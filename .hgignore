@@ -1,0 +1,8 @@
+syntax: glob
+Json.Serialization/bin/
+Json.Serialization/obj/
+Json.Tests/bin/
+Json.Tests/obj/
+Json/bin/
+Json/obj/
+_ReSharper.Json/
