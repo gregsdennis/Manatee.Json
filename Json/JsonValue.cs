@@ -72,7 +72,7 @@ namespace Manatee.Json
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
 				return boolValue;
 			}
-			set
+			private set
 			{
 				Type = JsonValueType.Boolean;
 				boolValue = value;
@@ -96,7 +96,7 @@ namespace Manatee.Json
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
 				return stringValue;
 			}
-			set
+			private set
 			{
 				Type = JsonValueType.String;
 				stringValue = value;
@@ -120,7 +120,7 @@ namespace Manatee.Json
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
 				return numberValue;
 			}
-			set
+			private set
 			{
 				Type = JsonValueType.Number;
 				numberValue = value;
@@ -144,7 +144,7 @@ namespace Manatee.Json
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
 				return objectValue;
 			}
-			set
+			private set
 			{
 				Type = JsonValueType.Object;
 				objectValue = value;
@@ -168,7 +168,7 @@ namespace Manatee.Json
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
 				return arrayValue;
 			}
-			set
+			private set
 			{
 				Type = JsonValueType.Array;
 				arrayValue = value;

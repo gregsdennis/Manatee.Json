@@ -86,51 +86,51 @@ namespace Manatee.Json.Tests.Json
 			var json = JsonValue.Null;
 			var actual = json.Object;
 		}
-		[TestMethod]
-		public void Accessor_SetBoolWhenNotBool_ChangesTypeAndAssignsValue()
-		{
-			var json = new JsonValue();
-			var expected = true;
-			json.Boolean = true;
-			Assert.AreEqual(JsonValueType.Boolean, json.Type);
-			Assert.AreEqual(expected, json.Boolean);
-		}
-		[TestMethod]
-		public void Accessor_SetNumberWhenNotNumber_ChangesTypeAndAssignsValue()
-		{
-			var json = new JsonValue();
-			var expected = 42;
-			json.Number = 42;
-			Assert.AreEqual(JsonValueType.Number, json.Type);
-			Assert.AreEqual(expected, json.Number);
-		}
-		[TestMethod]
-		public void Accessor_SetStringWhenNotString_ChangesTypeAndAssignsValue()
-		{
-			var json = new JsonValue();
-			var expected = "a string";
-			json.String = "a string";
-			Assert.AreEqual(JsonValueType.String, json.Type);
-			Assert.AreEqual(expected, json.String);
-		}
-		[TestMethod]
-		public void Accessor_SetArrayWhenNotArray_ChangesTypeAndAssignsValue()
-		{
-			var json = new JsonValue();
-			var expected = new JsonArray{false, 42, "a string"};
-			json.Array = new JsonArray {false, 42, "a string"};
-			Assert.AreEqual(JsonValueType.Array, json.Type);
-			Assert.AreEqual(expected, json.Array);
-		}
-		[TestMethod]
-		public void Accessor_SetObjectWhenNotObject_ChangesTypeAndAssignsValue()
-		{
-			var json = new JsonValue();
-			var expected = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
-			json.Object = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
-			Assert.AreEqual(JsonValueType.Object, json.Type);
-			Assert.AreEqual(expected, json.Object);
-		}
+		//[TestMethod]
+		//public void Accessor_SetBoolWhenNotBool_ChangesTypeAndAssignsValue()
+		//{
+		//    var json = new JsonValue();
+		//    var expected = true;
+		//    json.Boolean = true;
+		//    Assert.AreEqual(JsonValueType.Boolean, json.Type);
+		//    Assert.AreEqual(expected, json.Boolean);
+		//}
+		//[TestMethod]
+		//public void Accessor_SetNumberWhenNotNumber_ChangesTypeAndAssignsValue()
+		//{
+		//    var json = new JsonValue();
+		//    var expected = 42;
+		//    json.Number = 42;
+		//    Assert.AreEqual(JsonValueType.Number, json.Type);
+		//    Assert.AreEqual(expected, json.Number);
+		//}
+		//[TestMethod]
+		//public void Accessor_SetStringWhenNotString_ChangesTypeAndAssignsValue()
+		//{
+		//    var json = new JsonValue();
+		//    var expected = "a string";
+		//    json.String = "a string";
+		//    Assert.AreEqual(JsonValueType.String, json.Type);
+		//    Assert.AreEqual(expected, json.String);
+		//}
+		//[TestMethod]
+		//public void Accessor_SetArrayWhenNotArray_ChangesTypeAndAssignsValue()
+		//{
+		//    var json = new JsonValue();
+		//    var expected = new JsonArray{false, 42, "a string"};
+		//    json.Array = new JsonArray {false, 42, "a string"};
+		//    Assert.AreEqual(JsonValueType.Array, json.Type);
+		//    Assert.AreEqual(expected, json.Array);
+		//}
+		//[TestMethod]
+		//public void Accessor_SetObjectWhenNotObject_ChangesTypeAndAssignsValue()
+		//{
+		//    var json = new JsonValue();
+		//    var expected = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
+		//    json.Object = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
+		//    Assert.AreEqual(JsonValueType.Object, json.Type);
+		//    Assert.AreEqual(expected, json.Object);
+		//}
 		#endregion
 
 		#region ToString Tests
