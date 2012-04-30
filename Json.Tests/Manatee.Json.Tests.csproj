@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Json\JsonObjectTest.cs" />
     <Compile Include="Json\JsonArrayTest.cs" />
+    <Compile Include="Json\JsonValueTest.cs" />
     <Compile Include="Json\LinqExtensionsTest.cs" />
     <Compile Include="Serialization\JsonSerializerTest.cs" />
     <Compile Include="Serialization\Helpers\PrimitiveMapperTest.cs" />

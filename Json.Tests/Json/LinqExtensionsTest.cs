@@ -12,8 +12,8 @@ namespace Manatee.Json.Tests.Json
 		[TestMethod]
 		public void ToJson_FilteringArray_ReturnsArray()
 		{
-			var json = new JsonArray { false, 42, "a string", "another string" };
-			var expected = new JsonArray { "a string", "another string" };
+			var json = new JsonArray {false, 42, "a string", "another string"};
+			var expected = new JsonArray {"a string", "another string"};
 			var actual = json.Where(jv => jv.Type == JsonValueType.String).ToJson();
 			Assert.AreEqual(expected, actual);
 		}
