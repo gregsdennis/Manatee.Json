@@ -31,6 +31,8 @@ using System.Reflection;
 using System.Text;
 using Manatee.Json.Serialization.Attributes;
 using Manatee.Json.Serialization.Cache;
+using Manatee.Json.Serialization.Enumerations;
+using Manatee.Json.Serialization.Exceptions;
 using Manatee.Json.Serialization.Helpers;
 
 namespace Manatee.Json.Serialization
@@ -43,7 +45,7 @@ namespace Manatee.Json.Serialization
 		private const string TypeKey = "#Type";
 		private const string ValueKey = "#Value";
 
-		private JsonSerializerOptions Options { get; set; }
+		public JsonSerializerOptions Options { get; set; }
 
 		#region Public Methods
 		/// <summary>
@@ -54,9 +56,10 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
+			VerifyOptions();
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeof(T)))
 				return ((IJsonCompatible) obj).ToJson();
-			if (EqualsDefaultValue(obj)) return JsonValue.Null;
+			if (EqualsDefaultValue(obj) && !Options.EncodeDefaultValues) return JsonValue.Null;
 			var tryPrimitive = PrimitiveMapper.MapToJson(obj);
 			if (tryPrimitive != JsonValue.Null)
 				return tryPrimitive;
@@ -70,6 +73,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the type.</returns>
 		public JsonValue SerializeType<T>()
 		{
+			VerifyOptions();
 			var json = new JsonObject();
 			var propertyInfoList = typeof(T).GetProperties(BindingFlags.Static | BindingFlags.Public)
 											 .Where(p => p.GetSetMethod() != null)
@@ -101,6 +105,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The deserialized object.</returns>
 		public T Deserialize<T>(JsonValue json)
 		{
+			VerifyOptions();
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeof(T)))
 			{
 				var obj = (T)Activator.CreateInstance(typeof (T));
@@ -121,6 +126,7 @@ namespace Manatee.Json.Serialization
 		/// <param name="json">The JSON representation of the type.</param>
 		public void DeserializeType<T>(JsonValue json)
 		{
+			VerifyOptions();
 			if (json == JsonValue.Null)
 				return;
 			var propertyInfoList = typeof(T).GetProperties(BindingFlags.Static | BindingFlags.Public)
@@ -133,8 +139,11 @@ namespace Manatee.Json.Serialization
 				{
 					var deserialize = SerializerCache.Instance.GetDeserializer(propertyInfo.PropertyType);
 					propertyInfo.SetValue(null, deserialize.Invoke(this, new[] { json.Object[propertyInfo.Name] }), null);
+					json.Object.Remove(propertyInfo.Name);
 				}
 			}
+			if (json.Object.Count > 0)
+				throw new TypeDoesNotContainPropertyException(typeof(T), json);
 		}
 		#endregion
 
@@ -142,6 +151,11 @@ namespace Manatee.Json.Serialization
 		private static bool EqualsDefaultValue<T>(T value)
 		{
 			return EqualityComparer<T>.Default.Equals(value, default(T));
+		}
+		private void VerifyOptions()
+		{
+			if (Options == null)
+				Options = JsonSerializerOptions.Default;
 		}
 		private JsonValue AutoSerializeObject<T>(T obj)
 		{
@@ -159,7 +173,7 @@ namespace Manatee.Json.Serialization
 					        : propertyInfo.PropertyType;
 				var serialize = SerializerCache.Instance.GetSerializer(type);
 				var jsonProp = (JsonValue) serialize.Invoke(this, new[] {value});
-				if (jsonProp == JsonValue.Null) continue;
+				if ((jsonProp == JsonValue.Null) && !Options.EncodeDefaultValues) continue;
 				json.Add(propertyInfo.Name,
 				         type == propertyInfo.PropertyType
 				         	? jsonProp
@@ -191,8 +205,11 @@ namespace Manatee.Json.Serialization
 						var deserialize = SerializerCache.Instance.GetDeserializer(propertyInfo.PropertyType);
 						propertyInfo.SetValue(obj, deserialize.Invoke(this, new[] { json.Object[propertyInfo.Name] }), null);
 					}
+					json.Object.Remove(propertyInfo.Name);
 				}
 			}
+			if (json.Object.Count > 0)
+				throw new TypeDoesNotContainPropertyException(typeof (T), json);
 			return obj;
 		}
 		#endregion

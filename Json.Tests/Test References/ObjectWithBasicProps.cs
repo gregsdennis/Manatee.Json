@@ -13,7 +13,6 @@ namespace Manatee.Json.Tests.Test_References
 		public int IntProp { get; set; }
 		public double DoubleProp { get; set; }
 		public bool BoolProp { get; set; }
-		public DateTime DateTimeProp { get; set; }
 		#endregion
 
 		#region Nonserializable Instance Properties
@@ -53,7 +52,6 @@ namespace Manatee.Json.Tests.Test_References
 			       other.IntProp == IntProp &&
 			       other.DoubleProp.Equals(DoubleProp) &&
 			       other.BoolProp.Equals(BoolProp) &&
-				   other.DateTimeProp.Equals(DateTimeProp) &&
 			       Equals(other.ReadOnlyProp, ReadOnlyProp) &&
 			       Equals(other.WriteOnlyProp, WriteOnlyProp) &&
 			       Equals(other.IgnoreProp, IgnoreProp);
@@ -66,7 +64,6 @@ namespace Manatee.Json.Tests.Test_References
 				result = (result * 397) ^ IntProp;
 				result = (result * 397) ^ DoubleProp.GetHashCode();
 				result = (result * 397) ^ BoolProp.GetHashCode();
-				result = (result * 397) ^ DateTimeProp.GetHashCode();
 				result = (result * 397) ^ (ReadOnlyProp != null ? ReadOnlyProp.GetHashCode() : 0);
 				result = (result * 397) ^ (WriteOnlyProp != null ? WriteOnlyProp.GetHashCode() : 0);
 				result = (result * 397) ^ (IgnoreProp != null ? IgnoreProp.GetHashCode() : 0);
