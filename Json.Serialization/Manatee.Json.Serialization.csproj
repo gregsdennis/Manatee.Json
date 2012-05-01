@@ -67,6 +67,7 @@
     <Compile Include="Cache\SerializerMethodPair.cs" />
     <Compile Include="Enumerations\InvalidPropertyKeyBehavior.cs" />
     <Compile Include="Exceptions\NotPrimitiveTypeException.cs" />
+    <Compile Include="Exceptions\TypeDoesNotContainPropertyException.cs" />
     <Compile Include="Exceptions\TypeRegistrationException.cs" />
     <Compile Include="Helpers\ObjectCaster.cs" />
     <Compile Include="Helpers\PrimitiveMapper.cs" />

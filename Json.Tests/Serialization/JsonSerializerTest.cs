@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Manatee.Json;
 using Manatee.Json.Serialization;
+using Manatee.Json.Serialization.Enumerations;
+using Manatee.Json.Serialization.Exceptions;
 using Manatee.Json.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -64,16 +66,14 @@ namespace Manatee.Json.Tests.Serialization
 			           		{"StringProp", "stringValue"},
 			           		{"IntProp", 42},
 			           		{"DoubleProp", 6},
-			           		{"BoolProp", true},
-			           		{"DateTimeProp", DateTime.Today.ToString()}
+			           		{"BoolProp", true}
 			           	};
 			var expected = new ObjectWithBasicProps
 							{
 								StringProp = "stringValue",
 								IntProp = 42,
 								DoubleProp = 6.0,
-								BoolProp = true,
-								DateTimeProp = DateTime.Today
+								BoolProp = true
 							};
 			var actual = _serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
@@ -151,7 +151,7 @@ namespace Manatee.Json.Tests.Serialization
 			var expected = new Dictionary<string, double> { { "four", 4 }, { "three", 3 }, { "five", 5 }, { "six", 6 } };
 			JsonValue json = new JsonArray
 			                     	{
-			                     		new JsonObject {{"Key", "four"},{"Value", 4}},
+			                     		new JsonObject {{"Key", "four"}, {"Value", 4}},
 			                     		new JsonObject {{"Key", "three"}, {"Value", 3}},
 			                     		new JsonObject {{"Key", "five"}, {"Value", 5}},
 			                     		new JsonObject {{"Key", "six"}, {"Value", 6}}
@@ -217,6 +217,70 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(ObjectWithBasicProps.StaticIntProp, intProp);
 			Assert.AreEqual(ObjectWithBasicProps.StaticDoubleProp, doubleProp);
 			Assert.AreEqual(ObjectWithBasicProps.StaticBoolProp, boolProp);
+		}
+		[TestMethod]
+		public void Deserialize_DefaultOptions_IgnoresExtraProperties()
+		{
+			var json = new JsonObject
+			           	{
+			           		{"StringProp", "stringValue"},
+			           		{"IntProp", 42},
+							{"UnknownProp", "string"},
+			           		{"DoubleProp", 6},
+			           		{"BoolProp", true},
+							{"OtherProp", Math.PI}
+			           	};
+			var expected = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true
+			};
+			var actual = _serializer.Deserialize<ObjectWithBasicProps>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_CustomOptions_ThrowsTypeDoesNotContainPropertyException()
+		{
+			try
+			{
+				_serializer.Options = new JsonSerializerOptions
+										{
+											InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.ThrowException
+										};
+				var json = new JsonObject
+			           	{
+			           		{"StringProp", "stringValue"},
+			           		{"IntProp", 42},
+							{"UnknownProp", "string"},
+			           		{"DoubleProp", 6},
+			           		{"BoolProp", true},
+							{"OtherProp", Math.PI}
+			           	};
+				var expected = new ObjectWithBasicProps
+				{
+					StringProp = "stringValue",
+					IntProp = 42,
+					DoubleProp = 6.0,
+					BoolProp = true
+				};
+				var actual = _serializer.Deserialize<ObjectWithBasicProps>(json);
+				Assert.Fail("Did not throw exception.");
+			}
+			catch (TypeDoesNotContainPropertyException) { }
+			catch (AssertFailedException)
+			{
+				throw;
+			}
+			catch (Exception e)
+			{
+				Assert.Fail(string.Format("Threw {0}.", e.GetType()));
+			}
+			finally
+			{
+				_serializer.Options = null;
+			}
 		}
 		#endregion
 
@@ -368,6 +432,50 @@ namespace Manatee.Json.Tests.Serialization
 										{"StaticBoolProp", true}
 									};
 			var actual = _serializer.SerializeType<ObjectWithBasicProps>();
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_DefaultOptions_IgnoresDefaultValues()
+		{
+			// DoubleProp remains default
+			var obj = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				BoolProp = true
+			};
+			JsonValue expected = new JsonObject
+									{
+										{"StringProp", "stringValue"},
+										{"IntProp", 42},
+										{"BoolProp", true}
+									};
+			var actual = _serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_CustomOptions_SerializesDefaultValues()
+		{
+			_serializer.Options = new JsonSerializerOptions
+			                      	{
+			                      		EncodeDefaultValues = true
+			                      	};
+			// DoubleProp remains default
+			var obj = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				BoolProp = true
+			};
+			JsonValue expected = new JsonObject
+									{
+										{"StringProp", "stringValue"},
+										{"IntProp", 42},
+										{"DoubleProp", 0},
+										{"BoolProp", true}
+									};
+			var actual = _serializer.Serialize(obj);
+			_serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
 		#endregion

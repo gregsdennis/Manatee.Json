@@ -76,7 +76,7 @@ namespace Json.Tests.Serialization.Helpers
 				PrimitiveMapper.MapFromJson<Uri>(json);
 				Assert.Fail("Expected NotPrimitiveTypeException");
 			}
-			catch (NotPrimitiveTypeException e) { }
+			catch (NotPrimitiveTypeException) { }
 			catch (Exception e)
 			{
 				Assert.Fail(string.Format("Incorrect exception thrown: {0}", e));

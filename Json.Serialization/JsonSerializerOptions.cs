@@ -28,16 +28,19 @@ using Manatee.Json.Serialization.Enumerations;
 
 namespace Manatee.Json.Serialization
 {
-	class JsonSerializerOptions
+	/// <summary>
+	/// Represents a set of behavior options for the JsonSerializer object.
+	/// </summary>
+	public class JsonSerializerOptions
 	{
 		/// <summary>
 		/// Default options used by the serializer.
 		/// </summary>
-		public JsonSerializerOptions Default = new JsonSerializerOptions
-		                                       	{
-		                                       		EncodeDefaultValues = false,
-													InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.DoNothing
-		                                       	};
+		public static JsonSerializerOptions Default = new JsonSerializerOptions
+		                                              	{
+		                                              		EncodeDefaultValues = false,
+		                                              		InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.DoNothing
+		                                              	};
 		/// <summary>
 		/// Gets and sets whether the serializer encodes default values for properties.
 		/// </summary>
