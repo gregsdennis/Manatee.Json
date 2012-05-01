@@ -78,6 +78,7 @@ namespace Manatee.Json.Serialization
 		{
 			RegisterType(EncodeDateTime, DecodeDateTime);
 			RegisterType(EncodeTimeSpan, DecodeTimeSpan);
+			RegisterType(EncodeGuid, DecodeGuid);
 		}
 		#endregion
 
@@ -210,6 +211,26 @@ namespace Manatee.Json.Serialization
 		public static TimeSpan DecodeTimeSpan(JsonValue json)
 		{
 			return json.Type == JsonValueType.String ? TimeSpan.Parse(json.String) : default(TimeSpan);
+		}
+		#endregion
+		#region Guid
+		/// <summary>
+		/// Encodes a Guid object to its JSON representation.
+		/// </summary>
+		/// <param name="guid">A Guid object.</param>
+		/// <returns>The JSON representation of the Guid.</returns>
+		public static JsonValue EncodeGuid(Guid guid)
+		{
+			return guid.ToString();
+		}
+		/// <summary>
+		/// Decodes a Guid object from its JSON representation.
+		/// </summary>
+		/// <param name="json">A JSON representation of a Guid.</param>
+		/// <returns>The Guid object.</returns>
+		public static Guid DecodeGuid(JsonValue json)
+		{
+			return json.Type == JsonValueType.String ? Guid.Parse(json.String) : default(Guid);
 		}
 		#endregion
 		#endregion

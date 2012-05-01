@@ -53,5 +53,13 @@ namespace Manatee.Json.Serialization
 		/// contains invalid property keys.
 		/// </summary>
 		public InvalidPropertyKeyBehavior InvalidPropertyKeyBehavior { get; set; }
+		/// <summary>
+		/// Gets and sets the format for DateTime serialization using the default serializer methods.
+		/// </summary>
+		/// <remarks>
+		/// If the JsonSerializationTypeRegistry entry for DateTime has been changed to custom
+		/// methods, this property will have no effect.
+		/// </remarks>
+		internal DateTimeSerializationFormat DateTimeSerializationFormat { get; set; }
 	}
 }

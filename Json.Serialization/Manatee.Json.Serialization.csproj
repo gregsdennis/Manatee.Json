@@ -65,6 +65,7 @@
     <Compile Include="Cache\ObjectCasterMethodPair.cs" />
     <Compile Include="Cache\SerializerCache.cs" />
     <Compile Include="Cache\SerializerMethodPair.cs" />
+    <Compile Include="Enumerations\DateTimeSerializationFormat.cs" />
     <Compile Include="Enumerations\InvalidPropertyKeyBehavior.cs" />
     <Compile Include="Exceptions\NotPrimitiveTypeException.cs" />
     <Compile Include="Exceptions\TypeDoesNotContainPropertyException.cs" />
