@@ -208,7 +208,7 @@ namespace Manatee.Json.Serialization
 					json.Object.Remove(propertyInfo.Name);
 				}
 			}
-			if (json.Object.Count > 0)
+			if ((json.Object.Count > 0) && (Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(typeof (T), json);
 			return obj;
 		}
