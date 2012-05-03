@@ -5,7 +5,10 @@ using System.Text;
 
 namespace Manatee.Json.Serialization.Enumerations
 {
-	internal enum DateTimeSerializationFormat
+	/// <summary>
+	/// Available formatting options for serializing DateTime objects.
+	/// </summary>
+	public enum DateTimeSerializationFormat
 	{
 		/// <summary>
 		/// Output conforms to ISO 8601 formatting: YYYY-MM-DDThh:mm:ss.sTZD (e.g. 1997-07-16T19:20:30.45+01:00)
