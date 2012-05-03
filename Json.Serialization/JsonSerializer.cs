@@ -45,6 +45,9 @@ namespace Manatee.Json.Serialization
 		private const string TypeKey = "#Type";
 		private const string ValueKey = "#Value";
 
+		/// <summary>
+		/// Gets or sets a set of options for the serializer.
+		/// </summary>
 		public JsonSerializerOptions Options { get; set; }
 
 		#region Public Methods
@@ -63,8 +66,10 @@ namespace Manatee.Json.Serialization
 			var tryPrimitive = PrimitiveMapper.MapToJson(obj);
 			if (tryPrimitive != JsonValue.Null)
 				return tryPrimitive;
-			var converter = JsonSerializationTypeRegistry.GetToJsonConverter<T>();
-			return converter == null ? AutoSerializeObject(obj) : converter(obj);
+			JsonValue json;
+			return this.TryEncode(obj, out json) ? json : AutoSerializeObject(obj);
+			//var converter = JsonSerializationTypeRegistry.GetToJsonConverter<T>();
+			//return converter == null ? AutoSerializeObject(obj) : converter(obj);
 		}
 		/// <summary>
 		/// Serializes the public static properties of a type to a JSON structure.
@@ -108,7 +113,7 @@ namespace Manatee.Json.Serialization
 			VerifyOptions();
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeof(T)))
 			{
-				var obj = (T)Activator.CreateInstance(typeof (T));
+				var obj = (T)Activator.CreateInstance(typeof(T));
 				((IJsonCompatible)obj).FromJson(json);
 				return obj;
 			}
@@ -116,8 +121,10 @@ namespace Manatee.Json.Serialization
 				return default(T);
 			if (PrimitiveMapper.IsPrimitive(typeof(T)))
 				return PrimitiveMapper.MapFromJson<T>(json);
-			var converter = JsonSerializationTypeRegistry.GetFromJsonConverter<T>();
-			return converter == null ? AutoDeserializeObject<T>(json) : converter(json);
+			T ret;
+			return this.TryDecode(json, out ret) ? ret : AutoDeserializeObject<T>(json);
+			//var converter = JsonSerializationTypeRegistry.GetFromJsonConverter<T>();
+			//return converter == null ? AutoDeserializeObject<T>(json) : converter(json);
 		}
 		/// <summary>
 		/// Deserializes a JSON structure to the public static properties of a type.

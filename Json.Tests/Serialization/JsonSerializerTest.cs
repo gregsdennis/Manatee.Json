@@ -10,44 +10,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Serialization
 {
-	/// <summary>
-	///This is a test class for JsonSerializer and is intended
-	///to contain all JsonSerializer Unit Tests
-	///</summary>
-	[TestClass()]
+	[TestClass]
 	public class JsonSerializerTest
 	{
 		private JsonSerializer _serializer = new JsonSerializer();
-
-		#region Additional test attributes
-		// 
-		//You can use the following additional attributes as you write your tests:
-		//
-		//Use ClassInitialize to run code before running the first test in the class
-		//[ClassInitialize()]
-		//public static void MyClassInitialize(TestContext testContext)
-		//{
-		//}
-		//
-		//Use ClassCleanup to run code after all tests in a class have run
-		//[ClassCleanup()]
-		//public static void MyClassCleanup()
-		//{
-		//}
-		//
-		//Use TestInitialize to run code before running each test
-		//[TestInitialize()]
-		//public void MyTestInitialize()
-		//{
-		//}
-		//
-		//Use TestCleanup to run code after each test has run
-		//[TestCleanup()]
-		//public void MyTestCleanup()
-		//{
-		//}
-		//
-		#endregion
 
 		#region Deserialize Tests
 		[TestMethod]
@@ -56,6 +22,40 @@ namespace Manatee.Json.Tests.Serialization
 			JsonValue json = TimeSpan.FromDays(1).ToString();
 			var expected = TimeSpan.FromDays(1);
 			var actual = _serializer.Deserialize<TimeSpan>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_DateTimeDefaultOptions_Successful()
+		{
+			JsonValue json = DateTime.Today.ToString("");
+			var expected = DateTime.Today;
+			var actual = _serializer.Deserialize<DateTime>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_DateTimeJavaFormat_Successful()
+		{
+			_serializer.Options = new JsonSerializerOptions
+			{
+				DateTimeSerializationFormat = DateTimeSerializationFormat.JavaConstructor
+			};
+			JsonValue json = string.Format("/Date({0})/", DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond);
+			var expected = DateTime.Today;
+			var actual = _serializer.Deserialize<DateTime>(json);
+			_serializer.Options = null;
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_DateTimeMilliseconds_Successful()
+		{
+			_serializer.Options = new JsonSerializerOptions
+			{
+				DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
+			};
+			JsonValue json = DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond;
+			var expected = DateTime.Today;
+			var actual = _serializer.Deserialize<DateTime>(json);
+			_serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -291,6 +291,40 @@ namespace Manatee.Json.Tests.Serialization
 			var obj = TimeSpan.FromDays(1);
 			JsonValue expected = TimeSpan.FromDays(1).ToString();
 			var actual = _serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_DateTimeDefaultOptions_Successful()
+		{
+			var obj = DateTime.Today;
+			JsonValue expected = DateTime.Today.ToString("s");
+			var actual = _serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_DateTimeJavaFormat_Successful()
+		{
+			_serializer.Options = new JsonSerializerOptions
+			                      	{
+			                      		DateTimeSerializationFormat = DateTimeSerializationFormat.JavaConstructor
+			                      	};
+			var obj = DateTime.Today;
+			JsonValue expected = string.Format("/Date({0})/", DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond);
+			var actual = _serializer.Serialize(obj);
+			_serializer.Options = null;
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_DateTimeMilliseconds_Successful()
+		{
+			_serializer.Options = new JsonSerializerOptions
+			                      	{
+			                      		DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
+			                      	};
+			var obj = DateTime.Today;
+			JsonValue expected = DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond;
+			var actual = _serializer.Serialize(obj);
+			_serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]

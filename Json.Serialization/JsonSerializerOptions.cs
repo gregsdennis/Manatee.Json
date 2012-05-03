@@ -60,6 +60,6 @@ namespace Manatee.Json.Serialization
 		/// If the JsonSerializationTypeRegistry entry for DateTime has been changed to custom
 		/// methods, this property will have no effect.
 		/// </remarks>
-		internal DateTimeSerializationFormat DateTimeSerializationFormat { get; set; }
+		public DateTimeSerializationFormat DateTimeSerializationFormat { get; set; }
 	}
 }

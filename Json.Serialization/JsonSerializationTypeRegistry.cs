@@ -24,8 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
+using Manatee.Json.Serialization.Enumerations;
 using Manatee.Json.Serialization.Exceptions;
 
 namespace Manatee.Json.Serialization
@@ -55,17 +54,9 @@ namespace Manatee.Json.Serialization
 		private static readonly Dictionary<Type, Delegate> ToJsonConverters;
 		private static readonly Dictionary<Type, Delegate> FromJsonConverters;
 		private static readonly JsonSerializer _serializer;
+		private static readonly object lockHolder = new object();
 
-		internal static ToJsonDelegate<T> GetToJsonConverter<T>()
-		{
-			var type = typeof (T);
-			return ToJsonConverters.ContainsKey(type) ? (ToJsonDelegate<T>)ToJsonConverters[type] : null;
-		}
-		internal static FromJsonDelegate<T> GetFromJsonConverter<T>()
-		{
-			var type = typeof(T);
-			return FromJsonConverters.ContainsKey(type) ? (FromJsonDelegate<T>)FromJsonConverters[type] : null;
-		}
+		private static JsonSerializerOptions requestedOptions;
 
 		static JsonSerializationTypeRegistry()
 		{
@@ -74,11 +65,55 @@ namespace Manatee.Json.Serialization
 			_serializer = new JsonSerializer();
 			RegisterLocalTypes();
 		}
+
+		internal static bool TryEncode<T>(this JsonSerializer serializer, T obj, out JsonValue json)
+		{
+			var converter = GetToJsonConverter<T>();
+			if (converter == null)
+			{
+				json = null;
+				return false;
+			}
+			lock (lockHolder)
+			{
+				requestedOptions = serializer.Options;
+				json = converter(obj);
+				requestedOptions = null;
+				return true;
+			}
+		}
+		internal static bool TryDecode<T>(this JsonSerializer serializer, JsonValue json, out T obj)
+		{
+			var converter = GetFromJsonConverter<T>();
+			if (converter == null)
+			{
+				obj = default(T);
+				return false;
+			}
+			lock (lockHolder)
+			{
+				requestedOptions = serializer.Options;
+				obj = converter(json);
+				requestedOptions = null;
+				return true;
+			}
+		}
+
 		private static void RegisterLocalTypes()
 		{
 			RegisterType(EncodeDateTime, DecodeDateTime);
 			RegisterType(EncodeTimeSpan, DecodeTimeSpan);
 			RegisterType(EncodeGuid, DecodeGuid);
+		}
+		private static ToJsonDelegate<T> GetToJsonConverter<T>()
+		{
+			var type = typeof (T);
+			return ToJsonConverters.ContainsKey(type) ? (ToJsonDelegate<T>)ToJsonConverters[type] : null;
+		}
+		private static FromJsonDelegate<T> GetFromJsonConverter<T>()
+		{
+			var type = typeof(T);
+			return FromJsonConverters.ContainsKey(type) ? (FromJsonDelegate<T>)FromJsonConverters[type] : null;
 		}
 		#endregion
 
@@ -181,7 +216,17 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the DateTime.</returns>
 		public static JsonValue EncodeDateTime(DateTime dt)
 		{
-			return dt.ToString();
+			if (requestedOptions == null)
+				return dt.ToString();
+			switch (requestedOptions.DateTimeSerializationFormat)
+			{
+				case DateTimeSerializationFormat.JavaConstructor:
+					return string.Format("/Date({0})/", dt.Ticks/TimeSpan.TicksPerMillisecond);
+				case DateTimeSerializationFormat.Milliseconds:
+					return dt.Ticks/TimeSpan.TicksPerMillisecond;
+				default:
+					return dt.ToString("s");
+			}
 		}
 		/// <summary>
 		/// Decodes a DateTime object from its JSON representation.
@@ -190,7 +235,17 @@ namespace Manatee.Json.Serialization
 		/// <returns>The DateTime object.</returns>
 		public static DateTime DecodeDateTime(JsonValue json)
 		{
-			return json.Type == JsonValueType.String ? DateTime.Parse(json.String) : default(DateTime);
+			if (requestedOptions == null)
+				return DateTime.Parse(json.String);
+			switch (requestedOptions.DateTimeSerializationFormat)
+			{
+				case DateTimeSerializationFormat.JavaConstructor:
+					return new DateTime(long.Parse(json.String.Substring(6, json.String.Length - 8))*TimeSpan.TicksPerMillisecond);
+				case DateTimeSerializationFormat.Milliseconds:
+					return new DateTime((long) json.Number*TimeSpan.TicksPerMillisecond);
+				default:
+					return DateTime.Parse(json.String);
+			}
 		}
 		#endregion
 		#region TimeSpan
