@@ -28,6 +28,7 @@ using System.Text;
 
 namespace Manatee.Json.Serialization.Exceptions
 {
+	[Serializable]
 	class NotPrimitiveTypeException : Exception
 	{
 		public Type RequestedType { get; private set; }

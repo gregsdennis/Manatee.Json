@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Manatee.Json;
 using Manatee.Json.Serialization;
 
-namespace Manatee.Json.Tests.Test_References
+namespace Manatee.Tests.Test_References
 {
 	class JsonCompatibleClass : IJsonCompatible
 	{

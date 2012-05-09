@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		LinqExtensionsTest.cs
-	Namespace:		Manatee.Json.Tests.Json
+	Namespace:		Manatee.Json.Tests.Json.Extensions
 	Class Name:		LinqExtensionsTest
 	Purpose:		Tests for the LINQ extension methods for the Json library.
 
@@ -24,9 +24,11 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json;
+using Manatee.Json.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Manatee.Json.Tests.Json
+namespace Manatee.Tests.Json.Extensions
 {
 	[TestClass]
 	public class LinqExtensionsTest

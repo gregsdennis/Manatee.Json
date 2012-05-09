@@ -27,6 +27,7 @@ namespace Manatee.Json.Exceptions
 	/// <summary>
 	/// Thrown when an input string contains an invalid key.
 	/// </summary>
+	[Serializable]
 	public class JsonKeyParseException : Exception
 	{
 		/// <summary>

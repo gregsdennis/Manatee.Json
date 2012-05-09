@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Manatee.Json.Exceptions;
 using Manatee.Json.Helpers;
 using Manatee.StateMachine;

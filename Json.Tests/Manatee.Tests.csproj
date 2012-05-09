@@ -9,8 +9,8 @@
     <ProjectGuid>{E74B7538-5E17-43C7-925B-33784945312E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Manatee.Json.Tests</RootNamespace>
-    <AssemblyName>Manatee.Json.Tests</AssemblyName>
+    <RootNamespace>Manatee.Tests</RootNamespace>
+    <AssemblyName>Manatee.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -51,10 +51,11 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Json\Extensions\XmlExtensionsTest.cs" />
     <Compile Include="Json\JsonObjectTest.cs" />
     <Compile Include="Json\JsonArrayTest.cs" />
     <Compile Include="Json\JsonValueTest.cs" />
-    <Compile Include="Json\LinqExtensionsTest.cs" />
+    <Compile Include="Json\Extensions\LinqExtensionsTest.cs" />
     <Compile Include="Serialization\JsonSerializerTest.cs" />
     <Compile Include="Serialization\Helpers\PrimitiveMapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,7 +65,6 @@
     <Compile Include="Test References\ObjectWithAbstractAndInterfaceProps.cs" />
     <Compile Include="Test References\ObjectWithBasicProps.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Json.Serialization\Manatee.Json.Serialization.csproj">
       <Project>{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}</Project>
@@ -74,6 +74,12 @@
       <Project>{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}</Project>
       <Name>Manatee.Json</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Shadow Include="Test References\Manatee.Json.accessor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Shadow Include="Test References\Manatee.Json.Serialization.accessor" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,10 +5,10 @@ using Manatee.Json;
 using Manatee.Json.Serialization;
 using Manatee.Json.Serialization.Enumerations;
 using Manatee.Json.Serialization.Exceptions;
-using Manatee.Json.Tests.Test_References;
+using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Manatee.Json.Tests.Serialization
+namespace Manatee.Tests.Serialization
 {
 	[TestClass]
 	public class JsonSerializerTest
