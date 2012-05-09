@@ -28,6 +28,7 @@ namespace Manatee.Json.Exceptions
 	/// <summary>
 	/// Thrown when an input string contains a syntax error other than a key or value parse error.
 	/// </summary>
+	[Serializable]
 	public class JsonSyntaxException : Exception
 	{
 		/// <summary>

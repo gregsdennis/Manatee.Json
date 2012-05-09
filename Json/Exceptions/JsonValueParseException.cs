@@ -27,6 +27,7 @@ namespace Manatee.Json.Exceptions
 	/// <summary>
 	/// Thrown when an input string contains an invalid value.
 	/// </summary>
+	[Serializable]
 	public class JsonValueParseException : Exception
 	{
 		/// <summary>

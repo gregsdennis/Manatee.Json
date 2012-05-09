@@ -28,6 +28,7 @@ namespace Manatee.Json.Exceptions
 	///<summary>
 	/// Thrown when an invalid escape sequence is detected while parsing a string value.
 	///</summary>
+	[Serializable]
 	public class JsonStringInvalidEscapeSequenceException : Exception
 	{
 		///<summary>

@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using Manatee.Json;
 
-namespace Json.Tests.Serialization.Helpers
+namespace Manatee.Tests.Serialization.Helpers
 {
 	
 	

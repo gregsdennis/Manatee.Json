@@ -24,10 +24,11 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json;
 using Manatee.Json.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Manatee.Json.Tests.Json
+namespace Manatee.Tests.Json
 {
 	[TestClass]
 	public class JsonArrayTest

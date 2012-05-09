@@ -514,7 +514,7 @@ namespace Manatee.Json
 			}
 		}
 
-		private static string EvaluateEscapeSequences(string s)
+		internal static string EvaluateEscapeSequences(string s)
 		{
 			var i = 0;
 			while (i < s.Length)
@@ -552,7 +552,7 @@ namespace Manatee.Json
 			return s;
 		}
 
-		private static string InsertEscapeSequences(string s)
+		internal static string InsertEscapeSequences(string s)
 		{
 			var i = 0;
 			while (i < s.Length)

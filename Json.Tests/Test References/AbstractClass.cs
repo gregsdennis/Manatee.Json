@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Manatee.Json.Tests.Test_References
+namespace Manatee.Tests.Test_References
 {
 	abstract class AbstractClass
 	{

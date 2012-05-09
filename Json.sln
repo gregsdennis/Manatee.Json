@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Json\Manate
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Serialization", "Json.Serialization\Manatee.Json.Serialization.csproj", "{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests", "Json.Tests\Manatee.Json.Tests.csproj", "{E74B7538-5E17-43C7-925B-33784945312E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Tests", "Json.Tests\Manatee.Tests.csproj", "{E74B7538-5E17-43C7-925B-33784945312E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
 	ProjectSection(SolutionItems) = preProject

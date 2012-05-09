@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Manatee.Json.Serialization.Attributes;
 
-namespace Manatee.Json.Tests.Test_References
+namespace Manatee.Tests.Test_References
 {
 	class ObjectWithBasicProps
 	{

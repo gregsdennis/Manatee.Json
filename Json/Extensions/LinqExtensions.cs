@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		LinqExtensions.cs
-	Namespace:		Manatee.Json
+	Namespace:		Manatee.Json.Extensions
 	Class Name:		LinqExtensions
 	Purpose:		LINQ for Manatee.Json
 
@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Manatee.Json
+namespace Manatee.Json.Extensions
 {
 	/// <summary>
 	/// These extension methods cover LINQ compatibility.

@@ -32,6 +32,7 @@ namespace Manatee.Json.Serialization.Exceptions
 	/// Thrown when JsonSerializationTypeRegistry.RegisterType&lt;T&gt;(ToJsonDelegate&lt;T&gt; toJson, FromJsonDelegate&lt;T&gt; fromJson)
 	/// is passed one method and a null.
 	/// </summary>
+	[Serializable]
 	public class TypeRegistrationException : Exception
 	{
 		/// <summary>
