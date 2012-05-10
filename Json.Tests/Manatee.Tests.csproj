@@ -56,8 +56,8 @@
     <Compile Include="Json\JsonArrayTest.cs" />
     <Compile Include="Json\JsonValueTest.cs" />
     <Compile Include="Json\Extensions\LinqExtensionsTest.cs" />
-    <Compile Include="Serialization\JsonSerializerTest.cs" />
-    <Compile Include="Serialization\Helpers\PrimitiveMapperTest.cs" />
+    <Compile Include="Json\Serialization\JsonSerializerTest.cs" />
+    <Compile Include="Json\Helpers\PrimitiveMapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test References\AbstractClass.cs" />
     <Compile Include="Test References\DerivedClass.cs" />
@@ -66,10 +66,6 @@
     <Compile Include="Test References\ObjectWithBasicProps.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Json.Serialization\Manatee.Json.Serialization.csproj">
-      <Project>{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}</Project>
-      <Name>Manatee.Json.Serialization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Json\Manatee.Json.csproj">
       <Project>{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}</Project>
       <Name>Manatee.Json</Name>
@@ -77,9 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Shadow Include="Test References\Manatee.Json.accessor" />
-  </ItemGroup>
-  <ItemGroup>
-    <Shadow Include="Test References\Manatee.Json.Serialization.accessor" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

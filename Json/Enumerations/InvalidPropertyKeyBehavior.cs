@@ -21,7 +21,7 @@
 					JSON structure is passed which contains invalid property keys.
 
 ***************************************************************************************/
-namespace Manatee.Json.Serialization.Enumerations
+namespace Manatee.Json.Enumerations
 {
 	/// <summary>
 	/// Enumeration of behavior options for the deserializer when a JSON structure is passed which

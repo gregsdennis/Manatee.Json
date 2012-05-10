@@ -15,12 +15,12 @@
 	   limitations under the License.
  
 	File Name:		JsonInput.cs
-	Namespace:		Manatee.Json
+	Namespace:		Manatee.Json.Enumerations
 	Class Name:		JsonInput
 	Purpose:		Enumerates input types for JSON structures.
 
 ***************************************************************************************/
-namespace Manatee.Json
+namespace Manatee.Json.Enumerations
 {
 	internal enum JsonInput
 	{

@@ -15,18 +15,15 @@
 	   limitations under the License.
  
 	File Name:		TypeRegistrationException.cs
-	Namespace:		Manatee.Json.Serialization.Exceptions
+	Namespace:		Manatee.Json.Exceptions
 	Class Name:		TypeRegistrationException
 	Purpose:		Thrown when incorrectly attempting to register a type for the
 					serializer.
 
 ***************************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Manatee.Json.Serialization.Exceptions
+namespace Manatee.Json.Exceptions
 {
 	/// <summary>
 	/// Thrown when JsonSerializationTypeRegistry.RegisterType&lt;T&gt;(ToJsonDelegate&lt;T&gt; toJson, FromJsonDelegate&lt;T&gt; fromJson)
@@ -45,6 +42,9 @@ namespace Manatee.Json.Serialization.Exceptions
 		/// </summary>
 		/// <param name="type">The type.</param>
 		public TypeRegistrationException(Type type)
-			: base(string.Format("Attempted to register type {0} without supplying both an encoder and decoder.", type)) {}
+			: base(string.Format("Attempted to register type {0} without supplying both an encoder and decoder.", type))
+		{
+			Type = type;
+		}
 	}
 }

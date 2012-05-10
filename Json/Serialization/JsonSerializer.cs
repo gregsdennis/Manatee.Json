@@ -22,18 +22,14 @@
 
 ***************************************************************************************/
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using Manatee.Json.Serialization.Attributes;
+using Manatee.Json.Attributes;
 using Manatee.Json.Serialization.Cache;
-using Manatee.Json.Serialization.Enumerations;
-using Manatee.Json.Serialization.Exceptions;
-using Manatee.Json.Serialization.Helpers;
+using Manatee.Json.Enumerations;
+using Manatee.Json.Exceptions;
+using Manatee.Json.Helpers;
 
 namespace Manatee.Json.Serialization
 {

@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System;
 using System.Globalization;
+using Manatee.Json.Enumerations;
 using Manatee.Json.Exceptions;
 
 namespace Manatee.Json

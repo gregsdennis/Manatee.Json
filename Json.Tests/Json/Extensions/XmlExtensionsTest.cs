@@ -15,14 +15,12 @@
 	   limitations under the License.
  
 	File Name:		XmlExtensionsTest.cs
-	Namespace:		Manatee.Json.Tests.Json.Extensions
+	Namespace:		Manatee.Tests.Json.Extensions
 	Class Name:		XmlExtensionsTest
 	Purpose:		Tests for the XML extension methods for the Json library.
 
 ***************************************************************************************/
 using System;
-using System.Diagnostics;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
