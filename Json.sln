@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Json\Manatee.Json.csproj", "{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Serialization", "Json.Serialization\Manatee.Json.Serialization.csproj", "{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Tests", "Json.Tests\Manatee.Tests.csproj", "{E74B7538-5E17-43C7-925B-33784945312E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
@@ -28,12 +26,6 @@ Global
 		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Publish|Any CPU.Build.0 = Publish|Any CPU
 		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
-		{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}.Publish|Any CPU.Build.0 = Publish|Any CPU
-		{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6066DBF-1B69-4A20-B60B-4AAC28CA35D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Publish|Any CPU.ActiveCfg = Release|Any CPU

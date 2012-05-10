@@ -14,38 +14,36 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		SerializerMethodPair.cs
+	File Name:		ObjectCasterMethodPair.cs
 	Namespace:		Manatee.Json.Serialization.Cache
-	Class Name:		SerializerMethodPair
-	Purpose:		Represents a typed pair of JsonSerializer methods.
+	Class Name:		ObjectCasterMethodPair
+	Purpose:		Represents a typed pair of ObjectCaster methods.
 
 ***************************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
+using Manatee.Json.Helpers;
 
 namespace Manatee.Json.Serialization.Cache
 {
-	class SerializerMethodPair
+	internal class ObjectCasterMethodPair
 	{
-		public MethodInfo Serializer { get; private set; }
-		public MethodInfo Deserializer { get; private set; }
+		public MethodInfo Caster { get; private set; }
+		public MethodInfo TryCaster { get; private set; }
 
-		public SerializerMethodPair(Type type)
+		public ObjectCasterMethodPair(Type type)
 		{
-			Serializer = GetTypedSerializeMethod(type);
-			Deserializer = GetTypedDeserializeMethod(type);
+			Caster = GetTypedSerializeMethod(type);
+			TryCaster = GetTypedDeserializeMethod(type);
 		}
 
 		private static MethodInfo GetTypedSerializeMethod(Type type)
 		{
-			return typeof(JsonSerializer).GetMethod("Serialize").MakeGenericMethod(type);
+			return typeof(ObjectCaster).GetMethod("Cast").MakeGenericMethod(type);
 		}
 		private static MethodInfo GetTypedDeserializeMethod(Type type)
 		{
-			return typeof(JsonSerializer).GetMethod("Deserialize").MakeGenericMethod(type);
+			return typeof(ObjectCaster).GetMethod("TryCast").MakeGenericMethod(type);
 		}
 	}
 }

@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 using System.Collections.Generic;
+using Manatee.Json.Enumerations;
 
 namespace Manatee.Json.Helpers
 {

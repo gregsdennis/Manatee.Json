@@ -14,27 +14,32 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonValueParseException.cs
-	Namespace:		Manatee.Json.Exceptions
-	Class Name:		JsonValueParseException
-	Purpose:		Thrown when an input string contains an invalid value.
+	File Name:		DateTimeSerializationFormat.cs
+	Namespace:		Manatee.Json.Enumerations
+	Class Name:		DateTimeSerializationFormat
+	Purpose:		Enumeration of available formatting options for serializing
+					DateTime objects.
 
 ***************************************************************************************/
-using System;
-using Manatee.Json.Enumerations;
-
-namespace Manatee.Json.Exceptions
+namespace Manatee.Json.Enumerations
 {
 	/// <summary>
-	/// Thrown when an input string contains an invalid value.
+	/// Available formatting options for serializing DateTime objects.
 	/// </summary>
-	[Serializable]
-	public class JsonValueParseException : Exception
+	public enum DateTimeSerializationFormat
 	{
 		/// <summary>
-		/// Creates a new instance of this exception.
+		/// Output conforms to ISO 8601 formatting: YYYY-MM-DDThh:mm:ss.sTZD (e.g. 1997-07-16T19:20:30.45+01:00)
 		/// </summary>
-		public JsonValueParseException(JsonValueType t, int index)
-			: base(string.Format("Parse of type {0} failed at index {1}.", t, index)) { }
+		Iso8601,
+		/// <summary>
+		/// Output is a string in the format "/Date([ms])/", where [ms] is the number of milliseconds
+		/// since January 1, 1970 UTC.
+		/// </summary>
+		JavaConstructor,
+		/// <summary>
+		/// Output is a numeric value representing the number of milliseconds since January 1, 1970 UTC.
+		/// </summary>
+		Milliseconds
 	}
 }

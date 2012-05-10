@@ -14,47 +14,35 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		SerializerCache.cs
+	File Name:		SerializerMethodPair.cs
 	Namespace:		Manatee.Json.Serialization.Cache
-	Class Name:		SerializerCache
-	Purpose:		Maintains a cache of JsonSerializers methods organized by type.
+	Class Name:		SerializerMethodPair
+	Purpose:		Represents a typed pair of JsonSerializer methods.
 
 ***************************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Manatee.Json.Serialization.Cache
 {
-	class SerializerCache
+	internal class SerializerMethodPair
 	{
-		public readonly static SerializerCache Instance;
+		public MethodInfo Serializer { get; private set; }
+		public MethodInfo Deserializer { get; private set; }
 
-		private Dictionary<Type, SerializerMethodPair> _cache;
-
-		static SerializerCache()
+		public SerializerMethodPair(Type type)
 		{
-			Instance = new SerializerCache();
-		}
-		private SerializerCache()
-		{
-			_cache = new Dictionary<Type, SerializerMethodPair>();
+			Serializer = GetTypedSerializeMethod(type);
+			Deserializer = GetTypedDeserializeMethod(type);
 		}
 
-		public MethodInfo GetSerializer(Type type)
+		private static MethodInfo GetTypedSerializeMethod(Type type)
 		{
-			if (!_cache.ContainsKey(type))
-				_cache.Add(type, new SerializerMethodPair(type));
-			return _cache[type].Serializer;
+			return typeof(JsonSerializer).GetMethod("Serialize").MakeGenericMethod(type);
 		}
-
-		public MethodInfo GetDeserializer(Type type)
+		private static MethodInfo GetTypedDeserializeMethod(Type type)
 		{
-			if (!_cache.ContainsKey(type))
-				_cache.Add(type, new SerializerMethodPair(type));
-			return _cache[type].Deserializer;
+			return typeof(JsonSerializer).GetMethod("Deserialize").MakeGenericMethod(type);
 		}
 	}
 }

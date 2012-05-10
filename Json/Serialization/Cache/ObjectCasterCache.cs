@@ -14,39 +14,45 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ObjectCasterMethodPair.cs
+	File Name:		ObjectCasterCache.cs
 	Namespace:		Manatee.Json.Serialization.Cache
-	Class Name:		ObjectCasterMethodPair
-	Purpose:		Represents a typed pair of ObjectCaster methods.
+	Class Name:		ObjectCasterCache
+	Purpose:		Maintains a cache of ObjectCaster methods organized by type.
 
 ***************************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using Manatee.Json.Serialization.Helpers;
 
 namespace Manatee.Json.Serialization.Cache
 {
-	class ObjectCasterMethodPair
+	internal class ObjectCasterCache
 	{
-		public MethodInfo Caster { get; private set; }
-		public MethodInfo TryCaster { get; private set; }
+		public readonly static ObjectCasterCache Instance;
 
-		public ObjectCasterMethodPair(Type type)
+		private Dictionary<Type, ObjectCasterMethodPair> _cache;
+
+		static ObjectCasterCache()
 		{
-			Caster = GetTypedSerializeMethod(type);
-			TryCaster = GetTypedDeserializeMethod(type);
+			Instance = new ObjectCasterCache();
+		}
+		private ObjectCasterCache()
+		{
+			_cache = new Dictionary<Type, ObjectCasterMethodPair>();
 		}
 
-		private static MethodInfo GetTypedSerializeMethod(Type type)
+		public MethodInfo GetCaster(Type type)
 		{
-			return typeof(ObjectCaster).GetMethod("Cast").MakeGenericMethod(type);
+			if (!_cache.ContainsKey(type))
+				_cache.Add(type, new ObjectCasterMethodPair(type));
+			return _cache[type].Caster;
 		}
-		private static MethodInfo GetTypedDeserializeMethod(Type type)
+
+		public MethodInfo GetTryCaster(Type type)
 		{
-			return typeof(ObjectCaster).GetMethod("TryCast").MakeGenericMethod(type);
+			if (!_cache.ContainsKey(type))
+				_cache.Add(type, new ObjectCasterMethodPair(type));
+			return _cache[type].TryCaster;
 		}
 	}
 }

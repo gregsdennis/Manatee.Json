@@ -15,16 +15,13 @@
 	   limitations under the License.
  
 	File Name:		JsonValueTest.cs
-	Namespace:		Manatee.Json.Tests.Json
+	Namespace:		Manatee.Tests.Json
 	Class Name:		JsonValueTest
 	Purpose:		Tests for JsonValue.
 
 ***************************************************************************************/
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json;
+using Manatee.Json.Enumerations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Manatee.Json.Exceptions;
 
@@ -325,7 +322,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedSolidus_ReturnsCorrectJsonValue()
 		{
@@ -335,7 +331,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedReverseSolidus_ReturnsCorrectJsonValue()
 		{
@@ -345,7 +340,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedBackspace_ReturnsCorrectJsonValue()
 		{
@@ -355,7 +349,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedFormFeed_ReturnsCorrectJsonValue()
 		{
@@ -365,7 +358,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedNewLine_ReturnsCorrectJsonValue()
 		{
@@ -375,7 +367,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedCarriageReturn_ReturnsCorrectJsonValue()
 		{
@@ -385,7 +376,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedHorizontalTab_ReturnsCorrectJsonValue()
 		{
@@ -395,7 +385,6 @@ namespace Manatee.Tests.Json
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-
 		[TestMethod]
 		public void Parse_StringValueWithEscapedHexadecimalValue_ReturnsCorrectJsonValue()
 		{

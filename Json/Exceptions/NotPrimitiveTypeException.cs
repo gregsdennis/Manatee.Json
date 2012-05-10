@@ -14,25 +14,25 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonIgnoreAttribute.cs
-	Namespace:		Manatee.Json.Serialization.Attributes
-	Class Name:		JsonIgnoreAttribute
-	Purpose:		Applied to properties to indicate that they are not to be
-					serialized.
+	File Name:		NotPrimitiveTypeException.cs
+	Namespace:		Manatee.Json.Exceptions
+	Class Name:		NotPrimitiveTypeException
+	Purpose:		Thrown when a request is send to the PrimitiveMapper to map
+					a non-primitive type.
 
 ***************************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Manatee.Json.Serialization.Attributes
+namespace Manatee.Json.Exceptions
 {
-	/// <summary>
-	/// Applied to properties to indicate that they are not to be serialized.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
-	public class JsonIgnoreAttribute : Attribute
+	[Serializable]
+	internal class NotPrimitiveTypeException : Exception
 	{
+		public Type RequestedType { get; private set; }
+		public NotPrimitiveTypeException(Type type)
+			: base(string.Format("Type {0} is not primitive.", type))
+		{
+			RequestedType = type;
+		}
 	}
 }

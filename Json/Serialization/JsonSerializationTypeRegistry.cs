@@ -24,8 +24,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Serialization.Enumerations;
-using Manatee.Json.Serialization.Exceptions;
+using Manatee.Json.Enumerations;
+using Manatee.Json.Exceptions;
 
 namespace Manatee.Json.Serialization
 {

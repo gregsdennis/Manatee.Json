@@ -15,15 +15,11 @@
 	   limitations under the License.
  
 	File Name:		JsonArrayTest.cs
-	Namespace:		Manatee.Json.Tests.Json
+	Namespace:		Manatee.Tests.Json
 	Class Name:		JsonArrayTest
 	Purpose:		Tests for JsonArray.
 
 ***************************************************************************************/
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json;
 using Manatee.Json.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -15,19 +15,16 @@
 	   limitations under the License.
  
 	File Name:		PrimitiveMapper.cs
-	Namespace:		Manatee.Json.Serialization.Helpers
+	Namespace:		Manatee.Json.Helpers
 	Class Name:		PrimitiveMapper
 	Purpose:		Provides type-safe generic casting with additional functionality.
 
 ***************************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Manatee.Json;
-using Manatee.Json.Serialization.Exceptions;
+using Manatee.Json.Enumerations;
+using Manatee.Json.Exceptions;
 
-namespace Manatee.Json.Serialization.Helpers
+namespace Manatee.Json.Helpers
 {
 	internal static class PrimitiveMapper
 	{

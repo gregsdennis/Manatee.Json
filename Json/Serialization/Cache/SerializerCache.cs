@@ -14,47 +14,45 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ObjectCasterCache.cs
+	File Name:		SerializerCache.cs
 	Namespace:		Manatee.Json.Serialization.Cache
-	Class Name:		ObjectCasterCache
-	Purpose:		Maintains a cache of ObjectCaster methods organized by type.
+	Class Name:		SerializerCache
+	Purpose:		Maintains a cache of JsonSerializers methods organized by type.
 
 ***************************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Manatee.Json.Serialization.Cache
 {
-	class ObjectCasterCache
+	internal class SerializerCache
 	{
-		public readonly static ObjectCasterCache Instance;
+		public readonly static SerializerCache Instance;
 
-		private Dictionary<Type, ObjectCasterMethodPair> _cache;
+		private Dictionary<Type, SerializerMethodPair> _cache;
 
-		static ObjectCasterCache()
+		static SerializerCache()
 		{
-			Instance = new ObjectCasterCache();
+			Instance = new SerializerCache();
 		}
-		private ObjectCasterCache()
+		private SerializerCache()
 		{
-			_cache = new Dictionary<Type, ObjectCasterMethodPair>();
+			_cache = new Dictionary<Type, SerializerMethodPair>();
 		}
 
-		public MethodInfo GetCaster(Type type)
+		public MethodInfo GetSerializer(Type type)
 		{
 			if (!_cache.ContainsKey(type))
-				_cache.Add(type, new ObjectCasterMethodPair(type));
-			return _cache[type].Caster;
+				_cache.Add(type, new SerializerMethodPair(type));
+			return _cache[type].Serializer;
 		}
 
-		public MethodInfo GetTryCaster(Type type)
+		public MethodInfo GetDeserializer(Type type)
 		{
 			if (!_cache.ContainsKey(type))
-				_cache.Add(type, new ObjectCasterMethodPair(type));
-			return _cache[type].TryCaster;
+				_cache.Add(type, new SerializerMethodPair(type));
+			return _cache[type].Deserializer;
 		}
 	}
 }

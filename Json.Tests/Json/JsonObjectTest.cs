@@ -15,15 +15,11 @@
 	   limitations under the License.
  
 	File Name:		JsonObjectTest.cs
-	Namespace:		Manatee.Json.Tests.Json
+	Namespace:		Manatee.Tests.Json
 	Class Name:		JsonObjectTest
 	Purpose:		Tests for JsonObject.
 
 ***************************************************************************************/
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json;
 using Manatee.Json.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
