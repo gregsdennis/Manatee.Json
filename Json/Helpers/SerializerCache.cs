@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		SerializerCache.cs
-	Namespace:		Manatee.Json.Serialization.Cache
+	Namespace:		Manatee.Json.Cache
 	Class Name:		SerializerCache
 	Purpose:		Maintains a cache of JsonSerializers methods organized by type.
 
@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Manatee.Json.Serialization.Cache
+namespace Manatee.Json.Helpers
 {
 	internal class SerializerCache
 	{

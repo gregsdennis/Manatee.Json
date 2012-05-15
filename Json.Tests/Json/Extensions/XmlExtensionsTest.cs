@@ -22,7 +22,6 @@
 ***************************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 using Manatee.Json;
 using Manatee.Json.Extensions;
@@ -51,7 +50,7 @@ namespace Manatee.Tests.Json.Extensions
 
 			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToJson_ElementWithNumberValue_MapsCorrectly()
@@ -84,7 +83,7 @@ namespace Manatee.Tests.Json.Extensions
 
 			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToXElement_NumericStringWithKey_MapsCorrectly()
@@ -169,7 +168,7 @@ namespace Manatee.Tests.Json.Extensions
 
 			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToJson_ElementWithBooleanValue_MapsCorrectly()
@@ -207,7 +206,7 @@ namespace Manatee.Tests.Json.Extensions
 
 			var actual = json.ToXElement(null);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToXElement_ObjectWithKey_MapsCorrectly()
@@ -224,7 +223,7 @@ namespace Manatee.Tests.Json.Extensions
 
 			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToJson_SingleRootElementSimpleContents_MapsCorrectly()
@@ -303,29 +302,24 @@ namespace Manatee.Tests.Json.Extensions
 		{
 			var key = "aKey";
 			JsonValue json = new JsonArray {false, 42, "a string"};
-			var expected = new List<XElement>();
+			var expected = new XElement(key);
 			var xml = new XElement(key, false);
 			expected.Add(xml);
 			xml = new XElement(key, 42);
 			expected.Add(xml);
 			xml = new XElement(key, "a string");
 			expected.Add(xml);
-			var strings = expected.Select(x => x.ToString());
 
-			var actual = json.ToXElement(key).Elements();
+			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.Count, actual.Count());
-			foreach (var xElement in actual)
-			{
-				Assert.IsTrue(strings.Contains(xElement.ToString()));
-			}
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToXElement_ArrayWithNestedArray_MapsCorrectly()
 		{
 			var key = "aKey";
 			JsonValue json = new JsonArray {false, 42, new JsonArray {"a string"}};
-			var expected = new List<XElement>();
+			var expected = new XElement(key);
 			var xml = new XElement(key, false);
 			expected.Add(xml);
 			xml = new XElement(key, 42);
@@ -335,22 +329,17 @@ namespace Manatee.Tests.Json.Extensions
 			xml.Add(inner);
 			xml.SetAttributeValue("nest", true);
 			expected.Add(xml);
-			var strings = expected.Select(x => x.ToString());
 
-			var actual = json.ToXElement(key).Elements();
+			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.Count, actual.Count());
-			foreach (var xElement in actual)
-			{
-				Assert.IsTrue(strings.Contains(xElement.ToString()));
-			}
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToXElement_ArrayWithNestedArrayWithNestedObjectContainingSameKey_MapsCorrectly()
 		{
 			var key = "aKey";
 			JsonValue json = new JsonArray {false, 42, new JsonArray {"a string", new JsonObject {{key, 6}}}};
-			var expected = new List<XElement>();
+			var expected = new XElement(key);
 			var xml = new XElement(key, false);
 			expected.Add(xml);
 			xml = new XElement(key, 42);
@@ -364,15 +353,10 @@ namespace Manatee.Tests.Json.Extensions
 			xml.Add(inner);
 			xml.SetAttributeValue("nest", true);
 			expected.Add(xml);
-			var strings = expected.Select(x => x.ToString());
 
-			var actual = json.ToXElement(key).Elements();
+			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.Count, actual.Count());
-			foreach (var xElement in actual)
-			{
-				Assert.IsTrue(strings.Contains(xElement.ToString()));
-			}
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		#endregion
 		#region Null
@@ -392,7 +376,7 @@ namespace Manatee.Tests.Json.Extensions
 
 			var actual = json.ToXElement(key);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToJson_ElementWithNullValue_MapsCorrectly()
@@ -460,7 +444,7 @@ namespace Manatee.Tests.Json.Extensions
 
 			var actual = json.ToXElement("root");
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
+			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
 		[TestMethod]
 		public void ToJson_ComplexElement_MapsCorrectly()
@@ -537,6 +521,19 @@ namespace Manatee.Tests.Json.Extensions
 			var actual = toXElement.ToJson();
 
 			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void RoundTrip_StartingWithXml()
+		{
+			var expected = XElement.Parse(@"<Requests><Request><SearchCustomerRequest xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.manatee.com/services/""><MachineName xmlns=""http://www.manatee.com/services/sub/"">USA02415-2</MachineName><SearchContext xmlns:d2p1=""http://www.manatee.com/services/""><d2p1:CustomerId i:nil=""true"" /><d2p1:EdgeId /><d2p1:EmailAddress /><d2p1:LastName /><d2p1:LoyaltyCardNumber>1234567890123</d2p1:LoyaltyCardNumber><d2p1:MaxRows i:nil=""true"" /><d2p1:PhoneNumber /><d2p1:ZipCode /></SearchContext></SearchCustomerRequest></Request></Requests>");
+			var expectedJson = JsonValue.Parse(@"{""Requests"":{""Request"":{""SearchCustomerRequest"":[{""-xmlns:i"":""http:\/\/www.w3.org\/2001\/XMLSchema-instance"",""-xmlns"":""http:\/\/www.manatee.com\/services\/""},{""MachineName"":[{""-xmlns"":""http:\/\/www.manatee.com\/services\/sub\/""},""USA02415-2""],""d2p1:SearchContext"":[{""-xmlns:d2p1"":""http:\/\/www.manatee.com\/services\/""},{""d2p1:CustomerId"":[{""-i:nil"":True},Null],""d2p1:EdgeId"":Null,""d2p1:EmailAddress"":Null,""d2p1:LastName"":Null,""d2p1:LoyaltyCardNumber"":1234567890123,""d2p1:MaxRows"":[{""-i:nil"":True},Null],""d2p1:PhoneNumber"":Null,""d2p1:ZipCode"":Null}]}]}}}");
+
+			var toJson = expected.ToJson();
+			Assert.AreEqual(expectedJson, toJson);
+
+			var actual = toJson.ToXElement(null);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
 		}
 		#endregion
 	}

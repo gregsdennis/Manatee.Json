@@ -15,15 +15,16 @@
 	   limitations under the License.
  
 	File Name:		SerializerMethodPair.cs
-	Namespace:		Manatee.Json.Serialization.Cache
+	Namespace:		Manatee.Json.Cache
 	Class Name:		SerializerMethodPair
 	Purpose:		Represents a typed pair of JsonSerializer methods.
 
 ***************************************************************************************/
 using System;
 using System.Reflection;
+using Manatee.Json.Serialization;
 
-namespace Manatee.Json.Serialization.Cache
+namespace Manatee.Json.Helpers
 {
 	internal class SerializerMethodPair
 	{

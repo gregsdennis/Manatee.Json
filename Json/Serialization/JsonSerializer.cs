@@ -26,10 +26,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Manatee.Json.Attributes;
-using Manatee.Json.Serialization.Cache;
+using Manatee.Json.Helpers;
 using Manatee.Json.Enumerations;
 using Manatee.Json.Exceptions;
-using Manatee.Json.Helpers;
 
 namespace Manatee.Json.Serialization
 {

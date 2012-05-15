@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		ObjectCasterMethodPair.cs
-	Namespace:		Manatee.Json.Serialization.Cache
+	Namespace:		Manatee.Json.Cache
 	Class Name:		ObjectCasterMethodPair
 	Purpose:		Represents a typed pair of ObjectCaster methods.
 
@@ -24,7 +24,7 @@ using System;
 using System.Reflection;
 using Manatee.Json.Helpers;
 
-namespace Manatee.Json.Serialization.Cache
+namespace Manatee.Json.Helpers
 {
 	internal class ObjectCasterMethodPair
 	{
