@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		ObjectCasterCache.cs
-	Namespace:		Manatee.Json.Serialization.Cache
+	Namespace:		Manatee.Json.Cache
 	Class Name:		ObjectCasterCache
 	Purpose:		Maintains a cache of ObjectCaster methods organized by type.
 
@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Manatee.Json.Serialization.Cache
+namespace Manatee.Json.Helpers
 {
 	internal class ObjectCasterCache
 	{

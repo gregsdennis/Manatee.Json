@@ -76,6 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\XmlNamespaceRegistry.cs" />
+    <Compile Include="Helpers\XmlNamespacePair.cs" />
     <Compile Include="Helpers\CharacterConverter.cs" />
     <Compile Include="Exceptions\JsonStringInvalidEscapeSequenceException.cs" />
     <Compile Include="Exceptions\JsonKeyParseException.cs" />
@@ -91,10 +93,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enumerations\JsonInput.cs" />
     <Compile Include="Attributes\JsonIgnoreAttribute.cs" />
-    <Compile Include="Serialization\Cache\ObjectCasterCache.cs" />
-    <Compile Include="Serialization\Cache\ObjectCasterMethodPair.cs" />
-    <Compile Include="Serialization\Cache\SerializerCache.cs" />
-    <Compile Include="Serialization\Cache\SerializerMethodPair.cs" />
+    <Compile Include="Helpers\ObjectCasterCache.cs" />
+    <Compile Include="Helpers\ObjectCasterMethodPair.cs" />
+    <Compile Include="Helpers\SerializerCache.cs" />
+    <Compile Include="Helpers\SerializerMethodPair.cs" />
     <Compile Include="Enumerations\DateTimeSerializationFormat.cs" />
     <Compile Include="Enumerations\InvalidPropertyKeyBehavior.cs" />
     <Compile Include="Exceptions\NotPrimitiveTypeException.cs" />
