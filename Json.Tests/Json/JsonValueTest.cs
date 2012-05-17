@@ -106,51 +106,6 @@ namespace Manatee.Tests.Json
 			var json = JsonValue.Null;
 			var actual = json.Object;
 		}
-		//[TestMethod]
-		//public void Accessor_SetBoolWhenNotBool_ChangesTypeAndAssignsValue()
-		//{
-		//    var json = new JsonValue();
-		//    var expected = true;
-		//    json.Boolean = true;
-		//    Assert.AreEqual(JsonValueType.Boolean, json.Type);
-		//    Assert.AreEqual(expected, json.Boolean);
-		//}
-		//[TestMethod]
-		//public void Accessor_SetNumberWhenNotNumber_ChangesTypeAndAssignsValue()
-		//{
-		//    var json = new JsonValue();
-		//    var expected = 42;
-		//    json.Number = 42;
-		//    Assert.AreEqual(JsonValueType.Number, json.Type);
-		//    Assert.AreEqual(expected, json.Number);
-		//}
-		//[TestMethod]
-		//public void Accessor_SetStringWhenNotString_ChangesTypeAndAssignsValue()
-		//{
-		//    var json = new JsonValue();
-		//    var expected = "a string";
-		//    json.String = "a string";
-		//    Assert.AreEqual(JsonValueType.String, json.Type);
-		//    Assert.AreEqual(expected, json.String);
-		//}
-		//[TestMethod]
-		//public void Accessor_SetArrayWhenNotArray_ChangesTypeAndAssignsValue()
-		//{
-		//    var json = new JsonValue();
-		//    var expected = new JsonArray{false, 42, "a string"};
-		//    json.Array = new JsonArray {false, 42, "a string"};
-		//    Assert.AreEqual(JsonValueType.Array, json.Type);
-		//    Assert.AreEqual(expected, json.Array);
-		//}
-		//[TestMethod]
-		//public void Accessor_SetObjectWhenNotObject_ChangesTypeAndAssignsValue()
-		//{
-		//    var json = new JsonValue();
-		//    var expected = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
-		//    json.Object = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
-		//    Assert.AreEqual(JsonValueType.Object, json.Type);
-		//    Assert.AreEqual(expected, json.Object);
-		//}
 		#endregion
 
 		#region ToString Tests
@@ -158,7 +113,7 @@ namespace Manatee.Tests.Json
 		public void ToString_BoolFalse_ReturnsCorrectString()
 		{
 			var json = new JsonValue(false);
-			var expected = "False";
+			var expected = "false";
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
@@ -166,7 +121,7 @@ namespace Manatee.Tests.Json
 		public void ToString_BoolTrue_ReturnsCorrectString()
 		{
 			var json = new JsonValue(true);
-			var expected = "True";
+			var expected = "true";
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
@@ -190,7 +145,7 @@ namespace Manatee.Tests.Json
 		public void ToString_Array_ReturnsCorrectString()
 		{
 			var json = new JsonValue(new JsonArray { false, 42, "a string" });
-			var expected = "[False,42,\"a string\"]";
+			var expected = "[false,42,\"a string\"]";
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
@@ -198,7 +153,7 @@ namespace Manatee.Tests.Json
 		public void ToString_Object_ReturnsCorrectString()
 		{
 			var json = new JsonValue(new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}});
-			var expected = "{\"bool\":False,\"int\":42,\"string\":\"a string\"}";
+			var expected = "{\"bool\":false,\"int\":42,\"string\":\"a string\"}";
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
@@ -206,7 +161,7 @@ namespace Manatee.Tests.Json
 		public void ToString_Null_ReturnsCorrectString()
 		{
 			var json = new JsonValue();
-			var expected = "Null";
+			var expected = "null";
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
@@ -253,7 +208,7 @@ namespace Manatee.Tests.Json
 		[TestMethod]
 		public void Parse_StringWithBoolFalse_ReturnsCorrectJsonValue()
 		{
-			var s = "False";
+			var s = "false";
 			var expected = new JsonValue(false);
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
@@ -261,7 +216,7 @@ namespace Manatee.Tests.Json
 		[TestMethod]
 		public void Parse_StringWithBoolTrue_ReturnsCorrectJsonValue()
 		{
-			var s = "True";
+			var s = "true";
 			var expected = new JsonValue(true);
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
@@ -285,7 +240,7 @@ namespace Manatee.Tests.Json
 		[TestMethod]
 		public void Parse_StringWithArray_ReturnsCorrectJsonValue()
 		{
-			var s = "[False,42,\"a string\"]";
+			var s = "[false,42,\"a string\"]";
 			var expected = new JsonValue(new JsonArray {false, 42, "a string"});
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
@@ -293,7 +248,7 @@ namespace Manatee.Tests.Json
 		[TestMethod]
 		public void Parse_StringWithObject_ReturnsCorrectJsonValue()
 		{
-			var s = "{\"bool\":False,\"int\":42,\"string\":\"a string\"}";
+			var s = "{\"bool\":false,\"int\":42,\"string\":\"a string\"}";
 			var expected = new JsonValue(new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}});
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
@@ -301,7 +256,7 @@ namespace Manatee.Tests.Json
 		[TestMethod]
 		public void Parse_StringWithNull_ReturnsCorrectJsonValue()
 		{
-			var s = "Null";
+			var s = "null";
 			var expected = JsonValue.Null;
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
