@@ -232,16 +232,12 @@ namespace Manatee.Json
 		{
 			switch (Type)
 			{
-				case JsonValueType.Number:
-				case JsonValueType.String:
-				case JsonValueType.Boolean:
-					return ToString();
 				case JsonValueType.Object:
 					return objectValue.GetIndentedString(indentLevel);
 				case JsonValueType.Array:
 					return arrayValue.GetIndentedString(indentLevel);
 				default:
-					return "Null";
+					return "null";
 			}
 		}
 
@@ -262,13 +258,13 @@ namespace Manatee.Json
 				case JsonValueType.String:
 					return string.Format("\"{0}\"", InsertEscapeSequences(stringValue));
 				case JsonValueType.Boolean:
-					return string.Format("{0}", boolValue);
+					return boolValue ? "true" : "false";
 				case JsonValueType.Object:
 					return string.Format("{0}", objectValue);
 				case JsonValueType.Array:
 					return string.Format("{0}", arrayValue);
 				default:
-					return "Null";
+					return "null";
 			}
 		}
 		/// <summary>
