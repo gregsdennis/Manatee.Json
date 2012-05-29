@@ -64,6 +64,7 @@
     <Compile Include="Test References\JsonCompatibleClass.cs" />
     <Compile Include="Test References\ObjectWithAbstractAndInterfaceProps.cs" />
     <Compile Include="Test References\ObjectWithBasicProps.cs" />
+    <Compile Include="Test References\ObjectWithExtendedProps.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Json\Manatee.Json.csproj">
