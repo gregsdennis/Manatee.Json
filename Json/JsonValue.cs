@@ -446,7 +446,7 @@ namespace Manatee.Json
 		///<returns></returns>
 		public static bool operator !=(JsonValue a, JsonValue b)
 		{
-			return !a.Equals(b);
+			return !Equals(a, b);
 		}
 
 		internal static JsonValue Parse(string source, ref int index)

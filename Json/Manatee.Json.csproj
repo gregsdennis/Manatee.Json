@@ -76,6 +76,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\PropertyReference.cs" />
+    <Compile Include="Helpers\SerializerReferenceCache.cs" />
+    <Compile Include="Helpers\SerializerReferenceRecord.cs" />
     <Compile Include="Helpers\XmlNamespaceRegistry.cs" />
     <Compile Include="Helpers\XmlNamespacePair.cs" />
     <Compile Include="Helpers\CharacterConverter.cs" />

@@ -157,8 +157,8 @@ namespace Manatee.Tests.Json.Serialization
 		public void Deserialize_List_Successful()
 		{
 			JsonSerializationTypeRegistry.RegisterListType<int>();
-			JsonValue json = new JsonArray { 4, 3, 5, 6 };
-			var expected = new List<int> { 4, 3, 5, 6 };
+			JsonValue json = new JsonArray {4, 3, 5, 6};
+			var expected = new List<int> {4, 3, 5, 6};
 			var actual = _serializer.Deserialize<List<int>>(json);
 			Assert.AreEqual(expected.Count, actual.Count);
 			for (int i = 0; i < expected.Count; i++)
@@ -170,7 +170,7 @@ namespace Manatee.Tests.Json.Serialization
 		public void Deserialize_Dictionary_Successful()
 		{
 			JsonSerializationTypeRegistry.RegisterDictionaryType<string, double>();
-			var expected = new Dictionary<string, double> { { "four", 4 }, { "three", 3 }, { "five", 5 }, { "six", 6 } };
+			var expected = new Dictionary<string, double> {{"four", 4}, {"three", 3}, {"five", 5}, {"six", 6}};
 			JsonValue json = new JsonArray
 			                     	{
 			                     		new JsonObject {{"Key", "four"}, {"Value", 4}},
@@ -190,7 +190,7 @@ namespace Manatee.Tests.Json.Serialization
 		public void Deserialize_Queue_Successful()
 		{
 			JsonSerializationTypeRegistry.RegisterQueueType<int>();
-			JsonValue json = new JsonArray { 4, 3, 5, 6 };
+			JsonValue json = new JsonArray {4, 3, 5, 6};
 			var expected = new Queue<int>();
 			expected.Enqueue(4);
 			expected.Enqueue(3);
@@ -207,7 +207,7 @@ namespace Manatee.Tests.Json.Serialization
 		public void Deserialize_Stack_Successful()
 		{
 			JsonSerializationTypeRegistry.RegisterStackType<int>();
-			JsonValue json = new JsonArray { 4, 3, 5, 6 };
+			JsonValue json = new JsonArray {4, 3, 5, 6};
 			var expected = new Stack<int>();
 			expected.Push(4);
 			expected.Push(3);
@@ -253,12 +253,12 @@ namespace Manatee.Tests.Json.Serialization
 							{"OtherProp", Math.PI}
 			           	};
 			var expected = new ObjectWithBasicProps
-			{
-				StringProp = "stringValue",
-				IntProp = 42,
-				DoubleProp = 6.0,
-				BoolProp = true
-			};
+			               	{
+			               		StringProp = "stringValue",
+			               		IntProp = 42,
+			               		DoubleProp = 6.0,
+			               		BoolProp = true
+			               	};
 			var actual = _serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
@@ -303,6 +303,34 @@ namespace Manatee.Tests.Json.Serialization
 			{
 				_serializer.Options = null;
 			}
+		}
+		[TestMethod]
+		public void Deserialize_CircularStructure_MaintainsReferences()
+		{
+			var json = JsonValue.Parse(@"{""LoopProperty"":{""LoopProperty"":{""#Ref"":""f3a2993b-9b0c-4296-872e-95a9210295f4""},""StringProp"":""stringValueB"",""IntProp"":6,""BoolProp"":true},""StringProp"":""stringValueA"",""IntProp"":42,""#Define"":""f3a2993b-9b0c-4296-872e-95a9210295f4""}");
+			var expected = new ObjectWithExtendedProps
+			{
+				StringProp = "stringValueA",
+				IntProp = 42
+			};
+			var obj2 = new ObjectWithExtendedProps
+			{
+				StringProp = "stringValueB",
+				IntProp = 6,
+				BoolProp = true,
+				LoopProperty = expected
+			};
+			expected.LoopProperty = obj2;
+
+			var actual = _serializer.Deserialize<ObjectWithExtendedProps>(json);
+
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(expected.StringProp, actual.StringProp);
+			Assert.IsNotNull(actual.LoopProperty);
+			Assert.AreEqual(expected.LoopProperty.StringProp, actual.LoopProperty.StringProp);
+			Assert.IsNotNull(actual.LoopProperty.LoopProperty);
+			Assert.AreSame(actual, actual.LoopProperty.LoopProperty);
+
 		}
 		#endregion
 
@@ -518,11 +546,11 @@ namespace Manatee.Tests.Json.Serialization
 			                      	};
 			// DoubleProp remains default
 			var obj = new ObjectWithBasicProps
-			{
-				StringProp = "stringValue",
-				IntProp = 42,
-				BoolProp = true
-			};
+			          	{
+			          		StringProp = "stringValue",
+			          		IntProp = 42,
+			          		BoolProp = true
+			          	};
 			JsonValue expected = new JsonObject
 									{
 										{"StringProp", "stringValue"},
@@ -533,6 +561,36 @@ namespace Manatee.Tests.Json.Serialization
 			var actual = _serializer.Serialize(obj);
 			_serializer.Options = null;
 			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_CircularStructure_SerializesWithReference()
+		{
+			var obj = new ObjectWithExtendedProps
+			          	{
+			          		StringProp = "stringValue",
+			          		IntProp = 42,
+			          		BoolProp = true
+			          	};
+			var obj2 = new ObjectWithExtendedProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				BoolProp = true,
+				LoopProperty = obj
+			};
+			obj.LoopProperty = obj2;
+
+			var actual = _serializer.Serialize(obj);
+
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(JsonValueType.Object, actual.Type);
+			Assert.IsTrue(actual.Object.ContainsKey("#Define"));
+			Assert.IsTrue(actual.Object.ContainsKey("LoopProperty"));
+			Assert.AreEqual(JsonValueType.Object, actual.Object["LoopProperty"].Type);
+			Assert.IsTrue(actual.Object["LoopProperty"].Object.ContainsKey("LoopProperty"));
+			Assert.AreEqual(JsonValueType.Object, actual.Object["LoopProperty"].Object["LoopProperty"].Type);
+			Assert.IsTrue(actual.Object["LoopProperty"].Object["LoopProperty"].Object.ContainsKey("#Ref"));
+			Assert.AreEqual(actual.Object["#Define"], actual.Object["LoopProperty"].Object["LoopProperty"].Object["#Ref"]);
 		}
 		#endregion
 	}
