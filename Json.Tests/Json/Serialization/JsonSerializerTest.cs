@@ -330,7 +330,6 @@ namespace Manatee.Tests.Json.Serialization
 			Assert.AreEqual(expected.LoopProperty.StringProp, actual.LoopProperty.StringProp);
 			Assert.IsNotNull(actual.LoopProperty.LoopProperty);
 			Assert.AreSame(actual, actual.LoopProperty.LoopProperty);
-
 		}
 		#endregion
 

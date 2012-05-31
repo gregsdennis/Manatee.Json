@@ -39,12 +39,12 @@ namespace Manatee.Json.Helpers
 
 		private static MethodInfo GetTypedSerializeMethod(Type type)
 		{
-			return typeof(JsonSerializer).GetMethod("ManagedSerialize", BindingFlags.Instance | BindingFlags.NonPublic)
+			return typeof(JsonSerializer).GetMethod("Serialize")
 										 .MakeGenericMethod(type);
 		}
 		private static MethodInfo GetTypedDeserializeMethod(Type type)
 		{
-			return typeof(JsonSerializer).GetMethod("ManagedDeserialize", BindingFlags.Instance | BindingFlags.NonPublic)
+			return typeof(JsonSerializer).GetMethod("Deserialize")
 										 .MakeGenericMethod(type);
 		}
 	}
