@@ -325,10 +325,8 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the List&lt;T&gt;.</returns>
 		public static JsonValue EncodeGenericList<T>(List<T> list)
 		{
-			var cache = new SerializerReferenceCache();
 			var array = new JsonArray();
-			array.AddRange(list.Select(item => _serializer.ManagedSerialize(item, cache)));
-			cache.ReconcileJsonReferences();
+			array.AddRange(list.Select(item => _serializer.Serialize(item)));
 			return array;
 		}
 		/// <summary>
@@ -339,10 +337,8 @@ namespace Manatee.Json.Serialization
 		/// <returns>The List&lt;T&gt; object.</returns>
 		public static List<T> DecodeGenericList<T>(JsonValue json)
 		{
-			var cache = new SerializerReferenceCache();
 			var list = new List<T>();
-			list.AddRange(json.Array.Select(jv => _serializer.ManagedDeserialize<T>(jv, cache)));
-			cache.ReconcileObjectReferences();
+			list.AddRange(json.Array.Select(jv => _serializer.Deserialize<T>(jv)));
 			return list;
 		}
 		#endregion
@@ -356,14 +352,12 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the Dictionary&lt;T&gt;.</returns>
 		public static JsonValue EncodeGenericDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict)
 		{
-			var cache = new SerializerReferenceCache();
 			var array = new JsonArray();
 			array.AddRange(dict.Select(item => (JsonValue)(new JsonObject
 			                                               	{
-			                                               		{"Key", _serializer.ManagedSerialize(item.Key, cache)},
-																{"Value", _serializer.ManagedSerialize(item.Value, cache)}
+			                                               		{"Key", _serializer.Serialize(item.Key)},
+																{"Value", _serializer.Serialize(item.Value)}
 			                                               	})));
-			cache.ReconcileJsonReferences();
 			return array;
 		}
 		/// <summary>
@@ -375,14 +369,12 @@ namespace Manatee.Json.Serialization
 		/// <returns>The Dictionary&lt;T&gt; object.</returns>
 		public static Dictionary<TKey, TValue> DecodeGenericDictionary<TKey, TValue>(JsonValue json)
 		{
-			var cache = new SerializerReferenceCache();
 			var dict = new Dictionary<TKey, TValue>();
 			foreach (var jv in json.Array)
 			{
-				dict.Add(_serializer.ManagedDeserialize<TKey>(jv.Object["Key"], cache),
-						 _serializer.ManagedDeserialize<TValue>(jv.Object["Value"], cache));
+				dict.Add(_serializer.Deserialize<TKey>(jv.Object["Key"]),
+						 _serializer.Deserialize<TValue>(jv.Object["Value"]));
 			}
-			cache.ReconcileObjectReferences();
 			return dict;
 		}
 		#endregion
@@ -395,13 +387,11 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the Queue&lt;T&gt;.</returns>
 		public static JsonValue EncodeGenericQueue<T>(Queue<T> queue)
 		{
-			var cache = new SerializerReferenceCache();
 			var array = new JsonArray();
 			for (int i = 0; i < queue.Count; i++)
 			{
-				array.Add(_serializer.ManagedSerialize(queue.ElementAt(i), cache));
+				array.Add(_serializer.Serialize(queue.ElementAt(i)));
 			}
-			cache.ReconcileJsonReferences();
 			return array;
 		}
 		/// <summary>
@@ -412,13 +402,11 @@ namespace Manatee.Json.Serialization
 		/// <returns>The Queue&lt;T&gt; object.</returns>
 		public static Queue<T> DecodeGenericQueue<T>(JsonValue json)
 		{
-			var cache = new SerializerReferenceCache();
 			var queue = new Queue<T>();
 			for (int i = 0; i < json.Array.Count; i++)
 			{
-				queue.Enqueue(_serializer.ManagedDeserialize<T>(json.Array[i], cache));
+				queue.Enqueue(_serializer.Deserialize<T>(json.Array[i]));
 			}
-			cache.ReconcileObjectReferences();
 			return queue;
 		}
 		#endregion
@@ -431,13 +419,11 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the Stack&lt;T&gt;.</returns>
 		public static JsonValue EncodeGenericStack<T>(Stack<T> stack)
 		{
-			var cache = new SerializerReferenceCache();
 			var array = new JsonArray();
 			for (int i = 0; i < stack.Count; i++)
 			{
-				array.Add(_serializer.ManagedSerialize(stack.ElementAt(i), cache));
+				array.Add(_serializer.Serialize(stack.ElementAt(i)));
 			}
-			cache.ReconcileJsonReferences();
 			return array;
 		}
 		/// <summary>
@@ -448,13 +434,11 @@ namespace Manatee.Json.Serialization
 		/// <returns>The Stack&lt;T&gt; object.</returns>
 		public static Stack<T> DecodeGenericStack<T>(JsonValue json)
 		{
-			var cache = new SerializerReferenceCache();
 			var stack = new Stack<T>();
 			for (int i = 0; i < json.Array.Count; i++)
 			{
-				stack.Push(_serializer.ManagedDeserialize<T>(json.Array[i], cache));
+				stack.Push(_serializer.Deserialize<T>(json.Array[i]));
 			}
-			cache.ReconcileObjectReferences();
 			return stack;
 		}
 		#endregion
