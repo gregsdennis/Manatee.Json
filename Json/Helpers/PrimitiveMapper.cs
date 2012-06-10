@@ -44,6 +44,8 @@ namespace Manatee.Json.Helpers
 		{
 			if (!IsPrimitive(typeof(T)))
 			    throw new NotPrimitiveTypeException(typeof(T));
+			if (typeof(Enum).IsAssignableFrom(typeof(T)))
+				return (T) Enum.ToObject(typeof (T), (int) json.Number);
 			var value = json.GetValue();
 			T result;
 			ObjectCaster.TryCast(value, out result);
@@ -52,7 +54,7 @@ namespace Manatee.Json.Helpers
 
 		public static bool IsPrimitive(Type type)
 		{
-			return (type == typeof (string)) || type.IsPrimitive;
+			return type.IsPrimitive || (type == typeof (string)) || (typeof(Enum).IsAssignableFrom(type));
 		}
 
 		private static object GetValue(this JsonValue json)
