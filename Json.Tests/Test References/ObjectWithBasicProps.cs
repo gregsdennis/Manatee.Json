@@ -23,6 +23,7 @@
 
 ***************************************************************************************/
 using Manatee.Json.Attributes;
+using Manatee.Json.Enumerations;
 
 namespace Manatee.Tests.Test_References
 {
@@ -33,6 +34,7 @@ namespace Manatee.Tests.Test_References
 		public int IntProp { get; set; }
 		public double DoubleProp { get; set; }
 		public bool BoolProp { get; set; }
+		public JsonValueType EnumProp { get; set; }
 		#endregion
 
 		#region Nonserializable Instance Properties
@@ -74,7 +76,8 @@ namespace Manatee.Tests.Test_References
 			       other.BoolProp.Equals(BoolProp) &&
 			       Equals(other.ReadOnlyProp, ReadOnlyProp) &&
 			       Equals(other.WriteOnlyProp, WriteOnlyProp) &&
-			       Equals(other.IgnoreProp, IgnoreProp);
+			       Equals(other.IgnoreProp, IgnoreProp) &&
+				   Equals(other.EnumProp, EnumProp);
 		}
 		public override int GetHashCode()
 		{
@@ -87,6 +90,7 @@ namespace Manatee.Tests.Test_References
 				result = (result * 397) ^ (ReadOnlyProp != null ? ReadOnlyProp.GetHashCode() : 0);
 				result = (result * 397) ^ (WriteOnlyProp != null ? WriteOnlyProp.GetHashCode() : 0);
 				result = (result * 397) ^ (IgnoreProp != null ? IgnoreProp.GetHashCode() : 0);
+				result = (result * 397) ^ EnumProp.GetHashCode();
 				return result;
 			}
 		}

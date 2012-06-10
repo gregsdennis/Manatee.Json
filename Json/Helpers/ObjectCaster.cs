@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace Manatee.Json.Helpers
 {
@@ -37,7 +38,7 @@ namespace Manatee.Json.Helpers
 			catch (InvalidCastException)
 			{
 				result = default(T);
-				var parseMethod = typeof(T).GetMethod("TryParse", BindingFlags.Static | BindingFlags.Public,
+				var parseMethod = typeof(T).GetMethod("TryParse", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy,
 													  null, new[] { typeof(string), typeof(T).MakeByRefType() }, null);
 				if (parseMethod == null) return false;
 				var paramsList = new object[] { obj.ToString(), result };
@@ -65,6 +66,5 @@ namespace Manatee.Json.Helpers
 				return default(T);
 			}
 		}
-
 	}
 }

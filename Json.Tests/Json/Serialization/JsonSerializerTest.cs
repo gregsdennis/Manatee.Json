@@ -88,14 +88,16 @@ namespace Manatee.Tests.Json.Serialization
 			           		{"StringProp", "stringValue"},
 			           		{"IntProp", 42},
 			           		{"DoubleProp", 6},
-			           		{"BoolProp", true}
+			           		{"BoolProp", true},
+							{"EnumProp", 2}
 			           	};
 			var expected = new ObjectWithBasicProps
-							{
-								StringProp = "stringValue",
-								IntProp = 42,
-								DoubleProp = 6.0,
-								BoolProp = true
+			               	{
+			               		StringProp = "stringValue",
+			               		IntProp = 42,
+			               		DoubleProp = 6.0,
+			               		BoolProp = true,
+			               		EnumProp = JsonValueType.Boolean
 							};
 			var actual = _serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
@@ -384,14 +386,16 @@ namespace Manatee.Tests.Json.Serialization
 							StringProp = "stringValue",
 							IntProp = 42,
 							DoubleProp = 6.0,
-							BoolProp = true
+							BoolProp = true,
+							EnumProp = JsonValueType.Boolean
 						};
 			JsonValue expected = new JsonObject
 									{
 										{"StringProp", "stringValue"},
 										{"IntProp", 42},
 										{"DoubleProp", 6},
-										{"BoolProp", true}
+										{"BoolProp", true},
+										{"EnumProp", 2}
 									};
 			var actual = _serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
