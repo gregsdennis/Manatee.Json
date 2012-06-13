@@ -57,8 +57,6 @@ namespace Manatee.Json.Serialization
 		private static readonly JsonSerializer _serializer;
 		private static readonly object lockHolder = new object();
 
-		private static JsonSerializerOptions requestedOptions;
-
 		static JsonSerializationTypeRegistry()
 		{
 			ToJsonConverters = new Dictionary<Type, Delegate>();
@@ -77,9 +75,8 @@ namespace Manatee.Json.Serialization
 			}
 			lock (lockHolder)
 			{
-				requestedOptions = serializer.Options;
+				_serializer.Options = serializer.Options;
 				json = converter(obj);
-				requestedOptions = null;
 				return true;
 			}
 		}
@@ -93,9 +90,8 @@ namespace Manatee.Json.Serialization
 			}
 			lock (lockHolder)
 			{
-				requestedOptions = serializer.Options;
+				_serializer.Options = serializer.Options;
 				obj = converter(json);
-				requestedOptions = null;
 				return true;
 			}
 		}
@@ -217,9 +213,9 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the DateTime.</returns>
 		public static JsonValue EncodeDateTime(DateTime dt)
 		{
-			if (requestedOptions == null)
+			if (_serializer.Options == null)
 				return dt.ToString();
-			switch (requestedOptions.DateTimeSerializationFormat)
+			switch (_serializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.JavaConstructor:
 					return string.Format("/Date({0})/", dt.Ticks/TimeSpan.TicksPerMillisecond);
@@ -236,9 +232,9 @@ namespace Manatee.Json.Serialization
 		/// <returns>The DateTime object.</returns>
 		public static DateTime DecodeDateTime(JsonValue json)
 		{
-			if (requestedOptions == null)
+			if (_serializer.Options == null)
 				return DateTime.Parse(json.String);
-			switch (requestedOptions.DateTimeSerializationFormat)
+			switch (_serializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.JavaConstructor:
 					return new DateTime(long.Parse(json.String.Substring(6, json.String.Length - 8))*TimeSpan.TicksPerMillisecond);
