@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\JsonMapToAttribute.cs" />
     <Compile Include="Helpers\PropertyReference.cs" />
     <Compile Include="Helpers\SerializerReferenceCache.cs" />
     <Compile Include="Helpers\SerializerReferenceRecord.cs" />

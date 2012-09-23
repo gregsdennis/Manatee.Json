@@ -86,14 +86,7 @@ namespace Manatee.Json
 		public JsonObject(string s)
 			: this()
 		{
-			var inString = false;
-			source = "";
-			for (var i = 0; i < s.Length; i++)
-			{
-				if (s[i] == '"') inString = !inString;
-				if (inString || (!inString && !IsWhiteSpace(s[i])))
-					source += s[i];
-			}
+			source = StripExternalSpaces(s);
 			Parse(0);
 		}
 
@@ -139,6 +132,18 @@ namespace Manatee.Json
 		private static bool IsWhiteSpace(char c)
 		{
 			return (c == 10) || (c == 13) || (c == 32) || (c == 9);
+		}
+		private static string StripExternalSpaces(string s)
+		{
+			var inString = false;
+			var ret = "";
+			for (var i = 0; i < s.Length; i++)
+			{
+				if (s[i] == '"') inString = !inString;
+				if (inString || !IsWhiteSpace(s[i]))
+					ret += s[i];
+			}
+			return ret;
 		}
 		private int Parse(int i)
 		{
