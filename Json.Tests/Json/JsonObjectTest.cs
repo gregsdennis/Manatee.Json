@@ -115,5 +115,32 @@ namespace Manatee.Tests.Json
 			var s = "{\"bool\":false,\"int\":42,\"string\":\"a string\"";
 			var actual = new JsonObject(s);
 		}
+		[TestMethod]
+		public void Parse_StringFromSourceForge()
+		{
+			var s = @"{
+  ""self"": ""self"",
+  ""name"": ""name"",
+  ""emailAddress"": ""test at test dot com"",
+  ""avatarUrls"": {
+	""16x16"": ""http://smallUrl"",
+	""48x48"": ""https://largeUrl""
+  },
+  ""displayName"": ""Display Name"",
+  ""active"": true,
+  ""timeZone"": ""Europe"",
+  ""groups"": {
+	""size"": 1,
+	""items"": [
+	  {
+		""name"": ""users""
+	  }
+	]
+  },
+  ""expand"": ""groups""
+}";
+			var actual = new JsonObject(s);
+			var newString = actual.ToString();
+		}
 	}
 }

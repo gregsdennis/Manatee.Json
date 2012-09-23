@@ -253,7 +253,11 @@ namespace Manatee.Json.Serialization
 				var serialize = SerializerCache.Instance.GetSerializer(type);
 				var jsonProp = (JsonValue) serialize.Invoke(this, new[] {value});
 				if ((jsonProp == JsonValue.Null) && !Options.EncodeDefaultValues) continue;
-				json.Add(propertyInfo.Name,
+				string name = propertyInfo.Name;
+				var mapper = (JsonMapToAttribute)propertyInfo.GetCustomAttributes(typeof(JsonMapToAttribute), false).FirstOrDefault();
+				if (mapper != null)
+					name = mapper.MapToKey;
+				json.Add(name,
 				         type == propertyInfo.PropertyType
 				         	? jsonProp
 				         	: new JsonObject {{TypeKey, type.AssemblyQualifiedName}, {ValueKey, jsonProp}});
@@ -269,9 +273,13 @@ namespace Manatee.Json.Serialization
 			var obj = Activator.CreateInstance<T>();
 			foreach (var propertyInfo in propertyInfoList)
 			{
-				if (json.Object.ContainsKey(propertyInfo.Name))
+				string name = propertyInfo.Name;
+				var mapper = (JsonMapToAttribute)propertyInfo.GetCustomAttributes(typeof(JsonMapToAttribute), false).FirstOrDefault();
+				if (mapper != null)
+					name = mapper.MapToKey;
+				if (json.Object.ContainsKey(name))
 				{
-					var value = json.Object[propertyInfo.Name];
+					var value = json.Object[name];
 					if ((value.Type == JsonValueType.Object) && (value.Object.ContainsKey(TypeKey)))
 					{
 						var instanceType = Type.GetType(value.Object[TypeKey].String);
@@ -286,9 +294,9 @@ namespace Manatee.Json.Serialization
 					else
 					{
 						var deserialize = SerializerCache.Instance.GetDeserializer(propertyInfo.PropertyType);
-						propertyInfo.SetValue(obj, deserialize.Invoke(this, new object[] {json.Object[propertyInfo.Name]}), null);
+						propertyInfo.SetValue(obj, deserialize.Invoke(this, new object[] {json.Object[name]}), null);
 					}
-					json.Object.Remove(propertyInfo.Name);
+					json.Object.Remove(name);
 				}
 			}
 			if ((json.Object.Count > 0) && (Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))

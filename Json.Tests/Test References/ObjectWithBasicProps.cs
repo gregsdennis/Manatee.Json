@@ -35,6 +35,8 @@ namespace Manatee.Tests.Test_References
 		public double DoubleProp { get; set; }
 		public bool BoolProp { get; set; }
 		public JsonValueType EnumProp { get; set; }
+		[JsonMapTo("MapToMe")]
+		public int MappedProp { get; set; }
 		#endregion
 
 		#region Nonserializable Instance Properties
@@ -77,7 +79,8 @@ namespace Manatee.Tests.Test_References
 			       Equals(other.ReadOnlyProp, ReadOnlyProp) &&
 			       Equals(other.WriteOnlyProp, WriteOnlyProp) &&
 			       Equals(other.IgnoreProp, IgnoreProp) &&
-				   Equals(other.EnumProp, EnumProp);
+				   Equals(other.EnumProp, EnumProp) &&
+				   Equals(other.MappedProp, MappedProp);
 		}
 		public override int GetHashCode()
 		{
@@ -91,6 +94,7 @@ namespace Manatee.Tests.Test_References
 				result = (result * 397) ^ (WriteOnlyProp != null ? WriteOnlyProp.GetHashCode() : 0);
 				result = (result * 397) ^ (IgnoreProp != null ? IgnoreProp.GetHashCode() : 0);
 				result = (result * 397) ^ EnumProp.GetHashCode();
+				result = (result * 397) ^ MappedProp;
 				return result;
 			}
 		}

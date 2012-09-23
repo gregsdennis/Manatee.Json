@@ -316,7 +316,7 @@ namespace Manatee.Json
 		public static JsonValue Parse(string source)
 		{
 			var i = 1;
-			return Parse(source, ref i);
+			return Parse(StripExternalSpaces(source), ref i);
 		}
 
 		/// <summary>
@@ -594,6 +594,23 @@ namespace Manatee.Json
 				i++;
 			}
 			return s;
+		}
+
+		private static bool IsWhiteSpace(char c)
+		{
+			return (c == 10) || (c == 13) || (c == 32) || (c == 9);
+		}
+		private static string StripExternalSpaces(string s)
+		{
+			var inString = false;
+			var ret = "";
+			for (var i = 0; i < s.Length; i++)
+			{
+				if (s[i] == '"') inString = !inString;
+				if (inString || !IsWhiteSpace(s[i]))
+					ret += s[i];
+			}
+			return ret;
 		}
 	}
 }
