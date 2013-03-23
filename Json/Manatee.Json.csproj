@@ -93,7 +93,7 @@
     <Compile Include="Exceptions\JsonValueIncorrectTypeException.cs" />
     <Compile Include="Exceptions\JsonValueParseException.cs" />
     <Compile Include="JsonArray.cs" />
-    <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Extensions\JsonExtensions.cs" />
     <Compile Include="JsonObject.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="JsonValue.cs" />
