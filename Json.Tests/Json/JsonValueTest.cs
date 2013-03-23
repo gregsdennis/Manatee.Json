@@ -20,6 +20,8 @@
 	Purpose:		Tests for JsonValue.
 
 ***************************************************************************************/
+using System;
+using System.Linq;
 using Manatee.Json;
 using Manatee.Json.Enumerations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -169,9 +171,9 @@ namespace Manatee.Tests.Json
 		public void ToString_EscapableCharacters_ReturnsCorrectString()
 		{
 			JsonValue json1 = new JsonValue("These\" are/ some\\ of\b the\f escapable\n characters."),
-					  json2 = new JsonValue("Here\r are\t some" + (char)0x25A0 + " more.");
+					  json2 = new JsonValue("Here\r are\t some" + (char)0x25A0 + " more" + (char)0x009F + ".");
 			var expected1 = "\"These\\\" are\\/ some\\\\ of\\b the\\f escapable\\n characters.\"";
-			var expected2 = "\"Here\\r are\\t some\\u25A0 more.\"";
+			var expected2 = "\"Here\\r are\\t some" + (char)0x25A0 + " more\\u009F.\"";
 			var actual1 = json1.ToString();
 			var actual2 = json2.ToString();
 

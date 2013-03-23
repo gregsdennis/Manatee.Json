@@ -32,6 +32,8 @@ namespace Manatee.Tests.Json.Helpers
 	[TestClass]
 	public class PrimitiveMapperTest
 	{
+		private readonly PrimitiveMapper _mapper = new PrimitiveMapper(new ObjectCaster());
+
 		#region MapFromJson Tests
 		[TestMethod]
 		public void MapFromJson_ParameterIsNotPrimitive_ThrowsNotPrimitiveTypeException()
@@ -39,7 +41,7 @@ namespace Manatee.Tests.Json.Helpers
 			JsonValue json = new JsonObject();
 			try
 			{
-				PrimitiveMapper.MapFromJson<Uri>(json);
+				_mapper.MapFromJson<Uri>(json);
 				Assert.Fail("Expected NotPrimitiveTypeException");
 			}
 			catch (NotPrimitiveTypeException) { }
@@ -53,7 +55,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = new JsonValue("test");
 			var expected = "test";
-			var actual = PrimitiveMapper.MapFromJson<string>(json);
+			var actual = _mapper.MapFromJson<string>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -61,7 +63,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = new JsonValue(42);
 			var expected = 42;
-			var actual = PrimitiveMapper.MapFromJson<int>(json);
+			var actual = _mapper.MapFromJson<int>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -69,7 +71,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = new JsonValue(42.0);
 			var expected = 42.0;
-			var actual = PrimitiveMapper.MapFromJson<double>(json);
+			var actual = _mapper.MapFromJson<double>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -77,7 +79,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = new JsonValue(true);
 			var expected = true;
-			var actual = PrimitiveMapper.MapFromJson<bool>(json);
+			var actual = _mapper.MapFromJson<bool>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -85,7 +87,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = JsonValue.Null;
 			var expected = default(string);
-			var actual = PrimitiveMapper.MapFromJson<string>(json);
+			var actual = _mapper.MapFromJson<string>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -93,7 +95,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = JsonValue.Null;
 			var expected = default(int);
-			var actual = PrimitiveMapper.MapFromJson<int>(json);
+			var actual = _mapper.MapFromJson<int>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -101,7 +103,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = JsonValue.Null;
 			var expected = default(double);
-			var actual = PrimitiveMapper.MapFromJson<double>(json);
+			var actual = _mapper.MapFromJson<double>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -109,7 +111,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var json = JsonValue.Null;
 			var expected = default(bool);
-			var actual = PrimitiveMapper.MapFromJson<bool>(json);
+			var actual = _mapper.MapFromJson<bool>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		#endregion
@@ -120,7 +122,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var obj = "test";
 			var expected = new JsonValue(obj);
-			var actual = PrimitiveMapper.MapToJson(obj);
+			var actual = _mapper.MapToJson(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -128,7 +130,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var obj = 42;
 			var expected = new JsonValue(obj);
-			var actual = PrimitiveMapper.MapToJson(obj);
+			var actual = _mapper.MapToJson(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -136,7 +138,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var obj = 42.0;
 			var expected = new JsonValue(obj);
-			var actual = PrimitiveMapper.MapToJson(obj);
+			var actual = _mapper.MapToJson(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -144,7 +146,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var obj = true;
 			var expected = new JsonValue(obj);
-			var actual = PrimitiveMapper.MapToJson(obj);
+			var actual = _mapper.MapToJson(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -152,7 +154,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var obj = UriKind.Absolute;
 			var expected = new JsonValue((int)obj);
-			var actual = PrimitiveMapper.MapToJson(obj);
+			var actual = _mapper.MapToJson(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -160,7 +162,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var obj = DateTime.Today;
 			var expected = JsonValue.Null;
-			var actual = PrimitiveMapper.MapToJson(obj);
+			var actual = _mapper.MapToJson(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -168,7 +170,7 @@ namespace Manatee.Tests.Json.Helpers
 		{
 			var obj = new UriBuilder();
 			var expected = JsonValue.Null;
-			var actual = PrimitiveMapper.MapToJson(obj);
+			var actual = _mapper.MapToJson(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		#endregion

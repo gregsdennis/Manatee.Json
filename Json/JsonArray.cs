@@ -63,6 +63,7 @@ namespace Manatee.Json
 			StateMachine[State.Value, JsonInput.Boolean] = GotValue;
 			StateMachine[State.Value, JsonInput.Null] = GotValue;
 			StateMachine[State.Value, JsonInput.OpenBracket] = GotValue;
+			StateMachine[State.Value, JsonInput.CloseBracket] = GotEmpty;
 			StateMachine[State.End, JsonInput.Comma] = GotEnd;
 			StateMachine[State.End, JsonInput.CloseBracket] = GotEnd;
 			StateMachine.UpdateFunction = GetNextInput;
@@ -152,7 +153,7 @@ namespace Manatee.Json
 		/// </remarks>
 		public override string ToString()
 		{
-			if (Count == 0) return JsonValue.Null.ToString();
+			if (Count == 0) return "[]";
 			return "[" + string.Join(",", from value in this
 										  select value.ToString()) + "]";
 		}
@@ -168,10 +169,6 @@ namespace Manatee.Json
 		{
 			var json = obj as JsonArray;
 			if (json == null) return false;
-			var watch1 = from item in this where !json.Contains(item) select item;
-			var watch2 = from item in json where !Contains(item) select item;
-			var count1 = watch1.Count();
-			var count2 = watch2.Count();
 			return ((from item in this where !json.Contains(item) select item).Count() == 0) &&
 					(from item in json where !Contains(item) select item).Count() == 0;
 		}
@@ -212,6 +209,14 @@ namespace Manatee.Json
 			var array = owner as JsonArray;
 			array.value = JsonValue.Parse(array.source, ref array.index);
 			return State.End;
+		}
+		private static State GotEmpty(object owner, JsonInput input)
+		{
+			var array = owner as JsonArray;
+			array.done = (input == JsonInput.CloseBracket);
+			if (array.Count != 0)
+				throw new JsonSyntaxException(array.index);
+			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{

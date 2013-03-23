@@ -21,7 +21,9 @@
 
 ***************************************************************************************/
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Manatee.Json.Enumerations;
 using Manatee.Json.Exceptions;
 
@@ -40,6 +42,10 @@ namespace Manatee.Json
 
 		private const string TypeableChars =
 			@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 `-=,./;'[]\~!@#$%^&*()_+<>?:\""{}|";
+
+		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(UInt16.MinValue, UInt16.MaxValue)
+																			 .Select(n => (char)n)
+																			 .Where(c => !char.IsControl(c));
 
 		bool boolValue = false;
 		string stringValue = null;
@@ -190,37 +196,42 @@ namespace Manatee.Json
 		/// <summary>
 		/// Creates a JsonValue from a boolean.
 		/// </summary>
-		public JsonValue(bool b)
+		public JsonValue(bool? b)
 		{
-			Boolean = b;
+			if (b != null) Boolean = b.Value;
+			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a JsonValue from a string.
 		/// </summary>
 		public JsonValue(string s)
 		{
-			String = s;
+			if (s != null) String = s;
+			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a JsonValue from a numeric value.
 		/// </summary>
-		public JsonValue(double n)
+		public JsonValue(double? n)
 		{
-			Number = n;
+			if (n != null) Number = n.Value;
+			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a JsonValue from a JSON object.
 		/// </summary>
 		public JsonValue(JsonObject o)
 		{
-			Object = o;
+			if (o != null) Object = o;
+			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a JsonValue from a JSON array.
 		/// </summary>
 		public JsonValue(JsonArray a)
 		{
-			Array = a;
+			if (a != null) Array = a;
+			else Type = JsonValueType.Null;
 		}
 
 		/// <summary>
@@ -583,7 +594,7 @@ namespace Manatee.Json
 						i++;
 						break;
 					default:
-						if (!TypeableChars.Contains(s[i].ToString()))
+						if (!AvailableChars.Contains(s[i]))
 						{
 							var hex = Convert.ToInt16(s[i]).ToString("X4");
 							s = s.Substring(0, i) + "\\u" + hex + s.Substring(i + 1);

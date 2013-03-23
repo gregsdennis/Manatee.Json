@@ -212,8 +212,8 @@ namespace Manatee.Json.Extensions
 		}
 		private static JsonValue AttachAttributes(JsonValue json, XElement xElement)
 		{
-			var attributes = xElement.Attributes().Where(a => (a.Name != NestAttribute) && (a.Name != TypeAttribute));
-			if (attributes.Count() == 0)
+			var attributes = xElement.Attributes().Where(a => (a.Name != NestAttribute) && (a.Name != TypeAttribute)).ToList();
+			if (attributes.Count == 0)
 				return json;
 			var obj = new JsonObject();
 			foreach (var xAttribute in attributes)
