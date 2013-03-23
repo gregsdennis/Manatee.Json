@@ -68,6 +68,15 @@ namespace Manatee.Tests.Json
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
+		public void Parse_EmptyArray_ReturnsEmptyArray()
+		{
+			var s = "[]";
+			var expected = new JsonArray();
+			var i = 0;
+			var actual = new JsonArray(s, ref i);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
 		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingValue_ThrowsJsonSyntaxException()
 		{
