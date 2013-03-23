@@ -77,6 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\JsonMapToAttribute.cs" />
+    <Compile Include="Helpers\IObjectCaster.cs" />
+    <Compile Include="Helpers\IPrimitiveMapper.cs" />
+    <Compile Include="Helpers\ISerializerCache.cs" />
+    <Compile Include="Helpers\ISerializerReferenceCache.cs" />
     <Compile Include="Helpers\PropertyReference.cs" />
     <Compile Include="Helpers\SerializerReferenceCache.cs" />
     <Compile Include="Helpers\SerializerReferenceRecord.cs" />
@@ -89,6 +93,7 @@
     <Compile Include="Exceptions\JsonValueIncorrectTypeException.cs" />
     <Compile Include="Exceptions\JsonValueParseException.cs" />
     <Compile Include="JsonArray.cs" />
+    <Compile Include="JsonExtensions.cs" />
     <Compile Include="JsonObject.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="JsonValue.cs" />
@@ -97,8 +102,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enumerations\JsonInput.cs" />
     <Compile Include="Attributes\JsonIgnoreAttribute.cs" />
-    <Compile Include="Helpers\ObjectCasterCache.cs" />
-    <Compile Include="Helpers\ObjectCasterMethodPair.cs" />
     <Compile Include="Helpers\SerializerCache.cs" />
     <Compile Include="Helpers\SerializerMethodPair.cs" />
     <Compile Include="Enumerations\DateTimeSerializationFormat.cs" />
@@ -113,7 +116,6 @@
     <Compile Include="Serialization\JsonSerializer.cs" />
     <Compile Include="Serialization\JsonSerializerOptions.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -26,38 +26,47 @@ using Manatee.Json.Exceptions;
 
 namespace Manatee.Json.Helpers
 {
-	internal static class PrimitiveMapper
+	internal class PrimitiveMapper : IPrimitiveMapper
 	{
-		public static JsonValue MapToJson<T>(T obj)
+		private readonly IObjectCaster _objectCaster;
+
+		public PrimitiveMapper(IObjectCaster objectCaster)
 		{
-			if (obj is string)
-				return new JsonValue(ObjectCaster.Cast<string>(obj));
-			if (obj is bool)
-				return new JsonValue(ObjectCaster.Cast<bool>(obj));
-			if (obj is Enum)
-				return new JsonValue(ObjectCaster.Cast<int>(obj));
-			double result;
-			return ObjectCaster.TryCast(obj, out result) ? result : JsonValue.Null;
+			if (objectCaster == null)
+				throw new ArgumentNullException("objectCaster");
+			_objectCaster = objectCaster;
 		}
 
-		public static T MapFromJson<T>(JsonValue json)
+		public JsonValue MapToJson<T>(T obj)
+		{
+			if (obj is string)
+				return new JsonValue(_objectCaster.Cast<string>(obj));
+			if (obj is bool)
+				return new JsonValue(_objectCaster.Cast<bool>(obj));
+			if (obj is Enum)
+				return new JsonValue(_objectCaster.Cast<int>(obj));
+			double result;
+			return _objectCaster.TryCast(obj, out result) ? result : JsonValue.Null;
+		}
+
+		public T MapFromJson<T>(JsonValue json)
 		{
 			if (!IsPrimitive(typeof(T)))
 			    throw new NotPrimitiveTypeException(typeof(T));
 			if (typeof(Enum).IsAssignableFrom(typeof(T)))
 				return (T) Enum.ToObject(typeof (T), (int) json.Number);
-			var value = json.GetValue();
+			var value = GetValue(json);
 			T result;
-			ObjectCaster.TryCast(value, out result);
+			_objectCaster.TryCast(value, out result);
 			return result;
 		}
 
-		public static bool IsPrimitive(Type type)
+		public bool IsPrimitive(Type type)
 		{
 			return type.IsPrimitive || (type == typeof (string)) || (typeof(Enum).IsAssignableFrom(type));
 		}
 
-		private static object GetValue(this JsonValue json)
+		private static object GetValue(JsonValue json)
 		{
 			switch (json.Type)
 			{

@@ -21,41 +21,51 @@
 
 ***************************************************************************************/
 using System;
+using System.Collections.Generic;
 using System.Reflection;
-using System.Reflection.Emit;
 
 namespace Manatee.Json.Helpers
 {
-	internal static class ObjectCaster
+	internal class ObjectCaster : IObjectCaster
 	{
-		public static bool TryCast<T>(object obj, out T result)
+		private static readonly Dictionary<Type, MethodInfo> Cache = new Dictionary<Type, MethodInfo>();
+
+		public bool TryCast<T>(object obj, out T result)
 		{
 			try
 			{
-				result = (T)obj;
+				result = (T) obj;
 				return true;
 			}
 			catch (InvalidCastException)
 			{
+				var type = typeof (T);
 				result = default(T);
-				var parseMethod = typeof(T).GetMethod("TryParse", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy,
-													  null, new[] { typeof(string), typeof(T).MakeByRefType() }, null);
-				if (parseMethod == null) return false;
-				var paramsList = new object[] { obj.ToString(), result };
-				if ((bool)parseMethod.Invoke(null, paramsList))
+				MethodInfo parseMethod;
+				if (Cache.ContainsKey(type))
+					parseMethod = Cache[type];
+				else
 				{
-					result = (T)paramsList[1];
+					parseMethod = type.GetMethod("TryParse", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy,
+					                                   null, new[] {typeof (string), typeof (T).MakeByRefType()}, null);
+					Cache.Add(type, parseMethod);
+				}
+				if (parseMethod == null) return false;
+				var paramsList = new object[] {obj.ToString(), result};
+				if ((bool) parseMethod.Invoke(null, paramsList))
+				{
+					result = (T) paramsList[1];
 					return true;
 				}
 			}
 			catch
 			{
-				result = default(T);
+				result = default (T);
 			}
 			return false;
 		}
 
-		public static T Cast<T>(object obj)
+		public T Cast<T>(object obj)
 		{
 			try
 			{
@@ -63,7 +73,7 @@ namespace Manatee.Json.Helpers
 			}
 			catch (InvalidCastException)
 			{
-				return default(T);
+				return default (T);
 			}
 		}
 	}

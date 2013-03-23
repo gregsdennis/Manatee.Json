@@ -26,17 +26,11 @@ using System.Reflection;
 
 namespace Manatee.Json.Helpers
 {
-	internal class SerializerCache
+	internal class SerializerCache : ISerializerCache
 	{
-		public readonly static SerializerCache Instance;
+		private readonly Dictionary<Type, SerializerMethodPair> _cache;
 
-		private Dictionary<Type, SerializerMethodPair> _cache;
-
-		static SerializerCache()
-		{
-			Instance = new SerializerCache();
-		}
-		private SerializerCache()
+		public SerializerCache()
 		{
 			_cache = new Dictionary<Type, SerializerMethodPair>();
 		}

@@ -38,8 +38,8 @@ namespace Manatee.Json.Helpers
 
 		private XmlNamespaceRegistry() {}
 
-		private Dictionary<XElement, List<XmlNamespacePair>> _registry = new Dictionary<XElement, List<XmlNamespacePair>>();
-		private Dictionary<string, Stack<string>> _stack = new Dictionary<string, Stack<string>>();
+		private readonly Dictionary<XElement, List<XmlNamespacePair>> _registry = new Dictionary<XElement, List<XmlNamespacePair>>();
+		private readonly Dictionary<string, Stack<string>> _stack = new Dictionary<string, Stack<string>>();
 
 		public void RegisterElement(XElement element)
 		{
@@ -62,7 +62,7 @@ namespace Manatee.Json.Helpers
 		}
 		public string GetLabel(XElement element, string space)
 		{
-			return _registry[element].Where(pair => pair.Namespace == space).First().Label;
+			return _registry[element].First(pair => pair.Namespace == space).Label;
 		}
 
 		public void Register(string label, string space)

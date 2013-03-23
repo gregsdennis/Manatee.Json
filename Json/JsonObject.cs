@@ -61,6 +61,7 @@ namespace Manatee.Json
 		{
 			StateMachine[State.Start, JsonInput.OpenBrace] = GotStart;
 			StateMachine[State.Key, JsonInput.Quote] = GotKey;
+			StateMachine[State.Key, JsonInput.CloseBrace] = GotEmpty;
 			StateMachine[State.Colon, JsonInput.Colon] = GotColon;
 			StateMachine[State.Value, JsonInput.OpenBrace] = GotValue;
 			StateMachine[State.Value, JsonInput.Quote] = GotValue;
@@ -200,7 +201,7 @@ namespace Manatee.Json
 		/// </remarks>
 		public override string ToString()
 		{
-			if (Count == 0) return JsonValue.Null.ToString();
+			if (Count == 0) return "{}";
 			return "{" + string.Join(",", from kvp in this
 										  select string.Format("\"{0}\":{1}",kvp.Key,kvp.Value)) + "}";
 		}
@@ -265,6 +266,14 @@ namespace Manatee.Json
 			var obj = owner as JsonObject;
 			obj.value = JsonValue.Parse(obj.source, ref obj.index);
 			return State.End;
+		}
+		private static State GotEmpty(object owner, JsonInput input)
+		{
+			var obj = owner as JsonObject;
+			obj.done = (input == JsonInput.CloseBrace);
+			if (obj.Count != 0)
+				throw new JsonSyntaxException(obj.index);
+			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{

@@ -42,15 +42,21 @@ namespace Manatee.Json.Serialization
 		private const string RefKey = "#Ref";
 		private const string DefKey = "#Define";
 
-		[ThreadStatic]
-		private SerializerReferenceCache _cache = new SerializerReferenceCache();
-		[ThreadStatic]
-		private int _callCount = 0;
+		private static readonly ISerializerCache SerializerCache = new SerializerCache();
+		private static readonly IPrimitiveMapper PrimitiveMapper = new PrimitiveMapper(new ObjectCaster());
+
+		private readonly ISerializerReferenceCache _referenceCache = new SerializerReferenceCache();
+		private int _callCount;
+		private JsonSerializerOptions _options;
 
 		/// <summary>
 		/// Gets or sets a set of options for the serializer.
 		/// </summary>
-		public JsonSerializerOptions Options { get; set; }
+		public JsonSerializerOptions Options
+		{
+			get { return _options ?? (_options = JsonSerializerOptions.Default); }
+			set { _options = value ?? JsonSerializerOptions.Default; }
+		}
 
 		#region Public Methods
 		/// <summary>
@@ -65,8 +71,8 @@ namespace Manatee.Json.Serialization
 			var json = ManagedSerialize(obj);
 			if (--_callCount == 0)
 			{
-				_cache.ReconcileJsonReferences();
-				_cache.Clear();
+				_referenceCache.ReconcileJsonReferences();
+				_referenceCache.Clear();
 			}
 			return json;
 		}
@@ -78,12 +84,11 @@ namespace Manatee.Json.Serialization
 		public JsonValue SerializeType<T>()
 		{
 			_callCount++;
-			VerifyOptions();
 			var json = new JsonObject();
 			var propertyInfoList = typeof(T).GetProperties(BindingFlags.Static | BindingFlags.Public)
 											.Where(p => p.GetSetMethod() != null)
 											.Where(p => p.GetGetMethod() != null)
-											.Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Count() == 0);
+											.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any());
 			foreach (var propertyInfo in propertyInfoList)
 			{
 				var value = propertyInfo.GetValue(null, null);
@@ -96,14 +101,14 @@ namespace Manatee.Json.Serialization
 					var type = propertyInfo.PropertyType.IsAbstract || propertyInfo.PropertyType.IsInterface
 								? value.GetType()
 								: propertyInfo.PropertyType;
-					var serialize = SerializerCache.Instance.GetSerializer(type);
+					var serialize = SerializerCache.GetSerializer(type);
 					json.Add(propertyInfo.Name, (JsonValue) serialize.Invoke(this, new[] {value}));
 				}
 			}
 			if (--_callCount == 0)
 			{
-				_cache.ReconcileObjectReferences();
-				_cache.Clear();
+				_referenceCache.ReconcileObjectReferences();
+				_referenceCache.Clear();
 			}
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
@@ -119,8 +124,8 @@ namespace Manatee.Json.Serialization
 			var obj = ManagedDeserialize<T>(json);
 			if (--_callCount == 0)
 			{
-				_cache.ReconcileObjectReferences();
-				_cache.Clear();
+				_referenceCache.ReconcileObjectReferences();
+				_referenceCache.Clear();
 			}
 			return obj;
 		}
@@ -132,26 +137,25 @@ namespace Manatee.Json.Serialization
 		public void DeserializeType<T>(JsonValue json)
 		{
 			_callCount++;
-			VerifyOptions();
 			if (json == JsonValue.Null)
 				return;
 			var propertyInfoList = typeof(T).GetProperties(BindingFlags.Static | BindingFlags.Public)
 											.Where(p => p.GetSetMethod() != null)
 											.Where(p => p.GetGetMethod() != null)
-											.Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Count() == 0);
+											.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any());
 			foreach (var propertyInfo in propertyInfoList)
 			{
 				if (json.Object.ContainsKey(propertyInfo.Name))
 				{
-					var deserialize = SerializerCache.Instance.GetDeserializer(propertyInfo.PropertyType);
+					var deserialize = SerializerCache.GetDeserializer(propertyInfo.PropertyType);
 					propertyInfo.SetValue(null, deserialize.Invoke(this, new object[] {json.Object[propertyInfo.Name]}), null);
 					json.Object.Remove(propertyInfo.Name);
 				}
 			}
 			if (--_callCount == 0)
 			{
-				_cache.ReconcileObjectReferences();
-				_cache.Clear();
+				_referenceCache.ReconcileObjectReferences();
+				_referenceCache.Clear();
 			}
 			if (json.Object.Count > 0)
 				throw new TypeDoesNotContainPropertyException(typeof(T), json);
@@ -161,15 +165,14 @@ namespace Manatee.Json.Serialization
 		#region Support Methods
 		private JsonValue ManagedSerialize<T>(T obj)
 		{
-			var match = _cache.FindRecord(obj);
+			var match = _referenceCache.FindRecord(obj);
 			if (match != null)
 			{
 				match.IsReferenced = true;
-				return new JsonObject {{RefKey, match.ReferenceID.ToString()}};
+				return new JsonObject {{RefKey, match.ReferenceId.ToString()}};
 			}
-			match = new SerializerReferenceRecord { Object = obj };
-			_cache.Add(match);
-			VerifyOptions();
+			match = new SerializerReferenceRecord {Object = obj};
+			_referenceCache.Add(match);
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeof(T)))
 			{
 				match.Json = ((IJsonCompatible)obj).ToJson();
@@ -193,18 +196,16 @@ namespace Manatee.Json.Serialization
 			{
 				case JsonValueType.Object:
 					if (json.Object.ContainsKey(DefKey))
-						_cache.Add(match = new SerializerReferenceRecord(json.Object[DefKey].String));
+						_referenceCache.Add(match = new SerializerReferenceRecord(json.Object[DefKey].String));
 					break;
 				case JsonValueType.Array:
-					var def = json.Array.Where(jv => (jv.Type == JsonValueType.Object) &&
-													 (jv.Object.Count == 1) &&
-					                                 jv.Object.ContainsKey(DefKey))
-										.FirstOrDefault();
+					var def = json.Array.FirstOrDefault(jv => (jv.Type == JsonValueType.Object) &&
+					                                          (jv.Object.Count == 1) &&
+					                                          jv.Object.ContainsKey(DefKey));
 					if (def != null)
-						_cache.Add(match = new SerializerReferenceRecord(def.Object[DefKey].String));
+						_referenceCache.Add(match = new SerializerReferenceRecord(def.Object[DefKey].String));
 					break;
 			}
-			VerifyOptions();
 			T obj;
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeof(T)))
 			{
@@ -231,18 +232,13 @@ namespace Manatee.Json.Serialization
 		{
 			return EqualityComparer<T>.Default.Equals(value, default(T));
 		}
-		private void VerifyOptions()
-		{
-			if (Options == null)
-				Options = JsonSerializerOptions.Default;
-		}
 		private JsonValue AutoSerializeObject<T>(T obj)
 		{
 			var json = new JsonObject();
 			var propertyInfoList = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public)
 											.Where(p => p.GetSetMethod() != null)
 											.Where(p => p.GetGetMethod() != null)
-											.Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Count() == 0);
+											.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any());
 			foreach (var propertyInfo in propertyInfoList)
 			{
 				var value = propertyInfo.GetValue(obj, null);
@@ -250,13 +246,11 @@ namespace Manatee.Json.Serialization
 				var type = propertyInfo.PropertyType.IsAbstract || propertyInfo.PropertyType.IsInterface
 					        ? value.GetType()
 					        : propertyInfo.PropertyType;
-				var serialize = SerializerCache.Instance.GetSerializer(type);
+				var serialize = SerializerCache.GetSerializer(type);
 				var jsonProp = (JsonValue) serialize.Invoke(this, new[] {value});
 				if ((jsonProp == JsonValue.Null) && !Options.EncodeDefaultValues) continue;
-				string name = propertyInfo.Name;
 				var mapper = (JsonMapToAttribute)propertyInfo.GetCustomAttributes(typeof(JsonMapToAttribute), false).FirstOrDefault();
-				if (mapper != null)
-					name = mapper.MapToKey;
+				string name = mapper != null ? mapper.MapToKey : propertyInfo.Name;
 				json.Add(name,
 				         type == propertyInfo.PropertyType
 				         	? jsonProp
@@ -269,7 +263,7 @@ namespace Manatee.Json.Serialization
 			var propertyInfoList = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public)
 											.Where(p => p.GetSetMethod() != null)
 											.Where(p => p.GetGetMethod() != null)
-											.Where(p => p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Count() == 0);
+											.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any());
 			var obj = Activator.CreateInstance<T>();
 			foreach (var propertyInfo in propertyInfoList)
 			{
@@ -284,16 +278,16 @@ namespace Manatee.Json.Serialization
 					{
 						var instanceType = Type.GetType(value.Object[TypeKey].String);
 						var instanceJson = value.Object[ValueKey];
-						var deserialize = SerializerCache.Instance.GetDeserializer(instanceType);
+						var deserialize = SerializerCache.GetDeserializer(instanceType);
 						propertyInfo.SetValue(obj, deserialize.Invoke(this, new object[] {instanceJson}), null);
 					}
 					else if ((value.Type == JsonValueType.Object) && (value.Object.ContainsKey(RefKey)))
 					{
-						_cache.AddReference(value.Object[RefKey].String, obj, propertyInfo);
+						_referenceCache.AddReference(value.Object[RefKey].String, obj, propertyInfo);
 					}
 					else
 					{
-						var deserialize = SerializerCache.Instance.GetDeserializer(propertyInfo.PropertyType);
+						var deserialize = SerializerCache.GetDeserializer(propertyInfo.PropertyType);
 						propertyInfo.SetValue(obj, deserialize.Invoke(this, new object[] {json.Object[name]}), null);
 					}
 					json.Object.Remove(name);

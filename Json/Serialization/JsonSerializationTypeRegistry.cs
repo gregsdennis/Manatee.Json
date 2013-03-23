@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Enumerations;
 using Manatee.Json.Exceptions;
-using Manatee.Json.Helpers;
 
 namespace Manatee.Json.Serialization
 {
@@ -43,25 +42,25 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The type which the method serializes.</typeparam>
 		/// <param name="input">The object to be serialized.</param>
 		/// <returns>The JSON representation of the object.</returns>
-		public delegate JsonValue ToJsonDelegate<T>(T input);
+		public delegate JsonValue ToJsonDelegate<in T>(T input);
 		/// <summary>
 		/// Declares the required signature for a deserializer method.
 		/// </summary>
 		/// <typeparam name="T">The type which the method deserializes.</typeparam>
 		/// <param name="json">The JSON representation of the object.</param>
 		/// <returns>The deserialized object.</returns>
-		public delegate T FromJsonDelegate<T>(JsonValue json);
+		public delegate T FromJsonDelegate<out T>(JsonValue json);
 
 		private static readonly Dictionary<Type, Delegate> ToJsonConverters;
 		private static readonly Dictionary<Type, Delegate> FromJsonConverters;
-		private static readonly JsonSerializer _serializer;
-		private static readonly object lockHolder = new object();
+		private static readonly JsonSerializer Serializer;
+		private static readonly object LockHolder = new object();
 
 		static JsonSerializationTypeRegistry()
 		{
 			ToJsonConverters = new Dictionary<Type, Delegate>();
 			FromJsonConverters = new Dictionary<Type, Delegate>();
-			_serializer = new JsonSerializer();
+			Serializer = new JsonSerializer();
 			RegisterLocalTypes();
 		}
 
@@ -73,9 +72,9 @@ namespace Manatee.Json.Serialization
 				json = null;
 				return false;
 			}
-			lock (lockHolder)
+			lock (LockHolder)
 			{
-				_serializer.Options = serializer.Options;
+				Serializer.Options = serializer.Options;
 				json = converter(obj);
 				return true;
 			}
@@ -88,9 +87,9 @@ namespace Manatee.Json.Serialization
 				obj = default(T);
 				return false;
 			}
-			lock (lockHolder)
+			lock (LockHolder)
 			{
-				_serializer.Options = serializer.Options;
+				Serializer.Options = serializer.Options;
 				obj = converter(json);
 				return true;
 			}
@@ -213,9 +212,9 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the DateTime.</returns>
 		public static JsonValue EncodeDateTime(DateTime dt)
 		{
-			if (_serializer.Options == null)
+			if (Serializer.Options == null)
 				return dt.ToString();
-			switch (_serializer.Options.DateTimeSerializationFormat)
+			switch (Serializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.JavaConstructor:
 					return string.Format("/Date({0})/", dt.Ticks/TimeSpan.TicksPerMillisecond);
@@ -232,9 +231,9 @@ namespace Manatee.Json.Serialization
 		/// <returns>The DateTime object.</returns>
 		public static DateTime DecodeDateTime(JsonValue json)
 		{
-			if (_serializer.Options == null)
+			if (Serializer.Options == null)
 				return DateTime.Parse(json.String);
-			switch (_serializer.Options.DateTimeSerializationFormat)
+			switch (Serializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.JavaConstructor:
 					return new DateTime(long.Parse(json.String.Substring(6, json.String.Length - 8))*TimeSpan.TicksPerMillisecond);
@@ -297,7 +296,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the Nullable&lt;T&gt;.</returns>
 		public static JsonValue EncodeNullable<T>(T? nullable) where T : struct
 		{
-			return nullable.HasValue ? _serializer.Serialize(nullable.Value) : JsonValue.Null;
+			return nullable.HasValue ? Serializer.Serialize(nullable.Value) : JsonValue.Null;
 		}
 		/// <summary>
 		/// Decodes a Nullable&lt;T&gt; object from its JSON representation.
@@ -308,7 +307,7 @@ namespace Manatee.Json.Serialization
 		public static T? DecodeNullable<T>(JsonValue json) where T : struct
 		{
 			if (json == JsonValue.Null) return null;
-			T? nullable = _serializer.Deserialize<T>(json);
+			T? nullable = Serializer.Deserialize<T>(json);
 			return nullable;
 		}
 		#endregion
@@ -322,7 +321,7 @@ namespace Manatee.Json.Serialization
 		public static JsonValue EncodeGenericList<T>(List<T> list)
 		{
 			var array = new JsonArray();
-			array.AddRange(list.Select(item => _serializer.Serialize(item)));
+			array.AddRange(list.Select(item => Serializer.Serialize(item)));
 			return array;
 		}
 		/// <summary>
@@ -334,7 +333,7 @@ namespace Manatee.Json.Serialization
 		public static List<T> DecodeGenericList<T>(JsonValue json)
 		{
 			var list = new List<T>();
-			list.AddRange(json.Array.Select(jv => _serializer.Deserialize<T>(jv)));
+			list.AddRange(json.Array.Select(jv => Serializer.Deserialize<T>(jv)));
 			return list;
 		}
 		#endregion
@@ -351,8 +350,8 @@ namespace Manatee.Json.Serialization
 			var array = new JsonArray();
 			array.AddRange(dict.Select(item => (JsonValue)(new JsonObject
 			                                               	{
-			                                               		{"Key", _serializer.Serialize(item.Key)},
-																{"Value", _serializer.Serialize(item.Value)}
+			                                               		{"Key", Serializer.Serialize(item.Key)},
+																{"Value", Serializer.Serialize(item.Value)}
 			                                               	})));
 			return array;
 		}
@@ -368,8 +367,8 @@ namespace Manatee.Json.Serialization
 			var dict = new Dictionary<TKey, TValue>();
 			foreach (var jv in json.Array)
 			{
-				dict.Add(_serializer.Deserialize<TKey>(jv.Object["Key"]),
-						 _serializer.Deserialize<TValue>(jv.Object["Value"]));
+				dict.Add(Serializer.Deserialize<TKey>(jv.Object["Key"]),
+						 Serializer.Deserialize<TValue>(jv.Object["Value"]));
 			}
 			return dict;
 		}
@@ -386,7 +385,7 @@ namespace Manatee.Json.Serialization
 			var array = new JsonArray();
 			for (int i = 0; i < queue.Count; i++)
 			{
-				array.Add(_serializer.Serialize(queue.ElementAt(i)));
+				array.Add(Serializer.Serialize(queue.ElementAt(i)));
 			}
 			return array;
 		}
@@ -401,7 +400,7 @@ namespace Manatee.Json.Serialization
 			var queue = new Queue<T>();
 			for (int i = 0; i < json.Array.Count; i++)
 			{
-				queue.Enqueue(_serializer.Deserialize<T>(json.Array[i]));
+				queue.Enqueue(Serializer.Deserialize<T>(json.Array[i]));
 			}
 			return queue;
 		}
@@ -418,7 +417,7 @@ namespace Manatee.Json.Serialization
 			var array = new JsonArray();
 			for (int i = 0; i < stack.Count; i++)
 			{
-				array.Add(_serializer.Serialize(stack.ElementAt(i)));
+				array.Add(Serializer.Serialize(stack.ElementAt(i)));
 			}
 			return array;
 		}
@@ -433,7 +432,7 @@ namespace Manatee.Json.Serialization
 			var stack = new Stack<T>();
 			for (int i = 0; i < json.Array.Count; i++)
 			{
-				stack.Push(_serializer.Deserialize<T>(json.Array[i]));
+				stack.Push(Serializer.Deserialize<T>(json.Array[i]));
 			}
 			return stack;
 		}
