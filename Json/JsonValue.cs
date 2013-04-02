@@ -248,7 +248,7 @@ namespace Manatee.Json
 				case JsonValueType.Array:
 					return arrayValue.GetIndentedString(indentLevel);
 				default:
-					return "null";
+					return ToString();
 			}
 		}
 
