@@ -125,7 +125,7 @@ namespace Manatee.Tests.Json
 			var actual = new JsonObject(s);
 		}
 		[TestMethod]
-		public void Parse_StringFromSourceForge()
+		public void Parse_StringFromSourceForge_kheimric()
 		{
 			var s = @"{
   ""self"": ""self"",
@@ -150,6 +150,24 @@ namespace Manatee.Tests.Json
 }";
 			var actual = new JsonObject(s);
 			var newString = actual.ToString();
+		}
+		[TestMethod]
+		public void Add_NullValueAddsJsonNull()
+		{
+			var obj = new JsonObject();
+			obj.Add("null", null);
+
+			Assert.AreEqual(1, obj.Count);
+			Assert.AreEqual(JsonValue.Null, obj["null"]);
+		}
+		[TestMethod]
+		public void Indexer_NullValueAddsJsonNull()
+		{
+			var obj = new JsonObject();
+			obj["null"] = null;
+
+			Assert.AreEqual(1, obj.Count);
+			Assert.AreEqual(JsonValue.Null, obj["null"]);
 		}
 	}
 }
