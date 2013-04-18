@@ -105,26 +105,78 @@ namespace Manatee.Tests.Json.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void Deserialize_AbstractAndInterface_Successful()
+		public void Deserialize_AbstractAndInterfacePropsWithoutMap_Successful()
 		{
 			var json = new JsonObject{
 										{"AbstractProp", new JsonObject
 															{
 																{"#Type", typeof(DerivedClass).AssemblyQualifiedName},
-																{"#Value", new JsonObject{{"SomeProp", 42}}}
+																{"SomeProp", 42}
 															}},
 										{"InterfaceProp", new JsonObject
 															{
-																{"#Type", typeof(string).AssemblyQualifiedName},
-																{"#Value", "test comparable"}
+			                     								{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+			                     								{"RequiredProp", "test"}
 															}}
 									};
 			var expected = new ObjectWithAbstractAndInterfaceProps
-							{
-								AbstractProp = new DerivedClass {SomeProp = 42},
-								InterfaceProp = "test comparable"
-							};
+			               	{
+			               		AbstractProp = new DerivedClass {SomeProp = 42},
+			               		InterfaceProp = new ImplementationClass {RequiredProp = "test"}
+			               	};
 			var actual = _serializer.Deserialize<ObjectWithAbstractAndInterfaceProps>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_AbstractAndInterfacePropsWithMap_Successful()
+		{
+			var json = new JsonObject{
+										{"AbstractProp", new JsonObject
+															{
+																{"#Type", typeof(DerivedClass).AssemblyQualifiedName},
+																{"SomeProp", 42}
+															}},
+										{"InterfaceProp", new JsonObject {{"RequiredProp", "test"}}}
+									};
+			var expected = new ObjectWithAbstractAndInterfaceProps
+			               	{
+			               		AbstractProp = new DerivedClass {SomeProp = 42},
+			               		InterfaceProp = new ImplementationClass {RequiredProp = "test"}
+			               	};
+			JsonSerializationAbstractionMap.Map<Interface, ImplementationClass>();
+			var actual = _serializer.Deserialize<ObjectWithAbstractAndInterfaceProps>(json);
+			JsonSerializationAbstractionMap.RemoveMap<Interface>();
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_AbstractClass_Successful()
+		{
+			var json = new JsonObject
+			           	{
+			           		{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+			           		{"SomeProp", 42},
+			           		{"NewProp", "test"}
+			           	};
+			AbstractClass expected = new DerivedClass
+			                         	{
+			                         		SomeProp = 42,
+			                         		NewProp = "test"
+			                         	};
+
+			var actual = _serializer.Deserialize<AbstractClass>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_Interface_Successful()
+		{
+			JsonValue json = new JsonObject
+			                     	{
+			                     		{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+			                     		{"RequiredProp", "test"}
+			                     	};
+			Interface expected = new ImplementationClass {RequiredProp = "test"};
+
+			var actual = _serializer.Deserialize<Interface>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -405,26 +457,57 @@ namespace Manatee.Tests.Json.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void Serialize_AbstractAndInterface_Successful()
+		public void Serialize_AbstractAndInterfaceProps_Successful()
 		{
 			var obj = new ObjectWithAbstractAndInterfaceProps
-						{
-							AbstractProp = new DerivedClass {SomeProp = 42},
-							InterfaceProp = "test comparable"
-						};
+			          	{
+			          		AbstractProp = new DerivedClass {SomeProp = 42},
+			          		InterfaceProp = new ImplementationClass {RequiredProp = "test comparable"}
+			          	};
 			JsonValue expected = new JsonObject
 									{
 										{"AbstractProp", new JsonObject
 															{
 																{"#Type", typeof(DerivedClass).AssemblyQualifiedName},
-																{"#Value", new JsonObject{{"SomeProp", 42}}}
-															}},
+																{"SomeProp", 42}}
+															},
 										{"InterfaceProp", new JsonObject
 															{
-																{"#Type", typeof(string).AssemblyQualifiedName},
-																{"#Value", "test comparable"}
-															}}
+																{"#Type", typeof(ImplementationClass).AssemblyQualifiedName},
+																{"RequiredProp", "test comparable"}}
+															}
 									};
+			var actual = _serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_AbstractClass_Successful()
+		{
+			AbstractClass obj = new DerivedClass
+			                    	{
+			                    		SomeProp = 42,
+										NewProp = "test"
+			                    	};
+			JsonValue expected = new JsonObject
+			                     	{
+			                     		{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+			                     		{"SomeProp", 42},
+			                     		{"NewProp", "test"}
+			                     	};
+
+			var actual = _serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_Interface_Successful()
+		{
+			Interface obj = new ImplementationClass {RequiredProp = "test"};
+			JsonValue expected = new JsonObject
+			                     	{
+			                     		{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+			                     		{"RequiredProp", "test"}
+			                     	};
+
 			var actual = _serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}

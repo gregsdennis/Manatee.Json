@@ -28,7 +28,7 @@ namespace Manatee.Tests.Test_References
 {
 	public class ObjectWithAbstractAndInterfaceProps
 	{
-		public IComparable InterfaceProp { get; set; }
+		public Interface InterfaceProp { get; set; }
 		public AbstractClass AbstractProp { get; set; }
 
 		public override bool Equals(object obj)

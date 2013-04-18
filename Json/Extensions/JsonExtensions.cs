@@ -57,7 +57,7 @@ namespace Manatee.Json.Extensions
 		/// <returns>A bool or null if the key is not found or is not a string</returns>
 		public static bool? TryGetBoolean(this JsonObject obj, string key)
 		{
-			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type != JsonValueType.Null) ? obj[key].Boolean : (bool?)null;
+			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Boolean) ? obj[key].Boolean : (bool?)null;
 		}
 		/// <summary>
 		/// Returns a JsonArray or null if the key is not found or is not a string.
@@ -67,7 +67,7 @@ namespace Manatee.Json.Extensions
 		/// <returns>A JsonArray or null if the key is not found or is not a string</returns>
 		public static JsonArray TryGetArray(this JsonObject obj, string key)
 		{
-			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type != JsonValueType.Null) ? obj[key].Array : null;
+			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Array) ? obj[key].Array : null;
 		}
 		/// <summary>
 		/// Returns a JsonObject or null if the key is not found or is not a string.
@@ -77,7 +77,7 @@ namespace Manatee.Json.Extensions
 		/// <returns>A JsonObject or null if the key is not found or is not a string</returns>
 		public static JsonObject TryGetObject(this JsonObject obj, string key)
 		{
-			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type != JsonValueType.Null) ? obj[key].Object : null;
+			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Object) ? obj[key].Object : null;
 		}
 	}
 }

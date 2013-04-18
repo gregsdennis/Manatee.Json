@@ -51,11 +51,22 @@ namespace Manatee.Json
 
 		static StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
 
-		string source, key;
-		int index;
-		JsonValue value;
-		bool done;
-		private InputStream<JsonInput> stream;
+		string _source, _key;
+		int _index;
+		JsonValue _value;
+		bool _done;
+		private InputStream<JsonInput> _stream;
+
+		/// <summary>
+		/// Gets or sets the value associated with the specified key.
+		/// </summary>
+		/// <param name="key">The key of the value to get or set.</param>
+		/// <returns>The value associated with the specified key.</returns>
+		public new JsonValue this[string key]
+		{
+			get { return base[key]; }
+			set { base[key] = value ?? JsonValue.Null; }
+		}
 
 		static JsonObject()
 		{
@@ -73,12 +84,10 @@ namespace Manatee.Json
 			StateMachine[State.End, JsonInput.CloseBrace] = GotEnd;
 			StateMachine.UpdateFunction = GetNextInput;
 		}
-
 		/// <summary>
 		/// Creates an empty instance of a JSON object.
 		/// </summary>
 		public JsonObject() {}
-
 		/// <summary>
 		/// Creates an instance of a JSON object and fills it by parsing the
 		/// supplied string.
@@ -87,17 +96,15 @@ namespace Manatee.Json
 		public JsonObject(string s)
 			: this()
 		{
-			source = StripExternalSpaces(s);
+			_source = StripExternalSpaces(s);
 			Parse(0);
 		}
-
 		internal JsonObject(string s, ref int i)
 			: this()
 		{
-			source = s;
+			_source = s;
 			i = Parse(i);
 		}
-
 		/// <summary>
 		/// Finalizes memory management responsibilities.
 		/// </summary>
@@ -129,6 +136,15 @@ namespace Manatee.Json
 			s += string.Format("{0}\"{1}\" :\n{2}{3}\n{4}}}", tab1, key, tab2, this[key].GetIndentedString(indentLevel + 2), tab0);
 			return s;
 		}
+		/// <summary>
+		/// Adds the specified key and value to the dictionary.
+		/// </summary>
+		/// <param name="key">The key of the element to add.</param>
+		/// <param name="value">The value of the element to add. The value can be null for reference types.</param>
+		public new void Add(string key, JsonValue value)
+		{
+			base.Add(key, value ?? JsonValue.Null);
+		}
 
 		private static bool IsWhiteSpace(char c)
 		{
@@ -148,32 +164,32 @@ namespace Manatee.Json
 		}
 		private int Parse(int i)
 		{
-			if (stream == null)
-				stream = new InputStream<JsonInput>();
+			if (_stream == null)
+				_stream = new InputStream<JsonInput>();
 			else
-				stream.Clear();
-			value = null;
-			index = i;
-			done = false;
+				_stream.Clear();
+			_value = null;
+			_index = i;
+			_done = false;
 			try
 			{
-				StateMachine.Run(this, State.Start, stream);
-				if (!done)
-					throw new JsonSyntaxException(index);
+				StateMachine.Run(this, State.Start, _stream);
+				if (!_done)
+					throw new JsonSyntaxException(_index);
 			}
 			catch (InputNotValidForStateException<State, JsonInput>)
 			{
-				throw new JsonSyntaxException(index);
+				throw new JsonSyntaxException(_index);
 			}
 			catch (StateNotValidException<State>)
 			{
-				throw new JsonSyntaxException(index);
+				throw new JsonSyntaxException(_index);
 			}
 			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
 			{
-				throw new JsonSyntaxException(index);
+				throw new JsonSyntaxException(_index);
 			}
-			return index;
+			return _index;
 		}
 
 		private static string GetKey(string source, ref int index)
@@ -203,7 +219,7 @@ namespace Manatee.Json
 		{
 			if (Count == 0) return "{}";
 			return "{" + string.Join(",", from kvp in this
-										  select string.Format("\"{0}\":{1}",kvp.Key,kvp.Value)) + "}";
+										  select string.Format("\"{0}\":{1}", kvp.Key, kvp.Value)) + "}";
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
@@ -216,9 +232,8 @@ namespace Manatee.Json
 		{
 			var json = obj as JsonObject;
 			if (json == null) return false;
-			return ((from key in Keys where !json.ContainsKey(key) select key).Count() == 0) &&
-				   ((from key in json.Keys where !ContainsKey(key) select key).Count() == 0) &&
-				   this.All(pair => json[pair.Key].Equals(pair.Value));
+			return Keys.All(json.ContainsKey) && (Keys.Count == json.Keys.Count) &&
+			       this.All(pair => json[pair.Key].Equals(pair.Value));
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -236,15 +251,15 @@ namespace Manatee.Json
 		{
 			var obj = owner as JsonObject;
 			if (obj == null) return;
-			if (obj.done || (obj.index == obj.source.Length)) return;
+			if (obj._done || (obj._index == obj._source.Length)) return;
 			try
 			{
-				var next = CharacterConverter.Item(obj.source[obj.index++]);
-				obj.stream.Add(next);
+				var next = CharacterConverter.Item(obj._source[obj._index++]);
+				obj._stream.Add(next);
 			}
 			catch (KeyNotFoundException)
 			{
-				throw new JsonSyntaxException(obj.index);
+				throw new JsonSyntaxException(obj._index);
 			}
 		}
 		private static State GotStart(object owner, JsonInput input)
@@ -254,7 +269,7 @@ namespace Manatee.Json
 		private static State GotKey(object owner, JsonInput input)
 		{
 			var obj = owner as JsonObject;
-			obj.key = GetKey(obj.source, ref obj.index);
+			obj._key = GetKey(obj._source, ref obj._index);
 			return State.Colon;
 		}
 		private static State GotColon(object owner, JsonInput input)
@@ -264,22 +279,22 @@ namespace Manatee.Json
 		private static State GotValue(object owner, JsonInput input)
 		{
 			var obj = owner as JsonObject;
-			obj.value = JsonValue.Parse(obj.source, ref obj.index);
+			obj._value = JsonValue.Parse(obj._source, ref obj._index);
 			return State.End;
 		}
 		private static State GotEmpty(object owner, JsonInput input)
 		{
 			var obj = owner as JsonObject;
-			obj.done = (input == JsonInput.CloseBrace);
+			obj._done = (input == JsonInput.CloseBrace);
 			if (obj.Count != 0)
-				throw new JsonSyntaxException(obj.index);
+				throw new JsonSyntaxException(obj._index);
 			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{
 			var obj = owner as JsonObject;
-			obj[obj.key] = obj.value;
-			obj.done = (input == JsonInput.CloseBrace);
+			obj[obj._key] = obj._value;
+			obj._done = (input == JsonInput.CloseBrace);
 			return State.Key;
 		}
 

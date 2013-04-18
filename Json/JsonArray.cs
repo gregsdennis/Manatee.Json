@@ -169,8 +169,7 @@ namespace Manatee.Json
 		{
 			var json = obj as JsonArray;
 			if (json == null) return false;
-			return ((from item in this where !json.Contains(item) select item).Count() == 0) &&
-					(from item in json where !Contains(item) select item).Count() == 0;
+			return this.All(json.Contains) && (Count == json.Count);
 		}
 
 		/// <summary>
