@@ -207,7 +207,8 @@ namespace Manatee.Json.Serialization
 					break;
 			}
 			T obj;
-			if (typeof(IJsonCompatible).IsAssignableFrom(typeof(T)))
+			var mappedType = JsonSerializationAbstractionMap.GetMap(typeof (T));
+			if (typeof(IJsonCompatible).IsAssignableFrom(mappedType))
 			{
 				obj = JsonSerializationAbstractionMap.CreateInstance<T>(json);
 				((IJsonCompatible)obj).FromJson(json);

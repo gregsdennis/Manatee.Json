@@ -1,4 +1,27 @@
-﻿using System;
+﻿/***************************************************************************************
+
+	Copyright 2012 Greg Dennis
+
+	   Licensed under the Apache License, Version 2.0 (the "License");
+	   you may not use this file except in compliance with the License.
+	   You may obtain a copy of the License at
+
+		 http://www.apache.org/licenses/LICENSE-2.0
+
+	   Unless required by applicable law or agreed to in writing, software
+	   distributed under the License is distributed on an "AS IS" BASIS,
+	   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	   See the License for the specific language governing permissions and
+	   limitations under the License.
+ 
+	File Name:		JsonSerializationAbstractionMap.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		JsonSerializationAbstractionMap
+	Purpose:		Maps interfaces and abstract classes to concrete classes and
+					in order to provide instances during instantia.
+
+***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +36,12 @@ namespace Manatee.Json.Serialization
 	/// </summary>
 	public static class JsonSerializationAbstractionMap
 	{
-		private static readonly Dictionary<Type, Type> _registry = new Dictionary<Type, Type>();
+		private static readonly Dictionary<Type, Type> _registry;
+
+		static JsonSerializationAbstractionMap()
+		{
+			_registry = new Dictionary<Type, Type>();
+		}
 
 		/// <summary>
 		/// Applies a mapping from an abstraction to a concrete type.
@@ -34,6 +62,15 @@ namespace Manatee.Json.Serialization
 		public static void RemoveMap<TAbstract>()
 		{
 			_registry.Remove(typeof (TAbstract));
+		}
+		/// <summary>
+		/// Retrieves the map setting for an abstraction type.
+		/// </summary>
+		/// <param name="type">The abstraction type.</param>
+		/// <returns>The mapped type if a mapping exists; otherwise the abstraction type.</returns>
+		public static Type GetMap(Type type)
+		{
+			return _registry.ContainsKey(type) ? _registry[type] : type;
 		}
 
 		internal static T CreateInstance<T>(JsonValue json)

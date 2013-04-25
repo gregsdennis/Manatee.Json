@@ -31,8 +31,16 @@ namespace Manatee.Json.Attributes
 	[AttributeUsage(AttributeTargets.Property)]
 	public class JsonMapToAttribute : Attribute
 	{
+		///<summary>
+		/// Specifies the key in the JSON object which maps to the property to which
+		/// this attribute is applied.
+		///</summary>
 		public string MapToKey { get; set; }
 
+		/// <summary>
+		/// Creates a new instance fo the JsonMapToAttribute class.
+		/// </summary>
+		/// <param name="key">The JSON object key.</param>
 		public JsonMapToAttribute(string key)
 		{
 			MapToKey = key;
