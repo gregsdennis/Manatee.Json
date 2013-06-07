@@ -14,12 +14,13 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonExtensions.cs
+	File Name:		JsonObjectExtensions.cs
 	Namespace:		Manatee.Json
-	Class Name:		JsonExtensions
+	Class Name:		JsonObjectExtensions
 	Purpose:		Provides extension methods for JsonObjects.
 
 ***************************************************************************************/
+
 using Manatee.Json.Enumerations;
 
 namespace Manatee.Json.Extensions
@@ -27,7 +28,7 @@ namespace Manatee.Json.Extensions
 	/// <summary>
 	/// Provides extension methods for JsonValues.
 	/// </summary>
-	public static class JsonExtensions
+	public static class JsonObjectExtensions
 	{
 		/// <summary>
 		/// Returns a string or null if the key is not found or is not a string.
@@ -40,7 +41,7 @@ namespace Manatee.Json.Extensions
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.String) ? obj[key].String : null;
 		}
 		/// <summary>
-		/// Returns a double or null if the key is not found or is not a string.
+		/// Returns a double or null if the key is not found or is not a double.
 		/// </summary>
 		/// <param name="obj">The object to search</param>
 		/// <param name="key">The key</param>
@@ -50,7 +51,7 @@ namespace Manatee.Json.Extensions
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Number) ? obj[key].Number : (double?)null;
 		}
 		/// <summary>
-		/// Returns a bool or null if the key is not found or is not a string.
+		/// Returns a bool or null if the key is not found or is not a bool.
 		/// </summary>
 		/// <param name="obj">The object to search</param>
 		/// <param name="key">The key</param>
@@ -60,7 +61,7 @@ namespace Manatee.Json.Extensions
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Boolean) ? obj[key].Boolean : (bool?)null;
 		}
 		/// <summary>
-		/// Returns a JsonArray or null if the key is not found or is not a string.
+		/// Returns a JsonArray or null if the key is not found or is not a JsonArray.
 		/// </summary>
 		/// <param name="obj">The object to search</param>
 		/// <param name="key">The key</param>
@@ -70,7 +71,7 @@ namespace Manatee.Json.Extensions
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Array) ? obj[key].Array : null;
 		}
 		/// <summary>
-		/// Returns a JsonObject or null if the key is not found or is not a string.
+		/// Returns a JsonObject or null if the key is not found or is not a JsonObject.
 		/// </summary>
 		/// <param name="obj">The object to search</param>
 		/// <param name="key">The key</param>

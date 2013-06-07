@@ -51,19 +51,20 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Json\Extensions\JsonExtensionsTest.cs" />
+    <Compile Include="Json\Extensions\JsonArrayExtensionsTest.cs" />
+    <Compile Include="Json\Extensions\JsonObjectExtensionsTest.cs" />
     <Compile Include="Json\Extensions\XmlExtensionsTest.cs" />
     <Compile Include="Json\JsonObjectTest.cs" />
     <Compile Include="Json\JsonArrayTest.cs" />
     <Compile Include="Json\JsonValueTest.cs" />
     <Compile Include="Json\Extensions\LinqExtensionsTest.cs" />
+    <Compile Include="Json\Serialization\Internal\TypeGeneratorTest.cs" />
     <Compile Include="Json\Serialization\JsonSerializerTest.cs" />
-    <Compile Include="Json\Helpers\PrimitiveMapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test References\AbstractClass.cs" />
     <Compile Include="Test References\DerivedClass.cs" />
     <Compile Include="Test References\ImplementationClass.cs" />
-    <Compile Include="Test References\Interface.cs" />
+    <Compile Include="Test References\IInterface.cs" />
     <Compile Include="Test References\JsonCompatibleClass.cs" />
     <Compile Include="Test References\ObjectWithAbstractAndInterfaceProps.cs" />
     <Compile Include="Test References\ObjectWithBasicProps.cs" />

@@ -44,23 +44,6 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <OutputPath>..\..\Releases\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\Releases\Manatee.Json.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>..\..\Releases\Manatee.Json.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Manatee.StateMachine">
       <HintPath>..\..\Releases\Manatee.StateMachine.dll</HintPath>
@@ -77,14 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\JsonMapToAttribute.cs" />
+    <Compile Include="Enumerations\EnumSerializationFormat.cs" />
     <Compile Include="Exceptions\JsonTypeMapException.cs" />
-    <Compile Include="Helpers\IObjectCaster.cs" />
-    <Compile Include="Helpers\IPrimitiveMapper.cs" />
+    <Compile Include="Extensions\JsonArrayExtensions.cs" />
     <Compile Include="Helpers\ISerializerCache.cs" />
-    <Compile Include="Helpers\ISerializerReferenceCache.cs" />
-    <Compile Include="Helpers\PropertyReference.cs" />
-    <Compile Include="Helpers\SerializerReferenceCache.cs" />
-    <Compile Include="Helpers\SerializerReferenceRecord.cs" />
+    <Compile Include="Serialization\Internal\ITypeSerializer.cs" />
+    <Compile Include="Serialization\Internal\PropertyReference.cs" />
     <Compile Include="Helpers\XmlNamespaceRegistry.cs" />
     <Compile Include="Helpers\XmlNamespacePair.cs" />
     <Compile Include="Helpers\CharacterConverter.cs" />
@@ -94,7 +75,7 @@
     <Compile Include="Exceptions\JsonValueIncorrectTypeException.cs" />
     <Compile Include="Exceptions\JsonValueParseException.cs" />
     <Compile Include="JsonArray.cs" />
-    <Compile Include="Extensions\JsonExtensions.cs" />
+    <Compile Include="Extensions\JsonObjectExtensions.cs" />
     <Compile Include="JsonObject.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="JsonValue.cs" />
@@ -110,14 +91,30 @@
     <Compile Include="Exceptions\NotPrimitiveTypeException.cs" />
     <Compile Include="Exceptions\TypeDoesNotContainPropertyException.cs" />
     <Compile Include="Exceptions\TypeRegistrationException.cs" />
-    <Compile Include="Helpers\ObjectCaster.cs" />
-    <Compile Include="Helpers\PrimitiveMapper.cs" />
     <Compile Include="Serialization\IJsonCompatible.cs" />
+    <Compile Include="Serialization\Internal\AutoSerializer.cs" />
+    <Compile Include="Serialization\Internal\Constants.cs" />
+    <Compile Include="Serialization\Internal\DefaultValueSerializer.cs" />
+    <Compile Include="Serialization\Internal\ISerializer.cs" />
+    <Compile Include="Serialization\Internal\BooleanSerializer.cs" />
+    <Compile Include="Serialization\Internal\EnumNameSerializer.cs" />
+    <Compile Include="Serialization\Internal\EnumValueSerializer.cs" />
+    <Compile Include="Serialization\Internal\ISerializerFactory.cs" />
+    <Compile Include="Serialization\Internal\JsonCompatibleSerializer.cs" />
+    <Compile Include="Serialization\Internal\ReferencingSerializer.cs" />
+    <Compile Include="Serialization\Internal\SerializationPair.cs" />
+    <Compile Include="Serialization\Internal\SerializationPairCache.cs" />
+    <Compile Include="Serialization\Internal\SerializerFactory.cs" />
+    <Compile Include="Serialization\Internal\NumericSerializer.cs" />
+    <Compile Include="Serialization\Internal\RegisteredObjectSerializer.cs" />
+    <Compile Include="Serialization\Internal\StringSerializer.cs" />
+    <Compile Include="Serialization\Internal\TypeGenerator.cs" />
     <Compile Include="Serialization\JsonSerializationAbstractionMap.cs" />
     <Compile Include="Serialization\JsonSerializationTypeRegistry.cs" />
     <Compile Include="Serialization\JsonSerializer.cs" />
     <Compile Include="Serialization\JsonSerializerOptions.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

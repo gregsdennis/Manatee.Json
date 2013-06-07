@@ -47,11 +47,11 @@ namespace Manatee.Json
 																			 .Select(n => (char)n)
 																			 .Where(c => !char.IsControl(c));
 
-		bool boolValue = false;
-		string stringValue = null;
-		double numberValue = 0;
-		JsonObject objectValue = null;
-		JsonArray arrayValue = null;
+		bool _boolValue;
+		string _stringValue;
+		double _numberValue;
+		JsonObject _objectValue;
+		JsonArray _arrayValue;
 
 		/// <summary>
 		/// Globally defined null-valued JSON value.
@@ -77,12 +77,12 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Boolean)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
-				return boolValue;
+				return _boolValue;
 			}
 			private set
 			{
 				Type = JsonValueType.Boolean;
-				boolValue = value;
+				_boolValue = value;
 			}
 		}
 		/// <summary>
@@ -101,12 +101,12 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.String)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
-				return stringValue;
+				return _stringValue;
 			}
 			private set
 			{
 				Type = JsonValueType.String;
-				stringValue = value;
+				_stringValue = value;
 			}
 		}
 		/// <summary>
@@ -125,12 +125,12 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Number)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
-				return numberValue;
+				return _numberValue;
 			}
 			private set
 			{
 				Type = JsonValueType.Number;
-				numberValue = value;
+				_numberValue = value;
 			}
 		}
 		/// <summary>
@@ -149,12 +149,12 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Object)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
-				return objectValue;
+				return _objectValue;
 			}
 			private set
 			{
 				Type = JsonValueType.Object;
-				objectValue = value;
+				_objectValue = value;
 			}
 		}
 		/// <summary>
@@ -173,12 +173,12 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Array)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
-				return arrayValue;
+				return _arrayValue;
 			}
 			private set
 			{
 				Type = JsonValueType.Array;
-				arrayValue = value;
+				_arrayValue = value;
 			}
 		}
 		/// <summary>
@@ -244,9 +244,9 @@ namespace Manatee.Json
 			switch (Type)
 			{
 				case JsonValueType.Object:
-					return objectValue.GetIndentedString(indentLevel);
+					return _objectValue.GetIndentedString(indentLevel);
 				case JsonValueType.Array:
-					return arrayValue.GetIndentedString(indentLevel);
+					return _arrayValue.GetIndentedString(indentLevel);
 				default:
 					return ToString();
 			}
@@ -265,15 +265,15 @@ namespace Manatee.Json
 			switch (Type)
 			{
 				case JsonValueType.Number:
-					return string.Format("{0}", numberValue);
+					return string.Format("{0}", _numberValue);
 				case JsonValueType.String:
-					return string.Format("\"{0}\"", InsertEscapeSequences(stringValue));
+					return string.Format("\"{0}\"", InsertEscapeSequences(_stringValue));
 				case JsonValueType.Boolean:
-					return boolValue ? "true" : "false";
+					return _boolValue ? "true" : "false";
 				case JsonValueType.Object:
-					return string.Format("{0}", objectValue);
+					return string.Format("{0}", _objectValue);
 				case JsonValueType.Array:
-					return string.Format("{0}", arrayValue);
+					return string.Format("{0}", _arrayValue);
 				default:
 					return "null";
 			}

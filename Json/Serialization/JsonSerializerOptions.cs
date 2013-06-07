@@ -32,11 +32,7 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Default options used by the serializer.
 		/// </summary>
-		public static JsonSerializerOptions Default = new JsonSerializerOptions
-		                                              	{
-		                                              		EncodeDefaultValues = false,
-		                                              		InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.DoNothing
-		                                              	};
+		public static readonly JsonSerializerOptions Default;
 		/// <summary>
 		/// Gets and sets whether the serializer encodes default values for properties.
 		/// </summary>
@@ -57,5 +53,39 @@ namespace Manatee.Json.Serialization
 		/// methods, this property will have no effect.
 		/// </remarks>
 		public DateTimeSerializationFormat DateTimeSerializationFormat { get; set; }
+		/// <summary>
+		/// Gets and sets the format for enumeration serialization using the default serializer methods.
+		/// </summary>
+		/// <remarks>
+		/// If an entry has been made in JsonSerializationTypeRegistry for the specific type,
+		/// this property will have no effect.
+		/// </remarks>
+		public EnumSerializationFormat EnumSerializationFormat { get; set; }
+
+		static JsonSerializerOptions()
+		{
+			Default = new JsonSerializerOptions
+				{
+					EncodeDefaultValues = false,
+					InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.DoNothing,
+					EnumSerializationFormat = EnumSerializationFormat.AsInteger
+				};
+		}
+		/// <summary>
+		/// Creates a new instance of JsonSerializerOptions with default options.
+		/// </summary>
+		public JsonSerializerOptions() {}
+		/// <summary>
+		/// Creates a new instance of JsonSerializerOptions by copying an existing
+		/// JsonSerializerOptions instance.
+		/// </summary>
+		/// <param name="options">The JsonSerializerOptions instance to copy.</param>
+		public JsonSerializerOptions(JsonSerializerOptions options)
+		{
+			EncodeDefaultValues = options.EncodeDefaultValues;
+			InvalidPropertyKeyBehavior = options.InvalidPropertyKeyBehavior;
+			DateTimeSerializationFormat = options.DateTimeSerializationFormat;
+			EnumSerializationFormat = options.EnumSerializationFormat;
+		}
 	}
 }

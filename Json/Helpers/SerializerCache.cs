@@ -30,19 +30,25 @@ namespace Manatee.Json.Helpers
 	{
 		private readonly Dictionary<Type, SerializerMethodPair> _cache;
 
+		public static ISerializerCache Default { get; private set; }
+
+		static SerializerCache()
+		{
+			Default = new SerializerCache();
+		}
 		public SerializerCache()
 		{
 			_cache = new Dictionary<Type, SerializerMethodPair>();
 		}
 
-		public MethodInfo GetSerializer(Type type)
+		public MethodInfo GetSerializeMethod(Type type)
 		{
 			if (!_cache.ContainsKey(type))
 				_cache.Add(type, new SerializerMethodPair(type));
 			return _cache[type].Serializer;
 		}
 
-		public MethodInfo GetDeserializer(Type type)
+		public MethodInfo GetDeserializeMethod(Type type)
 		{
 			if (!_cache.ContainsKey(type))
 				_cache.Add(type, new SerializerMethodPair(type));
