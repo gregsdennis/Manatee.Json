@@ -27,6 +27,7 @@ using System.Linq;
 using System.Text;
 using Manatee.Json.Enumerations;
 using Manatee.Json.Exceptions;
+using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
@@ -78,9 +79,9 @@ namespace Manatee.Json.Serialization
 			var type = typeof (T);
 			if (type.IsAbstract || type.IsInterface)
 			{
-				if ((json.Type == JsonValueType.Object) && (json.Object.ContainsKey(JsonSerializer.TypeKey)))
+				if ((json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
 				{
-					var concrete = Type.GetType(json.Object[JsonSerializer.TypeKey].String);
+					var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
 					return (T) Activator.CreateInstance(concrete);
 				}
 				if (_registry.ContainsKey(type))
@@ -88,6 +89,8 @@ namespace Manatee.Json.Serialization
 					var concrete = _registry[type];
 					return (T) Activator.CreateInstance(concrete);
 				}
+				if (type.IsInterface)
+					return TypeGenerator.Default.Generate<T>();
 			}
 			return Activator.CreateInstance<T>();
 		}

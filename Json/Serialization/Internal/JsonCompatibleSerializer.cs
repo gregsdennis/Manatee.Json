@@ -14,20 +14,32 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertyReference.cs
-	Namespace:		Manatee.Json.Helpers
-	Class Name:		PropertyReference
-	Purpose:		Maintains a cache of references used by the serializer to
-					catch circular references.
+	File Name:		JsonCompatibleSerializer.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		JsonCompatibleSerializer
+	Purpose:		Converts objects which implement IJsonCompatible to and from
+					JsonValues.
 
 ***************************************************************************************/
-using System.Reflection;
 
-namespace Manatee.Json.Helpers
+using System;
+
+namespace Manatee.Json.Serialization.Internal
 {
-	class PropertyReference
+	internal class JsonCompatibleSerializer : ISerializer
 	{
-		public PropertyInfo Info { get; set; }
-		public object Owner { get; set; }
+		public bool ShouldMaintainReferences { get { return true; } }
+
+		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		{
+			var compatible = (IJsonCompatible) obj;
+			return compatible.ToJson();
+		}
+		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		{
+			var value = (IJsonCompatible) JsonSerializationAbstractionMap.CreateInstance<T>(json);
+			value.FromJson(json);
+			return (T) value;
+		}
 	}
 }

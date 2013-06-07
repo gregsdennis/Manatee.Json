@@ -64,34 +64,51 @@ namespace Manatee.Json.Serialization
 			RegisterLocalTypes();
 		}
 
-		internal static bool TryEncode<T>(this JsonSerializer serializer, T obj, out JsonValue json)
+		/// <summary>
+		/// Gets whether a given type has been entered into the registry.
+		/// </summary>
+		/// <typeparam name="T">The type.</typeparam>
+		/// <returns>True if an entry exists for the type; otherwise false.</returns>
+		public static bool IsRegistered<T>()
+		{
+			return IsRegistered(typeof(T));
+		}
+		/// <summary>
+		/// Gets whether a given type has been entered into the registry.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns>True if an entry exists for the type; otherwise false.</returns>
+		public static bool IsRegistered(Type type)
+		{
+			return ToJsonConverters.ContainsKey(type);
+		}
+
+		internal static void Encode<T>(this JsonSerializer serializer, T obj, out JsonValue json)
 		{
 			var converter = GetToJsonConverter<T>();
 			if (converter == null)
 			{
 				json = null;
-				return false;
+				return;
 			}
 			lock (LockHolder)
 			{
 				Serializer.Options = serializer.Options;
 				json = converter(obj);
-				return true;
 			}
 		}
-		internal static bool TryDecode<T>(this JsonSerializer serializer, JsonValue json, out T obj)
+		internal static void Decode<T>(this JsonSerializer serializer, JsonValue json, out T obj)
 		{
 			var converter = GetFromJsonConverter<T>();
 			if (converter == null)
 			{
 				obj = default(T);
-				return false;
+				return;
 			}
 			lock (LockHolder)
 			{
 				Serializer.Options = serializer.Options;
 				obj = converter(json);
-				return true;
 			}
 		}
 

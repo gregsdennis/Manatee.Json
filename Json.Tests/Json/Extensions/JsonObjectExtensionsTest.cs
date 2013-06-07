@@ -1,4 +1,26 @@
-﻿using System;
+﻿/***************************************************************************************
+
+	Copyright 2012 Greg Dennis
+
+	   Licensed under the Apache License, Version 2.0 (the "License");
+	   you may not use this file except in compliance with the License.
+	   You may obtain a copy of the License at
+
+		 http://www.apache.org/licenses/LICENSE-2.0
+
+	   Unless required by applicable law or agreed to in writing, software
+	   distributed under the License is distributed on an "AS IS" BASIS,
+	   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	   See the License for the specific language governing permissions and
+	   limitations under the License.
+ 
+	File Name:		JsonObjectExtensionsTest.cs
+	Namespace:		Manatee.Tests.Json.Extensions
+	Class Name:		JsonObjectExtensionsTest
+	Purpose:		Tests for the JsonObject extension methods for the Json library.
+
+***************************************************************************************/
+using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +31,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Manatee.Tests.Json.Extensions
 {
 	[TestClass]
-	public class JsonExtensionsTest
+	public class JsonObjectExtensionsTest
 	{
 		[TestMethod]
 		public void TryGetString_ReturnsRequested()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"boolean", true}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"boolean", true}
+				};
 
 			var value = json.TryGetString("string");
 
@@ -38,10 +60,10 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetString_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"number", 6},
-			           		{"boolean", true}
-			           	};
+				{
+					{"number", 6},
+					{"boolean", true}
+				};
 			var value = json.TryGetString("string");
 
 			Assert.IsNull(value);
@@ -50,11 +72,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetString_ValueNotStringReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"boolean", true}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"boolean", true}
+				};
 			var value = json.TryGetString("number");
 
 			Assert.IsNull(value);
@@ -63,11 +85,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetNumber_ReturnsRequested()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"boolean", true}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"boolean", true}
+				};
 
 			var value = json.TryGetNumber("number");
 
@@ -86,10 +108,10 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetNumber_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"boolean", true}
-			           	};
+				{
+					{"string", "test"},
+					{"boolean", true}
+				};
 			var value = json.TryGetNumber("number");
 
 			Assert.IsNull(value);
@@ -98,11 +120,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetNumber_ValueNotNumberReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"boolean", true}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"boolean", true}
+				};
 			var value = json.TryGetNumber("string");
 
 			Assert.IsNull(value);
@@ -111,11 +133,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetBoolean_ReturnsRequested()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"boolean", true}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"boolean", true}
+				};
 
 			var value = json.TryGetBoolean("boolean");
 
@@ -134,10 +156,10 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetBoolean_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6}
+				};
 			var value = json.TryGetBoolean("boolean");
 
 			Assert.IsNull(value);
@@ -146,11 +168,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetBoolean_ValueNotBooleanReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"boolean", true}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"boolean", true}
+				};
 			var value = json.TryGetBoolean("string");
 
 			Assert.IsNull(value);
@@ -159,11 +181,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetArray_ReturnsRequested()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"array", new JsonArray()}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"array", new JsonArray()}
+				};
 
 			var value = json.TryGetArray("array");
 
@@ -182,10 +204,10 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetArray_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6}
+				};
 			var value = json.TryGetArray("array");
 
 			Assert.IsNull(value);
@@ -194,11 +216,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetArray_ValueNotBooleanReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"array", new JsonArray()}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"array", new JsonArray()}
+				};
 			var value = json.TryGetArray("string");
 
 			Assert.IsNull(value);
@@ -207,11 +229,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetObject_ReturnsRequested()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"object", new JsonObject()}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"object", new JsonObject()}
+				};
 
 			var value = json.TryGetObject("object");
 
@@ -230,10 +252,10 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetObject_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6}
+				};
 			var value = json.TryGetObject("object");
 
 			Assert.IsNull(value);
@@ -242,11 +264,11 @@ namespace Manatee.Tests.Json.Extensions
 		public void TryGetObject_ValueNotBooleanReturnsNull()
 		{
 			var json = new JsonObject
-			           	{
-			           		{"string", "test"},
-			           		{"number", 6},
-			           		{"object", new JsonObject()}
-			           	};
+				{
+					{"string", "test"},
+					{"number", 6},
+					{"object", new JsonObject()}
+				};
 			var value = json.TryGetObject("string");
 
 			Assert.IsNull(value);
