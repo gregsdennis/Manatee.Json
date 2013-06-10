@@ -35,6 +35,16 @@ namespace Manatee.Tests.Json.Serialization.Internal
 			Assert.AreEqual(default(int), actual);
 		}
 		[TestMethod]
+		public void EventSubscription_Success()
+		{
+			var instance = TypeGenerator.Default.Generate<IInterface>();
+
+			EventHandler handler = (o, e) => { };
+
+			instance.RequiredEvent += handler;
+			instance.RequiredEvent -= handler;
+		}
+		[TestMethod]
 		public void CacheTypes_Success()
 		{
 			var instance = TypeGenerator.Default.Generate<IInterface>();
