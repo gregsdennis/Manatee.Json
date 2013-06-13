@@ -23,7 +23,7 @@ namespace Manatee.Tests.Test_References
 		public override bool Equals(object obj)
 		{
 			if (!(obj is ImplementationClass)) return false;
-			return Equals((ImplementationClass) obj);
+			return Equals((ImplementationClass)obj);
 		}
 		public bool Equals(ImplementationClass other)
 		{
@@ -38,6 +38,10 @@ namespace Manatee.Tests.Test_References
 		public int CompareTo(object obj)
 		{
 			throw new NotImplementedException();
+		}
+		public override string ToString()
+		{
+			return string.Format("RequiredProp: {0}", RequiredProp);
 		}
 	}
 }

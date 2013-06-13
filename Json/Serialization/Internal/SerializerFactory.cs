@@ -71,11 +71,12 @@ namespace Manatee.Json.Serialization.Internal
 		public ISerializer GetSerializer<T>(JsonSerializerOptions options)
 		{
 			var type = typeof (T);
-			if (JsonSerializationTypeRegistry.IsRegistered(type))
+			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
+			if (JsonSerializationTypeRegistry.IsRegistered(typeToSerialize))
 				return BuildSerializer(RegisteredObjectSerializer);
-			if (typeof(IJsonCompatible).IsAssignableFrom(type))
+			if (typeof(IJsonCompatible).IsAssignableFrom(typeToSerialize))
 				return BuildSerializer(JsonCompatibleSerializer);
-			if (typeof(Enum).IsAssignableFrom(type))
+			if (typeof(Enum).IsAssignableFrom(typeToSerialize))
 			{
 				switch (options.EnumSerializationFormat)
 				{
@@ -87,8 +88,8 @@ namespace Manatee.Json.Serialization.Internal
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (Library.ContainsKey(type))
-				return BuildSerializer(Library[type]);
+			if (Library.ContainsKey(typeToSerialize))
+				return BuildSerializer(Library[typeToSerialize]);
 			return BuildSerializer(AutoSerializer);
 		}
 		public ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
