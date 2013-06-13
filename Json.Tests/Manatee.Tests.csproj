@@ -66,6 +66,7 @@
     <Compile Include="Test References\ImplementationClass.cs" />
     <Compile Include="Test References\IInterface.cs" />
     <Compile Include="Test References\JsonCompatibleClass.cs" />
+    <Compile Include="Test References\JsonCompatibleImplementationClass.cs" />
     <Compile Include="Test References\ObjectWithAbstractAndInterfaceProps.cs" />
     <Compile Include="Test References\ObjectWithBasicProps.cs" />
     <Compile Include="Test References\ObjectWithExtendedProps.cs" />
