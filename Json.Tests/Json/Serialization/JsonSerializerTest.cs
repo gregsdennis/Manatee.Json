@@ -496,11 +496,14 @@ namespace Manatee.Tests.Json.Serialization
 			Assert.AreSame(actual, actual.LoopProperty.LoopProperty);
 			Assert.AreEqual(0, serializer.SerializationMap.Count);
 		}
+		// This test fails when all tests are run together because the JsonSerializationAbstractionMap
+		// is static and one of the other tests has registered ImplementationClass to be used
+		// for IInterface, and VS is running the tests concurrently.
 		[TestMethod]
 		public void Deserialize_UnimplementedInterface_ReturnsRunTimeImplementation()
 		{
 			var serializer = GetSerializer();
-			var json = new JsonObject { { "RequiredProp", "test" } };
+			var json = new JsonObject {{"RequiredProp", "test"}};
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
 
 			var actual = serializer.Deserialize<IInterface>(json);
@@ -609,6 +612,9 @@ namespace Manatee.Tests.Json.Serialization
 			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
+		// This test fails when all tests are run together because the JsonSerializationAbstractionMap
+		// is static and one of the other tests has registered ImplementationClass to be used
+		// for IInterface, and VS is running the tests concurrently.
 		[TestMethod]
 		public void Serialize_AbstractAndInterfaceProps_Successful()
 		{
@@ -657,6 +663,9 @@ namespace Manatee.Tests.Json.Serialization
 			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
+		// This test fails when all tests are run together because the JsonSerializationAbstractionMap
+		// is static and one of the other tests has registered ImplementationClass to be used
+		// for IInterface, and VS is running the tests concurrently.
 		[TestMethod]
 		public void Serialize_Interface_Successful()
 		{

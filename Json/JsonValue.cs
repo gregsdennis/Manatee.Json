@@ -40,18 +40,15 @@ namespace Manatee.Json
 	{
 		private const string EscapeChars = @"\""/bfnrtu";
 
-		private const string TypeableChars =
-			@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 `-=,./;'[]\~!@#$%^&*()_+<>?:\""{}|";
-
-		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(UInt16.MinValue, UInt16.MaxValue)
+		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
 																			 .Select(n => (char)n)
 																			 .Where(c => !char.IsControl(c));
 
-		bool _boolValue;
-		string _stringValue;
-		double _numberValue;
-		JsonObject _objectValue;
-		JsonArray _arrayValue;
+		private bool _boolValue;
+		private string _stringValue;
+		private double _numberValue;
+		private JsonObject _objectValue;
+		private JsonArray _arrayValue;
 
 		/// <summary>
 		/// Globally defined null-valued JSON value.
@@ -59,7 +56,7 @@ namespace Manatee.Json
 		/// <remarks>
 		/// Use this when initializing a JSON object or array.
 		/// </remarks>
-		public readonly static JsonValue Null = new JsonValue();
+		public static readonly JsonValue Null = new JsonValue();
 
 		/// <summary>
 		/// Accesses the JsonValue as a boolean.
@@ -522,7 +519,7 @@ namespace Manatee.Json
 			}
 		}
 
-		internal static string EvaluateEscapeSequences(string s)
+		private static string EvaluateEscapeSequences(string s)
 		{
 			var i = 0;
 			while (i < s.Length)
@@ -560,7 +557,7 @@ namespace Manatee.Json
 			return s;
 		}
 
-		internal static string InsertEscapeSequences(string s)
+		private static string InsertEscapeSequences(string s)
 		{
 			var i = 0;
 			while (i < s.Length)
@@ -615,11 +612,11 @@ namespace Manatee.Json
 		{
 			var inString = false;
 			var ret = "";
-			for (var i = 0; i < s.Length; i++)
+			foreach (var t in s)
 			{
-				if (s[i] == '"') inString = !inString;
-				if (inString || !IsWhiteSpace(s[i]))
-					ret += s[i];
+				if (t == '"') inString = !inString;
+				if (inString || !IsWhiteSpace(t))
+					ret += t;
 			}
 			return ret;
 		}

@@ -20,6 +20,8 @@
 	Purpose:		Represents a collection of JSON values.
 
 ***************************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Enumerations;
@@ -46,13 +48,13 @@ namespace Manatee.Json
 			End
 		}
 
-		static readonly StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
+		private static readonly StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
 
-		string source;
-		int index;
-		JsonValue value;
-		bool done;
-		InputStream<JsonInput> stream = new InputStream<JsonInput>();
+		private readonly string _source;
+		private int _index;
+		private JsonValue _value;
+		private bool _done;
+		readonly InputStream<JsonInput> _stream = new InputStream<JsonInput>();
 
 		static JsonArray()
 		{
@@ -83,7 +85,7 @@ namespace Manatee.Json
 		internal JsonArray(string s, ref int i)
 			: this()
 		{
-			source = s;
+			_source = s;
 			i = Parse(i);
 		}
 
@@ -118,29 +120,35 @@ namespace Manatee.Json
 
 		private int Parse(int i)
 		{
-			stream.Clear();
-			value = null;
-			index = i;
-			done = false;
+			_stream.Clear();
+			_value = null;
+			_index = i;
+			_done = false;
 			try
 			{
-				StateMachine.Run(this, State.Start, stream);
-				if (!done)
-					throw new JsonSyntaxException(index);
+				StateMachine.Run(this, State.Start, _stream);
+				if (!_done)
+					throw new JsonSyntaxException(_index);
 			}
 			catch (InputNotValidForStateException<State, JsonInput>)
 			{
-				throw new JsonSyntaxException(index);
+				throw new JsonSyntaxException(_index);
 			}
 			catch (StateNotValidException<State>)
 			{
-				throw new JsonSyntaxException(index);
+				throw new JsonSyntaxException(_index);
 			}
 			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
 			{
-				throw new JsonSyntaxException(index);
+				throw new JsonSyntaxException(_index);
 			}
-			return index;
+			catch (Exception e)
+			{
+				e.Data.Add("source", _source);
+				e.Data.Add("index", _index);
+				throw;
+			}
+			return _index;
 		}
 
 		/// <summary>
@@ -188,15 +196,15 @@ namespace Manatee.Json
 		{
 			var array = owner as JsonArray;
 			if (array == null) return;
-			if (array.done || (array.index == array.source.Length)) return;
+			if (array._done || (array._index == array._source.Length)) return;
 			try
 			{
-				var next = CharacterConverter.Item(array.source[array.index++]);
-				array.stream.Add(next);
+				var next = CharacterConverter.Item(array._source[array._index++]);
+				array._stream.Add(next);
 			}
 			catch (KeyNotFoundException)
 			{
-				throw new JsonSyntaxException(array.index);
+				throw new JsonSyntaxException(array._index);
 			}
 		}
 		private static State GotStart(object owner, JsonInput input)
@@ -206,22 +214,22 @@ namespace Manatee.Json
 		private static State GotValue(object owner, JsonInput input)
 		{
 			var array = owner as JsonArray;
-			array.value = JsonValue.Parse(array.source, ref array.index);
+			array._value = JsonValue.Parse(array._source, ref array._index);
 			return State.End;
 		}
 		private static State GotEmpty(object owner, JsonInput input)
 		{
 			var array = owner as JsonArray;
-			array.done = (input == JsonInput.CloseBracket);
+			array._done = (input == JsonInput.CloseBracket);
 			if (array.Count != 0)
-				throw new JsonSyntaxException(array.index);
+				throw new JsonSyntaxException(array._index);
 			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{
 			var array = owner as JsonArray;
-			array.Add(array.value);
-			array.done = (input == JsonInput.CloseBracket);
+			array.Add(array._value);
+			array._done = (input == JsonInput.CloseBracket);
 			return State.Value;
 		}
 	}
