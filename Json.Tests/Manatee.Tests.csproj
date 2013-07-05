@@ -51,6 +51,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DevTest.cs" />
     <Compile Include="Json\Extensions\JsonArrayExtensionsTest.cs" />
     <Compile Include="Json\Extensions\JsonObjectExtensionsTest.cs" />
     <Compile Include="Json\Extensions\XmlExtensionsTest.cs" />

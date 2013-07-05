@@ -21,6 +21,8 @@
 					structure.
 
 ***************************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Enumerations;
@@ -49,13 +51,14 @@ namespace Manatee.Json
 			End
 		}
 
-		static StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
+		private static readonly StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
 
-		string _source, _key;
-		int _index;
-		JsonValue _value;
-		bool _done;
-		private InputStream<JsonInput> _stream;
+		private readonly string _source;
+		private string _key;
+		private int _index;
+		private JsonValue _value;
+		private bool _done;
+		private readonly InputStream<JsonInput> _stream = new InputStream<JsonInput>();
 
 		/// <summary>
 		/// Gets or sets the value associated with the specified key.
@@ -154,20 +157,17 @@ namespace Manatee.Json
 		{
 			var inString = false;
 			var ret = "";
-			for (var i = 0; i < s.Length; i++)
+			foreach (var t in s)
 			{
-				if (s[i] == '"') inString = !inString;
-				if (inString || !IsWhiteSpace(s[i]))
-					ret += s[i];
+				if (t == '"') inString = !inString;
+				if (inString || !IsWhiteSpace(t))
+					ret += t;
 			}
 			return ret;
 		}
 		private int Parse(int i)
 		{
-			if (_stream == null)
-				_stream = new InputStream<JsonInput>();
-			else
-				_stream.Clear();
+			_stream.Clear();
 			_value = null;
 			_index = i;
 			_done = false;
@@ -188,6 +188,12 @@ namespace Manatee.Json
 			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
 			{
 				throw new JsonSyntaxException(_index);
+			}
+			catch (Exception e)
+			{
+				e.Data.Add("source", _source);
+				e.Data.Add("index", _index);
+				throw;
 			}
 			return _index;
 		}
