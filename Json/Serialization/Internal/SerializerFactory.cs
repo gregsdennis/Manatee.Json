@@ -72,7 +72,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var type = typeof (T);
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
-			if (JsonSerializationTypeRegistry.IsRegistered(typeToSerialize))
+			if (JsonSerializationTypeRegistry.IsRegistered(type))
 				return BuildSerializer(RegisteredObjectSerializer);
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeToSerialize))
 				return BuildSerializer(JsonCompatibleSerializer);
