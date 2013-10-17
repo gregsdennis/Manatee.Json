@@ -1,0 +1,8 @@
+E:\Projects\Manatee.Json\Manatee.Json\bin\Release\Manatee.Json.XML
+E:\Projects\Manatee.Json\Manatee.Json\bin\Release\Manatee.Json.dll
+E:\Projects\Manatee.Json\Manatee.Json\bin\Release\Manatee.Json.pdb
+E:\Projects\Manatee.Json\Manatee.Json\bin\Release\Manatee.StateMachine.dll
+E:\Projects\Manatee.Json\Manatee.Json\bin\Release\Manatee.StateMachine.pdb
+E:\Projects\Manatee.Json\Manatee.Json\bin\Release\Manatee.StateMachine.xml
+E:\Projects\Manatee.Json\Manatee.Json\obj\Release\Manatee.Json.dll
+E:\Projects\Manatee.Json\Manatee.Json\obj\Release\Manatee.Json.pdb

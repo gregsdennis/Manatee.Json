@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Manatee.StateMachine</name>
+    </assembly>
+    <members>
+        <member name="T:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2">
+            <summary>
+            Thrown when no action as been defined for the the given input in the current state.
+            </summary>
+            <typeparam name="TState">The object type of the state.</typeparam>
+            <typeparam name="TInput">The object type of the input.</typeparam>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2.#ctor">
+            <summary>
+            Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2.#ctor(`0,`1)">
+            <summary>
+            Creates a new instance of this exception with the default message.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2.#ctor(System.String)">
+            <summary>
+            Creates a new instance of this exception with a given message.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of this exception with the a given message and inner exception.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Creates a new instance of this exception with serialization and context information.
+            </summary>
+            <param name="info">The serialization information.</param>
+            <param name="context">The context information.</param>
+        </member>
+        <member name="P:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2.State">
+            <summary>
+            The state of the state machine.
+            </summary>
+        </member>
+        <member name="P:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2.Input">
+            <summary>
+            The input for the state.
+            </summary>
+        </member>
+        <member name="T:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2">
+            <summary>
+            Thrown when the current state is not set up to process the given input.
+            </summary>
+            <typeparam name="TState">The object type of the state.</typeparam>
+            <typeparam name="TInput">The object type of the input.</typeparam>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2.#ctor">
+            <summary>
+            Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2.#ctor(`0,`1)">
+            <summary>
+            Creates a new instance of this exception with the default message.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2.#ctor(System.String)">
+            <summary>
+            Creates a new instance of this exception with a given message.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of this exception with the a given message and inner exception.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Creates a new instance of this exception with serialization and context information.
+            </summary>
+            <param name="info">The serialization information.</param>
+            <param name="context">The context information.</param>
+        </member>
+        <member name="P:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2.State">
+            <summary>
+            The state of the state machine.
+            </summary>
+        </member>
+        <member name="P:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2.Input">
+            <summary>
+            The input that the state does not recognize.
+            </summary>
+        </member>
+        <member name="T:Manatee.StateMachine.Exceptions.StateNotValidException`1">
+            <summary>
+            Thrown when the specified state is not set up in the state machine.
+            </summary>
+            <typeparam name="TState">The object type of the state.</typeparam>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.StateNotValidException`1.#ctor">
+            <summary>
+            Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.StateNotValidException`1.#ctor(`0)">
+            <summary>
+            Creates a new instance of this exception with the default message.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.StateNotValidException`1.#ctor(System.String)">
+            <summary>
+            Creates a new instance of this exception with a given message.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.StateNotValidException`1.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of this exception with the a given message and inner exception.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.Exceptions.StateNotValidException`1.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Creates a new instance of this exception with serialization and context information.
+            </summary>
+            <param name="info">The serialization information.</param>
+            <param name="context">The context information.</param>
+        </member>
+        <member name="P:Manatee.StateMachine.Exceptions.StateNotValidException`1.State">
+            <summary>
+            The state that the state machine does not recognize.
+            </summary>
+        </member>
+        <member name="T:Manatee.StateMachine.InputStream`1">
+            <summary>
+            Represents a stream of input parameters for a StateMachine object.  Functions as a queue,
+            but can be reset to the beginning of the collection.
+            </summary>
+            <typeparam name="T">
+            The object type used for the inputs in the StateMachine.
+            </typeparam>
+        </member>
+        <member name="M:Manatee.StateMachine.InputStream`1.#ctor">
+            <summary>
+            A default constructor.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.InputStream`1.Reset">
+            <summary>
+            Resets the enumerator index to the start.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.InputStream`1.Next">
+            <summary>
+            Retrieves the next input object.
+            </summary>
+            <returns>
+            The next input object.
+            </returns>
+        </member>
+        <member name="P:Manatee.StateMachine.InputStream`1.IsAtEnd">
+            <summary>
+             Gets whether the current index is at the end of the stream.
+            </summary>
+        </member>
+        <member name="T:Manatee.StateMachine.StateMachine`2">
+            <summary>
+            Represents an extensible generic state machine.
+            </summary>
+            <typeparam name="TState">The object type to be used for states.</typeparam>
+            <typeparam name="TInput">The object type to be used for inputs.</typeparam>
+        </member>
+        <member name="M:Manatee.StateMachine.StateMachine`2.#ctor">
+            <summary>
+            Creates a new StateMachine object.
+            </summary>
+        </member>
+        <member name="M:Manatee.StateMachine.StateMachine`2.Run(System.Object,`0,Manatee.StateMachine.InputStream{`1})">
+            <summary>
+            Runs the state machine.
+            </summary>
+            <param name="owner">The object which created the StateMachine.</param>
+            <param name="startState">The state from which to start.</param>
+            <param name="inputStream">The input stream.</param>
+            <exception cref="T:Manatee.StateMachine.Exceptions.ActionNotDefinedForStateAndInputException`2">
+            Thrown when the input stream contains an input that the current state does
+            not recognize.
+            </exception>
+            <exception cref="T:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2">
+            Thrown when attempting to get a value for an input that the given state does
+            not recognize.
+            </exception>
+            <exception cref="T:Manatee.StateMachine.Exceptions.StateNotValidException`1">
+            Thrown when attempting to get a value for a state that the state machine
+            does not recognize.
+            </exception>
+        </member>
+        <member name="M:Manatee.StateMachine.StateMachine`2.UnregisterOwner(System.Object)">
+            <summary>
+            Disassociates an object from this StateMachine, allowing it to remove
+            all associated states.
+            </summary>
+            <param name="owner"></param>
+        </member>
+        <member name="P:Manatee.StateMachine.StateMachine`2.States">
+            <summary>
+            Gets the list of states.
+            </summary>
+        </member>
+        <member name="P:Manatee.StateMachine.StateMachine`2.Inputs">
+            <summary>
+            Gets the list of all Inputs for all states.
+            </summary>
+        </member>
+        <member name="P:Manatee.StateMachine.StateMachine`2.Actions">
+            <summary>
+            Gets the list of all actions for all state-input combinations.
+            </summary>
+        </member>
+        <member name="P:Manatee.StateMachine.StateMachine`2.UpdateFunction">
+            <summary>
+            Gets and sets a custom update function.
+            </summary>
+            <remarks>
+            The update function is called before each input is retrieved from
+            the input stream.  It is typically used to update the input stream,
+            but can also include any code that needs to be executed for each 
+            state-input evaluation.
+            </remarks>
+        </member>
+        <member name="P:Manatee.StateMachine.StateMachine`2.Item(`0,`1)">
+            <summary>
+            Provides an interface for getting and setting actions for state-input
+            combinations.
+            </summary>
+            <param name="state">The state for which to get/set the action.</param>
+            <param name="input">The input for which to get/set the action.</param>
+            <returns>
+            The action for the given state-input combination.  Throws an exception if
+            not set.
+            </returns>
+            <remarks>
+            The setter automatically adds the state and input to the States and
+            Inputs lists.
+            </remarks>
+            <exception cref="T:Manatee.StateMachine.Exceptions.InputNotValidForStateException`2">
+            Thrown when attempting to get a value for an input that the given state does
+            not recognize.
+            </exception>
+            <exception cref="T:Manatee.StateMachine.Exceptions.StateNotValidException`1">
+            Thrown when attempting to get a value for a state that the state machine
+            does not recognize.
+            </exception>
+        </member>
+        <member name="T:Manatee.StateMachine.StateMachine`2.StateMachineAction">
+            <summary>
+            Provides a method template for a state-input action.
+            </summary>
+            <param name="owner">The object which created the StateMachine.</param>
+            <param name="input">The input that triggered the function call.</param>
+            <returns>
+            The next state for this StateMachine object.
+            </returns>
+        </member>
+        <member name="T:Manatee.StateMachine.StateMachine`2.UpdateAction">
+            <summary>
+            Provides a method template for an action to be called before each iteration
+            of the state machine.
+            </summary>
+            <param name="owner">The object which created the StateMachine.</param>
+        </member>
+    </members>
+</doc>
