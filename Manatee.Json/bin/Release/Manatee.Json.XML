@@ -1,0 +1,1212 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Manatee.Json</name>
+    </assembly>
+    <members>
+        <member name="T:Manatee.Json.Attributes.JsonMapToAttribute">
+            <summary>
+            Allows the user to specify how a property is mapped during serialization.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Attributes.JsonMapToAttribute.#ctor(System.String)">
+            <summary>
+            Creates a new instance fo the JsonMapToAttribute class.
+            </summary>
+            <param name="key">The JSON object key.</param>
+        </member>
+        <member name="P:Manatee.Json.Attributes.JsonMapToAttribute.MapToKey">
+            <summary>
+             Specifies the key in the JSON object which maps to the property to which
+             this attribute is applied.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Enumerations.EnumSerializationFormat">
+            <summary>
+            Enumerates serialization formats for enumerations.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.EnumSerializationFormat.AsInteger">
+            <summary>
+            Instructs the serializer to convert enumeration values to their numeric
+            counterparts.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.EnumSerializationFormat.AsName">
+            <summary>
+            Instructs the serializer to convert enumeration values to their string
+            counterparts.
+            </summary>
+            <remarks>
+            This option will use the Description attribute if it is present.  If the
+            enumeration is marked with the flags attribute, the string representation
+            will consist of a comma-delimited list of names.  Whenever a value is
+            passed which does not have a named counterpart, the numeric value will
+            be used.
+            </remarks>
+        </member>
+        <member name="T:Manatee.Json.Enumerations.MapBaseAbstractionBehavior">
+            <summary>
+            Describes mapping behaviors for mapping abstraction types in the serializer.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.MapBaseAbstractionBehavior.None">
+            <summary>
+            Specifies that no additional mappings will be made.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.MapBaseAbstractionBehavior.Unmapped">
+            <summary>
+            Specifies that any unmapped base classes and interfaces will be mapped.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.MapBaseAbstractionBehavior.Override">
+            <summary>
+            Specifies that all base classes and interfaces will be mapped,
+            overriding any existing mappings.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.JsonTypeMapException`2">
+            <summary>
+             Thrown when an abstract or interface type is mapped to another abstract or interface type.
+            </summary>
+            <typeparam name="TAbstract">The type being mapped from.</typeparam>
+            <typeparam name="TConcrete">The type being mapped to.</typeparam>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.JsonTypeMapException`2.#ctor">
+            <summary>
+            Creates a new instance of the JsonTypeMapException object.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Extensions.JsonArrayExtensions">
+            <summary>
+            Provides extension methods for JsonArrays.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Extensions.JsonArrayExtensions.OfType(Manatee.Json.JsonArray,Manatee.Json.Enumerations.JsonValueType)">
+            <summary>
+            Returns a JsonArray containing only the JsonValues of a specified type from a given JsonArray.
+            </summary>
+            <param name="arr">The array to search</param>
+            <param name="type">The type of value to return</param>
+            <returns>A JsonArray containing only the JsonValues of a specified type</returns>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.JsonStringInvalidEscapeSequenceException">
+            <summary>
+             Thrown when an invalid escape sequence is detected while parsing a string value.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.JsonStringInvalidEscapeSequenceException.#ctor(System.String,System.Int32)">
+            <summary>
+             Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.JsonKeyParseException">
+            <summary>
+            Thrown when an input string contains an invalid key.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.JsonKeyParseException.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.JsonSyntaxException">
+            <summary>
+            Thrown when an input string contains a syntax error other than a key or value parse error.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.JsonSyntaxException.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.JsonValueIncorrectTypeException">
+            <summary>
+            Thrown when a value is accessed via the incorrect type accessor.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.JsonValueIncorrectTypeException.#ctor(Manatee.Json.Enumerations.JsonValueType,Manatee.Json.Enumerations.JsonValueType)">
+            <summary>
+            Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="P:Manatee.Json.Exceptions.JsonValueIncorrectTypeException.ValidType">
+            <summary>
+            The correct type for the JsonValue that threw the exception.
+            </summary>
+        </member>
+        <member name="P:Manatee.Json.Exceptions.JsonValueIncorrectTypeException.RequestedType">
+            <summary>
+            The type requested.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.JsonValueParseException">
+            <summary>
+            Thrown when an input string contains an invalid value.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.JsonValueParseException.#ctor(Manatee.Json.Enumerations.JsonValueType,System.Int32)">
+            <summary>
+            Creates a new instance of this exception.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.JsonArray">
+            <summary>
+            Represents a collection of JSON values.
+            </summary>
+            <remarks>
+            A value can consist of a string, a numeric value, a boolean (true or false), a null placeholder,
+            a JSON array of values, or a nested JSON object.
+            </remarks>
+        </member>
+        <member name="M:Manatee.Json.JsonArray.#ctor">
+            <summary>
+            Creates an empty instance of a JSON object.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonArray.#ctor(System.String,System.Int32@)">
+            <summary>
+            Creates an instance of a JSON array and fills it by parsing the
+            supplied string starting at the indicated index.
+            </summary>
+            <param name="s">A string.</param>
+            <param name="i">The index at which the array starts.</param>
+        </member>
+        <member name="M:Manatee.Json.JsonArray.Finalize">
+            <summary>
+            Finalizes memory management responsibilities.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonArray.GetIndentedString(System.Int32)">
+            <summary>
+            Creates a string representation of the JSON data.
+            </summary>
+            <param name="indentLevel">The indention level for the array.</param>
+            <returns>A string.</returns>
+        </member>
+        <member name="M:Manatee.Json.JsonArray.ToString">
+            <summary>
+            Creates a string representation of the JSON data.
+            </summary>
+            <returns>A string.</returns>
+            <remarks>
+            Passing the returned string back into the parser will result in a copy of
+            this Json array.
+            </remarks>
+        </member>
+        <member name="M:Manatee.Json.JsonArray.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+            </returns>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Manatee.Json.JsonArray.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:System.Object"/>.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:Manatee.Json.Extensions.JsonObjectExtensions">
+            <summary>
+            Provides extension methods for JsonValues.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Extensions.JsonObjectExtensions.TryGetString(Manatee.Json.JsonObject,System.String)">
+            <summary>
+            Returns a string or null if the key is not found or is not a string.
+            </summary>
+            <param name="obj">The object to search</param>
+            <param name="key">The key</param>
+            <returns>A string or null if the key is not found or is not a string</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.JsonObjectExtensions.TryGetNumber(Manatee.Json.JsonObject,System.String)">
+            <summary>
+            Returns a double or null if the key is not found or is not a double.
+            </summary>
+            <param name="obj">The object to search</param>
+            <param name="key">The key</param>
+            <returns>A double or null if the key is not found or is not a string</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.JsonObjectExtensions.TryGetBoolean(Manatee.Json.JsonObject,System.String)">
+            <summary>
+            Returns a bool or null if the key is not found or is not a bool.
+            </summary>
+            <param name="obj">The object to search</param>
+            <param name="key">The key</param>
+            <returns>A bool or null if the key is not found or is not a string</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.JsonObjectExtensions.TryGetArray(Manatee.Json.JsonObject,System.String)">
+            <summary>
+            Returns a JsonArray or null if the key is not found or is not a JsonArray.
+            </summary>
+            <param name="obj">The object to search</param>
+            <param name="key">The key</param>
+            <returns>A JsonArray or null if the key is not found or is not a string</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.JsonObjectExtensions.TryGetObject(Manatee.Json.JsonObject,System.String)">
+            <summary>
+            Returns a JsonObject or null if the key is not found or is not a JsonObject.
+            </summary>
+            <param name="obj">The object to search</param>
+            <param name="key">The key</param>
+            <returns>A JsonObject or null if the key is not found or is not a string</returns>
+        </member>
+        <member name="T:Manatee.Json.JsonObject">
+            <summary>
+            Represents a collection of key:value pairs in a JSON structure.
+            </summary>
+            <remarks>
+            A key is always represented as a string.  A value can consist of a string, a numerical value, 
+            a boolean (true or false), a null placeholder, a JSON array of values, or a nested JSON object.
+            </remarks>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.#ctor">
+            <summary>
+            Creates an empty instance of a JSON object.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.#ctor(System.String)">
+            <summary>
+            Creates an instance of a JSON object and fills it by parsing the
+            supplied string.
+            </summary>
+            <param name="s">A string.</param>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.Finalize">
+            <summary>
+            Finalizes memory management responsibilities.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.GetIndentedString(System.Int32)">
+            <summary>
+            Creates a string representation of the JSON data.
+            </summary>
+            <param name="indentLevel">The indention level for the object.</param>
+            <returns>A string.</returns>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.Add(System.String,Manatee.Json.JsonValue)">
+            <summary>
+            Adds the specified key and value to the dictionary.
+            </summary>
+            <param name="key">The key of the element to add.</param>
+            <param name="value">The value of the element to add. The value can be null for reference types.</param>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.ToString">
+            <summary>
+            Creates a string representation of the JSON data.
+            </summary>
+            <returns>A string.</returns>
+            <remarks>
+            Passing the returned string back into the parser will result in a copy of
+            this JSON object.
+            </remarks>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+            </returns>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Manatee.Json.JsonObject.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:System.Object"/>.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:Manatee.Json.JsonObject.Item(System.String)">
+            <summary>
+            Gets or sets the value associated with the specified key.
+            </summary>
+            <param name="key">The key of the value to get or set.</param>
+            <returns>The value associated with the specified key.</returns>
+        </member>
+        <member name="T:Manatee.Json.Extensions.XmlExtensions">
+            <summary>
+            Contains functionality to map JSON values to XML constructs.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Extensions.XmlExtensions.ToXElement(Manatee.Json.JsonValue,System.String)">
+            <summary>
+            Converts a JsonValue to an XElement
+            </summary>
+            <param name="json">A JsonValue.</param>
+            <param name="key">The key to be used as a top-level element name.</param>
+            <returns>An XElement representation of the JsomValue.</returns>
+            <remarks>
+            The 'key' parameter may be null only when the underlying JSON is an
+            object which contains a single key/value pair.
+            </remarks>
+        </member>
+        <member name="M:Manatee.Json.Extensions.XmlExtensions.ToJson(System.Xml.Linq.XElement)">
+            <summary>
+            Converts an XElement to a JsonObject.
+            </summary>
+            <param name="xElement">An XElement.</param>
+            <returns>The JsonValue representation of the XElement.</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.XmlExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
+            <summary>
+            Converts an XElement to a JsonObject.
+            </summary>
+            <param name="xElements">A collection of XElement objects.</param>
+            <returns>A single JsonValue which represents the list of XElement objects.</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.XmlExtensions.ToXElement(System.Xml.XmlNode)">
+            <summary>
+            Converts an XmlNode to an XElement.
+            </summary>
+            <param name="node">An XmlNode.</param>
+            <returns>The XElement construct of the XmlNode.</returns>
+            <remarks>Provided for convenience.</remarks>
+        </member>
+        <member name="M:Manatee.Json.Extensions.XmlExtensions.ToXmlNode(System.Xml.Linq.XElement)">
+            <summary>
+            Converts an XElement to an XmlNode.
+            </summary>
+            <param name="element">An XElement.</param>
+            <returns>The XmlNode construct of the XElement.</returns>
+            <remarks>Provided for convenience.</remarks>
+        </member>
+        <member name="T:Manatee.Json.JsonValue">
+            <summary>
+            Represents a JSON value.
+            </summary>
+            <remarks>
+            A value can consist of a string, a numerical value, a boolean (true or false), a null
+            placeholder, a JSON array of values, or a nested JSON object.
+            </remarks>
+        </member>
+        <member name="F:Manatee.Json.JsonValue.Null">
+            <summary>
+            Globally defined null-valued JSON value.
+            </summary>
+            <remarks>
+            Use this when initializing a JSON object or array.
+            </remarks>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.#ctor">
+            <summary>
+            Creates a null JsonValue.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.#ctor(System.Nullable{System.Boolean})">
+            <summary>
+            Creates a JsonValue from a boolean.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.#ctor(System.String)">
+            <summary>
+            Creates a JsonValue from a string.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.#ctor(System.Nullable{System.Double})">
+            <summary>
+            Creates a JsonValue from a numeric value.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.#ctor(Manatee.Json.JsonObject)">
+            <summary>
+            Creates a JsonValue from a JSON object.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.#ctor(Manatee.Json.JsonArray)">
+            <summary>
+            Creates a JsonValue from a JSON array.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.GetIndentedString(System.Int32)">
+            <summary>
+            Creates a string representation of the JSON data.
+            </summary>
+            <param name="indentLevel">The indention level for the value.</param>
+            <returns>A string.</returns>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.ToString">
+            <summary>
+            Creates a string that represents this JsonValue.
+            </summary>
+            <returns>A string representation of this JsonValue.</returns>
+            <remarks>
+            Passing the returned string back into the parser will result in a copy of
+            this JsonValue.
+            </remarks>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+            </returns>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:System.Object"/>.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.Parse(System.String)">
+            <summary>
+            Parses a string containing a JSON value.
+            </summary>
+            <param name="source">the string to parse.</param>
+            <returns>The JSON value represented by the string.</returns>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Boolean})~Manatee.Json.JsonValue">
+            <summary>
+            Implicitly converts a boolean into a JsonValue.
+            </summary>
+            <param name="b">A boolean.</param>
+            <returns>A JsonValue that represents the boolean.</returns>
+            <remarks>
+            This is useful when creating an initialized JsonObject or JsonArray.
+            </remarks>
+            <example><code>
+            JsonObject obj = new JsonObject{
+            	{"stringData", "string"},
+            	{"numberData", 10.6},
+            	{"boolData", true},
+            	{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+            	{"objectData", new JsonObject{
+            		{"stringData2", "another string"},
+            		{"moreBoolData", false}}}};
+            </code></example>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.op_Implicit(System.String)~Manatee.Json.JsonValue">
+            <summary>
+            Implicitly converts a string into a JsonValue.
+            </summary>
+            <param name="s">A string.</param>
+            <returns>A JsonValue that represents the string.</returns>
+            <remarks>
+            This is useful when creating an initialized JsonObject or JsonArray.
+            </remarks>
+            <example><code>
+            JsonObject obj = new JsonObject{
+            	{"stringData", "string"},
+            	{"numberData", 10.6},
+            	{"boolData", true},
+            	{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+            	{"objectData", new JsonObject{
+            		{"stringData2", "another string"},
+            		{"moreBoolData", false}}}};
+            </code></example>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Double})~Manatee.Json.JsonValue">
+            <summary>
+            Implicitly converts a double into a JsonValue.
+            </summary>
+            <param name="n">A double.</param>
+            <returns>A JsonValue that represents the double.</returns>
+            <remarks>
+            This is useful when creating an initialized JsonObject or JsonArray.
+            </remarks>
+            <example><code>
+            JsonObject obj = new JsonObject{
+            	{"stringData", "string"},
+            	{"numberData", 10.6},
+            	{"boolData", true},
+            	{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+            	{"objectData", new JsonObject{
+            		{"stringData2", "another string"},
+            		{"moreBoolData", false}}}};
+            </code></example>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonObject)~Manatee.Json.JsonValue">
+            <summary>
+            Implicitly converts a JSON object into a JsonValue.
+            </summary>
+            <param name="o">A Json object.</param>
+            <returns>A JsonValue that represents the Json object.</returns>
+            <remarks>
+            This is useful when creating an initialized JsonObject or JsonArray.
+            </remarks>
+            <example><code>
+            JsonObject obj = new JsonObject{
+            	{"stringData", "string"},
+            	{"numberData", 10.6},
+            	{"boolData", true},
+            	{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+            	{"objectData", new JsonObject{
+            		{"stringData2", "another string"},
+            		{"moreBoolData", false}}}};
+            </code></example>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonArray)~Manatee.Json.JsonValue">
+            <summary>
+            Implicitly converts a JSON array into a JsonValue.
+            </summary>
+            <param name="a">A Json array.</param>
+            <returns>A JsonValue that represents the Json array.</returns>
+            <remarks>
+            This is useful when creating an initialized JsonObject or JsonArray.
+            </remarks>
+            <example><code>
+            JsonObject obj = new JsonObject{
+            	{"stringData", "string"},
+            	{"numberData", 10.6},
+            	{"boolData", true},
+            	{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+            	{"objectData", new JsonObject{
+            		{"stringData2", "another string"},
+            		{"moreBoolData", false}}}};
+            </code></example>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.op_Equality(Manatee.Json.JsonValue,Manatee.Json.JsonValue)">
+            <summary>
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Manatee.Json.JsonValue.op_Inequality(Manatee.Json.JsonValue,Manatee.Json.JsonValue)">
+            <summary>
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Manatee.Json.JsonValue.Boolean">
+            <summary>
+            Accesses the JsonValue as a boolean.
+            </summary>
+            <exception cref="T:Manatee.Json.Exceptions.JsonValueIncorrectTypeException">
+            Thrown when this JsonValue does not contain a boolean.
+            </exception>
+            <remarks>
+            Setting the value as a boolean will automatically change the JsonValue's type and
+            discard the old data.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.JsonValue.String">
+            <summary>
+            Accesses the JsonValue as a string.
+            </summary>
+            <exception cref="T:Manatee.Json.Exceptions.JsonValueIncorrectTypeException">
+            Thrown when this JsonValue does not contain a string.
+            </exception>
+            <remarks>
+            Setting the value as a string will automatically change the JsonValue's type and
+            discard the old data.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.JsonValue.Number">
+            <summary>
+            Accesses the JsonValue as a numeric value.
+            </summary>
+            <exception cref="T:Manatee.Json.Exceptions.JsonValueIncorrectTypeException">
+            Thrown when this JsonValue does not contain a numeric value.
+            </exception>
+            <remarks>
+            Setting the value as a numeric value will automatically change the JsonValue's type and
+            discard the old data.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.JsonValue.Object">
+            <summary>
+            Accesses the JsonValue as a JSON object.
+            </summary>
+            <exception cref="T:Manatee.Json.Exceptions.JsonValueIncorrectTypeException">
+            Thrown when this JsonValue does not contain a Json object.
+            </exception>
+            <remarks>
+            Setting the value as a Json object will automatically change the JsonValue's type and
+            discard the old data.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.JsonValue.Array">
+            <summary>
+            Accesses the JsonValue as a JSON array.
+            </summary>
+            <exception cref="T:Manatee.Json.Exceptions.JsonValueIncorrectTypeException">
+            Thrown when this JsonValue does not contain a Json array.
+            </exception>
+            <remarks>
+            Setting the value as a Json array will automatically change the JsonValue's type and
+            discard the old data.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.JsonValue.Type">
+            <summary>
+            Gets the value type of the existing data.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Enumerations.JsonValueType">
+            <summary>
+            Specifies various types of values for use in a JSON key:value pair.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.JsonValueType.Number">
+            <summary>
+            Indicates that the Json key:value pair contains a numeric value (double).
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.JsonValueType.String">
+            <summary>
+            Indicates that the Json key:value pair contains a string.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.JsonValueType.Boolean">
+            <summary>
+            Indicates that the Json key:value pair contains a boolean value.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.JsonValueType.Object">
+            <summary>
+            Indicates that the Json key:value pair contains a nested Json object.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.JsonValueType.Array">
+            <summary>
+            Indicates that the Json key:value pair contains a Json array.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.JsonValueType.Null">
+            <summary>
+            Indicates that the Json key:value pair contains a null value.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Extensions.LinqExtensions">
+            <summary>
+            These extension methods cover LINQ compatibility.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})">
+            <summary>
+            Converts an IEnumerable&lt;JsonValue&gt; returned from a LINQ query back into
+            a JsonArray.
+            </summary>
+            <param name="results">An IEnumerable&lt;JsonValue&gt;</param>
+            <returns>An equivalent JsonArray</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Manatee.Json.JsonValue}})">
+            <summary>
+            Converts an IEnumerable&lt;KeyValuePair&lt;string, JsonValue&gt;&gt; returned from a
+            LINQ query back into a JsonObject.
+            </summary>
+            <param name="results">An IEnumerable&lt;KeyValuePair&lt;string, JsonValue&gt;&gt;</param>
+            <returns>An equivalent JsonObject</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Converts a collection of strings to a JsonArray.
+            </summary>
+            <param name="list">A collection of strings</param>
+            <returns>A JsonArray containing the strings</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Boolean})">
+            <summary>
+            Converts a collection of bools to a JsonArray.
+            </summary>
+            <param name="list">A collection of booleans</param>
+            <returns>A JsonArray containing the booleans</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Nullable{System.Boolean}})">
+            <summary>
+            Converts a collection of Nullable&lt;bool&gt; to a JsonArray.
+            </summary>
+            <param name="list">A collection of Nullable&lt;bool&gt;</param>
+            <returns>A JsonArray containing the Nullable&lt;bool&gt;</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonArray})">
+            <summary>
+            Converts a collection of JsonArrays to a JsonArray.
+            </summary>
+            <param name="list">A collection of JsonArrays</param>
+            <returns>A JsonArray containing the JsonArrays</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonObject})">
+            <summary>
+            Converts a collection of JsonObjects to a JsonArray.
+            </summary>
+            <param name="list">A collection of JsonObjects</param>
+            <returns>A JsonArray containing the JsonObjects</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>
+            Converts a collection of doubles to a JsonArray.
+            </summary>
+            <param name="list">A collection of doubles</param>
+            <returns>A JsonArray containing the doubles</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.Serialization.IJsonCompatible})">
+            <summary>
+            Serializes a collection of objects which implement IJsonCompatible to a JsonArray of equivalent JsonValues.
+            </summary>
+            <param name="list">A collection of equivalent JsonValues</param>
+            <returns>A JsonArray containing the equivalent JsonValues</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.FromJson``1(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})">
+            <summary>
+            Deserializes a collection of JsonValues to an IEnumerable of the objects.
+            </summary>
+            <typeparam name="T">The type of object contained in the collection</typeparam>
+            <param name="json">The collection of JsonValues</param>
+            <returns>A collection of the deserialized objects</returns>
+        </member>
+        <member name="M:Manatee.Json.Extensions.LinqExtensions.FromJson``1(Manatee.Json.JsonObject)">
+            <summary>
+            Deserializes a JsonValue to its equivalent object.
+            </summary>
+            <typeparam name="T">The type of object</typeparam>
+            <param name="json">The JsonValue to deserialize</param>
+            <returns>A collection of the deserialized objects</returns>
+        </member>
+        <member name="T:Manatee.Json.Attributes.JsonIgnoreAttribute">
+            <summary>
+            Applied to properties to indicate that they are not to be serialized.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Enumerations.DateTimeSerializationFormat">
+            <summary>
+            Available formatting options for serializing DateTime objects.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.DateTimeSerializationFormat.Iso8601">
+            <summary>
+            Output conforms to ISO 8601 formatting: YYYY-MM-DDThh:mm:ss.sTZD (e.g. 1997-07-16T19:20:30.45+01:00)
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.DateTimeSerializationFormat.JavaConstructor">
+            <summary>
+            Output is a string in the format "/Date([ms])/", where [ms] is the number of milliseconds
+            since January 1, 1970 UTC.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.DateTimeSerializationFormat.Milliseconds">
+            <summary>
+            Output is a numeric value representing the number of milliseconds since January 1, 1970 UTC.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Enumerations.InvalidPropertyKeyBehavior">
+            <summary>
+            Enumeration of behavior options for the deserializer when a JSON structure is passed which
+            contains invalid property keys.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.InvalidPropertyKeyBehavior.DoNothing">
+            <summary>
+            Deserializer ignores the invalid property keys.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Enumerations.InvalidPropertyKeyBehavior.ThrowException">
+            <summary>
+            Deserializer will throw an exception when an invalid property key is found.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.TypeDoesNotContainPropertyException">
+            <summary>
+            Optionally thrown when deserializing and the JSON structure contains property names
+            which are not valid for the type requested.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.TypeDoesNotContainPropertyException.#ctor(System.Type,Manatee.Json.JsonValue)">
+            <summary>
+            Initializes a new instance of the TypeDoesNotContainPropertyException class.
+            </summary>
+            <param name="type">The type.</param>
+            <param name="json">The invalid JSON structure.</param>
+        </member>
+        <member name="P:Manatee.Json.Exceptions.TypeDoesNotContainPropertyException.Type">
+            <summary>
+            Gets the type.
+            </summary>
+        </member>
+        <member name="P:Manatee.Json.Exceptions.TypeDoesNotContainPropertyException.Json">
+            <summary>
+            Gets the portion of the JSON structure which contain the invalid properties.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Exceptions.TypeRegistrationException">
+            <summary>
+            Thrown when JsonSerializationTypeRegistry.RegisterType&lt;T&gt;(ToJsonDelegate&lt;T&gt; toJson, FromJsonDelegate&lt;T&gt; fromJson)
+            is passed one method and a null.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Exceptions.TypeRegistrationException.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the TypeRegistrationException class.
+            </summary>
+            <param name="type">The type.</param>
+        </member>
+        <member name="P:Manatee.Json.Exceptions.TypeRegistrationException.Type">
+            <summary>
+            Gets the type.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Serialization.IJsonCompatible">
+            <summary>
+            Provides implementers the option to set a preferred method for serialization.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Serialization.IJsonCompatible.FromJson(Manatee.Json.JsonValue)">
+            <summary>
+            Builds an object from a JsonValue.
+            </summary>
+            <param name="json">The JsonValue representation of the object.</param>
+        </member>
+        <member name="M:Manatee.Json.Serialization.IJsonCompatible.ToJson">
+            <summary>
+            Converts an object to a JsonValue.
+            </summary>
+            <returns>The JsonValue representation of the object.</returns>
+        </member>
+        <member name="T:Manatee.Json.Serialization.JsonSerializationAbstractionMap">
+            <summary>
+            Provides an interface to map abstract and interface types to
+            concrete types for object instantiation during deserialization.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationAbstractionMap.Map``2(Manatee.Json.Enumerations.MapBaseAbstractionBehavior)">
+            <summary>
+            Applies a mapping from an abstraction to a concrete type.
+            </summary>
+            <typeparam name="TAbstract">The abstract type.</typeparam>
+            <typeparam name="TConcrete">The concrete type.</typeparam>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationAbstractionMap.RemoveMap``1(System.Boolean)">
+            <summary>
+            Removes a previously-assigned mapping.
+            </summary>
+            <typeparam name="TAbstract">The type to remove.</typeparam>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap(System.Type)">
+            <summary>
+            Retrieves the map setting for an abstraction type.
+            </summary>
+            <param name="type">The abstraction type.</param>
+            <returns>The mapped type if a mapping exists; otherwise the abstraction type.</returns>
+        </member>
+        <member name="T:Manatee.Json.Serialization.JsonSerializationTypeRegistry">
+            <summary>
+            Manages methods for serializing object types which do not implement IJsonCompatible and
+            cannot be automatically serialized.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered``1">
+            <summary>
+            Gets whether a given type has been entered into the registry.
+            </summary>
+            <typeparam name="T">The type.</typeparam>
+            <returns>True if an entry exists for the type; otherwise false.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered(System.Type)">
+            <summary>
+            Gets whether a given type has been entered into the registry.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>True if an entry exists for the type; otherwise false.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.RegisterType``1(Manatee.Json.Serialization.JsonSerializationTypeRegistry.ToJsonDelegate{``0},Manatee.Json.Serialization.JsonSerializationTypeRegistry.FromJsonDelegate{``0})">
+            <summary>
+            Registers an encode/decode method pair for a specific type.
+            </summary>
+            <typeparam name="T">The type.</typeparam>
+            <param name="toJson">The serializer method.</param>
+            <param name="fromJson">The deserializer method.</param>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.RegisterNullableType``1">
+            <summary>
+            Registers an encode/decode method pair for a nullable type.
+            </summary>
+            <typeparam name="T">The underlying type of the nullable.</typeparam>
+            <remarks>To register a nullable int, the call should be RegisterNullableType&lt;int&gt;()</remarks>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.RegisterListType``1">
+            <summary>
+            Registers an encode/decode method pair for a typed list.
+            </summary>
+            <typeparam name="T">The underlying type of the list.</typeparam>
+            <remarks>To register a list of ints, the call should be RegisterListType&lt;int&gt;()</remarks>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.RegisterDictionaryType``2">
+            <summary>
+            Registers an encode/decode method pair for a typed dictionary.
+            </summary>
+            <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
+            <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
+            <remarks>To register a dictionary of ints keyed by strings, the call should be RegisterDictionaryType&lt;string, int&gt;()</remarks>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.RegisterQueueType``1">
+            <summary>
+            Registers an encode/decode method pair for a typed queue.
+            </summary>
+            <typeparam name="T">The underlying type of the queue.</typeparam>
+            <remarks>To register a queue of ints, the call should be RegisterQueueType&lt;int&gt;()</remarks>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.RegisterStackType``1">
+            <summary>
+            Registers an encode/decode method pair for a typed stack.
+            </summary>
+            <typeparam name="T">The underlying type of the stack.</typeparam>
+            <remarks>To register a stack of ints, the call should be RegisterStackType&lt;int&gt;()</remarks>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeDateTime(System.DateTime)">
+            <summary>
+            Encodes a DateTime object to its JSON representation.
+            </summary>
+            <param name="dt">A DateTime object.</param>
+            <returns>The JSON representation of the DateTime.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeDateTime(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a DateTime object from its JSON representation.
+            </summary>
+            <param name="json">A JSON representation of a DateTime.</param>
+            <returns>The DateTime object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeTimeSpan(System.TimeSpan)">
+            <summary>
+            Encodes a TimeSpan object to its JSON representation.
+            </summary>
+            <param name="ts">A TimeSpan object.</param>
+            <returns>The JSON representation of the TimeSpan.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeTimeSpan(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a TimeSpan object from its JSON representation.
+            </summary>
+            <param name="json">A JSON representation of a TimeSpan.</param>
+            <returns>The TimeSpan object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeGuid(System.Guid)">
+            <summary>
+            Encodes a Guid object to its JSON representation.
+            </summary>
+            <param name="guid">A Guid object.</param>
+            <returns>The JSON representation of the Guid.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeGuid(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a Guid object from its JSON representation.
+            </summary>
+            <param name="json">A JSON representation of a Guid.</param>
+            <returns>The Guid object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeNullable``1(System.Nullable{``0})">
+            <summary>
+            Encodes a Nullable&lt;T&gt; to its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the nullable value.</typeparam>
+            <param name="nullable">The Nullable&lt;T&gt; object.</param>
+            <returns>The JSON representation of the Nullable&lt;T&gt;.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeNullable``1(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a Nullable&lt;T&gt; object from its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the nullable value.</typeparam>
+            <param name="json">A JSON representation of a Nullable&lt;T&gt;.</param>
+            <returns>The Nullable&lt;T&gt; object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeGenericList``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Encodes a List&lt;T&gt; to its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the list.</typeparam>
+            <param name="list">The List&lt;T&gt; object.</param>
+            <returns>The JSON representation of the List&lt;T&gt;.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeGenericList``1(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a List&lt;T&gt; object from its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the list.</typeparam>
+            <param name="json">A JSON representation of a List&lt;T&gt;.</param>
+            <returns>The List&lt;T&gt; object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeGenericDictionary``2(System.Collections.Generic.Dictionary{``0,``1})">
+            <summary>
+            Encodes a Dictionary&lt;T&gt; to its JSON representation.
+            </summary>
+            <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
+            <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
+            <param name="dict">The Dictionary&lt;T&gt; object.</param>
+            <returns>The JSON representation of the Dictionary&lt;T&gt;.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeGenericDictionary``2(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a Dictionary&lt;T&gt; object from its JSON representation.
+            </summary>
+            <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
+            <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
+            <param name="json">A JSON representation of a Dictionary&lt;T&gt;.</param>
+            <returns>The Dictionary&lt;T&gt; object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeGenericQueue``1(System.Collections.Generic.Queue{``0})">
+            <summary>
+            Encodes a Queue&lt;T&gt; to its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the queue.</typeparam>
+            <param name="queue">The Queue&lt;T&gt; object.</param>
+            <returns>The JSON representation of the Queue&lt;T&gt;.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeGenericQueue``1(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a Queue&lt;T&gt; object from its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the queue.</typeparam>
+            <param name="json">A JSON representation of a Queue&lt;T&gt;.</param>
+            <returns>The Queue&lt;T&gt; object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.EncodeGenericStack``1(System.Collections.Generic.Stack{``0})">
+            <summary>
+            Encodes a Stack&lt;T&gt; to its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the stack.</typeparam>
+            <param name="stack">The Stack&lt;T&gt; object.</param>
+            <returns>The JSON representation of the Stack&lt;T&gt;.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.DecodeGenericStack``1(Manatee.Json.JsonValue)">
+            <summary>
+            Decodes a Stack&lt;T&gt; object from its JSON representation.
+            </summary>
+            <typeparam name="T">The underlying type of the stack.</typeparam>
+            <param name="json">A JSON representation of a Stack&lt;T&gt;.</param>
+            <returns>The Stack&lt;T&gt; object.</returns>
+        </member>
+        <member name="T:Manatee.Json.Serialization.JsonSerializationTypeRegistry.ToJsonDelegate`1">
+            <summary>
+            Declares the required signature for a serializer method.
+            </summary>
+            <typeparam name="T">The type which the method serializes.</typeparam>
+            <param name="input">The object to be serialized.</param>
+            <returns>The JSON representation of the object.</returns>
+        </member>
+        <member name="T:Manatee.Json.Serialization.JsonSerializationTypeRegistry.FromJsonDelegate`1">
+            <summary>
+            Declares the required signature for a deserializer method.
+            </summary>
+            <typeparam name="T">The type which the method deserializes.</typeparam>
+            <param name="json">The JSON representation of the object.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="T:Manatee.Json.Serialization.JsonSerializer">
+            <summary>
+            Serializes and deserializes objects and types to and from JSON structures.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializer.Serialize``1(``0)">
+            <summary>
+            Serializes an object to a JSON structure.
+            </summary>
+            <typeparam name="T">The type of the object to serialize.</typeparam>
+            <param name="obj">The object to serialize.</param>
+            <returns>The JSON representation of the object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializer.SerializeType``1">
+            <summary>
+            Serializes the public static properties of a type to a JSON structure.
+            </summary>
+            <typeparam name="T">The type to serialize.</typeparam>
+            <returns>The JSON representation of the type.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializer.Deserialize``1(Manatee.Json.JsonValue)">
+            <summary>
+            Deserializes a JSON structure to an object of the appropriate type.
+            </summary>
+            <typeparam name="T">The type of the object that the JSON structure represents.</typeparam>
+            <param name="json">The JSON representation of the object.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializer.DeserializeType``1(Manatee.Json.JsonValue)">
+            <summary>
+            Deserializes a JSON structure to the public static properties of a type.
+            </summary>
+            <typeparam name="T">The type to deserialize.</typeparam>
+            <param name="json">The JSON representation of the type.</param>
+        </member>
+        <member name="P:Manatee.Json.Serialization.JsonSerializer.Options">
+            <summary>
+            Gets or sets a set of options for the serializer.
+            </summary>
+        </member>
+        <member name="T:Manatee.Json.Serialization.JsonSerializerOptions">
+            <summary>
+            Represents a set of behavior options for the JsonSerializer object.
+            </summary>
+        </member>
+        <member name="F:Manatee.Json.Serialization.JsonSerializerOptions.Default">
+            <summary>
+            Default options used by the serializer.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializerOptions.#ctor">
+            <summary>
+            Creates a new instance of JsonSerializerOptions with default options.
+            </summary>
+        </member>
+        <member name="M:Manatee.Json.Serialization.JsonSerializerOptions.#ctor(Manatee.Json.Serialization.JsonSerializerOptions)">
+            <summary>
+            Creates a new instance of JsonSerializerOptions by copying an existing
+            JsonSerializerOptions instance.
+            </summary>
+            <param name="options">The JsonSerializerOptions instance to copy.</param>
+        </member>
+        <member name="P:Manatee.Json.Serialization.JsonSerializerOptions.EncodeDefaultValues">
+            <summary>
+            Gets and sets whether the serializer encodes default values for properties.
+            </summary>
+            <remarks>
+            Setting to 'true' may significantly increase the size of the JSON structure.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.Serialization.JsonSerializerOptions.InvalidPropertyKeyBehavior">
+            <summary>
+            Gets and sets the behavior of the deserializer when a JSON structure is passed which
+            contains invalid property keys.
+            </summary>
+        </member>
+        <member name="P:Manatee.Json.Serialization.JsonSerializerOptions.DateTimeSerializationFormat">
+            <summary>
+            Gets and sets the format for DateTime serialization using the default serializer methods.
+            </summary>
+            <remarks>
+            If the JsonSerializationTypeRegistry entry for DateTime has been changed to custom
+            methods, this property will have no effect.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.Serialization.JsonSerializerOptions.EnumSerializationFormat">
+            <summary>
+            Gets and sets the format for enumeration serialization using the default serializer methods.
+            </summary>
+            <remarks>
+            If an entry has been made in JsonSerializationTypeRegistry for the specific type,
+            this property will have no effect.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.Serialization.JsonSerializerOptions.CaseSensitiveDeserialization">
+            <summary>
+            Gets and sets whether the serializer considers case for properties while deserializing.
+            </summary>
+            <remarks>
+            This only affect automatic serialization.
+            </remarks>
+        </member>
+        <member name="P:Manatee.Json.Serialization.JsonSerializerOptions.AlwaysSerializeTypeName">
+            <summary>
+            Gets and sets whether the serializer always includes the type name when serializing.
+            </summary>
+            <remarks>
+            This only affect automatic serialization.
+            </remarks>
+        </member>
+    </members>
+</doc>
