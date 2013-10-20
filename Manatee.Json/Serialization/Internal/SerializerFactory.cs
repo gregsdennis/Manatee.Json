@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using Manatee.Json.Enumerations;
+using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -38,6 +39,7 @@ namespace Manatee.Json.Serialization.Internal
 		private static readonly RegisteredObjectSerializer RegisteredObjectSerializer;
 		private static readonly StringSerializer StringSerializer;
 		private static readonly Dictionary<Type, ISerializer> Library;
+		private static readonly SchemaSerializer SchemaSerializer;
 
 		static SerializerFactory()
 		{
@@ -49,6 +51,7 @@ namespace Manatee.Json.Serialization.Internal
 			NumericSerializer = new NumericSerializer();
 			RegisteredObjectSerializer = new RegisteredObjectSerializer();
 			StringSerializer = new StringSerializer();
+			SchemaSerializer = new SchemaSerializer();
 			Library = new Dictionary<Type, ISerializer>
 				{
 					{typeof (sbyte), NumericSerializer},
@@ -72,6 +75,8 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var type = typeof (T);
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
+			if (typeof (IJsonSchema).IsAssignableFrom(type))
+				return BuildSerializer(SchemaSerializer);
 			if (JsonSerializationTypeRegistry.IsRegistered(type))
 				return BuildSerializer(RegisteredObjectSerializer);
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeToSerialize))

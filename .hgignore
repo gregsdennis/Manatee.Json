@@ -12,3 +12,7 @@ Json.sln.DotSettings.user
 NuGet/
 TestResults/
 packages/
+Manatee.Json.Tests/bin/
+Manatee.Json.Tests/obj/
+Manatee.Json/bin/
+Manatee.Json/obj/
