@@ -66,6 +66,26 @@
     <Compile Include="Exceptions\JsonTypeMapException.cs" />
     <Compile Include="Extensions\JsonArrayExtensions.cs" />
     <Compile Include="Helpers\ISerializerCache.cs" />
+    <Compile Include="Schema\AllOfSchema.cs" />
+    <Compile Include="Schema\AnyOfSchema.cs" />
+    <Compile Include="Schema\ArraySchema.cs" />
+    <Compile Include="Schema\BooleanSchema.cs" />
+    <Compile Include="Schema\EnumSchema.cs" />
+    <Compile Include="Schema\IJsonSchema.cs" />
+    <Compile Include="Schema\IntegerSchema.cs" />
+    <Compile Include="Schema\JsonSchema.cs" />
+    <Compile Include="Schema\NotSchema.cs" />
+    <Compile Include="Schema\NullSchema.cs" />
+    <Compile Include="Schema\NumberSchema.cs" />
+    <Compile Include="Schema\ObjectSchema.cs" />
+    <Compile Include="Schema\OneOfSchema.cs" />
+    <Compile Include="Schema\JsonSchemaFactory.cs" />
+    <Compile Include="Schema\JsonSchemaPropertyDefinition.cs" />
+    <Compile Include="Schema\JsonSchemaPropertyDefinitionCollection.cs" />
+    <Compile Include="Schema\JsonSchemaReference.cs" />
+    <Compile Include="Schema\JsonSchemaTypeDefinition.cs" />
+    <Compile Include="Schema\JsonSchemaTypeDefinitionCollection.cs" />
+    <Compile Include="Schema\StringSchema.cs" />
     <Compile Include="Serialization\Internal\ITypeSerializer.cs" />
     <Compile Include="Serialization\Internal\PropertyReference.cs" />
     <Compile Include="Helpers\XmlNamespaceRegistry.cs" />
@@ -104,6 +124,7 @@
     <Compile Include="Serialization\Internal\ISerializerFactory.cs" />
     <Compile Include="Serialization\Internal\JsonCompatibleSerializer.cs" />
     <Compile Include="Serialization\Internal\ReferencingSerializer.cs" />
+    <Compile Include="Serialization\Internal\SchemaSerializer.cs" />
     <Compile Include="Serialization\Internal\SerializationPair.cs" />
     <Compile Include="Serialization\Internal\SerializationPairCache.cs" />
     <Compile Include="Serialization\Internal\SerializerFactory.cs" />
@@ -119,6 +140,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

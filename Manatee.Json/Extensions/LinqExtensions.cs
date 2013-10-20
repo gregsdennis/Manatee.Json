@@ -136,11 +136,28 @@ namespace Manatee.Json.Extensions
 		/// </summary>
 		/// <param name="list">A collection of equivalent JsonValues</param>
 		/// <returns>A JsonArray containing the equivalent JsonValues</returns>
-		public static JsonValue ToJson(this IEnumerable<IJsonCompatible> list)
+		public static JsonValue ToJson<T>(this IEnumerable<T> list)
+			where T : IJsonCompatible
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
 			json.AddRange(list.Select(j => j == null ? JsonValue.Null : j.ToJson()));
+			return json;
+		}
+		/// <summary>
+		/// Converts an IEnumerable&lt;KeyValuePair&lt;string, JsonValue&gt;&gt; returned from a
+		/// LINQ query back into a JsonObject.
+		/// </summary>
+		/// <param name="results">An IEnumerable&lt;KeyValuePair&lt;string, JsonValue&gt;&gt;</param>
+		/// <returns>An equivalent JsonObject</returns>
+		public static JsonObject ToJson<T>(this IEnumerable<KeyValuePair<string, T>> results)
+			where T : IJsonCompatible
+		{
+			var json = new JsonObject();
+			foreach (var keyValuePair in results)
+			{
+				json.Add(keyValuePair.Key, keyValuePair.Value == null ? JsonValue.Null : keyValuePair.Value.ToJson());
+			}
 			return json;
 		}
 		/// <summary>
