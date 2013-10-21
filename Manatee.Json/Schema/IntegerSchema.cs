@@ -20,7 +20,10 @@
 	Purpose:		Defines a schema which expects an integer.
 
 ***************************************************************************************/
+
+using Manatee.Json.Enumerations;
 using Manatee.Json.Extensions;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -51,6 +54,23 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public IntegerSchema() : base(JsonSchemaTypeDefinition.Integer) {}
 
+		/// <summary>
+		/// Validates a <see cref="JsonValue"/> against the schema.
+		/// </summary>
+		/// <param name="json">A <see cref="JsonValue"/></param>
+		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
+		public override bool Validate(JsonValue json, JsonValue root = null)
+		{
+			if (json.Type != JsonValueType.Number) return false;
+			var number = json.Number;
+			if (!number.IsInt()) return false;
+			var integer = (int) number;
+			var valid = true;
+			if (Minimum.HasValue) valid &= ExclusiveMinimum ? integer >= Minimum : integer > Minimum;
+			if (Maximum.HasValue) valid &= ExclusiveMaximum ? integer <= Maximum : integer < Maximum;
+			return valid;
+		}
 		/// <summary>
 		/// Builds an object from a JsonValue.
 		/// </summary>

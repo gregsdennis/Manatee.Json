@@ -20,6 +20,9 @@
 	Purpose:		Defines a schema which expects a null value.
 
 ***************************************************************************************/
+
+using Manatee.Json.Enumerations;
+
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -31,5 +34,16 @@ namespace Manatee.Json.Schema
 		/// Creates an instance of the <see cref="NullSchema"/> class.
 		/// </summary>
 		public NullSchema() : base(JsonSchemaTypeDefinition.Null) {}
+
+		/// <summary>
+		/// Validates a <see cref="JsonValue"/> against the schema.
+		/// </summary>
+		/// <param name="json">A <see cref="JsonValue"/></param>
+		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
+		public override bool Validate(JsonValue json, JsonValue root = null)
+		{
+			return json.Type == JsonValueType.Null;
+		}
 	}
 }

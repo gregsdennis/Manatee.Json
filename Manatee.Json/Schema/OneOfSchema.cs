@@ -47,6 +47,17 @@ namespace Manatee.Json.Schema
 		public JsonValue Default { get; set; }
 
 		/// <summary>
+		/// Validates a <see cref="JsonValue"/> against the schema.
+		/// </summary>
+		/// <param name="json">A <see cref="JsonValue"/></param>
+		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
+		public bool Validate(JsonValue json, JsonValue root = null)
+		{
+			var jValue = root ?? ToJson();
+			return Options.Count(s => s.Validate(json, jValue)) == 1;
+		}
+		/// <summary>
 		/// Builds an object from a JsonValue.
 		/// </summary>
 		/// <param name="json">The JsonValue representation of the object.</param>

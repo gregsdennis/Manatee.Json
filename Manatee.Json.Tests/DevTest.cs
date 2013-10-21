@@ -26,6 +26,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -35,9 +36,50 @@ namespace Manatee.Json.Tests
 	public class DevTest
 	{
 		[TestMethod]
-		[Ignore]
+		//[Ignore]
 		public void Test1()
 		{
+			var schema = JsonSchema.Draft04;
+			var geoSchemaJson = new JsonObject
+				{
+					{"description", "A geographical coordinate"},
+					{"type", "object"},
+					{
+						"properties", new JsonObject
+							{
+								{"latitude", new JsonObject {{"type", "number"}}},
+								{"longitude", new JsonObject {{"type", "number"}}}
+							}
+					},
+					{"required", new JsonArray {"latitude", "longitude"}}
+				};
+			Console.WriteLine("geo schema valid: {0}", schema.Validate(geoSchemaJson));
+			var geoSchema = JsonSchemaFactory.FromJson(geoSchemaJson);
+			var geoJson = new JsonObject
+				{
+					{"latitude", 95.4},
+					{"longitude", 36.8}
+				};
+			Console.WriteLine("geo json valid: {0}", geoSchema.Validate(geoJson));
+		}
+		[TestMethod]
+		//[Ignore]
+		public void Test2()
+		{
+			var schema = JsonSchema.Draft04;
+			var geoSchemaJson = new JsonObject
+				{
+					{"$ref", "http://json-schema.org/geo"}
+				};
+			Console.WriteLine("geo schema valid: {0}", schema.Validate(geoSchemaJson));
+			var serializer = new JsonSerializer();
+			var geoSchema = serializer.Deserialize<IJsonSchema>(geoSchemaJson);
+			var geoJson = new JsonObject
+				{
+					{"latitude", 95.4},
+					{"longitude", 36.8}
+				};
+			Console.WriteLine("geo json valid: {0}", geoSchema.Validate(geoJson));
 		}
 	}
 }

@@ -20,6 +20,9 @@
 	Purpose:		Defines a schema which expects an boolean value.
 
 ***************************************************************************************/
+
+using Manatee.Json.Enumerations;
+
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -31,7 +34,17 @@ namespace Manatee.Json.Schema
 		/// Creates a new instance of the <see cref="BooleanSchema"/> class.
 		/// </summary>
 		public BooleanSchema() : base(JsonSchemaTypeDefinition.Boolean) { }
-		
+
+		/// <summary>
+		/// Validates a <see cref="JsonValue"/> against the schema.
+		/// </summary>
+		/// <param name="json">A <see cref="JsonValue"/></param>
+		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
+		public override bool Validate(JsonValue json, JsonValue root = null)
+		{
+			return json.Type == JsonValueType.Boolean;
+		}
 		/// <summary>
 		/// Converts an object to a JsonValue.
 		/// </summary>

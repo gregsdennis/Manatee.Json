@@ -20,6 +20,8 @@
 	Purpose:		Defines a schema which expects an array.
 
 ***************************************************************************************/
+using System.Linq;
+using Manatee.Json.Enumerations;
 using Manatee.Json.Extensions;
 
 namespace Manatee.Json.Schema
@@ -51,6 +53,31 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public ArraySchema() : base(JsonSchemaTypeDefinition.Array) {}
 
+		/// <summary>
+		/// Validates a <see cref="JsonValue"/> against the schema.
+		/// </summary>
+		/// <param name="json">A <see cref="JsonValue"/></param>
+		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
+		public override bool Validate(JsonValue json, JsonValue root = null)
+		{
+			if (json.Type != JsonValueType.Array) return false;
+			var array = json.Array;
+			var valid = true;
+			if (MinItems.HasValue) valid &= array.Count >= MinItems;
+			if (MaxItems.HasValue) valid &= array.Count <= MaxItems;
+			if (UniqueItems)
+			{
+				var grouped = array.GroupBy(v => v);
+				valid &= grouped.Select(g => g.Count()).Max() == 1;
+			}
+			if (Items != null)
+			{
+				var jValue = root ?? ToJson();				
+				valid = array.All(v => Items.Validate(v, jValue));
+			}
+			return valid;
+		}
 		/// <summary>
 		/// Builds an object from a JsonValue.
 		/// </summary>

@@ -14,27 +14,22 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		IJsonSchema.cs
-	Namespace:		Manatee.Json.Schema
-	Class Name:		IJsonSchema
-	Purpose:		Defines a type for all schema to implement.
+	File Name:		GeneralExtensions.cs
+	Namespace:		Manatee.Json.Internal
+	Class Name:		GeneralExtensions
+	Purpose:		General-use extension methods for the library.
 
 ***************************************************************************************/
-using Manatee.Json.Serialization;
 
-namespace Manatee.Json.Schema
+using System;
+
+namespace Manatee.Json.Internal
 {
-	/// <summary>
-	/// Defines a type for all schema to implement.
-	/// </summary>
-	public interface IJsonSchema : IJsonCompatible
+	internal static class GeneralExtensions
 	{
-		/// <summary>
-		/// Validates a <see cref="JsonValue"/> against the schema.
-		/// </summary>
-		/// <param name="json">A <see cref="JsonValue"/></param>
-		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
-		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		bool Validate(JsonValue json, JsonValue root = null);
+		 public static bool IsInt(this double value)
+		 {
+			 return Math.Ceiling(value) == Math.Floor(value);
+		 }
 	}
 }

@@ -66,6 +66,7 @@
     <Compile Include="Exceptions\JsonTypeMapException.cs" />
     <Compile Include="Extensions\JsonArrayExtensions.cs" />
     <Compile Include="Helpers\ISerializerCache.cs" />
+    <Compile Include="Internal\GeneralExtensions.cs" />
     <Compile Include="Schema\AllOfSchema.cs" />
     <Compile Include="Schema\AnyOfSchema.cs" />
     <Compile Include="Schema\ArraySchema.cs" />

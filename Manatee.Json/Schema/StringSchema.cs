@@ -20,6 +20,8 @@
 	Purpose:		Defines a schema which expects a string.
 
 ***************************************************************************************/
+
+using Manatee.Json.Enumerations;
 using Manatee.Json.Extensions;
 
 namespace Manatee.Json.Schema
@@ -32,7 +34,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a required format for the string.
 		/// </summary>
-		// todo: this may need to be an enum with the valid types
+		// todo: this may need to be an enum with the valid types... or a string validator object...
 		public string Format { get; set; }
 		/// <summary>
 		/// Defines a minimum acceptable length.
@@ -48,6 +50,23 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public StringSchema() : base(JsonSchemaTypeDefinition.String) {}
 
+		/// <summary>
+		/// Validates a <see cref="JsonValue"/> against the schema.
+		/// </summary>
+		/// <param name="json">A <see cref="JsonValue"/></param>
+		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
+		public override bool Validate(JsonValue json, JsonValue root = null)
+		{
+			if (json.Type != JsonValueType.String) return false;
+			var str = json.String;
+			var length = str.Length;
+			var valid = true;
+			if (MinLength.HasValue) valid &= length >= MinLength;
+			if (MaxLength.HasValue) valid &= length <= MaxLength;
+			// todo: validate Format
+			return valid;
+		}
 		/// <summary>
 		/// Builds an object from a JsonValue.
 		/// </summary>
