@@ -69,6 +69,16 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public IJsonSchema Definition { get; set; }
 
+		static JsonSchemaTypeDefinition()
+		{
+			Array.Definition = new ArraySchema();
+			Boolean.Definition = new BooleanSchema();
+			Integer.Definition = new IntegerSchema();
+			Null.Definition = new NullSchema();
+			Number.Definition = new NumberSchema();
+			Object.Definition = new ObjectSchema();
+			String.Definition = new StringSchema();
+		}
 		internal JsonSchemaTypeDefinition() {}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaTypeDefinition"/> type.

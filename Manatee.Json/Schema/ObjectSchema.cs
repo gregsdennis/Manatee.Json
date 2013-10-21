@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Enumerations;
 using Manatee.Json.Extensions;
 
 namespace Manatee.Json.Schema
@@ -72,6 +73,29 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public ObjectSchema() : base(JsonSchemaTypeDefinition.Object) {}
 
+		/// <summary>
+		/// Validates a <see cref="JsonValue"/> against the schema.
+		/// </summary>
+		/// <param name="json">A <see cref="JsonValue"/></param>
+		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
+		public override bool Validate(JsonValue json, JsonValue root = null)
+		{
+			if (Properties == null) return true;
+			if (json.Type != JsonValueType.Object) return false;
+			var obj = json.Object;
+			var requiredProperties = Properties.Where(p => p.IsRequired).ToList();
+			var otherProperties = Properties.Where(p => !p.IsRequired).ToList();
+			var valid = true;
+			var jValue = root ?? ToJson();
+			foreach (var property in requiredProperties)
+			{
+				if (!obj.ContainsKey(property.Name)) return false;
+				valid &= property.Type.Validate(obj[property.Name], jValue);
+			}
+			valid &= otherProperties.Where(p => obj.ContainsKey(p.Name)).All(p => p.Type.Validate(obj[p.Name], jValue));
+			return valid;
+		}
 		/// <summary>
 		/// Builds an object from a JsonValue.
 		/// </summary>
