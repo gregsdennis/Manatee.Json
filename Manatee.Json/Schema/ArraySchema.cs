@@ -20,6 +20,8 @@
 	Purpose:		Defines a schema which expects an array.
 
 ***************************************************************************************/
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Manatee.Json.Schema
@@ -57,24 +59,30 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override bool Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (json.Type != JsonValueType.Array) return false;
+			if (json.Type != JsonValueType.Array)
+				return new SchemaValidationResults(string.Empty, string.Format("Expected: Array; Actual: {0}.", json.Type));
 			var array = json.Array;
-			var valid = true;
-			if (MinItems.HasValue) valid &= array.Count >= MinItems;
-			if (MaxItems.HasValue) valid &= array.Count <= MaxItems;
+			var errors = new List<SchemaValidationError>();
+			if (MinItems.HasValue && array.Count < MinItems)
+				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: >= {0} items; Actual: {1} items.", MinItems, array.Count)));
+			if (MaxItems.HasValue && array.Count <= MaxItems)
+				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: <= {0} items; Actual: {1} items.", MaxItems, array.Count)));
 			if (UniqueItems)
 			{
 				var grouped = array.GroupBy(v => v);
-				valid &= grouped.Select(g => g.Count()).Max() == 1;
+				if (grouped.Select(g => g.Count()).Max() != 1)
+					errors.Add(new SchemaValidationError(string.Empty, "Expected unique items; Duplicates were found."));
 			}
 			if (Items != null)
 			{
-				var jValue = root ?? ToJson();				
-				valid = array.All(v => Items.Validate(v, jValue));
+				var jValue = root ?? ToJson();
+				var itemValidations = array.Select(v => Items.Validate(v, jValue)).Where(r => !r.Valid).ToList();
+				if (itemValidations.Any())
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("{0} items failed type validation.", itemValidations.Count)));
 			}
-			return valid;
+			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
 		/// Builds an object from a JsonValue.

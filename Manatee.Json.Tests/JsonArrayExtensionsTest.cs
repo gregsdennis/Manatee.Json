@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		JsonArrayExtensionsTest.cs
-	Namespace:		Manatee.Json.Tests.Extensions
+	Namespace:		Manatee.Json.Tests
 	Class Name:		JsonArrayExtensionsTest
 	Purpose:		Tests for the JsonArray extension methods for the Json library.
 
@@ -23,7 +23,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Manatee.Json.Tests.Extensions
+namespace Manatee.Json.Tests
 {
 	[TestClass]
 	public class JsonArrayExtensionsTest

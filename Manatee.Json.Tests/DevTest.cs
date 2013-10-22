@@ -39,52 +39,6 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
-			var schema = JsonSchema.Draft04;
-			var geoSchemaJson = new JsonObject
-				{
-					{"description", "A geographical coordinate"},
-					{"type", "object"},
-					{
-						"properties", new JsonObject
-							{
-								{"latitude", new JsonObject {{"type", "number"}}},
-								{"longitude", new JsonObject {{"type", "number"}}}
-							}
-					},
-					{"required", new JsonArray {"latitude", "longitude"}}
-				};
-			Console.WriteLine("geo schema valid: {0}", schema.Validate(geoSchemaJson));
-			var geoSchema = JsonSchemaFactory.FromJson(geoSchemaJson);
-			var geoJson = new JsonObject
-				{
-					{"latitude", 95.4},
-					{"longitude", 36.8}
-				};
-			Console.WriteLine("geo json valid: {0}", geoSchema.Validate(geoJson));
-		}
-		[TestMethod]
-		//[Ignore]
-		public void Test2()
-		{
-			var schema = JsonSchema.Draft04;
-			var geoSchemaJson = new JsonObject
-				{
-					{"$ref", "http://json-schema.org/geo"}
-				};
-			Console.WriteLine("geo schema valid: {0}", schema.Validate(geoSchemaJson));
-			var serializer = new JsonSerializer();
-			var geoSchema = serializer.Deserialize<IJsonSchema>(geoSchemaJson);
-			var geoJson = new JsonObject
-				{
-					{"latitude", 95.4},
-					{"longitude", 36.8}
-				};
-			Console.WriteLine("geo json valid: {0}", geoSchema.Validate(geoJson));
-		}
-		[TestMethod]
-		//[Ignore]
-		public void Test3()
-		{
 			var geoSchema = new ObjectSchema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
@@ -92,23 +46,44 @@ namespace Manatee.Json.Tests
 							new JsonSchemaPropertyDefinition
 								{
 									Name = "latitude",
-									Type = new NumberSchema(),
+									Type = new NumberSchema {Minimum = -180, Maximum = 180},
 									IsRequired = true
 								},
 							new JsonSchemaPropertyDefinition
 								{
 									Name = "longitude",
-									Type = new NumberSchema(),
+									Type = new NumberSchema {Minimum = -90, Maximum = 90},
 									IsRequired = true
+								},
+							new JsonSchemaPropertyDefinition
+								{
+									Name = "nestedProperty",
+									Type = new ObjectSchema
+										{
+											Properties = new JsonSchemaPropertyDefinitionCollection
+												{
+													new JsonSchemaPropertyDefinition
+														{
+															Name = "test",
+															Type = new StringSchema()
+														}
+												}
+										}
 								}
 						}
 				};
 			var geoJson = new JsonObject
 				{
-					{"latitude", 95.4},
-					{"longitude", 36.8}
+					{"latitude", 95},
+					{"longitude", -36.8},
+					{"nestedProperty", new JsonObject {{"test", false}}}
 				};
-			Console.WriteLine("geo json valid: {0}", geoSchema.Validate(geoJson));
+			var validation = geoSchema.Validate(geoJson);
+			Console.WriteLine("geo json valid: {0}", validation.Valid);
+			foreach (var error in validation.Errors)
+			{
+				Console.WriteLine("    {0}", error);
+			}
 		}
 	}
 }

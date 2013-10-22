@@ -39,9 +39,11 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override bool Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			return json.Type == JsonValueType.Null;
+			return json.Type != JsonValueType.Null
+				? new SchemaValidationResults(string.Empty, string.Format("Expected: Null; Actual: {0}.", json.Type))
+				: new SchemaValidationResults();
 		}
 	}
 }

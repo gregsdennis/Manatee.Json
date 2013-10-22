@@ -77,22 +77,28 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override bool Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (Properties == null) return true;
-			if (json.Type != JsonValueType.Object) return false;
+			// todo: validate AdditionalProperties
+			if (json.Type != JsonValueType.Object)
+				return new SchemaValidationResults(string.Empty, string.Format("Expected: Object; Actual: {0}.", json.Type));
+			if (Properties == null) return new SchemaValidationResults();
 			var obj = json.Object;
-			var requiredProperties = Properties.Where(p => p.IsRequired).ToList();
-			var otherProperties = Properties.Where(p => !p.IsRequired).ToList();
-			var valid = true;
+			var errors = new List<SchemaValidationError>();
 			var jValue = root ?? ToJson();
-			foreach (var property in requiredProperties)
+			foreach (var property in Properties)
 			{
-				if (!obj.ContainsKey(property.Name)) return false;
-				valid &= property.Type.Validate(obj[property.Name], jValue);
+				if (!obj.ContainsKey(property.Name))
+				{
+					if (property.IsRequired)
+						errors.Add(new SchemaValidationError(property.Name, "Required property not found."));
+					continue;
+				}
+				var result = property.Type.Validate(obj[property.Name], jValue);
+				if (!result.Valid)
+					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Name)));
 			}
-			valid &= otherProperties.Where(p => obj.ContainsKey(p.Name)).All(p => p.Type.Validate(obj[p.Name], jValue));
-			return valid;
+			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
 		/// Builds an object from a JsonValue.

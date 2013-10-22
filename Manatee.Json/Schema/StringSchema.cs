@@ -21,6 +21,8 @@
 
 ***************************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -53,16 +55,19 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override bool Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (json.Type != JsonValueType.String) return false;
+			if (json.Type != JsonValueType.String)
+				return new SchemaValidationResults(string.Empty, string.Format("Expected: String; Actual: {0}.", json.Type));
 			var str = json.String;
 			var length = str.Length;
-			var valid = true;
-			if (MinLength.HasValue) valid &= length >= MinLength;
-			if (MaxLength.HasValue) valid &= length <= MaxLength;
+			var errors = new List<SchemaValidationError>();
+			if (MinLength.HasValue && (length < MinLength))
+				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: length >= {0}; Actual: {1}.", MinLength, length)));
+			if (MaxLength.HasValue && (length > MaxLength))
+				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: length <= {0}; Actual: {1}.", MaxLength, length)));
 			// todo: validate Format
-			return valid;
+			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
 		/// Builds an object from a JsonValue.
