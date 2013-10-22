@@ -23,7 +23,6 @@
 ***************************************************************************************/
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Extensions;
 
 namespace Manatee.Json.Schema
 {

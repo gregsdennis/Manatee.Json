@@ -21,8 +21,6 @@
 
 ***************************************************************************************/
 
-using Manatee.Json.Enumerations;
-using Manatee.Json.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Extensions

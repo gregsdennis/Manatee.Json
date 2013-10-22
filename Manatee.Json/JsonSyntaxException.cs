@@ -14,27 +14,28 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonStringInvalidEscapeSequenceException.cs
-	Namespace:		Manatee.Json.Exceptions
-	Class Name:		JsonStringInvalidEscapeSequenceException
-	Purpose:		Thrown when an invalid escape sequence is detected while
-					parsing a string value.
+	File Name:		JsonSyntaxException.cs
+	Namespace:		Manatee.Json
+	Class Name:		JsonSyntaxException
+	Purpose:		Thrown when an input string contains a syntax error other
+					than a key or value parse error.
 
 ***************************************************************************************/
+
 using System;
 
-namespace Manatee.Json.Exceptions
+namespace Manatee.Json
 {
-	///<summary>
-	/// Thrown when an invalid escape sequence is detected while parsing a string value.
-	///</summary>
+	/// <summary>
+	/// Thrown when an input string contains a syntax error other than a key or value parse error.
+	/// </summary>
 	[Serializable]
-	public class JsonStringInvalidEscapeSequenceException : Exception
+	public class JsonSyntaxException : Exception
 	{
-		///<summary>
+		/// <summary>
 		/// Creates a new instance of this exception.
-		///</summary>
-		public JsonStringInvalidEscapeSequenceException(string sequence, int index)
-			: base(string.Format("Invalid escape sequence '{0}' found at index {1}.", sequence, index)) { }
+		/// </summary>
+		public JsonSyntaxException(int index)
+			: base(string.Format("Parse found a syntax error at index {0}.", index)) { }
 	}
 }

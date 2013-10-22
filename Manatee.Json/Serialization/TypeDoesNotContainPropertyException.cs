@@ -15,16 +15,17 @@
 	   limitations under the License.
  
 	File Name:		TypeDoesNotContainPropertyException.cs
-	Namespace:		Manatee.Json.Exceptions
+	Namespace:		Manatee.Json.Serialization
 	Class Name:		TypeDoesNotContainPropertyException
 	Purpose:		Optionally thrown when deserializing and the JSON structure
 					contains property names which are not valid for the type
 					requested.
 
 ***************************************************************************************/
+
 using System;
 
-namespace Manatee.Json.Exceptions
+namespace Manatee.Json.Serialization
 {
 	/// <summary>
 	/// Optionally thrown when deserializing and the JSON structure contains property names

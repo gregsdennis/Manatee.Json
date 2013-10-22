@@ -14,36 +14,32 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonMapToAttribute.cs
-	Namespace:		Manatee.Json.Attributes
-	Class Name:		JsonMapToAttribute
-	Purpose:		Applied to properties to customize how they are to be
-					serialized.
+	File Name:		DateTimeSerializationFormat.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		DateTimeSerializationFormat
+	Purpose:		Enumeration of available formatting options for serializing
+					DateTime objects.
 
 ***************************************************************************************/
-using System;
-
-namespace Manatee.Json.Attributes
+namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Allows the user to specify how a property is mapped during serialization.
+	/// Available formatting options for serializing DateTime objects.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
-	public class JsonMapToAttribute : Attribute
+	public enum DateTimeSerializationFormat
 	{
-		///<summary>
-		/// Specifies the key in the JSON object which maps to the property to which
-		/// this attribute is applied.
-		///</summary>
-		public string MapToKey { get; set; }
-
 		/// <summary>
-		/// Creates a new instance fo the JsonMapToAttribute class.
+		/// Output conforms to ISO 8601 formatting: YYYY-MM-DDThh:mm:ss.sTZD (e.g. 1997-07-16T19:20:30.45+01:00)
 		/// </summary>
-		/// <param name="key">The JSON object key.</param>
-		public JsonMapToAttribute(string key)
-		{
-			MapToKey = key;
-		}
+		Iso8601,
+		/// <summary>
+		/// Output is a string in the format "/Date([ms])/", where [ms] is the number of milliseconds
+		/// since January 1, 1970 UTC.
+		/// </summary>
+		JavaConstructor,
+		/// <summary>
+		/// Output is a numeric value representing the number of milliseconds since January 1, 1970 UTC.
+		/// </summary>
+		Milliseconds
 	}
 }

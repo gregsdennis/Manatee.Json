@@ -22,8 +22,9 @@
 					library.
 
 ***************************************************************************************/
-using Manatee.Json.Attributes;
-using Manatee.Json.Enumerations;
+
+using Manatee.Json;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Tests.Test_References
 {

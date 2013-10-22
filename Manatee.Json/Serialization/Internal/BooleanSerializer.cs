@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		BooleanSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		BooleanSerializer
 	Purpose:		Converts booleans to and from JsonValues.
 

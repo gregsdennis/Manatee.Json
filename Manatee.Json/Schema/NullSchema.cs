@@ -21,8 +21,6 @@
 
 ***************************************************************************************/
 
-using Manatee.Json.Enumerations;
-
 namespace Manatee.Json.Schema
 {
 	/// <summary>

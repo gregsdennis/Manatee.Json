@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		EnumValueSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		EnumValueSerializer
 	Purpose:		Converts enumerations to and from JsonValues by integral value.
 

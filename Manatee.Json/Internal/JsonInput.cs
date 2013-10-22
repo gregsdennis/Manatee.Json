@@ -14,27 +14,25 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonSyntaxException.cs
-	Namespace:		Manatee.Json.Exceptions
-	Class Name:		JsonSyntaxException
-	Purpose:		Thrown when an input string contains a syntax error other
-					than a key or value parse error.
+	File Name:		JsonInput.cs
+	Namespace:		Manatee.Json.Internal
+	Class Name:		JsonInput
+	Purpose:		Enumerates input types for JSON structures.
 
 ***************************************************************************************/
-using System;
-
-namespace Manatee.Json.Exceptions
+namespace Manatee.Json.Internal
 {
-	/// <summary>
-	/// Thrown when an input string contains a syntax error other than a key or value parse error.
-	/// </summary>
-	[Serializable]
-	public class JsonSyntaxException : Exception
+	internal enum JsonInput
 	{
-		/// <summary>
-		/// Creates a new instance of this exception.
-		/// </summary>
-		public JsonSyntaxException(int index)
-			: base(string.Format("Parse found a syntax error at index {0}.", index)) { }
+		OpenBrace,
+		Quote,
+		Colon,
+		Number,
+		Boolean,
+		Null,
+		OpenBracket,
+		Comma,
+		CloseBracket,
+		CloseBrace
 	}
 }

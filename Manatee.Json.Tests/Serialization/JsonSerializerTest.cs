@@ -24,8 +24,6 @@
 
 using System;
 using System.Collections.Generic;
-using Manatee.Json.Enumerations;
-using Manatee.Json.Exceptions;
 using Manatee.Json.Serialization;
 using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

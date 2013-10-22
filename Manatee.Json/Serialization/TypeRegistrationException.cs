@@ -14,33 +14,38 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		MapBaseAbstractionBehavior.cs
-	Namespace:		Manatee.Json.Enumerations
-	Class Name:		MapBaseAbstractionBehavior
-	Purpose:		Describes mapping behaviors for mapping abstraction types
-					in the serializer.
+	File Name:		TypeRegistrationException.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		TypeRegistrationException
+	Purpose:		Thrown when incorrectly attempting to register a type for the
+					serializer.
 
 ***************************************************************************************/
 
-namespace Manatee.Json.Enumerations
+using System;
+
+namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Describes mapping behaviors for mapping abstraction types in the serializer.
+	/// Thrown when JsonSerializationTypeRegistry.RegisterType&lt;T&gt;(ToJsonDelegate&lt;T&gt; toJson, FromJsonDelegate&lt;T&gt; fromJson)
+	/// is passed one method and a null.
 	/// </summary>
-	public enum MapBaseAbstractionBehavior
+	[Serializable]
+	public class TypeRegistrationException : Exception
 	{
 		/// <summary>
-		/// Specifies that no additional mappings will be made.
+		/// Gets the type.
 		/// </summary>
-		None,
+		public Type Type { get; private set; }
+
 		/// <summary>
-		/// Specifies that any unmapped base classes and interfaces will be mapped.
+		/// Initializes a new instance of the TypeRegistrationException class.
 		/// </summary>
-		Unmapped,
-		/// <summary>
-		/// Specifies that all base classes and interfaces will be mapped,
-		/// overriding any existing mappings.
-		/// </summary>
-		Override
+		/// <param name="type">The type.</param>
+		public TypeRegistrationException(Type type)
+			: base(string.Format("Attempted to register type {0} without supplying both an encoder and decoder.", type))
+		{
+			Type = type;
+		}
 	}
 }

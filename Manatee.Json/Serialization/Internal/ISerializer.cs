@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		ISerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		ISerializer
 	Purpose:		Defines methods to convert between objects and JsonValues.
 

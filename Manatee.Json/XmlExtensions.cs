@@ -15,20 +15,20 @@
 	   limitations under the License.
  
 	File Name:		XmlExtentions.cs
-	Namespace:		Manatee.Json.Extensions
+	Namespace:		Manatee.Json
 	Class Name:		XmlExtensions
 	Purpose:		XML conversions for Manatee.Json
 
 ***************************************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using Manatee.Json.Enumerations;
-using Manatee.Json.Helpers;
+using Manatee.Json.Internal;
 
-namespace Manatee.Json.Extensions
+namespace Manatee.Json
 {
 	/// <summary>
 	/// Contains functionality to map JSON values to XML constructs.

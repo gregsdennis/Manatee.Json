@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		ISerializerFactory.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		ISerializerFactory
 	Purpose:		Defines methods required to produce IJsonSerializer
 					implementations based on a given type.

@@ -20,7 +20,7 @@
 	Purpose:		Tests for the JsonObject extension methods for the Json library.
 
 ***************************************************************************************/
-using Manatee.Json.Extensions;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Extensions

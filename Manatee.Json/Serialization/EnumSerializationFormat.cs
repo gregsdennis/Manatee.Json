@@ -15,13 +15,13 @@
 	   limitations under the License.
  
 	File Name:		EnumSerializationFormat.cs
-	Namespace:		Manatee.Json.Enumerations
+	Namespace:		Manatee.Json.Serialization
 	Class Name:		EnumSerializationFormat
 	Purpose:		Enumerates serialization formats for enumerations.
 
 ***************************************************************************************/
 
-namespace Manatee.Json.Enumerations
+namespace Manatee.Json.Serialization
 {
 	/// <summary>
 	/// Enumerates serialization formats for enumerations.

@@ -81,5 +81,34 @@ namespace Manatee.Json.Tests
 				};
 			Console.WriteLine("geo json valid: {0}", geoSchema.Validate(geoJson));
 		}
+		[TestMethod]
+		//[Ignore]
+		public void Test3()
+		{
+			var geoSchema = new ObjectSchema
+				{
+					Properties = new JsonSchemaPropertyDefinitionCollection
+						{
+							new JsonSchemaPropertyDefinition
+								{
+									Name = "latitude",
+									Type = new NumberSchema(),
+									IsRequired = true
+								},
+							new JsonSchemaPropertyDefinition
+								{
+									Name = "longitude",
+									Type = new NumberSchema(),
+									IsRequired = true
+								}
+						}
+				};
+			var geoJson = new JsonObject
+				{
+					{"latitude", 95.4},
+					{"longitude", 36.8}
+				};
+			Console.WriteLine("geo json valid: {0}", geoSchema.Validate(geoJson));
+		}
 	}
 }

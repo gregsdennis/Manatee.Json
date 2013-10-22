@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		TypeGenerator.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		TypeGenerator
 	Purpose:		Generates types at run-time which implement a given interface.
 

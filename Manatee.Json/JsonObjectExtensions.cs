@@ -21,9 +21,7 @@
 
 ***************************************************************************************/
 
-using Manatee.Json.Enumerations;
-
-namespace Manatee.Json.Extensions
+namespace Manatee.Json
 {
 	/// <summary>
 	/// Provides extension methods for JsonValues.

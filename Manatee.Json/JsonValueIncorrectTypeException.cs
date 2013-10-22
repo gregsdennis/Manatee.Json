@@ -15,15 +15,15 @@
 	   limitations under the License.
  
 	File Name:		JsonValueIncorrectTypeException.cs
-	Namespace:		Manatee.Json.Exceptions
+	Namespace:		Manatee.Json
 	Class Name:		JsonValueIncorrectTypeException
 	Purpose:		Thrown when a value is accessed via the incorrect type accessor.
 
 ***************************************************************************************/
-using System;
-using Manatee.Json.Enumerations;
 
-namespace Manatee.Json.Exceptions
+using System;
+
+namespace Manatee.Json
 {
 	/// <summary>
 	/// Thrown when a value is accessed via the incorrect type accessor.

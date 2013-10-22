@@ -1,4 +1,4 @@
-/***************************************************************************************
+﻿/***************************************************************************************
 
 	Copyright 2012 Greg Dennis
 
@@ -14,28 +14,33 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		InvalidPropertyKeyBehavior.cs
-	Namespace:		Manatee.Json.Serialization.Enumerations
-	Class Name:		InvalidPropertyKeyBehavior
-	Purpose:		Enumeration of behavior options for the deserializer when a
-					JSON structure is passed which contains invalid property keys.
+	File Name:		MapBaseAbstractionBehavior.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		MapBaseAbstractionBehavior
+	Purpose:		Describes mapping behaviors for mapping abstraction types
+					in the serializer.
 
 ***************************************************************************************/
-namespace Manatee.Json.Enumerations
+
+namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Enumeration of behavior options for the deserializer when a JSON structure is passed which
-	/// contains invalid property keys.
+	/// Describes mapping behaviors for mapping abstraction types in the serializer.
 	/// </summary>
-	public enum InvalidPropertyKeyBehavior
+	public enum MapBaseAbstractionBehavior
 	{
 		/// <summary>
-		/// Deserializer ignores the invalid property keys.
+		/// Specifies that no additional mappings will be made.
 		/// </summary>
-		DoNothing,
+		None,
 		/// <summary>
-		/// Deserializer will throw an exception when an invalid property key is found.
+		/// Specifies that any unmapped base classes and interfaces will be mapped.
 		/// </summary>
-		ThrowException
+		Unmapped,
+		/// <summary>
+		/// Specifies that all base classes and interfaces will be mapped,
+		/// overriding any existing mappings.
+		/// </summary>
+		Override
 	}
 }

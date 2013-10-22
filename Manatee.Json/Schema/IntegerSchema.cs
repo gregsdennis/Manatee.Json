@@ -21,8 +21,6 @@
 
 ***************************************************************************************/
 
-using Manatee.Json.Enumerations;
-using Manatee.Json.Extensions;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema

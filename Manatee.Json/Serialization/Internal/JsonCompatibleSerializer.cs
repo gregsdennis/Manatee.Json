@@ -15,14 +15,12 @@
 	   limitations under the License.
  
 	File Name:		JsonCompatibleSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		JsonCompatibleSerializer
 	Purpose:		Converts objects which implement IJsonCompatible to and from
 					JsonValues.
 
 ***************************************************************************************/
-
-using System;
 
 namespace Manatee.Json.Serialization.Internal
 {

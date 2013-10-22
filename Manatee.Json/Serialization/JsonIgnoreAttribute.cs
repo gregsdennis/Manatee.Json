@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		JsonIgnoreAttribute.cs
-	Namespace:		Manatee.Json.Attributes
+	Namespace:		Manatee.Json.Serialization
 	Class Name:		JsonIgnoreAttribute
 	Purpose:		Applied to properties to indicate that they are not to be
 					serialized.
@@ -23,7 +23,7 @@
 ***************************************************************************************/
 using System;
 
-namespace Manatee.Json.Attributes
+namespace Manatee.Json.Serialization
 {
 	/// <summary>
 	/// Applied to properties to indicate that they are not to be serialized.

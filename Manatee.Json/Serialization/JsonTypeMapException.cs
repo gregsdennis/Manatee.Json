@@ -15,18 +15,16 @@
 	   limitations under the License.
  
 	File Name:		JsonTypeMapException.cs
-	Namespace:		Manatee.Json.Exceptions
+	Namespace:		Manatee.Json.Serialization
 	Class Name:		JsonTypeMapException
 	Purpose:		Thrown when an abstract or interface type is mapped to another
 					abstract or interface type.
 
 ***************************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Manatee.Json.Exceptions
+using System;
+
+namespace Manatee.Json.Serialization
 {
 	///<summary>
 	/// Thrown when an abstract or interface type is mapped to another abstract or interface type.
