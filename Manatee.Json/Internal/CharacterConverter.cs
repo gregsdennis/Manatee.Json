@@ -15,15 +15,15 @@
 	   limitations under the License.
  
 	File Name:		CharacterConverter.cs
-	Namespace:		Manatee.Json.Helpers
+	Namespace:		Manatee.Json.Internal
 	Class Name:		CharacterConverter
 	Purpose:		Maps ASCII characters to JsonInput values.
 
 ***************************************************************************************/
-using System.Collections.Generic;
-using Manatee.Json.Enumerations;
 
-namespace Manatee.Json.Helpers
+using System.Collections.Generic;
+
+namespace Manatee.Json.Internal
 {
 	internal static class CharacterConverter
 	{

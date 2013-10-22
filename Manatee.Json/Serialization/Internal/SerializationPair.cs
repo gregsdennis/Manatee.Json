@@ -15,14 +15,13 @@
 	   limitations under the License.
  
 	File Name:		SerializationPair.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		SerializationPair
 	Purpose:		Defines an equivalence between an object and its representative
 					JSON.
 
 ***************************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 

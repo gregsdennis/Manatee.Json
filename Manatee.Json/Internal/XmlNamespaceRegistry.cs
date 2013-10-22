@@ -15,19 +15,19 @@
 	   limitations under the License.
  
 	File Name:		XmlNamespacePair.cs
-	Namespace:		Manatee.Json.Helpers
+	Namespace:		Manatee.Json.Internal
 	Class Name:		XmlNamespacePair
 	Purpose:		Maintains a cache of namespace pairs defined by a given
 					XML element.
 
 ***************************************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
-namespace Manatee.Json.Helpers
+namespace Manatee.Json.Internal
 {
 	internal class XmlNamespaceRegistry
 	{

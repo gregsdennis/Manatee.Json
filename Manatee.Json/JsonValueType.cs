@@ -15,13 +15,13 @@
 	   limitations under the License.
  
 	File Name:		JsonValueType.cs
-	Namespace:		Manatee.Json.Enumerations
+	Namespace:		Manatee.Json
 	Class Name:		JsonValueType
 	Purpose:		Specifies various types of values for use in a JSON
 					key:value pair.
 
 ***************************************************************************************/
-namespace Manatee.Json.Enumerations
+namespace Manatee.Json
 {
 	/// <summary>
 	/// Specifies various types of values for use in a JSON key:value pair.

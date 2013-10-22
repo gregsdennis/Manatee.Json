@@ -20,10 +20,10 @@
 	Purpose:		Provides extension methods for JsonArrays.
 
 ***************************************************************************************/
-using System.Linq;
-using Manatee.Json.Enumerations;
 
-namespace Manatee.Json.Extensions
+using System.Linq;
+
+namespace Manatee.Json
 {
 	/// <summary>
 	/// Provides extension methods for JsonArrays.

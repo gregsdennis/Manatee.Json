@@ -14,27 +14,21 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonValueParseException.cs
-	Namespace:		Manatee.Json.Exceptions
-	Class Name:		JsonValueParseException
-	Purpose:		Thrown when an input string contains an invalid value.
+	File Name:		ISerializerCache.cs
+	Namespace:		Manatee.Json.Serialization.Internal
+	Class Name:		ISerializerCache
+	Purpose:		Defines methods to cache typed serializer methods.
 
 ***************************************************************************************/
-using System;
-using Manatee.Json.Enumerations;
 
-namespace Manatee.Json.Exceptions
+using System;
+using System.Reflection;
+
+namespace Manatee.Json.Serialization.Internal
 {
-	/// <summary>
-	/// Thrown when an input string contains an invalid value.
-	/// </summary>
-	[Serializable]
-	public class JsonValueParseException : Exception
+	internal interface ISerializerCache
 	{
-		/// <summary>
-		/// Creates a new instance of this exception.
-		/// </summary>
-		public JsonValueParseException(JsonValueType t, int index)
-			: base(string.Format("Parse of type {0} failed at index {1}.", t, index)) { }
+		MethodInfo GetSerializeMethod(Type type);
+		MethodInfo GetDeserializeMethod(Type type);
 	}
 }

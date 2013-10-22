@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		NumericSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		NumericSerializer
 	Purpose:		Converts numeric types to and from JsonValues.
 

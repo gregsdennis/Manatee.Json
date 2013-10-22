@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		Constants.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		Constants
 	Purpose:		Defines several constants used throughout the library.
 

@@ -20,7 +20,6 @@
 	Purpose:		Default options used by the serializer.
 
 ***************************************************************************************/
-using Manatee.Json.Enumerations;
 
 namespace Manatee.Json.Serialization
 {

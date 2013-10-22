@@ -14,25 +14,27 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NotPrimitiveTypeException.cs
-	Namespace:		Manatee.Json.Exceptions
-	Class Name:		NotPrimitiveTypeException
-	Purpose:		Thrown when a request is send to the PrimitiveMapper to map
-					a non-primitive type.
+	File Name:		JsonValueParseException.cs
+	Namespace:		Manatee.Json
+	Class Name:		JsonValueParseException
+	Purpose:		Thrown when an input string contains an invalid value.
 
 ***************************************************************************************/
+
 using System;
 
-namespace Manatee.Json.Exceptions
+namespace Manatee.Json
 {
+	/// <summary>
+	/// Thrown when an input string contains an invalid value.
+	/// </summary>
 	[Serializable]
-	internal class NotPrimitiveTypeException : Exception
+	public class JsonValueParseException : Exception
 	{
-		public Type RequestedType { get; private set; }
-		public NotPrimitiveTypeException(Type type)
-			: base(string.Format("Type {0} is not primitive.", type))
-		{
-			RequestedType = type;
-		}
+		/// <summary>
+		/// Creates a new instance of this exception.
+		/// </summary>
+		public JsonValueParseException(JsonValueType t, int index)
+			: base(string.Format("Parse of type {0} failed at index {1}.", t, index)) { }
 	}
 }

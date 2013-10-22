@@ -14,26 +14,28 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonKeyParseException.cs
-	Namespace:		Manatee.Json.Exceptions
-	Class Name:		JsonKeyParseException
-	Purpose:		Thrown when an input string contains an invalid key.
+	File Name:		JsonStringInvalidEscapeSequenceException.cs
+	Namespace:		Manatee.Json
+	Class Name:		JsonStringInvalidEscapeSequenceException
+	Purpose:		Thrown when an invalid escape sequence is detected while
+					parsing a string value.
 
 ***************************************************************************************/
+
 using System;
 
-namespace Manatee.Json.Exceptions
+namespace Manatee.Json
 {
-	/// <summary>
-	/// Thrown when an input string contains an invalid key.
-	/// </summary>
+	///<summary>
+	/// Thrown when an invalid escape sequence is detected while parsing a string value.
+	///</summary>
 	[Serializable]
-	public class JsonKeyParseException : Exception
+	public class JsonStringInvalidEscapeSequenceException : Exception
 	{
-		/// <summary>
+		///<summary>
 		/// Creates a new instance of this exception.
-		/// </summary>
-		public JsonKeyParseException(int index)
-			: base(string.Format("Parse of key failed at index {0}.", index)) { }
+		///</summary>
+		public JsonStringInvalidEscapeSequenceException(string sequence, int index)
+			: base(string.Format("Invalid escape sequence '{0}' found at index {1}.", sequence, index)) { }
 	}
 }

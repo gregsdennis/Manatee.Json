@@ -14,37 +14,27 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		TypeRegistrationException.cs
-	Namespace:		Manatee.Json.Exceptions
-	Class Name:		TypeRegistrationException
-	Purpose:		Thrown when incorrectly attempting to register a type for the
-					serializer.
+	File Name:		JsonKeyParseException.cs
+	Namespace:		Manatee.Json
+	Class Name:		JsonKeyParseException
+	Purpose:		Thrown when an input string contains an invalid key.
 
 ***************************************************************************************/
+
 using System;
 
-namespace Manatee.Json.Exceptions
+namespace Manatee.Json
 {
 	/// <summary>
-	/// Thrown when JsonSerializationTypeRegistry.RegisterType&lt;T&gt;(ToJsonDelegate&lt;T&gt; toJson, FromJsonDelegate&lt;T&gt; fromJson)
-	/// is passed one method and a null.
+	/// Thrown when an input string contains an invalid key.
 	/// </summary>
 	[Serializable]
-	public class TypeRegistrationException : Exception
+	public class JsonKeyParseException : Exception
 	{
 		/// <summary>
-		/// Gets the type.
+		/// Creates a new instance of this exception.
 		/// </summary>
-		public Type Type { get; private set; }
-
-		/// <summary>
-		/// Initializes a new instance of the TypeRegistrationException class.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		public TypeRegistrationException(Type type)
-			: base(string.Format("Attempted to register type {0} without supplying both an encoder and decoder.", type))
-		{
-			Type = type;
-		}
+		public JsonKeyParseException(int index)
+			: base(string.Format("Parse of key failed at index {0}.", index)) { }
 	}
 }

@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Manatee.Json.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Extensions

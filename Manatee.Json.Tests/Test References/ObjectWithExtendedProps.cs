@@ -22,8 +22,6 @@
 					library.
 
 ***************************************************************************************/
-using System;
-using Manatee.Json.Attributes;
 
 namespace Manatee.Tests.Test_References
 {

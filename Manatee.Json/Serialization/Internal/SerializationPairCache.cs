@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		SerializationPairCache.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		SerializationPairCache
 	Purpose:		Manages pairs of objects and their respective JSON.
 

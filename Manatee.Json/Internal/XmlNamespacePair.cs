@@ -15,12 +15,12 @@
 	   limitations under the License.
  
 	File Name:		XmlNamespacePair.cs
-	Namespace:		Manatee.Json.Helpers
+	Namespace:		Manatee.Json.Internal
 	Class Name:		XmlNamespacePair
 	Purpose:		Identifies an XML namespace and its identifying label.
 
 ***************************************************************************************/
-namespace Manatee.Json.Helpers
+namespace Manatee.Json.Internal
 {
 	internal class XmlNamespacePair
 	{

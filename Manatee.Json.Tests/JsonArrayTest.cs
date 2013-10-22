@@ -21,7 +21,6 @@
 
 ***************************************************************************************/
 
-using Manatee.Json.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests

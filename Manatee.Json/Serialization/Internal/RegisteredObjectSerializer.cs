@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		RegisteredObjectSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		RegisteredObjectSerializer
 	Purpose:		Converts an object whose type has registered serialize methods
 					to and from JsonValues.

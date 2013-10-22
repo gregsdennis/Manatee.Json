@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		StringSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		StringSerializer
 	Purpose:		Converts strings to and from JsonValues.
 

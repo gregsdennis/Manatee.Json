@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		AutoSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		AutoSerializer
 	Purpose:		Converts objects to and from JsonValues based on available
 					properties.
@@ -26,10 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Manatee.Json.Attributes;
-using Manatee.Json.Enumerations;
-using Manatee.Json.Exceptions;
-using Manatee.Json.Helpers;
 
 namespace Manatee.Json.Serialization.Internal
 {

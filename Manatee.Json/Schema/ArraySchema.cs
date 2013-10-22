@@ -21,8 +21,6 @@
 
 ***************************************************************************************/
 using System.Linq;
-using Manatee.Json.Enumerations;
-using Manatee.Json.Extensions;
 
 namespace Manatee.Json.Schema
 {

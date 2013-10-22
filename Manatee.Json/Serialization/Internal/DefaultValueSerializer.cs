@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		DefaultValueSerializer.cs
-	Namespace:		Manatee.Json.Serialization
+	Namespace:		Manatee.Json.Serialization.Internal
 	Class Name:		DefaultValueSerializer
 	Purpose:		Shortcuts serialization and returns JsonValue.Null if the
 					object equals the default value for its type.
