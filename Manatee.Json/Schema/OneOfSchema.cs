@@ -51,10 +51,13 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public bool Validate(JsonValue json, JsonValue root = null)
+		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			var jValue = root ?? ToJson();
-			return Options.Count(s => s.Validate(json, jValue)) == 1;
+			var errors = Options.Select(s => s.Validate(json, jValue)).ToList();
+			if (errors.Count(r => r.Valid) == 1) return new SchemaValidationResults();
+			if (errors.Count(r => r.Valid) == 0) return new SchemaValidationResults(errors);
+			return new SchemaValidationResults(string.Empty, "More than one option was valid.");
 		}
 		/// <summary>
 		/// Builds an object from a JsonValue.

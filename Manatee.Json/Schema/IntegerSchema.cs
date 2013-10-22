@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 
+using System.Collections.Generic;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
@@ -58,16 +59,34 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override bool Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (json.Type != JsonValueType.Number) return false;
+			if (json.Type != JsonValueType.Number) return new SchemaValidationResults(string.Empty, string.Format("Expected: Integer; Actual: {0}.", json.Type));
 			var number = json.Number;
-			if (!number.IsInt()) return false;
+			if (!number.IsInt()) return new SchemaValidationResults(string.Empty, "Expected: Integer; Actual: Number.");
 			var integer = (int) number;
-			var valid = true;
-			if (Minimum.HasValue) valid &= ExclusiveMinimum ? integer >= Minimum : integer > Minimum;
-			if (Maximum.HasValue) valid &= ExclusiveMaximum ? integer <= Maximum : integer < Maximum;
-			return valid;
+			var errors = new List<SchemaValidationError>();
+			if (ExclusiveMinimum)
+			{
+				if (integer <= Minimum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: > {0}; Actual: {1}.", Minimum, integer)));
+			}
+			else
+			{
+				if (integer < Minimum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: >= {0}; Actual: {1}.", Minimum, integer)));
+			}
+			if (ExclusiveMaximum)
+			{
+				if (integer >= Maximum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: < {0}; Actual: {1}.", Maximum, integer)));
+			}
+			else
+			{
+				if (integer > Maximum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: <= {0}; Actual: {1}.", Maximum, integer)));
+			}
+			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
 		/// Builds an object from a JsonValue.

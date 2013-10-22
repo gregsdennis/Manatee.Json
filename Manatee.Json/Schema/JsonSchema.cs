@@ -197,9 +197,9 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public virtual bool Validate(JsonValue json, JsonValue root = null)
+		public virtual SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			return true;
+			return new SchemaValidationResults();
 		}
 		/// <summary>
 		/// Builds an object from a JsonValue.

@@ -21,6 +21,9 @@
 
 ***************************************************************************************/
 
+using System.Collections.Generic;
+using Manatee.Json.Internal;
+
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -56,14 +59,32 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override bool Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (json.Type != JsonValueType.Number) return false;
+			if (json.Type != JsonValueType.Number) return new SchemaValidationResults(string.Empty, string.Format("Expected: Integer; Actual: {0}.", json.Type));
 			var number = json.Number;
-			var valid = true;
-			if (Minimum.HasValue) valid &= ExclusiveMinimum ? number >= Minimum : number > Minimum;
-			if (Maximum.HasValue) valid &= ExclusiveMaximum ? number <= Maximum : number < Maximum;
-			return valid;
+			var errors = new List<SchemaValidationError>();
+			if (ExclusiveMinimum)
+			{
+				if (number <= Minimum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: > {0}; Actual: {1}.", Minimum, number)));
+			}
+			else
+			{
+				if (number < Minimum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: >= {0}; Actual: {1}.", Minimum, number)));
+			}
+			if (ExclusiveMaximum)
+			{
+				if (number >= Maximum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: < {0}; Actual: {1}.", Maximum, number)));
+			}
+			else
+			{
+				if (number > Maximum)
+					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: <= {0}; Actual: {1}.", Maximum, number)));
+			}
+			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
 		/// Builds an object from a JsonValue.
