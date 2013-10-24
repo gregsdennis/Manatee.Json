@@ -22,14 +22,19 @@
 ***************************************************************************************/
 
 using System;
+using System.Linq;
 
 namespace Manatee.Json.Internal
 {
 	internal static class GeneralExtensions
 	{
-		 public static bool IsInt(this double value)
-		 {
-			 return Math.Ceiling(value) == Math.Floor(value);
-		 }
+		public static bool IsInt(this double value)
+		{
+			return Math.Ceiling(value) == Math.Floor(value);
+		}
+		public static bool In<T>(this T obj, params T[] values)
+		{
+			return values.Contains(obj);
+		}
 	}
 }
