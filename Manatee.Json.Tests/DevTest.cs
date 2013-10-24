@@ -28,6 +28,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
+using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -40,50 +41,41 @@ namespace Manatee.Json.Tests
 		public void Test1()
 		{
 			var geoSchema = new ObjectSchema
-				{
-					Properties = new JsonSchemaPropertyDefinitionCollection
+			{
+				Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition
 								{
 									Name = "latitude",
-									Type = new NumberSchema {Minimum = -180, Maximum = 180},
+									Type = new NumberSchema(),
 									IsRequired = true
 								},
 							new JsonSchemaPropertyDefinition
 								{
 									Name = "longitude",
-									Type = new NumberSchema {Minimum = -90, Maximum = 90},
+									Type = new NumberSchema(),
 									IsRequired = true
-								},
-							new JsonSchemaPropertyDefinition
-								{
-									Name = "nestedProperty",
-									Type = new ObjectSchema
-										{
-											Properties = new JsonSchemaPropertyDefinitionCollection
-												{
-													new JsonSchemaPropertyDefinition
-														{
-															Name = "test",
-															Type = new StringSchema()
-														}
-												}
-										}
 								}
 						}
-				};
+			};
 			var geoJson = new JsonObject
 				{
-					{"latitude", 95},
-					{"longitude", -36.8},
-					{"nestedProperty", new JsonObject {{"test", false}}}
+					{"latitude", 95.4},
+					//{"longitude", 36.8}
 				};
-			var validation = geoSchema.Validate(geoJson);
-			Console.WriteLine("geo json valid: {0}", validation.Valid);
-			foreach (var error in validation.Errors)
+			var result = geoSchema.Validate(geoJson);
+			Console.WriteLine("geo json valid: {0}", result.Valid);
+			foreach (var error in result.Errors)
 			{
 				Console.WriteLine("    {0}", error);
 			}
+		}
+		[TestMethod]
+		//[Ignore]
+		public void Test2()
+		{
+			var schema = JsonSchemaFactory.FromType(typeof (JsonValue));
+			Console.WriteLine(schema.ToJson());
 		}
 	}
 }

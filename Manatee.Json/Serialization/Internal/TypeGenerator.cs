@@ -44,8 +44,9 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			Default = new TypeGenerator();
 			var assemblyName = new AssemblyName(AssemblyName);
-			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave, @"E:\Projects\Manatee.Json\Json.Tests\bin\Debug\");
-			//_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
+			// Note: To debug IL generation, please use the following line with your own test path.  Also need to uncomment the Save() call in the Generate<T>() method.
+			//_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave, @"E:\Projects\Manatee.Json\Manatee.Json.Tests\bin\Debug\");
+			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
 			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName, AssemblyName + ".dll");
 			_cache = new Dictionary<Type, Type>();
 		}
@@ -65,7 +66,8 @@ namespace Manatee.Json.Serialization.Internal
 			ImplementEvents<T>(typeBuilder);
 			var concreteType = typeBuilder.CreateType();
 			_cache.Add(type, concreteType);
-			_assemblyBuilder.Save(@"Manatee.Json.DynamicTypes.dll");
+			// Note: To debug IL generation, please uncomment the following line.  Also need to use the first _assemblyBuilder assignment in the static constructor.
+			//_assemblyBuilder.Save(@"Manatee.Json.DynamicTypes.dll");
 			return (T)ConstructInstance(concreteType);
 		}
 
