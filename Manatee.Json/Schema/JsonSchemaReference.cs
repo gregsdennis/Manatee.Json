@@ -35,7 +35,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a reference to the root schema.
 		/// </summary>
-		public static readonly JsonSchemaReference Self = new JsonSchemaReference("#");
+		public static readonly JsonSchemaReference Root = new JsonSchemaReference("#");
 
 		private IJsonSchema _schema;
 

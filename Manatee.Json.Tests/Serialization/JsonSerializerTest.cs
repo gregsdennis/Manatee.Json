@@ -233,6 +233,20 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
+		public void Deserialize_InterfaceWithoutMap_Successful()
+		{
+			var serializer = GetSerializer();
+			JsonValue json = new JsonObject
+				{
+					{"RequiredProp", "test"}
+				};
+			IInterface expected = new ImplementationClass { RequiredProp = "test" };
+
+			var actual = serializer.Deserialize<IInterface>(json);
+			Assert.AreEqual(expected.RequiredProp, actual.RequiredProp);
+			Assert.AreNotEqual(typeof (ImplementationClass), actual.GetType());
+		}
+		[TestMethod]
 		public void Deserialize_InterfaceWithMap_Successful()
 		{
 			var serializer = GetSerializer();

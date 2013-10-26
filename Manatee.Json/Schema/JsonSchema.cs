@@ -47,7 +47,7 @@ namespace Manatee.Json.Schema
 					{
 						new JsonSchemaTypeDefinition("schemaArray")
 							{
-								Definition = new ArraySchema {MinItems = 1, Items = JsonSchemaReference.Self},
+								Definition = new ArraySchema {MinItems = 1, Items = JsonSchemaReference.Root},
 							},
 						new JsonSchemaTypeDefinition("positiveInteger")
 							{
@@ -99,12 +99,12 @@ namespace Manatee.Json.Schema
 						new JsonSchemaPropertyDefinition {Name = "pattern", Type = new StringSchema {Format = "regex"}},
 						new JsonSchemaPropertyDefinition {Name = "additionalItems", Type = new AnyOfSchema
 							{
-								Options = new List<IJsonSchema> {new BooleanSchema(), JsonSchemaReference.Self},
+								Options = new List<IJsonSchema> {new BooleanSchema(), JsonSchemaReference.Root},
 								Default = new JsonObject()
 							}},
 						new JsonSchemaPropertyDefinition {Name = "items", Type = new AnyOfSchema
 							{
-								Options = new List<IJsonSchema> {JsonSchemaReference.Self, new JsonSchemaReference("#/definitions/schemaArray")},
+								Options = new List<IJsonSchema> {JsonSchemaReference.Root, new JsonSchemaReference("#/definitions/schemaArray")},
 								Default = new JsonObject()
 							}},
 						new JsonSchemaPropertyDefinition {Name = "maxItems", Type = new JsonSchemaReference("#/definitions/positiveInteger")},
@@ -115,22 +115,22 @@ namespace Manatee.Json.Schema
 						new JsonSchemaPropertyDefinition {Name = "required", Type = new JsonSchemaReference("#/definitions/stringArray")},
 						new JsonSchemaPropertyDefinition {Name = "additionalProperties", Type = new AnyOfSchema
 							{
-								Options = new List<IJsonSchema> {new BooleanSchema(), JsonSchemaReference.Self},
+								Options = new List<IJsonSchema> {new BooleanSchema(), JsonSchemaReference.Root},
 								Default = new JsonObject()
 							}},
 						new JsonSchemaPropertyDefinition {Name = "definitions", Type = new ObjectSchema
 							{
-								AdditionalProperties = JsonSchemaReference.Self,
+								AdditionalProperties = JsonSchemaReference.Root,
 								Default = new JsonObject()
 							}},
 						new JsonSchemaPropertyDefinition {Name = "properties", Type = new ObjectSchema
 							{
-								AdditionalProperties = JsonSchemaReference.Self,
+								AdditionalProperties = JsonSchemaReference.Root,
 								Default = new JsonObject()
 							}},
 						new JsonSchemaPropertyDefinition {Name = "patternProperties", Type = new ObjectSchema
 							{
-								AdditionalProperties = JsonSchemaReference.Self,
+								AdditionalProperties = JsonSchemaReference.Root,
 								Default = new JsonObject()
 							}},
 						new JsonSchemaPropertyDefinition {Name = "dependencies", Type = new ObjectSchema
@@ -139,7 +139,7 @@ namespace Manatee.Json.Schema
 									{
 										Options = new List<IJsonSchema>
 											{
-												JsonSchemaReference.Self,
+												JsonSchemaReference.Root,
 												new JsonSchemaReference("#/definitions/stringArray")
 											}
 									}
@@ -156,7 +156,7 @@ namespace Manatee.Json.Schema
 						new JsonSchemaPropertyDefinition {Name = "allOf", Type = new JsonSchemaReference("#/definitions/schemaArray")},
 						new JsonSchemaPropertyDefinition {Name = "anyOf", Type = new JsonSchemaReference("#/definitions/schemaArray")},
 						new JsonSchemaPropertyDefinition {Name = "oneOf", Type = new JsonSchemaReference("#/definitions/schemaArray")},
-						new JsonSchemaPropertyDefinition {Name = "not", Type = JsonSchemaReference.Self},
+						new JsonSchemaPropertyDefinition {Name = "not", Type = JsonSchemaReference.Root},
 					},
 				Dependencies = new Dictionary<string, IEnumerable<string>>
 					{
