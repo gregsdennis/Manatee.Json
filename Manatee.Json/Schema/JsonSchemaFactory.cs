@@ -218,7 +218,7 @@ namespace Manatee.Json.Schema
 					if ((definition.Definition is JsonSchemaReference) &&
 						((JsonSchemaReference) definition.Definition).Reference == target)
 					{
-						definition.Definition = JsonSchemaReference.Self;
+						definition.Definition = JsonSchemaReference.Root;
 					}
 					else
 					{
@@ -233,7 +233,7 @@ namespace Manatee.Json.Schema
 					if ((property.Type is JsonSchemaReference) &&
 						((JsonSchemaReference)property.Type).Reference == target)
 					{
-						property.Type = JsonSchemaReference.Self;
+						property.Type = JsonSchemaReference.Root;
 					}
 					else
 					{

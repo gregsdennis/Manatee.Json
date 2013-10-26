@@ -43,6 +43,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public bool IsRequired { get; set; }
 
+		public JsonSchemaPropertyDefinition()
+		{
+			Type = JsonSchema.Empty;
+		}
+
 		/// <summary>
 		/// Builds an object from a JsonValue.
 		/// </summary>
