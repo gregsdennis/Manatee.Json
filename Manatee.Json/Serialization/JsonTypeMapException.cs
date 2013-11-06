@@ -34,7 +34,7 @@ namespace Manatee.Json.Serialization
 	public class JsonTypeMapException<TAbstract, TConcrete> : Exception
 	{
 		/// <summary>
-		/// Creates a new instance of the JsonTypeMapException object.
+		/// Creates a new instance of the <see cref="JsonTypeMapException&lt;TAbstract, TConcrete&gt;"/> object.
 		/// </summary>
 		public JsonTypeMapException()
 			: base(string.Format("Cannot create map from type '{0}' to type '{1}' because the destination type is either abstract or an interface.",

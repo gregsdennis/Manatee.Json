@@ -21,59 +21,61 @@
 
 ***************************************************************************************/
 
+using System;
+
 namespace Manatee.Json
 {
 	/// <summary>
-	/// Provides extension methods for JsonValues.
+	/// Provides extension methods for <see cref="JsonValue"/>s.
 	/// </summary>
 	public static class JsonObjectExtensions
 	{
 		/// <summary>
-		/// Returns a string or null if the key is not found or is not a string.
+		/// Returns a <see cref="string"/> or null if the key is not found or is not a <see cref="string"/>.
 		/// </summary>
-		/// <param name="obj">The object to search</param>
+		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
-		/// <returns>A string or null if the key is not found or is not a string</returns>
+		/// <returns>A <see cref="string"/> or null if the key is not found or is not a <see cref="string"/></returns>
 		public static string TryGetString(this JsonObject obj, string key)
 		{
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.String) ? obj[key].String : null;
 		}
 		/// <summary>
-		/// Returns a double or null if the key is not found or is not a double.
+		/// Returns a <see cref="Nullable&lt;double&gt;"/> or null if the key is not found or is not a double.
 		/// </summary>
-		/// <param name="obj">The object to search</param>
+		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
-		/// <returns>A double or null if the key is not found or is not a string</returns>
+		/// <returns>A <see cref="Nullable&lt;double&gt;"/> or null if the key is not found or is not a <see cref="Nullable&lt;double&gt;"/></returns>
 		public static double? TryGetNumber(this JsonObject obj, string key)
 		{
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Number) ? obj[key].Number : (double?)null;
 		}
 		/// <summary>
-		/// Returns a bool or null if the key is not found or is not a bool.
+		/// Returns a <see cref="Nullable&lt;bool&gt;"/> or null if the key is not found or is not a <see cref="bool"/>.
 		/// </summary>
-		/// <param name="obj">The object to search</param>
+		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
-		/// <returns>A bool or null if the key is not found or is not a string</returns>
+		/// <returns>A <see cref="Nullable&lt;bool&gt;"/> or null if the key is not found or is not a <see cref="Nullable&lt;bool&gt;"/></returns>
 		public static bool? TryGetBoolean(this JsonObject obj, string key)
 		{
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Boolean) ? obj[key].Boolean : (bool?)null;
 		}
 		/// <summary>
-		/// Returns a JsonArray or null if the key is not found or is not a JsonArray.
+		/// Returns a <see cref="JsonArray"/> or null if the key is not found or is not a <see cref="JsonArray"/>.
 		/// </summary>
-		/// <param name="obj">The object to search</param>
+		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
-		/// <returns>A JsonArray or null if the key is not found or is not a string</returns>
+		/// <returns>A <see cref="JsonArray"/> or null if the key is not found or is not a <see cref="JsonArray"/></returns>
 		public static JsonArray TryGetArray(this JsonObject obj, string key)
 		{
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Array) ? obj[key].Array : null;
 		}
 		/// <summary>
-		/// Returns a JsonObject or null if the key is not found or is not a JsonObject.
+		/// Returns a <see cref="JsonObject"/> or null if the key is not found or is not a <see cref="JsonObject"/>.
 		/// </summary>
-		/// <param name="obj">The object to search</param>
+		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
-		/// <returns>A JsonObject or null if the key is not found or is not a string</returns>
+		/// <returns>A <see cref="JsonObject"/> or null if the key is not found or is not a <see cref="JsonObject"/></returns>
 		public static JsonObject TryGetObject(this JsonObject obj, string key)
 		{
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Object) ? obj[key].Object : null;

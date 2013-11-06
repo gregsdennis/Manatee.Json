@@ -38,7 +38,7 @@ namespace Manatee.Json.Serialization
 		public string MapToKey { get; set; }
 
 		/// <summary>
-		/// Creates a new instance fo the JsonMapToAttribute class.
+		/// Creates a new instance fo the <see cref="JsonMapToAttribute"/> class.
 		/// </summary>
 		/// <param name="key">The JSON object key.</param>
 		public JsonMapToAttribute(string key)

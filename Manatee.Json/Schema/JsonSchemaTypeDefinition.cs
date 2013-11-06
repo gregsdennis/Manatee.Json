@@ -89,9 +89,9 @@ namespace Manatee.Json.Schema
 		}
 
 		/// <summary>
-		/// Builds an object from a JsonValue.
+		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="json">The JsonValue representation of the object.</param>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		public void FromJson(JsonValue json)
 		{
 			if (json.Type == JsonValueType.String)
@@ -104,9 +104,9 @@ namespace Manatee.Json.Schema
 			Definition = JsonSchemaFactory.FromJson(details.Value);
 		}
 		/// <summary>
-		/// Converts an object to a JsonValue.
+		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <returns>The JsonValue representation of the object.</returns>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson()
 		{
 			if (Definition == null)

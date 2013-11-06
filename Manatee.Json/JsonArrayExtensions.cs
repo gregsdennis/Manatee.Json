@@ -26,16 +26,16 @@ using System.Linq;
 namespace Manatee.Json
 {
 	/// <summary>
-	/// Provides extension methods for JsonArrays.
+	/// Provides extension methods for <see cref="JsonArray"/>s.
 	/// </summary>
 	public static class JsonArrayExtensions
 	{
 		/// <summary>
-		/// Returns a JsonArray containing only the JsonValues of a specified type from a given JsonArray.
+		/// Returns a <see cref="JsonArray"/> containing only the <see cref="JsonValue"/>s of a specified type from a given <see cref="JsonArray"/>.
 		/// </summary>
 		/// <param name="arr">The array to search</param>
 		/// <param name="type">The type of value to return</param>
-		/// <returns>A JsonArray containing only the JsonValues of a specified type</returns>
+		/// <returns>A <see cref="JsonArray"/> containing only the <see cref="JsonValue"/>s of a specified type</returns>
 		public static JsonArray OfType(this JsonArray arr, JsonValueType type)
 		{
 			if (arr == null) return null;

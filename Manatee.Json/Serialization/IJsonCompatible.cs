@@ -29,14 +29,14 @@ namespace Manatee.Json.Serialization
 	public interface IJsonCompatible
 	{
 		/// <summary>
-		/// Builds an object from a JsonValue.
+		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="json">The JsonValue representation of the object.</param>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		void FromJson(JsonValue json);
 		/// <summary>
-		/// Converts an object to a JsonValue.
+		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <returns>The JsonValue representation of the object.</returns>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		JsonValue ToJson();
 	}
 }

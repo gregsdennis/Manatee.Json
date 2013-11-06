@@ -43,15 +43,18 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public bool IsRequired { get; set; }
 
+		/// <summary>
+		/// Creates a new instance of the <see cref="JsonSchemaPropertyDefinition"/> class.
+		/// </summary>
 		public JsonSchemaPropertyDefinition()
 		{
 			Type = JsonSchema.Empty;
 		}
 
 		/// <summary>
-		/// Builds an object from a JsonValue.
+		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="json">The JsonValue representation of the object.</param>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		public void FromJson(JsonValue json)
 		{
 			var details = json.Object.First();
@@ -59,9 +62,9 @@ namespace Manatee.Json.Schema
 			Type = JsonSchemaFactory.FromJson(details.Value);
 		}
 		/// <summary>
-		/// Converts an object to a JsonValue.
+		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <returns>The JsonValue representation of the object.</returns>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson()
 		{
 			return new JsonObject {{Name, Type.ToJson()}};

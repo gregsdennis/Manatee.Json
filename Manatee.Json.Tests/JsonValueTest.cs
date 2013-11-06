@@ -168,7 +168,7 @@ namespace Manatee.Json.Tests
 		{
 			JsonValue json1 = new JsonValue("These\" are/ some\\ of\b the\f escapable\n characters."),
 					  json2 = new JsonValue("Here\r are\t some" + (char)0x25A0 + " more" + (char)0x009F + ".");
-			var expected1 = "\"These\\\" are\\/ some\\\\ of\\b the\\f escapable\\n characters.\"";
+			var expected1 = "\"These\\\" are/ some\\\\ of\\b the\\f escapable\\n characters.\"";
 			var expected2 = "\"Here\\r are\\t some" + (char)0x25A0 + " more\\u009F.\"";
 			var actual1 = json1.ToString();
 			var actual2 = json2.ToString();
@@ -287,7 +287,7 @@ namespace Manatee.Json.Tests
 		[TestMethod]
 		public void Parse_StringValueWithEscapedReverseSolidus_ReturnsCorrectJsonValue()
 		{
-			var json = "\"An \\/escaped\\/ reverse solidus\"";
+			var json = "\"An \\/escaped/ reverse solidus\"";
 			JsonValue expected = "An /escaped/ reverse solidus";
 			var actual = JsonValue.Parse(json);
 
@@ -343,6 +343,15 @@ namespace Manatee.Json.Tests
 		{
 			var json = "\"An \\u25A0escaped\\u25A0 hex value\"";
 			JsonValue expected = "An " + (char)0x25A0 + "escaped" + (char)0x25A0 + " hex value";
+			var actual = JsonValue.Parse(json);
+
+			Assert.AreEqual(expected.String, actual.String);
+		}
+		[TestMethod]
+		public void Parse_StringValueWithSurrogateUnicodePair_ReturnsCorrectJsonValue()
+		{
+			var json = "\"\\uD85A\\uDC21\"";
+			JsonValue expected = char.ConvertFromUtf32(0x16821);
 			var actual = JsonValue.Parse(json);
 
 			Assert.AreEqual(expected.String, actual.String);
