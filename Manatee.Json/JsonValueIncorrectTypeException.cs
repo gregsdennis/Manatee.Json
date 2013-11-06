@@ -32,7 +32,7 @@ namespace Manatee.Json
 	public class JsonValueIncorrectTypeException : InvalidOperationException
 	{
 		/// <summary>
-		/// The correct type for the JsonValue that threw the exception.
+		/// The correct type for the <see cref="JsonValue"/> that threw the exception.
 		/// </summary>
 		public JsonValueType ValidType { get; private set; }
 		/// <summary>

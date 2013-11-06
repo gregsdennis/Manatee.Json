@@ -57,13 +57,13 @@ namespace Manatee.Json
 		public static readonly JsonValue Null = new JsonValue();
 
 		/// <summary>
-		/// Accesses the JsonValue as a boolean.
+		/// Accesses the <see cref="JsonValue"/> as a boolean.
 		/// </summary>
 		/// <exception cref="JsonValueIncorrectTypeException">
-		/// Thrown when this JsonValue does not contain a boolean.
+		/// Thrown when this <see cref="JsonValue"/> does not contain a boolean.
 		/// </exception>
 		/// <remarks>
-		/// Setting the value as a boolean will automatically change the JsonValue's type and
+		/// Setting the value as a boolean will automatically change the <see cref="JsonValue"/>'s type and
 		/// discard the old data.
 		/// </remarks>
 		public bool Boolean
@@ -81,13 +81,13 @@ namespace Manatee.Json
 			}
 		}
 		/// <summary>
-		/// Accesses the JsonValue as a string.
+		/// Accesses the <see cref="JsonValue"/> as a string.
 		/// </summary>
 		/// <exception cref="JsonValueIncorrectTypeException">
-		/// Thrown when this JsonValue does not contain a string.
+		/// Thrown when this <see cref="JsonValue"/> does not contain a string.
 		/// </exception>
 		/// <remarks>
-		/// Setting the value as a string will automatically change the JsonValue's type and
+		/// Setting the value as a string will automatically change the <see cref="JsonValue"/>'s type and
 		/// discard the old data.
 		/// </remarks>
 		public string String
@@ -105,13 +105,13 @@ namespace Manatee.Json
 			}
 		}
 		/// <summary>
-		/// Accesses the JsonValue as a numeric value.
+		/// Accesses the <see cref="JsonValue"/> as a numeric value.
 		/// </summary>
 		/// <exception cref="JsonValueIncorrectTypeException">
-		/// Thrown when this JsonValue does not contain a numeric value.
+		/// Thrown when this <see cref="JsonValue"/> does not contain a numeric value.
 		/// </exception>
 		/// <remarks>
-		/// Setting the value as a numeric value will automatically change the JsonValue's type and
+		/// Setting the value as a numeric value will automatically change the <see cref="JsonValue"/>'s type and
 		/// discard the old data.
 		/// </remarks>
 		public double Number
@@ -129,13 +129,13 @@ namespace Manatee.Json
 			}
 		}
 		/// <summary>
-		/// Accesses the JsonValue as a JSON object.
+		/// Accesses the <see cref="JsonValue"/> as a JSON object.
 		/// </summary>
 		/// <exception cref="JsonValueIncorrectTypeException">
-		/// Thrown when this JsonValue does not contain a Json object.
+		/// Thrown when this <see cref="JsonValue"/> does not contain a Json object.
 		/// </exception>
 		/// <remarks>
-		/// Setting the value as a Json object will automatically change the JsonValue's type and
+		/// Setting the value as a JSON object will automatically change the <see cref="JsonValue"/>'s type and
 		/// discard the old data.
 		/// </remarks>
 		public JsonObject Object
@@ -153,13 +153,13 @@ namespace Manatee.Json
 			}
 		}
 		/// <summary>
-		/// Accesses the JsonValue as a JSON array.
+		/// Accesses the <see cref="JsonValue"/> as a JSON array.
 		/// </summary>
 		/// <exception cref="JsonValueIncorrectTypeException">
-		/// Thrown when this JsonValue does not contain a Json array.
+		/// Thrown when this <see cref="JsonValue"/> does not contain a Json array.
 		/// </exception>
 		/// <remarks>
-		/// Setting the value as a Json array will automatically change the JsonValue's type and
+		/// Setting the value as a JSON array will automatically change the <see cref="JsonValue"/>'s type and
 		/// discard the old data.
 		/// </remarks>
 		public JsonArray Array
@@ -182,14 +182,14 @@ namespace Manatee.Json
 		public JsonValueType Type { get; private set; }
 
 		/// <summary>
-		/// Creates a null JsonValue.
+		/// Creates a null <see cref="JsonValue"/>.
 		/// </summary>
 		public JsonValue()
 		{
 			Type = JsonValueType.Null;
 		}
 		/// <summary>
-		/// Creates a JsonValue from a boolean.
+		/// Creates a <see cref="JsonValue"/> from a boolean.
 		/// </summary>
 		public JsonValue(bool? b)
 		{
@@ -197,7 +197,7 @@ namespace Manatee.Json
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
-		/// Creates a JsonValue from a string.
+		/// Creates a <see cref="JsonValue"/> from a string.
 		/// </summary>
 		public JsonValue(string s)
 		{
@@ -205,7 +205,7 @@ namespace Manatee.Json
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
-		/// Creates a JsonValue from a numeric value.
+		/// Creates a <see cref="JsonValue"/> from a numeric value.
 		/// </summary>
 		public JsonValue(double? n)
 		{
@@ -213,7 +213,7 @@ namespace Manatee.Json
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
-		/// Creates a JsonValue from a JSON object.
+		/// Creates a <see cref="JsonValue"/> from a JSON object.
 		/// </summary>
 		public JsonValue(JsonObject o)
 		{
@@ -221,7 +221,7 @@ namespace Manatee.Json
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
-		/// Creates a JsonValue from a JSON array.
+		/// Creates a <see cref="JsonValue"/> from a JSON array.
 		/// </summary>
 		public JsonValue(JsonArray a)
 		{
@@ -248,12 +248,12 @@ namespace Manatee.Json
 		}
 
 		/// <summary>
-		/// Creates a string that represents this JsonValue.
+		/// Creates a string that represents this <see cref="JsonValue"/>.
 		/// </summary>
-		/// <returns>A string representation of this JsonValue.</returns>
+		/// <returns>A string representation of this <see cref="JsonValue"/>.</returns>
 		/// <remarks>
 		/// Passing the returned string back into the parser will result in a copy of
-		/// this JsonValue.
+		/// this <see cref="JsonValue"/>.
 		/// </remarks>
 		public override string ToString()
 		{
@@ -315,10 +315,10 @@ namespace Manatee.Json
 		}
 
 		/// <summary>
-		/// Parses a string containing a JSON value.
+		/// Parses a <see cref="string"/> containing a JSON value.
 		/// </summary>
-		/// <param name="source">the string to parse.</param>
-		/// <returns>The JSON value represented by the string.</returns>
+		/// <param name="source">the <see cref="string"/> to parse.</param>
+		/// <returns>The JSON value represented by the <see cref="string"/>.</returns>
 		public static JsonValue Parse(string source)
 		{
 			var i = 1;
@@ -326,12 +326,12 @@ namespace Manatee.Json
 		}
 
 		/// <summary>
-		/// Implicitly converts a boolean into a JsonValue.
+		/// Implicitly converts a <see cref="bool"/> into a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="b">A boolean.</param>
-		/// <returns>A JsonValue that represents the boolean.</returns>
+		/// <param name="b">A <see cref="bool"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="bool"/>.</returns>
 		/// <remarks>
-		/// This is useful when creating an initialized JsonObject or JsonArray.
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
 		/// <example><code>
 		/// JsonObject obj = new JsonObject{
@@ -348,12 +348,12 @@ namespace Manatee.Json
 			return new JsonValue(b);
 		}
 		/// <summary>
-		/// Implicitly converts a string into a JsonValue.
+		/// Implicitly converts a <see cref="string"/> into a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="s">A string.</param>
-		/// <returns>A JsonValue that represents the string.</returns>
+		/// <param name="s">A <see cref="string"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="string"/>.</returns>
 		/// <remarks>
-		/// This is useful when creating an initialized JsonObject or JsonArray.
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
 		/// <example><code>
 		/// JsonObject obj = new JsonObject{
@@ -370,12 +370,12 @@ namespace Manatee.Json
 			return new JsonValue(s);
 		}
 		/// <summary>
-		/// Implicitly converts a double into a JsonValue.
+		/// Implicitly converts a <see cref="double"/> into a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="n">A double.</param>
-		/// <returns>A JsonValue that represents the double.</returns>
+		/// <param name="n">A <see cref="double"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="double"/>.</returns>
 		/// <remarks>
-		/// This is useful when creating an initialized JsonObject or JsonArray.
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
 		/// <example><code>
 		/// JsonObject obj = new JsonObject{
@@ -392,12 +392,12 @@ namespace Manatee.Json
 			return new JsonValue(n);
 		}
 		/// <summary>
-		/// Implicitly converts a JSON object into a JsonValue.
+		/// Implicitly converts a <see cref="JsonObject"/> into a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="o">A Json object.</param>
-		/// <returns>A JsonValue that represents the Json object.</returns>
+		/// <param name="o">A JSON object.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="JsonObject"/>.</returns>
 		/// <remarks>
-		/// This is useful when creating an initialized JsonObject or JsonArray.
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
 		/// <example><code>
 		/// JsonObject obj = new JsonObject{
@@ -414,12 +414,12 @@ namespace Manatee.Json
 			return new JsonValue(o);
 		}
 		/// <summary>
-		/// Implicitly converts a JSON array into a JsonValue.
+		/// Implicitly converts a <see cref="JsonArray"/> into a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="a">A Json array.</param>
-		/// <returns>A JsonValue that represents the Json array.</returns>
+		/// <param name="a">A JSON array.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="JsonArray"/>.</returns>
 		/// <remarks>
-		/// This is useful when creating an initialized JsonObject or JsonArray.
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
 		/// <example><code>
 		/// JsonObject obj = new JsonObject{
@@ -485,7 +485,7 @@ namespace Manatee.Json
 					if (length == 0)
 					{
 						index += 2;
-						return new JsonValue("");
+						return new JsonValue(string.Empty);
 					}
 					index += length;
 					return new JsonValue(EvaluateEscapeSequences(temp.Substring(0, length-1)));
@@ -513,7 +513,7 @@ namespace Manatee.Json
 						default:
 							double d;
 							if (!double.TryParse(temp, out d))
-								throw new JsonValueParseException(JsonValueType.Number, index);
+								throw new JsonValueParseException(index, temp);
 							index += temp.Length - 1;
 							return new JsonValue(d);
 					}
@@ -523,8 +523,10 @@ namespace Manatee.Json
 		private static string EvaluateEscapeSequences(string s)
 		{
 			var i = 0;
+			int length;
 			while (i < s.Length)
 			{
+				length = 1;
 				if (s[i] == '\\')
 					switch (s[i + 1])
 					{
@@ -534,26 +536,38 @@ namespace Manatee.Json
 							s = s.Remove(i, 1);
 							break;
 						case 'b':
-							s = s.Substring(0, i) + '\b' + s.Substring(i + 2);
+							length = 2;
+							s = s.Substring(0, i) + '\b' + s.Substring(i + length);
 							break;
 						case 'f':
-							s = s.Substring(0, i) + '\f' + s.Substring(i + 2);
+							length = 2;
+							s = s.Substring(0, i) + '\f' + s.Substring(i + length);
 							break;
 						case 'n':
-							s = s.Substring(0, i) + '\n' + s.Substring(i + 2);
+							length = 2;
+							s = s.Substring(0, i) + '\n' + s.Substring(i + length);
 							break;
 						case 'r':
-							s = s.Substring(0, i) + '\r' + s.Substring(i + 2);
+							length = 2;
+							s = s.Substring(0, i) + '\r' + s.Substring(i + length);
 							break;
 						case 't':
-							s = s.Substring(0, i) + '\t' + s.Substring(i + 2);
+							length = 2;
+							s = s.Substring(0, i) + '\t' + s.Substring(i + length);
 							break;
 						case 'u':
+							length = 6;
 							var hex = int.Parse(s.Substring(i + 2, 4), NumberStyles.HexNumber);
-							s = s.Substring(0, i) + (char)hex + s.Substring(i + 6);
+							if (s.Substring(i + 6, 2) == "\\u")
+							{
+								var hex2 = int.Parse(s.Substring(i + 8, 4), NumberStyles.HexNumber);
+								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
+								length += 6;
+							}
+							s = s.Substring(0, i) + char.ConvertFromUtf32(hex) + s.Substring(i + length);
 							break;
 					}
-				i++;
+				i += length;
 			}
 			return s;
 		}
@@ -566,7 +580,6 @@ namespace Manatee.Json
 				switch (s[i])
 				{
 					case '"':
-					case '/':
 					case '\\':
 						s = s.Insert(i, "\\");
 						i++;

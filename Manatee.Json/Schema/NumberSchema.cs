@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
 		/// <param name="json">A <see cref="JsonValue"/></param>
-		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
@@ -87,9 +87,9 @@ namespace Manatee.Json.Schema
 			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
-		/// Builds an object from a JsonValue.
+		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="json">The JsonValue representation of the object.</param>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		public override void FromJson(JsonValue json)
 		{
 			base.FromJson(json);
@@ -100,9 +100,9 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("exclusiveMaximum")) ExclusiveMaximum = obj["minimum"].Boolean;
 		}
 		/// <summary>
-		/// Converts an object to a JsonValue.
+		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <returns>The JsonValue representation of the object.</returns>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public override JsonValue ToJson()
 		{
 			var json = base.ToJson().Object;

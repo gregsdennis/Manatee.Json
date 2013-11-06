@@ -44,11 +44,11 @@ namespace Manatee.Json.Tests
 			Assert.IsTrue(json1.Equals(json2));
 		}
 		[TestMethod]
-		public void Equals_SameValuesDifferentOrder_ReturnsTrue()
+		public void Equals_SameValuesDifferentOrder_ReturnsFalse()
 		{
 			var json1 = new JsonArray { false, 42, "a string" };
 			var json2 = new JsonArray { 42, false, "a string" };
-			Assert.IsTrue(json1.Equals(json2));
+			Assert.IsFalse(json1.Equals(json2));
 		}
 		[TestMethod]
 		public void Equals_DifferentValues_ReturnsFalse()

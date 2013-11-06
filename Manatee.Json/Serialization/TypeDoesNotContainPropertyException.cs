@@ -43,7 +43,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public JsonValue Json { get; private set; }
 		/// <summary>
-		/// Initializes a new instance of the TypeDoesNotContainPropertyException class.
+		/// Initializes a new instance of the <see cref="TypeDoesNotContainPropertyException"/> class.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="json">The invalid JSON structure.</param>

@@ -775,7 +775,7 @@ namespace Manatee.Json.Tests.Serialization
 			stack.Push(3);
 			stack.Push(5);
 			stack.Push(6);
-			JsonValue expected = new JsonArray { 4, 3, 5, 6 };
+			JsonValue expected = new JsonArray {6, 5, 3, 4};
 			var actual = serializer.Serialize(stack);
 			Assert.AreEqual(expected, actual);
 		}

@@ -42,11 +42,11 @@ namespace Manatee.Json
 		private const string XmlNamespaceAttribute = "xmlns";
 
 		/// <summary>
-		/// Converts a JsonValue to an XElement
+		/// Converts a <see cref="JsonValue"/> to an XElement
 		/// </summary>
-		/// <param name="json">A JsonValue.</param>
+		/// <param name="json">A <see cref="JsonValue"/>.</param>
 		/// <param name="key">The key to be used as a top-level element name.</param>
-		/// <returns>An XElement representation of the JsomValue.</returns>
+		/// <returns>An <see cref="XElement"/> representation of the <see cref="JsonValue"/>.</returns>
 		/// <remarks>
 		/// The 'key' parameter may be null only when the underlying JSON is an
 		/// object which contains a single key/value pair.
@@ -144,19 +144,19 @@ namespace Manatee.Json
 			}
 		}
 		/// <summary>
-		/// Converts an XElement to a JsonObject.
+		/// Converts an <see cref="XElement"/> to a <see cref="JsonObject"/>.
 		/// </summary>
-		/// <param name="xElement">An XElement.</param>
-		/// <returns>The JsonValue representation of the XElement.</returns>
+		/// <param name="xElement">An <see cref="XElement"/>.</param>
+		/// <returns>The <see cref="JsonValue"/> representation of the <see cref="XElement"/>.</returns>
 		public static JsonValue ToJson(this XElement xElement)
 		{
 			return new JsonObject {{GetNamespaceForElement(xElement) + xElement.Name.LocalName, GetValue(xElement)}};
 		}
 		/// <summary>
-		/// Converts an XElement to a JsonObject.
+		/// Converts an <see cref="XElement"/> to a <see cref="JsonObject"/>.
 		/// </summary>
-		/// <param name="xElements">A collection of XElement objects.</param>
-		/// <returns>A single JsonValue which represents the list of XElement objects.</returns>
+		/// <param name="xElements">A collection of <see cref="XElement"/> objects.</param>
+		/// <returns>A single <see cref="JsonValue"/> which represents the list of <see cref="XElement"/> objects.</returns>
 		public static JsonValue ToJson(this IEnumerable<XElement> xElements)
 		{
 			var json = new JsonObject();
@@ -279,10 +279,10 @@ namespace Manatee.Json
 		}
 
 		/// <summary>
-		/// Converts an XmlNode to an XElement.
+		/// Converts an <see cref="XmlNode"/> to an <see cref="XElement"/>.
 		/// </summary>
-		/// <param name="node">An XmlNode.</param>
-		/// <returns>The XElement construct of the XmlNode.</returns>
+		/// <param name="node">An <see cref="XmlNode"/>.</param>
+		/// <returns>The <see cref="XElement"/> construct of the <see cref="XmlNode"/>.</returns>
 		/// <remarks>Provided for convenience.</remarks>
 		public static XElement ToXElement(this XmlNode node)
 		{
@@ -292,10 +292,10 @@ namespace Manatee.Json
 			return xDoc.Root;
 		}
 		/// <summary>
-		/// Converts an XElement to an XmlNode.
+		/// Converts an <see cref="XElement"/> to an <see cref="XmlNode"/>.
 		/// </summary>
-		/// <param name="element">An XElement.</param>
-		/// <returns>The XmlNode construct of the XElement.</returns>
+		/// <param name="element">An <see cref="XElement"/>.</param>
+		/// <returns>The <see cref="XmlNode"/> construct of the <see cref="XElement"/>.</returns>
 		/// <remarks>Provided for convenience.</remarks>
 		public static XmlNode ToXmlNode(this XElement element)
 		{

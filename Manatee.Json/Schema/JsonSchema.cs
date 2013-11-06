@@ -27,7 +27,7 @@ using System.Collections.Generic;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Provides base functionality for the basic ISchema implementations.
+	/// Provides base functionality for the basic <see cref="ISchema"/> implementations.
 	/// </summary>
 	public class JsonSchema : IJsonSchema
 	{
@@ -195,16 +195,16 @@ namespace Manatee.Json.Schema
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
 		/// <param name="json">A <see cref="JsonValue"/></param>
-		/// <param name="root">The root schema serialized to a JsonValue.  Used internally for resolving references.</param>
+		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public virtual SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			return new SchemaValidationResults();
 		}
 		/// <summary>
-		/// Builds an object from a JsonValue.
+		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="json">The JsonValue representation of the object.</param>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		public virtual void FromJson(JsonValue json)
 		{
 			var obj = json.Object;
@@ -238,9 +238,9 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("default")) Default = obj["default"];
 		}
 		/// <summary>
-		/// Converts an object to a JsonValue.
+		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <returns>The JsonValue representation of the object.</returns>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public virtual JsonValue ToJson()
 		{
 			var json = new JsonObject();

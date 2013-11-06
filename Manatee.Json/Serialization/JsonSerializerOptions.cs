@@ -21,10 +21,12 @@
 
 ***************************************************************************************/
 
+using System;
+
 namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Represents a set of behavior options for the JsonSerializer object.
+	/// Represents a set of behavior options for the <see cref="JsonSerializer"/> object.
 	/// </summary>
 	public class JsonSerializerOptions
 	{
@@ -45,10 +47,10 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public InvalidPropertyKeyBehavior InvalidPropertyKeyBehavior { get; set; }
 		/// <summary>
-		/// Gets and sets the format for DateTime serialization using the default serializer methods.
+		/// Gets and sets the format for <see cref="DateTime"/> serialization using the default serializer methods.
 		/// </summary>
 		/// <remarks>
-		/// If the JsonSerializationTypeRegistry entry for DateTime has been changed to custom
+		/// If the <see cref="JsonSerializationTypeRegistry"/> entry for DateTime has been changed to custom
 		/// methods, this property will have no effect.
 		/// </remarks>
 		public DateTimeSerializationFormat DateTimeSerializationFormat { get; set; }
@@ -56,7 +58,7 @@ namespace Manatee.Json.Serialization
 		/// Gets and sets the format for enumeration serialization using the default serializer methods.
 		/// </summary>
 		/// <remarks>
-		/// If an entry has been made in JsonSerializationTypeRegistry for the specific type,
+		/// If an entry has been made in <see cref="JsonSerializationTypeRegistry"/> for the specific type,
 		/// this property will have no effect.
 		/// </remarks>
 		public EnumSerializationFormat EnumSerializationFormat { get; set; }
@@ -85,14 +87,14 @@ namespace Manatee.Json.Serialization
 				};
 		}
 		/// <summary>
-		/// Creates a new instance of JsonSerializerOptions with default options.
+		/// Creates a new instance of <see cref="JsonSerializerOptions"/> with default options.
 		/// </summary>
 		public JsonSerializerOptions() {}
 		/// <summary>
-		/// Creates a new instance of JsonSerializerOptions by copying an existing
-		/// JsonSerializerOptions instance.
+		/// Creates a new instance of <see cref="JsonSerializerOptions"/> by copying an existing
+		/// <see cref="JsonSerializerOptions"/> instance.
 		/// </summary>
-		/// <param name="options">The JsonSerializerOptions instance to copy.</param>
+		/// <param name="options">The <see cref="JsonSerializerOptions"/> instance to copy.</param>
 		public JsonSerializerOptions(JsonSerializerOptions options)
 		{
 			EncodeDefaultValues = options.EncodeDefaultValues;
