@@ -571,7 +571,6 @@ namespace Manatee.Json
 			}
 			return s;
 		}
-
 		private static string InsertEscapeSequences(string s)
 		{
 			var i = 0;
@@ -617,18 +616,24 @@ namespace Manatee.Json
 			}
 			return s;
 		}
-
 		private static bool IsWhiteSpace(char c)
 		{
 			return (c == 10) || (c == 13) || (c == 32) || (c == 9);
 		}
 		private static string StripExternalSpaces(string s)
 		{
-			var inString = false;
+			bool inString = false, delimited = false;
 			var ret = "";
 			foreach (var t in s)
 			{
-				if (t == '"') inString = !inString;
+				if (t == '\\') delimited = true;
+				if (t == '"' )
+				{
+					if (delimited)
+						delimited = false;
+					else
+						inString = !inString;
+				}
 				if (inString || !IsWhiteSpace(t))
 					ret += t;
 			}

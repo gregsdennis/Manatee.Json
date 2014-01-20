@@ -131,10 +131,10 @@ namespace Manatee.Json
 			{
 				key = Keys.ElementAt(i);
 				if (this[key] == null) this[key] = new JsonValue();
-				s += string.Format("{0}\"{1}\" :\n{2}{3},\n", tab1, key, tab2, this[key].GetIndentedString(indentLevel + 2));
+				s += string.Format("{0}\"{1}\" : {3},\n", tab1, key, tab2, this[key].GetIndentedString(indentLevel + 2));
 			}
 			key = Keys.ElementAt(i);
-			s += string.Format("{0}\"{1}\" :\n{2}{3}\n{4}}}", tab1, key, tab2, this[key].GetIndentedString(indentLevel + 2), tab0);
+			s += string.Format("{0}\"{1}\" : {3}\n{4}}}", tab1, key, tab2, this[key].GetIndentedString(indentLevel + 2), tab0);
 			return s;
 		}
 		/// <summary>
