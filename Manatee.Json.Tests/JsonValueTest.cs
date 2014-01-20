@@ -269,8 +269,8 @@ namespace Manatee.Json.Tests
 		[TestMethod]
 		public void Parse_StringValueWithEscapedQuote_ReturnsCorrectJsonValue()
 		{
-			var json = "\"An \\\"escaped\\\" quote\"";
-			JsonValue expected = "An \"escaped\" quote";
+			var json = "\"An \\\"escaped quote with\\\" spaces\"";
+			JsonValue expected = "An \"escaped quote with\" spaces";
 			var actual = JsonValue.Parse(json);
 
 			Assert.AreEqual(expected.String, actual.String);

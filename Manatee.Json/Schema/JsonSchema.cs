@@ -84,8 +84,8 @@ namespace Manatee.Json.Schema
 					},
 				Properties = new JsonSchemaPropertyDefinitionCollection
 					{
-						new JsonSchemaPropertyDefinition {Name = "id", Type = new StringSchema {Format = "uri"}},
-						new JsonSchemaPropertyDefinition {Name = "$schema", Type = new StringSchema {Format = "uri"}},
+						new JsonSchemaPropertyDefinition {Name = "id", Type = new StringSchema {Format = StringFormat.Uri}},
+						new JsonSchemaPropertyDefinition {Name = "$schema", Type = new StringSchema {Format = StringFormat.Uri}},
 						new JsonSchemaPropertyDefinition {Name = "title", Type = new StringSchema()},
 						new JsonSchemaPropertyDefinition {Name = "description", Type = new StringSchema()},
 						new JsonSchemaPropertyDefinition {Name = "default", Type = Empty},
@@ -96,7 +96,7 @@ namespace Manatee.Json.Schema
 						new JsonSchemaPropertyDefinition {Name = "exclusiveMinimum", Type = new BooleanSchema {Default = false}},
 						new JsonSchemaPropertyDefinition {Name = "maxLength", Type = new JsonSchemaReference("#/definitions/positiveInteger")},
 						new JsonSchemaPropertyDefinition {Name = "minLength", Type = new JsonSchemaReference("#/definitions/positiveIntegerDefault0")},
-						new JsonSchemaPropertyDefinition {Name = "pattern", Type = new StringSchema {Format = "regex"}},
+						new JsonSchemaPropertyDefinition {Name = "pattern", Type = new StringSchema {Format = StringFormat.Regex}},
 						new JsonSchemaPropertyDefinition {Name = "additionalItems", Type = new AnyOfSchema
 							{
 								Options = new List<IJsonSchema> {new BooleanSchema(), JsonSchemaReference.Root},

@@ -22,6 +22,7 @@
 ***************************************************************************************/
 
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Schema
 {
@@ -33,8 +34,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a required format for the string.
 		/// </summary>
-		// todo: this may need to be an enum with the valid types... or a string validator object...
-		public string Format { get; set; }
+		public StringFormat Format { get; set; }
 		/// <summary>
 		/// Defines a minimum acceptable length.
 		/// </summary>
@@ -43,6 +43,10 @@ namespace Manatee.Json.Schema
 		/// Defines a maximum acceptable length.
 		/// </summary>
 		public uint? MaxLength { get; set; }
+		/// <summary>
+		/// Defines a <see cref="Regex"/> pattern for to which the value must adhere.
+		/// </summary>
+		public string Pattern { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="StringSchema"/> class
@@ -66,7 +70,10 @@ namespace Manatee.Json.Schema
 				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: length >= {0}; Actual: {1}.", MinLength, length)));
 			if (MaxLength.HasValue && (length > MaxLength))
 				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: length <= {0}; Actual: {1}.", MaxLength, length)));
-			// todo: validate Format
+			if (Format != null && !Format.Validate(str))
+				errors.Add(new SchemaValidationError(string.Empty, string.Format("Value [{0}] is not in an acceptable [{1}] format.", str, Format.Key)));
+			if (Pattern != null && !Regex.IsMatch(str, Pattern))
+				errors.Add(new SchemaValidationError(string.Empty, string.Format("Value [{0}] does not match required Regex pattern [{1}].", str, Pattern)));
 			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
@@ -77,9 +84,11 @@ namespace Manatee.Json.Schema
 		{
 			base.FromJson(json);
 			var obj = json.Object;
-			Format = obj.TryGetString("format");
+			var formatKey = obj.TryGetString("format");
+			Format = StringFormat.GetFormat(formatKey);
 			MinLength = (uint?) obj.TryGetNumber("minLength");
 			MaxLength = (uint?) obj.TryGetNumber("maxLength");
+			Pattern = obj.TryGetString("pattern");
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -88,9 +97,10 @@ namespace Manatee.Json.Schema
 		public override JsonValue ToJson()
 		{
 			var json = base.ToJson().Object;
-			if (!string.IsNullOrWhiteSpace(Format)) json["format"] = Format;
+			if (Format != null) json["format"] = Format.Key;
 			if (MinLength.HasValue) json["minLength"] = MinLength;
 			if (MaxLength.HasValue) json["maxLength"] = MaxLength;
+			if (Pattern != null) json["pattern"] = Pattern;
 			return json;
 		}
 	}
