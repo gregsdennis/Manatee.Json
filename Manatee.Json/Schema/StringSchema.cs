@@ -71,7 +71,7 @@ namespace Manatee.Json.Schema
 			if (MaxLength.HasValue && (length > MaxLength))
 				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: length <= {0}; Actual: {1}.", MaxLength, length)));
 			if (Format != null && !Format.Validate(str))
-				errors.Add(new SchemaValidationError(string.Empty, string.Format("Value [{0}] is not in an acceptable [{1}] format.", str, Format.Key)));
+				errors.Add(new SchemaValidationError(string.Empty, string.Format("Value [{0}] is not in an acceptable {1} format.", str, Format.Key)));
 			if (Pattern != null && !Regex.IsMatch(str, Pattern))
 				errors.Add(new SchemaValidationError(string.Empty, string.Format("Value [{0}] does not match required Regex pattern [{1}].", str, Pattern)));
 			return new SchemaValidationResults(errors);

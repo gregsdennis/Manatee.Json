@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -51,6 +52,15 @@ namespace Manatee.Json.Tests
 								{
 									Name = "longitude",
 									Type = new NumberSchema(),
+									IsRequired = false
+								},
+							new JsonSchemaPropertyDefinition()
+								{
+									Name = "stringData",
+									Type = new StringSchema
+										{
+											Format = StringFormat.HostName
+										},
 									IsRequired = true
 								}
 						}
@@ -58,7 +68,8 @@ namespace Manatee.Json.Tests
 			var geoJson = new JsonObject
 				{
 					{"latitude", 95.4},
-					{"longitude", 36.8}
+					{"longitude", 36.8},
+					{"stringData", ""}
 				};
 			var result = geoSchema.Validate(geoJson);
 			Console.WriteLine("geoJson valid? {0}", result.Valid);
@@ -66,6 +77,8 @@ namespace Manatee.Json.Tests
 			{
 				Console.WriteLine("    {0}", error);
 			}
+			if (result.Errors.Any())
+				throw new Exception();
 		}
 		[TestMethod]
 		//[Ignore]
@@ -76,15 +89,6 @@ namespace Manatee.Json.Tests
 			// Try Dictionary<string, int> or JsonObject (Dictionary<string, JsonValue>).
 			var schema = JsonSchemaFactory.FromType(typeof (Dictionary<string, int>));
 			Console.WriteLine(schema.ToJson());
-		}
-		[TestMethod]
-		public void Test3()
-		{
-			var text = "[\r\n\t{\r\n\t\t\"name\" : \"Default\",\r\n\t\t\"shelfLimit\" : \"All\",\r\n\t\t\"isShelfGutted\" : true,\r\n\t\t\"categories\" : [100,101,200],\r\n\t\t\"returns\" :\r\n\t\t\t{\r\n\t\t\t\t\"shelf\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"backstock\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"gut\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t}\r\n\t\t\t},\r\n\t\t\"trades\" :\r\n\t\t\t{\r\n\t\t\t\t\"shelf\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"backstock\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"gut\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t}\r\n\t\t\t},\r\n\t\t\"distros\" :\r\n\t\t\t{\r\n\t\t\t\t\"shelf\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"backstock\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"gut\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t}\r\n\t\t\t},\r\n\t\t\"priceChanges\" :\r\n\t\t\t{\r\n\t\t\t\t\"shelf\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"backstock\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"gut\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t}\r\n\t\t\t},\r\n\t\t\"titleOnHand\" :\r\n\t\t\t{\r\n\t\t\t\t\"shelf\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"backstock\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t},\r\n\t\t\t\t\"gut\" :\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"id\" : {\"qty\" : 0, \"perUnit\" : false},\r\n\t\t\t\t\t\t\"price\" : {\"qty\" : 0, \"perUnit\" : false}\r\n\t\t\t\t\t}\r\n\t\t\t}\r\n\t}\r\n]";
-			var json = JsonValue.Parse(text);
-			Console.WriteLine(json);
-			//Console.WriteLine(json.GetIndentedString());
-			//Console.WriteLine(json.ToXElement("schemes").ToString());
 		}
 	}
 }
