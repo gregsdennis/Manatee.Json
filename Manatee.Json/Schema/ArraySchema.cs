@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -77,7 +78,7 @@ namespace Manatee.Json.Schema
 			}
 			if (Items != null)
 			{
-				var jValue = root ?? ToJson();
+				var jValue = root ?? ToJson(null);
 				var itemValidations = array.Select(v => Items.Validate(v, jValue)).Where(r => !r.Valid).ToList();
 				if (itemValidations.Any())
 					errors.Add(new SchemaValidationError(string.Empty, string.Format("{0} items failed type validation.", itemValidations.Count)));
@@ -88,9 +89,9 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		public override void FromJson(JsonValue json)
+		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			base.FromJson(json);
+			base.FromJson(json, serializer);
 			var obj = json.Object;
 			MinItems = (uint?)obj.TryGetNumber("minItems");
 			MaxItems = (uint?)obj.TryGetNumber("maxItems");
@@ -101,10 +102,10 @@ namespace Manatee.Json.Schema
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson()
+		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			var json = base.ToJson().Object;
-			if (Items != null) json["items"] = Items.ToJson();
+			var json = base.ToJson(serializer).Object;
+			if (Items != null) json["items"] = Items.ToJson(serializer);
 			if (MinItems.HasValue) json["minItems"] = MinItems;
 			if (MaxItems.HasValue) json["maxItems"] = MinItems;
 			if (UniqueItems) json["uniqueItems"] = UniqueItems;

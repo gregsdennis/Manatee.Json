@@ -30,7 +30,7 @@ namespace Manatee.Json.Serialization.Internal
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var schema = (IJsonSchema) obj;
-			return schema.ToJson();
+			return schema.ToJson(serializer);
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{

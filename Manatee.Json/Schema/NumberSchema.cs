@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using Manatee.Json.Internal;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -90,9 +91,9 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		public override void FromJson(JsonValue json)
+		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			base.FromJson(json);
+			base.FromJson(json, serializer);
 			var obj = json.Object;
 			Minimum = obj.TryGetNumber("minimum");
 			Maximum = obj.TryGetNumber("maximum");
@@ -103,9 +104,9 @@ namespace Manatee.Json.Schema
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson()
+		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			var json = base.ToJson().Object;
+			var json = base.ToJson(serializer).Object;
 			if (Minimum.HasValue) json["minimum"] = Minimum;
 			if (Maximum.HasValue) json["maximum"] = Maximum;
 			if (ExclusiveMinimum) json["exclusiveMinimum"] = ExclusiveMinimum;

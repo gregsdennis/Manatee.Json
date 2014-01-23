@@ -28,7 +28,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a single property within a schema.
 	/// </summary>
-	public class JsonSchemaPropertyDefinition : IJsonCompatible
+	public class JsonSchemaPropertyDefinition : IJsonSerializable
 	{
 		/// <summary>
 		/// Defines the name of the property.
@@ -55,7 +55,9 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		public void FromJson(JsonValue json)
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			var details = json.Object.First();
 			Name = details.Key;
@@ -64,10 +66,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public JsonValue ToJson()
+		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonObject {{Name, Type.ToJson()}};
+			return new JsonObject {{Name, Type.ToJson(serializer)}};
 		}
 	}
 }

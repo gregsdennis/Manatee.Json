@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -43,7 +44,7 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			var jValue = root ?? ToJson();
+			var jValue = root ?? ToJson(null);
 			var errors = Values.Select(d => d.Definition.Validate(json, jValue)).ToList();
 			return errors.Any(r => r.Valid)
 				? new SchemaValidationResults()
@@ -53,22 +54,26 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		public void FromJson(JsonValue json)
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			Values = json.Object["enum"].Array.Select(v =>
 				{
 					var defn = new JsonSchemaTypeDefinition();
-					defn.FromJson(v);
+					defn.FromJson(v, serializer);
 					return defn;
 				});
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public JsonValue ToJson()
+		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonObject {{"enum", Values.ToJson()}};
+			return new JsonObject {{"enum", Values.ToJson(serializer)}};
 		}
 	}
 }
