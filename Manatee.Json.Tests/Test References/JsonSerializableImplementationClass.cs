@@ -1,4 +1,4 @@
-/***************************************************************************************
+﻿/***************************************************************************************
 
 	Copyright 2012 Greg Dennis
 
@@ -14,22 +14,27 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		IInterface.cs
+	File Name:		JsonSerializableImplementationClass.cs
 	Namespace:		Manatee.Tests.Test_References
-	Class Name:		IInterface
-	Purpose:		Simple interface to be used in testing the Manatee.Json
-					library.
+	Class Name:		JsonSerializableImplementationClass
+	Purpose:		Basic class that implements IJsonSerializable to be used in
+					testing the Manatee.Json library.
 
 ***************************************************************************************/
-using System;
+using Manatee.Json;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Tests.Test_References
 {
-	public interface IInterface : IComparable
+	public class JsonSerializableImplementationClass : ImplementationClass, IJsonSerializable
 	{
-		string this[int a] { get; set; }
-		string RequiredProp { get; set; }
-		T RequiredMethod<T, U>(U str) where T : U;
-		event EventHandler RequiredEvent;
+		public void FromJson(JsonValue json, JsonSerializer serializer)
+		{
+			RequiredProp = json.Object["requiredProp"].String;
+		}
+		public JsonValue ToJson(JsonSerializer serializer)
+		{
+			return new JsonObject { { "requiredProp", RequiredProp } };
+		}
 	}
 }
