@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -85,7 +86,7 @@ namespace Manatee.Json.Schema
 			if (Properties == null) return new SchemaValidationResults();
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
-			var jValue = root ?? ToJson();
+			var jValue = root ?? ToJson(null);
 			foreach (var property in Properties)
 			{
 				if (!obj.ContainsKey(property.Name))
@@ -104,9 +105,11 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		public override void FromJson(JsonValue json)
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			base.FromJson(json);
+			base.FromJson(json, serializer);
 			var obj = json.Object;
 			Id = obj.TryGetString("id");
 			Schema = obj.TryGetString("$schema");
@@ -147,8 +150,10 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson()
+		public override JsonValue ToJson(JsonSerializer serializer)
 		{
 			IEnumerable<string> requiredProperties = Enumerable.Empty<string>();
 			var json = new JsonObject();
@@ -156,14 +161,14 @@ namespace Manatee.Json.Schema
 			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
 			if (!string.IsNullOrWhiteSpace(Title)) json["title"] = Title;
 			if (!string.IsNullOrWhiteSpace(Description)) json["description"] = Description;
-			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson();
+			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
 			if (Type != null) json["type"] = Type.Name;
 			if (Properties != null)
 			{
-				json["properties"] = Properties.ToDictionary(p => p.Name, p => p.Type).ToJson();
+				json["properties"] = Properties.ToDictionary(p => p.Name, p => p.Type).ToJson(serializer);
 				requiredProperties = Properties.Where(p => p.IsRequired).Select(p => p.Name);
 			}
-			if (AdditionalProperties != null) json["additionalProperties"] = AdditionalProperties.ToJson();
+			if (AdditionalProperties != null) json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
 			if ((Dependencies != null) && Dependencies.Any())
 			{
 				var jsonDependencies = new JsonObject();

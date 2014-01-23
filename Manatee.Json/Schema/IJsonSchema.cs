@@ -27,7 +27,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a type for all schema to implement.
 	/// </summary>
-	public interface IJsonSchema : IJsonCompatible
+	public interface IJsonSchema : IJsonSerializable
 	{
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.

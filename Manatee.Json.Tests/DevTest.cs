@@ -88,7 +88,7 @@ namespace Manatee.Json.Tests
 			// For example, the system can't generate for KeyValuePair<,> since the properties aren't read/write.
 			// Try Dictionary<string, int> or JsonObject (Dictionary<string, JsonValue>).
 			var schema = JsonSchemaFactory.FromType(typeof (Dictionary<string, int>));
-			Console.WriteLine(schema.ToJson());
+			Console.WriteLine(schema.ToJson(null));
 		}
 	}
 }

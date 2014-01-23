@@ -24,6 +24,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -84,7 +85,7 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			var jValue = root ?? ToJson();
+			var jValue = root ?? ToJson(null);
 			if (_schema == null)
 				Resolve(jValue);
 			return Resolved.Validate(json, jValue);
@@ -93,7 +94,7 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		public void FromJson(JsonValue json)
+		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			Reference = json.Object["$ref"].String;
 		}
@@ -101,7 +102,7 @@ namespace Manatee.Json.Schema
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public JsonValue ToJson()
+		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return new JsonObject {{"$ref", Reference}};
 		}

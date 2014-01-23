@@ -127,7 +127,7 @@ namespace Manatee.Json.Schema
 				// if has "not" key, select NotSchema
 				schema = new EnumSchema();
 			}
-			schema.FromJson(json);
+			schema.FromJson(json, null);
 			return schema;
 		}
 

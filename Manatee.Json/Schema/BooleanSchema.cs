@@ -21,6 +21,8 @@
 
 ***************************************************************************************/
 
+using Manatee.Json.Serialization;
+
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -49,9 +51,9 @@ namespace Manatee.Json.Schema
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson()
+		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			var json = base.ToJson().Object;
+			var json = base.ToJson(serializer).Object;
 			return json;
 		}
 	}

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -205,7 +206,9 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		public virtual void FromJson(JsonValue json)
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		public virtual void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			var obj = json.Object;
 			if (obj.ContainsKey("type"))
@@ -240,8 +243,10 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public virtual JsonValue ToJson()
+		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
 			var json = new JsonObject();
 			if (Type != null) json["type"] = Type.Name;
