@@ -26,33 +26,33 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Tests.Test_References
 {
-	public class JsonCompatibleClass : IJsonCompatible
+	public class JsonSerializableClass : IJsonSerializable
 	{
 		public string StringProp { get; private set; }
 		public int IntProp { get; private set; }
 
-		public JsonCompatibleClass() { }
-		public JsonCompatibleClass(string s, int i)
+		public JsonSerializableClass() { }
+		public JsonSerializableClass(string s, int i)
 		{
 			StringProp = s;
 			IntProp = i;
 		}
 
-		#region Implementation of IJsonCompatible
+		#region Implementation of IJsonSerializable
 
-		public void FromJson(JsonValue json)
+		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			StringProp = json.Object["StringProp"].String;
 			IntProp = (int)json.Object["IntProp"].Number;
 		}
 
-		public JsonValue ToJson()
+		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return new JsonObject
-			       	{
-			       		{"StringProp", StringProp},
-			       		{"IntProp", IntProp}
-			       	};
+				{
+					{"StringProp", StringProp},
+					{"IntProp", IntProp}
+				};
 		}
 
 		#endregion

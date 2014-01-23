@@ -34,6 +34,7 @@ namespace Manatee.Json.Serialization.Internal
 		private static readonly EnumNameSerializer EnumNameSerializer;
 		private static readonly EnumValueSerializer EnumValueSerializer;
 		private static readonly JsonCompatibleSerializer JsonCompatibleSerializer;
+		private static readonly JsonSerializableSerializer JsonSerializableSerializer;
 		private static readonly NumericSerializer NumericSerializer;
 		private static readonly RegisteredObjectSerializer RegisteredObjectSerializer;
 		private static readonly StringSerializer StringSerializer;
@@ -47,6 +48,7 @@ namespace Manatee.Json.Serialization.Internal
 			EnumNameSerializer = new EnumNameSerializer();
 			EnumValueSerializer = new EnumValueSerializer();
 			JsonCompatibleSerializer = new JsonCompatibleSerializer();
+			JsonSerializableSerializer = new JsonSerializableSerializer();
 			NumericSerializer = new NumericSerializer();
 			RegisteredObjectSerializer = new RegisteredObjectSerializer();
 			StringSerializer = new StringSerializer();
@@ -78,6 +80,8 @@ namespace Manatee.Json.Serialization.Internal
 				return BuildSerializer(SchemaSerializer);
 			if (JsonSerializationTypeRegistry.IsRegistered(type))
 				return BuildSerializer(RegisteredObjectSerializer);
+			if (typeof(IJsonSerializable).IsAssignableFrom(typeToSerialize))
+				return BuildSerializer(JsonSerializableSerializer);
 			if (typeof(IJsonCompatible).IsAssignableFrom(typeToSerialize))
 				return BuildSerializer(JsonCompatibleSerializer);
 			if (typeof(Enum).IsAssignableFrom(typeToSerialize))

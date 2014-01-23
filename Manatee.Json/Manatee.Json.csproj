@@ -63,6 +63,8 @@
     <Compile Include="Schema\StringFormat.cs" />
     <Compile Include="Schema\SchemaValidationError.cs" />
     <Compile Include="Schema\SchemaValidationResults.cs" />
+    <Compile Include="Serialization\IJsonSerializable.cs" />
+    <Compile Include="Serialization\Internal\JsonSerializableSerializer.cs" />
     <Compile Include="Serialization\JsonMapToAttribute.cs" />
     <Compile Include="Serialization\EnumSerializationFormat.cs" />
     <Compile Include="Serialization\MapBaseAbstractionBehavior.cs" />

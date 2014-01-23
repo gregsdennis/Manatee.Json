@@ -54,7 +54,8 @@
     <Compile Include="DevTest.cs" />
     <Compile Include="JsonArrayExtensionsTest.cs" />
     <Compile Include="JsonObjectExtensionsTest.cs" />
-    <Compile Include="LabelTest.cs" />
+    <Compile Include="Test References\JsonSerializableClass.cs" />
+    <Compile Include="Test References\JsonSerializableImplementationClass.cs" />
     <Compile Include="XmlExtensionsTest.cs" />
     <Compile Include="JsonObjectTest.cs" />
     <Compile Include="JsonArrayTest.cs" />

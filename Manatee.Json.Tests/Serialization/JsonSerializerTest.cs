@@ -275,6 +275,20 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
+		public void Deserialize_InterfaceWithMapToIJsonSerializableImplementation_Successful()
+		{
+			var serializer = GetSerializer();
+			JsonValue json = new JsonObject
+				{
+					{"requiredProp", "test"}
+				};
+			IInterface expected = new JsonSerializableImplementationClass { RequiredProp = "test" };
+			JsonSerializationAbstractionMap.Map<IInterface, JsonSerializableImplementationClass>();
+
+			var actual = serializer.Deserialize<IInterface>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
 		public void Deserialize_Nullable_Null_Successful()
 		{
 			var serializer = GetSerializer();
@@ -717,6 +731,19 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var serializer = GetSerializer();
 			var obj = new JsonCompatibleClass("test string", 42);
+			var expected = new JsonObject
+				{
+					{"StringProp", "test string"},
+					{"IntProp", 42}
+				};
+			var actual = serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_IJsonSerializable_Successful()
+		{
+			var serializer = GetSerializer();
+			var obj = new JsonSerializableClass("test string", 42);
 			var expected = new JsonObject
 				{
 					{"StringProp", "test string"},

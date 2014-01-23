@@ -14,27 +14,30 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonCompatibleImplementationClass.cs
-	Namespace:		Manatee.Tests.Test_References
-	Class Name:		JsonCompatibleImplementationClass
-	Purpose:		Basic class that implements IJsonCompatible to be used in
-					testing the Manatee.Json library.
+	File Name:		JsonSerializableSerializer.cs
+	Namespace:		Manatee.Json.Serialization.Internal
+	Class Name:		JsonSerializableSerializer
+	Purpose:		Converts objects which implement IJsonSerializable to and from
+					JsonValues.
 
 ***************************************************************************************/
-using Manatee.Json;
-using Manatee.Json.Serialization;
 
-namespace Manatee.Tests.Test_References
+namespace Manatee.Json.Serialization.Internal
 {
-	public class JsonCompatibleImplementationClass : ImplementationClass, IJsonCompatible
+	public class JsonSerializableSerializer : ISerializer
 	{
-		public void FromJson(JsonValue json)
+		public bool ShouldMaintainReferences { get { return true; } }
+
+		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			RequiredProp = json.Object["requiredProp"].String;
+			var serializable = (IJsonSerializable) obj;
+			return serializable.ToJson(serializer);
 		}
-		public JsonValue ToJson()
+		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			return new JsonObject { { "requiredProp", RequiredProp } };
+			var value = (IJsonSerializable) JsonSerializationAbstractionMap.CreateInstance<T>(json);
+			value.FromJson(json, serializer);
+			return (T) value;
 		}
 	}
 }
