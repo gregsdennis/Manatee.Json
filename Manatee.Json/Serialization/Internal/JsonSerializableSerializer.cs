@@ -24,7 +24,7 @@
 
 namespace Manatee.Json.Serialization.Internal
 {
-	public class JsonSerializableSerializer : ISerializer
+	internal class JsonSerializableSerializer : ISerializer
 	{
 		public bool ShouldMaintainReferences { get { return true; } }
 
@@ -35,7 +35,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var value = (IJsonSerializable) JsonSerializationAbstractionMap.CreateInstance<T>(json);
+			var value = (IJsonSerializable) JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			value.FromJson(json, serializer);
 			return (T) value;
 		}

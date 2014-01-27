@@ -14,30 +14,26 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonCompatibleSerializer.cs
+	File Name:		ActivatorResolver.cs
 	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		JsonCompatibleSerializer
-	Purpose:		Converts objects which implement IJsonCompatible to and from
-					JsonValues.
+	Class Name:		ActivatorResolver
+	Purpose:		Implements IResolver using the Activator.
 
 ***************************************************************************************/
 
+using System;
+
 namespace Manatee.Json.Serialization.Internal
 {
-	internal class JsonCompatibleSerializer : ISerializer
+	internal class ActivatorResolver : IResolver
 	{
-		public bool ShouldMaintainReferences { get { return true; } }
-
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public T Resolve<T>()
 		{
-			var compatible = (IJsonCompatible) obj;
-			return compatible.ToJson();
+			return Activator.CreateInstance<T>();
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Resolve(Type type)
 		{
-			var value = (IJsonCompatible) JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
-			value.FromJson(json);
-			return (T) value;
+			return Activator.CreateInstance(type);
 		}
 	}
 }

@@ -70,12 +70,16 @@ namespace Manatee.Json.Serialization
 		/// </remarks>
 		public bool CaseSensitiveDeserialization { get; set; }
 		/// <summary>
-		/// Gets and sets whether the serializer always includes the type name when serializing.
+		/// Gets and sets whether the serializer always includes the type name while serializing.
 		/// </summary>
 		/// <remarks>
 		/// This only affect automatic serialization.
 		/// </remarks>
 		public bool AlwaysSerializeTypeName { get; set; }
+		/// <summary>
+		/// Gets and sets an <see cref="IResolver"/> implementation for instantiating objects while deserializing.
+		/// </summary>
+		public IResolver Resolver { get; set; }
 
 		static JsonSerializerOptions()
 		{

@@ -14,30 +14,21 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonCompatibleSerializer.cs
-	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		JsonCompatibleSerializer
-	Purpose:		Converts objects which implement IJsonCompatible to and from
-					JsonValues.
+	File Name:		IResolver.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		IResolver
+	Purpose:		Defines methods required to resolved instances for
+					deserialization.
 
 ***************************************************************************************/
 
-namespace Manatee.Json.Serialization.Internal
-{
-	internal class JsonCompatibleSerializer : ISerializer
-	{
-		public bool ShouldMaintainReferences { get { return true; } }
+using System;
 
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
-		{
-			var compatible = (IJsonCompatible) obj;
-			return compatible.ToJson();
-		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
-		{
-			var value = (IJsonCompatible) JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
-			value.FromJson(json);
-			return (T) value;
-		}
+namespace Manatee.Json.Serialization
+{
+	public interface IResolver
+	{
+		T Resolve<T>();
+		object Resolve(Type type);
 	}
 }
