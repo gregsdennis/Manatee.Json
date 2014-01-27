@@ -22,7 +22,6 @@
 ***************************************************************************************/
 
 using System.Collections.Generic;
-using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema

@@ -28,7 +28,7 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Provides base functionality for the basic <see cref="ISchema"/> implementations.
+	/// Provides base functionality for the basic <see cref="IJsonSchema"/> implementations.
 	/// </summary>
 	public class JsonSchema : IJsonSchema
 	{

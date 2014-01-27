@@ -124,7 +124,7 @@ namespace Manatee.Json.Schema
 			}
 			else if (obj.ContainsKey("enum"))
 			{
-				// if has "not" key, select NotSchema
+				// if has "enum" key, select EnumSchema
 				schema = new EnumSchema();
 			}
 			schema.FromJson(json, null);

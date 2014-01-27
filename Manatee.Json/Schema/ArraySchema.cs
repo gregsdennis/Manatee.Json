@@ -68,14 +68,10 @@ namespace Manatee.Json.Schema
 			var errors = new List<SchemaValidationError>();
 			if (MinItems.HasValue && array.Count < MinItems)
 				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: >= {0} items; Actual: {1} items.", MinItems, array.Count)));
-			if (MaxItems.HasValue && array.Count <= MaxItems)
+			if (MaxItems.HasValue && array.Count > MaxItems)
 				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: <= {0} items; Actual: {1} items.", MaxItems, array.Count)));
-			if (UniqueItems)
-			{
-				var grouped = array.GroupBy(v => v);
-				if (grouped.Select(g => g.Count()).Max() != 1)
-					errors.Add(new SchemaValidationError(string.Empty, "Expected unique items; Duplicates were found."));
-			}
+			if (UniqueItems && (array.Count != array.Distinct().Count()))
+				errors.Add(new SchemaValidationError(string.Empty, "Expected unique items; Duplicates were found."));
 			if (Items != null)
 			{
 				var jValue = root ?? ToJson(null);
@@ -89,6 +85,8 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			base.FromJson(json, serializer);
@@ -101,6 +99,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{
