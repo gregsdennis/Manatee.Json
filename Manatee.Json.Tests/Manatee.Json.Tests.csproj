@@ -54,6 +54,18 @@
     <Compile Include="DevTest.cs" />
     <Compile Include="JsonArrayExtensionsTest.cs" />
     <Compile Include="JsonObjectExtensionsTest.cs" />
+    <Compile Include="Schema\AllOfSchemaTest.cs" />
+    <Compile Include="Schema\ArraySchemaTest.cs" />
+    <Compile Include="Schema\AnyOfSchemaTest.cs" />
+    <Compile Include="Schema\BooleanSchemaTest.cs" />
+    <Compile Include="Schema\StringSchemaTest.cs" />
+    <Compile Include="Schema\OneOfSchemaTest.cs" />
+    <Compile Include="Schema\ObjectSchemaTest.cs" />
+    <Compile Include="Schema\NumberSchemaTest.cs" />
+    <Compile Include="Schema\NullSchemaTest.cs" />
+    <Compile Include="Schema\NotSchemaTest.cs" />
+    <Compile Include="Schema\IntegerSchemaTest.cs" />
+    <Compile Include="Schema\EnumSchemaTest.cs" />
     <Compile Include="Test References\JsonSerializableClass.cs" />
     <Compile Include="Test References\JsonSerializableImplementationClass.cs" />
     <Compile Include="XmlExtensionsTest.cs" />
@@ -80,9 +92,7 @@
       <Name>Manatee.Json</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Schema\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -17,8 +17,8 @@
 	File Name:		OneOfSchema.cs
 	Namespace:		Manatee.Json.Schema
 	Class Name:		OneOfSchema
-	Purpose:		Used to define a collection of schema conditions, one of
-					which must be satisfied.
+	Purpose:		Used to define a collection of schema conditions, exactly
+					one of which must be satisfied.
 
 ***************************************************************************************/
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Used to define a collection of schema conditions, one of which may
+	/// Used to define a collection of schema conditions, exactly one of which must
 	/// be satisfied.
 	/// </summary>
 	public class OneOfSchema : IJsonSchema
@@ -56,9 +56,16 @@ namespace Manatee.Json.Schema
 		{
 			var jValue = root ?? ToJson(null);
 			var errors = Options.Select(s => s.Validate(json, jValue)).ToList();
-			if (errors.Count(r => r.Valid) == 1) return new SchemaValidationResults();
-			if (errors.Count(r => r.Valid) == 0) return new SchemaValidationResults(errors);
-			return new SchemaValidationResults(string.Empty, "More than one option was valid.");
+			var validCount = errors.Count(r => r.Valid);
+			switch (validCount)
+			{
+				case 0:
+					return new SchemaValidationResults(errors);
+				case 1:
+					return new SchemaValidationResults();
+				default:
+					return new SchemaValidationResults(string.Empty, "More than one option was valid.");
+			}
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

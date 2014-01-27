@@ -89,6 +89,15 @@ namespace Manatee.Json.Schema
 		}
 
 		/// <summary>
+		/// Builds a <see cref="JsonSchemaTypeDefinition"/> which can be used to represent an enumeration value.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static JsonSchemaTypeDefinition CreateEnumValue(string value)
+		{
+			return new JsonSchemaTypeDefinition(value) {Definition = new StringSchema {Pattern = value}};
+		}
+		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>

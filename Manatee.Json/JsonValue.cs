@@ -311,6 +311,21 @@ namespace Manatee.Json
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
+			switch (Type)
+			{
+				case JsonValueType.Number:
+					return Number.GetHashCode();
+				case JsonValueType.String:
+					return String.GetHashCode();
+				case JsonValueType.Boolean:
+					return Boolean.GetHashCode();
+				case JsonValueType.Object:
+					return Object.GetHashCode();
+				case JsonValueType.Array:
+					return Array.GetHashCode();
+				case JsonValueType.Null:
+					return JsonValueType.Null.GetHashCode();
+			}
 			return base.GetHashCode();
 		}
 

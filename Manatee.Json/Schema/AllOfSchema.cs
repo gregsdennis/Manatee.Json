@@ -68,6 +68,12 @@ namespace Manatee.Json.Schema
 			Requirements = obj["allOf"].Array.Select(JsonSchemaFactory.FromJson);
 			if (obj.ContainsKey("default")) Default = obj["default"];
 		}
+		/// <summary>
+		/// Converts an object to a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			var json = new JsonObject {{"allOf", Requirements.ToJson(serializer)}};

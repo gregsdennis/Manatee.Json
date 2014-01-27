@@ -27,34 +27,35 @@ namespace Manatee.Json.Internal
 {
 	internal static class CharacterConverter
 	{
-	    private static readonly Dictionary<char, JsonInput> Converter = new Dictionary<char, JsonInput>()
-	                                                                        {
-	                                                                            {'{', JsonInput.OpenBrace},
-	                                                                            {'"', JsonInput.Quote},
-	                                                                            {':', JsonInput.Colon},
-	                                                                            {'-', JsonInput.Number},
-	                                                                            {'.', JsonInput.Number},
-	                                                                            {'0', JsonInput.Number},
-	                                                                            {'1', JsonInput.Number},
-	                                                                            {'2', JsonInput.Number},
-	                                                                            {'3', JsonInput.Number},
-	                                                                            {'4', JsonInput.Number},
-	                                                                            {'5', JsonInput.Number},
-	                                                                            {'6', JsonInput.Number},
-	                                                                            {'7', JsonInput.Number},
-	                                                                            {'8', JsonInput.Number},
-	                                                                            {'9', JsonInput.Number},
-	                                                                            {'t', JsonInput.Boolean},
-	                                                                            {'T', JsonInput.Boolean},
-	                                                                            {'f', JsonInput.Boolean},
-	                                                                            {'F', JsonInput.Boolean},
-	                                                                            {'n', JsonInput.Null},
-	                                                                            {'N', JsonInput.Null},
-	                                                                            {'[', JsonInput.OpenBracket},
-	                                                                            {',', JsonInput.Comma},
-	                                                                            {']', JsonInput.CloseBracket},
-	                                                                            {'}', JsonInput.CloseBrace}
-	                                                                        };
+		private static readonly Dictionary<char, JsonInput> Converter =
+			new Dictionary<char, JsonInput>()
+				{
+					{'{', JsonInput.OpenBrace},
+					{'"', JsonInput.Quote},
+					{':', JsonInput.Colon},
+					{'-', JsonInput.Number},
+					{'.', JsonInput.Number},
+					{'0', JsonInput.Number},
+					{'1', JsonInput.Number},
+					{'2', JsonInput.Number},
+					{'3', JsonInput.Number},
+					{'4', JsonInput.Number},
+					{'5', JsonInput.Number},
+					{'6', JsonInput.Number},
+					{'7', JsonInput.Number},
+					{'8', JsonInput.Number},
+					{'9', JsonInput.Number},
+					{'t', JsonInput.Boolean},
+					{'T', JsonInput.Boolean},
+					{'f', JsonInput.Boolean},
+					{'F', JsonInput.Boolean},
+					{'n', JsonInput.Null},
+					{'N', JsonInput.Null},
+					{'[', JsonInput.OpenBracket},
+					{',', JsonInput.Comma},
+					{']', JsonInput.CloseBracket},
+					{'}', JsonInput.CloseBrace}
+				};
 		public static JsonInput Item(char key) { return Converter[key]; }
 	}
 }
