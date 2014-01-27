@@ -35,10 +35,12 @@ namespace Manatee.Json.Serialization
 	public static class JsonSerializationAbstractionMap
 	{
 		private static readonly Dictionary<Type, Type> _registry;
+		private static readonly IResolver _defaultResolver;
 
 		static JsonSerializationAbstractionMap()
 		{
 			_registry = new Dictionary<Type, Type>();
+			_defaultResolver = new ActivatorResolver();
 		}
 
 		/// <summary>
@@ -91,25 +93,26 @@ namespace Manatee.Json.Serialization
 			return _registry.ContainsKey(type) ? _registry[type] : type;
 		}
 
-		internal static T CreateInstance<T>(JsonValue json)
+		internal static T CreateInstance<T>(JsonValue json, IResolver resolver)
 		{
 			var type = typeof (T);
+			resolver = resolver ?? _defaultResolver;
 			if (type.IsAbstract || type.IsInterface)
 			{
 				if ((json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
 				{
 					var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
-					return (T) Activator.CreateInstance(concrete);
+					return (T) resolver.Resolve(concrete);
 				}
 				if (_registry.ContainsKey(type))
 				{
 					var concrete = _registry[type];
-					return (T) Activator.CreateInstance(concrete);
+					return (T) resolver.Resolve(concrete);
 				}
 				if (type.IsInterface)
 					return TypeGenerator.Default.Generate<T>();
 			}
-			return Activator.CreateInstance<T>();
+			return resolver.Resolve<T>();
 		}
 
 		private static void MapBaseTypes(Type tAbstract, Type tConcrete, bool overwrite)
