@@ -34,7 +34,7 @@ namespace Manatee.Json
 		/// <summary>
 		/// Creates a new instance of this exception.
 		/// </summary>
-		public JsonKeyParseException(int index)
+		internal JsonKeyParseException(int index)
 			: base(string.Format("Parse of key failed at index {0}.", index)) { }
 	}
 }

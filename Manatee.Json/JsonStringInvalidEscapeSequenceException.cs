@@ -35,7 +35,7 @@ namespace Manatee.Json
 		///<summary>
 		/// Creates a new instance of this exception.
 		///</summary>
-		public JsonStringInvalidEscapeSequenceException(string sequence, int index)
+		internal JsonStringInvalidEscapeSequenceException(string sequence, int index)
 			: base(string.Format("Invalid escape sequence '{0}' found at index {1}.", sequence, index)) { }
 	}
 }

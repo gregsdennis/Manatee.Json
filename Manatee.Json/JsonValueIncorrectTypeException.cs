@@ -42,7 +42,7 @@ namespace Manatee.Json
 		/// <summary>
 		/// Creates a new instance of this exception.
 		/// </summary>
-		public JsonValueIncorrectTypeException(JsonValueType valid, JsonValueType requested)
+		internal JsonValueIncorrectTypeException(JsonValueType valid, JsonValueType requested)
 			: base(string.Format("Cannot access value of type {0} as type {1}.", valid, requested))
 		{
 			ValidType = valid;

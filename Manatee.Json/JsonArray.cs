@@ -140,12 +140,6 @@ namespace Manatee.Json
 			{
 				throw new JsonSyntaxException(_index);
 			}
-			catch (Exception e)
-			{
-				e.Data.Add("source", _source);
-				e.Data.Add("index", _index);
-				throw;
-			}
 			return _index;
 		}
 

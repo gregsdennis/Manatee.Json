@@ -111,5 +111,21 @@ namespace Manatee.Json.Schema
 			if (UniqueItems) json["uniqueItems"] = UniqueItems;
 			return json;
 		}
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <returns>
+		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+		/// </returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public override bool Equals(IJsonSchema other)
+		{
+			var schema = other as ArraySchema;
+			return base.Equals(schema) &&
+			       MinItems == schema.MinItems &&
+			       MaxItems == schema.MaxItems &&
+			       Items.Equals(schema.Items) &&
+			       UniqueItems == schema.UniqueItems;
+		}
 	}
 }

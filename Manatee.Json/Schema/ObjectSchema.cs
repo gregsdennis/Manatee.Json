@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -61,16 +62,21 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines any additional properties to be expected by this schema.
 		/// </summary>
-		public IJsonSchema AdditionalProperties { get; set; }
+		public AdditionalProperties AdditionalProperties { get; set; }
+		/// <summary>
+		/// Defines additional properties based on regular expression matching of the property name.
+		/// </summary>
+		public Dictionary<Regex, IJsonSchema> PatternProperties { get; set; }
 		/// <summary>
 		/// Defines property dependencies.
 		/// </summary>
-		public IDictionary<string, IEnumerable<string>> Dependencies { get; set; }
+		public Dictionary<string, IEnumerable<string>> Dependencies { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="ObjectSchema"/> class.
 		/// </summary>
-		public ObjectSchema() : base(JsonSchemaTypeDefinition.Object) {}
+		public ObjectSchema()
+			: base(JsonSchemaTypeDefinition.Object) {}
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -80,7 +86,6 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			// todo: validate AdditionalProperties
 			if (json.Type != JsonValueType.Object)
 				return new SchemaValidationResults(string.Empty, string.Format("Expected: Object; Actual: {0}.", json.Type));
 			if (Properties == null) return new SchemaValidationResults();
@@ -98,6 +103,37 @@ namespace Manatee.Json.Schema
 				var result = property.Type.Validate(obj[property.Name], jValue);
 				if (!result.Valid)
 					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Name)));
+			}
+			var extraData = obj.Where(kvp => Properties.All(p => p.Name != kvp.Key))
+			                   .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+			if (AdditionalProperties != null && AdditionalProperties.Equals(AdditionalProperties.False))
+			{
+				if (PatternProperties != null)
+				{
+					foreach (var patternProperty in PatternProperties)
+					{
+						var pattern = patternProperty.Key;
+						var schema = patternProperty.Value;
+						var matches = extraData.Keys.Where(k => pattern.IsMatch(k));
+						foreach (var match in matches)
+						{
+							var matchErrors = schema.Validate(extraData[match]).Errors;
+							errors.AddRange(matchErrors.Select(e => new SchemaValidationError(match, e.Message)));
+						}
+						extraData = extraData.Where(kvp => !pattern.IsMatch(kvp.Key))
+						                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+					}
+				}
+				errors.AddRange(extraData.Keys.Select(k => new SchemaValidationError(k, "Cannot find a match within Properties or PatternProperties.")));
+			}
+			else if (AdditionalProperties != null)
+			{
+				var schema = AdditionalProperties.Definition;
+				foreach (var key in extraData.Keys)
+				{
+					var extraErrors = schema.Validate(extraData[key]).Errors;
+					errors.AddRange(extraErrors.Select(e => new SchemaValidationError(key, e.Message)));
+				}
 			}
 			return new SchemaValidationResults(errors);
 		}
@@ -133,7 +169,20 @@ namespace Manatee.Json.Schema
 					Properties.Add(property);
 				}
 			}
-			if (obj.ContainsKey("additionalProperties")) AdditionalProperties = JsonSchemaFactory.FromJson(obj["additionalProperties"]);
+			if (obj.ContainsKey("additionalProperties"))
+			{
+				if (obj["additionalProperties"].Type == JsonValueType.Boolean)
+					AdditionalProperties = obj["additionalProperties"].Boolean ? AdditionalProperties.True : AdditionalProperties.False;
+				else
+				{
+					AdditionalProperties = new AdditionalProperties {Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"])};
+				}
+			}
+			if (obj.ContainsKey("patternProperties"))
+			{
+				var patterns = obj["patternProperties"].Object;
+				PatternProperties = patterns.ToDictionary(kvp => new Regex(kvp.Key), kvp => JsonSchemaFactory.FromJson(kvp.Value));
+			}
 			if (obj.ContainsKey("dependencies"))
 			{
 				Dependencies = obj["dependencies"].Object.ToDictionary(v => v.Key, v => v.Value.Array.Select(s => s.String));
@@ -155,7 +204,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			IEnumerable<string> requiredProperties = Enumerable.Empty<string>();
+			var requiredProperties = new List<string>();
 			var json = new JsonObject();
 			if (!string.IsNullOrWhiteSpace(Id)) json["id"] = Id;
 			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
@@ -166,9 +215,12 @@ namespace Manatee.Json.Schema
 			if (Properties != null)
 			{
 				json["properties"] = Properties.ToDictionary(p => p.Name, p => p.Type).ToJson(serializer);
-				requiredProperties = Properties.Where(p => p.IsRequired).Select(p => p.Name);
+				requiredProperties = Properties.Where(p => p.IsRequired).Select(p => p.Name).ToList();
 			}
-			if (AdditionalProperties != null) json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
+			if (AdditionalProperties != null)
+				json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
+			if (PatternProperties != null && PatternProperties.Any())
+				json["patternProperties"] = PatternProperties.ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value).ToJson(serializer);
 			if ((Dependencies != null) && Dependencies.Any())
 			{
 				var jsonDependencies = new JsonObject();
@@ -181,6 +233,27 @@ namespace Manatee.Json.Schema
 			if (requiredProperties.Any()) json["required"] = requiredProperties.ToJson();
 			if (Default != null) json["default"] = Default;
 			return json;
+		}
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <returns>
+		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+		/// </returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public override bool Equals(IJsonSchema other)
+		{
+			var schema = other as ObjectSchema;
+			return base.Equals(schema) &&
+			       Id == schema.Id &&
+			       Schema == schema.Schema &&
+			       Title == schema.Title &&
+			       Description == schema.Description &&
+			       Definitions.SequenceEqual(schema.Definitions) &&
+			       Properties.SequenceEqual(schema.Properties) &&
+			       AdditionalProperties.Equals(schema.AdditionalProperties) &&
+			       PatternProperties.SequenceEqual(PatternProperties) &&
+			       Dependencies.SequenceEqual(schema.Dependencies);
 		}
 	}
 }

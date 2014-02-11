@@ -42,7 +42,7 @@ namespace Manatee.Json.Serialization
 		/// Initializes a new instance of the <see cref="TypeRegistrationException"/> class.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		public TypeRegistrationException(Type type)
+		internal TypeRegistrationException(Type type)
 			: base(string.Format("Attempted to register type {0} without supplying both an encoder and decoder.", type))
 		{
 			Type = type;

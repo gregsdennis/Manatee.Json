@@ -47,7 +47,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="json">The invalid JSON structure.</param>
-		public TypeDoesNotContainPropertyException(Type type, JsonValue json)
+		internal TypeDoesNotContainPropertyException(Type type, JsonValue json)
 			: base(string.Format("Type {0} does not contain any properties within {1}.", type, json))
 		{
 			Type = type;

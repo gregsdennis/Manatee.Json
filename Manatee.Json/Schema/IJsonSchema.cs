@@ -20,6 +20,8 @@
 	Purpose:		Defines a type for all schema to implement.
 
 ***************************************************************************************/
+
+using System;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -27,7 +29,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a type for all schema to implement.
 	/// </summary>
-	public interface IJsonSchema : IJsonSerializable
+	public interface IJsonSchema : IJsonSerializable, IEquatable<IJsonSchema>
 	{
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.

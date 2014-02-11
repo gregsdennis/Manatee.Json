@@ -31,15 +31,23 @@ namespace Manatee.Json
 	[Serializable]
 	public class JsonValueParseException : Exception
 	{
+		public string Input { get; private set; }
+
 		/// <summary>
 		/// Creates a new instance of this exception.
 		/// </summary>
-		public JsonValueParseException(JsonValueType t, int index)
-			: base(string.Format("Parse of type {0} failed at index {1}.", t, index)) { }
+		internal JsonValueParseException(JsonValueType t, int index, string input)
+			: base(string.Format("Parse of type {0} failed at index {1}.", t, index))
+		{
+			Input = input;
+		}
 		/// <summary>
 		/// Creates a new instance of this exception.
 		/// </summary>
-		public JsonValueParseException(int index, string value)
-			: base(string.Format("Parse failed at index {0}: cannot determine type of value '{1}'.", index, value)) { }
+		internal JsonValueParseException(int index, string value, string input)
+			: base(string.Format("Parse failed at index {0}: cannot determine type of value '{1}'.", index, value))
+		{
+			Input = input;
+		}
 	}
 }

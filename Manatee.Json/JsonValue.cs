@@ -479,7 +479,7 @@ namespace Manatee.Json
 				case '"':										// string
 					temp = source.Substring(index);
 					if (temp.Length < 2)
-						throw new JsonValueParseException(JsonValueType.String, index);
+						throw new JsonValueParseException(JsonValueType.String, index, source);
 					length = 0;
 					var found = false;
 					while (!found && length < temp.Length)
@@ -496,7 +496,7 @@ namespace Manatee.Json
 						length++;
 					}
 					if (!found)
-						throw new JsonValueParseException(JsonValueType.String, index);
+						throw new JsonValueParseException(JsonValueType.String, index, source);
 					if (length == 0)
 					{
 						index += 2;
@@ -528,7 +528,7 @@ namespace Manatee.Json
 						default:
 							double d;
 							if (!double.TryParse(temp, out d))
-								throw new JsonValueParseException(index, temp);
+								throw new JsonValueParseException(index, temp, source);
 							index += temp.Length - 1;
 							return new JsonValue(d);
 					}
