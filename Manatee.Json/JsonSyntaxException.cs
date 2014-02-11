@@ -37,7 +37,7 @@ namespace Manatee.Json
 		/// <summary>
 		/// Creates a new instance of this exception.
 		/// </summary>
-		public JsonSyntaxException(int index)
+		internal JsonSyntaxException(int index)
 			: base(string.Format("Parse found a syntax error at index {0}.", index)) { }
 	}
 }

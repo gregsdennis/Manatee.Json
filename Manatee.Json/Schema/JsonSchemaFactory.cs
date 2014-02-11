@@ -131,7 +131,12 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 
-		internal static IJsonSchema FromType(Type type)
+		public static IJsonSchema FromTypeBeta<T>()
+		{
+			return FromTypeBeta(typeof (T));
+		}
+
+		public static IJsonSchema FromTypeBeta(Type type)
 		{
 			var schema = FromType(type, null);
 			ReplaceReferences(schema, string.Format("#/definitions/{0}", type.FullName));
@@ -155,7 +160,7 @@ namespace Manatee.Json.Schema
 			var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
 			foreach (var property in properties)
 			{
-				if (!property.CanRead || !property.CanWrite || property.GetIndexParameters().Any()) continue;
+				if (!property.CanRead || property.GetIndexParameters().Any()) continue;
 				var propertyDefinition = new JsonSchemaPropertyDefinition {Name = property.Name};
 				schema = GetBasicSchema(property.PropertyType, definitionList);
 				if (schema != null)

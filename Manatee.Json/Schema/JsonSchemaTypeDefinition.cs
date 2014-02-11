@@ -20,6 +20,8 @@
 	Purpose:		Defines a single type definition within a schema.
 
 ***************************************************************************************/
+
+using System.Data;
 using System.Linq;
 using Manatee.Json.Serialization;
 
@@ -59,6 +61,9 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static readonly JsonSchemaTypeDefinition String = new JsonSchemaTypeDefinition("string");
 
+		private bool _isReadOnly;
+		private IJsonSchema _definition;
+
 		/// <summary>
 		/// Defines the name of the type.
 		/// </summary>
@@ -66,17 +71,33 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a schema used to define the type.
 		/// </summary>
-		public IJsonSchema Definition { get; set; }
+		public IJsonSchema Definition
+		{
+			get { return _definition; }
+			set
+			{
+				if (_isReadOnly)
+					throw new ReadOnlyException(string.Format("The '{0}' member is not editable.", Name));
+				_definition = value;
+			}
+		}
 
 		static JsonSchemaTypeDefinition()
 		{
 			Array.Definition = new ArraySchema();
+			Array._isReadOnly = true;
 			Boolean.Definition = new BooleanSchema();
+			Boolean._isReadOnly = true;
 			Integer.Definition = new IntegerSchema();
+			Integer._isReadOnly = true;
 			Null.Definition = new NullSchema();
+			Null._isReadOnly = true;
 			Number.Definition = new NumberSchema();
+			Number._isReadOnly = true;
 			Object.Definition = new ObjectSchema();
+			Object._isReadOnly = true;
 			String.Definition = new StringSchema();
+			String._isReadOnly = true;
 		}
 		internal JsonSchemaTypeDefinition() {}
 		/// <summary>

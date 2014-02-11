@@ -83,5 +83,17 @@ namespace Manatee.Json.Schema
 			if (Default != null) json["default"] = Default;
 			return json;
 		}
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <returns>
+		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+		/// </returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public virtual bool Equals(IJsonSchema other)
+		{
+			var schema = other as NotSchema;
+			return (schema != null) && (Restrictions.SequenceEqual(schema.Restrictions));
+		}
 	}
 }

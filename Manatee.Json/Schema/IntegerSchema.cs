@@ -119,5 +119,21 @@ namespace Manatee.Json.Schema
 			if (ExclusiveMaximum) json["exclusiveMaximum"] = ExclusiveMaximum;
 			return json;
 		}
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <returns>
+		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+		/// </returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public override bool Equals(IJsonSchema other)
+		{
+			var schema = other as NumberSchema;
+			return base.Equals(schema) &&
+				   Minimum == schema.Minimum &&
+				   Maximum == schema.Maximum &&
+				   ExclusiveMinimum == schema.ExclusiveMinimum &&
+				   ExclusiveMaximum == schema.ExclusiveMaximum;
+		}
 	}
 }

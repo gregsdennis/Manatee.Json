@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Schema\AdditionalPropertiesDefinition.cs" />
     <Compile Include="Schema\StringFormat.cs" />
     <Compile Include="Schema\SchemaValidationError.cs" />
     <Compile Include="Schema\SchemaValidationResults.cs" />
