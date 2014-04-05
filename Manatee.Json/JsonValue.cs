@@ -22,8 +22,11 @@
 ***************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Manatee.Json
 {
@@ -474,6 +477,7 @@ namespace Manatee.Json
 		{
 			string temp;
 			int length;
+			Debug.WriteLineIf(index == 0, source);
 			switch (source[index-1])
 			{
 				case '"':										// string
@@ -631,28 +635,20 @@ namespace Manatee.Json
 			}
 			return s;
 		}
-		private static bool IsWhiteSpace(char c)
-		{
-			return (c == 10) || (c == 13) || (c == 32) || (c == 9);
-		}
 		private static string StripExternalSpaces(string s)
 		{
-			bool inString = false, delimited = false;
-			var ret = "";
-			foreach (var t in s)
+			var getNonDelimitedQuote = new Regex("(\\\")|(([^\\\"]|(\\\\\\\"))*(([^\\\\\\\"]\\\")|$))");
+			var whitespace = new Regex("\\s+");
+			var match = getNonDelimitedQuote.Match(s);
+			var remove = true;
+			var sb = new StringBuilder();
+			while (match.Success)
 			{
-				if (t == '\\') delimited = true;
-				if (t == '"' )
-				{
-					if (delimited)
-						delimited = false;
-					else
-						inString = !inString;
-				}
-				if (inString || !IsWhiteSpace(t))
-					ret += t;
+				sb.Append(remove ? whitespace.Replace(match.Value, string.Empty) : match.Value);
+				remove = !remove;
+				match = match.NextMatch();
 			}
-			return ret;
+			return sb.ToString();
 		}
 	}
 }
