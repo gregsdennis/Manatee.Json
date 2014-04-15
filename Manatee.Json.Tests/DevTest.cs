@@ -90,5 +90,12 @@ namespace Manatee.Json.Tests
 			var schema = JsonSchemaFactory.FromTypeBeta(typeof (Dictionary<string, int>));
 			Console.WriteLine(schema.ToJson(null));
 		}
+		[TestMethod]
+		public void QuotesTest()
+		{
+			var str = "{\"id\":\"533f018805de2474035484e1\",\"closed\":false,\"dateLastActivity\":\"2014-04-11T18:59:17.826Z\",\"desc\":\"User Story #2072\",\"idBoard\":\"51b9e93ac6c1fb974b0002c8\",\"idList\":\"5342afd77c14f8c318f0ad53\",\"idShort\":2083,\"idAttachmentCover\":null,\"manualCoverAttachment\":false,\"name\":\"Change \\\"Remove Additional Deposits\\\" to \\\"Remove Pending Deposits\\\"\",\"pos\":1081344,\"due\":null,\"url\":\"https://trello.com/c/kZEIQxtL/2083-change-remove-additional-deposits-to-remove-pending-deposits\",\"subscribed\":true}";
+			var json = JsonValue.Parse(str);
+			Console.WriteLine(json);
+		}
 	}
 }
