@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2014 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -14,22 +14,31 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		GeneralExtensions.cs
-	Namespace:		Manatee.Json.Internal
-	Class Name:		GeneralExtensions
-	Purpose:		General-use extension methods for the library.
+	File Name:		PropertySelectionStrategy.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		PropertySelectionStrategy
+	Purpose:		Enumerates the types of properties which are automatically
+					serialized.
 
 ***************************************************************************************/
 
 using System;
 
-namespace Manatee.Json.Internal
+namespace Manatee.Json.Serialization
 {
-	internal static class GeneralExtensions
+	/// <summary>
+	/// Enumerates the types of properties which are automatically serialized.
+	/// </summary>
+	[Flags]
+	public enum PropertySelectionStrategy
 	{
-		public static bool IsInt(this double value)
-		{
-			return Math.Ceiling(value) == Math.Floor(value);
-		}
+		/// <summary>
+		/// Indicates that read/write properties will be serialized.
+		/// </summary>
+		ReadWriteOnly = 1,
+		/// <summary>
+		/// Indicates that read-only properties will be serialized.
+		/// </summary>
+		ReadOnly = 2,
 	}
 }

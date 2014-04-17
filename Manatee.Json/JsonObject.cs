@@ -22,7 +22,6 @@
 
 ***************************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -89,6 +88,13 @@ namespace Manatee.Json
 		/// Creates an empty instance of a JSON object.
 		/// </summary>
 		public JsonObject() {}
+		/// <summary>
+		/// Creates an instance of a JSON object and initializes it with the
+		/// supplied JSON values.
+		/// </summary>
+		/// <param name="collection"></param>
+		public JsonObject(IDictionary<string, JsonValue> collection)
+			: base(collection) {}
 		/// <summary>
 		/// Creates an instance of a JSON object and fills it by parsing the
 		/// supplied string.

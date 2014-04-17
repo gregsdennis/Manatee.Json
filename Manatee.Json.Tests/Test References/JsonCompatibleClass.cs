@@ -31,7 +31,6 @@ namespace Manatee.Tests.Test_References
 		public string StringProp { get; private set; }
 		public int IntProp { get; private set; }
 
-		public JsonCompatibleClass() { }
 		public JsonCompatibleClass(string s, int i)
 		{
 			StringProp = s;

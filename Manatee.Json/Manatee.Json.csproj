@@ -108,6 +108,8 @@
     <Compile Include="JsonArray.cs" />
     <Compile Include="JsonObjectExtensions.cs" />
     <Compile Include="JsonObject.cs" />
+    <Compile Include="Serialization\PropertySelectionStrategy.cs" />
+    <Compile Include="Serialization\TypeNameSerializationBehavior.cs" />
     <Compile Include="XmlExtensions.cs" />
     <Compile Include="JsonValue.cs" />
     <Compile Include="JsonValueType.cs" />

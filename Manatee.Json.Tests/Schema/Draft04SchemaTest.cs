@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2014 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -14,22 +14,30 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		GeneralExtensions.cs
-	Namespace:		Manatee.Json.Internal
-	Class Name:		GeneralExtensions
-	Purpose:		General-use extension methods for the library.
+	File Name:		Draft04SchemaTest.cs
+	Namespace:		Manatee.Json.Tests.Schema
+	Class Name:		Draft04SchemaTest
+	Purpose:		Tests that the Draft04 schema object validates itself.
 
 ***************************************************************************************/
 
-using System;
+using System.Linq;
+using Manatee.Json.Schema;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Manatee.Json.Internal
+namespace Manatee.Json.Tests.Schema
 {
-	internal static class GeneralExtensions
+	[TestClass]
+	public class Draft04SchemaTest
 	{
-		public static bool IsInt(this double value)
-		{
-			return Math.Ceiling(value) == Math.Floor(value);
-		}
+		 [TestMethod]
+		 public void Draft04IsSelfValidating()
+		 {
+			 var json = JsonSchema.Draft04.ToJson(null);
+			 var results = JsonSchema.Draft04.Validate(json);
+
+			 Assert.IsTrue(results.Valid);
+			 Assert.AreEqual(0, results.Errors.Count());
+		 }
 	}
 }

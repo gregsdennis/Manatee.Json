@@ -40,7 +40,7 @@ namespace Manatee.Json.Schema
 		public static readonly StringFormat Ipv6 = new StringFormat("ipv6", "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$");
 		public static readonly StringFormat Regex = new StringFormat("regex", null);
 		// from http://mathiasbynens.be/demo/url-regex
-		public static readonly StringFormat Uri = new StringFormat("uri", "^([a-zA-Z]{3,})://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?$");
+		public static readonly StringFormat Uri = new StringFormat("uri", "^([a-zA-Z]{3,})://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%#&=]*)?$");
 
 		private static readonly Dictionary<string, StringFormat> _lookup = new Dictionary<string, StringFormat>
 				{
@@ -72,9 +72,9 @@ namespace Manatee.Json.Schema
 
 		public static StringFormat GetFormat(string formatKey)
 		{
-			return _lookup.ContainsKey(formatKey)
-				? _lookup[formatKey]
-				: null;
+			return (formatKey != null) && _lookup.ContainsKey(formatKey)
+				       ? _lookup[formatKey]
+				       : null;
 		}
 	}
 }

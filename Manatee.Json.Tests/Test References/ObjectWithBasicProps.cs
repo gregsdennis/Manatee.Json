@@ -28,6 +28,8 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Tests.Test_References
 {
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 	public class ObjectWithBasicProps
 	{
 		#region Serializable Instance Properties
@@ -101,4 +103,6 @@ namespace Manatee.Tests.Test_References
 		}
 		#endregion
 	}
+// ReSharper restore UnusedAutoPropertyAccessor.Local
+// ReSharper restore UnusedMember.Global
 }

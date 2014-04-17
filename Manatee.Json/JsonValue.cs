@@ -637,7 +637,7 @@ namespace Manatee.Json
 		}
 		private static string StripExternalSpaces(string s)
 		{
-			var getNonDelimitedQuote = new Regex("(\\\")|(([^\"]|(\\\\\\\"))*(([^\\\"]\\\")|$))");
+			var getNonDelimitedQuote = new Regex("((([^\"]*\\\\\\\")*)|([^\"]*))(\\\"|$)");
 			var whitespace = new Regex("\\s+");
 			var match = getNonDelimitedQuote.Match(s);
 			var remove = true;

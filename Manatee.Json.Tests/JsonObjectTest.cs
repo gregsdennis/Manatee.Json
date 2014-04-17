@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -167,6 +168,19 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(1, obj.Count);
 			Assert.AreEqual(JsonValue.Null, obj["null"]);
+		}
+		[TestMethod]
+		public void Ctor_InitializationIsSuccessful()
+		{
+			var expected = new JsonObject
+				{
+					{"number", 5},
+					{"string", "a string"},
+					{"bool", true},
+					{"null", JsonValue.Null}
+				};
+			var actual = new JsonObject(expected.ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }
