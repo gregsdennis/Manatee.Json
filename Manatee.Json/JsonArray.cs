@@ -21,7 +21,6 @@
 
 ***************************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -70,16 +69,20 @@ namespace Manatee.Json
 		}
 
 		/// <summary>
-		/// Creates an empty instance of a JSON object.
+		/// Creates an empty instance of a JSON array.
 		/// </summary>
 		public JsonArray() {}
-
 		/// <summary>
-		/// Creates an instance of a JSON array and fills it by parsing the
-		/// supplied string starting at the indicated index.
+		/// Creates an instance of a JSON array and initializes it with the
+		/// supplied JSON values.
 		/// </summary>
-		/// <param name="s">A string.</param>
-		/// <param name="i">The index at which the array starts.</param>
+		/// <param name="collection"></param>
+		public JsonArray(IEnumerable<JsonValue> collection)
+			: base(collection)
+		{
+			
+		}
+
 		internal JsonArray(string s, ref int i)
 			: this()
 		{

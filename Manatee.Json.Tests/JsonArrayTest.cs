@@ -99,5 +99,12 @@ namespace Manatee.Json.Tests
 			var i = 0;
 			var actual = new JsonArray(s, ref i);
 		}
+		[TestMethod]
+		public void Ctor_InitializationIsSuccessful()
+		{
+			var expected = new JsonArray {5, "a string", false, JsonValue.Null};
+			var actual = new JsonArray(expected.ToArray());
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }

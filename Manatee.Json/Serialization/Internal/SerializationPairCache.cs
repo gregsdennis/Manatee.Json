@@ -33,21 +33,9 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			return Values.Any(v => ReferenceEquals(v.Object, obj));
 		}
-		public bool Contains(JsonValue json)
-		{
-			return Values.Any(v => v.Json.Equals(json));
-		}
-		public void Add(Guid guid, object obj, JsonValue json)
-		{
-			Add(guid, new SerializationPair {Json = json, Object = obj});
-		}
 		public Guid GetKey(object obj)
 		{
 			return this.First(v => ReferenceEquals(v.Value.Object, obj)).Key;
-		}
-		public Guid GetKey(JsonValue json)
-		{
-			return this.First(v => v.Value.Json.Equals(json)).Key; 
 		}
 	}
 }

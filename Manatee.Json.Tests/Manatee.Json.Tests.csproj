@@ -58,6 +58,7 @@
     <Compile Include="Schema\ArraySchemaTest.cs" />
     <Compile Include="Schema\AnyOfSchemaTest.cs" />
     <Compile Include="Schema\BooleanSchemaTest.cs" />
+    <Compile Include="Schema\Draft04SchemaTest.cs" />
     <Compile Include="Schema\StringSchemaTest.cs" />
     <Compile Include="Schema\OneOfSchemaTest.cs" />
     <Compile Include="Schema\ObjectSchemaTest.cs" />

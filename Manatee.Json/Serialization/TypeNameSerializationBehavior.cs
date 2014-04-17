@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2014 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -14,22 +14,28 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		GeneralExtensions.cs
-	Namespace:		Manatee.Json.Internal
-	Class Name:		GeneralExtensions
-	Purpose:		General-use extension methods for the library.
+	File Name:		TypeNameSerializationBehavior.cs
+	Namespace:		Manatee.Json.Serialization
+	Class Name:		TypeNameSerializationBehavior
+	Purpose:		Enumerates serialization behaviors for saving type names.
 
 ***************************************************************************************/
 
-using System;
-
-namespace Manatee.Json.Internal
+namespace Manatee.Json.Serialization
 {
-	internal static class GeneralExtensions
+	public enum TypeNameSerializationBehavior
 	{
-		public static bool IsInt(this double value)
-		{
-			return Math.Ceiling(value) == Math.Floor(value);
-		}
+		/// <summary>
+		/// Serializes the type name as necessary.
+		/// </summary>
+		Auto,
+		/// <summary>
+		/// Always serializes the type name.
+		/// </summary>
+		Always,
+		/// <summary>
+		/// Never serializes the type name.
+		/// </summary>
+		Never
 	}
 }

@@ -37,12 +37,13 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var json = new JsonObject();
 			var type = typeof(T);
-			if (type.IsAbstract || type.IsInterface || serializer.Options.AlwaysSerializeTypeName)
+			if ((serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never) &&
+				(type.IsAbstract || type.IsInterface || (serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always)))
 			{
 				type = obj.GetType();
 				json.Add(Constants.TypeKey, type.AssemblyQualifiedName);
 			}
-			var propertyInfoList = GetProperties(type);
+			var propertyInfoList = GetProperties(type, serializer.Options.PropertySelectionStrategy);
 			var map = SerializeValues(obj, serializer, propertyInfoList);
 			ConstructJsonObject(json, map);
 			return json.Count == 0 ? JsonValue.Null : json;
@@ -60,7 +61,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var obj = JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			var type = obj.GetType();
-			var propertyInfoList = GetProperties(type);
+			var propertyInfoList = GetProperties(type, serializer.Options.PropertySelectionStrategy);
 			var map = DeserializeValues(obj, json, serializer, propertyInfoList, !serializer.Options.CaseSensitiveDeserialization);
 			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(type, json);
@@ -77,14 +78,20 @@ namespace Manatee.Json.Serialization.Internal
 			AssignObjectProperties(null, map);
 		}
 
-		private static IEnumerable<PropertyInfo> GetProperties(Type type)
+		private static IEnumerable<PropertyInfo> GetProperties(Type type, PropertySelectionStrategy propertyTypes)
 		{
-			var propertyInfoList = type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
-									   .Where(p => p.GetSetMethod() != null)
-									   .Where(p => p.GetGetMethod() != null)
-									   .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-									   .ToList();
-			return propertyInfoList;
+			var properties = new List<PropertyInfo>();
+			if ((propertyTypes | PropertySelectionStrategy.ReadWriteOnly) != 0)
+				properties.AddRange(type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+				                        .Where(p => p.GetSetMethod() != null)
+				                        .Where(p => p.GetGetMethod() != null)
+				                        .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any()));
+			if ((propertyTypes | PropertySelectionStrategy.ReadOnly) != 0)
+				properties.AddRange(type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+										.Where(p => p.GetSetMethod() == null)
+										.Where(p => p.GetGetMethod() != null)
+										.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any()));
+			return properties;
 		}
 		private static IEnumerable<PropertyInfo> GetTypeProperties(Type type)
 		{

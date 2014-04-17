@@ -75,7 +75,11 @@ namespace Manatee.Json.Serialization
 		/// <remarks>
 		/// This only affect automatic serialization.
 		/// </remarks>
-		public bool AlwaysSerializeTypeName { get; set; }
+		public TypeNameSerializationBehavior TypeNameSerializationBehavior { get; set; }
+		/// <summary>
+		/// Gets and sets which properties are automatically included while serializing.
+		/// </summary>
+		public PropertySelectionStrategy PropertySelectionStrategy { get; set; }
 		/// <summary>
 		/// Gets and sets an <see cref="IResolver"/> implementation for instantiating objects while deserializing.
 		/// </summary>
@@ -105,6 +109,7 @@ namespace Manatee.Json.Serialization
 			InvalidPropertyKeyBehavior = options.InvalidPropertyKeyBehavior;
 			DateTimeSerializationFormat = options.DateTimeSerializationFormat;
 			EnumSerializationFormat = options.EnumSerializationFormat;
+			PropertySelectionStrategy = PropertySelectionStrategy.ReadWriteOnly;
 		}
 	}
 }
