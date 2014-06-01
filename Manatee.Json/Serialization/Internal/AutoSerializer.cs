@@ -158,7 +158,11 @@ namespace Manatee.Json.Serialization.Internal
 					var valueObj = deserialize.Invoke(serializer, new object[] {value});
 					if ((value.Type == JsonValueType.Object) && value.Object.ContainsKey(Constants.RefKey))
 					{
+#if NET35 || NET35C
+						var guid = new Guid(value.Object[Constants.RefKey].String);
+#elif NET4 || NET4C || NET45
 						var guid = Guid.Parse(value.Object[Constants.RefKey].String);
+#endif
 						var pair = serializer.SerializationMap[guid];
 						if (pair.DeserializationIsComplete)
 							dict.Add(propertyInfo, valueObj);
@@ -190,7 +194,11 @@ namespace Manatee.Json.Serialization.Internal
 					var valueObj = deserialize.Invoke(serializer, new object[] { value });
 					if ((value.Type == JsonValueType.Object) && value.Object.ContainsKey(Constants.RefKey))
 					{
+#if NET35 || NET35C
+						var guid = new Guid(value.Object[Constants.RefKey].String);
+#elif NET4 || NET4C || NET45
 						var guid = Guid.Parse(value.Object[Constants.RefKey].String);
+#endif
 						var pair = serializer.SerializationMap[guid];
 						if (pair.DeserializationIsComplete)
 							dict.Add(propertyInfo, valueObj);

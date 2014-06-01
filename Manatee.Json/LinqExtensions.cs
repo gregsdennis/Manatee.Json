@@ -34,10 +34,10 @@ namespace Manatee.Json
 	public static class LinqExtensions
 	{
 		/// <summary>
-		/// Converts an <see cref="IEnumerable(JsonValue)"/> returned from a LINQ query back into
+		/// Converts an <see cref="IEnumerable{JsonValue}"/> returned from a LINQ query back into
 		/// a <see cref="JsonArray"/>.
 		/// </summary>
-		/// <param name="results">An <see cref="IEnumerable(JsonValue)"/></param>
+		/// <param name="results">An <see cref="IEnumerable{JsonValue}"/></param>
 		/// <returns>An equivalent <see cref="JsonArray"/></returns>
 		public static JsonArray ToJson(this IEnumerable<JsonValue> results)
 		{
@@ -47,10 +47,10 @@ namespace Manatee.Json
 		}
 
 		/// <summary>
-		/// Converts an <see cref="IEnumerable(KeyValuePair(string, JsonValue))"/> returned from a
+		/// Converts an <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/> returned from a
 		/// LINQ query back into a <see cref="JsonObject"/>.
 		/// </summary>
-		/// <param name="results">An <see cref="IEnumerable(KeyValuePair(string, JsonValue))"/></param>
+		/// <param name="results">An <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/></param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
 		public static JsonObject ToJson(this IEnumerable<KeyValuePair<string, JsonValue>> results)
 		{
@@ -86,10 +86,10 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
-		/// Converts a collection of <see cref="Nullable(bool)"/> to a <see cref="JsonArray"/>.
+		/// Converts a collection of <see cref="Nullable{Boolean}"/> to a <see cref="JsonArray"/>.
 		/// </summary>
-		/// <param name="list">A collection of <see cref="Nullable(bool)"/></param>
-		/// <returns>A <see cref="JsonArray"/> containing the <see cref="Nullable(bool)"/></returns>
+		/// <param name="list">A collection of <see cref="Nullable{Boolean}"/></param>
+		/// <returns>A <see cref="JsonArray"/> containing the <see cref="Nullable{Boolean}"/></returns>
 		public static JsonValue ToJson(this IEnumerable<bool?> list)
 		{
 			if (list == null) return JsonValue.Null;
@@ -134,19 +134,6 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
-		/// Serializes a collection of objects which implement <see cref="IJsonCompatible"/> to a <see cref="JsonArray"/> of equivalent JsonValues.
-		/// </summary>
-		/// <param name="list">A collection of equivalent <see cref="JsonValue"/>s</param>
-		/// <returns>A <see cref="JsonArray"/> containing the equivalent JsonValues</returns>
-		public static JsonValue ToJson<T>(this IEnumerable<T> list)
-			where T : IJsonCompatible
-		{
-			if (list == null) return JsonValue.Null;
-			var json = new JsonArray();
-			json.AddRange(list.Select(j => j == null ? JsonValue.Null : j.ToJson()));
-			return json;
-		}
-		/// <summary>
 		/// Serializes a collection of objects which implement <see cref="IJsonSerializable"/> to a <see cref="JsonArray"/> of equivalent JsonValues.
 		/// </summary>
 		/// <param name="list">A collection of equivalent <see cref="JsonValue"/>s</param>
@@ -162,26 +149,10 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
-		/// Converts an <see cref="IEnumerable(KeyValuePair(string, JsonValue))"/> returned from a
+		/// Converts an <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/> returned from a
 		/// LINQ query back into a <see cref="JsonObject"/>.
 		/// </summary>
-		/// <param name="results">An <see cref="IEnumerable(KeyValuePair(string, JsonValue))"/></param>
-		/// <returns>An equivalent <see cref="JsonObject"/></returns>
-		public static JsonObject ToJson<T>(this IEnumerable<KeyValuePair<string, T>> results)
-			where T : IJsonCompatible
-		{
-			var json = new JsonObject();
-			foreach (var keyValuePair in results)
-			{
-				json.Add(keyValuePair.Key, keyValuePair.Value == null ? JsonValue.Null : keyValuePair.Value.ToJson());
-			}
-			return json;
-		}
-		/// <summary>
-		/// Converts an <see cref="IEnumerable(KeyValuePair(string, JsonValue))"/> returned from a
-		/// LINQ query back into a <see cref="JsonObject"/>.
-		/// </summary>
-		/// <param name="results">An <see cref="IEnumerable(KeyValuePair(string, JsonValue))"/></param>
+		/// <param name="results">An <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/></param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
@@ -196,26 +167,7 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
-		/// Deserializes a collection of <see cref="JsonValue"/>s to an <see cref="IEnumerable(T)"/> of the objects.
-		/// </summary>
-		/// <typeparam name="T">The type of object contained in the collection</typeparam>
-		/// <param name="json">The collection of <see cref="JsonValue"/>s</param>
-		/// <returns>A collection of the deserialized objects</returns>
-		public static IEnumerable<T> FromJson<T>(this IEnumerable<JsonValue> json)
-			where T : IJsonCompatible, new()
-		{
-			if (json == null) return null;
-			var list = new List<T>();
-			foreach (var value in json)
-			{
-				T item = new T();
-				item.FromJson(value);
-				list.Add(item);
-			}
-			return list;
-		}
-		/// <summary>
-		/// Deserializes a collection of <see cref="JsonValue"/>s to an <see cref="IEnumerable(T)"/> of the objects.
+		/// Deserializes a collection of <see cref="JsonValue"/>s to an <see cref="IEnumerable{T}"/> of the objects.
 		/// </summary>
 		/// <typeparam name="T">The type of object contained in the collection</typeparam>
 		/// <param name="json">The collection of <see cref="JsonValue"/>s</param>
@@ -234,20 +186,6 @@ namespace Manatee.Json
 				list.Add(item);
 			}
 			return list;
-		}
-		/// <summary>
-		/// Deserializes a <see cref="JsonValue"/> to its equivalent object.
-		/// </summary>
-		/// <typeparam name="T">The type of object</typeparam>
-		/// <param name="json">The <see cref="JsonValue"/> to deserialize</param>
-		/// <returns>A collection of the deserialized objects</returns>
-		public static T FromJson<T>(this JsonObject json)
-			where T : IJsonCompatible, new()
-		{
-			if (json == null) return default(T);
-			T obj = new T();
-			obj.FromJson(json);
-			return obj;
 		}
 		/// <summary>
 		/// Deserializes a <see cref="JsonValue"/> to its equivalent object.

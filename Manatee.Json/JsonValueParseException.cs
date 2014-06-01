@@ -31,6 +31,13 @@ namespace Manatee.Json
 	[Serializable]
 	public class JsonValueParseException : Exception
 	{
+		/// <summary>
+		/// Gets the index at which the error occurred.
+		/// </summary>
+		public int Index { get; private set; }
+		/// <summary>
+		/// Gets the input string which caused the error.
+		/// </summary>
 		public string Input { get; private set; }
 
 		/// <summary>
@@ -39,6 +46,7 @@ namespace Manatee.Json
 		internal JsonValueParseException(JsonValueType t, int index, string input)
 			: base(string.Format("Parse of type {0} failed at index {1}.", t, index))
 		{
+			Index = index;
 			Input = input;
 		}
 		/// <summary>
@@ -47,6 +55,7 @@ namespace Manatee.Json
 		internal JsonValueParseException(int index, string value, string input)
 			: base(string.Format("Parse failed at index {0}: cannot determine type of value '{1}'.", index, value))
 		{
+			Index = index;
 			Input = input;
 		}
 	}

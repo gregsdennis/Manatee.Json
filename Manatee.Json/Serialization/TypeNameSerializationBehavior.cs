@@ -23,6 +23,9 @@
 
 namespace Manatee.Json.Serialization
 {
+	/// <summary>
+	/// Enumerates serialization behaviors for saving type names.
+	/// </summary>
 	public enum TypeNameSerializationBehavior
 	{
 		/// <summary>

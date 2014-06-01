@@ -23,6 +23,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -206,10 +207,17 @@ namespace Manatee.Json.Schema
 		{
 			var requiredProperties = new List<string>();
 			var json = new JsonObject();
+#if NET35
+			if (!Id.IsNullOrWhiteSpace()) json["id"] = Id;
+			if (!Schema.IsNullOrWhiteSpace()) json["$schema"] = Schema;
+			if (!Title.IsNullOrWhiteSpace()) json["title"] = Title;
+			if (!Description.IsNullOrWhiteSpace()) json["description"] = Description;
+#elif NET4
 			if (!string.IsNullOrWhiteSpace(Id)) json["id"] = Id;
 			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
 			if (!string.IsNullOrWhiteSpace(Title)) json["title"] = Title;
 			if (!string.IsNullOrWhiteSpace(Description)) json["description"] = Description;
+#endif
 			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
 			if (Type != null) json["type"] = Type.Name;
 			if (Properties != null)

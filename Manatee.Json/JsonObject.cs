@@ -222,8 +222,11 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "{}";
-			return "{" + string.Join(",", from kvp in this
-										  select string.Format("\"{0}\":{1}", kvp.Key, kvp.Value)) + "}";
+#if NET35 || NET35C
+			return "{" + string.Join(",", this.Select(kvp => string.Format("\"{0}\":{1}", kvp.Key, kvp.Value)).ToArray()) + "}";
+#elif NET4 || NET4C || NET45
+			return "{" + string.Join(",", this.Select(kvp => string.Format("\"{0}\":{1}", kvp.Key, kvp.Value))) + "}";
+#endif
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="object"/> is equal to the current <see cref="object"/>.

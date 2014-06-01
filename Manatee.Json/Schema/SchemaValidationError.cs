@@ -21,6 +21,8 @@
 
 ***************************************************************************************/
 
+using Manatee.Json.Internal;
+
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -45,7 +47,11 @@ namespace Manatee.Json.Schema
 
 		internal SchemaValidationError PrependPropertyName(string parent)
 		{
+#if NET35 || NET35C
+			if (PropertyName.IsNullOrWhiteSpace())
+#elif NET4 || NET4C || NET45
 			if (string.IsNullOrWhiteSpace(PropertyName))
+#endif
 				PropertyName = parent;
 			else PropertyName = parent + "." + PropertyName;
 			return this;
