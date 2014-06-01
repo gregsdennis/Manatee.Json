@@ -29,10 +29,12 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -47,7 +49,7 @@
   <ItemGroup>
     <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Manatee.StateMachine.1.0.1\lib\net40\Manatee.StateMachine.dll</HintPath>
+      <HintPath>..\packages\Manatee.StateMachine.1.1\lib\net40\Manatee.StateMachine.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -123,7 +125,6 @@
     <Compile Include="Serialization\InvalidPropertyKeyBehavior.cs" />
     <Compile Include="Serialization\TypeDoesNotContainPropertyException.cs" />
     <Compile Include="Serialization\TypeRegistrationException.cs" />
-    <Compile Include="Serialization\IJsonCompatible.cs" />
     <Compile Include="Serialization\Internal\AutoSerializer.cs" />
     <Compile Include="Serialization\Internal\Constants.cs" />
     <Compile Include="Serialization\Internal\DefaultValueSerializer.cs" />
@@ -132,7 +133,6 @@
     <Compile Include="Serialization\Internal\EnumNameSerializer.cs" />
     <Compile Include="Serialization\Internal\EnumValueSerializer.cs" />
     <Compile Include="Serialization\Internal\ISerializerFactory.cs" />
-    <Compile Include="Serialization\Internal\JsonCompatibleSerializer.cs" />
     <Compile Include="Serialization\Internal\ReferencingSerializer.cs" />
     <Compile Include="Serialization\Internal\SchemaSerializer.cs" />
     <Compile Include="Serialization\Internal\SerializationPair.cs" />
@@ -150,7 +150,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -555,24 +555,19 @@ namespace Manatee.Json
 							s = s.Remove(i, 1);
 							break;
 						case 'b':
-							length = 2;
-							s = s.Substring(0, i) + '\b' + s.Substring(i + length);
+							s = s.Substring(0, i) + '\b' + s.Substring(i + length + 1);
 							break;
 						case 'f':
-							length = 2;
-							s = s.Substring(0, i) + '\f' + s.Substring(i + length);
+							s = s.Substring(0, i) + '\f' + s.Substring(i + length + 1);
 							break;
 						case 'n':
-							length = 2;
-							s = s.Substring(0, i) + '\n' + s.Substring(i + length);
+							s = s.Substring(0, i) + '\n' + s.Substring(i + length+1);
 							break;
 						case 'r':
-							length = 2;
-							s = s.Substring(0, i) + '\r' + s.Substring(i + length);
+							s = s.Substring(0, i) + '\r' + s.Substring(i + length + 1);
 							break;
 						case 't':
-							length = 2;
-							s = s.Substring(0, i) + '\t' + s.Substring(i + length);
+							s = s.Substring(0, i) + '\t' + s.Substring(i + length + 1);
 							break;
 						case 'u':
 							length = 6;

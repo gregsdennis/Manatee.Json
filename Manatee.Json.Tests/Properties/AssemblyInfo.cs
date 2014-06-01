@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Json.Tests")]
+[assembly: AssemblyTitle("Manatee.Json.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("GameStop, Inc.")]
-[assembly: AssemblyProduct("Json.Tests")]
-[assembly: AssemblyCopyright("Copyright © GameStop, Inc. 2012")]
+[assembly: AssemblyCompany("Little Crab Solutions")]
+[assembly: AssemblyProduct("Manatee.Json.Tests")]
+[assembly: AssemblyCopyright("Copyright © 2014 Little Crab Solutions")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

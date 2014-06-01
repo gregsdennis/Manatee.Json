@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Manatee.StateMachine.1.1\lib\net40\Manatee.StateMachine.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -81,8 +85,6 @@
     <Compile Include="Test References\DerivedClass.cs" />
     <Compile Include="Test References\ImplementationClass.cs" />
     <Compile Include="Test References\IInterface.cs" />
-    <Compile Include="Test References\JsonCompatibleClass.cs" />
-    <Compile Include="Test References\JsonCompatibleImplementationClass.cs" />
     <Compile Include="Test References\ObjectWithAbstractAndInterfaceProps.cs" />
     <Compile Include="Test References\ObjectWithBasicProps.cs" />
     <Compile Include="Test References\ObjectWithExtendedProps.cs" />
@@ -93,7 +95,9 @@
       <Name>Manatee.Json</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

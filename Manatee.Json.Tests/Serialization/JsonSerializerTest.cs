@@ -261,20 +261,6 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void Deserialize_InterfaceWithMapToIJsonCompatibleImplementation_Successful()
-		{
-			var serializer = GetSerializer();
-			JsonValue json = new JsonObject
-				{
-					{"requiredProp", "test"}
-				};
-			IInterface expected = new JsonCompatibleImplementationClass { RequiredProp = "test" };
-			JsonSerializationAbstractionMap.Map<IInterface, JsonCompatibleImplementationClass>();
-
-			var actual = serializer.Deserialize<IInterface>(json);
-			Assert.AreEqual(expected, actual);
-		}
-		[TestMethod]
 		public void Deserialize_InterfaceWithMapToIJsonSerializableImplementation_Successful()
 		{
 			var serializer = GetSerializer();
@@ -306,19 +292,6 @@ namespace Manatee.Json.Tests.Serialization
 			int? expected = 42;
 			JsonValue json = 42;
 			var actual = serializer.Deserialize<int?>(json);
-			Assert.AreEqual(expected, actual);
-		}
-		[TestMethod]
-		public void Deserialize_IJsonCompatible_Successfull()
-		{
-			var serializer = GetSerializer();
-			var expected = new JsonCompatibleClass("test string", 42);
-			var json = new JsonObject
-				{
-					{"StringProp", "test string"},
-					{"IntProp", 42}
-				};
-			var actual = serializer.Deserialize<JsonCompatibleClass>(json);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -724,19 +697,6 @@ namespace Manatee.Json.Tests.Serialization
 			int? i = 42;
 			JsonValue expected = 42;
 			var actual = serializer.Serialize(i);
-			Assert.AreEqual(expected, actual);
-		}
-		[TestMethod]
-		public void Serialize_IJsonCompatible_Successful()
-		{
-			var serializer = GetSerializer();
-			var obj = new JsonCompatibleClass("test string", 42);
-			var expected = new JsonObject
-				{
-					{"StringProp", "test string"},
-					{"IntProp", 42}
-				};
-			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]

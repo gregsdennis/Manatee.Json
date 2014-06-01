@@ -28,7 +28,7 @@ using System.Linq;
 namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Manages methods for serializing object types which do not implement <see cref="IJsonCompatible"/> and
+	/// Manages methods for serializing object types which do not implement <see cref="IJsonSerializable"/> and
 	/// cannot be automatically serialized.
 	/// </summary>
 	public static class JsonSerializationTypeRegistry
@@ -148,7 +148,7 @@ namespace Manatee.Json.Serialization
 		/// Registers an encode/decode method pair for a nullable type.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the nullable.</typeparam>
-		/// <remarks>To register a nullable int, the call should be RegisterNullableType&lt;int&gt;()</remarks>
+		/// <remarks>To register a nullable int, the call should be RegisterNullableType{int}()</remarks>
 		public static void RegisterNullableType<T>() where T : struct
 		{
 			var type = typeof(T);
@@ -162,7 +162,7 @@ namespace Manatee.Json.Serialization
 		/// Registers an encode/decode method pair for a typed list.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
-		/// <remarks>To register a list of ints, the call should be RegisterListType&lt;int&gt;()</remarks>
+		/// <remarks>To register a list of ints, the call should be RegisterListType{int}()</remarks>
 		public static void RegisterListType<T>()
 		{
 			var type = typeof(T);
@@ -177,7 +177,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
 		/// <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
-		/// <remarks>To register a dictionary of ints keyed by strings, the call should be RegisterDictionaryType&lt;string, int&gt;()</remarks>
+		/// <remarks>To register a dictionary of ints keyed by strings, the call should be RegisterDictionaryType{string, int}()</remarks>
 		public static void RegisterDictionaryType<TKey, TValue>()
 		{
 			var keyType = typeof(TKey);
@@ -192,7 +192,7 @@ namespace Manatee.Json.Serialization
 		/// Registers an encode/decode method pair for a typed queue.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the queue.</typeparam>
-		/// <remarks>To register a queue of ints, the call should be RegisterQueueType&lt;int&gt;()</remarks>
+		/// <remarks>To register a queue of ints, the call should be RegisterQueueType{int}()</remarks>
 		public static void RegisterQueueType<T>()
 		{
 			var type = typeof(T);
@@ -206,7 +206,7 @@ namespace Manatee.Json.Serialization
 		/// Registers an encode/decode method pair for a typed stack.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the stack.</typeparam>
-		/// <remarks>To register a stack of ints, the call should be RegisterStackType&lt;int&gt;()</remarks>
+		/// <remarks>To register a stack of ints, the call should be RegisterStackType{int}()</remarks>
 		public static void RegisterStackType<T>()
 		{
 			var type = typeof(T);
@@ -296,7 +296,11 @@ namespace Manatee.Json.Serialization
 		/// <returns>The <see cref="Guid"/> object.</returns>
 		public static Guid DecodeGuid(JsonValue json)
 		{
+#if NET35 || NET35C
+			return json.Type == JsonValueType.String ? new Guid(json.String) : default(Guid);
+#elif NET4 || NET4C || NET45
 			return json.Type == JsonValueType.String ? Guid.Parse(json.String) : default(Guid);
+#endif
 		}
 		#endregion
 		#endregion
@@ -304,21 +308,21 @@ namespace Manatee.Json.Serialization
 		#region Generic Types
 		#region Nullable<T>
 		/// <summary>
-		/// Encodes a <see cref="Nullable&lt;T&gt;"/> to its JSON representation.
+		/// Encodes a <see cref="Nullable{T}"/> to its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the nullable value.</typeparam>
-		/// <param name="nullable">The <see cref="Nullable&lt;T&gt;"/> object.</param>
-		/// <returns>The JSON representation of the <see cref="Nullable&lt;T&gt;"/>.</returns>
+		/// <param name="nullable">The <see cref="Nullable{T}"/> object.</param>
+		/// <returns>The JSON representation of the <see cref="Nullable{T}"/>.</returns>
 		public static JsonValue EncodeNullable<T>(T? nullable) where T : struct
 		{
 			return nullable.HasValue ? Serializer.Serialize(nullable.Value) : JsonValue.Null;
 		}
 		/// <summary>
-		/// Decodes a <see cref="Nullable&lt;T&gt;"/> object from its JSON representation.
+		/// Decodes a <see cref="Nullable{T}"/> object from its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the nullable value.</typeparam>
-		/// <param name="json">A JSON representation of a <see cref="Nullable&lt;T&gt;"/>.</param>
-		/// <returns>The <see cref="Nullable&lt;T&gt;"/> object.</returns>
+		/// <param name="json">A JSON representation of a <see cref="Nullable{T}"/>.</param>
+		/// <returns>The <see cref="Nullable{T}"/> object.</returns>
 		public static T? DecodeNullable<T>(JsonValue json) where T : struct
 		{
 			if (json == JsonValue.Null) return null;
@@ -328,11 +332,11 @@ namespace Manatee.Json.Serialization
 		#endregion
 		#region List<T>
 		/// <summary>
-		/// Encodes a <see cref="List&lt;T&gt;"/> to its JSON representation.
+		/// Encodes a <see cref="List{T}"/> to its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
-		/// <param name="list">The <see cref="List&lt;T&gt;"/> object.</param>
-		/// <returns>The JSON representation of the <see cref="List&lt;T&gt;"/>.</returns>
+		/// <param name="list">The <see cref="List{T}"/> object.</param>
+		/// <returns>The JSON representation of the <see cref="List{T}"/>.</returns>
 		public static JsonValue EncodeGenericList<T>(List<T> list)
 		{
 			var array = new JsonArray();
@@ -340,11 +344,11 @@ namespace Manatee.Json.Serialization
 			return array;
 		}
 		/// <summary>
-		/// Decodes a <see cref="List&lt;T&gt;"/> object from its JSON representation.
+		/// Decodes a <see cref="List{T}"/> object from its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
-		/// <param name="json">A JSON representation of a <see cref="List&lt;T&gt;"/>.</param>
-		/// <returns>The <see cref="List&lt;T&gt;"/> object.</returns>
+		/// <param name="json">A JSON representation of a <see cref="List{T}"/>.</param>
+		/// <returns>The <see cref="List{T}"/> object.</returns>
 		public static List<T> DecodeGenericList<T>(JsonValue json)
 		{
 			var list = new List<T>();
@@ -354,12 +358,12 @@ namespace Manatee.Json.Serialization
 		#endregion
 		#region Dictionary<TKey, TValue>
 		/// <summary>
-		/// Encodes a <see cref="Dictionary&lt;T&gt;"/> to its JSON representation.
+		/// Encodes a <see cref="Dictionary{TKey, TValue}"/> to its JSON representation.
 		/// </summary>
 		/// <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
 		/// <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
-		/// <param name="dict">The <see cref="Dictionary&lt;T&gt;"/> object.</param>
-		/// <returns>The JSON representation of the <see cref="Dictionary&lt;T&gt;"/>.</returns>
+		/// <param name="dict">The <see cref="Dictionary{TKey, TValue}"/> object.</param>
+		/// <returns>The JSON representation of the <see cref="Dictionary{TKey, TValue}"/>.</returns>
 		public static JsonValue EncodeGenericDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict)
 		{
 			var array = new JsonArray();
@@ -371,12 +375,12 @@ namespace Manatee.Json.Serialization
 			return array;
 		}
 		/// <summary>
-		/// Decodes a <see cref="Dictionary&lt;T&gt;"/> object from its JSON representation.
+		/// Decodes a <see cref="Dictionary{TKey, TValue}"/> object from its JSON representation.
 		/// </summary>
 		/// <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
 		/// <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
-		/// <param name="json">A JSON representation of a <see cref="Dictionary&lt;T&gt;"/>.</param>
-		/// <returns>The <see cref="Dictionary&lt;T&gt;"/> object.</returns>
+		/// <param name="json">A JSON representation of a <see cref="Dictionary{TKey, TValue}"/>.</param>
+		/// <returns>The <see cref="Dictionary{TKey, TValue}"/> object.</returns>
 		public static Dictionary<TKey, TValue> DecodeGenericDictionary<TKey, TValue>(JsonValue json)
 		{
 			var dict = new Dictionary<TKey, TValue>();
@@ -390,11 +394,11 @@ namespace Manatee.Json.Serialization
 		#endregion
 		#region Queue<T>
 		/// <summary>
-		/// Encodes a <see cref="Queue&lt;T&gt;"/> to its JSON representation.
+		/// Encodes a <see cref="Queue{T}"/> to its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the queue.</typeparam>
-		/// <param name="queue">The <see cref="Queue&lt;T&gt;"/> object.</param>
-		/// <returns>The JSON representation of the <see cref="Queue&lt;T&gt;"/>.</returns>
+		/// <param name="queue">The <see cref="Queue{T}"/> object.</param>
+		/// <returns>The JSON representation of the <see cref="Queue{T}"/>.</returns>
 		public static JsonValue EncodeGenericQueue<T>(Queue<T> queue)
 		{
 			var array = new JsonArray();
@@ -405,11 +409,11 @@ namespace Manatee.Json.Serialization
 			return array;
 		}
 		/// <summary>
-		/// Decodes a <see cref="Queue&lt;T&gt;"/> object from its JSON representation.
+		/// Decodes a <see cref="Queue{T}"/> object from its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the queue.</typeparam>
-		/// <param name="json">A JSON representation of a <see cref="Queue&lt;T&gt;"/>.</param>
-		/// <returns>The <see cref="Queue&lt;T&gt;"/> object.</returns>
+		/// <param name="json">A JSON representation of a <see cref="Queue{T}"/>.</param>
+		/// <returns>The <see cref="Queue{T}"/> object.</returns>
 		public static Queue<T> DecodeGenericQueue<T>(JsonValue json)
 		{
 			var queue = new Queue<T>();
@@ -422,11 +426,11 @@ namespace Manatee.Json.Serialization
 		#endregion
 		#region Stack<T>
 		/// <summary>
-		/// Encodes a <see cref="Stack&lt;T&gt;"/> to its JSON representation.
+		/// Encodes a <see cref="Stack{T}"/> to its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the stack.</typeparam>
-		/// <param name="stack">The <see cref="Stack&lt;T&gt;"/> object.</param>
-		/// <returns>The JSON representation of the <see cref="Stack&lt;T&gt;"/>.</returns>
+		/// <param name="stack">The <see cref="Stack{T}"/> object.</param>
+		/// <returns>The JSON representation of the <see cref="Stack{T}"/>.</returns>
 		public static JsonValue EncodeGenericStack<T>(Stack<T> stack)
 		{
 			var array = new JsonArray();
@@ -437,11 +441,11 @@ namespace Manatee.Json.Serialization
 			return array;
 		}
 		/// <summary>
-		/// Decodes a <see cref="Stack&lt;T&gt;"/> object from its JSON representation.
+		/// Decodes a <see cref="Stack{T}"/> object from its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the stack.</typeparam>
-		/// <param name="json">A JSON representation of a <see cref="Stack&lt;T&gt;"/>.</param>
-		/// <returns>The <see cref="Stack&lt;T&gt;"/> object.</returns>
+		/// <param name="json">A JSON representation of a <see cref="Stack{T}"/>.</param>
+		/// <returns>The <see cref="Stack{T}"/> object.</returns>
 		public static Stack<T> DecodeGenericStack<T>(JsonValue json)
 		{
 			var stack = new Stack<T>();

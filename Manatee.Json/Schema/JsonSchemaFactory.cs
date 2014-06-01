@@ -130,12 +130,21 @@ namespace Manatee.Json.Schema
 			schema.FromJson(json, null);
 			return schema;
 		}
-
+		/// <summary>
+		/// Builds a <see cref="IJsonSchema"/> implementation which can validate JSON for a given type.
+		/// </summary>
+		/// <typeparam name="T">The type to convert to a schema.</typeparam>
+		/// <returns>The schema object.</returns>
 		public static IJsonSchema FromTypeBeta<T>()
 		{
 			return FromTypeBeta(typeof (T));
 		}
 
+		/// <summary>
+		/// Builds a <see cref="IJsonSchema"/> implementation which can validate JSON for a given type.
+		/// </summary>
+		/// <param name="type">The type to convert to a schema.</param>
+		/// <returns>The schema object.</returns>
 		public static IJsonSchema FromTypeBeta(Type type)
 		{
 			var schema = FromType(type, null);

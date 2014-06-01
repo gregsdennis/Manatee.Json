@@ -91,11 +91,11 @@ namespace Manatee.Json.Tests
 			Console.WriteLine(schema.ToJson(null));
 		}
 		[TestMethod]
-		public void QuotesTest()
+		public void EscapingTest()
 		{
-			var str = "[{\"id\":\"533f018805de2474035484e1\",\"closed\":false,\"dateLastActivity\":\"2014-04-16T19:28:54.092Z\",\"desc\":\"User Story #2072\",\"idBoard\":\"51b9e93ac6c1fb974b0002c8\",\"idList\":\"5342afd77c14f8c318f0ad53\",\"idShort\":2083,\"idAttachmentCover\":null,\"manualCoverAttachment\":false,\"name\":\"Change \\\"Remove Additional Deposits\\\" to \\\"Remove Pending Deposits\\\" plus text\",\"pos\":1769472,\"due\":null,\"url\":\"https://trello.com/c/kZEIQxtL/2083-change-remove-additional-deposits-to-remove-pending-deposits\",\"subscribed\":true},{\"id\":\"533f018b14ad777818e5e49c\",\"closed\":false,\"dateLastActivity\":\"2014-04-16T19:28:54.114Z\",\"desc\":\"User Story #2072\",\"idBoard\":\"51b9e93ac6c1fb974b0002c8\",\"idList\":\"5342afd77c14f8c318f0ad53\",\"idShort\":2089,\"idAttachmentCover\":null,\"manualCoverAttachment\":false,\"name\":\"Domain changes\",\"pos\":1867776,\"due\":null,\"url\":\"https://trello.com/c/bEq7rzRa/2089-domain-changes\",\"subscribed\":true}]";
-			var json = JsonValue.Parse(str);
-			Console.WriteLine(json.GetIndentedString());
+			var str = "{\"string\":\"double\\n\\nspaced\"}";
+			var json = JsonValue.Parse(str).Object;
+			Console.WriteLine(json["string"].String);
 		}
 	}
 }

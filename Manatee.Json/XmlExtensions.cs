@@ -53,7 +53,11 @@ namespace Manatee.Json
 		/// </remarks>
 		public static XElement ToXElement(this JsonValue json, string key)
 		{
+#if NET35 || NET35C
+			if (key.IsNullOrWhiteSpace() && (json.Type != JsonValueType.Object))
+#elif NET4 || NET4C || NET45
 			if (string.IsNullOrWhiteSpace(key) && (json.Type != JsonValueType.Object))
+#endif
 				throw new ArgumentException(EncodingWithoutKeyError);
 			var name = GetXName(key);
 			XElement xml;

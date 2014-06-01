@@ -1,6 +1,4 @@
-﻿#if NET4
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -22,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("effb4352-e82d-445c-ba56-99a6d5ceb8b8")]
+[assembly: Guid("4e4b4fc6-83db-4352-a591-9af0241ff77f")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -36,6 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: InternalsVisibleTo("Manatee.Json.Tests")]
-#endif

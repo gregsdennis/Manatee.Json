@@ -41,21 +41,21 @@ namespace Manatee.Json
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.String) ? obj[key].String : null;
 		}
 		/// <summary>
-		/// Returns a <see cref="Nullable&lt;double&gt;"/> or null if the key is not found or is not a double.
+		/// Returns a <see cref="Nullable{Double}"/> or null if the key is not found or is not a double.
 		/// </summary>
 		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
-		/// <returns>A <see cref="Nullable&lt;double&gt;"/> or null if the key is not found or is not a <see cref="Nullable&lt;double&gt;"/></returns>
+		/// <returns>A <see cref="Nullable{Double}"/> or null if the key is not found or is not a <see cref="Nullable{Double}"/></returns>
 		public static double? TryGetNumber(this JsonObject obj, string key)
 		{
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Number) ? obj[key].Number : (double?)null;
 		}
 		/// <summary>
-		/// Returns a <see cref="Nullable&lt;bool&gt;"/> or null if the key is not found or is not a <see cref="bool"/>.
+		/// Returns a <see cref="Nullable{Boolan}"/> or null if the key is not found or is not a <see cref="bool"/>.
 		/// </summary>
 		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
-		/// <returns>A <see cref="Nullable&lt;bool&gt;"/> or null if the key is not found or is not a <see cref="Nullable&lt;bool&gt;"/></returns>
+		/// <returns>A <see cref="Nullable{Boolan}"/> or null if the key is not found or is not a <see cref="Nullable{Boolan}"/></returns>
 		public static bool? TryGetBoolean(this JsonObject obj, string key)
 		{
 			return (obj == null) ? null : obj.ContainsKey(key) && (obj[key].Type == JsonValueType.Boolean) ? obj[key].Boolean : (bool?)null;

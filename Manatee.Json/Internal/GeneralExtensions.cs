@@ -31,5 +31,11 @@ namespace Manatee.Json.Internal
 		{
 			return Math.Ceiling(value) == Math.Floor(value);
 		}
+#if NET35 || NET35C
+		public static bool IsNullOrWhiteSpace(this string value)
+		{
+			return string.IsNullOrEmpty(value.Trim());
+		}
+#endif
 	}
 }

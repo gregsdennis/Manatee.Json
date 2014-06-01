@@ -58,11 +58,11 @@ namespace Manatee.Tests.Test_References
 
 		public override bool Equals(object obj)
 		{
-			if (obj is JsonCompatibleClass) return Equals((JsonCompatibleClass)obj);
+			if (obj is JsonSerializableClass) return Equals((JsonSerializableClass)obj);
 			return base.Equals(obj);
 		}
 
-		public bool Equals(JsonCompatibleClass other)
+		public bool Equals(JsonSerializableClass other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;

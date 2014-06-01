@@ -24,6 +24,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -61,22 +62,6 @@ namespace Manatee.Json.Schema
 		{
 			Reference = reference;
 		}
-
-		/// <summary>
-		/// Resolves the reference in relation to a specific root.
-		/// </summary>
-		/// <param name="root"></param>
-		public void Resolve(JsonValue root)
-		{
-			if (string.IsNullOrWhiteSpace(Reference))
-				throw new ArgumentNullException("Reference");
-			if (root == null)
-				throw new ArgumentNullException("root");
-			if (Reference[0] == '#')
-				_schema = ResolveLocalReference(root);
-			else
-				_schema = ResolveExternalReference();
-		}
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
@@ -94,6 +79,8 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			Reference = json.Object["$ref"].String;
@@ -101,6 +88,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
@@ -119,15 +108,23 @@ namespace Manatee.Json.Schema
 			return (schema != null) && (schema.Reference == Reference);
 		}
 
+		private void Resolve(JsonValue root)
+		{
+#if NET35 || NET35C
+			if (Reference.IsNullOrWhiteSpace())
+#elif NET4 || NET4C || NET45
+			if (string.IsNullOrWhiteSpace(Reference))
+#endif
+				throw new ArgumentNullException("Reference");
+			if (root == null)
+				throw new ArgumentNullException("root");
+			_schema = Reference[0] == '#' ? ResolveLocalReference(root) : ResolveExternalReference();
+		}
 		private IJsonSchema ResolveLocalReference(JsonValue root)
 		{
-			var properties = Reference.Split('/').Skip(1);
+			var properties = Reference.Split('/').Skip(1).ToList();
 			if (!properties.Any()) return JsonSchemaFactory.FromJson(root);
-			var value = root;
-			foreach (var property in properties)
-			{
-				value = value.Object[property];
-			}
+			var value = properties.Aggregate(root, (current, property) => current.Object[property]);
 			return JsonSchemaFactory.FromJson(value);
 		}
 		private IJsonSchema ResolveExternalReference()
