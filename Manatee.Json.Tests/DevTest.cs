@@ -42,21 +42,18 @@ namespace Manatee.Json.Tests
 			{
 				Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("latitude")
 								{
-									Name = "latitude",
 									Type = new NumberSchema(),
 									IsRequired = true
 								},
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("longitude")
 								{
-									Name = "longitude",
 									Type = new NumberSchema(),
 									IsRequired = false
 								},
-							new JsonSchemaPropertyDefinition()
+							new JsonSchemaPropertyDefinition("stringData")
 								{
-									Name = "stringData",
 									Type = new StringSchema
 										{
 											Format = StringFormat.HostName

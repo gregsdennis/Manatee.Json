@@ -51,13 +51,11 @@ namespace Manatee.Json
 		/// The 'key' parameter may be null only when the underlying JSON is an
 		/// object which contains a single key/value pair.
 		/// </remarks>
+		/// <exception cref="ArgumentException">Thrown if <paramref name="key"/> is null, empty, or whitespace
+		/// and <paramref name="json"/> is not a non-empty <see cref="JsonObject"/>.</exception>
 		public static XElement ToXElement(this JsonValue json, string key)
 		{
-#if NET35 || NET35C
 			if (key.IsNullOrWhiteSpace() && (json.Type != JsonValueType.Object))
-#elif NET4 || NET4C || NET45
-			if (string.IsNullOrWhiteSpace(key) && (json.Type != JsonValueType.Object))
-#endif
 				throw new ArgumentException(EncodingWithoutKeyError);
 			var name = GetXName(key);
 			XElement xml;
@@ -161,6 +159,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="xElements">A collection of <see cref="XElement"/> objects.</param>
 		/// <returns>A single <see cref="JsonValue"/> which represents the list of <see cref="XElement"/> objects.</returns>
+		/// <exception cref="XmlException">Thrown if an error occurs while attempting to convert an array of elements.</exception>
 		public static JsonValue ToJson(this IEnumerable<XElement> xElements)
 		{
 			var json = new JsonObject();
@@ -204,7 +203,6 @@ namespace Manatee.Json
 		private static JsonValue GetValue(XElement xElement)
 		{
 			var typeAttribute = xElement.Attribute(TypeAttribute);
-			//var otherAttributes = xElement.Attributes().Where(a => (a.Name != NestAttribute) && (a.Name != TypeAttribute));
 			if (xElement.HasElements)
 				return AttachAttributes(xElement.Elements().ToJson(), xElement);
 			if (string.IsNullOrEmpty(xElement.Value) && (typeAttribute == null))

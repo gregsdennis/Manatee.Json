@@ -22,6 +22,7 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -99,11 +100,20 @@ namespace Manatee.Json
 		/// Creates an instance of a JSON object and fills it by parsing the
 		/// supplied string.
 		/// </summary>
-		/// <param name="s">A string.</param>
-		public JsonObject(string s)
+		/// <param name="source">A string.</param>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty or whitespace.</exception>
+		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
+		/// <exception cref="JsonValueParseException">Thrown if <paramref name="source"/> contains an unrecognizable
+		/// JSON value.</exception>
+		/// <exception cref="JsonStringInvalidEscapeSequenceException">Thrown if <paramref name="source"/> contains a
+		/// string value with an invalid escape sequence.</exception>
+		/// <exception cref="JsonKeyParseException">Thrown if <paramref name="source"/> contains an invalid object key.
+		/// For example, if the key is not a string.</exception>
+		public JsonObject(string source)
 			: this()
 		{
-			_source = StripExternalSpaces(s);
+			_source = StripExternalSpaces(source);
 			Parse(0);
 		}
 		internal JsonObject(string s, ref int i)
@@ -222,11 +232,7 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "{}";
-#if NET35 || NET35C
 			return "{" + string.Join(",", this.Select(kvp => string.Format("\"{0}\":{1}", kvp.Key, kvp.Value)).ToArray()) + "}";
-#elif NET4 || NET4C || NET45
-			return "{" + string.Join(",", this.Select(kvp => string.Format("\"{0}\":{1}", kvp.Key, kvp.Value))) + "}";
-#endif
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="object"/> is equal to the current <see cref="object"/>.

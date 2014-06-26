@@ -166,7 +166,7 @@ namespace Manatee.Json.Schema
 				Properties = new JsonSchemaPropertyDefinitionCollection();
 				foreach (var prop in obj["properties"].Object)
 				{
-					var property = new JsonSchemaPropertyDefinition {Name = prop.Key, Type = JsonSchemaFactory.FromJson(prop.Value)};
+					var property = new JsonSchemaPropertyDefinition(prop.Key) {Type = JsonSchemaFactory.FromJson(prop.Value)};
 					Properties.Add(property);
 				}
 			}

@@ -21,8 +21,11 @@
 
 ***************************************************************************************/
 
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -71,6 +74,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a schema used to define the type.
 		/// </summary>
+		/// <exception cref="ReadOnlyException">Thrown when attempting to set the definition
+		/// of one of the static <see cref="JsonSchemaTypeDefinition"/> fields.</exception>
 		public IJsonSchema Definition
 		{
 			get { return _definition; }
@@ -104,19 +109,37 @@ namespace Manatee.Json.Schema
 		/// Creates a new instance of the <see cref="JsonSchemaTypeDefinition"/> type.
 		/// </summary>
 		/// <param name="name">The name of the type.</param>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is null, empty, or whitespace.</exception>
 		public JsonSchemaTypeDefinition(string name)
 		{
+			if (name.IsNullOrWhiteSpace())
+				throw new ArgumentNullException("name");
+
 			Name = name;
 		}
 
 		/// <summary>
 		/// Builds a <see cref="JsonSchemaTypeDefinition"/> which can be used to represent an enumeration value.
 		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="value">A string value.</param>
+		/// <returns>A <see cref="JsonSchemaTypeDefinition"/> which can be used in an <see cref="EnumSchema"/>.</returns>
 		public static JsonSchemaTypeDefinition CreateEnumValue(string value)
 		{
 			return new JsonSchemaTypeDefinition(value) {Definition = new StringSchema {Pattern = value}};
+		}
+		/// <summary>
+		/// Builds an <see cref="IEnumerable{T}"/> of <see cref="JsonSchemaTypeDefinition"/> which contains
+		/// enumeration definitions for each member of an enumeration type.
+		/// </summary>
+		/// <typeparam name="T">The enumeration type.</typeparam>
+		/// <returns>A collection of <see cref="JsonSchemaTypeDefinition"/>s which can be used in an <see cref="EnumSchema"/>.</returns>
+		/// <exception cref="ArgumentException">Thrown when <typeparamref name="T"/> is not an enumeration type.</exception>
+		public static IEnumerable<JsonSchemaTypeDefinition> CreateEnumValues<T>()
+		{
+			if (!typeof(Enum).IsAssignableFrom(typeof(T)))
+				throw new ArgumentException("Type '{0}' is not an enumeration.");
+
+			return Enum.GetNames(typeof (T)).Select(CreateEnumValue);
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

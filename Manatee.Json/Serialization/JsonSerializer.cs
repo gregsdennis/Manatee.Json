@@ -83,6 +83,9 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The type of the object that the JSON structure represents.</typeparam>
 		/// <param name="json">The JSON representation of the object.</param>
 		/// <returns>The deserialized object.</returns>
+		/// <exception cref="TypeDoesNotContainPropertyException">Optionally thrown during automatic
+		/// deserialization when the JSON contains a property which is not defined by the requested
+		/// type.</exception>
 		public T Deserialize<T>(JsonValue json)
 		{
 			_callCount++;
@@ -99,6 +102,9 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The type to deserialize.</typeparam>
 		/// <param name="json">The JSON representation of the type.</param>
+		/// <exception cref="TypeDoesNotContainPropertyException">Optionally thrown during automatic
+		/// deserialization when the JSON contains a property which is not defined by the requested
+		/// type.</exception>
 		public void DeserializeType<T>(JsonValue json)
 		{
 			var serializer = SerializerFactory.GetTypeSerializer<T>(Options);

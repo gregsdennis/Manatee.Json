@@ -77,7 +77,10 @@ namespace Manatee.Json.Schema
 				var jValue = root ?? ToJson(null);
 				var itemValidations = array.Select(v => Items.Validate(v, jValue)).Where(r => !r.Valid).ToList();
 				if (itemValidations.Any())
+				{
 					errors.Add(new SchemaValidationError(string.Empty, string.Format("{0} items failed type validation.", itemValidations.Count)));
+					errors.AddRange(itemValidations.SelectMany(v => v.Errors));
+				}
 			}
 			return new SchemaValidationResults(errors);
 		}

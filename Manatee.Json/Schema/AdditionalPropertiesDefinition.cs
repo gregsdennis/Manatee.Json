@@ -47,6 +47,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a schema to which any additional properties must validate.
 		/// </summary>
+		/// <exception cref="ReadOnlyException">Thrown when attempting to set the definition
+		/// of one of the static <see cref="AdditionalProperties"/> fields.</exception>
 		public IJsonSchema Definition
 		{
 			get { return _definition; }

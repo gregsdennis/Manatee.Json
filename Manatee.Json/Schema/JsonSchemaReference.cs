@@ -57,9 +57,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class.
 		/// </summary>
-		/// <param name="reference"></param>
+		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is nulll, empty, or whitespace.</exception>
 		public JsonSchemaReference(string reference)
 		{
+			if (reference.IsNullOrWhiteSpace())
+				throw new ArgumentNullException("reference");
 			Reference = reference;
 		}
 		/// <summary>
@@ -110,12 +113,6 @@ namespace Manatee.Json.Schema
 
 		private void Resolve(JsonValue root)
 		{
-#if NET35 || NET35C
-			if (Reference.IsNullOrWhiteSpace())
-#elif NET4 || NET4C || NET45
-			if (string.IsNullOrWhiteSpace(Reference))
-#endif
-				throw new ArgumentNullException("Reference");
 			if (root == null)
 				throw new ArgumentNullException("root");
 			_schema = Reference[0] == '#' ? ResolveLocalReference(root) : ResolveExternalReference();

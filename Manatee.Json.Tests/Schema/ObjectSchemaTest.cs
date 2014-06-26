@@ -51,9 +51,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema(),
 									IsRequired = true
 								}
@@ -73,9 +72,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						}
@@ -94,9 +92,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						}
@@ -115,9 +112,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						}
@@ -136,9 +132,8 @@ namespace Manatee.Json.Tests.Schema
 			{
 				Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						},
@@ -162,9 +157,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						},
@@ -188,9 +182,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						},
@@ -210,9 +203,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						},
@@ -232,9 +224,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition
+							new JsonSchemaPropertyDefinition("test1")
 								{
-									Name = "test1",
 									Type = new StringSchema()
 								}
 						},

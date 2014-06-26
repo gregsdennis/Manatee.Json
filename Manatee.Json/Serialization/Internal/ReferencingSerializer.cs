@@ -67,11 +67,7 @@ namespace Manatee.Json.Serialization.Internal
 				SerializationPair pair;
 				if (jsonObj.ContainsKey(Constants.DefKey))
 				{
-#if NET35 || NET35C
 					var guid = new Guid(jsonObj[Constants.DefKey].String);
-#elif NET4 || NET4C || NET45
-					var guid = Guid.Parse(jsonObj[Constants.DefKey].String);
-#endif
 					jsonObj.Remove(Constants.DefKey);
 					pair = new SerializationPair {Json = json};
 					serializer.SerializationMap.Add(guid, pair);
@@ -82,11 +78,7 @@ namespace Manatee.Json.Serialization.Internal
 				}
 				if (jsonObj.ContainsKey(Constants.RefKey))
 				{
-#if NET35 || NET35C
 					var guid = new Guid(jsonObj[Constants.RefKey].String);
-#elif NET4 || NET4C || NET45
-					var guid = Guid.Parse(jsonObj[Constants.RefKey].String);
-#endif
 					pair = serializer.SerializationMap[guid];
 					return (T) pair.Object;
 				}

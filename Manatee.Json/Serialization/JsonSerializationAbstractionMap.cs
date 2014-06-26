@@ -48,6 +48,8 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="TAbstract">The abstract type.</typeparam>
 		/// <typeparam name="TConcrete">The concrete type.</typeparam>
+		/// <exception cref="JsonTypeMapException{TAbstract, TConcrete}">Thrown if TConcrete is an
+		/// abstract class or an interface.</exception>
 		public static void Map<TAbstract, TConcrete>(MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
 			where TConcrete : TAbstract, new()
 		{

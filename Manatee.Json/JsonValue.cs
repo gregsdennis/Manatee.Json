@@ -27,6 +27,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json
 {
@@ -337,8 +338,21 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="source">the <see cref="string"/> to parse.</param>
 		/// <returns>The JSON value represented by the <see cref="string"/>.</returns>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty or whitespace.</exception>
+		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
+		/// <exception cref="JsonValueParseException">Thrown if <paramref name="source"/> contains an unrecognizable
+		/// JSON value.</exception>
+		/// <exception cref="JsonStringInvalidEscapeSequenceException">Thrown if <paramref name="source"/> contains a
+		/// string value with an invalid escape sequence.</exception>
+		/// <exception cref="JsonKeyParseException">Thrown if <paramref name="source"/> contains an invalid object key.
+		/// For example, if the key is not a string.</exception>
 		public static JsonValue Parse(string source)
 		{
+			if (source == null)
+				throw new ArgumentNullException("source");
+			if (source.IsNullOrWhiteSpace())
+				throw new ArgumentException("Source string contains no data.");
 			var i = 1;
 			return Parse(StripExternalSpaces(source), ref i);
 		}

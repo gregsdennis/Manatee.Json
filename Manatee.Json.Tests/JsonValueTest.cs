@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -355,6 +356,27 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(json);
 
 			Assert.AreEqual(expected.String, actual.String);
+		}
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void Parse_NullString_ThrowsException()
+		{
+			string json = null;
+			var actual = JsonValue.Parse(json);
+		}
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void Parse_EmptyString_ThrowsException()
+		{
+			string json = string.Empty;
+			var actual = JsonValue.Parse(json);
+		}
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void Parse_WhitespaceString_ThrowsException()
+		{
+			string json = "  \t\n";
+			var actual = JsonValue.Parse(json);
 		}
 		#endregion
 

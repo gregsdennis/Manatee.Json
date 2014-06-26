@@ -170,7 +170,7 @@ namespace Manatee.Json.Schema
 			foreach (var property in properties)
 			{
 				if (!property.CanRead || property.GetIndexParameters().Any()) continue;
-				var propertyDefinition = new JsonSchemaPropertyDefinition {Name = property.Name};
+				var propertyDefinition = new JsonSchemaPropertyDefinition(property.Name);
 				schema = GetBasicSchema(property.PropertyType, definitionList);
 				if (schema != null)
 				{

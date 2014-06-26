@@ -37,7 +37,11 @@ namespace Manatee.Tests.Test_References
 		{
 			return default(T);
 		}
-		public event EventHandler RequiredEvent;
+		public event EventHandler RequiredEvent
+		{
+			add { }
+			remove { }
+		}
 
 		public override bool Equals(object obj)
 		{
