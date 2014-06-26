@@ -47,10 +47,10 @@ namespace Manatee.Json
 		}
 
 		/// <summary>
-		/// Converts an <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/> returned from a
+		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a
 		/// LINQ query back into a <see cref="JsonObject"/>.
 		/// </summary>
-		/// <param name="results">An <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/></param>
+		/// <param name="results">An <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/></param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
 		public static JsonObject ToJson(this IEnumerable<KeyValuePair<string, JsonValue>> results)
 		{
@@ -149,10 +149,10 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
-		/// Converts an <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/> returned from a
+		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a
 		/// LINQ query back into a <see cref="JsonObject"/>.
 		/// </summary>
-		/// <param name="results">An <see cref="IEnumerable{KeyValuePair{string, JsonValue}}"/></param>
+		/// <param name="results">An <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/></param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>

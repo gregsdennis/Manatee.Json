@@ -47,13 +47,10 @@ namespace Manatee.Json.Schema
 
 		internal SchemaValidationError PrependPropertyName(string parent)
 		{
-#if NET35 || NET35C
 			if (PropertyName.IsNullOrWhiteSpace())
-#elif NET4 || NET4C || NET45
-			if (string.IsNullOrWhiteSpace(PropertyName))
-#endif
 				PropertyName = parent;
-			else PropertyName = parent + "." + PropertyName;
+			else
+				PropertyName = parent + "." + PropertyName;
 			return this;
 		}
 
@@ -66,7 +63,9 @@ namespace Manatee.Json.Schema
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return string.Format("Property: {0} - {1}", PropertyName, Message);
+			return PropertyName.IsNullOrWhiteSpace()
+				? Message
+				: string.Format("Property: {0} - {1}", PropertyName, Message);
 		}
 	}
 }

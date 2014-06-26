@@ -135,6 +135,8 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="toJson">The serializer method.</param>
 		/// <param name="fromJson">The deserializer method.</param>
+		/// <exception cref="TypeRegistrationException">Thrown if either, but not both, <paramref name="toJson"/>
+		/// or <paramref name="fromJson"/> is null.</exception>
 		public static void RegisterType<T>(ToJsonDelegate<T> toJson, FromJsonDelegate<T> fromJson)
 		{
 			if (((toJson == null) && (fromJson != null)) ||
@@ -296,11 +298,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The <see cref="Guid"/> object.</returns>
 		public static Guid DecodeGuid(JsonValue json)
 		{
-#if NET35 || NET35C
 			return json.Type == JsonValueType.String ? new Guid(json.String) : default(Guid);
-#elif NET4 || NET4C || NET45
-			return json.Type == JsonValueType.String ? Guid.Parse(json.String) : default(Guid);
-#endif
 		}
 		#endregion
 		#endregion

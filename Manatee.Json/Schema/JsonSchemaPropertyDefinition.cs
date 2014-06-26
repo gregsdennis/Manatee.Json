@@ -20,7 +20,10 @@
 	Purpose:		Defines a single property within a schema.
 
 ***************************************************************************************/
+
+using System;
 using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -33,7 +36,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines the name of the property.
 		/// </summary>
-		public string Name { get; set; }
+		public string Name { get; private set; }
 		/// <summary>
 		/// Defines a schema used to represent the type of this property.
 		/// </summary>
@@ -46,8 +49,14 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaPropertyDefinition"/> class.
 		/// </summary>
-		public JsonSchemaPropertyDefinition()
+		/// <param name="name">The name of the type.</param>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is null, empty, or whitespace.</exception>
+		public JsonSchemaPropertyDefinition(string name)
 		{
+			if (name.IsNullOrWhiteSpace())
+				throw new ArgumentNullException("name");
+
+			Name = name;
 			Type = JsonSchema.Empty;
 		}
 

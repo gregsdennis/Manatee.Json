@@ -157,11 +157,7 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "[]";
-#if NET35 || NET35C
 			return "[" + string.Join(",", this.Select(value => value.ToString()).ToArray()) + "]";
-#elif NET4 || NET4C || NET45
-			return "[" + string.Join(",", this.Select(value => value.ToString())) + "]";
-#endif
 		}
 
 		/// <summary>
