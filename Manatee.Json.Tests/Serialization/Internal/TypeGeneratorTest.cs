@@ -34,7 +34,7 @@ namespace Manatee.Json.Tests.Serialization.Internal
 		[TestMethod]
 		public void TypeCreation_Success()
 		{
-			var instance = TypeGenerator.Default.Generate<IInterface>();
+			var instance = TypeGenerator.Generate<IInterface>();
 
 			Assert.IsNotNull(instance);
 		}
@@ -43,7 +43,7 @@ namespace Manatee.Json.Tests.Serialization.Internal
 		{
 			string stringProp = "test";
 
-			var instance = TypeGenerator.Default.Generate<IInterface>();
+			var instance = TypeGenerator.Generate<IInterface>();
 			instance.RequiredProp = stringProp;
 
 			Assert.AreEqual(stringProp, instance.RequiredProp);
@@ -51,7 +51,7 @@ namespace Manatee.Json.Tests.Serialization.Internal
 		[TestMethod]
 		public void MethodCall_Success()
 		{
-			var instance = TypeGenerator.Default.Generate<IInterface>();
+			var instance = TypeGenerator.Generate<IInterface>();
 
 			var actual = instance.RequiredMethod<int, IConvertible>(2.0);
 
@@ -60,7 +60,7 @@ namespace Manatee.Json.Tests.Serialization.Internal
 		[TestMethod]
 		public void EventSubscription_Success()
 		{
-			var instance = TypeGenerator.Default.Generate<IInterface>();
+			var instance = TypeGenerator.Generate<IInterface>();
 
 			EventHandler handler = (o, e) => { };
 
@@ -70,8 +70,8 @@ namespace Manatee.Json.Tests.Serialization.Internal
 		[TestMethod]
 		public void CacheTypes_Success()
 		{
-			var instance = TypeGenerator.Default.Generate<IInterface>();
-			var instance2 = TypeGenerator.Default.Generate<IInterface>();
+			var instance = TypeGenerator.Generate<IInterface>();
+			var instance2 = TypeGenerator.Generate<IInterface>();
 
 			Assert.AreNotSame(instance, instance2);
 			Assert.AreEqual(instance.GetType(), instance2.GetType());

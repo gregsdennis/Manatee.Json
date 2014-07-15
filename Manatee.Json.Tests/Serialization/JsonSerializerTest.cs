@@ -90,7 +90,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"IntProp", 42},
 					{"DoubleProp", 6},
 					{"BoolProp", true},
-					{"EnumProp", 2},
+					{"EnumProp", 1},
 					{"MapToMe", 4}
 				};
 			var expected = new ObjectWithBasicProps
@@ -99,7 +99,7 @@ namespace Manatee.Json.Tests.Serialization
 				IntProp = 42,
 				DoubleProp = 6.0,
 				BoolProp = true,
-				EnumProp = JsonValueType.Boolean,
+				EnumProp = TestEnum.BasicEnumValue,
 				MappedProp = 4
 			};
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
@@ -116,7 +116,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"IntProp", 42},
 					{"DoubleProp", 6},
 					{"BoolProp", true},
-					{"EnumProp", "Boolean"},
+					{"EnumProp", "BasicEnumValue"},
 					{"MapToMe", 4}
 				};
 			var expected = new ObjectWithBasicProps
@@ -125,7 +125,33 @@ namespace Manatee.Json.Tests.Serialization
 				IntProp = 42,
 				DoubleProp = 6.0,
 				BoolProp = true,
-				EnumProp = JsonValueType.Boolean,
+				EnumProp = TestEnum.BasicEnumValue,
+				MappedProp = 4
+			};
+			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_BasicWithNamedEnumWithDescription_Successful()
+		{
+			var serializer = GetSerializer();
+			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var json = new JsonObject
+				{
+					{"StringProp", "stringValue"},
+					{"IntProp", 42},
+					{"DoubleProp", 6},
+					{"BoolProp", true},
+					{"EnumProp", "enum_value_with_description"},
+					{"MapToMe", 4}
+				};
+			var expected = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true,
+				EnumProp = TestEnum.EnumValueWithDescription,
 				MappedProp = 4
 			};
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
@@ -570,7 +596,7 @@ namespace Manatee.Json.Tests.Serialization
 				IntProp = 42,
 				DoubleProp = 6.0,
 				BoolProp = true,
-				EnumProp = JsonValueType.Boolean,
+				EnumProp = TestEnum.BasicEnumValue,
 				MappedProp = 4
 			};
 			JsonValue expected = new JsonObject
@@ -579,7 +605,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"IntProp", 42},
 					{"DoubleProp", 6},
 					{"BoolProp", true},
-					{"EnumProp", 2},
+					{"EnumProp", 1},
 					{"MapToMe", 4}
 				};
 			var actual = serializer.Serialize(obj);
@@ -596,7 +622,7 @@ namespace Manatee.Json.Tests.Serialization
 				IntProp = 42,
 				DoubleProp = 6.0,
 				BoolProp = true,
-				EnumProp = JsonValueType.Boolean,
+				EnumProp = TestEnum.BasicEnumValue,
 				MappedProp = 4
 			};
 			JsonValue expected = new JsonObject
@@ -605,7 +631,33 @@ namespace Manatee.Json.Tests.Serialization
 					{"IntProp", 42},
 					{"DoubleProp", 6},
 					{"BoolProp", true},
-					{"EnumProp", "Boolean"},
+					{"EnumProp", "BasicEnumValue"},
+					{"MapToMe", 4}
+				};
+			var actual = serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_BasicWithNamedEnumWithDescription_Successful()
+		{
+			var serializer = GetSerializer();
+			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var obj = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true,
+				EnumProp = TestEnum.EnumValueWithDescription,
+				MappedProp = 4
+			};
+			JsonValue expected = new JsonObject
+				{
+					{"StringProp", "stringValue"},
+					{"IntProp", 42},
+					{"DoubleProp", 6},
+					{"BoolProp", true},
+					{"EnumProp", "enum_value_with_description"},
 					{"MapToMe", 4}
 				};
 			var actual = serializer.Serialize(obj);

@@ -112,7 +112,7 @@ namespace Manatee.Json.Serialization
 					return (T) resolver.Resolve(concrete);
 				}
 				if (type.IsInterface)
-					return TypeGenerator.Default.Generate<T>();
+					return TypeGenerator.Generate<T>();
 			}
 			return resolver.Resolve<T>();
 		}
