@@ -30,7 +30,7 @@ using System.Threading;
 
 namespace Manatee.Json.Serialization.Internal
 {
-	internal class TypeGenerator
+	internal static class TypeGenerator
 	{
 		private const string AssemblyName = "Manatee.Json.DynamicTypes";
 
@@ -38,21 +38,22 @@ namespace Manatee.Json.Serialization.Internal
 		private static readonly ModuleBuilder _moduleBuilder;
 		private static readonly Dictionary<Type, Type> _cache;
 
-		public static TypeGenerator Default { get; private set; }
-
 		static TypeGenerator()
 		{
-			Default = new TypeGenerator();
 			var assemblyName = new AssemblyName(AssemblyName);
 			// Note: To debug IL generation, please use the following line with your own test path.  Also need to uncomment the Save() call in the Generate<T>() method.
 			//_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave, @"E:\Projects\Manatee.Json\Manatee.Json.Tests\bin\Debug\");
+#if NET35 || NET35C
 			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName);
+#elif NET4 || NET4C || NET45
+			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
 			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName, AssemblyName + ".dll");
+#endif
 			_cache = new Dictionary<Type, Type>();
 		}
-		private TypeGenerator() {}
 
-		public T Generate<T>()
+		public static T Generate<T>()
 		{
 			var type = typeof (T);
 			if (_cache.ContainsKey(type))

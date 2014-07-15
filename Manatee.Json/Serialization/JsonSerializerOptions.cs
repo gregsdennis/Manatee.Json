@@ -66,14 +66,14 @@ namespace Manatee.Json.Serialization
 		/// Gets and sets whether the serializer considers case for properties while deserializing.
 		/// </summary>
 		/// <remarks>
-		/// This only affect automatic serialization.
+		/// This only affects automatic serialization.
 		/// </remarks>
 		public bool CaseSensitiveDeserialization { get; set; }
 		/// <summary>
 		/// Gets and sets whether the serializer always includes the type name while serializing.
 		/// </summary>
 		/// <remarks>
-		/// This only affect automatic serialization.
+		/// This only affects automatic serialization.
 		/// </remarks>
 		public TypeNameSerializationBehavior TypeNameSerializationBehavior { get; set; }
 		/// <summary>
