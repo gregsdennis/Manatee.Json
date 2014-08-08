@@ -23,6 +23,7 @@
 
 ***************************************************************************************/
 
+using System;
 using System.ComponentModel;
 using Manatee.Json;
 using Manatee.Json.Serialization;
@@ -39,6 +40,7 @@ namespace Manatee.Tests.Test_References
 		public double DoubleProp { get; set; }
 		public bool BoolProp { get; set; }
 		public TestEnum EnumProp { get; set; }
+		public FlagsEnum FlagsEnumProp { get; set; }
 		[JsonMapTo("MapToMe")]
 		public int MappedProp { get; set; }
 		#endregion
@@ -111,6 +113,15 @@ namespace Manatee.Tests.Test_References
 		BasicEnumValue,
 		[Description("enum_value_with_description")]
 		EnumValueWithDescription
+	}
+
+	[Flags]
+	public enum FlagsEnum
+	{
+		None = 0,
+		BasicEnumValue = 1,
+		[Description("enum_value_with_description")]
+		EnumValueWithDescription = 2
 	}
 // ReSharper restore UnusedAutoPropertyAccessor.Local
 // ReSharper restore UnusedMember.Global

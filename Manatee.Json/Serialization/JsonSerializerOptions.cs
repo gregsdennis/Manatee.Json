@@ -63,6 +63,10 @@ namespace Manatee.Json.Serialization
 		/// </remarks>
 		public EnumSerializationFormat EnumSerializationFormat { get; set; }
 		/// <summary>
+		/// Gets and sets a separator to be used when serializing enumerations marked with the <see cref="FlagsAttribute"/>.
+		/// </summary>
+		public string FlagsEnumSeparator { get; set; }
+		/// <summary>
 		/// Gets and sets whether the serializer considers case for properties while deserializing.
 		/// </summary>
 		/// <remarks>

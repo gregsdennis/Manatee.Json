@@ -22,6 +22,10 @@
 ***************************************************************************************/
 
 using System;
+using System.Collections.Generic;
+#if NET35 || NET35C
+using System.Linq;
+#endif
 
 namespace Manatee.Json.Internal
 {
@@ -37,6 +41,14 @@ namespace Manatee.Json.Internal
 			return string.IsNullOrEmpty(value.Trim());
 #elif NET4 || NET4C || NET45
 			return string.IsNullOrWhiteSpace(value);
+#endif
+		}
+		public static string Join(this IEnumerable<string> segments, string separator)
+		{
+#if NET35 || NET35C
+			return string.Join(separator, segments.ToArray());
+#elif NET4 || NET4C || NET45
+			return string.Join(separator, segments);
 #endif
 		}
 	}
