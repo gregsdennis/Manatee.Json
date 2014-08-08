@@ -663,6 +663,91 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
+		[TestMethod]
+		public void Serialize_BasicWithNamedFlagsEnum_Successful()
+		{
+			var serializer = GetSerializer();
+			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var obj = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true,
+				EnumProp = TestEnum.BasicEnumValue,
+				FlagsEnumProp = FlagsEnum.BasicEnumValue,
+				MappedProp = 4
+			};
+			JsonValue expected = new JsonObject
+				{
+					{"StringProp", "stringValue"},
+					{"IntProp", 42},
+					{"DoubleProp", 6},
+					{"BoolProp", true},
+					{"EnumProp", "BasicEnumValue"},
+					{"FlagsEnumProp", "BasicEnumValue"},
+					{"MapToMe", 4}
+				};
+			var actual = serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_BasicWithNamedFlagsEnumWithDescription_Successful()
+		{
+			var serializer = GetSerializer();
+			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var obj = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true,
+				EnumProp = TestEnum.EnumValueWithDescription,
+				FlagsEnumProp = FlagsEnum.EnumValueWithDescription,
+				MappedProp = 4
+			};
+			JsonValue expected = new JsonObject
+				{
+					{"StringProp", "stringValue"},
+					{"IntProp", 42},
+					{"DoubleProp", 6},
+					{"BoolProp", true},
+					{"EnumProp", "enum_value_with_description"},
+					{"FlagsEnumProp", "enum_value_with_description"},
+					{"MapToMe", 4}
+				};
+			var actual = serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_BasicWithNamedMultivalueFlagsEnumWithDescription_Successful()
+		{
+			var serializer = GetSerializer();
+			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			serializer.Options.FlagsEnumSeparator = " | ";
+			var obj = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true,
+				EnumProp = TestEnum.EnumValueWithDescription,
+				FlagsEnumProp = (FlagsEnum) 3,
+				MappedProp = 4
+			};
+			JsonValue expected = new JsonObject
+				{
+					{"StringProp", "stringValue"},
+					{"IntProp", 42},
+					{"DoubleProp", 6},
+					{"BoolProp", true},
+					{"EnumProp", "enum_value_with_description"},
+					{"FlagsEnumProp", "BasicEnumValue | enum_value_with_description"},
+					{"MapToMe", 4}
+				};
+			var actual = serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
 		// This test fails when all tests are run together because the JsonSerializationAbstractionMap
 		// is static and one of the other tests has registered ImplementationClass to be used
 		// for IInterface, and VS is running the tests concurrently.
@@ -878,6 +963,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"DoubleProp", 0},
 					{"BoolProp", true},
 					{"EnumProp", 0},
+					{"FlagsEnumProp", 0},
 					{"MapToMe", 0}
 				};
 			var actual = serializer.Serialize(obj);

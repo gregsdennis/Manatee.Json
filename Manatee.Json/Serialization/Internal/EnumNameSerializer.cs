@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -43,7 +44,10 @@ namespace Manatee.Json.Serialization.Internal
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			EnsureDescriptions<T>();
-			return _descriptions[typeof (T)].First(d => Equals(d.Value, obj)).String;
+			var attributes = (typeof (T)).GetCustomAttributes(typeof (FlagsAttribute), false);
+			return !attributes.Any()
+				? _descriptions[typeof (T)].First(d => Equals(d.Value, obj)).String
+				: BuildFlagsValues(obj, serializer.Options.FlagsEnumSeparator);
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -67,6 +71,23 @@ namespace Manatee.Json.Serialization.Internal
 			var attributes = memInfo[0].GetCustomAttributes(typeof (DescriptionAttribute), false);
 			return attributes.Any() ? ((DescriptionAttribute)attributes[0]).Description : name;
 		}
-
+		private static string BuildFlagsValues<T>(T obj, string separator)
+		{
+			var descriptions = _descriptions[typeof (T)];
+			var value = Convert.ToInt64(obj);
+			var index = descriptions.Count - 1;
+			var names = new List<string>();
+			while (value > 0 && index > 0)
+			{
+				var compare = Convert.ToInt64(descriptions[index].Value);
+				if (value >= compare)
+				{
+					names.Insert(0, descriptions[index].String);
+					value -= compare;
+				}
+				index--;
+			}
+			return names.Join(separator);
+		}
 	}
 }
