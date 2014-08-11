@@ -491,7 +491,9 @@ namespace Manatee.Json
 		{
 			string temp;
 			int length;
+#if !IOS
 			Debug.WriteLineIf(index == 0, source);
+#endif
 			switch (source[index-1])
 			{
 				case '"':										// string

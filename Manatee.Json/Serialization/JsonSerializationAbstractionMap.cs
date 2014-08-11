@@ -111,8 +111,10 @@ namespace Manatee.Json.Serialization
 					var concrete = _registry[type];
 					return (T) resolver.Resolve(concrete);
 				}
+#if !IOS
 				if (type.IsInterface)
 					return TypeGenerator.Generate<T>();
+#endif
 			}
 			return resolver.Resolve<T>();
 		}
