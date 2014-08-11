@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Manatee.Json\Manatee.Json.csproj", "{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
@@ -32,10 +34,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\4.5\Manatee.Json\Manatee.Json.csproj", "{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iOS", "iOS", "{4A934D21-3C20-4F6C-B529-6E2D793C5FDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\iOS\Manatee.Json\Manatee.Json.csproj", "{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Json.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -64,16 +67,24 @@ Global
 		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7} = {49822D30-93F8-4575-86DB-27EA27A5299E}
 		{E74B7538-5E17-43C7-925B-33784945312E} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 		{2FF3277B-E5D4-4B23-86BD-32246D6AB4A6} = {C7B94F9D-BDEB-45E1-809E-F687BA7715D9}
 		{A8F74E88-C5B0-4ABF-8AE7-3B2A4DD012C9} = {93D5BD41-C245-4650-B629-0AA8D137A75E}
-		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7} = {49822D30-93F8-4575-86DB-27EA27A5299E}
 		{98D2DA6F-3776-4AFA-BBB9-3F2C3F0DE3C5} = {DDF2E4C0-0717-412F-9DDB-A4E7457B1A86}
 		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5} = {E51BA75F-50F0-4B01-B39E-AB27C097BA8F}
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139} = {4A934D21-3C20-4F6C-B529-6E2D793C5FDA}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Json.vsmdi
 	EndGlobalSection
 EndGlobal
