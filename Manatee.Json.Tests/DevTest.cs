@@ -25,7 +25,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -38,48 +38,71 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
-			var geoSchema = new ObjectSchema
-			{
-				Properties = new JsonSchemaPropertyDefinitionCollection
-						{
-							new JsonSchemaPropertyDefinition("latitude")
-								{
-									Type = new NumberSchema(),
-									IsRequired = true
-								},
-							new JsonSchemaPropertyDefinition("longitude")
-								{
-									Type = new NumberSchema(),
-									IsRequired = false
-								},
-							new JsonSchemaPropertyDefinition("stringData")
-								{
-									Type = new StringSchema
-										{
-											Format = StringFormat.HostName
-										},
-									IsRequired = true
-								}
-						}
-			};
-			var geoJson = new JsonObject
+			var json = new JsonObject
 				{
-					{"latitude", 95.4},
-					{"longitude", 36.8},
-					{"stringData", ""}
+					{
+						"store", new JsonObject
+							{
+								{
+									"book", new JsonArray
+										{
+											new JsonObject
+												{
+													{"category", "reference"},
+													{"author", "Nigel Rees"},
+													{"title", "Sayings of the Century"},
+													{"price", 8.95},
+													{"inStock", false}
+												},
+											new JsonObject
+												{
+													{"category", "fiction"},
+													{"author", "Evelyn Waugh"},
+													{"title", "Sword of Honour"},
+													{"price", 12.99},
+												},
+											new JsonObject
+												{
+													{"category", "fiction"},
+													{"author", "Herman Melville"},
+													{"title", "Moby Dick"},
+													{"isbn", "0-553-21311-3"},
+													{"price", 8.99},
+												},
+											new JsonObject
+												{
+													{"category", "fiction"},
+													{"author", "J. R. R. Tolkien"},
+													{"title", "The Lord of the Rings"},
+													{"isbn", "0-395-19395-8"},
+													{"price", 22.99},
+												},
+										}
+								},
+								{
+									"bicycle", new JsonObject
+										{
+											{"color", "red"},
+											{"price", 19.95}
+										}
+								}
+							}
+					}
 				};
-			var result = geoSchema.Validate(geoJson);
-			Console.WriteLine("geoJson valid? {0}", result.Valid);
-			foreach (var error in result.Errors)
-			{
-				Console.WriteLine("    {0}", error);
-			}
-			if (result.Errors.Any())
-				throw new Exception();
+
+			var maxPrice = Math.Sqrt(100);
+			var path = JsonPathWith.Name("store")
+			                       .Name("book")
+			                       .ArrayFilter(jv => jv.GetNumber("price") < maxPrice);
+
+			var result = path.Evaluate(json);
+
+			Console.WriteLine(path);
+			Console.WriteLine(result.GetIndentedString());
 		}
 		[TestMethod]
 		//[Ignore]
-		public void Test2()
+		public void SchemaGenerationTest()
 		{
 			// Having some problems with generating schema from complex or immutable types.
 			// For example, the system can't generate for KeyValuePair<,> since the properties aren't read/write.

@@ -14,30 +14,25 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertySelectionStrategy.cs
-	Namespace:		Manatee.Json.Serialization
-	Class Name:		PropertySelectionStrategy
-	Purpose:		Enumerates the types of properties which are automatically
-					serialized.
+	File Name:		IJsonPathOperator.cs
+	Namespace:		Manatee.Json.Path
+	Class Name:		IJsonPathOperator
+	Purpose:		Defines methods for JSON Path operators.
 
 ***************************************************************************************/
 
-using System;
-
-namespace Manatee.Json.Serialization
+namespace Manatee.Json.Path
 {
 	/// <summary>
-	/// Enumerates the types of properties which are automatically serialized.
+	/// Defines methods for JSON Path operators.
 	/// </summary>
-	public enum PropertySelectionStrategy
+	public interface IJsonPathOperator
 	{
 		/// <summary>
-		/// Indicates that read/write properties will be serialized.
+		/// Evaluates a portion of the JSON Path.
 		/// </summary>
-		ReadWriteOnly = 1,
-		/// <summary>
-		/// Indicates that read-only properties will be serialized.
-		/// </summary>
-		ReadOnly = 2,
+		/// <param name="json">The resulting <see cref="JsonArray"/> from the previous operation.</param>
+		/// <returns>A new <see cref="JsonArray"/> containing the current results.</returns>
+		JsonArray Evaluate(JsonArray json);
 	}
 }
