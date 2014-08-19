@@ -62,6 +62,78 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\JsonPathInput.cs" />
+    <Compile Include="Path\Expressions\AddExpression.cs" />
+    <Compile Include="Path\Expressions\AndExpression.cs" />
+    <Compile Include="Path\Expressions\ConversionExpression.cs" />
+    <Compile Include="Path\Expressions\DivideExpression.cs" />
+    <Compile Include="Path\Expressions\ExponentExpression.cs" />
+    <Compile Include="Path\Expressions\FieldExpression.cs" />
+    <Compile Include="Path\Expressions\IsGreaterThanEqualExpression.cs" />
+    <Compile Include="Path\Expressions\IsGreaterThanExpression.cs" />
+    <Compile Include="Path\Expressions\IsLessThanEqualExpression.cs" />
+    <Compile Include="Path\Expressions\IsLessThanExpression.cs" />
+    <Compile Include="Path\Expressions\IsNotEqualExpression.cs" />
+    <Compile Include="Path\Expressions\ModuloExpression.cs" />
+    <Compile Include="Path\Expressions\NotExpression.cs" />
+    <Compile Include="Path\Expressions\HasPropertyExpression.cs" />
+    <Compile Include="Path\Expressions\OrExpression.cs" />
+    <Compile Include="Path\Expressions\PropertyNumberExpression.cs" />
+    <Compile Include="Path\Expressions\PropertyStringExpression.cs" />
+    <Compile Include="Path\Expressions\Translation\AddExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\AndExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\BooleanValueExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ConversionExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\DivideExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ExponentExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Expression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Path\Expressions\ExpressionTreeBranch.cs" />
+    <Compile Include="Path\Expressions\ExpressionTreeNode.cs" />
+    <Compile Include="Path\Expressions\IsEqualExpression.cs" />
+    <Compile Include="Path\Expressions\LengthExpression.cs" />
+    <Compile Include="Path\Expressions\MultiplyExpression.cs" />
+    <Compile Include="Path\Expressions\NegateExpression.cs" />
+    <Compile Include="Path\Expressions\SubtractExpression.cs" />
+    <Compile Include="Path\Expressions\Translation\FieldExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsGreaterThanEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsGreaterThanExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsLessThanEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsLessThanExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsNotEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\LengthExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ModuloExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\MultiplyExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NegateExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NotExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NumberValueExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\HasPropertyExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\OrExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\PropertyNumberTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\PropertyStringTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\SubtractExpressionTranslator.cs" />
+    <Compile Include="Path\PathExpressions.cs" />
+    <Compile Include="Path\Expressions\ValueExpression.cs" />
+    <Compile Include="Path\Operators\ArrayOperator.cs" />
+    <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />
+    <Compile Include="Path\ArrayParameters\FilterExpressionQuery.cs" />
+    <Compile Include="Path\IJsonPathArrayQuery.cs" />
+    <Compile Include="Path\IJsonPathOperator.cs" />
+    <Compile Include="Path\JsonPath.cs" />
+    <Compile Include="Path\JsonPathWith.cs" />
+    <Compile Include="Path\IJsonPathSearchParameter.cs" />
+    <Compile Include="Path\ArrayParameters\IndexQuery.cs" />
+    <Compile Include="Path\Operators\NameOperator.cs" />
+    <Compile Include="Path\SearchParameters\NameSearchParameter.cs" />
+    <Compile Include="Path\Operators\SearchOperator.cs" />
+    <Compile Include="Path\ArrayParameters\SliceQuery.cs" />
+    <Compile Include="Path\Operators\WildCardOperator.cs" />
+    <Compile Include="Path\ArrayParameters\WildCardQuery.cs" />
+    <Compile Include="Path\SearchParameters\WildCardSearchParameter.cs" />
     <Compile Include="Schema\AdditionalPropertiesDefinition.cs" />
     <Compile Include="Schema\StringFormat.cs" />
     <Compile Include="Schema\SchemaValidationError.cs" />
@@ -150,6 +222,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

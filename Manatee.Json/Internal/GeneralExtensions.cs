@@ -23,14 +23,16 @@
 
 using System;
 using System.Collections.Generic;
-#if NET35 || NET35C
 using System.Linq;
-#endif
 
 namespace Manatee.Json.Internal
 {
 	internal static class GeneralExtensions
 	{
+		public static bool In<T>(this T value, params T[] collection)
+		{
+			return collection.Contains(value);
+		}
 		public static bool IsInt(this double value)
 		{
 			return Math.Ceiling(value) == Math.Floor(value);
@@ -43,13 +45,18 @@ namespace Manatee.Json.Internal
 			return string.IsNullOrWhiteSpace(value);
 #endif
 		}
-		public static string Join(this IEnumerable<string> segments, string separator)
+		public static string Join<T>(this IEnumerable<T> segments, string separator)
 		{
 #if NET35 || NET35C
-			return string.Join(separator, segments.ToArray());
+			return string.Join(separator, segments.Select(s => s.ToString()).ToArray());
 #elif NET4 || NET4C || NET45
 			return string.Join(separator, segments);
 #endif
+		}
+		public static IEnumerable<T> NotNull<T>(this IEnumerable<T> items)
+			where T : class
+		{
+			return items.Where(i => i != null);
 		}
 	}
 }

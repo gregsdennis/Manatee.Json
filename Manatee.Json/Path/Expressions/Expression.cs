@@ -14,30 +14,33 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertySelectionStrategy.cs
-	Namespace:		Manatee.Json.Serialization
-	Class Name:		PropertySelectionStrategy
-	Purpose:		Enumerates the types of properties which are automatically
-					serialized.
+	File Name:		Expression.cs
+	Namespace:		Manatee.Json.Path.Expressions
+	Class Name:		Expression
+	Purpose:		Represents an expression in JsonPaths.
 
 ***************************************************************************************/
-
 using System;
+using Manatee.Json.Path.Expressions.Translation;
 
-namespace Manatee.Json.Serialization
+namespace Manatee.Json.Path.Expressions
 {
-	/// <summary>
-	/// Enumerates the types of properties which are automatically serialized.
-	/// </summary>
-	public enum PropertySelectionStrategy
+	internal class Expression<T, TIn>
 	{
-		/// <summary>
-		/// Indicates that read/write properties will be serialized.
-		/// </summary>
-		ReadWriteOnly = 1,
-		/// <summary>
-		/// Indicates that read-only properties will be serialized.
-		/// </summary>
-		ReadOnly = 2,
+		internal ExpressionTreeNode<TIn> Root { get; set; }
+
+		public T Evaluate(TIn json)
+		{
+			return (T) Convert.ChangeType(Root.Evaluate(json), typeof (T));
+		}
+		public override string ToString()
+		{
+			return Root.ToString();
+		}
+
+		public static implicit operator Expression<T, TIn>(System.Linq.Expressions.Expression<Func<TIn, T>> source)
+		{
+			return ExpressionTranslator.Translate(source);
+		}
 	}
 }

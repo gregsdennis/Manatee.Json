@@ -29,33 +29,69 @@ namespace Manatee.Json.Internal
 	{
 		private static readonly Dictionary<char, JsonInput> Converter =
 			new Dictionary<char, JsonInput>()
-				{
-					{'{', JsonInput.OpenBrace},
-					{'"', JsonInput.Quote},
-					{':', JsonInput.Colon},
-					{'-', JsonInput.Number},
-					{'.', JsonInput.Number},
-					{'0', JsonInput.Number},
-					{'1', JsonInput.Number},
-					{'2', JsonInput.Number},
-					{'3', JsonInput.Number},
-					{'4', JsonInput.Number},
-					{'5', JsonInput.Number},
-					{'6', JsonInput.Number},
-					{'7', JsonInput.Number},
-					{'8', JsonInput.Number},
-					{'9', JsonInput.Number},
-					{'t', JsonInput.Boolean},
-					{'T', JsonInput.Boolean},
-					{'f', JsonInput.Boolean},
-					{'F', JsonInput.Boolean},
-					{'n', JsonInput.Null},
-					{'N', JsonInput.Null},
-					{'[', JsonInput.OpenBracket},
-					{',', JsonInput.Comma},
-					{']', JsonInput.CloseBracket},
-					{'}', JsonInput.CloseBrace}
-				};
-		public static JsonInput Item(char key) { return Converter[key]; }
+			{
+				{'{', JsonInput.OpenBrace},
+				{'}', JsonInput.CloseBrace},
+				{'"', JsonInput.Quote},
+				{':', JsonInput.Colon},
+				{'-', JsonInput.Number},
+				{'.', JsonInput.Number},
+				{'0', JsonInput.Number},
+				{'1', JsonInput.Number},
+				{'2', JsonInput.Number},
+				{'3', JsonInput.Number},
+				{'4', JsonInput.Number},
+				{'5', JsonInput.Number},
+				{'6', JsonInput.Number},
+				{'7', JsonInput.Number},
+				{'8', JsonInput.Number},
+				{'9', JsonInput.Number},
+				{'t', JsonInput.Boolean},
+				{'T', JsonInput.Boolean},
+				{'f', JsonInput.Boolean},
+				{'F', JsonInput.Boolean},
+				{'n', JsonInput.Null},
+				{'N', JsonInput.Null},
+				{'[', JsonInput.OpenBracket},
+				{']', JsonInput.CloseBracket},
+				{',', JsonInput.Comma},
+			};
+		private static readonly Dictionary<char, JsonPathInput> PathConverter =
+			new Dictionary<char, JsonPathInput>
+			{
+				{'$', JsonPathInput.Root},
+				{':', JsonPathInput.Colon},
+				{'-', JsonPathInput.Number},
+				{'.', JsonPathInput.Number},
+				{'0', JsonPathInput.Number},
+				{'1', JsonPathInput.Number},
+				{'2', JsonPathInput.Number},
+				{'3', JsonPathInput.Number},
+				{'4', JsonPathInput.Number},
+				{'5', JsonPathInput.Number},
+				{'6', JsonPathInput.Number},
+				{'7', JsonPathInput.Number},
+				{'8', JsonPathInput.Number},
+				{'9', JsonPathInput.Number},
+				{'.', JsonPathInput.Period},
+				{'[', JsonPathInput.OpenBracket},
+				{']', JsonPathInput.CloseBracket},
+				{'(', JsonPathInput.OpenParenth},
+				{')', JsonPathInput.CloseParenth},
+				{',', JsonPathInput.Comma},
+				{'*', JsonPathInput.Wildcard},
+				{'@', JsonPathInput.Current},
+				{'?', JsonPathInput.Filter},
+				{'\'', JsonPathInput.Name},
+			};
+
+		public static JsonInput Item(char key)
+		{
+			return Converter[key];
+		}
+		public static JsonPathInput PathItem(char key)
+		{
+			return char.IsLetter(key) ? JsonPathInput.Name : PathConverter[key];
+		}
 	}
 }

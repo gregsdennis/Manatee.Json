@@ -14,30 +14,29 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertySelectionStrategy.cs
-	Namespace:		Manatee.Json.Serialization
-	Class Name:		PropertySelectionStrategy
-	Purpose:		Enumerates the types of properties which are automatically
-					serialized.
+	File Name:		JsonPathInput.cs
+	Namespace:		Manatee.Json.Internal
+	Class Name:		JsonPathInput
+	Purpose:		DESCRIPTION
 
 ***************************************************************************************/
 
-using System;
-
-namespace Manatee.Json.Serialization
+namespace Manatee.Json.Internal
 {
-	/// <summary>
-	/// Enumerates the types of properties which are automatically serialized.
-	/// </summary>
-	public enum PropertySelectionStrategy
+	internal enum JsonPathInput
 	{
-		/// <summary>
-		/// Indicates that read/write properties will be serialized.
-		/// </summary>
-		ReadWriteOnly = 1,
-		/// <summary>
-		/// Indicates that read-only properties will be serialized.
-		/// </summary>
-		ReadOnly = 2,
+		Root,
+		OpenBracket,
+		CloseBracket,
+		Period,
+		Wildcard,
+		Current,
+		OpenParenth,
+		CloseParenth,
+		Filter,
+		Number,
+		Name,
+		Colon,
+		Comma
 	}
 }
