@@ -64,8 +64,10 @@
   <ItemGroup>
     <Compile Include="Path\Expressions\ArrayIndexExpression.cs" />
     <Compile Include="Path\Expressions\ComparisonExpression.cs" />
+    <Compile Include="Path\Expressions\PathExpression.cs" />
     <Compile Include="Path\Expressions\Translation\ArrayIndexExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\PathExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\StringValueExpressionTranslator.cs" />
     <Compile Include="Path\Parsing\JsonPathInput.cs" />
     <Compile Include="Path\Expressions\AddExpression.cs" />
     <Compile Include="Path\Expressions\AndExpression.cs" />

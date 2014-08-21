@@ -14,25 +14,26 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ComparisonExpression.cs
-	Namespace:		Manatee.Json.Path.Expressions
-	Class Name:		ComparisonExpression
-	Purpose:		Provides a base class for expression objects which
-					express comparison operations.
+	File Name:		StringValueExpressionTranslator.cs
+	Namespace:		Manatee.Json.Path.Expressions.Translation
+	Class Name:		StringValueExpressionTranslator
+	Purpose:		Translates from a LINQ Constant Expression with a string
+					value to a ValueExpression.
 
 ***************************************************************************************/
 using System;
+using System.Linq.Expressions;
 
-namespace Manatee.Json.Path.Expressions
+namespace Manatee.Json.Path.Expressions.Translation
 {
-	internal abstract class ComparisonExpression<T> : ExpressionTreeBranch<T>
+	internal class StringValueExpressionTranslator : IExpressionTranslator
 	{
-		protected static double? GetDouble(object value)
+		public ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
-			if (value == null) return null;
-			var json = value as JsonValue;
-			if (json == null) return Convert.ToDouble(value);
-			return json.Type == JsonValueType.Number ? json.Number : (double?) null;
+			var constant = body as ConstantExpression;
+			if (constant == null)
+				throw new InvalidOperationException();
+			return new ValueExpression<T> { Value = constant.Value };
 		}
 	}
 }

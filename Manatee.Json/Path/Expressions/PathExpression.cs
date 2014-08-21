@@ -14,25 +14,35 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ComparisonExpression.cs
+	File Name:		PathExpression.cs
 	Namespace:		Manatee.Json.Path.Expressions
-	Class Name:		ComparisonExpression
-	Purpose:		Provides a base class for expression objects which
-					express comparison operations.
+	Class Name:		PathExpression
+	Purpose:		Provides a base class for expressions which are part of paths.
 
 ***************************************************************************************/
 using System;
+using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal abstract class ComparisonExpression<T> : ExpressionTreeBranch<T>
+	internal abstract class PathExpression<T> : ExpressionTreeNode<T>
 	{
-		protected static double? GetDouble(object value)
+		public override int Priority { get { return 5; } }
+		public JsonPath Path { get; set; }
+
+		public override object Evaluate(T json)
 		{
-			if (value == null) return null;
-			var json = value as JsonValue;
-			if (json == null) return Convert.ToDouble(value);
-			return json.Type == JsonValueType.Number ? json.Number : (double?) null;
+			var value = json as JsonValue;
+			if (value == null)
+				throw new NotSupportedException("Path expressions require a JsonValue to evaluate.");
+			var results = Path.Evaluate(value);
+			if (results.Count > 1)
+				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
+			return results.FirstOrDefault();
+		}
+		public override string ToString()
+		{
+			return string.Format("@{0}", Path.GetRawString());
 		}
 	}
 }
