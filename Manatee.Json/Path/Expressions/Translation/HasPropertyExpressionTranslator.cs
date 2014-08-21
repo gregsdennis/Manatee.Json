@@ -20,7 +20,6 @@
 	Purpose:		Translates from a LINQ Method Call Expression with a
 					HasProperty method to a HasPropertyExpression.
 
-
 ***************************************************************************************/
 using System;
 using System.Linq;

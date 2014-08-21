@@ -17,7 +17,7 @@
 	File Name:		NameExpression.cs
 	Namespace:		Manatee.Json.Path.Expressions
 	Class Name:		NameExpression
-	Purpose:		Expresses the intent to retrieve a string from a named
+	Purpose:		Expresses the intent to retrieve a value from a named
 					property in an object.
 
 ***************************************************************************************/
