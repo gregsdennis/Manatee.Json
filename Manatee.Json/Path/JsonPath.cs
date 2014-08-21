@@ -54,7 +54,12 @@ namespace Manatee.Json.Path
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return string.Format("${0}", this.Select(o => o.ToString()).Join(string.Empty));
+			return string.Format("${0}", GetRawString());
+		}
+
+		internal string GetRawString()
+		{
+			return this.Select(o => o.ToString()).Join(string.Empty);
 		}
 	}
 }

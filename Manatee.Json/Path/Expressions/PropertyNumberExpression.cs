@@ -25,23 +25,22 @@ using System;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class PropertyNumberExpression<T> : ExpressionTreeNode<T>
+	internal class PropertyNumberExpression<T> : PathExpression<T>
 	{
 		public override int Priority { get { return 5; } }
-		public string Name { get; set; }
 
 		public override object Evaluate(T json)
 		{
 			var value = json as JsonValue;
 			if (value == null)
 				throw new NotSupportedException("PropertyNumber requires a JsonValue to evaluate.");
-			return value.Type == JsonValueType.Object && value.Object.ContainsKey(Name) && value.Object[Name].Type == JsonValueType.Number
-					   ? value.Object[Name].Number
+			return value.Type == JsonValueType.Number
+					   ? value.Number
 					   : (double?)null;
 		}
 		public override string ToString()
 		{
-			return string.Format("@.{0}", Name);
+			return string.Format("@.{0}", Path);
 		}
 	}
 }

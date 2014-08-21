@@ -15,13 +15,13 @@
 	   limitations under the License.
  
 	File Name:		JsonPathInput.cs
-	Namespace:		Manatee.Json.Internal
+	Namespace:		Manatee.Json.Path.Parsing
 	Class Name:		JsonPathInput
 	Purpose:		DESCRIPTION
 
 ***************************************************************************************/
 
-namespace Manatee.Json.Internal
+namespace Manatee.Json.Path.Parsing
 {
 	internal enum JsonPathInput
 	{

@@ -62,7 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Internal\JsonPathInput.cs" />
+    <Compile Include="Path\Expressions\ArrayIndexExpression.cs" />
+    <Compile Include="Path\Expressions\ComparisonExpression.cs" />
+    <Compile Include="Path\Expressions\Translation\ArrayIndexExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\PathExpressionTranslator.cs" />
+    <Compile Include="Path\Parsing\JsonPathInput.cs" />
     <Compile Include="Path\Expressions\AddExpression.cs" />
     <Compile Include="Path\Expressions\AndExpression.cs" />
     <Compile Include="Path\Expressions\ConversionExpression.cs" />
@@ -79,7 +83,7 @@
     <Compile Include="Path\Expressions\HasPropertyExpression.cs" />
     <Compile Include="Path\Expressions\OrExpression.cs" />
     <Compile Include="Path\Expressions\PropertyNumberExpression.cs" />
-    <Compile Include="Path\Expressions\PropertyStringExpression.cs" />
+    <Compile Include="Path\Expressions\NameExpresssion.cs" />
     <Compile Include="Path\Expressions\Translation\AddExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\AndExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\BooleanValueExpressionTranslator.cs" />
@@ -113,8 +117,7 @@
     <Compile Include="Path\Expressions\Translation\NumberValueExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\HasPropertyExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\OrExpressionTranslator.cs" />
-    <Compile Include="Path\Expressions\Translation\PropertyNumberTranslator.cs" />
-    <Compile Include="Path\Expressions\Translation\PropertyStringTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NameExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\SubtractExpressionTranslator.cs" />
     <Compile Include="Path\PathExpressions.cs" />
     <Compile Include="Path\Expressions\ValueExpression.cs" />

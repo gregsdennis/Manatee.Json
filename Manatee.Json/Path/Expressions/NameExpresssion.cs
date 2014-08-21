@@ -14,18 +14,19 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertyStringExpression.cs
+	File Name:		NameExpression.cs
 	Namespace:		Manatee.Json.Path.Expressions
-	Class Name:		PropertyStringExpression
+	Class Name:		NameExpression
 	Purpose:		Expresses the intent to retrieve a string from a named
 					property in an object.
 
 ***************************************************************************************/
 using System;
+using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class PropertyStringExpression<T> : ExpressionTreeNode<T>
+	internal class NameExpression<T> : PathExpression<T>
 	{
 		public override int Priority { get { return 5; } }
 		public string Name { get; set; }
@@ -34,14 +35,19 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var value = json as JsonValue;
 			if (value == null)
-				throw new NotSupportedException("PropertyString requires a JsonValue to evaluate.");
-			return value.Type == JsonValueType.Object && value.Object.ContainsKey(Name) && value.Object[Name].Type == JsonValueType.String
-				       ? value.Object[Name].String
+				throw new NotSupportedException("Name requires a JsonValue to evaluate.");
+			var results = Path.Evaluate(json as JsonValue);
+			if (results.Count > 1)
+				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, json));
+			var result = results.FirstOrDefault();
+			return result != null && result.Type == JsonValueType.Object && result.Object.ContainsKey(Name)
+				       ? result.Object[Name]
 				       : null;
 		}
 		public override string ToString()
 		{
-			return string.Format("@.{0}", Name);
+			var path = Path == null ? string.Empty : Path.GetRawString();
+			return string.Format("@{0}.{1}", path, Name);
 		}
 	}
 }

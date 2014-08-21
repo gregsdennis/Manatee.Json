@@ -21,23 +21,39 @@
 
 ***************************************************************************************/
 using System;
+using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class LengthExpression<T> : ExpressionTreeNode<T>
+	internal class LengthExpression<T> : PathExpression<T>
 	{
 		public override int Priority { get { return 5; } }
 
 		public override object Evaluate(T json)
 		{
-			var array = json as JsonArray;
-			if (array == null)
-				throw new NotSupportedException("Length requires a JsonArray to evaluate.");
-			return (double) array.Count;
+			JsonArray array;
+			if (Path == null)
+			{
+				array = json as JsonArray;
+				if (array == null)
+					throw new NotSupportedException("Length requires a JsonArray to evaluate.");
+			}
+			else
+			{
+				var results = Path.Evaluate(json as JsonValue);
+				if (results.Count > 1)
+					throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, json));
+				var result = results.FirstOrDefault();
+				array = result != null && result.Type == JsonValueType.Array
+					        ? result.Array
+					        : null;
+			}
+			return array == null ? null : (int?) array.Count;
 		}
 		public override string ToString()
 		{
-			return "@.length";
+			var path = Path == null ? string.Empty : Path.GetRawString();
+			return string.Format("@{0}.length", path);
 		}
 	}
 }
