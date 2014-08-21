@@ -30,11 +30,10 @@ namespace Manatee.Json.Path.ArrayParameters
 	{
 		private readonly Expression<int, JsonArray> _expression;
 
-		public Expression<int, JsonArray> Expression { get { return _expression; } }
-
 		public IndexExpressionQuery(System.Linq.Expressions.Expression<Func<JsonArray, int>> expression)
 		{
 			_expression = expression;
+			;
 		}
 
 		public IEnumerable<JsonValue> Find(JsonArray json)
@@ -44,7 +43,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override string ToString()
 		{
-			return string.Format("({0})", Expression);
+			return string.Format("({0})", _expression);
 		}
 	}
 }

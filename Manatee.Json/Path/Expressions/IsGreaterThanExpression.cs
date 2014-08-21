@@ -20,18 +20,19 @@
 	Purpose:		Expresses the intent to compare two values.
 
 ***************************************************************************************/
-using System;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class IsGreaterThanExpression<T> : ExpressionTreeBranch<T>
+	internal class IsGreaterThanExpression<T> : ComparisonExpression<T>
 	{
 		public override int Priority { get { return 1; } }
 
 		public override object Evaluate(T json)
 		{
-			var compare = Left.Evaluate(json) as IComparable;
-			return compare != null && compare.CompareTo(Right.Evaluate(json)) > 0;
+			var left = GetDouble(Left.Evaluate(json));
+			if (left == null) return false;
+			var right = GetDouble(Right.Evaluate(json));
+			return left.Value.CompareTo(right) > 0;
 		}
 		public override string ToString()
 		{

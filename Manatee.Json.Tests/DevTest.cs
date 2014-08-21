@@ -51,8 +51,9 @@ namespace Manatee.Json.Tests
 													{"category", "reference"},
 													{"author", "Nigel Rees"},
 													{"title", "Sayings of the Century"},
-													{"price", 8.95},
-													{"inStock", false}
+													{"price", new JsonObject {{"new", 8.95}, {"used", 5.00}}},
+													{"inStock", false},
+													{"tags", new JsonArray{"awesome", "thrilling", "insightful"}}
 												},
 											new JsonObject
 												{
@@ -60,6 +61,7 @@ namespace Manatee.Json.Tests
 													{"author", "Evelyn Waugh"},
 													{"title", "Sword of Honour"},
 													{"price", 12.99},
+													{"tags", new JsonArray{4, "thrilling", "insightful"}}
 												},
 											new JsonObject
 												{
@@ -68,6 +70,7 @@ namespace Manatee.Json.Tests
 													{"title", "Moby Dick"},
 													{"isbn", "0-553-21311-3"},
 													{"price", 8.99},
+													{"tags", new JsonArray{10, "thrilling", "insightful"}}
 												},
 											new JsonObject
 												{
@@ -77,6 +80,7 @@ namespace Manatee.Json.Tests
 													{"isbn", "0-395-19395-8"},
 													{"price", 22.99},
 												},
+											new JsonArray{"true", true, 5}
 										}
 								},
 								{
@@ -90,32 +94,29 @@ namespace Manatee.Json.Tests
 					}
 				};
 
-			var maxPrice = Math.Sqrt(100);
-			var path = JsonPathWith.Name("store")
-			                       .Name("book")
-			                       .ArrayFilter(jv => jv.GetNumber("price") < maxPrice);
-
+			var maxPrice = 20;
+			var path = JsonPathWith.Search("book")
+								   .ArrayFilter(jv => jv.Name("tags").ArrayIndex(0) < maxPrice);
 			var result = path.Evaluate(json);
+
+			Console.WriteLine(path);
+			Console.WriteLine(result.GetIndentedString());
+
+			maxPrice = 10;
+			result = path.Evaluate(json);
 
 			Console.WriteLine(path);
 			Console.WriteLine(result.GetIndentedString());
 		}
 		[TestMethod]
-		//[Ignore]
+		[Ignore]
 		public void SchemaGenerationTest()
 		{
 			// Having some problems with generating schema from complex or immutable types.
 			// For example, the system can't generate for KeyValuePair<,> since the properties aren't read/write.
-			// Try Dictionary<string, int> or JsonObject (Dictionary<string, JsonValue>).
+			// Try Dictionary<string, int>.
 			var schema = JsonSchemaFactory.FromTypeBeta(typeof (Dictionary<string, int>));
 			Console.WriteLine(schema.ToJson(null));
-		}
-		[TestMethod]
-		public void EscapingTest()
-		{
-			var str = "{\"string\":\"double\\n\\nspaced\"}";
-			var json = JsonValue.Parse(str).Object;
-			Console.WriteLine(json["string"].String);
 		}
 	}
 }

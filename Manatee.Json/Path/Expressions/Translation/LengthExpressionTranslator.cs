@@ -21,15 +21,19 @@
 					Length method to a LengthExpression.
 
 ***************************************************************************************/
+
 using System.Linq.Expressions;
 
 namespace Manatee.Json.Path.Expressions.Translation
 {
-	internal class LengthExpressionTranslator : IExpressionTranslator
+	internal class LengthExpressionTranslator : PathExpressionTranslator
 	{
-		public ExpressionTreeNode<T> Translate<T>(Expression body)
+		public override ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
-			return new LengthExpression<T>();
+			var method = body as MethodCallExpression;
+			return method == null
+				       ? new LengthExpression<T>()
+				       : new LengthExpression<T> {Path = BuildPath(method)};
 		}
 	}
 }

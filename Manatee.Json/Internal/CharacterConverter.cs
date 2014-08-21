@@ -22,6 +22,7 @@
 ***************************************************************************************/
 
 using System.Collections.Generic;
+using Manatee.Json.Path.Parsing;
 
 namespace Manatee.Json.Internal
 {
@@ -62,7 +63,6 @@ namespace Manatee.Json.Internal
 				{'$', JsonPathInput.Root},
 				{':', JsonPathInput.Colon},
 				{'-', JsonPathInput.Number},
-				{'.', JsonPathInput.Number},
 				{'0', JsonPathInput.Number},
 				{'1', JsonPathInput.Number},
 				{'2', JsonPathInput.Number},

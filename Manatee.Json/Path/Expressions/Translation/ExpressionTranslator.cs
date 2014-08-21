@@ -175,10 +175,10 @@ namespace Manatee.Json.Path.Expressions.Translation
 					return new LengthExpressionTranslator();
 				case "HasProperty":
 					return new HasPropertyExpressionTranslator();
-				case "GetNumber":
-					return new PropertyNumberTranslator();
-				case "GetString":
-					return new PropertyStringTranslator();
+				case "Name":
+					return new NameExpressionTranslator();
+				case "ArrayIndex":
+					return new ArrayIndexExpressionTranslator();
 			}
 			throw new NotSupportedException(string.Format("The method '{0}' is not supported.", method.Method.Name));
 		}
@@ -187,7 +187,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 			var member = (MemberExpression) exp;
 			if (member.Member is FieldInfo && member.Expression is ConstantExpression)
 				return new FieldExpressionTranslator();
-			throw new NotSupportedException();
+			throw new NotSupportedException("Properties and static fields are not supported.");
 		}
 
 		public static ExpressionTreeNode<T> TranslateNode<T>(Expression source)

@@ -31,7 +31,8 @@ namespace Manatee.Json.Path.Expressions
 
 		public T Evaluate(TIn json)
 		{
-			return (T) Convert.ChangeType(Root.Evaluate(json), typeof (T));
+			var result = Root.Evaluate(json);
+			return (T) result;
 		}
 		public override string ToString()
 		{

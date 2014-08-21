@@ -14,11 +14,11 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertyNumberTranslator.cs
+	File Name:		NameExpressionTranslator.cs
 	Namespace:		Manatee.Json.Path.Expressions.Translation
-	Class Name:		PropertyNumberTranslator
+	Class Name:		NameExpressionTranslator
 	Purpose:		Translates from a LINQ Method Call Expression with a
-					PropertyNumber method to a PropertyNumberExpression.
+					Name method to a NameExpression.
 
 ***************************************************************************************/
 using System;
@@ -27,17 +27,21 @@ using System.Linq.Expressions;
 
 namespace Manatee.Json.Path.Expressions.Translation
 {
-	internal class PropertyNumberTranslator : IExpressionTranslator
+	internal class NameExpressionTranslator : PathExpressionTranslator
 	{
-		public ExpressionTreeNode<T> Translate<T>(Expression body)
+		public override ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
 			var method = body as MethodCallExpression;
 			if (method == null)
 				throw new InvalidOperationException();
 			var parameter = method.Arguments.Last() as ConstantExpression;
 			if (parameter == null || parameter.Type != typeof(string))
-				throw new NotSupportedException("Only literal string arguments are supported in PropertyNumber()");
-			return new PropertyNumberExpression<T> { Name = parameter.Value.ToString() };
+				throw new NotSupportedException("Only literal string arguments are supported in Name().");
+			return new NameExpression<T>
+				{
+					Path = BuildPath(method),
+					Name = (string) parameter.Value
+				};
 		}
 	}
 }

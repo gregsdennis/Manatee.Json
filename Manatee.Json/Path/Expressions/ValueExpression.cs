@@ -21,6 +21,9 @@
 
 ***************************************************************************************/
 
+using System;
+using System.Linq;
+
 namespace Manatee.Json.Path.Expressions
 {
 	internal class ValueExpression<T> : ExpressionTreeNode<T>
@@ -37,6 +40,51 @@ namespace Manatee.Json.Path.Expressions
 			return Value is string
 				       ? string.Format("\"{0}\"", Value)
 				       : Value.ToString();
+		}
+	}
+
+	internal abstract class PathExpression<T> : ExpressionTreeNode<T>
+	{
+		public override int Priority { get { return 5; } }
+		public JsonPath Path { get; set; }
+
+		public override object Evaluate(T json)
+		{
+			var value = json as JsonValue;
+			if (value == null)
+				throw new NotSupportedException("Path expressions require a JsonValue to evaluate.");
+			var results = Path.Evaluate(value);
+			if (results.Count > 1)
+				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
+			return results.FirstOrDefault();
+		}
+		public override string ToString()
+		{
+			return string.Format("@{0}", Path.GetRawString());
+		}
+	}
+
+	internal class PathNumberExpression<T> : PathExpression<T>
+	{
+		public override object Evaluate(T json)
+		{
+			var result = (JsonValue)base.Evaluate(json);
+			if (result == null) return null;
+			return result.Type == JsonValueType.Number
+					   ? result.Number
+					   : (double?)null;
+		}
+	}
+
+	internal class PathStringExpression<T> : PathExpression<T>
+	{
+		public override object Evaluate(T json)
+		{
+			var result = (JsonValue)base.Evaluate(json);
+			if (result == null) return null;
+			return result.Type == JsonValueType.String
+				       ? result.String
+				       : null;
 		}
 	}
 }

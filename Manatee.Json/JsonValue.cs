@@ -286,6 +286,7 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
+			// TODO: Should account for obj being a string, bool, double, etc.
 			var json = obj as JsonValue;
 			if (json == null) return false;
 			if (json.Type != Type) return false;
@@ -332,7 +333,6 @@ namespace Manatee.Json
 			}
 			return base.GetHashCode();
 		}
-
 		/// <summary>
 		/// Parses a <see cref="string"/> containing a JSON value.
 		/// </summary>
@@ -476,7 +476,6 @@ namespace Manatee.Json
 		{
 			return ReferenceEquals(a,b) || ((a != null) && (a.Equals(b)));
 		}
-
 		///<summary>
 		///</summary>
 		///<param name="a"></param>
@@ -485,6 +484,42 @@ namespace Manatee.Json
 		public static bool operator !=(JsonValue a, JsonValue b)
 		{
 			return !Equals(a, b);
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
+		public static bool operator <(JsonValue a, double b)
+		{
+			return a != null && a.Type == JsonValueType.Number && a.Number < b;
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
+		public static bool operator <=(JsonValue a, double b)
+		{
+			return a != null && a.Type == JsonValueType.Number && a.Number <= b;
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
+		public static bool operator >(JsonValue a, double b)
+		{
+			return a != null && a.Type == JsonValueType.Number && a.Number > b;
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
+		public static bool operator >=(JsonValue a, double b)
+		{
+			return a != null && a.Type == JsonValueType.Number && a.Number >= b;
 		}
 
 		internal static JsonValue Parse(string source, ref int index)

@@ -378,6 +378,13 @@ namespace Manatee.Json.Tests
 			string json = "  \t\n";
 			var actual = JsonValue.Parse(json);
 		}
+		[TestMethod]
+		public void Parse_Escaping()
+		{
+			var str = "{\"string\":\"double\\n\\nspaced\"}";
+			var json = JsonValue.Parse(str).Object;
+			Console.WriteLine(json["string"].String);
+		}
 		#endregion
 
 		#region Operator Tests

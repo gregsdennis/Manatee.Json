@@ -20,6 +20,7 @@
 	Purpose:		Expresses the intent to convert from one type to another.
 
 ***************************************************************************************/
+
 using System;
 
 namespace Manatee.Json.Path.Expressions
@@ -28,14 +29,27 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 5; } }
 		public ExpressionTreeNode<T> Root { get; set; }
+		public Type TargetType { get; set; }
 
 		public override object Evaluate(T json)
 		{
-			return Convert.ToDouble(Root.Evaluate(json));
+			var value = Root.Evaluate(json);
+			var result = CastValue(value);
+			return result;
 		}
 		public override string ToString()
 		{
 			return Root.ToString();
+		}
+
+		private object CastValue(object value)
+		{
+			if (TargetType != typeof (JsonValue)) return value;
+			if (value is bool)
+				return new JsonValue((bool)value);
+			if (value is string)
+				return new JsonValue((string)value);
+			return new JsonValue(Convert.ToDouble(value));
 		}
 	}
 }
