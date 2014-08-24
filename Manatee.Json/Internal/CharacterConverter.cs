@@ -60,7 +60,7 @@ namespace Manatee.Json.Internal
 		private static readonly Dictionary<char, JsonPathInput> PathConverter =
 			new Dictionary<char, JsonPathInput>
 			{
-				{'$', JsonPathInput.Root},
+				{'$', JsonPathInput.Dollar},
 				{':', JsonPathInput.Colon},
 				{'-', JsonPathInput.Number},
 				{'0', JsonPathInput.Number},
@@ -77,12 +77,9 @@ namespace Manatee.Json.Internal
 				{'[', JsonPathInput.OpenBracket},
 				{']', JsonPathInput.CloseBracket},
 				{'(', JsonPathInput.OpenParenth},
-				{')', JsonPathInput.CloseParenth},
 				{',', JsonPathInput.Comma},
-				{'*', JsonPathInput.Wildcard},
-				{'@', JsonPathInput.Current},
-				{'?', JsonPathInput.Filter},
-				{'\'', JsonPathInput.Name},
+				{'*', JsonPathInput.Star},
+				{'?', JsonPathInput.Question},
 			};
 
 		public static JsonInput Item(char key)
@@ -91,7 +88,7 @@ namespace Manatee.Json.Internal
 		}
 		public static JsonPathInput PathItem(char key)
 		{
-			return char.IsLetter(key) ? JsonPathInput.Name : PathConverter[key];
+			return char.IsLetter(key) ? JsonPathInput.Letter : PathConverter[key];
 		}
 	}
 }

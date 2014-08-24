@@ -14,50 +14,44 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NameSearchParameter.cs
-	Namespace:		Manatee.Json.Path.SearchParameters
-	Class Name:		NameSearchParameter
-	Purpose:		Indicates that a search should look for a named parameter.
+	File Name:		IndexQuery.cs
+	Namespace:		Manatee.Json.Path.ArrayParameters
+	Class Name:		IndexQuery
+	Purpose:		Provides indexed array queries.
 
 ***************************************************************************************/
+
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 
-namespace Manatee.Json.Path.SearchParameters
+namespace Manatee.Json.Path.Queries
 {
-	internal class NameSearchParameter : IJsonPathSearchParameter
+	internal class IndexQuery : IJsonPathQuery
 	{
-		private readonly string _name;
+		private readonly bool _isForSearch;
+		private readonly IEnumerable<int> _indices;
 
-		public string Name { get { return _name; } }
-
-		public NameSearchParameter(string name)
+		public IndexQuery(bool isForSearch, params int[] indices)
 		{
-			_name = name;
+			_isForSearch = isForSearch;
+			_indices = indices;
 		}
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json)
 		{
-			return new JsonArray(json.SelectMany(v =>
+			var index = 0;
+			var items = json.ToList();
+			while (index < items.Count)
 			{
-				switch (v.Type)
-				{
-					case JsonValueType.Object:
-						var match = v.Object.ContainsKey(Name) ? v.Object[Name] : null;
-						var search = v.Object.Values.SelectMany(jv => Find(new[] {jv})).ToList();
-						if (match != null)
-							search.Insert(0, match);
-						return search;
-					case JsonValueType.Array:
-						return new JsonArray(v.Array.SelectMany(jv => Find(new[] {jv})));
-					default:
-						return Enumerable.Empty<JsonValue>();
-				}
-			}));
+				if (_indices.Contains(index))
+					yield return items[index];
+				index++;
+			}
 		}
 		public override string ToString()
 		{
-			return Name;
+			return _isForSearch ? string.Format("[{0}]", _indices.Join(",")) : _indices.Join(",");
 		}
 	}
 }

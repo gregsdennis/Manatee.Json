@@ -133,6 +133,7 @@
     <Compile Include="Path\IJsonPathSearchParameter.cs" />
     <Compile Include="Path\ArrayParameters\IndexQuery.cs" />
     <Compile Include="Path\Operators\NameOperator.cs" />
+    <Compile Include="Path\SearchParameters\ArraySearchParameter.cs" />
     <Compile Include="Path\SearchParameters\NameSearchParameter.cs" />
     <Compile Include="Path\Operators\SearchOperator.cs" />
     <Compile Include="Path\ArrayParameters\SliceQuery.cs" />

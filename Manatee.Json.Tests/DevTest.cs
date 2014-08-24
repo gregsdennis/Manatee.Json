@@ -93,17 +93,10 @@ namespace Manatee.Json.Tests
 							}
 					}
 				};
+			//Console.WriteLine(json);
 
-			var maxPrice = 20;
-			var path = JsonPathWith.Search("book")
-								   .ArrayFilter(jv => jv.Name("tags").ArrayIndex(0) < maxPrice);
+			var path = JsonPath.Parse("$..[1:2:]");
 			var result = path.Evaluate(json);
-
-			Console.WriteLine(path);
-			Console.WriteLine(result.GetIndentedString());
-
-			maxPrice = 10;
-			result = path.Evaluate(json);
 
 			Console.WriteLine(path);
 			Console.WriteLine(result.GetIndentedString());

@@ -14,50 +14,38 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NameSearchParameter.cs
-	Namespace:		Manatee.Json.Path.SearchParameters
-	Class Name:		NameSearchParameter
-	Purpose:		Indicates that a search should look for a named parameter.
+	File Name:		FilterExpressionQuery.cs
+	Namespace:		Manatee.Json.Path.ArrayParameters
+	Class Name:		FilterExpressionQuery
+	Purpose:		Provides expression-based filtering for array queries.
 
 ***************************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Path.Expressions;
 
-namespace Manatee.Json.Path.SearchParameters
+namespace Manatee.Json.Path.Queries
 {
-	internal class NameSearchParameter : IJsonPathSearchParameter
+	internal class FilterExpressionQuery : IJsonPathQuery
 	{
-		private readonly string _name;
+		private readonly bool _isForSearch;
+		private readonly Expression<bool, JsonValue> _expression;
 
-		public string Name { get { return _name; } }
-
-		public NameSearchParameter(string name)
+		public FilterExpressionQuery(bool isForSearch, System.Linq.Expressions.Expression<Func<JsonValue, bool>> expression)
 		{
-			_name = name;
+			_isForSearch = isForSearch;
+			_expression = expression;
 		}
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json)
 		{
-			return new JsonArray(json.SelectMany(v =>
-			{
-				switch (v.Type)
-				{
-					case JsonValueType.Object:
-						var match = v.Object.ContainsKey(Name) ? v.Object[Name] : null;
-						var search = v.Object.Values.SelectMany(jv => Find(new[] {jv})).ToList();
-						if (match != null)
-							search.Insert(0, match);
-						return search;
-					case JsonValueType.Array:
-						return new JsonArray(v.Array.SelectMany(jv => Find(new[] {jv})));
-					default:
-						return Enumerable.Empty<JsonValue>();
-				}
-			}));
+			return json.Where(_expression.Evaluate);
 		}
 		public override string ToString()
 		{
-			return Name;
+			return string.Format(_isForSearch ? "[?({0})]" : "?({0})", _expression);
 		}
 	}
 }
