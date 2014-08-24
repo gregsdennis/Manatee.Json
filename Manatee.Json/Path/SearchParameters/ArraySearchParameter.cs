@@ -14,10 +14,10 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NameSearchParameter.cs
+	File Name:		ArraySearchParameter.cs
 	Namespace:		Manatee.Json.Path.SearchParameters
-	Class Name:		NameSearchParameter
-	Purpose:		Indicates that a search should look for a named parameter.
+	Class Name:		ArraySearchParameter
+	Purpose:		Indicates that a search should look for an array parameter.
 
 ***************************************************************************************/
 using System.Collections.Generic;
@@ -25,39 +25,38 @@ using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
-	internal class NameSearchParameter : IJsonPathSearchParameter
+	internal class ArraySearchParameter : IJsonPathSearchParameter
 	{
-		private readonly string _name;
+		private readonly IJsonPathArrayQuery _query;
 
-		public string Name { get { return _name; } }
+		public IJsonPathArrayQuery Query { get { return _query; } }
 
-		public NameSearchParameter(string name)
+		public ArraySearchParameter(IJsonPathArrayQuery query)
 		{
-			_name = name;
+			_query = query;
 		}
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json)
 		{
 			return new JsonArray(json.SelectMany(v =>
-			{
-				switch (v.Type)
 				{
-					case JsonValueType.Object:
-						var match = v.Object.ContainsKey(Name) ? v.Object[Name] : null;
-						var search = v.Object.Values.SelectMany(jv => Find(new[] {jv})).ToList();
-						if (match != null)
-							search.Insert(0, match);
-						return search;
-					case JsonValueType.Array:
-						return new JsonArray(v.Array.SelectMany(jv => Find(new[] {jv})));
-					default:
-						return Enumerable.Empty<JsonValue>();
-				}
-			}));
+					switch (v.Type)
+					{
+						case JsonValueType.Object:
+							return v.Object.Values.SelectMany(jv => Find(new[] {jv})).ToList();
+						case JsonValueType.Array:
+							var matches = Query.Find(v.Array).ToList();
+							var search = v.Array.SelectMany(jv => Find(new[] {jv}));
+							matches.AddRange(search);
+							return matches;
+						default:
+							return Enumerable.Empty<JsonValue>();
+					}
+				}));
 		}
 		public override string ToString()
 		{
-			return Name;
+			return string.Format("[{0}]", Query);
 		}
 	}
 }

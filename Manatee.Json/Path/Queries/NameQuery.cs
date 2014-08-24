@@ -15,23 +15,24 @@
 	   limitations under the License.
  
 	File Name:		NameSearchParameter.cs
-	Namespace:		Manatee.Json.Path.SearchParameters
+	Namespace:		Manatee.Json.Path.Queries
 	Class Name:		NameSearchParameter
 	Purpose:		Indicates that a search should look for a named parameter.
 
 ***************************************************************************************/
+
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manatee.Json.Path.SearchParameters
+namespace Manatee.Json.Path.Queries
 {
-	internal class NameSearchParameter : IJsonPathSearchParameter
+	internal class NameQuery : IJsonPathQuery
 	{
 		private readonly string _name;
 
 		public string Name { get { return _name; } }
 
-		public NameSearchParameter(string name)
+		public NameQuery(string name)
 		{
 			_name = name;
 		}
@@ -39,21 +40,21 @@ namespace Manatee.Json.Path.SearchParameters
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json)
 		{
 			return new JsonArray(json.SelectMany(v =>
-			{
-				switch (v.Type)
 				{
-					case JsonValueType.Object:
-						var match = v.Object.ContainsKey(Name) ? v.Object[Name] : null;
-						var search = v.Object.Values.SelectMany(jv => Find(new[] {jv})).ToList();
-						if (match != null)
-							search.Insert(0, match);
-						return search;
-					case JsonValueType.Array:
-						return new JsonArray(v.Array.SelectMany(jv => Find(new[] {jv})));
-					default:
-						return Enumerable.Empty<JsonValue>();
-				}
-			}));
+					switch (v.Type)
+					{
+						case JsonValueType.Object:
+							var match = v.Object.ContainsKey(Name) ? v.Object[Name] : null;
+							var search = v.Object.Values.SelectMany(jv => Find(new JsonArray { jv })).ToList();
+							if (match != null)
+								search.Insert(0, match);
+							return search;
+						case JsonValueType.Array:
+							return new JsonArray(v.Array.SelectMany(jv => Find(new JsonArray { jv })));
+						default:
+							return Enumerable.Empty<JsonValue>();
+					}
+				}));
 		}
 		public override string ToString()
 		{

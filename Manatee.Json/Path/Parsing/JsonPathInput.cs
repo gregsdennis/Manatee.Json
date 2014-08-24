@@ -25,18 +25,17 @@ namespace Manatee.Json.Path.Parsing
 {
 	internal enum JsonPathInput
 	{
-		Root,
+		Dollar,
 		OpenBracket,
 		CloseBracket,
 		Period,
-		Wildcard,
-		Current,
+		Star,
 		OpenParenth,
-		CloseParenth,
-		Filter,
+		Question,
 		Number,
-		Name,
+		Letter,
 		Colon,
-		Comma
+		Comma,
+		End
 	}
 }
