@@ -30,7 +30,7 @@ namespace Manatee.Json.Path.ArrayParameters
 
 		public static WildCardQuery Instance { get { return _instance; } }
 
-		public IEnumerable<JsonValue> Find(JsonArray json)
+		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
 			return json;
 		}

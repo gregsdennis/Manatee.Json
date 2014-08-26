@@ -32,7 +32,8 @@ namespace Manatee.Json.Path
 		/// Evaluates a portion of the JSON Path.
 		/// </summary>
 		/// <param name="json">The resulting <see cref="JsonArray"/> from the previous operation.</param>
+		/// <param name="root">The root of the path.</param>
 		/// <returns>A new <see cref="JsonArray"/> containing the current results.</returns>
-		JsonArray Evaluate(JsonArray json);
+		JsonArray Evaluate(JsonArray json, JsonValue root);
 	}
 }

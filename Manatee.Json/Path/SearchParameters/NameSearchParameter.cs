@@ -36,7 +36,7 @@ namespace Manatee.Json.Path.SearchParameters
 			_name = name;
 		}
 
-		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json)
+		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{
 			return new JsonArray(json.SelectMany(v =>
 			{
@@ -44,12 +44,12 @@ namespace Manatee.Json.Path.SearchParameters
 				{
 					case JsonValueType.Object:
 						var match = v.Object.ContainsKey(Name) ? v.Object[Name] : null;
-						var search = v.Object.Values.SelectMany(jv => Find(new[] {jv})).ToList();
+						var search = v.Object.Values.SelectMany(jv => Find(new[] {jv}, root)).ToList();
 						if (match != null)
 							search.Insert(0, match);
 						return search;
 					case JsonValueType.Array:
-						return new JsonArray(v.Array.SelectMany(jv => Find(new[] {jv})));
+						return new JsonArray(v.Array.SelectMany(jv => Find(new[] {jv}, root)));
 					default:
 						return Enumerable.Empty<JsonValue>();
 				}

@@ -31,9 +31,9 @@ namespace Manatee.Json.Path.Expressions
 		public ExpressionTreeNode<T> Root { get; set; }
 		public Type TargetType { get; set; }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
-			var value = Root.Evaluate(json);
+			var value = Root.Evaluate(json, root);
 			var result = CastValue(value);
 			return result;
 		}

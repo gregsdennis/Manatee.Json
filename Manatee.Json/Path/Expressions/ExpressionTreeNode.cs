@@ -26,6 +26,6 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public abstract int Priority { get; }
 
-		public abstract object Evaluate(T json);
+		public abstract object Evaluate(T json, JsonValue root);
 	}
 }

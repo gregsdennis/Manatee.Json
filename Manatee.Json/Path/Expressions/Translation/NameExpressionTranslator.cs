@@ -31,6 +31,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 	{
 		public override ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
+			bool isLocal;
 			var method = body as MethodCallExpression;
 			if (method == null)
 				throw new InvalidOperationException();
@@ -39,8 +40,9 @@ namespace Manatee.Json.Path.Expressions.Translation
 				throw new NotSupportedException("Only literal string arguments are supported in Name().");
 			return new NameExpression<T>
 				{
-					Path = BuildPath(method),
-					Name = (string) parameter.Value
+					Path = BuildPath(method, out isLocal),
+					IsLocal = isLocal,
+					Name = (string)parameter.Value
 				};
 		}
 	}

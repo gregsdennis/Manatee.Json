@@ -53,7 +53,7 @@ namespace Manatee.Json.Tests
 													{"title", "Sayings of the Century"},
 													{"price", new JsonObject {{"new", 8.95}, {"used", 5.00}}},
 													{"inStock", false},
-													{"tags", new JsonArray{"awesome", "thrilling", "insightful"}}
+													{"tags", new JsonArray {"awesome", "thrilling", "insightful"}}
 												},
 											new JsonObject
 												{
@@ -61,7 +61,7 @@ namespace Manatee.Json.Tests
 													{"author", "Evelyn Waugh"},
 													{"title", "Sword of Honour"},
 													{"price", 12.99},
-													{"tags", new JsonArray{4, "thrilling", "insightful"}}
+													{"tags", new JsonArray {4, "thrilling", "insightful"}}
 												},
 											new JsonObject
 												{
@@ -70,7 +70,7 @@ namespace Manatee.Json.Tests
 													{"title", "Moby Dick"},
 													{"isbn", "0-553-21311-3"},
 													{"price", 8.99},
-													{"tags", new JsonArray{10, "thrilling", "insightful"}}
+													{"tags", new JsonArray {10, "thrilling", "insightful"}}
 												},
 											new JsonObject
 												{
@@ -80,7 +80,7 @@ namespace Manatee.Json.Tests
 													{"isbn", "0-395-19395-8"},
 													{"price", 22.99},
 												},
-											new JsonArray{"true", true, 5}
+											new JsonArray {"true", true, new JsonObject {{"value", 5}}, "hello", JsonValue.Null, false}
 										}
 								},
 								{
@@ -93,10 +93,10 @@ namespace Manatee.Json.Tests
 							}
 					}
 				};
-			//Console.WriteLine(json);
+			//Console.WriteLine(json.GetIndentedString());
 
-			var path = JsonPath.Parse("$..book[?(@.tags[0]==\"awesome\")]");
-			var path2 = JsonPathWith.Search("book").Array(v => v.Name("tags").ArrayIndex(0) == "awesome");
+			var path = JsonPath.Parse("$..book[?(@.price < $.store.bicycle.price)]");
+			var path2 = JsonPathWith.Search("book").Array(v => v.Name("price") < JsonPathRoot.Name("store").Name("bicycle").Name("price"));
 			var result = path.Evaluate(json);
 
 			Console.WriteLine(path);

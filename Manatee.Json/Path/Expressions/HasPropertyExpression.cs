@@ -29,7 +29,7 @@ namespace Manatee.Json.Path.Expressions
 		public override int Priority { get { return 5; } }
 		public string Name { get; set; }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
 			var value = json as JsonValue;
 			if (value == null)

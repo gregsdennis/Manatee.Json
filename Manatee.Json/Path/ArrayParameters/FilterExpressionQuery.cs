@@ -36,9 +36,9 @@ namespace Manatee.Json.Path.ArrayParameters
 			_expression = expression;
 		}
 
-		public IEnumerable<JsonValue> Find(JsonArray json)
+		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
-			return json.Where(_expression.Evaluate);
+			return json.Where(v => _expression.Evaluate(v, root));
 		}
 		public override string ToString()
 		{

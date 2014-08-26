@@ -60,11 +60,13 @@ namespace Manatee.Json.Path.Expressions
 			StateMachine[State.Start, JsonPathExpressionInput.OpenParenth] = GotStart;
 			StateMachine[State.Value, JsonPathExpressionInput.OpenParenth] = GotGroup;
 			StateMachine[State.Value, JsonPathExpressionInput.Number] = GotNumber;
-			StateMachine[State.Value, JsonPathExpressionInput.Current] = GotPath;
+			StateMachine[State.Value, JsonPathExpressionInput.Root] = GotRoot;
+			StateMachine[State.Value, JsonPathExpressionInput.Current] = GotCurrent;
 			StateMachine[State.Value, JsonPathExpressionInput.Quote] = GotString;
 			StateMachine[State.NumberOrPath, JsonPathExpressionInput.OpenParenth] = GotGroup;
 			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Number] = GotNumber;
-			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Current] = GotPath;
+			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Root] = GotRoot;
+			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Current] = GotCurrent;
 			StateMachine[State.Operator, JsonPathExpressionInput.Plus] = GotPlus;
 			StateMachine[State.Operator, JsonPathExpressionInput.Minus] = GotMinus;
 			StateMachine[State.Operator, JsonPathExpressionInput.Star] = GotMultiply;
@@ -78,14 +80,15 @@ namespace Manatee.Json.Path.Expressions
 			StateMachine[State.Comparison, JsonPathExpressionInput.Equal] = GotEqual;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.OpenParenth] = GotGroup;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Number] = GotNumber;
-			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Current] = GotPath;
+			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Root] = GotRoot;
+			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Current] = GotCurrent;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Equal] = FinalizeComparison;
 			StateMachine.UpdateFunction = GetNextInput;
 		}
 
-		public T Evaluate(TIn json)
+		public T Evaluate(TIn json, JsonValue root)
 		{
-			var result = Root.Evaluate(json);
+			var result = Root.Evaluate(json, root);
 			if (typeof (T) == typeof (bool) && result == null)
 				return (T) (object) false;
 			if (typeof (T) == typeof (bool) && result != null && !(result is bool))
@@ -183,7 +186,7 @@ namespace Manatee.Json.Path.Expressions
 			exp._nodeList.Add(new ValueExpression<TIn> {Value = num});
 			return State.Operator;
 		}
-		private static State GotPath(object owner, JsonPathExpressionInput input)
+		private static State GotRoot(object owner, JsonPathExpressionInput input)
 		{
 			var exp = owner as Expression<T, TIn>;
 			CheckComparison(exp);
@@ -197,6 +200,22 @@ namespace Manatee.Json.Path.Expressions
 			}
 			else
 				exp._nodeList.Add(new PathExpression<TIn> {Path = path});
+			return State.Operator;
+		}
+		private static State GotCurrent(object owner, JsonPathExpressionInput input)
+		{
+			var exp = owner as Expression<T, TIn>;
+			CheckComparison(exp);
+			var path = new JsonPath();
+			exp._index = path.Parse(exp._source, exp._index - 1) - 1;
+			var name = path.Last() as NameOperator;
+			if (name != null && name.Name == "length")
+			{
+				path.Remove(name);
+				exp._nodeList.Add(new LengthExpression<TIn> {Path = path, IsLocal = true});
+			}
+			else
+				exp._nodeList.Add(new PathExpression<TIn> {Path = path, IsLocal = true});
 			return State.Operator;
 		}
 		private static State GotString(object owner, JsonPathExpressionInput input)

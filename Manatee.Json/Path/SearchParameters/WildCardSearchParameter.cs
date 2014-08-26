@@ -31,7 +31,7 @@ namespace Manatee.Json.Path.SearchParameters
 
 		public static WildCardSearchParameter Instance { get { return _instance; } }
 
-		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json)
+		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{
 			return new JsonArray(json.SelectMany(v =>
 				{
@@ -39,10 +39,10 @@ namespace Manatee.Json.Path.SearchParameters
 					switch (v.Type)
 					{
 						case JsonValueType.Object:
-							contents.AddRange(v.Object.Values.SelectMany(jv => Find(new JsonArray {jv})));
+							contents.AddRange(v.Object.Values.SelectMany(jv => Find(new JsonArray {jv}, root)));
 							break;
 						case JsonValueType.Array:
-							contents.AddRange(v.Array.SelectMany(jv => Find(new JsonArray {jv})));
+							contents.AddRange(v.Array.SelectMany(jv => Find(new JsonArray {jv}, root)));
 							break;
 					}
 					return contents;

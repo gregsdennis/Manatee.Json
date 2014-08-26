@@ -27,9 +27,9 @@ namespace Manatee.Json.Path.Expressions
 		public override int Priority { get { return 5; } }
 		public ExpressionTreeNode<T> Root { get; set; }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
-			return !(bool)Root.Evaluate(json);
+			return !(bool)Root.Evaluate(json, root);
 		}
 		public override string ToString()
 		{

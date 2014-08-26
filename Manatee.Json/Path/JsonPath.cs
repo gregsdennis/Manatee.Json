@@ -67,6 +67,7 @@ namespace Manatee.Json.Path
 		private bool _done;
 		private readonly InputStream<JsonPathInput> _stream = new InputStream<JsonPathInput>();
 		private bool _isSearch;
+		private bool _allowLocalRoot;
 
 		static JsonPath()
 		{
@@ -136,7 +137,7 @@ namespace Manatee.Json.Path
 		public JsonArray Evaluate(JsonValue json)
 		{
 			var current = new JsonArray {json};
-			var found = this.Aggregate(current, (c, o) => o.Evaluate(c));
+			var found = this.Aggregate(current, (c, o) => o.Evaluate(c, json));
 			return found;
 		}
 		/// <summary>
@@ -158,6 +159,7 @@ namespace Manatee.Json.Path
 		internal int Parse(string source, int i)
 		{
 			_source = source;
+			_allowLocalRoot = true;
 			Parse(i);
 			return _index;
 		}
@@ -215,6 +217,8 @@ namespace Manatee.Json.Path
 		private static State GotCurrent(object owner, JsonPathInput input)
 		{
 			var path = owner as JsonPath;
+			if (!path._allowLocalRoot)
+				throw new JsonSyntaxException(path._index);
 			path._gotObject = false;
 			return State.ObjectOrArray;
 		}

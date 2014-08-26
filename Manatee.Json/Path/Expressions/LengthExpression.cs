@@ -29,12 +29,15 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 5; } }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
 			JsonArray array;
 			if (Path == null || !Path.Any())
 			{
-				array = json as JsonArray;
+				if (IsLocal)
+					array = json as JsonArray;
+				else
+					array = root.Type == JsonValueType.Array ? root.Array : null;
 				if (array == null)
 				{
 					var value = json as JsonValue;
@@ -45,9 +48,10 @@ namespace Manatee.Json.Path.Expressions
 			}
 			else
 			{
-				var results = Path.Evaluate(json as JsonValue);
+				var value = IsLocal ? json as JsonValue : root;
+				var results = Path.Evaluate(value);
 				if (results.Count > 1)
-					throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, json));
+					throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
 				var result = results.FirstOrDefault();
 				array = result != null && result.Type == JsonValueType.Array
 					        ? result.Array
@@ -58,7 +62,7 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
-			return string.Format("@{0}.length", path);
+			return string.Format(IsLocal ? "@{0}.length" : "${0}.length", path);
 		}
 	}
 }

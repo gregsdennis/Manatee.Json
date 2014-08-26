@@ -29,10 +29,11 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 5; } }
 		public JsonPath Path { get; set; }
+		public bool IsLocal { get; set; }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
-			var value = json as JsonValue;
+			var value = IsLocal ? json as JsonValue : root;
 			if (value == null)
 				throw new NotSupportedException("Path expressions require a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
@@ -42,7 +43,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return string.Format("@{0}", Path.GetRawString());
+			return string.Format(IsLocal ? "@{0}" : "${0}", Path.GetRawString());
 		}
 	}
 }

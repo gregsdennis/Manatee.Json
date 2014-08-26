@@ -85,7 +85,6 @@
     <Compile Include="Path\Expressions\NotExpression.cs" />
     <Compile Include="Path\Expressions\HasPropertyExpression.cs" />
     <Compile Include="Path\Expressions\OrExpression.cs" />
-    <Compile Include="Path\Expressions\PropertyNumberExpression.cs" />
     <Compile Include="Path\Expressions\NameExpresssion.cs" />
     <Compile Include="Path\Expressions\Translation\AddExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\AndExpressionTranslator.cs" />
@@ -122,7 +121,8 @@
     <Compile Include="Path\Expressions\Translation\OrExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\NameExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\SubtractExpressionTranslator.cs" />
-    <Compile Include="Path\PathExpressions.cs" />
+    <Compile Include="Path\JsonPathRoot.cs" />
+    <Compile Include="Path\PathExpressionExtensions.cs" />
     <Compile Include="Path\Expressions\ValueExpression.cs" />
     <Compile Include="Path\Operators\ArrayOperator.cs" />
     <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />

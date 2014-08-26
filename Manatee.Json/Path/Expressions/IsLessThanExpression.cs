@@ -27,11 +27,11 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 1; } }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
-			var left = GetDouble(Left.Evaluate(json));
+			var left = GetDouble(Left.Evaluate(json, root));
 			if (left == null) return false;
-			var right = GetDouble(Right.Evaluate(json));
+			var right = GetDouble(Right.Evaluate(json, root));
 			return left.Value.CompareTo(right) < 0;
 		}
 		public override string ToString()
