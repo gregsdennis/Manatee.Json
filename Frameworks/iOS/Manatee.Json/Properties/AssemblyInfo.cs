@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Manatee.Json")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Provides an intuitive approach to building JSON structures.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("GameStop, Inc.")]
+[assembly: AssemblyCompany("Little Crab Solutions")]
 [assembly: AssemblyProduct("Manatee.Json")]
-[assembly: AssemblyCopyright("Copyright © GameStop, Inc. 2014")]
+[assembly: AssemblyCopyright("Copyright © 2014 Little Crab Solutions")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
