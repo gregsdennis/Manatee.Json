@@ -102,11 +102,22 @@ namespace Manatee.Json.Path
 			StateMachine.UpdateFunction = GetNextInput;
 		}
 		internal JsonPath() {}
+		/// <summary>
+		/// Finalizes memory management responsibilities.
+		/// </summary>
 		~JsonPath()
 		{
 			StateMachine.UnregisterOwner(this);
 		}
 
+		/// <summary>
+		/// Parses a <see cref="string"/> containing a JSON path.
+		/// </summary>
+		/// <param name="source">the <see cref="string"/> to parse.</param>
+		/// <returns>The JSON path represented by the <see cref="string"/>.</returns>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty or whitespace.</exception>
+		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON path syntax.</exception>
 		public static JsonPath Parse(string source)
 		{
 			if (source == null)

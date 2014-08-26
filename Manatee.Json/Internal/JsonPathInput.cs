@@ -17,7 +17,7 @@
 	File Name:		JsonPathInput.cs
 	Namespace:		Manatee.Json.Internal
 	Class Name:		JsonPathInput
-	Purpose:		DESCRIPTION
+	Purpose:		Enumerates input types for JSON Paths.
 
 ***************************************************************************************/
 
