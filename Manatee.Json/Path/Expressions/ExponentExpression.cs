@@ -30,7 +30,9 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json)
 		{
-			return Math.Pow((double)Left.Evaluate(json), (double)Right.Evaluate(json));
+			var left = Convert.ToDouble(Left.Evaluate(json));
+			var right = Convert.ToDouble(Right.Evaluate(json));
+			return Math.Pow(left, right);
 		}
 		public override string ToString()
 		{

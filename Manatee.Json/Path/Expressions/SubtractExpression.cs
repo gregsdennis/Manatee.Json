@@ -20,6 +20,9 @@
 	Purpose:		Expresses the intent to subtract one number from another.
 
 ***************************************************************************************/
+
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
 	internal class SubtractExpression<T> : ExpressionTreeBranch<T>
@@ -28,7 +31,9 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json)
 		{
-			return (double)Left.Evaluate(json) - (double)Right.Evaluate(json);
+			var left = Convert.ToDouble(Left.Evaluate(json));
+			var right = Convert.ToDouble(Right.Evaluate(json));
+			return left - right;
 		}
 		public override string ToString()
 		{

@@ -20,7 +20,6 @@
 	Purpose:		Provides expression-based indexing for array queries.
 
 ***************************************************************************************/
-using System;
 using System.Collections.Generic;
 using Manatee.Json.Path.Expressions;
 
@@ -30,10 +29,9 @@ namespace Manatee.Json.Path.ArrayParameters
 	{
 		private readonly Expression<int, JsonArray> _expression;
 
-		public IndexExpressionQuery(System.Linq.Expressions.Expression<Func<JsonArray, int>> expression)
+		public IndexExpressionQuery(Expression<int, JsonArray> expression)
 		{
 			_expression = expression;
-			;
 		}
 
 		public IEnumerable<JsonValue> Find(JsonArray json)

@@ -32,11 +32,16 @@ namespace Manatee.Json.Path.Expressions
 		public override object Evaluate(T json)
 		{
 			JsonArray array;
-			if (Path == null)
+			if (Path == null || !Path.Any())
 			{
 				array = json as JsonArray;
 				if (array == null)
-					throw new NotSupportedException("Length requires a JsonArray to evaluate.");
+				{
+					var value = json as JsonValue;
+					if (value.Type == JsonValueType.Array)
+						array = value.Array;
+				}
+				if (array == null) return null;
 			}
 			else
 			{

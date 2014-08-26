@@ -31,7 +31,7 @@ namespace Manatee.Json.Path.ArrayParameters
 	{
 		private readonly Expression<bool, JsonValue> _expression;
 
-		public FilterExpressionQuery(System.Linq.Expressions.Expression<Func<JsonValue, bool>> expression)
+		public FilterExpressionQuery(Expression<bool, JsonValue> expression)
 		{
 			_expression = expression;
 		}

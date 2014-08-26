@@ -20,6 +20,9 @@
 	Purpose:		Expresses the intent to compare two values.
 
 ***************************************************************************************/
+
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
 	internal class IsEqualExpression<T> : ExpressionTreeBranch<T>
@@ -28,7 +31,14 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json)
 		{
-			return Equals(Left.Evaluate(json), Right.Evaluate(json));
+			var left = Left.Evaluate(json);
+			var right = Right.Evaluate(json);
+			if (left == null && right == null) return true;
+			if (left == null || right == null) return false;
+			var compare = left as IComparable;
+			if (compare != null)
+				return compare.CompareTo(Convert.ChangeType(right, left.GetType())) == 0;
+			return left == right || left.Equals(right) || right.Equals(left);
 		}
 		public override string ToString()
 		{

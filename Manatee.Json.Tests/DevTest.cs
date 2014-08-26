@@ -95,10 +95,12 @@ namespace Manatee.Json.Tests
 				};
 			//Console.WriteLine(json);
 
-			var path = JsonPath.Parse("$..[1:2:]");
+			var path = JsonPath.Parse("$..book[?(@.tags[0]==\"awesome\")]");
+			var path2 = JsonPathWith.Search("book").Array(v => v.Name("tags").ArrayIndex(0) == "awesome");
 			var result = path.Evaluate(json);
 
 			Console.WriteLine(path);
+			Console.WriteLine(path2);
 			Console.WriteLine(result.GetIndentedString());
 		}
 		[TestMethod]
