@@ -21,12 +21,14 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Manatee.Json.Internal;
 using Manatee.Json.Path.ArrayParameters;
+using Manatee.Json.Path.Expressions;
 using Manatee.Json.Path.Operators;
-using Manatee.Json.Path.Parsing;
 using Manatee.Json.Path.SearchParameters;
 using Manatee.StateMachine;
 using Manatee.StateMachine.Exceptions;
@@ -68,9 +70,11 @@ namespace Manatee.Json.Path
 
 		static JsonPath()
 		{
-			StateMachine[State.Start, JsonPathInput.Dollar] = GotStart;
+			StateMachine[State.Start, JsonPathInput.Dollar] = GotRoot;
+			StateMachine[State.Start, JsonPathInput.Current] = GotCurrent;
 			StateMachine[State.ObjectOrArray, JsonPathInput.OpenBracket] = GotArray;
 			StateMachine[State.ObjectOrArray, JsonPathInput.Period] = GotObject;
+			StateMachine[State.ObjectOrArray, JsonPathInput.Number] = CompletePath;
 			StateMachine[State.ObjectOrArray, JsonPathInput.End] = CompletePath;
 			StateMachine[State.ArrayContent, JsonPathInput.Star] = GotArrayWildCard;
 			StateMachine[State.ArrayContent, JsonPathInput.OpenParenth] = ParseIndexExpression;
@@ -79,6 +83,7 @@ namespace Manatee.Json.Path
 			StateMachine[State.ArrayContent, JsonPathInput.Colon] = GotSlice;
 			StateMachine[State.IndexOrSlice, JsonPathInput.Colon] = GotSlice;
 			StateMachine[State.IndexOrSlice, JsonPathInput.Comma] = GotIndex;
+			StateMachine[State.IndexOrSlice, JsonPathInput.CloseBracket] = FinalizeIndex;
 			StateMachine[State.Colon, JsonPathInput.CloseBracket] = FinalizeSlice;
 			StateMachine[State.Colon, JsonPathInput.Number] = GotSliceValue;
 			StateMachine[State.Colon, JsonPathInput.Colon] = GotSlice;
@@ -102,9 +107,13 @@ namespace Manatee.Json.Path
 			StateMachine.UnregisterOwner(this);
 		}
 
-		public static JsonPath Parse(string s)
+		public static JsonPath Parse(string source)
 		{
-			var path = new JsonPath {_source = s};
+			if (source == null)
+				throw new ArgumentNullException("source");
+			if (source.IsNullOrWhiteSpace())
+				throw new ArgumentException("Source string contains no data.");
+			var path = new JsonPath {_source = Regex.Replace(source, @"\s+", string.Empty)};
 			path.Parse(0);
 			return path;
 		}
@@ -135,8 +144,14 @@ namespace Manatee.Json.Path
 		{
 			return this.Select(o => o.ToString()).Join(string.Empty);
 		}
+		internal int Parse(string source, int i)
+		{
+			_source = source;
+			Parse(i);
+			return _index;
+		}
 
-		private int Parse(int i)
+		private void Parse(int i)
 		{
 			_stream.Clear();
 			_index = i;
@@ -147,7 +162,7 @@ namespace Manatee.Json.Path
 				if (!_done)
 					throw new JsonSyntaxException(_index);
 			}
-			catch (InputNotValidForStateException<State, JsonInput>)
+			catch (InputNotValidForStateException<State, JsonPathInput>)
 			{
 				throw new JsonSyntaxException(_index);
 			}
@@ -155,19 +170,16 @@ namespace Manatee.Json.Path
 			{
 				throw new JsonSyntaxException(_index);
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonPathInput>)
 			{
 				throw new JsonSyntaxException(_index);
 			}
-			return _index;
 		}
 		private static void GetNextInput(object owner)
 		{
 			var obj = owner as JsonPath;
-			if (obj == null)
-				return;
-			if (obj._done)
-				return;
+			if (obj == null) return;
+			if (obj._done) return;
 			if (obj._index == obj._source.Length)
 			{
 				obj._stream.Add(JsonPathInput.End);
@@ -183,7 +195,13 @@ namespace Manatee.Json.Path
 				throw new JsonSyntaxException(obj._index);
 			}
 		}
-		private static State GotStart(object owner, JsonPathInput input)
+		private static State GotRoot(object owner, JsonPathInput input)
+		{
+			var path = owner as JsonPath;
+			path._gotObject = false;
+			return State.ObjectOrArray;
+		}
+		private static State GotCurrent(object owner, JsonPathInput input)
 		{
 			var path = owner as JsonPath;
 			path._gotObject = false;
@@ -230,12 +248,18 @@ namespace Manatee.Json.Path
 		{
 			var path = owner as JsonPath;
 			path._gotObject = false;
+			var exp = new Expression<int, JsonArray>();
+			path._index = exp.Parse(path._source, path._index - 1);
+			path.Add(new ArrayOperator(new IndexExpressionQuery(exp)));
 			return State.CloseArray;
 		}
 		private static State ParseFilterExpression(object owner, JsonPathInput input)
 		{
 			var path = owner as JsonPath;
 			path._gotObject = false;
+			var exp = new Expression<bool, JsonValue>();
+			path._index = exp.Parse(path._source, path._index);
+			path.Add(new ArrayOperator(new FilterExpressionQuery(exp)));
 			return State.CloseArray;
 		}
 		private static State GotIndexOrSlice(object owner, JsonPathInput input)

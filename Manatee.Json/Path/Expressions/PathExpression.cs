@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal abstract class PathExpression<T> : ExpressionTreeNode<T>
+	internal class PathExpression<T> : ExpressionTreeNode<T>
 	{
 		public override int Priority { get { return 5; } }
 		public JsonPath Path { get; set; }

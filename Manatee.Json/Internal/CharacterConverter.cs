@@ -22,7 +22,6 @@
 ***************************************************************************************/
 
 using System.Collections.Generic;
-using Manatee.Json.Path.Parsing;
 
 namespace Manatee.Json.Internal
 {
@@ -61,6 +60,7 @@ namespace Manatee.Json.Internal
 			new Dictionary<char, JsonPathInput>
 			{
 				{'$', JsonPathInput.Dollar},
+				{'@', JsonPathInput.Current},
 				{':', JsonPathInput.Colon},
 				{'-', JsonPathInput.Number},
 				{'0', JsonPathInput.Number},
@@ -81,6 +81,34 @@ namespace Manatee.Json.Internal
 				{'*', JsonPathInput.Star},
 				{'?', JsonPathInput.Question},
 			};
+		private static readonly Dictionary<char, JsonPathExpressionInput> ExpressionConverter =
+			new Dictionary<char, JsonPathExpressionInput>
+				{
+					{'(', JsonPathExpressionInput.OpenParenth},
+					{')', JsonPathExpressionInput.CloseParenth},
+					{'0', JsonPathExpressionInput.Number},
+					{'1', JsonPathExpressionInput.Number},
+					{'2', JsonPathExpressionInput.Number},
+					{'3', JsonPathExpressionInput.Number},
+					{'4', JsonPathExpressionInput.Number},
+					{'5', JsonPathExpressionInput.Number},
+					{'6', JsonPathExpressionInput.Number},
+					{'7', JsonPathExpressionInput.Number},
+					{'8', JsonPathExpressionInput.Number},
+					{'9', JsonPathExpressionInput.Number},
+					{'.', JsonPathExpressionInput.Number},
+					{'+', JsonPathExpressionInput.Plus},
+					{'-', JsonPathExpressionInput.Minus},
+					{'*', JsonPathExpressionInput.Star},
+					{'/', JsonPathExpressionInput.Slash},
+					{'^', JsonPathExpressionInput.Caret},
+					{'@', JsonPathExpressionInput.Current},
+					{'<', JsonPathExpressionInput.LessThan},
+					{'=', JsonPathExpressionInput.Equal},
+					{'>', JsonPathExpressionInput.GreaterThan},
+					{'!', JsonPathExpressionInput.Bang},
+					{'"', JsonPathExpressionInput.Quote},
+				};
 
 		public static JsonInput Item(char key)
 		{
@@ -88,7 +116,15 @@ namespace Manatee.Json.Internal
 		}
 		public static JsonPathInput PathItem(char key)
 		{
-			return char.IsLetter(key) ? JsonPathInput.Letter : PathConverter[key];
+			return char.IsLetter(key)
+				       ? JsonPathInput.Letter
+				       : PathConverter.ContainsKey(key)
+					         ? PathConverter[key]
+					         : JsonPathInput.End;
+		}
+		public static JsonPathExpressionInput ExpressionItem(char key)
+		{
+			return ExpressionConverter[key];
 		}
 	}
 }

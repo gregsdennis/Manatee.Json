@@ -39,7 +39,9 @@ namespace Manatee.Json.Path.Operators
 
 		public JsonArray Evaluate(JsonArray json)
 		{
-			return new JsonArray(json.Select(v => v.Type == JsonValueType.Object && v.Object.ContainsKey(Name) ? v.Object[Name] : null).NotNull());
+			return new JsonArray(json.Select(v => v.Type == JsonValueType.Object && v.Object.ContainsKey(Name)
+				                                      ? v.Object[Name]
+				                                      : null).NotNull());
 		}
 		public override string ToString()
 		{

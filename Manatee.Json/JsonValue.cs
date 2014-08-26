@@ -288,7 +288,13 @@ namespace Manatee.Json
 		{
 			// TODO: Should account for obj being a string, bool, double, etc.
 			var json = obj as JsonValue;
-			if (json == null) return false;
+			if (json == null)
+			{
+				if (obj is string && Type == JsonValueType.String) return (string) obj == String;
+				if (obj is bool && Type == JsonValueType.Boolean) return (bool) obj == Boolean;
+				if (obj is IConvertible && !(obj is string || obj is bool) && Type == JsonValueType.Number) return Convert.ToDouble(obj) == Number;
+				return false;
+			}
 			if (json.Type != Type) return false;
 			switch (Type)
 			{
@@ -499,9 +505,27 @@ namespace Manatee.Json
 		///<param name="a"></param>
 		///<param name="b"></param>
 		///<returns></returns>
+		public static bool operator <(double a, JsonValue b)
+		{
+			return b != null && b.Type == JsonValueType.Number && a > b.Number;
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
 		public static bool operator <=(JsonValue a, double b)
 		{
 			return a != null && a.Type == JsonValueType.Number && a.Number <= b;
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
+		public static bool operator <=(double a, JsonValue b)
+		{
+			return b != null && b.Type == JsonValueType.Number && a >= b.Number;
 		}
 		///<summary>
 		///</summary>
@@ -517,9 +541,27 @@ namespace Manatee.Json
 		///<param name="a"></param>
 		///<param name="b"></param>
 		///<returns></returns>
+		public static bool operator >(double a, JsonValue b)
+		{
+			return b != null && b.Type == JsonValueType.Number && a < b.Number;
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
 		public static bool operator >=(JsonValue a, double b)
 		{
 			return a != null && a.Type == JsonValueType.Number && a.Number >= b;
+		}
+		///<summary>
+		///</summary>
+		///<param name="a"></param>
+		///<param name="b"></param>
+		///<returns></returns>
+		public static bool operator >=(double a, JsonValue b)
+		{
+			return b != null && b.Type == JsonValueType.Number && a <= b.Number;
 		}
 
 		internal static JsonValue Parse(string source, ref int index)

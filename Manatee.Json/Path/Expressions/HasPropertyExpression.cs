@@ -33,7 +33,7 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var value = json as JsonValue;
 			if (value == null)
-				throw new NotSupportedException("Length requires an array to evaluate.");
+				throw new NotSupportedException("HasProperty requires an array to evaluate.");
 			var result = value.Type == JsonValueType.Object && value.Object.ContainsKey(Name);
 			if (result && value.Object[Name].Type == JsonValueType.Boolean)
 				result = value.Object[Name].Boolean;
