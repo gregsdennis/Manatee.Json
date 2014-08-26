@@ -29,10 +29,10 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 3; } }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
-			var left = Convert.ToDouble(Left.Evaluate(json));
-			var right = Convert.ToDouble(Right.Evaluate(json));
+			var left = Convert.ToDouble(Left.Evaluate(json, root));
+			var right = Convert.ToDouble(Right.Evaluate(json, root));
 			return left / right;
 		}
 		public override string ToString()

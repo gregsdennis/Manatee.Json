@@ -30,10 +30,15 @@ namespace Manatee.Json.Path.Expressions.Translation
 	{
 		public override ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
+			bool isLocal;
 			var method = body as MethodCallExpression;
 			return method == null
 				       ? new LengthExpression<T>()
-				       : new LengthExpression<T> {Path = BuildPath(method)};
+				       : new LengthExpression<T>
+					       {
+						       Path = BuildPath(method, out isLocal),
+						       IsLocal = isLocal
+					       };
 		}
 	}
 }

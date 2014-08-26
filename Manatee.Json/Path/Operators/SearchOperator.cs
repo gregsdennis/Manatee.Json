@@ -33,9 +33,9 @@ namespace Manatee.Json.Path.Operators
 			_parameter = parameter;
 		}
 
-		public JsonArray Evaluate(JsonArray json)
+		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			return new JsonArray(Parameter.Find(json));
+			return new JsonArray(Parameter.Find(json, root));
 		}
 		public override string ToString()
 		{

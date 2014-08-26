@@ -102,6 +102,7 @@ namespace Manatee.Json.Internal
 					{'*', JsonPathExpressionInput.Star},
 					{'/', JsonPathExpressionInput.Slash},
 					{'^', JsonPathExpressionInput.Caret},
+					{'$', JsonPathExpressionInput.Root},
 					{'@', JsonPathExpressionInput.Current},
 					{'<', JsonPathExpressionInput.LessThan},
 					{'=', JsonPathExpressionInput.Equal},

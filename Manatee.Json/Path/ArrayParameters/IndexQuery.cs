@@ -37,7 +37,7 @@ namespace Manatee.Json.Path.ArrayParameters
 			_indices = indices;
 		}
 
-		public IEnumerable<JsonValue> Find(JsonArray json)
+		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
 			var index = 0;
 			while (index < json.Count)

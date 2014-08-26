@@ -37,7 +37,7 @@ namespace Manatee.Json.Path.Operators
 			_name = name;
 		}
 
-		public JsonArray Evaluate(JsonArray json)
+		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
 			return new JsonArray(json.Select(v => v.Type == JsonValueType.Object && v.Object.ContainsKey(Name)
 				                                      ? v.Object[Name]

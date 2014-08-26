@@ -29,10 +29,10 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 1; } }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
-			var left = Left.Evaluate(json);
-			var right = Right.Evaluate(json);
+			var left = Left.Evaluate(json, root);
+			var right = Right.Evaluate(json, root);
 			if (left == null && right == null) return true;
 			if (left == null || right == null) return false;
 			var compare = left as IComparable;

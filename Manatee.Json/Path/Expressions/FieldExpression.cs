@@ -30,13 +30,13 @@ namespace Manatee.Json.Path.Expressions
 		public FieldInfo Field { get; set; }
 		public object Source { get; set; }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
 			return Field.GetValue(Source);
 		}
 		public override string ToString()
 		{
-			var value = Evaluate(default(T));
+			var value = Evaluate(default(T), null);
 			return value is string
 					   ? string.Format("\"{0}\"", value)
 					   : value.ToString();

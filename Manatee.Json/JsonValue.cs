@@ -286,7 +286,6 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			// TODO: Should account for obj being a string, bool, double, etc.
 			var json = obj as JsonValue;
 			if (json == null)
 			{
@@ -496,72 +495,96 @@ namespace Manatee.Json
 		///<param name="a"></param>
 		///<param name="b"></param>
 		///<returns></returns>
-		public static bool operator <(JsonValue a, double b)
+		public static bool operator <(JsonValue a, JsonValue b)
 		{
-			return a != null && a.Type == JsonValueType.Number && a.Number < b;
+			if (a == null || b == null) return a == null && b == null;
+			if (a.Type != b.Type) return false;
+			switch (a.Type)
+			{
+				case JsonValueType.Number:
+					return a.Number < b.Number;
+				case JsonValueType.String:
+					return string.Compare(a.String, b.String, StringComparison.Ordinal) < 0;
+				case JsonValueType.Boolean:
+				case JsonValueType.Object:
+				case JsonValueType.Array:
+				case JsonValueType.Null:
+					return false;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 		///<summary>
 		///</summary>
 		///<param name="a"></param>
 		///<param name="b"></param>
 		///<returns></returns>
-		public static bool operator <(double a, JsonValue b)
+		public static bool operator <=(JsonValue a, JsonValue b)
 		{
-			return b != null && b.Type == JsonValueType.Number && a > b.Number;
+			if (a == null || b == null) return a == null && b == null;
+			if (a.Type != b.Type) return false;
+			switch (a.Type)
+			{
+				case JsonValueType.Number:
+					return a.Number < b.Number;
+				case JsonValueType.String:
+					return string.Compare(a.String, b.String, StringComparison.Ordinal) <= 0;
+				case JsonValueType.Boolean:
+				case JsonValueType.Object:
+				case JsonValueType.Array:
+				case JsonValueType.Null:
+					return false;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 		///<summary>
 		///</summary>
 		///<param name="a"></param>
 		///<param name="b"></param>
 		///<returns></returns>
-		public static bool operator <=(JsonValue a, double b)
+		public static bool operator >(JsonValue a, JsonValue b)
 		{
-			return a != null && a.Type == JsonValueType.Number && a.Number <= b;
+			if (a == null || b == null) return a == null && b == null;
+			if (a.Type != b.Type) return false;
+			switch (a.Type)
+			{
+				case JsonValueType.Number:
+					return a.Number < b.Number;
+				case JsonValueType.String:
+					return string.Compare(a.String, b.String, StringComparison.Ordinal) > 0;
+				case JsonValueType.Boolean:
+				case JsonValueType.Object:
+				case JsonValueType.Array:
+				case JsonValueType.Null:
+					return false;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 		///<summary>
 		///</summary>
 		///<param name="a"></param>
 		///<param name="b"></param>
 		///<returns></returns>
-		public static bool operator <=(double a, JsonValue b)
+		public static bool operator >=(JsonValue a, JsonValue b)
 		{
-			return b != null && b.Type == JsonValueType.Number && a >= b.Number;
-		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator >(JsonValue a, double b)
-		{
-			return a != null && a.Type == JsonValueType.Number && a.Number > b;
-		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator >(double a, JsonValue b)
-		{
-			return b != null && b.Type == JsonValueType.Number && a < b.Number;
-		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator >=(JsonValue a, double b)
-		{
-			return a != null && a.Type == JsonValueType.Number && a.Number >= b;
-		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator >=(double a, JsonValue b)
-		{
-			return b != null && b.Type == JsonValueType.Number && a <= b.Number;
+			if (a == null || b == null) return a == null && b == null;
+			if (a.Type != b.Type) return false;
+			switch (a.Type)
+			{
+				case JsonValueType.Number:
+					return a.Number < b.Number;
+				case JsonValueType.String:
+					return string.Compare(a.String, b.String, StringComparison.Ordinal) >= 0;
+				case JsonValueType.Boolean:
+				case JsonValueType.Object:
+				case JsonValueType.Array:
+				case JsonValueType.Null:
+					return false;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 
 		internal static JsonValue Parse(string source, ref int index)

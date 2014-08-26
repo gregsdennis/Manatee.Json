@@ -32,6 +32,7 @@ namespace Manatee.Json.Internal
 		Star,
 		Slash,
 		Caret,
+		Root,
 		Current,
 		LessThan,
 		Equal,

@@ -26,9 +26,9 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 0; } }
 
-		public override object Evaluate(T json)
+		public override object Evaluate(T json, JsonValue root)
 		{
-			return (bool)Left.Evaluate(json) || (bool)Right.Evaluate(json);
+			return (bool)Left.Evaluate(json, root) || (bool)Right.Evaluate(json, root);
 		}
 		public override string ToString()
 		{

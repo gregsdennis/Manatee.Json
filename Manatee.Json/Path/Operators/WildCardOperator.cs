@@ -32,7 +32,7 @@ namespace Manatee.Json.Path.Operators
 
 		public static WildCardOperator Instance { get { return _instance; } }
 
-		public JsonArray Evaluate(JsonArray json)
+		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
 			return new JsonArray(json.SelectMany(v =>
 				{
