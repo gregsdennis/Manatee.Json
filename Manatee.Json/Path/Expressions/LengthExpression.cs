@@ -32,7 +32,7 @@ namespace Manatee.Json.Path.Expressions
 		public override object Evaluate(T json, JsonValue root)
 		{
 			JsonArray array;
-			if (Path == null || !Path.Any())
+			if (Path == null || !Path.Operators.Any())
 			{
 				if (IsLocal)
 					array = json as JsonArray;
