@@ -192,10 +192,10 @@ namespace Manatee.Json.Path.Expressions
 			CheckComparison(exp);
 			var path = new JsonPath();
 			exp._index = path.Parse(exp._source, exp._index - 1) - 1;
-			var name = path.Last() as NameOperator;
+			var name = path.Operators.Last() as NameOperator;
 			if (name != null && name.Name == "length")
 			{
-				path.Remove(name);
+				path.Operators.Remove(name);
 				exp._nodeList.Add(new LengthExpression<TIn> {Path = path});
 			}
 			else
@@ -208,10 +208,10 @@ namespace Manatee.Json.Path.Expressions
 			CheckComparison(exp);
 			var path = new JsonPath();
 			exp._index = path.Parse(exp._source, exp._index - 1) - 1;
-			var name = path.Last() as NameOperator;
+			var name = path.Operators.Last() as NameOperator;
 			if (name != null && name.Name == "length")
 			{
-				path.Remove(name);
+				path.Operators.Remove(name);
 				exp._nodeList.Add(new LengthExpression<TIn> {Path = path, IsLocal = true});
 			}
 			else

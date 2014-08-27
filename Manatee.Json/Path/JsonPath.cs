@@ -38,7 +38,7 @@ namespace Manatee.Json.Path
 	/// <summary>
 	/// Provides primary functionality for JSON Path objects.
 	/// </summary>
-	public class JsonPath : List<IJsonPathOperator>
+	public class JsonPath
 	{
 		private enum State
 		{
@@ -58,6 +58,7 @@ namespace Manatee.Json.Path
 
 		private static readonly StateMachine<State, JsonPathInput> StateMachine = new StateMachine<State, JsonPathInput>();
 
+		private readonly List<IJsonPathOperator> _operators;
 		private bool _gotObject;
 		private string _source;
 		private int _index;
@@ -68,6 +69,8 @@ namespace Manatee.Json.Path
 		private readonly InputStream<JsonPathInput> _stream = new InputStream<JsonPathInput>();
 		private bool _isSearch;
 		private bool _allowLocalRoot;
+
+		internal List<IJsonPathOperator> Operators { get { return _operators; } }
 
 		static JsonPath()
 		{
@@ -102,7 +105,10 @@ namespace Manatee.Json.Path
 			StateMachine[State.Search, JsonPathInput.Letter] = GotSearchName;
 			StateMachine.UpdateFunction = GetNextInput;
 		}
-		internal JsonPath() {}
+		internal JsonPath()
+		{
+			_operators = new List<IJsonPathOperator>();
+		}
 		/// <summary>
 		/// Finalizes memory management responsibilities.
 		/// </summary>
@@ -137,7 +143,7 @@ namespace Manatee.Json.Path
 		public JsonArray Evaluate(JsonValue json)
 		{
 			var current = new JsonArray {json};
-			var found = this.Aggregate(current, (c, o) => o.Evaluate(c, json));
+			var found = Operators.Aggregate(current, (c, o) => o.Evaluate(c, json));
 			return found;
 		}
 		/// <summary>
@@ -154,7 +160,7 @@ namespace Manatee.Json.Path
 
 		internal string GetRawString()
 		{
-			return this.Select(o => o.ToString()).Join(string.Empty);
+			return Operators.Select(o => o.ToString()).Join(string.Empty);
 		}
 		internal int Parse(string source, int i)
 		{
@@ -253,10 +259,10 @@ namespace Manatee.Json.Path
 			if (path._isSearch)
 			{
 				path._isSearch = false;
-				path.Add(new SearchOperator(new ArraySearchParameter(WildCardQuery.Instance)));
+				path.Operators.Add(new SearchOperator(new ArraySearchParameter(WildCardQuery.Instance)));
 			}
 			else
-				path.Add(new ArrayOperator(WildCardQuery.Instance));
+				path.Operators.Add(new ArrayOperator(WildCardQuery.Instance));
 			return State.CloseArray;
 		}
 		private static State ParseIndexExpression(object owner, JsonPathInput input)
@@ -265,7 +271,7 @@ namespace Manatee.Json.Path
 			path._gotObject = false;
 			var exp = new Expression<int, JsonArray>();
 			path._index = exp.Parse(path._source, path._index - 1);
-			path.Add(new ArrayOperator(new IndexExpressionQuery(exp)));
+			path.Operators.Add(new ArrayOperator(new IndexExpressionQuery(exp)));
 			return State.CloseArray;
 		}
 		private static State ParseFilterExpression(object owner, JsonPathInput input)
@@ -274,7 +280,7 @@ namespace Manatee.Json.Path
 			path._gotObject = false;
 			var exp = new Expression<bool, JsonValue>();
 			path._index = exp.Parse(path._source, path._index);
-			path.Add(new ArrayOperator(new FilterExpressionQuery(exp)));
+			path.Operators.Add(new ArrayOperator(new FilterExpressionQuery(exp)));
 			return State.CloseArray;
 		}
 		private static State GotIndexOrSlice(object owner, JsonPathInput input)
@@ -305,10 +311,10 @@ namespace Manatee.Json.Path
 			if (path._isSearch)
 			{
 				path._isSearch = false;
-				path.Add(new SearchOperator(new ArraySearchParameter(new SliceQuery(start, end, step))));
+				path.Operators.Add(new SearchOperator(new ArraySearchParameter(new SliceQuery(start, end, step))));
 			}
 			else
-				path.Add(new ArrayOperator(new SliceQuery(start, end, step)));
+				path.Operators.Add(new ArrayOperator(new SliceQuery(start, end, step)));
 			return State.ObjectOrArray;
 		}
 		private static State GotSlice(object owner, JsonPathInput input)
@@ -340,10 +346,10 @@ namespace Manatee.Json.Path
 			if (path._isSearch)
 			{
 				path._isSearch = false;
-				path.Add(new SearchOperator(new ArraySearchParameter(new IndexQuery(path._indices.ToArray()))));
+				path.Operators.Add(new SearchOperator(new ArraySearchParameter(new IndexQuery(path._indices.ToArray()))));
 			}
 			else
-				path.Add(new ArrayOperator(new IndexQuery(path._indices.ToArray())));
+				path.Operators.Add(new ArrayOperator(new IndexQuery(path._indices.ToArray())));
 			return State.ObjectOrArray;
 		}
 		private static State GotIndex(object owner, JsonPathInput input)
@@ -368,7 +374,7 @@ namespace Manatee.Json.Path
 		{
 			var path = owner as JsonPath;
 			path._gotObject = false;
-			path.Add(WildCardOperator.Instance);
+			path.Operators.Add(WildCardOperator.Instance);
 			return State.ObjectOrArray;
 		}
 		private static State GotName(object owner, JsonPathInput input)
@@ -376,7 +382,7 @@ namespace Manatee.Json.Path
 			var path = owner as JsonPath;
 			path._gotObject = false;
 			var name = GetName(path);
-			path.Add(new NameOperator(name));
+			path.Operators.Add(new NameOperator(name));
 			return State.ObjectOrArray;
 		}
 		private static State GotSearchArray(object owner, JsonPathInput input)
@@ -390,7 +396,7 @@ namespace Manatee.Json.Path
 		{
 			var path = owner as JsonPath;
 			path._gotObject = false;
-			path.Add(new SearchOperator(WildCardSearchParameter.Instance));
+			path.Operators.Add(new SearchOperator(WildCardSearchParameter.Instance));
 			return State.ObjectOrArray;
 		}
 		private static State GotSearchName(object owner, JsonPathInput input)
@@ -398,7 +404,7 @@ namespace Manatee.Json.Path
 			var path = owner as JsonPath;
 			path._gotObject = false;
 			var name = GetName(path);
-			path.Add(new SearchOperator(new NameSearchParameter(name)));
+			path.Operators.Add(new SearchOperator(new NameSearchParameter(name)));
 			return State.ObjectOrArray;
 		}
 		private static string GetName(JsonPath path)

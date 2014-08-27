@@ -46,12 +46,12 @@ namespace Manatee.Json.Path.Expressions.Translation
 					case "Name":
 						if (parameter != null && parameter.Type != typeof (string))
 							throw new NotSupportedException("Only literal string arguments are supported");
-						path.Insert(0, new NameOperator((string) parameter.Value));
+						path.Operators.Insert(0, new NameOperator((string)parameter.Value));
 						break;
 					case "ArrayIndex":
 						if (parameter != null && parameter.Type != typeof (int))
 							throw new NotSupportedException("Only literal string arguments are supported");
-						path.Insert(0, new ArrayOperator(new IndexQuery((int) parameter.Value)));
+						path.Operators.Insert(0, new ArrayOperator(new IndexQuery((int)parameter.Value)));
 						break;
 				}
 				isLocal = currentMethod.Arguments.Count != 1;
