@@ -41,7 +41,8 @@ namespace Manatee.Json.Path.Expressions
 			Operator,
 			Comparison,
 			ValueOrOperator,
-			End
+			BooleanOrComparison,
+			End,
 		}
 
 		private static readonly StateMachine<State, JsonPathExpressionInput> StateMachine = new StateMachine<State, JsonPathExpressionInput>();
@@ -62,7 +63,9 @@ namespace Manatee.Json.Path.Expressions
 			StateMachine[State.Value, JsonPathExpressionInput.Number] = GotNumber;
 			StateMachine[State.Value, JsonPathExpressionInput.Root] = GotRoot;
 			StateMachine[State.Value, JsonPathExpressionInput.Current] = GotCurrent;
+			StateMachine[State.Value, JsonPathExpressionInput.Bang] = GotNot;
 			StateMachine[State.Value, JsonPathExpressionInput.Quote] = GotString;
+			StateMachine[State.Value, JsonPathExpressionInput.Letter] = GotNamedConstant;
 			StateMachine[State.NumberOrPath, JsonPathExpressionInput.OpenParenth] = GotGroup;
 			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Number] = GotNumber;
 			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Root] = GotRoot;
@@ -74,15 +77,25 @@ namespace Manatee.Json.Path.Expressions
 			StateMachine[State.Operator, JsonPathExpressionInput.Caret] = GotExponent;
 			StateMachine[State.Operator, JsonPathExpressionInput.LessThan] = GotLessThan;
 			StateMachine[State.Operator, JsonPathExpressionInput.Equal] = GotEqual;
+			StateMachine[State.Operator, JsonPathExpressionInput.And] = GotAnd;
+			StateMachine[State.Operator, JsonPathExpressionInput.Or] = GotOr;
 			StateMachine[State.Operator, JsonPathExpressionInput.GreaterThan] = GotGreaterThan;
 			StateMachine[State.Operator, JsonPathExpressionInput.Bang] = GotNot;
 			StateMachine[State.Operator, JsonPathExpressionInput.CloseParenth] = CompleteExpression;
 			StateMachine[State.Comparison, JsonPathExpressionInput.Equal] = GotEqual;
+			StateMachine[State.Comparison, JsonPathExpressionInput.And] = GotAnd;
+			StateMachine[State.Comparison, JsonPathExpressionInput.Or] = GotOr;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.OpenParenth] = GotGroup;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Number] = GotNumber;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Root] = GotRoot;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Current] = GotCurrent;
 			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Equal] = FinalizeComparison;
+			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Letter] = GotNamedConstant;
+			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.OpenParenth] = GotGroup;
+			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Root] = GotRoot;
+			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Current] = GotCurrent;
+			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Equal] = GotEqual;
+			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Letter] = GotNamedConstant;
 			StateMachine.UpdateFunction = GetNextInput;
 		}
 
@@ -268,11 +281,51 @@ namespace Manatee.Json.Path.Expressions
 			var exp = owner as Expression<T, TIn>;
 			if (exp._previousInput.HasValue)
 			{
-				exp._nodeList.Add(new IsEqualExpression<TIn>());
+				switch (exp._previousInput)
+				{
+					case JsonPathExpressionInput.Equal:
+						exp._nodeList.Add(new IsEqualExpression<TIn>());
+						break;
+					case JsonPathExpressionInput.Bang:
+						exp._nodeList.Add(new IsNotEqualExpression<TIn>());
+						break;
+					default:
+						throw new JsonSyntaxException(exp._index);
+				}
 				exp._previousInput = null;
 				return State.Value;
 			}
 			exp._previousInput = JsonPathExpressionInput.Equal;
+			return State.Comparison;
+		}
+		private static State GotAnd(object owner, JsonPathExpressionInput input)
+		{
+			var exp = owner as Expression<T, TIn>;
+			if (exp._previousInput.HasValue)
+			{
+				if (exp._previousInput == JsonPathExpressionInput.And)
+					exp._nodeList.Add(new AndExpression<TIn>());
+				else
+					throw new JsonSyntaxException(exp._index);
+				exp._previousInput = null;
+				return State.Value;
+			}
+			exp._previousInput = JsonPathExpressionInput.And;
+			return State.Comparison;
+		}
+		private static State GotOr(object owner, JsonPathExpressionInput input)
+		{
+			var exp = owner as Expression<T, TIn>;
+			if (exp._previousInput.HasValue)
+			{
+				if (exp._previousInput == JsonPathExpressionInput.Or)
+					exp._nodeList.Add(new OrExpression<TIn>());
+				else
+					throw new JsonSyntaxException(exp._index);
+				exp._previousInput = null;
+				return State.Value;
+			}
+			exp._previousInput = JsonPathExpressionInput.Or;
 			return State.Comparison;
 		}
 		private static State GotGreaterThan(object owner, JsonPathExpressionInput input)
@@ -285,7 +338,44 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var exp = owner as Expression<T, TIn>;
 			exp._previousInput = JsonPathExpressionInput.Bang;
-			return State.ValueOrOperator;
+			return State.BooleanOrComparison;
+		}
+		private static State GotNamedConstant(object owner, JsonPathExpressionInput input)
+		{
+			ExpressionTreeNode<TIn> bang = null;
+			var exp = owner as Expression<T, TIn>;
+			if (exp._previousInput.HasValue)
+			{
+				bang = new NotExpression<TIn>();
+				exp._previousInput = null;
+			}
+			object value;
+			var substring = exp._source.Substring(exp._index - 1).ToLower();
+			if (substring.StartsWith("true"))
+			{
+				if (bang != null)
+					exp._nodeList.Add(bang);
+				value = true;
+				exp._index += 3;
+			}
+			else if (substring.StartsWith("false"))
+			{
+				if (bang != null)
+					exp._nodeList.Add(bang);
+				value = false;
+				exp._index += 4;
+			}
+			else if (substring.StartsWith("null"))
+			{
+				if (bang != null)
+					throw new JsonSyntaxException(exp._index);
+				value = JsonValue.Null;
+				exp._index += 3;
+			}
+			else
+				throw new JsonSyntaxException(exp._index);
+			exp._nodeList.Add(new ValueExpression<TIn> {Value = value});
+			return State.Operator;
 		}
 		private static State FinalizeComparison(object owner, JsonPathExpressionInput input)
 		{
@@ -315,7 +405,7 @@ namespace Manatee.Json.Path.Expressions
 					exp._nodeList.Add(new IsGreaterThanExpression<TIn>());
 					break;
 				case JsonPathExpressionInput.Bang:
-					throw new NotImplementedException();
+					exp._nodeList.Add(new NotExpression<TIn>());
 					break;
 				default:
 					throw new JsonSyntaxException(exp._index);
@@ -345,6 +435,13 @@ namespace Manatee.Json.Path.Expressions
 				var right = nodes.Skip(split + 1).ToList();
 				branch.Left = BuildTree(left);
 				branch.Right = BuildTree(right);
+			}
+			var not = root as NotExpression<TIn>;
+			if (not != null)
+			{
+				var split = nodes.IndexOf(root);
+				var right = nodes.Skip(split + 1).FirstOrDefault();
+				not.Root = right;
 			}
 			return root;
 		}

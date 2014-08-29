@@ -35,15 +35,16 @@ namespace Manatee.Json.Path.Expressions.Translation
 		private static readonly Dictionary<Type, Func<Expression, IExpressionTranslator>> _translators =
 			new Dictionary<Type, Func<Expression, IExpressionTranslator>>
 				{
-					{typeof (ConstantExpression), e => GetValueTranslator(e.Type)},
+					{typeof (ConstantExpression), GetValueTranslator},
 					{typeof (BinaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
 					{typeof (UnaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
 					{typeof (MethodCallExpression), GetMethodCallTranslator},
 					{typeof (MemberExpression), GetMemberTranslator},
 				};
 
-		private static IExpressionTranslator GetValueTranslator(Type type)
+		private static IExpressionTranslator GetValueTranslator(Expression e)
 		{
+			var type = e.Type;
 			if (type == typeof(bool))
 				return new BooleanValueExpressionTranslator();
 			if (type == typeof(string))
@@ -51,6 +52,9 @@ namespace Manatee.Json.Path.Expressions.Translation
 			if (type.In(typeof(sbyte), typeof(byte), typeof(char), typeof(short), typeof(ushort), typeof(int),
 			                typeof (uint), typeof (long), typeof (ulong), typeof (float), typeof (double), typeof (decimal)))
 				return new NumberValueExpressionTranslator();
+			var constant = (ConstantExpression) e;
+			if (constant.Value == null)
+				return new NullValueExpressionTranslator();
 			throw new NotSupportedException(string.Format("Values of type '{0}' are not supported.", type));
 		}
 		private static IExpressionTranslator GetNodeTypeBasedTranslator(ExpressionType type)

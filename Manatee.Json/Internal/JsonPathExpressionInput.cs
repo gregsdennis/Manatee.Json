@@ -39,6 +39,9 @@ namespace Manatee.Json.Internal
 		GreaterThan,
 		Bang,
 		Quote,
+		Letter,
+		And,
+		Or,
 		End
 	}
 }

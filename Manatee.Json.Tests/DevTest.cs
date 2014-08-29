@@ -61,7 +61,7 @@ namespace Manatee.Json.Tests
 													{"author", "Evelyn Waugh"},
 													{"title", "Sword of Honour"},
 													{"price", 12.99},
-													{"tags", new JsonArray {4, "thrilling", "insightful"}}
+													{"tags", new JsonArray {4, "red", "insightful"}}
 												},
 											new JsonObject
 												{
@@ -79,6 +79,7 @@ namespace Manatee.Json.Tests
 													{"title", "The Lord of the Rings"},
 													{"isbn", "0-395-19395-8"},
 													{"price", 22.99},
+													{"nullValue", JsonValue.Null}
 												},
 											new JsonArray {"true", true, new JsonObject {{"value", 5}}, "hello", JsonValue.Null, false}
 										}
@@ -87,7 +88,8 @@ namespace Manatee.Json.Tests
 									"bicycle", new JsonObject
 										{
 											{"color", "red"},
-											{"price", 19.95}
+											{"price", 19.95},
+											{"sold", false}
 										}
 								}
 							}
@@ -95,9 +97,9 @@ namespace Manatee.Json.Tests
 				};
 			//Console.WriteLine(json.GetIndentedString());
 
-			var path = JsonPath.Parse("$..book[?(@.price < $.store.bicycle.price)]");
-			var path2 = JsonPathWith.Search("book").Array(v => v.Name("price") < JsonPathRoot.Name("store").Name("bicycle").Name("price"));
-			var result = path.Evaluate(json);
+			var path = JsonPath.Parse("$..book[?(@.inStock == !$.store.bicycle.sold)]");
+			var path2 = JsonPathWith.Search("book").Array(v => v.Name("inStock") == !JsonPathRoot.Name("store").Name("bicycle").Name("sold"));
+			var result = path2.Evaluate(json);
 
 			Console.WriteLine(path);
 			Console.WriteLine(path2);

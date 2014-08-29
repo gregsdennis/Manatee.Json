@@ -14,42 +14,32 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		WildCardOperator.cs
+	File Name:		LengthOperator.cs
 	Namespace:		Manatee.Json.Path.Operators
-	Class Name:		WildCardOperator
-	Purpose:		Indicates that the path should return all values at the
-					current level.
+	Class Name:		LengthOperator
+	Purpose:		Indicates that the current value should be an array and
+					returns the number of items.
 
 ***************************************************************************************/
 using System.Linq;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Operators
 {
-	internal class WildCardOperator : IJsonPathOperator
+	internal class LengthOperator : IJsonPathOperator
 	{
-		private static readonly WildCardOperator _instance = new WildCardOperator();
+		private static readonly LengthOperator _instance = new LengthOperator();
 
-		public static WildCardOperator Instance { get { return _instance; } }
+		public static LengthOperator Instance { get { return _instance; } }
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			return new JsonArray(json.SelectMany(v =>
-				{
-					switch (v.Type)
-					{
-						case JsonValueType.Object:
-							return v.Object.Values;
-						case JsonValueType.Array:
-							return v.Array;
-						default:
-							return Enumerable.Empty<JsonValue>();
-					}
-				}).NotNull());
+			return json.Where(v => v.Type == JsonValueType.Array)
+			           .Select(v => (JsonValue) v.Array.Count)
+			           .ToJson();
 		}
 		public override string ToString()
 		{
-			return ".*";
+			return string.Format(".length");
 		}
 	}
 }

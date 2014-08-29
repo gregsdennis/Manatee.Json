@@ -14,32 +14,22 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		FieldExpression.cs
-	Namespace:		Manatee.Json.Path.Expressions
-	Class Name:		FieldExpression
-	Purpose:		Expresses the intent to retrieve a value from a field.
+	File Name:		NullValueExpressionTranslator.cs
+	Namespace:		Manatee.Json.Path.Expressions.Translation
+	Class Name:		NullValueExpressionTranslator
+	Purpose:		Translates from a LINQ Constant Expression with a null
+					value to a ValueExpression.
 
 ***************************************************************************************/
-using System.Reflection;
+using System.Linq.Expressions;
 
-namespace Manatee.Json.Path.Expressions
+namespace Manatee.Json.Path.Expressions.Translation
 {
-	internal class FieldExpression<T> : ExpressionTreeNode<T>
+	internal class NullValueExpressionTranslator : IExpressionTranslator
 	{
-		public override int Priority { get { return 6; } }
-		public FieldInfo Field { get; set; }
-		public object Source { get; set; }
-
-		public override object Evaluate(T json, JsonValue root)
+		public ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
-			return Field.GetValue(Source);
-		}
-		public override string ToString()
-		{
-			var value = Evaluate(default(T), null);
-			return value is string
-					   ? string.Format("\"{0}\"", value)
-					   : value.ToString();
+			return new ValueExpression<T> { Value = JsonValue.Null };
 		}
 	}
 }

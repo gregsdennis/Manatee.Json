@@ -109,6 +109,14 @@ namespace Manatee.Json.Internal
 					{'>', JsonPathExpressionInput.GreaterThan},
 					{'!', JsonPathExpressionInput.Bang},
 					{'"', JsonPathExpressionInput.Quote},
+					{'t', JsonPathExpressionInput.Letter},
+					{'T', JsonPathExpressionInput.Letter},
+					{'f', JsonPathExpressionInput.Letter},
+					{'F', JsonPathExpressionInput.Letter},
+					{'n', JsonPathExpressionInput.Letter},
+					{'N', JsonPathExpressionInput.Letter},
+					{'&', JsonPathExpressionInput.And},
+					{'|', JsonPathExpressionInput.Or},
 				};
 
 		public static JsonInput Item(char key)

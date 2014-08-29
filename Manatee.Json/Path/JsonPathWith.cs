@@ -36,14 +36,28 @@ namespace Manatee.Json.Path
 		#region Start New Path
 
 		/// <summary>
+		/// Creates a new <see cref="JsonPath"/> object which starts by specifying an array length.
+		/// </summary>
+		/// <returns>A new <see cref="JsonPath"/>.</returns>
+		public static JsonPath Length()
+		{
+			var path = new JsonPath();
+			path.Operators.Add(LengthOperator.Instance);
+			return path;
+		}
+		/// <summary>
 		/// Creates a new <see cref="JsonPath"/> object which starts by specifying an object property.
 		/// </summary>
 		/// <param name="name">The name to follow.</param>
 		/// <returns>A new <see cref="JsonPath"/>.</returns>
+		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="Length()"/></remarks>
 		public static JsonPath Name(string name)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new NameOperator(name));
+			if (name == "length")
+				path.Operators.Add(LengthOperator.Instance);
+			else
+				path.Operators.Add(new NameOperator(name));
 			return path;
 		}
 		/// <summary>
@@ -71,10 +85,21 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="name">The name to search for.</param>
 		/// <returns>A new <see cref="JsonPath"/>.</returns>
+		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="SearchLength()"/></remarks>
 		public static JsonPath Search(string name)
 		{
 			var path = new JsonPath();
 			path.Operators.Add(new SearchOperator(new NameSearchParameter(name)));
+			return path;
+		}
+		/// <summary>
+		/// Creates a new <see cref="JsonPath"/> object which starts by searching for array lengths.
+		/// </summary>
+		/// <returns>A new <see cref="JsonPath"/>.</returns>
+		public static JsonPath SearchLength()
+		{
+			var path = new JsonPath();
+			path.Operators.Add(new SearchOperator(LengthSearchParameter.Instance));
 			return path;
 		}
 		/// <summary>
@@ -201,16 +226,32 @@ namespace Manatee.Json.Path
 		#region Operators
 
 		/// <summary>
+		/// Appends a <see cref="JsonPath"/> by specifying an array length.
+		/// </summary>
+		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
+		/// <returns>The new <see cref="JsonPath"/>.</returns>
+		public static JsonPath Length(this JsonPath path)
+		{
+			var newPath = new JsonPath();
+			newPath.Operators.AddRange(path.Operators);
+			newPath.Operators.Add(LengthOperator.Instance);
+			return newPath;
+		}
+		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an object property.
 		/// </summary>
 		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
 		/// <param name="name">The name to follow.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
+		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="Length(JsonPath)"/></remarks>
 		public static JsonPath Name(this JsonPath path, string name)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
-			newPath.Operators.Add(new NameOperator(name));
+			if (name == "length")
+				newPath.Operators.Add(LengthOperator.Instance);
+			else
+				newPath.Operators.Add(new NameOperator(name));
 			return newPath;
 		}
 		/// <summary>
@@ -243,11 +284,24 @@ namespace Manatee.Json.Path
 		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
 		/// <param name="name">The name to follow.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
+		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="SearchLength(JsonPath)"/></remarks>
 		public static JsonPath Search(this JsonPath path, string name)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
 			newPath.Operators.Add(new SearchOperator(new NameSearchParameter(name)));
+			return newPath;
+		}
+		/// <summary>
+		/// Appends a <see cref="JsonPath"/> by searching for array lengths.
+		/// </summary>
+		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
+		/// <returns>The new <see cref="JsonPath"/>.</returns>
+		public static JsonPath SearchLength(this JsonPath path)
+		{
+			var newPath = new JsonPath();
+			newPath.Operators.AddRange(path.Operators);
+			newPath.Operators.Add(new SearchOperator(LengthSearchParameter.Instance));
 			return newPath;
 		}
 		/// <summary>

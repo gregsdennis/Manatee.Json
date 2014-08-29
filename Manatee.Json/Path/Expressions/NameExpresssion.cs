@@ -28,7 +28,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class NameExpression<T> : PathExpression<T>
 	{
-		public override int Priority { get { return 5; } }
+		public override int Priority { get { return 6; } }
 		public string Name { get; set; }
 
 		public override object Evaluate(T json, JsonValue root)
