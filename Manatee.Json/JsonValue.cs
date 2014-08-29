@@ -586,6 +586,14 @@ namespace Manatee.Json
 					throw new ArgumentOutOfRangeException();
 			}
 		}
+		/// <summary>
+		/// </summary>
+		/// <param name="v"></param>
+		/// <returns></returns>
+		public static bool operator !(JsonValue v)
+		{
+			return v != null && v.Type == JsonValueType.Boolean && !v.Boolean;
+		}
 
 		internal static JsonValue Parse(string source, ref int index)
 		{

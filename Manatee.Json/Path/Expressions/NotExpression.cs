@@ -29,7 +29,8 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json, JsonValue root)
 		{
-			return !(bool)Root.Evaluate(json, root);
+			var result = Root.Evaluate(json, root);
+			return result != null && result.Equals(true);
 		}
 		public override string ToString()
 		{

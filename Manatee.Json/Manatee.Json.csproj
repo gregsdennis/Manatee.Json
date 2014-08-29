@@ -68,6 +68,7 @@
     <Compile Include="Path\Expressions\ComparisonExpression.cs" />
     <Compile Include="Path\Expressions\PathExpression.cs" />
     <Compile Include="Path\Expressions\Translation\ArrayIndexExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NullValueExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\PathExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\StringValueExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\AddExpression.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Path\Expressions\Translation\NameExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\SubtractExpressionTranslator.cs" />
     <Compile Include="Path\JsonPathRoot.cs" />
+    <Compile Include="Path\Operators\LengthOperator.cs" />
     <Compile Include="Path\PathExpressionExtensions.cs" />
     <Compile Include="Path\Expressions\ValueExpression.cs" />
     <Compile Include="Path\Operators\ArrayOperator.cs" />

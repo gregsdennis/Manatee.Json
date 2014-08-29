@@ -53,4 +53,32 @@ namespace Manatee.Json.Path.SearchParameters
 			return "*";
 		}
 	}
+	internal class LengthSearchParameter : IJsonPathSearchParameter
+	{
+		private static readonly LengthSearchParameter _instance = new LengthSearchParameter();
+
+		public static LengthSearchParameter Instance { get { return _instance; } }
+
+		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
+		{
+			return new JsonArray(json.SelectMany(v =>
+				{
+					var contents = new List<JsonValue> {v.Array.Count};
+					switch (v.Type)
+					{
+						case JsonValueType.Object:
+							contents.AddRange(v.Object.Values.SelectMany(jv => Find(new JsonArray {jv}, root)));
+							break;
+						case JsonValueType.Array:
+							contents.AddRange(v.Array.SelectMany(jv => Find(new JsonArray {jv}, root)));
+							break;
+					}
+					return contents;
+				}));
+		}
+		public override string ToString()
+		{
+			return "length";
+		}
+	}
 }
