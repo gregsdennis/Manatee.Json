@@ -52,7 +52,7 @@ namespace Manatee.Json.Tests
 													{"author", "Nigel Rees"},
 													{"title", "Sayings of the Century"},
 													{"price", new JsonObject {{"new", 8.95}, {"used", 5.00}}},
-													{"inStock", false},
+													{"inStock", "no"},
 													{"tags", new JsonArray {"awesome", "thrilling", "insightful"}}
 												},
 											new JsonObject
@@ -97,8 +97,8 @@ namespace Manatee.Json.Tests
 				};
 			//Console.WriteLine(json.GetIndentedString());
 
-			var path = JsonPath.Parse("$..book[?(@.inStock == !$.store.bicycle.sold)]");
-			var path2 = JsonPathWith.Search("book").Array(v => v.Name("inStock") == !JsonPathRoot.Name("store").Name("bicycle").Name("sold"));
+			var path = JsonPath.Parse("$..book[?(@.price+10 <= $.store.bicycle.price)]");
+			var path2 = JsonPathWith.Search("book").Array(v => v.Name("price")+10 <= JsonPathRoot.Name("store").Name("bicycle").Name("price"));
 			var result = path2.Evaluate(json);
 
 			Console.WriteLine(path);

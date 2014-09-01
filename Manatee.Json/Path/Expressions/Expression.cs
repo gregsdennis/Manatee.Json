@@ -113,11 +113,6 @@ namespace Manatee.Json.Path.Expressions
 			return Root.ToString();
 		}
 
-		public static implicit operator Expression<T, TIn>(System.Linq.Expressions.Expression<Func<TIn, T>> source)
-		{
-			return ExpressionTranslator.Translate(source);
-		}
-
 		internal int Parse(string source, int i)
 		{
 			_source = source;

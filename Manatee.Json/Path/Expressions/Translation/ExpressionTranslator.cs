@@ -206,9 +206,13 @@ namespace Manatee.Json.Path.Expressions.Translation
 			}
 			throw new NotSupportedException(string.Format("Expression type '{0}' is not supported.", type));
 		}
-		public static Expression<T, TIn> Translate<T, TIn>(Expression<Func<TIn, T>> source)
+		public static Expression<T, JsonValue> Translate<T>(Expression<Func<JsonPathValue, T>> source)
 		{
-			return new Expression<T, TIn> { Root = TranslateNode<TIn>(source.Body) };
+			return new Expression<T, JsonValue> {Root = TranslateNode<JsonValue>(source.Body)};
+		}
+		public static Expression<T, JsonArray> Translate<T>(Expression<Func<JsonPathArray, T>> source)
+		{
+			return new Expression<T, JsonArray> {Root = TranslateNode<JsonArray>(source.Body)};
 		}
 	}
 }

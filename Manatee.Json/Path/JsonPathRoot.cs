@@ -53,7 +53,7 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="name">The name of the property.</param>
 		/// <returns>The value if the property exists and is a number; otherwise null.</returns>
-		internal static JsonValue Name(string name)
+		internal static JsonPathValue Name(string name)
 		{
 			throw new InvalidOperationException("This operation is reserved for JsonPath.");
 		}
@@ -62,7 +62,7 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="index">The index to retreive.</param>
 		/// <returns>The value if the property exists and is a number; otherwise null.</returns>
-		internal static JsonValue ArrayIndex(int index)
+		internal static JsonPathValue ArrayIndex(int index)
 		{
 			throw new InvalidOperationException("This operation is reserved for JsonPath.");
 		}

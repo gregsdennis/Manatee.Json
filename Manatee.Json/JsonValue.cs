@@ -490,110 +490,6 @@ namespace Manatee.Json
 		{
 			return !Equals(a, b);
 		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator <(JsonValue a, JsonValue b)
-		{
-			if (a == null || b == null) return a == null && b == null;
-			if (a.Type != b.Type) return false;
-			switch (a.Type)
-			{
-				case JsonValueType.Number:
-					return a.Number < b.Number;
-				case JsonValueType.String:
-					return string.Compare(a.String, b.String, StringComparison.Ordinal) < 0;
-				case JsonValueType.Boolean:
-				case JsonValueType.Object:
-				case JsonValueType.Array:
-				case JsonValueType.Null:
-					return false;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator <=(JsonValue a, JsonValue b)
-		{
-			if (a == null || b == null) return a == null && b == null;
-			if (a.Type != b.Type) return false;
-			switch (a.Type)
-			{
-				case JsonValueType.Number:
-					return a.Number < b.Number;
-				case JsonValueType.String:
-					return string.Compare(a.String, b.String, StringComparison.Ordinal) <= 0;
-				case JsonValueType.Boolean:
-				case JsonValueType.Object:
-				case JsonValueType.Array:
-				case JsonValueType.Null:
-					return false;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator >(JsonValue a, JsonValue b)
-		{
-			if (a == null || b == null) return a == null && b == null;
-			if (a.Type != b.Type) return false;
-			switch (a.Type)
-			{
-				case JsonValueType.Number:
-					return a.Number < b.Number;
-				case JsonValueType.String:
-					return string.Compare(a.String, b.String, StringComparison.Ordinal) > 0;
-				case JsonValueType.Boolean:
-				case JsonValueType.Object:
-				case JsonValueType.Array:
-				case JsonValueType.Null:
-					return false;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-		///<summary>
-		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
-		public static bool operator >=(JsonValue a, JsonValue b)
-		{
-			if (a == null || b == null) return a == null && b == null;
-			if (a.Type != b.Type) return false;
-			switch (a.Type)
-			{
-				case JsonValueType.Number:
-					return a.Number < b.Number;
-				case JsonValueType.String:
-					return string.Compare(a.String, b.String, StringComparison.Ordinal) >= 0;
-				case JsonValueType.Boolean:
-				case JsonValueType.Object:
-				case JsonValueType.Array:
-				case JsonValueType.Null:
-					return false;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-		/// <summary>
-		/// </summary>
-		/// <param name="v"></param>
-		/// <returns></returns>
-		public static bool operator !(JsonValue v)
-		{
-			return v != null && v.Type == JsonValueType.Boolean && !v.Boolean;
-		}
 
 		internal static JsonValue Parse(string source, ref int index)
 		{
@@ -661,6 +557,23 @@ namespace Manatee.Json
 							return new JsonValue(d);
 					}
 			}
+		}
+		internal object GetValue()
+		{
+			switch (Type)
+			{
+				case JsonValueType.Number:
+					return Number;
+				case JsonValueType.String:
+					return String;
+				case JsonValueType.Boolean:
+					return Boolean;
+				case JsonValueType.Object:
+					return Object;
+				case JsonValueType.Array:
+					return Array;
+			}
+			return null;
 		}
 
 		private static string EvaluateEscapeSequences(string s)

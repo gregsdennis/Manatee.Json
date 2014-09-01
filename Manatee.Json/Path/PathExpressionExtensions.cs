@@ -36,7 +36,7 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="json">The array.</param>
 		/// <returns>The length of the array.</returns>
-		public static int Length(this JsonArray json)
+		public static int Length(this JsonPathArray json)
 		{
 			throw new InvalidOperationException("This operation is reserved for JsonPath.");
 		}
@@ -45,7 +45,7 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="json">The array.</param>
 		/// <returns>The length of the array.</returns>
-		public static int Length(this JsonValue json)
+		public static int Length(this JsonPathValue json)
 		{
 			throw new InvalidOperationException("This operation is reserved for JsonPath.");
 		}
@@ -55,7 +55,7 @@ namespace Manatee.Json.Path
 		/// <param name="json">The value.</param>
 		/// <param name="name">The name of the property.</param>
 		/// <returns>true if the value is an object and contains key <paramref name="name"/> or if its value is true; otherwise false.</returns>
-		public static bool HasProperty(this JsonValue json, string name)
+		public static bool HasProperty(this JsonPathValue json, string name)
 		{
 			throw new InvalidOperationException("This operation is reserved for JsonPath.");
 		}
@@ -65,7 +65,7 @@ namespace Manatee.Json.Path
 		/// <param name="json">The value.</param>
 		/// <param name="name">The name of the property.</param>
 		/// <returns>The value if the property exists and is a number; otherwise null.</returns>
-		internal static JsonValue Name(this JsonValue json, string name)
+		internal static JsonPathValue Name(this JsonPathValue json, string name)
 		{
 			throw new InvalidOperationException("This operation is reserved for JsonPath.");
 		}
@@ -75,7 +75,7 @@ namespace Manatee.Json.Path
 		/// <param name="json">The value.</param>
 		/// <param name="index">The index to retreive.</param>
 		/// <returns>The value if the property exists and is a number; otherwise null.</returns>
-		internal static JsonValue ArrayIndex(this JsonValue json, int index)
+		internal static JsonPathValue ArrayIndex(this JsonPathValue json, int index)
 		{
 			throw new InvalidOperationException("This operation is reserved for JsonPath.");
 		}
