@@ -41,7 +41,7 @@ namespace Manatee.Json.Path.Expressions
 				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
 			var result = results.FirstOrDefault();
 			return result != null && result.Type == JsonValueType.Object && result.Object.ContainsKey(Name)
-				       ? result.Object[Name]
+				       ? result.Object[Name].GetValue()
 				       : null;
 		}
 		public override string ToString()

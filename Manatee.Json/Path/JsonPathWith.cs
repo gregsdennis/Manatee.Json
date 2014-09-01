@@ -23,6 +23,7 @@
 using System;
 using System.Linq.Expressions;
 using Manatee.Json.Path.ArrayParameters;
+using Manatee.Json.Path.Expressions.Translation;
 using Manatee.Json.Path.Operators;
 using Manatee.Json.Path.SearchParameters;
 
@@ -144,10 +145,10 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="expression">The expression.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath SearchArray(Expression<Func<JsonArray, int>> expression)
+		public static JsonPath SearchArray(Expression<Func<JsonPathArray, int>> expression)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new IndexExpressionQuery(expression))));
+			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new IndexExpressionQuery(ExpressionTranslator.Translate(expression)))));
 			return path;
 		}
 		/// <summary>
@@ -155,10 +156,10 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="expression">The predicate expression</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath SearchArray(Expression<Func<JsonValue, bool>> expression)
+		public static JsonPath SearchArray(Expression<Func<JsonPathValue, bool>> expression)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new FilterExpressionQuery(expression))));
+			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new FilterExpressionQuery(ExpressionTranslator.Translate(expression)))));
 			return path;
 		}
 		/// <summary>
@@ -203,10 +204,10 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="expression">The expression.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath Array(Expression<Func<JsonArray, int>> expression)
+		public static JsonPath Array(Expression<Func<JsonPathArray, int>> expression)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new ArrayOperator(new IndexExpressionQuery(expression)));
+			path.Operators.Add(new ArrayOperator(new IndexExpressionQuery(ExpressionTranslator.Translate(expression))));
 			return path;
 		}
 		/// <summary>
@@ -214,10 +215,10 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="expression">The predicate expression</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath Array(Expression<Func<JsonValue, bool>> expression)
+		public static JsonPath Array(Expression<Func<JsonPathValue, bool>> expression)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new ArrayOperator(new FilterExpressionQuery(expression)));
+			path.Operators.Add(new ArrayOperator(new FilterExpressionQuery(ExpressionTranslator.Translate(expression))));
 			return path;
 		}
 
@@ -353,11 +354,11 @@ namespace Manatee.Json.Path
 		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
 		/// <param name="expression">The expression.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath Array(this JsonPath path, Expression<Func<JsonArray, int>> expression)
+		public static JsonPath Array(this JsonPath path, Expression<Func<JsonPathArray, int>> expression)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
-			newPath.Operators.Add(new ArrayOperator(new IndexExpressionQuery(expression)));
+			newPath.Operators.Add(new ArrayOperator(new IndexExpressionQuery(ExpressionTranslator.Translate(expression))));
 			return newPath;
 		}
 		/// <summary>
@@ -366,11 +367,11 @@ namespace Manatee.Json.Path
 		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
 		/// <param name="expression">The predicate expression</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath Array(this JsonPath path, Expression<Func<JsonValue, bool>> expression)
+		public static JsonPath Array(this JsonPath path, Expression<Func<JsonPathValue, bool>> expression)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
-			newPath.Operators.Add(new ArrayOperator(new FilterExpressionQuery(expression)));
+			newPath.Operators.Add(new ArrayOperator(new FilterExpressionQuery(ExpressionTranslator.Translate(expression))));
 			return newPath;
 		}
 

@@ -122,7 +122,9 @@
     <Compile Include="Path\Expressions\Translation\OrExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\NameExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\SubtractExpressionTranslator.cs" />
+    <Compile Include="Path\JsonPathArray.cs" />
     <Compile Include="Path\JsonPathRoot.cs" />
+    <Compile Include="Path\JsonPathValue.cs" />
     <Compile Include="Path\Operators\LengthOperator.cs" />
     <Compile Include="Path\PathExpressionExtensions.cs" />
     <Compile Include="Path\Expressions\ValueExpression.cs" />

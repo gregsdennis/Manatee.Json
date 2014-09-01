@@ -28,7 +28,10 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json, JsonValue root)
 		{
-			return (double)Left.Evaluate(json, root) % (double)Right.Evaluate(json, root);
+			var left = Left.Evaluate(json, root);
+			var right = Right.Evaluate(json, root);
+			if (!(left is double) || !(right is double)) return null;
+			return (double) left%(double) right;
 		}
 		public override string ToString()
 		{

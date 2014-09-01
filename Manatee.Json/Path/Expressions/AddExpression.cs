@@ -21,8 +21,6 @@
 
 ***************************************************************************************/
 
-using System;
-
 namespace Manatee.Json.Path.Expressions
 {
 	internal class AddExpression<T> : ExpressionTreeBranch<T>
@@ -31,9 +29,16 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json, JsonValue root)
 		{
-			var left = Convert.ToDouble(Left.Evaluate(json, root));
-			var right = Convert.ToDouble(Right.Evaluate(json, root));
-			return left + right;
+			var left = Left.Evaluate(json, root);
+			var right = Right.Evaluate(json, root);
+			if (!(left is double) || !(right is double))
+			{
+				var sleft = left as string;
+				var sright = right as string;
+				if (sleft == null || sright == null) return null;
+				return sleft + sright;
+			}
+			return (double) left + (double) right;
 		}
 		public override string ToString()
 		{
