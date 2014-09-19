@@ -38,71 +38,28 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
-			var json = new JsonObject
+			var json = new JsonArray
 				{
-					{
-						"store", new JsonObject
-							{
-								{
-									"book", new JsonArray
-										{
-											new JsonObject
-												{
-													{"category", "reference"},
-													{"author", "Nigel Rees"},
-													{"title", "Sayings of the Century"},
-													{"price", new JsonObject {{"new", 8.95}, {"used", 5.00}}},
-													{"inStock", "no"},
-													{"tags", new JsonArray {"awesome", "thrilling", "insightful"}}
-												},
-											new JsonObject
-												{
-													{"category", "fiction"},
-													{"author", "Evelyn Waugh"},
-													{"title", "Sword of Honour"},
-													{"price", 12.99},
-													{"tags", new JsonArray {4, "red", "insightful"}}
-												},
-											new JsonObject
-												{
-													{"category", "fiction"},
-													{"author", "Herman Melville"},
-													{"title", "Moby Dick"},
-													{"isbn", "0-553-21311-3"},
-													{"price", 8.99},
-													{"tags", new JsonArray {10, "thrilling", "insightful"}}
-												},
-											new JsonObject
-												{
-													{"category", "fiction"},
-													{"author", "J. R. R. Tolkien"},
-													{"title", "The Lord of the Rings"},
-													{"isbn", "0-395-19395-8"},
-													{"price", 22.99},
-													{"nullValue", JsonValue.Null}
-												},
-											new JsonArray {"true", true, new JsonObject {{"value", 5}}, "hello", JsonValue.Null, false}
-										}
-								},
-								{
-									"bicycle", new JsonObject
-										{
-											{"color", "red"},
-											{"price", 19.95},
-											{"sold", false}
-										}
-								}
-							}
-					}
+					new JsonObject
+						{
+							{"Lookup", new JsonArray {5, 6, 7, 8, 9}},
+							{"Response", new JsonObject {{"int", 5}, {"string", "stringValue"}}}
+						},
+					new JsonObject
+						{
+							{"Lookup", new JsonArray {1, 2, 3, 4}},
+							{"Response", new JsonObject {{"int", true}, {"string", "otherstringValue"}}}
+						}
 				};
-			//Console.WriteLine(json.GetIndentedString());
+			Console.WriteLine(json);
 
-			var path = JsonPath.Parse("$..book[?(@.price+10 <= $.store.bicycle.price)]");
-			var path2 = JsonPathWith.Search("book").Array(v => v.Name("price")+10 <= JsonPathRoot.Name("store").Name("bicycle").Name("price"));
-			var result = path2.Evaluate(json);
+			var name = "Lookup";
+			var value = 3;
+			var path = JsonPathWith.Array(jv => jv.Name(name)
+												  .IndexOf(value) != -1).Name("Response");
+			var result = path.Evaluate(json);
 
 			Console.WriteLine(path);
-			Console.WriteLine(path2);
 			Console.WriteLine(result.GetIndentedString());
 		}
 		[TestMethod]

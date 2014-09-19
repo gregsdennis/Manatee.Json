@@ -24,8 +24,6 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using Manatee.Json.Internal;
 using Manatee.Json.Path.ArrayParameters;
 using Manatee.Json.Path.Operators;
 
@@ -46,14 +44,14 @@ namespace Manatee.Json.Path.Expressions.Translation
 				switch (currentMethod.Method.Name)
 				{
 					case "Name":
-						if (parameter != null && parameter.Type != typeof(string))
-							throw new NotSupportedException("Only literal string arguments are supported");
-						path.Operators.Insert(0, new NameOperator((string)parameter.Value));
+						if (parameter == null || parameter.Type != typeof (string))
+							throw new NotSupportedException("Only literal string arguments are supported within JsonPath expressions.");
+						path.Operators.Insert(0, new NameOperator((string) parameter.Value));
 						break;
 					case "ArrayIndex":
-						if (parameter != null && parameter.Type != typeof (int))
-							throw new NotSupportedException("Only literal string arguments are supported");
-						path.Operators.Insert(0, new ArrayOperator(new IndexQuery((int)parameter.Value)));
+						if (parameter == null || parameter.Type != typeof (int))
+							throw new NotSupportedException("Only literal string arguments are supported within JsonPath expressions.");
+						path.Operators.Insert(0, new ArrayOperator(new IndexQuery((int) parameter.Value)));
 						break;
 				}
 				isLocal = currentMethod.Arguments.Count != 1;

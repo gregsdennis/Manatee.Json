@@ -14,11 +14,11 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NameExpressionTranslator.cs
+	File Name:		IndexOfExpressionTranslator.cs
 	Namespace:		Manatee.Json.Path.Expressions.Translation
-	Class Name:		NameExpressionTranslator
-	Purpose:		Translates from a LINQ Method Call Expression with a
-					Name method to a NameExpression.
+	Class Name:		IndexOfExpressionTranslator
+	Purpose:		Translates from a LINQ Method Call Expression to an
+					IndexOfExpression.
 
 ***************************************************************************************/
 using System;
@@ -27,7 +27,7 @@ using System.Linq.Expressions;
 
 namespace Manatee.Json.Path.Expressions.Translation
 {
-	internal class NameExpressionTranslator : PathExpressionTranslator
+	internal class IndexOfExpressionTranslator : PathExpressionTranslator
 	{
 		public override ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
@@ -36,20 +36,20 @@ namespace Manatee.Json.Path.Expressions.Translation
 			if (method == null)
 				throw new InvalidOperationException();
 			var parameter = method.Arguments.Last() as ConstantExpression;
-			if (parameter == null || parameter.Type != typeof (string))
+			if (parameter == null || parameter.Type != typeof(JsonValue))
 			{
-				return new NameExpression<T>
-				{
-					Path = BuildPath(method, out isLocal),
-					IsLocal = isLocal,
-					NameExp = ExpressionTranslator.TranslateNode<T>(method.Arguments.Last())
-				};
+				return new IndexOfExpression<T>
+					{
+						Path = BuildPath(method, out isLocal),
+						IsLocal = isLocal,
+						ValueExpression = ExpressionTranslator.TranslateNode<T>(method.Arguments.Last())
+					};
 			}
-			return new NameExpression<T>
+			return new IndexOfExpression<T>
 				{
 					Path = BuildPath(method, out isLocal),
 					IsLocal = isLocal,
-					Name = (string)parameter.Value
+					Value = (JsonValue)parameter.Value,
 				};
 		}
 	}

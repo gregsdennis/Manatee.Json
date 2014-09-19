@@ -1,4 +1,4 @@
-/***************************************************************************************
+﻿/***************************************************************************************
 
 	Copyright 2014 Greg Dennis
 
@@ -14,11 +14,10 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NameExpression.cs
+	File Name:		IndexOfExpression.cs
 	Namespace:		Manatee.Json.Path.Expressions
-	Class Name:		NameExpression
-	Purpose:		Expresses the intent to retrieve a value from a named
-					property in an object.
+	Class Name:		IndexOfExpression
+	Purpose:		Expresses the intent to retrieve the index of a given value.
 
 ***************************************************************************************/
 using System;
@@ -26,41 +25,41 @@ using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class NameExpression<T> : PathExpression<T>
+	internal class IndexOfExpression<T> : PathExpression<T>
 	{
 		public override int Priority { get { return 6; } }
-		public string Name { get; set; }
-		public ExpressionTreeNode<T> NameExp { get; set; }
+		public JsonValue Value { get; set; }
+		public ExpressionTreeNode<T> ValueExpression { get; set; }
 
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var value = IsLocal ? json as JsonValue : root;
 			if (value == null)
-				throw new NotSupportedException("Name requires a JsonValue to evaluate.");
+				throw new NotSupportedException("IndexOf requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
 			if (results.Count > 1)
 				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
 			var result = results.FirstOrDefault();
-			var name = GetName();
-			return result != null && result.Type == JsonValueType.Object && result.Object.ContainsKey(name)
-				       ? result.Object[name].GetValue()
-				       : null;
+			var searchValue = GetValue();
+			return result != null && result.Type == JsonValueType.Array && searchValue != null
+					   ? result.Array.IndexOf(searchValue)
+					   : (object)null;
 		}
 		public override string ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
-			return string.Format(IsLocal ? "@{0}.{1}" : "${0}.{1}", path, GetName());
+			return string.Format(IsLocal ? "@{0}.indexOf({1})" : "${0}.indexOf({1})", path, GetValue());
 		}
 
-		private string GetName()
+		private JsonValue GetValue()
 		{
-			if (NameExp != null)
+			if (ValueExpression != null)
 			{
-				var value = NameExp.Evaluate(default(T), null);
+				var value = ValueExpression.Evaluate(default(T), null);
 				if (value != null)
-					return (string)value;
+					return (JsonValue)value;
 			}
-			return Name;
+			return Value;
 		}
 	}
 }
