@@ -66,8 +66,10 @@
     <Compile Include="Internal\JsonPathInput.cs" />
     <Compile Include="Path\Expressions\ArrayIndexExpression.cs" />
     <Compile Include="Path\Expressions\ComparisonExpression.cs" />
+    <Compile Include="Path\Expressions\IndexOfExpression.cs" />
     <Compile Include="Path\Expressions\PathExpression.cs" />
     <Compile Include="Path\Expressions\Translation\ArrayIndexExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IndexOfExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\NullValueExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\PathExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\StringValueExpressionTranslator.cs" />

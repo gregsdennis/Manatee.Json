@@ -30,6 +30,7 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public override int Priority { get { return 6; } }
 		public int Index { get; set; }
+		public ExpressionTreeNode<T> IndexExpression { get; set; }
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -40,14 +41,25 @@ namespace Manatee.Json.Path.Expressions
 			if (results.Count > 1)
 				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
 			var result = results.FirstOrDefault();
-			return result != null && result.Type == JsonValueType.Array && Index >= 0 && Index < result.Array.Count
-					   ? result.Array[Index]
-				       : null;
+			var index = GetIndex();
+			return result != null && result.Type == JsonValueType.Array && index >= 0 && index < result.Array.Count
+					   ? result.Array[index]
+					   : null;
 		}
 		public override string ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
-			return string.Format(IsLocal ? "@{0}[{1}]" : "${0}[{1}]", path, Index);
+			return string.Format(IsLocal ? "@{0}[{1}]" : "${0}[{1}]", path, GetIndex());
+		}
+
+		private int GetIndex()
+		{
+			if (IndexExpression != null)
+			{
+				var value = IndexExpression.Evaluate(default(T), null);
+				if (value != null) return (int) value;
+			}
+			return Index;
 		}
 	}
 }

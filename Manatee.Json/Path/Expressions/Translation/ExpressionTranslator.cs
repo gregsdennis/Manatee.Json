@@ -183,6 +183,8 @@ namespace Manatee.Json.Path.Expressions.Translation
 					return new NameExpressionTranslator();
 				case "ArrayIndex":
 					return new ArrayIndexExpressionTranslator();
+				case "IndexOf":
+					return new IndexOfExpressionTranslator();
 			}
 			throw new NotSupportedException(string.Format("The method '{0}' is not supported.", method.Method.Name));
 		}
