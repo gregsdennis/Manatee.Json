@@ -42,14 +42,14 @@ namespace Manatee.Json.Path.Expressions.Translation
 					{
 						Path = BuildPath(method, out isLocal),
 						IsLocal = isLocal,
-						ValueExpression = ExpressionTranslator.TranslateNode<T>(method.Arguments.Last())
+						ParameterExpression = ExpressionTranslator.TranslateNode<JsonArray>(method.Arguments.Last())
 					};
 			}
 			return new IndexOfExpression<T>
 				{
 					Path = BuildPath(method, out isLocal),
 					IsLocal = isLocal,
-					Value = (JsonValue)parameter.Value,
+					Parameter = (JsonValue)parameter.Value,
 				};
 		}
 	}

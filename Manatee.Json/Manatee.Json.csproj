@@ -127,6 +127,7 @@
     <Compile Include="Path\JsonPathArray.cs" />
     <Compile Include="Path\JsonPathRoot.cs" />
     <Compile Include="Path\JsonPathValue.cs" />
+    <Compile Include="Path\Operators\IndexOfOperator.cs" />
     <Compile Include="Path\Operators\LengthOperator.cs" />
     <Compile Include="Path\PathExpressionExtensions.cs" />
     <Compile Include="Path\Expressions\ValueExpression.cs" />

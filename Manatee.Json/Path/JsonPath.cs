@@ -78,6 +78,7 @@ namespace Manatee.Json.Path
 			StateMachine[State.Start, JsonPathInput.Current] = GotCurrent;
 			StateMachine[State.ObjectOrArray, JsonPathInput.OpenBracket] = GotArray;
 			StateMachine[State.ObjectOrArray, JsonPathInput.Period] = GotObject;
+			StateMachine[State.ObjectOrArray, JsonPathInput.OpenParenth] = GotFunction;
 			StateMachine[State.ObjectOrArray, JsonPathInput.Number] = CompletePath;
 			StateMachine[State.ObjectOrArray, JsonPathInput.End] = CompletePath;
 			StateMachine[State.ArrayContent, JsonPathInput.Star] = GotArrayWildCard;
@@ -245,6 +246,19 @@ namespace Manatee.Json.Path
 			}
 			path._gotObject = true;
 			return State.ObjectContent;
+		}
+		private static State GotFunction(object owner, JsonPathInput input)
+		{
+			var path = owner as JsonPath;
+			path._gotObject = false;
+			var exp = new Expression<JsonValue, JsonArray>();
+			path._index = exp.Parse(path._source, path._index - 1);
+			var last = path.Operators.Last() as NameOperator;
+			if (last != null && last.Name != "indexOf")
+				throw new NotSupportedException("Currently, 'indexOf()' is the only supported function.");
+			path.Operators.Remove(last);
+			path.Operators.Add(new IndexOfOperator(exp));
+			return State.ObjectOrArray;
 		}
 		private static State CompletePath(object owner, JsonPathInput input)
 		{
