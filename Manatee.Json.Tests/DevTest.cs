@@ -42,7 +42,7 @@ namespace Manatee.Json.Tests
 				{
 					new JsonObject
 						{
-							{"Lookup", new JsonArray {5, 6, 7, 8, 9}},
+							{"Lookup", new JsonArray {5, "string", 7, 8, 9}},
 							{"Response", new JsonObject {{"int", 5}, {"string", "stringValue"}}}
 						},
 					new JsonObject
@@ -53,10 +53,8 @@ namespace Manatee.Json.Tests
 				};
 			Console.WriteLine(json);
 
-			var name = "Lookup";
-			var value = 3;
-			var path = JsonPathWith.Array(jv => jv.Name(name)
-												  .IndexOf(value) != -1).Name("Response");
+			var path = JsonPath.Parse("$..[?(@.Lookup.indexOf(\"string\")!=0-1)].Response");
+			//var path = JsonPathWith.SearchArray(jv => jv.Name("Lookup").IndexOf("string") != -1).Name("Response");
 			var result = path.Evaluate(json);
 
 			Console.WriteLine(path);

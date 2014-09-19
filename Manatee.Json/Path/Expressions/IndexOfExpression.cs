@@ -28,8 +28,8 @@ namespace Manatee.Json.Path.Expressions
 	internal class IndexOfExpression<T> : PathExpression<T>
 	{
 		public override int Priority { get { return 6; } }
-		public JsonValue Value { get; set; }
-		public ExpressionTreeNode<T> ValueExpression { get; set; }
+		public JsonValue Parameter { get; set; }
+		public ExpressionTreeNode<JsonArray> ParameterExpression { get; set; }
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -40,26 +40,40 @@ namespace Manatee.Json.Path.Expressions
 			if (results.Count > 1)
 				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
 			var result = results.FirstOrDefault();
-			var searchValue = GetValue();
-			return result != null && result.Type == JsonValueType.Array && searchValue != null
-					   ? result.Array.IndexOf(searchValue)
+			var parameter = GetParameter();
+			return result != null && result.Type == JsonValueType.Array && parameter != null
+					   ? result.Array.IndexOf(parameter)
 					   : (object)null;
 		}
 		public override string ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
-			return string.Format(IsLocal ? "@{0}.indexOf({1})" : "${0}.indexOf({1})", path, GetValue());
+			var parameter = ParameterExpression == null ? Parameter.ToString() : ParameterExpression.ToString();
+			return string.Format(IsLocal ? "@{0}.indexOf({1})" : "${0}.indexOf({1})", path, parameter);
 		}
 
-		private JsonValue GetValue()
+		private JsonValue GetParameter()
 		{
-			if (ValueExpression != null)
+			if (ParameterExpression != null)
 			{
-				var value = ValueExpression.Evaluate(default(T), null);
+				var value = ParameterExpression.Evaluate(null, null);
 				if (value != null)
-					return (JsonValue)value;
+				{
+					if (value is double)
+						return new JsonValue((double)value);
+					if (value is bool)
+						return new JsonValue((bool)value);
+					if (value is string)
+						return new JsonValue((string)value);
+					if (value is JsonArray)
+						return new JsonValue((JsonArray)value);
+					if (value is JsonObject)
+						return new JsonValue((JsonObject)value);
+					if (value is JsonValue)
+						return (JsonValue) value;
+				}
 			}
-			return Value;
+			return Parameter;
 		}
 	}
 }

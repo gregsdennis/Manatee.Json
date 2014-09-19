@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
-using Manatee.Json.Path.Expressions.Translation;
 using Manatee.Json.Path.Operators;
 using Manatee.StateMachine;
 using Manatee.StateMachine.Exceptions;
@@ -106,6 +105,19 @@ namespace Manatee.Json.Path.Expressions
 				return (T) (object) false;
 			if (typeof (T) == typeof (bool) && result != null && !(result is bool))
 				return (T) (object) true;
+			if (typeof (T) == typeof (JsonValue))
+			{
+				if (result is double)
+					return (T)(object)(new JsonValue((double)result));
+				if (result is bool)
+					return (T)(object)(new JsonValue((bool)result));
+				if (result is string)
+					return (T)(object)(new JsonValue((string)result));
+				if (result is JsonArray)
+					return (T)(object)(new JsonValue((JsonArray)result));
+				if (result is JsonObject)
+					return (T)(object)(new JsonValue((JsonObject)result));
+			}
 			return (T)Convert.ChangeType(result, typeof(T));
 		}
 		public override string ToString()
@@ -171,7 +183,11 @@ namespace Manatee.Json.Path.Expressions
 			CheckComparison(exp);
 			var group = new Expression<T, TIn>();
 			exp._index = group.Parse(exp._source, exp._index - 1);
-			exp._nodeList.Add(group.Root);
+			var last = exp._nodeList.LastOrDefault() as IndexOfExpression<TIn>;
+			if (last != null)
+				last.ParameterExpression = group.Root as ExpressionTreeNode<JsonArray>;
+			else
+				exp._nodeList.Add(group.Root);
 			return State.Value;
 		}
 		private static State CompleteExpression(object owner, JsonPathExpressionInput input)
@@ -201,10 +217,16 @@ namespace Manatee.Json.Path.Expressions
 			var path = new JsonPath();
 			exp._index = path.Parse(exp._source, exp._index - 1) - 1;
 			var name = path.Operators.Last() as NameOperator;
+			var indexOf = path.Operators.Last() as IndexOfOperator;
 			if (name != null && name.Name == "length")
 			{
 				path.Operators.Remove(name);
 				exp._nodeList.Add(new LengthExpression<TIn> {Path = path});
+			}
+			else if (indexOf != null)
+			{
+				path.Operators.Remove(indexOf);
+				exp._nodeList.Add(new IndexOfExpression<TIn> { Path = path, IsLocal = true, ParameterExpression = indexOf.Parameter.Root });
 			}
 			else
 				exp._nodeList.Add(new PathExpression<TIn> {Path = path});
@@ -217,10 +239,16 @@ namespace Manatee.Json.Path.Expressions
 			var path = new JsonPath();
 			exp._index = path.Parse(exp._source, exp._index - 1) - 1;
 			var name = path.Operators.Last() as NameOperator;
+			var indexOf = path.Operators.Last() as IndexOfOperator;
 			if (name != null && name.Name == "length")
 			{
 				path.Operators.Remove(name);
 				exp._nodeList.Add(new LengthExpression<TIn> {Path = path, IsLocal = true});
+			}
+			else if (indexOf != null)
+			{
+				path.Operators.Remove(indexOf);
+				exp._nodeList.Add(new IndexOfExpression<TIn> {Path = path, IsLocal = true, ParameterExpression = indexOf.Parameter.Root});
 			}
 			else
 				exp._nodeList.Add(new PathExpression<TIn> {Path = path, IsLocal = true});
