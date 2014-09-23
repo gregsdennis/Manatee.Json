@@ -40,25 +40,23 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The type which the method serializes.</typeparam>
 		/// <param name="input">The object to be serialized.</param>
 		/// <returns>The JSON representation of the object.</returns>
-		public delegate JsonValue ToJsonDelegate<in T>(T input);
+		public delegate JsonValue ToJsonDelegate<in T>(T input, JsonSerializer serializer);
 		/// <summary>
 		/// Declares the required signature for a deserializer method.
 		/// </summary>
 		/// <typeparam name="T">The type which the method deserializes.</typeparam>
 		/// <param name="json">The JSON representation of the object.</param>
 		/// <returns>The deserialized object.</returns>
-		public delegate T FromJsonDelegate<out T>(JsonValue json);
+		public delegate T FromJsonDelegate<out T>(JsonValue json, JsonSerializer serializer);
 
 		private static readonly Dictionary<Type, Delegate> ToJsonConverters;
 		private static readonly Dictionary<Type, Delegate> FromJsonConverters;
-		private static readonly JsonSerializer Serializer;
 		private static readonly object LockHolder = new object();
 
 		static JsonSerializationTypeRegistry()
 		{
 			ToJsonConverters = new Dictionary<Type, Delegate>();
 			FromJsonConverters = new Dictionary<Type, Delegate>();
-			Serializer = new JsonSerializer();
 			RegisterLocalTypes();
 		}
 
@@ -91,8 +89,7 @@ namespace Manatee.Json.Serialization
 			}
 			lock (LockHolder)
 			{
-				Serializer.Options = serializer.Options;
-				json = converter(obj);
+				json = converter(obj, serializer);
 			}
 		}
 		internal static void Decode<T>(this JsonSerializer serializer, JsonValue json, out T obj)
@@ -105,8 +102,7 @@ namespace Manatee.Json.Serialization
 			}
 			lock (LockHolder)
 			{
-				Serializer.Options = serializer.Options;
-				obj = converter(json);
+				obj = converter(json, serializer);
 			}
 		}
 
@@ -227,11 +223,11 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="dt">A <see cref="DateTime"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="DateTime"/>.</returns>
-		public static JsonValue EncodeDateTime(DateTime dt)
+		public static JsonValue EncodeDateTime(DateTime dt, JsonSerializer serializer)
 		{
-			if (Serializer.Options == null)
+			if (serializer.Options == null)
 				return dt.ToString();
-			switch (Serializer.Options.DateTimeSerializationFormat)
+			switch (serializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.JavaConstructor:
 					return string.Format("/Date({0})/", dt.Ticks/TimeSpan.TicksPerMillisecond);
@@ -246,11 +242,11 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="json">A JSON representation of a <see cref="DateTime"/>.</param>
 		/// <returns>The <see cref="DateTime"/> object.</returns>
-		public static DateTime DecodeDateTime(JsonValue json)
+		public static DateTime DecodeDateTime(JsonValue json, JsonSerializer serializer)
 		{
-			if (Serializer.Options == null)
+			if (serializer.Options == null)
 				return DateTime.Parse(json.String);
-			switch (Serializer.Options.DateTimeSerializationFormat)
+			switch (serializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.JavaConstructor:
 					return new DateTime(long.Parse(json.String.Substring(6, json.String.Length - 8))*TimeSpan.TicksPerMillisecond);
@@ -267,7 +263,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="ts">A <see cref="TimeSpan"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="TimeSpan"/>.</returns>
-		public static JsonValue EncodeTimeSpan(TimeSpan ts)
+		public static JsonValue EncodeTimeSpan(TimeSpan ts, JsonSerializer serializer)
 		{
 			return ts.ToString();
 		}
@@ -276,7 +272,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="json">A JSON representation of a <see cref="TimeSpan"/>.</param>
 		/// <returns>The <see cref="TimeSpan"/> object.</returns>
-		public static TimeSpan DecodeTimeSpan(JsonValue json)
+		public static TimeSpan DecodeTimeSpan(JsonValue json, JsonSerializer serializer)
 		{
 			return json.Type == JsonValueType.String ? TimeSpan.Parse(json.String) : default(TimeSpan);
 		}
@@ -287,7 +283,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="guid">A <see cref="Guid"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="Guid"/>.</returns>
-		public static JsonValue EncodeGuid(Guid guid)
+		public static JsonValue EncodeGuid(Guid guid, JsonSerializer serializer)
 		{
 			return guid.ToString();
 		}
@@ -296,7 +292,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="json">A JSON representation of a <see cref="Guid"/>.</param>
 		/// <returns>The <see cref="Guid"/> object.</returns>
-		public static Guid DecodeGuid(JsonValue json)
+		public static Guid DecodeGuid(JsonValue json, JsonSerializer serializer)
 		{
 			return json.Type == JsonValueType.String ? new Guid(json.String) : default(Guid);
 		}
@@ -311,9 +307,9 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the nullable value.</typeparam>
 		/// <param name="nullable">The <see cref="Nullable{T}"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="Nullable{T}"/>.</returns>
-		public static JsonValue EncodeNullable<T>(T? nullable) where T : struct
+		public static JsonValue EncodeNullable<T>(T? nullable, JsonSerializer serializer) where T : struct
 		{
-			return nullable.HasValue ? Serializer.Serialize(nullable.Value) : JsonValue.Null;
+			return nullable.HasValue ? serializer.Serialize(nullable.Value) : JsonValue.Null;
 		}
 		/// <summary>
 		/// Decodes a <see cref="Nullable{T}"/> object from its JSON representation.
@@ -321,10 +317,10 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the nullable value.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Nullable{T}"/>.</param>
 		/// <returns>The <see cref="Nullable{T}"/> object.</returns>
-		public static T? DecodeNullable<T>(JsonValue json) where T : struct
+		public static T? DecodeNullable<T>(JsonValue json, JsonSerializer serializer) where T : struct
 		{
 			if (json == JsonValue.Null) return null;
-			T? nullable = Serializer.Deserialize<T>(json);
+			T? nullable = serializer.Deserialize<T>(json);
 			return nullable;
 		}
 		#endregion
@@ -335,10 +331,10 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
 		/// <param name="list">The <see cref="List{T}"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="List{T}"/>.</returns>
-		public static JsonValue EncodeGenericList<T>(List<T> list)
+		public static JsonValue EncodeGenericList<T>(List<T> list, JsonSerializer serializer)
 		{
 			var array = new JsonArray();
-			array.AddRange(list.Select(item => Serializer.Serialize(item)));
+			array.AddRange(list.Select(serializer.Serialize));
 			return array;
 		}
 		/// <summary>
@@ -347,10 +343,10 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="List{T}"/>.</param>
 		/// <returns>The <see cref="List{T}"/> object.</returns>
-		public static List<T> DecodeGenericList<T>(JsonValue json)
+		public static List<T> DecodeGenericList<T>(JsonValue json, JsonSerializer serializer)
 		{
 			var list = new List<T>();
-			list.AddRange(json.Array.Select(jv => Serializer.Deserialize<T>(jv)));
+			list.AddRange(json.Array.Select(serializer.Deserialize<T>));
 			return list;
 		}
 		#endregion
@@ -362,14 +358,14 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
 		/// <param name="dict">The <see cref="Dictionary{TKey, TValue}"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="Dictionary{TKey, TValue}"/>.</returns>
-		public static JsonValue EncodeGenericDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict)
+		public static JsonValue EncodeGenericDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, JsonSerializer serializer)
 		{
 			var array = new JsonArray();
-			array.AddRange(dict.Select(item => (JsonValue)(new JsonObject
-			                                               	{
-			                                               		{"Key", Serializer.Serialize(item.Key)},
-																{"Value", Serializer.Serialize(item.Value)}
-			                                               	})));
+			array.AddRange(dict.Select(item => (JsonValue) (new JsonObject
+				{
+					{"Key", serializer.Serialize(item.Key)},
+					{"Value", serializer.Serialize(item.Value)}
+				})));
 			return array;
 		}
 		/// <summary>
@@ -379,16 +375,12 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Dictionary{TKey, TValue}"/>.</param>
 		/// <returns>The <see cref="Dictionary{TKey, TValue}"/> object.</returns>
-		public static Dictionary<TKey, TValue> DecodeGenericDictionary<TKey, TValue>(JsonValue json)
+		public static Dictionary<TKey, TValue> DecodeGenericDictionary<TKey, TValue>(JsonValue json, JsonSerializer serializer)
 		{
-			var dict = new Dictionary<TKey, TValue>();
-			foreach (var jv in json.Array)
-			{
-				dict.Add(Serializer.Deserialize<TKey>(jv.Object["Key"]),
-						 Serializer.Deserialize<TValue>(jv.Object["Value"]));
-			}
-			return dict;
+			return json.Array.ToDictionary(jv => serializer.Deserialize<TKey>(jv.Object["Key"]),
+										   jv => serializer.Deserialize<TValue>(jv.Object["Value"]));
 		}
+
 		#endregion
 		#region Queue<T>
 		/// <summary>
@@ -397,12 +389,12 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the queue.</typeparam>
 		/// <param name="queue">The <see cref="Queue{T}"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="Queue{T}"/>.</returns>
-		public static JsonValue EncodeGenericQueue<T>(Queue<T> queue)
+		public static JsonValue EncodeGenericQueue<T>(Queue<T> queue, JsonSerializer serializer)
 		{
 			var array = new JsonArray();
 			for (int i = 0; i < queue.Count; i++)
 			{
-				array.Add(Serializer.Serialize(queue.ElementAt(i)));
+				array.Add(serializer.Serialize(queue.ElementAt(i)));
 			}
 			return array;
 		}
@@ -412,12 +404,12 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the queue.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Queue{T}"/>.</param>
 		/// <returns>The <see cref="Queue{T}"/> object.</returns>
-		public static Queue<T> DecodeGenericQueue<T>(JsonValue json)
+		public static Queue<T> DecodeGenericQueue<T>(JsonValue json, JsonSerializer serializer)
 		{
 			var queue = new Queue<T>();
 			for (int i = 0; i < json.Array.Count; i++)
 			{
-				queue.Enqueue(Serializer.Deserialize<T>(json.Array[i]));
+				queue.Enqueue(serializer.Deserialize<T>(json.Array[i]));
 			}
 			return queue;
 		}
@@ -429,12 +421,12 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the stack.</typeparam>
 		/// <param name="stack">The <see cref="Stack{T}"/> object.</param>
 		/// <returns>The JSON representation of the <see cref="Stack{T}"/>.</returns>
-		public static JsonValue EncodeGenericStack<T>(Stack<T> stack)
+		public static JsonValue EncodeGenericStack<T>(Stack<T> stack, JsonSerializer serializer)
 		{
 			var array = new JsonArray();
 			for (int i = 0; i < stack.Count; i++)
 			{
-				array.Add(Serializer.Serialize(stack.ElementAt(i)));
+				array.Add(serializer.Serialize(stack.ElementAt(i)));
 			}
 			return array;
 		}
@@ -444,12 +436,12 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="T">The underlying type of the stack.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Stack{T}"/>.</param>
 		/// <returns>The <see cref="Stack{T}"/> object.</returns>
-		public static Stack<T> DecodeGenericStack<T>(JsonValue json)
+		public static Stack<T> DecodeGenericStack<T>(JsonValue json, JsonSerializer serializer)
 		{
 			var stack = new Stack<T>();
 			for (int i = 0; i < json.Array.Count; i++)
 			{
-				stack.Push(Serializer.Deserialize<T>(json.Array[i]));
+				stack.Push(serializer.Deserialize<T>(json.Array[i]));
 			}
 			return stack;
 		}

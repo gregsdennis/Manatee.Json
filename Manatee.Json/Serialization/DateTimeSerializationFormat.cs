@@ -40,6 +40,6 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Output is a numeric value representing the number of milliseconds since January 1, 1970 UTC.
 		/// </summary>
-		Milliseconds
+		Milliseconds,
 	}
 }
