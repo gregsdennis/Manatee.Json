@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
+using Manatee.Json.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -53,12 +54,22 @@ namespace Manatee.Json.Tests
 				};
 			Console.WriteLine(json);
 
-			var path = JsonPath.Parse("$..[?(@.Lookup.indexOf(\"string\")!=0-1)].Response");
-			//var path = JsonPathWith.SearchArray(jv => jv.Name("Lookup").IndexOf("string") != -1).Name("Response");
+			//var path = JsonPath.Parse("$..[?(@.Lookup.indexOf(\"string\")!=0-1)].Response");
+			var path = JsonPathWith.SearchArray(jv => jv.Name("Lookup").IndexOf("string") != -1).Name("Response");
 			var result = path.Evaluate(json);
 
 			Console.WriteLine(path);
 			Console.WriteLine(result.GetIndentedString());
+		}
+		[TestMethod]
+		public void Test2()
+		{
+			JsonSerializationTypeRegistry.RegisterListType<int>();
+			var anon = new {Prop1 = "string", Prop2 = new List<int> {5, 6, 7}};
+			var serializer = new JsonSerializer();
+			var json = serializer.Serialize(anon);
+
+			Console.WriteLine(json);
 		}
 		[TestMethod]
 		[Ignore]
