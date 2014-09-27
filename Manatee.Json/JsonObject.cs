@@ -113,7 +113,7 @@ namespace Manatee.Json
 		public JsonObject(string source)
 			: this()
 		{
-			_source = StripExternalSpaces(source);
+			_source = source.StripExternalSpaces();
 			Parse(0);
 		}
 		internal JsonObject(string s, ref int i)
@@ -163,22 +163,6 @@ namespace Manatee.Json
 			base.Add(key, value ?? JsonValue.Null);
 		}
 
-		private static bool IsWhiteSpace(char c)
-		{
-			return (c == 10) || (c == 13) || (c == 32) || (c == 9);
-		}
-		private static string StripExternalSpaces(string s)
-		{
-			var inString = false;
-			var ret = "";
-			foreach (var t in s)
-			{
-				if (t == '"') inString = !inString;
-				if (inString || !IsWhiteSpace(t))
-					ret += t;
-			}
-			return ret;
-		}
 		private int Parse(int i)
 		{
 			_stream.Clear();
@@ -191,17 +175,31 @@ namespace Manatee.Json
 				if (!_done)
 					throw new JsonSyntaxException(_index);
 			}
-			catch (InputNotValidForStateException<State, JsonInput>)
+			catch (InputNotValidForStateException<State, JsonInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				switch (e.State)
+				{
+					case State.Start:
+						throw new JsonSyntaxException("Expected '{{' at index {0}", _index);
+					case State.Key:
+						throw new JsonSyntaxException("Expected a key at index {0}", _index);
+					case State.Colon:
+						throw new JsonSyntaxException("Expected ':' after key '{0}'", _key);
+					case State.Value:
+						throw new JsonSyntaxException("Expected a value for key '{0}'", _key);
+					case State.End:
+						throw new JsonSyntaxException("Expected either ',' or '}}' at index {0}", _index);
+					default:
+						throw new JsonSyntaxException(_index, e);
+				}
 			}
-			catch (StateNotValidException<State>)
+			catch (StateNotValidException<State> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
 			return _index;
 		}

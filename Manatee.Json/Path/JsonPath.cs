@@ -182,17 +182,17 @@ namespace Manatee.Json.Path
 				if (!_done)
 					throw new JsonSyntaxException(_index);
 			}
-			catch (InputNotValidForStateException<State, JsonPathInput>)
+			catch (InputNotValidForStateException<State, JsonPathInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
-			catch (StateNotValidException<State>)
+			catch (StateNotValidException<State> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonPathInput>)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonPathInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
 		}
 		private static void GetNextInput(object owner)

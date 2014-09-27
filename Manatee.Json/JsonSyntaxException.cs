@@ -23,8 +23,6 @@
 ***************************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Manatee.Json
 {
@@ -34,10 +32,11 @@ namespace Manatee.Json
 	[Serializable]
 	public class JsonSyntaxException : Exception
 	{
-		/// <summary>
-		/// Creates a new instance of this exception.
-		/// </summary>
+		internal JsonSyntaxException(string format, params object[] parameters)
+			: base(string.Format(format, parameters)) { }
 		internal JsonSyntaxException(int index)
 			: base(string.Format("Parse found a syntax error at index {0}.", index)) { }
+		internal JsonSyntaxException(int index, Exception innerException)
+			: base(string.Format("Parse found a syntax error at index {0}.", index), innerException) { }
 	}
 }

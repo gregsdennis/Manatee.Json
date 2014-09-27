@@ -131,17 +131,17 @@ namespace Manatee.Json
 				if (!_done)
 					throw new JsonSyntaxException(_index);
 			}
-			catch (InputNotValidForStateException<State, JsonInput>)
+			catch (InputNotValidForStateException<State, JsonInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
-			catch (StateNotValidException<State>)
+			catch (StateNotValidException<State> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
 			return _index;
 		}
