@@ -21,12 +21,7 @@
 
 ***************************************************************************************/
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json
@@ -40,12 +35,6 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonValue
 	{
-		private const string EscapeChars = @"\""/bfnrtu";
-
-		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
-																			 .Select(n => (char)n)
-																			 .Where(c => !char.IsControl(c));
-
 		private bool _boolValue;
 		private string _stringValue;
 		private double _numberValue;
@@ -266,7 +255,7 @@ namespace Manatee.Json
 				case JsonValueType.Number:
 					return string.Format("{0}", _numberValue);
 				case JsonValueType.String:
-					return string.Format("\"{0}\"", InsertEscapeSequences(_stringValue));
+					return string.Format("\"{0}\"", _stringValue.InsertEscapeSequences());
 				case JsonValueType.Boolean:
 					return _boolValue ? "true" : "false";
 				case JsonValueType.Object:
@@ -359,7 +348,7 @@ namespace Manatee.Json
 			if (source.IsNullOrWhiteSpace())
 				throw new ArgumentException("Source string contains no data.");
 			var i = 1;
-			return Parse(StripExternalSpaces(source), ref i);
+			return Parse(source.StripExternalSpaces(), ref i);
 		}
 
 		/// <summary>
@@ -509,7 +498,7 @@ namespace Manatee.Json
 					while (!found && length < temp.Length)
 					{
 						if (temp[length] == '\\')
-							if (!EscapeChars.Contains(temp[length + 1].ToString()))
+							if (!GeneralExtensions.EscapeChars.Contains(temp[length + 1].ToString()))
 								throw new JsonStringInvalidEscapeSequenceException(temp.Substring(length, 2), index + length);
 							else
 								if (temp[length + 1] == 'u')
@@ -527,7 +516,7 @@ namespace Manatee.Json
 						return new JsonValue(string.Empty);
 					}
 					index += length;
-					return new JsonValue(EvaluateEscapeSequences(temp.Substring(0, length-1)));
+					return new JsonValue(temp.Substring(0, length-1).EvaluateEscapeSequences());
 				case '{':										// object
 					index--;
 					return new JsonValue(new JsonObject(source, ref index));
@@ -576,111 +565,5 @@ namespace Manatee.Json
 			return null;
 		}
 
-		private static string EvaluateEscapeSequences(string s)
-		{
-			var i = 0;
-			int length;
-			while (i < s.Length)
-			{
-				length = 1;
-				if (s[i] == '\\')
-					switch (s[i + 1])
-					{
-						case '"':
-						case '/':
-						case '\\':
-							s = s.Remove(i, 1);
-							break;
-						case 'b':
-							s = s.Substring(0, i) + '\b' + s.Substring(i + length + 1);
-							break;
-						case 'f':
-							s = s.Substring(0, i) + '\f' + s.Substring(i + length + 1);
-							break;
-						case 'n':
-							s = s.Substring(0, i) + '\n' + s.Substring(i + length+1);
-							break;
-						case 'r':
-							s = s.Substring(0, i) + '\r' + s.Substring(i + length + 1);
-							break;
-						case 't':
-							s = s.Substring(0, i) + '\t' + s.Substring(i + length + 1);
-							break;
-						case 'u':
-							length = 6;
-							var hex = int.Parse(s.Substring(i + 2, 4), NumberStyles.HexNumber);
-							if (s.Substring(i + 6, 2) == "\\u")
-							{
-								var hex2 = int.Parse(s.Substring(i + 8, 4), NumberStyles.HexNumber);
-								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
-								length += 6;
-							}
-							s = s.Substring(0, i) + char.ConvertFromUtf32(hex) + s.Substring(i + length);
-							break;
-					}
-				i += length;
-			}
-			return s;
-		}
-		private static string InsertEscapeSequences(string s)
-		{
-			var i = 0;
-			while (i < s.Length)
-			{
-				switch (s[i])
-				{
-					case '"':
-					case '\\':
-						s = s.Insert(i, "\\");
-						i++;
-						break;
-					case '\b':
-						s = s.Substring(0, i) + "\\b" + s.Substring(i + 1);
-						i++;
-						break;
-					case '\f':
-						s = s.Substring(0, i) + "\\f" + s.Substring(i + 1);
-						i++;
-						break;
-					case '\n':
-						s = s.Substring(0, i) + "\\n" + s.Substring(i + 1);
-						i++;
-						break;
-					case '\r':
-						s = s.Substring(0, i) + "\\r" + s.Substring(i + 1);
-						i++;
-						break;
-					case '\t':
-						s = s.Substring(0, i) + "\\t" + s.Substring(i + 1);
-						i++;
-						break;
-					default:
-						if (!AvailableChars.Contains(s[i]))
-						{
-							var hex = Convert.ToInt16(s[i]).ToString("X4");
-							s = s.Substring(0, i) + "\\u" + hex + s.Substring(i + 1);
-							i += 5;
-						}
-						break;
-				}
-				i++;
-			}
-			return s;
-		}
-		private static string StripExternalSpaces(string s)
-		{
-			var getNonDelimitedQuote = new Regex("((([^\"]*\\\\\\\")*)|([^\"]*))[^\"]*(\\\"|$)");
-			var whitespace = new Regex("\\s+");
-			var match = getNonDelimitedQuote.Match(s);
-			var remove = true;
-			var sb = new StringBuilder();
-			while (match.Success)
-			{
-				sb.Append(remove ? whitespace.Replace(match.Value, string.Empty) : match.Value);
-				remove = !remove;
-				match = match.NextMatch();
-			}
-			return sb.ToString();
-		}
 	}
 }

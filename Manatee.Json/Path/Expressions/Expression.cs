@@ -143,17 +143,17 @@ namespace Manatee.Json.Path.Expressions
 				if (!_done)
 					throw new JsonSyntaxException(_index);
 			}
-			catch (InputNotValidForStateException<State, JsonPathExpressionInput>)
+			catch (InputNotValidForStateException<State, JsonPathExpressionInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
-			catch (StateNotValidException<State>)
+			catch (StateNotValidException<State> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonPathExpressionInput>)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonPathExpressionInput> e)
 			{
-				throw new JsonSyntaxException(_index);
+				throw new JsonSyntaxException(_index, e);
 			}
 		}
 		private static void GetNextInput(object owner)

@@ -39,27 +39,10 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
-			var json = new JsonArray
-				{
-					new JsonObject
-						{
-							{"Lookup", new JsonArray {5, "string", 7, 8, 9}},
-							{"Response", new JsonObject {{"int", 5}, {"string", "stringValue"}}}
-						},
-					new JsonObject
-						{
-							{"Lookup", new JsonArray {1, 2, 3, 4}},
-							{"Response", new JsonObject {{"int", true}, {"string", "otherstringValue"}}}
-						}
-				};
+			var text = "{\"key\":\"value\",\"key2\":+}";
+			var json = JsonValue.Parse(text);
+
 			Console.WriteLine(json);
-
-			//var path = JsonPath.Parse("$..[?(@.Lookup.indexOf(\"string\")!=0-1)].Response");
-			var path = JsonPathWith.SearchArray(jv => jv.Name("Lookup").IndexOf("string") != -1).Name("Response");
-			var result = path.Evaluate(json);
-
-			Console.WriteLine(path);
-			Console.WriteLine(result.GetIndentedString());
 		}
 		[TestMethod]
 		public void Test2()
