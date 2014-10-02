@@ -20,6 +20,8 @@
 	Purpose:		Expresses the intent to retrieve a value from a field.
 
 ***************************************************************************************/
+
+using System;
 using System.Reflection;
 
 namespace Manatee.Json.Path.Expressions
@@ -32,7 +34,9 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json, JsonValue root)
 		{
-			return Field.GetValue(Source);
+			if (Field.FieldType == typeof(string))
+				return Field.GetValue(Source);
+			return Convert.ToDouble(Field.GetValue(Source));
 		}
 		public override string ToString()
 		{

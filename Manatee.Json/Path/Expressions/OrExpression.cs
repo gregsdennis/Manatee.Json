@@ -32,7 +32,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return string.Format("{0} && {1}", Left, Right);
+			return string.Format("{0} || {1}", Left, Right);
 		}
 	}
 }

@@ -23,7 +23,7 @@
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class IsLessThanExpression<T> : ComparisonExpression<T>
+	internal class IsLessThanExpression<T> : ExpressionTreeBranch<T>
 	{
 		public override int Priority { get { return 1; } }
 

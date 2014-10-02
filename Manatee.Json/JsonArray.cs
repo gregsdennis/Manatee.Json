@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -129,19 +130,34 @@ namespace Manatee.Json
 			{
 				StateMachine.Run(this, State.Start, _stream);
 				if (!_done)
-					throw new JsonSyntaxException(_index);
+					throw new JsonSyntaxException("Found incomplete JSON array.");
 			}
 			catch (InputNotValidForStateException<State, JsonInput> e)
 			{
-				throw new JsonSyntaxException(_index, e);
+				switch (e.State)
+				{
+					case State.Start:
+						throw new JsonSyntaxException("Expected '['.");
+					case State.Value:
+						throw new JsonSyntaxException("Expected a value at array index {0}.", Count);
+					case State.End:
+						throw new JsonSyntaxException("Expected either ',' or ']' after array index {0}.", Count);
+					default:
+						throw new IndexOutOfRangeException();
+				}
 			}
-			catch (StateNotValidException<State> e)
+			catch (StateNotValidException<State>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON array. Please report to littlecrabsolutions@yahoo.com.");
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonInput> e)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON array. Please report to littlecrabsolutions@yahoo.com.");
+			}
+			catch (JsonSyntaxException e)
+			{
+				e.PrependPath(string.Format("[{0}]", Count));
+				throw;
 			}
 			return _index;
 		}
@@ -191,14 +207,16 @@ namespace Manatee.Json
 			var array = owner as JsonArray;
 			if (array == null) return;
 			if (array._done || (array._index == array._source.Length)) return;
+			var c = default(char);
 			try
 			{
-				var next = CharacterConverter.Item(array._source[array._index++]);
+				c = array._source[array._index++];
+				var next = CharacterConverter.Item(c);
 				array._stream.Add(next);
 			}
 			catch (KeyNotFoundException)
 			{
-				throw new JsonSyntaxException(array._index);
+				throw new JsonSyntaxException("Unrecognized character '{0}' in input string.", c);
 			}
 		}
 		private static State GotStart(object owner, JsonInput input)
@@ -214,9 +232,7 @@ namespace Manatee.Json
 		private static State GotEmpty(object owner, JsonInput input)
 		{
 			var array = owner as JsonArray;
-			array._done = (input == JsonInput.CloseBracket);
-			if (array.Count != 0)
-				throw new JsonSyntaxException(array._index);
+			array._done = true;
 			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)

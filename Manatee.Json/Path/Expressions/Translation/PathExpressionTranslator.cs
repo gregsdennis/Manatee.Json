@@ -37,7 +37,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 		{
 			var path = new JsonPath();
 			var currentMethod = method.Arguments.First() as MethodCallExpression;
-			isLocal = method.Arguments.Count != 1;
+			isLocal = method.Method.Name== "Length" ? method.Arguments.Count != 0 : method.Arguments.Count != 1;
 			while (currentMethod != null)
 			{
 				var parameter = currentMethod.Arguments.Last() as ConstantExpression;

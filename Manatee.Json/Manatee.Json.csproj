@@ -65,7 +65,7 @@
     <Compile Include="Internal\JsonPathExpressionInput.cs" />
     <Compile Include="Internal\JsonPathInput.cs" />
     <Compile Include="Path\Expressions\ArrayIndexExpression.cs" />
-    <Compile Include="Path\Expressions\ComparisonExpression.cs" />
+    <Compile Include="Path\Expressions\GroupExpression.cs" />
     <Compile Include="Path\Expressions\IndexOfExpression.cs" />
     <Compile Include="Path\Expressions\PathExpression.cs" />
     <Compile Include="Path\Expressions\Translation\ArrayIndexExpressionTranslator.cs" />
@@ -142,12 +142,14 @@
     <Compile Include="Path\ArrayParameters\IndexQuery.cs" />
     <Compile Include="Path\Operators\NameOperator.cs" />
     <Compile Include="Path\SearchParameters\ArraySearchParameter.cs" />
+    <Compile Include="Path\SearchParameters\LengthSearchParameter.cs" />
     <Compile Include="Path\SearchParameters\NameSearchParameter.cs" />
     <Compile Include="Path\Operators\SearchOperator.cs" />
     <Compile Include="Path\ArrayParameters\SliceQuery.cs" />
     <Compile Include="Path\Operators\WildCardOperator.cs" />
     <Compile Include="Path\ArrayParameters\WildCardQuery.cs" />
     <Compile Include="Path\SearchParameters\WildCardSearchParameter.cs" />
+    <Compile Include="Properties\ResharperAnnotations.cs" />
     <Compile Include="Schema\AdditionalPropertiesDefinition.cs" />
     <Compile Include="Schema\StringFormat.cs" />
     <Compile Include="Schema\SchemaValidationError.cs" />

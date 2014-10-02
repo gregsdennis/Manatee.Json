@@ -35,7 +35,9 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return string.Format("{0}+{1}", Left, Right);
+			var left = Left.Priority <= Priority ? string.Format("({0})", Left) : Left.ToString();
+			var right = Right.Priority <= Priority ? string.Format("({0})", Right) : Right.ToString();
+			return string.Format("{0}%{1}", left, right);
 		}
 	}
 }

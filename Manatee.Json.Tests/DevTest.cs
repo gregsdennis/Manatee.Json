@@ -39,20 +39,37 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
-			var text = "{\"key\":\"value\",\"key2\":+}";
-			var json = JsonValue.Parse(text);
+			try
+			{
+				var text = "{\"key\" : \"value\", \"key2\" : [\"arrayValue1\", \"innerValue\", null, false]}";
+				var json = JsonValue.Parse(text);
 
-			Console.WriteLine(json);
+				var pathText = "$.key2[(@.length-(5-2))]";
+				var path = JsonPath.Parse(pathText);
+
+				Console.WriteLine(text);
+				Console.WriteLine(json);
+				Console.WriteLine(pathText);
+				Console.WriteLine(path);
+				Console.WriteLine(path.Evaluate(json));
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
+			}
 		}
 		[TestMethod]
 		public void Test2()
 		{
-			JsonSerializationTypeRegistry.RegisterListType<int>();
-			var anon = new {Prop1 = "string", Prop2 = new List<int> {5, 6, 7}};
-			var serializer = new JsonSerializer();
-			var json = serializer.Serialize(anon);
+			var text = "{\"key\" : \"value\", \"key2\" : [\"arrayValue1\", \"innerValue\", null, false]}";
+			var json = JsonValue.Parse(text);
 
-			Console.WriteLine(json);
+			var value = 2;
+			var path = JsonPathWith.Name("key2").Array(ja => ja.Length() * (5 - value));
+
+			Console.WriteLine(path);
+			Console.WriteLine(path.Evaluate(json));
 		}
 		[TestMethod]
 		[Ignore]

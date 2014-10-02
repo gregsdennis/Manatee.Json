@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Path.Expressions;
 
 namespace Manatee.Json.Path.ArrayParameters
@@ -37,7 +38,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
 			var index = _expression.Evaluate(json, root);
-			return index >= 0 && index < json.Count ? new[] {json[index]} : null;
+			return index >= 0 && index < json.Count ? new[] {json[index]} : Enumerable.Empty<JsonValue>();
 		}
 		public override string ToString()
 		{

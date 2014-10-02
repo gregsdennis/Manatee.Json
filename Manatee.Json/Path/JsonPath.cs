@@ -125,7 +125,7 @@ namespace Manatee.Json.Path
 		/// <returns>The JSON path represented by the <see cref="string"/>.</returns>
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty or whitespace.</exception>
-		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON path syntax.</exception>
+		/// <exception cref="JsonPathSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON path syntax.</exception>
 		public static JsonPath Parse(string source)
 		{
 			if (source == null)
@@ -180,19 +180,47 @@ namespace Manatee.Json.Path
 			{
 				StateMachine.Run(this, State.Start, _stream);
 				if (!_done)
-					throw new JsonSyntaxException(_index);
+					throw new JsonPathSyntaxException(this, "Found incomplete JSON path.");
 			}
 			catch (InputNotValidForStateException<State, JsonPathInput> e)
 			{
-				throw new JsonSyntaxException(_index, e);
+				switch (e.State)
+				{
+					case State.Start:
+						throw new JsonPathSyntaxException(this, "Paths must start with a '$', or optionally a '@' if inside an expression.");
+					case State.ObjectOrArray:
+						throw new JsonPathSyntaxException(this, "Expected '.', '..', or '['.");
+					case State.ArrayContent:
+						throw new JsonPathSyntaxException(this, "Expected '?', '(', ':', or an integer.");
+					case State.IndexOrSlice:
+						throw new JsonPathSyntaxException(this, "Expected ',', ':', or ']'.");
+					case State.Colon:
+						if (_colonCount == 2)
+							throw new JsonPathSyntaxException(this, "Expected an integer.");
+						throw new JsonPathSyntaxException(this, "Expected ':' or an integer.");
+					case State.SliceValue:
+						throw new JsonPathSyntaxException(this, "Expected ':' or ']'.");
+					case State.Comma:
+						throw new JsonPathSyntaxException(this, "Expected an integer.");
+					case State.IndexValue:
+						throw new JsonPathSyntaxException(this, "Expected ',' or ']'.");
+					case State.CloseArray:
+						throw new JsonPathSyntaxException(this, "Expected ']'.");
+					case State.ObjectContent:
+						throw new JsonPathSyntaxException(this, "Expected a key name.  Note: quoted keys and keys which start with numbers are not currently supported.");
+					case State.Search:
+						throw new JsonPathSyntaxException(this, "Expected a key name or '['.  Note: quoted keys and keys which start with numbers are not currently supported.");
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 			}
-			catch (StateNotValidException<State> e)
+			catch (StateNotValidException<State>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonPathSyntaxException(this, "An unrecoverable error occurred while parsing a JSON path. Please report to littlecrabsolutions@yahoo.com.");
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonPathInput> e)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonPathInput>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonPathSyntaxException(this, "An unrecoverable error occurred while parsing a JSON path. Please report to littlecrabsolutions@yahoo.com.");
 			}
 		}
 		private static void GetNextInput(object owner)
@@ -205,14 +233,16 @@ namespace Manatee.Json.Path
 				obj._stream.Add(JsonPathInput.End);
 				return;
 			}
+			var c = default(char);
 			try
 			{
-				var next = CharacterConverter.PathItem(obj._source[obj._index++]);
+				c = obj._source[obj._index++];
+				var next = CharacterConverter.PathItem(c);
 				obj._stream.Add(next);
 			}
 			catch (KeyNotFoundException)
 			{
-				throw new JsonSyntaxException(obj._index);
+				throw new JsonPathSyntaxException(obj, "Unrecognized character '{0}' in input string.", c);
 			}
 		}
 		private static State GotRoot(object owner, JsonPathInput input)
@@ -225,7 +255,7 @@ namespace Manatee.Json.Path
 		{
 			var path = owner as JsonPath;
 			if (!path._allowLocalRoot)
-				throw new JsonSyntaxException(path._index);
+				throw new JsonPathSyntaxException(path, "Local paths (starting with '@') are only allowed within the context of an expression.");
 			path._gotObject = false;
 			return State.ObjectOrArray;
 		}
@@ -318,7 +348,7 @@ namespace Manatee.Json.Path
 			var path = owner as JsonPath;
 			path._gotObject = false;
 			if (path._colonCount > 2)
-				throw new JsonSyntaxException(path._index-1);
+				throw new JsonPathSyntaxException(path, "Array slice format incorrect.  Parameters are 'start:end:increment'.");
 			int? start = path._slice.ContainsKey(0) ? path._slice[0] : (int?)null;
 			int? end = path._slice.ContainsKey(1) ? path._slice[1] : (int?)null;
 			int? step = path._slice.ContainsKey(2) ? path._slice[2] : (int?)null;
@@ -425,7 +455,7 @@ namespace Manatee.Json.Path
 		{
 			var chars = new List<char>();
 			path._index--;
-			while (path._index < path._source.Length && char.IsLetter(path._source[path._index]))
+			while (path._index < path._source.Length && char.IsLetterOrDigit(path._source[path._index]))
 			{
 				chars.Add(path._source[path._index]);
 				path._index++;
