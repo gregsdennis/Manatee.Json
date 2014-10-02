@@ -17,26 +17,70 @@
 	File Name:		JsonSyntaxException.cs
 	Namespace:		Manatee.Json
 	Class Name:		JsonSyntaxException
-	Purpose:		Thrown when an input string contains a syntax error other
-					than a key or value parse error.
+	Purpose:		Thrown when an input string contains a syntax error.
 
 ***************************************************************************************/
 
 using System;
+using JetBrains.Annotations;
+using Manatee.Json.Path;
 
 namespace Manatee.Json
 {
 	/// <summary>
-	/// Thrown when an input string contains a syntax error other than a key or value parse error.
+	/// Thrown when an input string contains a syntax error.
 	/// </summary>
 	[Serializable]
 	public class JsonSyntaxException : Exception
 	{
+		private string _path;
+
+		public string Path { get { return string.Format("${0}", _path); } }
+
+		[StringFormatMethod("format")]
 		internal JsonSyntaxException(string format, params object[] parameters)
 			: base(string.Format(format, parameters)) { }
-		internal JsonSyntaxException(int index)
-			: base(string.Format("Parse found a syntax error at index {0}.", index)) { }
-		internal JsonSyntaxException(int index, Exception innerException)
-			: base(string.Format("Parse found a syntax error at index {0}.", index), innerException) { }
+
+		public void PrependPath(string part)
+		{
+			_path = part + _path;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0} Path: '{1}'.\n{2}", Message, Path, StackTrace);
+		}
+	}
+	/// <summary>
+	/// Thrown when an input string contains a syntax error.
+	/// </summary>
+	[Serializable]
+	public class JsonPathSyntaxException : Exception
+	{
+		private readonly string _path;
+		private readonly bool _isExpression;
+
+		public string Path { get { return _path; } }
+
+		[StringFormatMethod("format")]
+		internal JsonPathSyntaxException(JsonPath path, string format, params object[] parameters)
+			: base(string.Format(format, parameters))
+		{
+			_path = path.ToString();
+		}
+		[StringFormatMethod("format")]
+		internal JsonPathSyntaxException(string expression, string format, params object[] parameters)
+			: base(string.Format(format, parameters))
+		{
+			_isExpression = true;
+			_path = expression;
+		}
+
+		public override string ToString()
+		{
+			return _isExpression
+				? string.Format("{0} Expression up to error: '{1}'.\n{2}", Message, Path, StackTrace)
+				: string.Format("{0} Path up to error: '{1}'.\n{2}", Message, Path, StackTrace);
+		}
 	}
 }

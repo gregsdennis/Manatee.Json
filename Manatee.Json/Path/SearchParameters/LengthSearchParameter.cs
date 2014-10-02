@@ -14,10 +14,11 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		WildCardSearchParameter.cs
+	File Name:		LengthSearchParameter.cs
 	Namespace:		Manatee.Json.Path.SearchParameters
-	Class Name:		WildCardSearchParameter
-	Purpose:		Indicates that a search should return all values.
+	Class Name:		LengthSearchParameter
+	Purpose:		Indicates that a search should return the length of all
+					object and array values.
 
 ***************************************************************************************/
 using System.Collections.Generic;
@@ -25,17 +26,17 @@ using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
-	internal class WildCardSearchParameter : IJsonPathSearchParameter
+	internal class LengthSearchParameter : IJsonPathSearchParameter
 	{
-		private static readonly WildCardSearchParameter _instance = new WildCardSearchParameter();
+		private static readonly LengthSearchParameter _instance = new LengthSearchParameter();
 
-		public static WildCardSearchParameter Instance { get { return _instance; } }
+		public static LengthSearchParameter Instance { get { return _instance; } }
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{
 			return new JsonArray(json.SelectMany(v =>
 				{
-					var contents = new List<JsonValue> {v};
+					var contents = new List<JsonValue> {v.Array.Count};
 					switch (v.Type)
 					{
 						case JsonValueType.Object:
@@ -50,7 +51,7 @@ namespace Manatee.Json.Path.SearchParameters
 		}
 		public override string ToString()
 		{
-			return "*";
+			return "length";
 		}
 	}
 }

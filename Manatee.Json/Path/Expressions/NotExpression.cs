@@ -34,11 +34,12 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return Root is AndExpression<T> || Root is OrExpression<T> || Root is IsEqualExpression<T> || Root is IsNotEqualExpression<T> ||
-			       Root is IsLessThanExpression<T> || Root is IsLessThanEqualExpression<T> ||
-			       Root is IsGreaterThanExpression<T> || Root is IsGreaterThanEqualExpression<T>
-				       ? string.Format("!({0})", Root)
-				       : string.Format("!{0}", Root);
+			return Root is AndExpression<T> || Root is OrExpression<T> ||
+				   Root is IsEqualExpression<T> || Root is IsNotEqualExpression<T> ||
+				   Root is IsLessThanExpression<T> || Root is IsLessThanEqualExpression<T> ||
+				   Root is IsGreaterThanExpression<T> || Root is IsGreaterThanEqualExpression<T>
+					   ? string.Format("!({0})", Root)
+					   : string.Format("!{0}", Root);
 		}
 	}
 }

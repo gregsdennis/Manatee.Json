@@ -173,33 +173,40 @@ namespace Manatee.Json
 			{
 				StateMachine.Run(this, State.Start, _stream);
 				if (!_done)
-					throw new JsonSyntaxException(_index);
+					throw new JsonSyntaxException("Found incomplete JSON object.");
 			}
 			catch (InputNotValidForStateException<State, JsonInput> e)
 			{
 				switch (e.State)
 				{
 					case State.Start:
-						throw new JsonSyntaxException("Expected '{{' at index {0}", _index);
+						throw new JsonSyntaxException("Expected '{{'.");
 					case State.Key:
-						throw new JsonSyntaxException("Expected a key at index {0}", _index);
+						if (_key != null)
+							throw new JsonSyntaxException("Expected a key. Last key: `{0}`.", _key);
+						throw new JsonSyntaxException("Expected a key.");
 					case State.Colon:
-						throw new JsonSyntaxException("Expected ':' after key '{0}'", _key);
+						throw new JsonSyntaxException("Expected ':' after key '{0}'.", _key);
 					case State.Value:
 						throw new JsonSyntaxException("Expected a value for key '{0}'", _key);
 					case State.End:
-						throw new JsonSyntaxException("Expected either ',' or '}}' at index {0}", _index);
+						throw new JsonSyntaxException("Expected either ',' or '}}'. Last key: `{0}`.", _key);
 					default:
-						throw new JsonSyntaxException(_index, e);
+						throw new IndexOutOfRangeException();
 				}
 			}
-			catch (StateNotValidException<State> e)
+			catch (StateNotValidException<State>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON object. Please report to littlecrabsolutions@yahoo.com.");
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonInput> e)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON object. Please report to littlecrabsolutions@yahoo.com.");
+			}
+			catch (JsonSyntaxException e)
+			{
+				e.PrependPath(string.Format(".{0}", _key));
+				throw;
 			}
 			return _index;
 		}
@@ -263,14 +270,16 @@ namespace Manatee.Json
 			var obj = owner as JsonObject;
 			if (obj == null) return;
 			if (obj._done || (obj._index == obj._source.Length)) return;
+			var c = default(char);
 			try
 			{
-				var next = CharacterConverter.Item(obj._source[obj._index++]);
+				c = obj._source[obj._index++];
+				var next = CharacterConverter.Item(c);
 				obj._stream.Add(next);
 			}
 			catch (KeyNotFoundException)
 			{
-				throw new JsonSyntaxException(obj._index);
+				throw new JsonSyntaxException("Unrecognized character '{0}' in input string.  Last key: '{1}'", c, obj._key);
 			}
 		}
 		private static State GotStart(object owner, JsonInput input)
@@ -296,9 +305,7 @@ namespace Manatee.Json
 		private static State GotEmpty(object owner, JsonInput input)
 		{
 			var obj = owner as JsonObject;
-			obj._done = (input == JsonInput.CloseBrace);
-			if (obj.Count != 0)
-				throw new JsonSyntaxException(obj._index);
+			obj._done = true;
 			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)

@@ -57,7 +57,7 @@ namespace Manatee.Json.Path.Expressions
 					        ? result.Array
 					        : null;
 			}
-			return array == null ? null : (int?) array.Count;
+			return array == null ? null : (object)(double) array.Count;
 		}
 		public override string ToString()
 		{

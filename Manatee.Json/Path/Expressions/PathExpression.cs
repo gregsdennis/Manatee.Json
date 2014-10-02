@@ -35,7 +35,7 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var value = IsLocal ? json as JsonValue : root;
 			if (value == null)
-				throw new NotSupportedException("Path expressions require a JsonValue to evaluate.");
+				throw new InvalidOperationException(string.Format("Path must evaluate to a JsonValue. Returned value is {0}.", json.GetType().Name));
 			var results = Path.Evaluate(value);
 			if (results.Count > 1)
 				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));

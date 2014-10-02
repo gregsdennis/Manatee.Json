@@ -14,25 +14,28 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ComparisonExpression.cs
+	File Name:		GroupExpression.cs
 	Namespace:		Manatee.Json.Path.Expressions
-	Class Name:		ComparisonExpression
-	Purpose:		Provides a base class for expression objects which
-					express comparison operations.
+	Class Name:		GroupExpression
+	Purpose:		Expresses the intent to group an expression as a component
+					in a larger expression.
 
 ***************************************************************************************/
-using System;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal abstract class ComparisonExpression<T> : ExpressionTreeBranch<T>
+	internal class GroupExpression<T> : ExpressionTreeNode<T>
 	{
-		protected static double? GetDouble(object value)
+		public override int Priority { get { return 6; } }
+		public ExpressionTreeNode<T> Group { get; set; }
+
+		public override object Evaluate(T json, JsonValue root)
 		{
-			if (value == null) return null;
-			var json = value as JsonValue;
-			if (json == null) return Convert.ToDouble(value);
-			return json.Type == JsonValueType.Number ? json.Number : (double?) null;
+			return Group.Evaluate(json, root);
+		}
+		public override string ToString()
+		{
+			return string.Format("({0})", Group);
 		}
 	}
 }

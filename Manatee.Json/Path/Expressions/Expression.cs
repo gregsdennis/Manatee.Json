@@ -52,6 +52,7 @@ namespace Manatee.Json.Path.Expressions
 		private string _source;
 		private int _index;
 		private JsonPathExpressionInput? _previousInput;
+		private int _startIndex;
 
 		internal ExpressionTreeNode<TIn> Root { get; set; }
 
@@ -135,40 +136,68 @@ namespace Manatee.Json.Path.Expressions
 		private void Parse(int i)
 		{
 			_stream.Clear();
+			_startIndex = i + 1;
 			_index = i;
 			_done = false;
 			try
 			{
 				StateMachine.Run(this, State.Start, _stream);
 				if (!_done)
-					throw new JsonSyntaxException(_index);
+					throw new JsonPathSyntaxException(GetErrorLocation(), "Found incomplete expression.");
 			}
 			catch (InputNotValidForStateException<State, JsonPathExpressionInput> e)
 			{
-				throw new JsonSyntaxException(_index, e);
+				switch (e.State)
+				{
+					case State.Start:
+						throw new JsonPathSyntaxException(GetErrorLocation(), "Expression must start with '('.");
+					case State.Value:
+						throw new JsonPathSyntaxException(GetErrorLocation(), "Expected an expression, a value, or a path which evaluates to a value.");
+					case State.NumberOrPath:
+						throw new JsonPathSyntaxException(GetErrorLocation(), "Expected an expression, a value, or a path which evaluates to a value.");
+					case State.Operator:
+						throw new JsonPathSyntaxException(GetErrorLocation(), "Expected an operator.");
+					case State.Comparison:
+						throw new JsonPathSyntaxException(GetErrorLocation(), "Invalid comparison operator.");
+					case State.ValueOrOperator:
+						if (e.Input == JsonPathExpressionInput.CloseParenth)
+							throw new JsonPathSyntaxException(GetErrorLocation(), "Found incomplete expression.");
+						throw new JsonPathSyntaxException(GetErrorLocation(), "Invalid comparison operator.");
+					case State.BooleanOrComparison:
+						throw new JsonPathSyntaxException(GetErrorLocation(), "Expected '=', a boolean value, or an expression which evaluates to a boolean.");
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 			}
-			catch (StateNotValidException<State> e)
+			catch (StateNotValidException<State>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonPathSyntaxException(GetErrorLocation(), "An unrecoverable error occurred while parsing a JSON path expression. Please report to littlecrabsolutions@yahoo.com.");
 			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonPathExpressionInput> e)
+			catch (ActionNotDefinedForStateAndInputException<State, JsonPathExpressionInput>)
 			{
-				throw new JsonSyntaxException(_index, e);
+				throw new JsonPathSyntaxException(GetErrorLocation(), "An unrecoverable error occurred while parsing a JSON path expression. Please report to littlecrabsolutions@yahoo.com.");
 			}
+		}
+		private string GetErrorLocation()
+		{
+			var length = _index - _startIndex - 1;
+			return length < 1 ? string.Empty : _source.Substring(_startIndex, length);
 		}
 		private static void GetNextInput(object owner)
 		{
 			var obj = owner as Expression<T, TIn>;
 			if (obj == null) return;
 			if (obj._done || (obj._index == obj._source.Length)) return;
+			var c = default(char);
 			try
 			{
-				var next = CharacterConverter.ExpressionItem(obj._source[obj._index++]);
+				c = obj._source[obj._index++];
+				var next = CharacterConverter.ExpressionItem(c);
 				obj._stream.Add(next);
 			}
 			catch (KeyNotFoundException)
 			{
-				throw new JsonSyntaxException(obj._index);
+				throw new JsonPathSyntaxException(obj.GetErrorLocation(), "Unrecognized character '{0}' in input string.", c);
 			}
 		}
 		private static State GotStart(object owner, JsonPathExpressionInput input)
@@ -187,8 +216,8 @@ namespace Manatee.Json.Path.Expressions
 			if (last != null)
 				last.ParameterExpression = group.Root as ExpressionTreeNode<JsonArray>;
 			else
-				exp._nodeList.Add(group.Root);
-			return State.Value;
+				exp._nodeList.Add(new GroupExpression<TIn> {Group = group.Root});
+			return State.Operator;
 		}
 		private static State CompleteExpression(object owner, JsonPathExpressionInput input)
 		{
@@ -205,7 +234,7 @@ namespace Manatee.Json.Path.Expressions
 			var numString = new string(exp._source.Skip(exp._index - 1).TakeWhile(char.IsNumber).ToArray());
 			double num;
 			if (!double.TryParse(numString, out num))
-				throw new JsonSyntaxException(exp._index);
+				throw new JsonPathSyntaxException("Attempt to parse '{0}' as a number failed.", numString);
 			exp._index += numString.Length - 1;
 			exp._nodeList.Add(new ValueExpression<TIn> {Value = num});
 			return State.Operator;
@@ -313,7 +342,7 @@ namespace Manatee.Json.Path.Expressions
 						exp._nodeList.Add(new IsNotEqualExpression<TIn>());
 						break;
 					default:
-						throw new JsonSyntaxException(exp._index);
+						throw new JsonPathSyntaxException(exp.GetErrorLocation(), "Operator '={0}' not recognized.", exp._source[exp._index - 1]);
 				}
 				exp._previousInput = null;
 				return State.Value;
@@ -329,7 +358,7 @@ namespace Manatee.Json.Path.Expressions
 				if (exp._previousInput == JsonPathExpressionInput.And)
 					exp._nodeList.Add(new AndExpression<TIn>());
 				else
-					throw new JsonSyntaxException(exp._index);
+					throw new JsonPathSyntaxException(exp.GetErrorLocation(), "Operator '&{0}' not recognized.", exp._source[exp._index - 1]);
 				exp._previousInput = null;
 				return State.Value;
 			}
@@ -344,7 +373,7 @@ namespace Manatee.Json.Path.Expressions
 				if (exp._previousInput == JsonPathExpressionInput.Or)
 					exp._nodeList.Add(new OrExpression<TIn>());
 				else
-					throw new JsonSyntaxException(exp._index);
+					throw new JsonPathSyntaxException(exp.GetErrorLocation(), "Operator '|{0}' not recognized.", exp._source[exp._index - 1]);
 				exp._previousInput = null;
 				return State.Value;
 			}
@@ -391,12 +420,15 @@ namespace Manatee.Json.Path.Expressions
 			else if (substring.StartsWith("null"))
 			{
 				if (bang != null)
-					throw new JsonSyntaxException(exp._index);
+					throw new JsonPathSyntaxException(exp.GetErrorLocation(), "Cannot apply '!' operator to 'null'.");
 				value = JsonValue.Null;
 				exp._index += 3;
 			}
 			else
-				throw new JsonSyntaxException(exp._index);
+			{
+				var constant = new string(substring.TakeWhile(char.IsLetterOrDigit).ToArray());
+				throw new JsonPathSyntaxException(exp.GetErrorLocation(), "Constant value '{0}' not recognized", constant);
+			}
 			exp._nodeList.Add(new ValueExpression<TIn> {Value = value});
 			return State.Operator;
 		}
@@ -421,7 +453,7 @@ namespace Manatee.Json.Path.Expressions
 							exp._nodeList.Add(new IsNotEqualExpression<TIn>());
 							break;
 						default:
-							throw new JsonSyntaxException(exp._index);
+							throw new JsonPathSyntaxException(exp.GetErrorLocation(), "Operator '{0}=' not recognized.", exp._source[exp._index - 2]);
 					}
 					break;
 				case JsonPathExpressionInput.GreaterThan:
@@ -431,7 +463,7 @@ namespace Manatee.Json.Path.Expressions
 					exp._nodeList.Add(new NotExpression<TIn>());
 					break;
 				default:
-					throw new JsonSyntaxException(exp._index);
+					throw new ArgumentOutOfRangeException();
 			}
 			exp._previousInput = null;
 			return State.NumberOrPath;

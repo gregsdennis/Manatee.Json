@@ -513,16 +513,16 @@ namespace Manatee.Json
 					if (length == 0)
 					{
 						index += 2;
-						return new JsonValue(string.Empty);
+						return string.Empty;
 					}
 					index += length;
-					return new JsonValue(temp.Substring(0, length-1).EvaluateEscapeSequences());
+					return temp.Substring(0, length-1).EvaluateEscapeSequences();
 				case '{':										// object
 					index--;
-					return new JsonValue(new JsonObject(source, ref index));
+					return new JsonObject(source, ref index);
 				case '[':										// array
 					index--;
-					return new JsonValue(new JsonArray(source, ref index));
+					return new JsonArray(source, ref index);
 				default:										// bool, number, null
 					temp = source.Substring(index-1);
 					length = temp.IndexOfAny(new[] { ',', ']', '}' });
@@ -531,10 +531,10 @@ namespace Manatee.Json
 					{
 						case "true":
 							index += temp.Length - 1;
-							return new JsonValue(true);
+							return true;
 						case "false":
 							index += temp.Length - 1;
-							return new JsonValue(false);
+							return false;
 						case "null":
 							index += temp.Length - 1;
 							return Null;
@@ -543,7 +543,7 @@ namespace Manatee.Json
 							if (!double.TryParse(temp, out d))
 								throw new JsonValueParseException(index, temp, source);
 							index += temp.Length - 1;
-							return new JsonValue(d);
+							return d;
 					}
 			}
 		}
