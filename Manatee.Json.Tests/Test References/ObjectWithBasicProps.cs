@@ -25,7 +25,6 @@
 
 using System;
 using System.ComponentModel;
-using Manatee.Json;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Tests.Test_References
@@ -34,6 +33,9 @@ namespace Manatee.Tests.Test_References
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 	public class ObjectWithBasicProps
 	{
+		public string Field;
+		public readonly string ReadOnlyField = "read only";
+
 		#region Serializable Instance Properties
 		public string StringProp { get; set; }
 		public int IntProp { get; set; }
@@ -86,7 +88,8 @@ namespace Manatee.Tests.Test_References
 			       Equals(other.WriteOnlyProp, WriteOnlyProp) &&
 			       Equals(other.IgnoreProp, IgnoreProp) &&
 				   Equals(other.EnumProp, EnumProp) &&
-				   Equals(other.MappedProp, MappedProp);
+				   Equals(other.MappedProp, MappedProp) &&
+				   Equals(other.Field, Field);
 		}
 		public override int GetHashCode()
 		{
@@ -101,6 +104,7 @@ namespace Manatee.Tests.Test_References
 				result = (result * 397) ^ (IgnoreProp != null ? IgnoreProp.GetHashCode() : 0);
 				result = (result * 397) ^ EnumProp.GetHashCode();
 				result = (result * 397) ^ MappedProp;
+				result = (result * 397) ^ Field.GetHashCode();
 				return result;
 			}
 		}

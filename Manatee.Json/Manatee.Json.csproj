@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Internal\JsonPathExpressionInput.cs" />
     <Compile Include="Internal\JsonPathInput.cs" />
+    <Compile Include="JsonPathSyntaxException.cs" />
     <Compile Include="Path\Expressions\ArrayIndexExpression.cs" />
     <Compile Include="Path\Expressions\GroupExpression.cs" />
     <Compile Include="Path\Expressions\IndexOfExpression.cs" />
@@ -156,7 +157,9 @@
     <Compile Include="Schema\SchemaValidationResults.cs" />
     <Compile Include="Serialization\IJsonSerializable.cs" />
     <Compile Include="Serialization\Internal\ActivatorResolver.cs" />
+    <Compile Include="Serialization\Internal\FieldReference.cs" />
     <Compile Include="Serialization\Internal\JsonSerializableSerializer.cs" />
+    <Compile Include="Serialization\Internal\MemberReference.cs" />
     <Compile Include="Serialization\IResolver.cs" />
     <Compile Include="Serialization\JsonMapToAttribute.cs" />
     <Compile Include="Serialization\EnumSerializationFormat.cs" />

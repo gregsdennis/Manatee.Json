@@ -28,7 +28,7 @@ namespace Manatee.Json.Serialization
 	/// <summary>
 	/// Allows the user to specify how a property is mapped during serialization.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class JsonMapToAttribute : Attribute
 	{
 		///<summary>

@@ -88,6 +88,10 @@ namespace Manatee.Json.Serialization
 		/// Gets and sets an <see cref="IResolver"/> implementation for instantiating objects while deserializing.
 		/// </summary>
 		public IResolver Resolver { get; set; }
+		/// <summary>
+		/// Gets and sets whether public fields should be serialized during autoserialization.
+		/// </summary>
+		public bool AutoSerializeFields { get; set; }
 
 		static JsonSerializerOptions()
 		{

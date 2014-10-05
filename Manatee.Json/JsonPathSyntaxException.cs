@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2014 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -14,32 +14,32 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonSyntaxException.cs
+	File Name:		JsonPathSyntaxException.cs
 	Namespace:		Manatee.Json
-	Class Name:		JsonSyntaxException
+	Class Name:		JsonPathSyntaxException
 	Purpose:		Thrown when an input string contains a syntax error while
-					parsing a <see cref="JsonObject"/>, <see cref="JsonArray"/>,
-					or <see cref="JsonValue"/>.
+					parsing a <see cref="JsonPath"/>.
 
 ***************************************************************************************/
-
 using System;
 using JetBrains.Annotations;
+using Manatee.Json.Path;
 
 namespace Manatee.Json
 {
 	/// <summary>
-	/// Thrown when an input string contains a syntax error while parsing a <see cref="JsonObject"/>, <see cref="JsonArray"/>, or <see cref="JsonValue"/>.
+	/// Thrown when an input string contains a syntax error while parsing a <see cref="JsonPath"/>.
 	/// </summary>
 	[Serializable]
-	public class JsonSyntaxException : Exception
+	public class JsonPathSyntaxException : Exception
 	{
-		private string _path;
-
+		private readonly string _path;
+		private readonly bool _isExpression;
+		
 		/// <summary>
 		/// Gets the path up to the point at which the error was found.
 		/// </summary>
-		public string Path { get { return string.Format("${0}", _path); } }
+		public string Path { get { return _path; } }
 
 		/// <summary>
 		/// Gets a message that describes the current exception.
@@ -48,15 +48,20 @@ namespace Manatee.Json
 		/// The error message that explains the reason for the exception, or an empty string("").
 		/// </returns>
 		/// <filterpriority>1</filterpriority>
-		public override string Message { get { return string.Format("{0} Path: '{1}'", base.Message, Path); } }
+		public override string Message { get { return string.Format(_isExpression ? "{0} Expression up to error: {1}" : "{0} Path up to error: {1}", base.Message, Path); } }
 
 		[StringFormatMethod("format")]
-		internal JsonSyntaxException(string format, params object[] parameters)
-			: base(string.Format(format, parameters)) { }
-
-		internal void PrependPath(string part)
+		internal JsonPathSyntaxException(JsonPath path, string format, params object[] parameters)
+			: base(string.Format(format, parameters))
 		{
-			_path = part + _path;
+			_path = path.ToString();
+		}
+		[StringFormatMethod("format")]
+		internal JsonPathSyntaxException(string expression, string format, params object[] parameters)
+			: base(string.Format(format, parameters))
+		{
+			_isExpression = true;
+			_path = expression;
 		}
 	}
 }

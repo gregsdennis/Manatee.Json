@@ -537,6 +537,34 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreNotEqual(expected.GetType(), actual.GetType());
 			Assert.AreEqual(expected.RequiredProp, actual.RequiredProp);
 		}
+		[TestMethod]
+		public void Deserialize_Fields()
+		{
+			var serializer = GetSerializer();
+			serializer.Options.AutoSerializeFields = true;
+			var json = new JsonObject
+				{
+					{"StringProp", "stringValue"},
+					{"IntProp", 42},
+					{"DoubleProp", 6},
+					{"BoolProp", true},
+					{"EnumProp", 1},
+					{"MapToMe", 4},
+					{"Field", "test"}
+				};
+			var expected = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true,
+				EnumProp = TestEnum.BasicEnumValue,
+				MappedProp = 4,
+				Field = "test"
+			};
+			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
+			Assert.AreEqual(expected, actual);
+		}
 		#endregion
 
 		#region Serialize Tests
@@ -1001,6 +1029,34 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.IsTrue(actual.Object["LoopProperty"].Object["LoopProperty"].Object.ContainsKey("#Ref"));
 			Assert.AreEqual(actual.Object["#Def"], actual.Object["LoopProperty"].Object["LoopProperty"].Object["#Ref"]);
 			Assert.AreEqual(0, serializer.SerializationMap.Count);
+		}
+		[TestMethod]
+		public void Serialize_Fields()
+		{
+			var serializer = GetSerializer();
+			serializer.Options.AutoSerializeFields = true;
+			var obj = new ObjectWithBasicProps
+			{
+				StringProp = "stringValue",
+				IntProp = 42,
+				DoubleProp = 6.0,
+				BoolProp = true,
+				EnumProp = TestEnum.BasicEnumValue,
+				MappedProp = 4,
+				Field = "test"
+			};
+			JsonValue expected = new JsonObject
+				{
+					{"StringProp", "stringValue"},
+					{"IntProp", 42},
+					{"DoubleProp", 6},
+					{"BoolProp", true},
+					{"EnumProp", 1},
+					{"MapToMe", 4},
+					{"Field", "test"}
+				};
+			var actual = serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
 		}
 		#endregion
 

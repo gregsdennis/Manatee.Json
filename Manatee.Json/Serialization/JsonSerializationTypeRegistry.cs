@@ -39,6 +39,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The type which the method serializes.</typeparam>
 		/// <param name="input">The object to be serialized.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the object.</returns>
 		public delegate JsonValue ToJsonDelegate<in T>(T input, JsonSerializer serializer);
 		/// <summary>
@@ -46,6 +47,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The type which the method deserializes.</typeparam>
 		/// <param name="json">The JSON representation of the object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The deserialized object.</returns>
 		public delegate T FromJsonDelegate<out T>(JsonValue json, JsonSerializer serializer);
 
@@ -222,6 +224,7 @@ namespace Manatee.Json.Serialization
 		/// Encodes a <see cref="DateTime"/> object to its JSON representation.
 		/// </summary>
 		/// <param name="dt">A <see cref="DateTime"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="DateTime"/>.</returns>
 		public static JsonValue EncodeDateTime(DateTime dt, JsonSerializer serializer)
 		{
@@ -241,6 +244,7 @@ namespace Manatee.Json.Serialization
 		/// Decodes a <see cref="DateTime"/> object from its JSON representation.
 		/// </summary>
 		/// <param name="json">A JSON representation of a <see cref="DateTime"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="DateTime"/> object.</returns>
 		public static DateTime DecodeDateTime(JsonValue json, JsonSerializer serializer)
 		{
@@ -262,6 +266,7 @@ namespace Manatee.Json.Serialization
 		/// Encodes a <see cref="TimeSpan"/> object to its JSON representation.
 		/// </summary>
 		/// <param name="ts">A <see cref="TimeSpan"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="TimeSpan"/>.</returns>
 		public static JsonValue EncodeTimeSpan(TimeSpan ts, JsonSerializer serializer)
 		{
@@ -271,6 +276,7 @@ namespace Manatee.Json.Serialization
 		/// Decodes a <see cref="TimeSpan"/> object from its JSON representation.
 		/// </summary>
 		/// <param name="json">A JSON representation of a <see cref="TimeSpan"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="TimeSpan"/> object.</returns>
 		public static TimeSpan DecodeTimeSpan(JsonValue json, JsonSerializer serializer)
 		{
@@ -282,6 +288,7 @@ namespace Manatee.Json.Serialization
 		/// Encodes a <see cref="Guid"/> object to its JSON representation.
 		/// </summary>
 		/// <param name="guid">A <see cref="Guid"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="Guid"/>.</returns>
 		public static JsonValue EncodeGuid(Guid guid, JsonSerializer serializer)
 		{
@@ -291,6 +298,7 @@ namespace Manatee.Json.Serialization
 		/// Decodes a <see cref="Guid"/> object from its JSON representation.
 		/// </summary>
 		/// <param name="json">A JSON representation of a <see cref="Guid"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="Guid"/> object.</returns>
 		public static Guid DecodeGuid(JsonValue json, JsonSerializer serializer)
 		{
@@ -306,6 +314,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the nullable value.</typeparam>
 		/// <param name="nullable">The <see cref="Nullable{T}"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="Nullable{T}"/>.</returns>
 		public static JsonValue EncodeNullable<T>(T? nullable, JsonSerializer serializer) where T : struct
 		{
@@ -316,6 +325,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the nullable value.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Nullable{T}"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="Nullable{T}"/> object.</returns>
 		public static T? DecodeNullable<T>(JsonValue json, JsonSerializer serializer) where T : struct
 		{
@@ -330,6 +340,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
 		/// <param name="list">The <see cref="List{T}"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="List{T}"/>.</returns>
 		public static JsonValue EncodeGenericList<T>(List<T> list, JsonSerializer serializer)
 		{
@@ -342,6 +353,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="List{T}"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="List{T}"/> object.</returns>
 		public static List<T> DecodeGenericList<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -357,6 +369,7 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
 		/// <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
 		/// <param name="dict">The <see cref="Dictionary{TKey, TValue}"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="Dictionary{TKey, TValue}"/>.</returns>
 		public static JsonValue EncodeGenericDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, JsonSerializer serializer)
 		{
@@ -374,6 +387,7 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="TKey">The underlying type used as the key for the dictionary.</typeparam>
 		/// <typeparam name="TValue">The underlying type used as the value for the dictionary.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Dictionary{TKey, TValue}"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="Dictionary{TKey, TValue}"/> object.</returns>
 		public static Dictionary<TKey, TValue> DecodeGenericDictionary<TKey, TValue>(JsonValue json, JsonSerializer serializer)
 		{
@@ -388,6 +402,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the queue.</typeparam>
 		/// <param name="queue">The <see cref="Queue{T}"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="Queue{T}"/>.</returns>
 		public static JsonValue EncodeGenericQueue<T>(Queue<T> queue, JsonSerializer serializer)
 		{
@@ -403,6 +418,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the queue.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Queue{T}"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="Queue{T}"/> object.</returns>
 		public static Queue<T> DecodeGenericQueue<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -420,6 +436,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the stack.</typeparam>
 		/// <param name="stack">The <see cref="Stack{T}"/> object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The JSON representation of the <see cref="Stack{T}"/>.</returns>
 		public static JsonValue EncodeGenericStack<T>(Stack<T> stack, JsonSerializer serializer)
 		{
@@ -435,6 +452,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the stack.</typeparam>
 		/// <param name="json">A JSON representation of a <see cref="Stack{T}"/>.</param>
+		/// <param name="serializer">The serializer to be used.</param>
 		/// <returns>The <see cref="Stack{T}"/> object.</returns>
 		public static Stack<T> DecodeGenericStack<T>(JsonValue json, JsonSerializer serializer)
 		{
