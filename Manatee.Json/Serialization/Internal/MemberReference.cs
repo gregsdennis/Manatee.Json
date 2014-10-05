@@ -14,31 +14,28 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertySelectionStrategy.cs
-	Namespace:		Manatee.Json.Serialization
-	Class Name:		PropertySelectionStrategy
-	Purpose:		Enumerates the types of properties which are automatically
-					serialized.
+	File Name:		MemberReference.cs
+	Namespace:		Manatee.Json.Serialization.Internal
+	Class Name:		MemberReference
+	Purpose:		Base classes for defining a field or property on an object
+					for the purpose of cataloging references.
 
 ***************************************************************************************/
+using System.Reflection;
 
-using System;
-
-namespace Manatee.Json.Serialization
+namespace Manatee.Json.Serialization.Internal
 {
-	/// <summary>
-	/// Enumerates the types of properties which are automatically serialized.
-	/// </summary>
-	[Flags]
-	public enum PropertySelectionStrategy
+	internal abstract class MemberReference
 	{
-		/// <summary>
-		/// Indicates that read/write properties will be serialized.
-		/// </summary>
-		ReadWriteOnly = 1,
-		/// <summary>
-		/// Indicates that read-only properties will be serialized.
-		/// </summary>
-		ReadOnly = 2,
+		public object Owner { get; set; }
+
+		public abstract object GetValue(object instance);
+		public abstract void SetValue(object instance, object value);
+	}
+
+	internal abstract class MemberReference<T> : MemberReference
+		where T : MemberInfo
+	{
+		public T Info { get; set; }
 	}
 }

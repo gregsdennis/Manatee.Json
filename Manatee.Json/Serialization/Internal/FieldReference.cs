@@ -14,31 +14,26 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		PropertySelectionStrategy.cs
-	Namespace:		Manatee.Json.Serialization
-	Class Name:		PropertySelectionStrategy
-	Purpose:		Enumerates the types of properties which are automatically
-					serialized.
+	File Name:		FieldReference.cs
+	Namespace:		Manatee.Json.Serialization.Internal
+	Class Name:		FieldReference
+	Purpose:		Defines a field on an object for the purpose of cataloging
+					references.
 
 ***************************************************************************************/
+using System.Reflection;
 
-using System;
-
-namespace Manatee.Json.Serialization
+namespace Manatee.Json.Serialization.Internal
 {
-	/// <summary>
-	/// Enumerates the types of properties which are automatically serialized.
-	/// </summary>
-	[Flags]
-	public enum PropertySelectionStrategy
+	internal class FieldReference : MemberReference<FieldInfo>
 	{
-		/// <summary>
-		/// Indicates that read/write properties will be serialized.
-		/// </summary>
-		ReadWriteOnly = 1,
-		/// <summary>
-		/// Indicates that read-only properties will be serialized.
-		/// </summary>
-		ReadOnly = 2,
+		public override object GetValue(object instance)
+		{
+			return Info.GetValue(instance);
+		}
+		public override void SetValue(object instance, object value)
+		{
+			Info.SetValue(instance, value);
+		}
 	}
 }
