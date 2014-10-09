@@ -106,18 +106,20 @@ namespace Manatee.Json.Path.Expressions
 				return (T) (object) false;
 			if (typeof (T) == typeof (bool) && result != null && !(result is bool))
 				return (T) (object) true;
+			if (typeof (T) == typeof (int) && result == null)
+				return (T) (object) -1;
 			if (typeof (T) == typeof (JsonValue))
 			{
 				if (result is double)
-					return (T)(object)(new JsonValue((double)result));
+					return (T) (object) new JsonValue((double) result);
 				if (result is bool)
-					return (T)(object)(new JsonValue((bool)result));
+					return (T) (object) new JsonValue((bool) result);
 				if (result is string)
-					return (T)(object)(new JsonValue((string)result));
+					return (T) (object) new JsonValue((string) result);
 				if (result is JsonArray)
-					return (T)(object)(new JsonValue((JsonArray)result));
+					return (T) (object) new JsonValue((JsonArray) result);
 				if (result is JsonObject)
-					return (T)(object)(new JsonValue((JsonObject)result));
+					return (T) (object) new JsonValue((JsonObject) result);
 			}
 			return (T)Convert.ChangeType(result, typeof(T));
 		}

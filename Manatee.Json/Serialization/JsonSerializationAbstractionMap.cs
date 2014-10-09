@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
@@ -57,16 +58,15 @@ namespace Manatee.Json.Serialization
 				throw new JsonTypeMapException<TAbstract, TConcrete>();
 			var tAbstract = typeof (TAbstract);
 			var tConcrete = typeof (TConcrete);
-			_registry[tAbstract] = tConcrete;
-			switch (mappingBehavior)
-			{
-				case MapBaseAbstractionBehavior.Unmapped:
-					MapBaseTypes(tAbstract, tConcrete, false);
-					break;
-				case MapBaseAbstractionBehavior.Override:
-					MapBaseTypes(tAbstract, tConcrete, true);
-					break;
-			}
+			MapTypes(tAbstract, tConcrete, mappingBehavior);
+		}
+		public static void MapGeneric(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
+		{
+			if (tConcrete.IsAbstract || tConcrete.IsInterface)
+				throw new Exception();
+			if (!tConcrete.InheritsFrom(tAbstract))
+				throw new Exception();
+			MapTypes(tAbstract, tConcrete, mappingBehavior);
 		}
 		/// <summary>
 		/// Removes a previously-assigned mapping.
@@ -119,6 +119,19 @@ namespace Manatee.Json.Serialization
 			return resolver.Resolve<T>();
 		}
 
+		private static void MapTypes(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior)
+		{
+			_registry[tAbstract] = tConcrete;
+			switch (mappingBehavior)
+			{
+				case MapBaseAbstractionBehavior.Unmapped:
+					MapBaseTypes(tAbstract, tConcrete, false);
+					break;
+				case MapBaseAbstractionBehavior.Override:
+					MapBaseTypes(tAbstract, tConcrete, true);
+					break;
+			}
+		}
 		private static void MapBaseTypes(Type tAbstract, Type tConcrete, bool overwrite)
 		{
 			if (tAbstract == null) return;

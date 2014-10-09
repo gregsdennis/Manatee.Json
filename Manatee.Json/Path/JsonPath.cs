@@ -184,6 +184,11 @@ namespace Manatee.Json.Path
 			}
 			catch (InputNotValidForStateException<State, JsonPathInput> e)
 			{
+				if (e.Input == JsonPathInput.Star && _allowLocalRoot)
+				{
+					_done = true;
+					return;
+				}
 				switch (e.State)
 				{
 					case State.Start:
@@ -196,8 +201,8 @@ namespace Manatee.Json.Path
 						throw new JsonPathSyntaxException(this, "Expected ',', ':', or ']'.");
 					case State.Colon:
 						if (_colonCount == 2)
-							throw new JsonPathSyntaxException(this, "Expected an integer.");
-						throw new JsonPathSyntaxException(this, "Expected ':' or an integer.");
+							throw new JsonPathSyntaxException(this, "Expected ']' or an integer.");
+						throw new JsonPathSyntaxException(this, "Expected ']', ':', or an integer.");
 					case State.SliceValue:
 						throw new JsonPathSyntaxException(this, "Expected ':' or ']'.");
 					case State.Comma:

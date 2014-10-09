@@ -48,7 +48,9 @@ namespace Manatee.Json.Path.Expressions
 			}
 			else
 			{
-				var value = IsLocal ? json as JsonValue : root;
+				var value = IsLocal
+								? json is JsonArray ? json as JsonArray : json as JsonValue
+								: root;
 				var results = Path.Evaluate(value);
 				if (results.Count > 1)
 					throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
