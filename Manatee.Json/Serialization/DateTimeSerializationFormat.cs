@@ -41,5 +41,9 @@ namespace Manatee.Json.Serialization
 		/// Output is a numeric value representing the number of milliseconds since January 1, 1970 UTC.
 		/// </summary>
 		Milliseconds,
+		/// <summary>
+		/// Output is formatted using the <see cref="JsonSerializerOptions.CustomDateTimeSerializationFormat"/> property.
+		/// </summary>
+		Custom,
 	}
 }

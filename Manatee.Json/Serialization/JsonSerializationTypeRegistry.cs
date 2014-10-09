@@ -23,6 +23,7 @@
 ***************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Manatee.Json.Serialization
@@ -232,12 +233,16 @@ namespace Manatee.Json.Serialization
 				return dt.ToString();
 			switch (serializer.Options.DateTimeSerializationFormat)
 			{
+				case DateTimeSerializationFormat.Iso8601:
+					return dt.ToString("s");
 				case DateTimeSerializationFormat.JavaConstructor:
 					return string.Format("/Date({0})/", dt.Ticks/TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Milliseconds:
-					return dt.Ticks/TimeSpan.TicksPerMillisecond;
+					return dt.Ticks / TimeSpan.TicksPerMillisecond;
+				case DateTimeSerializationFormat.Custom:
+					return dt.ToString(serializer.Options.CustomDateTimeSerializationFormat);
 				default:
-					return dt.ToString("s");
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 		/// <summary>
@@ -252,12 +257,16 @@ namespace Manatee.Json.Serialization
 				return DateTime.Parse(json.String);
 			switch (serializer.Options.DateTimeSerializationFormat)
 			{
+				case DateTimeSerializationFormat.Iso8601:
+					return DateTime.Parse(json.String);
 				case DateTimeSerializationFormat.JavaConstructor:
 					return new DateTime(long.Parse(json.String.Substring(6, json.String.Length - 8))*TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Milliseconds:
 					return new DateTime((long) json.Number*TimeSpan.TicksPerMillisecond);
+				case DateTimeSerializationFormat.Custom:
+					return DateTime.ParseExact(json.String, serializer.Options.CustomDateTimeSerializationFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
 				default:
-					return DateTime.Parse(json.String);
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 		#endregion
