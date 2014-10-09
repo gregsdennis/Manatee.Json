@@ -580,6 +580,40 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
+		[TestMethod]
+		public void Deserialize_MapGenericAbstraction_Interface_Success()
+		{
+			JsonSerializationAbstractionMap.MapGeneric(typeof(IFace<>), typeof(Impl<>));
+
+			var serializer = new JsonSerializer();
+			var json = new JsonObject { { "Value", 1 } };
+			var value = serializer.Deserialize<IFace<int>>(json);
+
+			Assert.AreEqual(typeof (Impl<int>), value.GetType());
+		}
+		[TestMethod]
+		public void Deserialize_MapGenericAbstraction_BaseClass_Success()
+		{
+			JsonSerializationAbstractionMap.MapGeneric(typeof(Impl<>), typeof(Derived<>));
+
+			var serializer = new JsonSerializer();
+			var json = new JsonObject { { "Value", 1 } };
+			var value = serializer.Deserialize<Impl<int>>(json);
+
+			Assert.AreEqual(typeof(Derived<int>), value.GetType());
+		}
+		[TestMethod]
+		public void Deserialize_MapGenericAbstraction_WithOverride_Success()
+		{
+			JsonSerializationAbstractionMap.MapGeneric(typeof(Impl<>), typeof(Derived<>));
+			JsonSerializationAbstractionMap.Map<Impl<string>, Derived<string>>();
+
+			var serializer = new JsonSerializer();
+			var json = new JsonObject { { "Value", 1 } };
+			var value = serializer.Deserialize<Impl<int>>(json);
+
+			Assert.AreEqual(typeof(Derived<int>), value.GetType());
+		}
 		#endregion
 
 		#region Serialize Tests
@@ -1022,7 +1056,8 @@ namespace Manatee.Json.Tests.Serialization
 					{"BoolProp", true},
 					{"EnumProp", 0},
 					{"FlagsEnumProp", 0},
-					{"MapToMe", 0}
+					{"MapToMe", 0},
+					{"ReadOnlyProp", JsonValue.Null}
 				};
 			var actual = serializer.Serialize(obj);
 			serializer.Options = null;

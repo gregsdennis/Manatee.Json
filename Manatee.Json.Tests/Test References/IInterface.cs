@@ -36,4 +36,18 @@ namespace Manatee.Tests.Test_References
 		event EventHandler RequiredEvent;
 // ReSharper restore EventNeverInvoked.Global
 	}
+
+	public interface IFace<T>
+	{
+		int Value { get; set; }
+	}
+
+	public class Impl<T> : IFace<T>
+	{
+		public int Value { get; set; }
+	}
+
+	public class Derived<T> : Impl<T> { }
+
+
 }
