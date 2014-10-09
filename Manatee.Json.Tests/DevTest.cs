@@ -35,29 +35,28 @@ namespace Manatee.Json.Tests
 	[TestClass]
 	public class DevTest
 	{
+		public interface IFace<T>
+		{
+			int Value { get; set; }
+		}
+
+		public class Impl<T> : IFace<T>
+		{
+			public int Value { get; set; }
+		}
+
+		public class Derived<T> : Impl<T> { }
+
 		[TestMethod]
 		//[Ignore]
 		public void Test1()
 		{
-			try
-			{
-				var text = "{\"key\" : \"value\", \"key2\" : [\"arrayValue1\", \"innerValue\", null, false]}";
-				var json = JsonValue.Parse(text);
+			JsonSerializationAbstractionMap.MapGeneric(typeof(Impl<>), typeof(Derived<>));
 
-				var pathText = "$.key2[(@.length-(5-2))]";
-				var path = JsonPath.Parse(pathText);
+			var serializer = new JsonSerializer();
+			var json = new JsonObject {{"Value", 1}};
 
-				Console.WriteLine(text);
-				Console.WriteLine(json);
-				Console.WriteLine(pathText);
-				Console.WriteLine(path);
-				Console.WriteLine(path.Evaluate(json));
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);
-				throw;
-			}
+			Console.WriteLine(serializer.Deserialize<Impl<int>>(json).Value);
 		}
 		[TestMethod]
 		public void Test2()
@@ -71,6 +70,7 @@ namespace Manatee.Json.Tests
 			Console.WriteLine(path);
 			Console.WriteLine(path.Evaluate(json));
 		}
+
 		[TestMethod]
 		[Ignore]
 		public void SchemaGenerationTest()

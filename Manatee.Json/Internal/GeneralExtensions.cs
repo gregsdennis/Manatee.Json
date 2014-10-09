@@ -85,10 +85,9 @@ namespace Manatee.Json.Internal
 		public static string EvaluateEscapeSequences(this string s)
 		{
 			var i = 0;
-			int length;
 			while (i < s.Length)
 			{
-				length = 1;
+				var length = 1;
 				if (s[i] == '\\')
 					switch (s[i + 1])
 					{
@@ -172,6 +171,25 @@ namespace Manatee.Json.Internal
 				i++;
 			}
 			return s;
+		}
+		// Note: These methods assume that if a generic type is passed, the type is open.
+		public static bool InheritsFrom(this Type tDerived, Type tBase)
+		{
+			if (tDerived.IsSubtypeOf(tBase)) return true;
+			var interfaces = tDerived.GetInterfaces().Select(i => i.IsGenericType ? i.GetGenericTypeDefinition() : i);
+			return interfaces.Contains(tBase);
+		}
+		private static bool IsSubtypeOf(this Type tDerived, Type tBase)
+		{
+			var currentType = tDerived.BaseType;
+			while (currentType != null)
+			{
+				if (currentType.IsGenericType)
+					currentType = currentType.GetGenericTypeDefinition();
+				if (currentType == tBase) return true;
+				currentType = currentType.BaseType;
+			}
+			return false;
 		}
 	}
 }

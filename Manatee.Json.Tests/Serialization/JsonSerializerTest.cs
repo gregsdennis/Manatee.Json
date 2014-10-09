@@ -1058,6 +1058,17 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
+		[TestMethod]
+		public void Serialize_ObjectWithAllDefaultValues()
+		{
+			var obj = new ObjectWithExtendedProps();
+
+			var serializer = new JsonSerializer {Options = {AutoSerializeFields = true, EncodeDefaultValues = true}};
+
+			var json = serializer.Serialize(obj);
+
+			Console.WriteLine(json);
+		}
 		#endregion
 
 		#region Support

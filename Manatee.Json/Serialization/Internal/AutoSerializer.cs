@@ -158,18 +158,22 @@ namespace Manatee.Json.Serialization.Internal
 				{
 					if (propertyInfo.GetIndexParameters().Any()) continue;
 					value = propertyInfo.GetValue(obj, null);
-					if (value == null) continue;
+					if (value == null && !serializer.Options.EncodeDefaultValues) continue;
 					type = propertyInfo.PropertyType;
 				}
 				else
 				{
 					var fieldInfo = (FieldInfo) memberInfo;
 					value = fieldInfo.GetValue(obj);
-					if (value == null) continue;
+					if (value == null && !serializer.Options.EncodeDefaultValues) continue;
 					type = fieldInfo.FieldType;
 				}
-				var serialize = SerializerCache.Default.GetSerializeMethod(type);
-				var json = (JsonValue) serialize.Invoke(serializer, new[] {value});
+				var json = JsonValue.Null;
+				if (value != null)
+				{
+					var serialize = SerializerCache.Default.GetSerializeMethod(type);
+					json = (JsonValue) serialize.Invoke(serializer, new[] {value});
+				}
 				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
 				dict.Add(memberInfo, json);
 			}
