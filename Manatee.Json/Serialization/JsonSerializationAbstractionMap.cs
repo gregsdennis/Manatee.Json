@@ -92,23 +92,35 @@ namespace Manatee.Json.Serialization
 		/// <returns>The mapped type if a mapping exists; otherwise the abstraction type.</returns>
 		public static Type GetMap(Type type)
 		{
-			return _registry.ContainsKey(type) ? _registry[type] : type;
+			if (_registry.ContainsKey(type)) return _registry[type];
+			if (type.IsGenericType)
+			{
+				var genericDefinition = type.GetGenericTypeDefinition();
+				var genericMatches = _registry.Where(t => t.Key.IsGenericTypeDefinition && t.Key.GetGenericTypeDefinition() == genericDefinition).ToList();
+				if (genericMatches.Any())
+					return genericMatches.First().Value;
+			}
+			return type;
 		}
 
 		internal static T CreateInstance<T>(JsonValue json, IResolver resolver)
 		{
 			var type = typeof (T);
 			resolver = resolver ?? _defaultResolver;
-			if (type.IsAbstract || type.IsInterface)
+			if (type.IsAbstract || type.IsInterface || type.IsGenericType)
 			{
 				if ((json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
 				{
 					var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
 					return (T) resolver.Resolve(concrete);
 				}
+				if (!_registry.ContainsKey(type) && type.IsGenericType)
+					type = type.GetGenericTypeDefinition();
 				if (_registry.ContainsKey(type))
 				{
 					var concrete = _registry[type];
+					if (concrete.IsGenericTypeDefinition)
+						concrete = concrete.MakeGenericType(typeof (T).GetGenericArguments());
 					return (T) resolver.Resolve(concrete);
 				}
 #if !IOS

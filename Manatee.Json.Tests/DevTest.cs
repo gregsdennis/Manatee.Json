@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
+using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -35,18 +36,6 @@ namespace Manatee.Json.Tests
 	[TestClass]
 	public class DevTest
 	{
-		public interface IFace<T>
-		{
-			int Value { get; set; }
-		}
-
-		public class Impl<T> : IFace<T>
-		{
-			public int Value { get; set; }
-		}
-
-		public class Derived<T> : Impl<T> { }
-
 		[TestMethod]
 		//[Ignore]
 		public void Test1()
@@ -55,8 +44,10 @@ namespace Manatee.Json.Tests
 
 			var serializer = new JsonSerializer();
 			var json = new JsonObject {{"Value", 1}};
+			var value = serializer.Deserialize<Impl<int>>(json);
 
-			Console.WriteLine(serializer.Deserialize<Impl<int>>(json).Value);
+			Console.WriteLine(value.Value);
+			Console.WriteLine(value.GetType());
 		}
 		[TestMethod]
 		public void Test2()
