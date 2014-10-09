@@ -71,10 +71,25 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var serializer = GetSerializer();
 			serializer.Options = new JsonSerializerOptions
-				{
-					DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
-				};
-			JsonValue json = DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond;
+			{
+				DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
+			};
+			JsonValue json = DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond;
+			var expected = DateTime.Today;
+			var actual = serializer.Deserialize<DateTime>(json);
+			serializer.Options = null;
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Deserialize_DateTimeCustom_Successful()
+		{
+			var serializer = GetSerializer();
+			serializer.Options = new JsonSerializerOptions
+			{
+				DateTimeSerializationFormat = DateTimeSerializationFormat.Custom,
+				CustomDateTimeSerializationFormat = "yyyy.MM.dd"
+			};
+			JsonValue json = DateTime.Today.ToString("yyyy.MM.dd");
 			var expected = DateTime.Today;
 			var actual = serializer.Deserialize<DateTime>(json);
 			serializer.Options = null;
@@ -605,11 +620,26 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var serializer = GetSerializer();
 			serializer.Options = new JsonSerializerOptions
-			                      	{
-			                      		DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
-			                      	};
+			{
+				DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
+			};
 			var obj = DateTime.Today;
 			JsonValue expected = DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond;
+			var actual = serializer.Serialize(obj);
+			serializer.Options = null;
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Serialize_DateTimeCustom_Successful()
+		{
+			var serializer = GetSerializer();
+			serializer.Options = new JsonSerializerOptions
+			{
+				DateTimeSerializationFormat = DateTimeSerializationFormat.Custom,
+				CustomDateTimeSerializationFormat = "yyyy.MM.dd"
+			};
+			var obj = DateTime.Today;
+			JsonValue expected = DateTime.Today.ToString("yyyy.MM.dd");
 			var actual = serializer.Serialize(obj);
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);

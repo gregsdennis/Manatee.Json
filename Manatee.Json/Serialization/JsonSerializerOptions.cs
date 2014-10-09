@@ -55,6 +55,10 @@ namespace Manatee.Json.Serialization
 		/// </remarks>
 		public DateTimeSerializationFormat DateTimeSerializationFormat { get; set; }
 		/// <summary>
+		/// Gets and sets a custom serialization format for <see cref="DateTime"/>.
+		/// </summary>
+		public string CustomDateTimeSerializationFormat { get; set; }
+		/// <summary>
 		/// Gets and sets the format for enumeration serialization using the default serializer methods.
 		/// </summary>
 		/// <remarks>
