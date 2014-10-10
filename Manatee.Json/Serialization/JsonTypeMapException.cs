@@ -29,16 +29,25 @@ namespace Manatee.Json.Serialization
 	///<summary>
 	/// Thrown when an abstract or interface type is mapped to another abstract or interface type.
 	///</summary>
+	public class JsonTypeMapException : Exception
+	{
+		internal JsonTypeMapException(Type abstractType, Type concreteType)
+			: base(string.Format("Cannot create map from type '{0}' to type '{1}' because the destination type is either abstract or an interface.",
+								 abstractType,
+								 concreteType)) {}
+	}
+
+	///<summary>
+	/// Thrown when an abstract or interface type is mapped to another abstract or interface type.
+	///</summary>
 	///<typeparam name="TAbstract">The type being mapped from.</typeparam>
 	///<typeparam name="TConcrete">The type being mapped to.</typeparam>
-	public class JsonTypeMapException<TAbstract, TConcrete> : Exception
+	public class JsonTypeMapException<TAbstract, TConcrete> : JsonTypeMapException
 	{
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonTypeMapException&lt;TAbstract, TConcrete&gt;"/> object.
 		/// </summary>
 		internal JsonTypeMapException()
-			: base(string.Format("Cannot create map from type '{0}' to type '{1}' because the destination type is either abstract or an interface.",
-								 typeof(TAbstract),
-								 typeof(TConcrete))) {}
+			: base(typeof (TAbstract), typeof (TConcrete)) {}
 	}
 }

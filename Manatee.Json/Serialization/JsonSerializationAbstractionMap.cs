@@ -49,6 +49,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="TAbstract">The abstract type.</typeparam>
 		/// <typeparam name="TConcrete">The concrete type.</typeparam>
+		/// <param name="mappingBehavior">The mapping behavior.</param>
 		/// <exception cref="JsonTypeMapException{TAbstract, TConcrete}">Thrown if TConcrete is an
 		/// abstract class or an interface.</exception>
 		public static void Map<TAbstract, TConcrete>(MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
@@ -60,18 +61,28 @@ namespace Manatee.Json.Serialization
 			var tConcrete = typeof (TConcrete);
 			MapTypes(tAbstract, tConcrete, mappingBehavior);
 		}
+		/// <summary>
+		/// Applies a mapping from an open generic abstraction to an open generic concrete type.
+		/// </summary>
+		/// <param name="tAbstract">The abstract type.</param>
+		/// <param name="tConcrete">The concrete type.</param>
+		/// <param name="mappingBehavior">The mapping behavior.</param>
+		/// <exception cref="JsonTypeMapException">Thrown if <paramref name="tConcrete"/> is an
+		/// abstract class or an interface or if <paramref name="tConcrete"/> does not inherit
+		/// from <paramref name="tAbstract"/>.</exception>
 		public static void MapGeneric(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
 		{
 			if (tConcrete.IsAbstract || tConcrete.IsInterface)
-				throw new Exception();
+				throw new JsonTypeMapException(tAbstract, tConcrete);
 			if (!tConcrete.InheritsFrom(tAbstract))
-				throw new Exception();
+				throw new JsonTypeMapException(tAbstract, tConcrete);
 			MapTypes(tAbstract, tConcrete, mappingBehavior);
 		}
 		/// <summary>
 		/// Removes a previously-assigned mapping.
 		/// </summary>
 		/// <typeparam name="TAbstract">The type to remove.</typeparam>
+		/// <param name="removeRelated">Optionally removes mappings of base and related interface types.</param>
 		public static void RemoveMap<TAbstract>(bool removeRelated = true)
 		{
 			var tAbstract = typeof (TAbstract);
