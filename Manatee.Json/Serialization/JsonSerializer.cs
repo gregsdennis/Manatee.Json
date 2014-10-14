@@ -77,6 +77,11 @@ namespace Manatee.Json.Serialization
 			SerializationMap.Clear();
 			return json;
 		}
+		/// <summary>
+		/// Generates a template JSON inserting default values.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
 		public JsonValue GenerateTemplate<T>()
 		{
 			return TemplateGenerator.FromType<T>(this);
