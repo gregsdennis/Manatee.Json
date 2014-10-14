@@ -50,6 +50,8 @@ namespace Manatee.Json.Serialization.Internal
 
 		public static JsonValue FromType<T>(JsonSerializer serializer)
 		{
+			var encodeDefaultValues = serializer.Options.EncodeDefaultValues;
+			serializer.Options.EncodeDefaultValues = true;
 			serializer.Options.IncludeContentSample = true;
 			_generatedTypes = new List<Type>();
 
@@ -58,6 +60,7 @@ namespace Manatee.Json.Serialization.Internal
 			var json = serializer.Serialize(instance);
 
 			serializer.Options.IncludeContentSample = false;
+			serializer.Options.EncodeDefaultValues = encodeDefaultValues;
 			return json;
 		}
 

@@ -359,25 +359,25 @@ namespace Manatee.Json.Serialization
 		#endregion
 		#region Array<T>
 		/// <summary>
-		/// Encodes a <see cref="T"/>[] to its JSON representation.
+		/// Encodes a <typeparamref name="T"/>[] to its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the array.</typeparam>
-		/// <param name="list">The <see cref="T"/>[] object.</param>
+		/// <param name="array">The <typeparamref name="T"/>[] object.</param>
 		/// <param name="serializer">The serializer to be used.</param>
-		/// <returns>The JSON representation of the <see cref="T"/>[].</returns>
-		public static JsonValue EncodeGenericArray<T>(T[] list, JsonSerializer serializer)
+		/// <returns>The JSON representation of the <typeparamref name="T"/>[].</returns>
+		public static JsonValue EncodeGenericArray<T>(T[] array, JsonSerializer serializer)
 		{
-			var array = new JsonArray();
-			array.AddRange(list.Select(serializer.Serialize));
-			return array;
+			var json = new JsonArray();
+			json.AddRange(array.Select(serializer.Serialize));
+			return json;
 		}
 		/// <summary>
-		/// Decodes a <see cref="T"/>[] object from its JSON representation.
+		/// Decodes a <typeparamref name="T"/>[] object from its JSON representation.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the array.</typeparam>
-		/// <param name="json">A JSON representation of a <see cref="T"/>[].</param>
+		/// <param name="json">A JSON representation of a <typeparamref name="T"/>[].</param>
 		/// <param name="serializer">The serializer to be used.</param>
-		/// <returns>The <see cref="T"/>[] object.</returns>
+		/// <returns>The <typeparamref name="T"/>[] object.</returns>
 		public static T[] DecodeGenericArray<T>(JsonValue json, JsonSerializer serializer)
 		{
 			var list = new List<T>();
