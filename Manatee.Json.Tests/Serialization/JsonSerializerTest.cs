@@ -37,7 +37,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_RegisteredType_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonValue json = TimeSpan.FromDays(1).ToString();
 			var expected = TimeSpan.FromDays(1);
 			var actual = serializer.Deserialize<TimeSpan>(json);
@@ -46,7 +46,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_DateTimeDefaultOptions_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonValue json = DateTime.Today.ToString("");
 			var expected = DateTime.Today;
 			var actual = serializer.Deserialize<DateTime>(json);
@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_DateTimeJavaFormat_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			serializer.Options = new JsonSerializerOptions
 				{
 					DateTimeSerializationFormat = DateTimeSerializationFormat.JavaConstructor
@@ -69,11 +69,13 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_DateTimeMilliseconds_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options = new JsonSerializerOptions
-			{
-				DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
-			};
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
+						}
+				};
 			JsonValue json = DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond;
 			var expected = DateTime.Today;
 			var actual = serializer.Deserialize<DateTime>(json);
@@ -83,12 +85,14 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_DateTimeCustom_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options = new JsonSerializerOptions
-			{
-				DateTimeSerializationFormat = DateTimeSerializationFormat.Custom,
-				CustomDateTimeSerializationFormat = "yyyy.MM.dd"
-			};
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DateTimeSerializationFormat = DateTimeSerializationFormat.Custom,
+							CustomDateTimeSerializationFormat = "yyyy.MM.dd"
+						}
+				};
 			JsonValue json = DateTime.Today.ToString("yyyy.MM.dd");
 			var expected = DateTime.Today;
 			var actual = serializer.Deserialize<DateTime>(json);
@@ -98,7 +102,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Basic_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -123,7 +127,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_BasicWithNamedEnum_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
 			var json = new JsonObject
 				{
@@ -149,8 +153,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_BasicWithNamedEnumWithDescription_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -175,7 +178,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_AbstractAndInterfacePropsWithoutMap_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
 					{
@@ -204,7 +207,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_AbstractAndInterfacePropsWithMap_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
 					{"AbstractProp", new JsonObject {{"SomeProp", 42}}},
@@ -223,7 +226,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_AbstractClass_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
 					{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
@@ -242,7 +245,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_AbstractClassWithMap_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
 					//{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
@@ -262,7 +265,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Interface_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonValue json = new JsonObject
 				{
 					{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
@@ -276,7 +279,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_InterfaceWithoutMap_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonValue json = new JsonObject
 				{
 					{"RequiredProp", "test"}
@@ -290,7 +293,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_InterfaceWithMap_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonValue json = new JsonObject
 				{
 					{"RequiredProp", "test"}
@@ -304,7 +307,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_InterfaceWithMapToIJsonSerializableImplementation_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonValue json = new JsonObject
 				{
 					{"requiredProp", "test"}
@@ -318,7 +321,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Nullable_Null_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? expected = null;
 			var json = JsonValue.Null;
@@ -328,7 +331,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Nullable_NonNull_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? expected = 42;
 			JsonValue json = 42;
@@ -336,12 +339,26 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
+		public void Deserialize_Array_Successful()
+		{
+			var serializer = new JsonSerializer();
+			JsonSerializationTypeRegistry.RegisterArrayType<int>();
+			JsonValue json = new JsonArray { 4, 3, 5, 6 };
+			var expected = new[] { 4, 3, 5, 6 };
+			var actual = serializer.Deserialize<int[]>(json);
+			Assert.AreEqual(expected.Length, actual.Length);
+			for (int i = 0; i < expected.Length; i++)
+			{
+				Assert.AreEqual(expected[i], actual[i]);
+			}
+		}
+		[TestMethod]
 		public void Deserialize_List_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterListType<int>();
-			JsonValue json = new JsonArray {4, 3, 5, 6};
-			var expected = new List<int> {4, 3, 5, 6};
+			JsonValue json = new JsonArray { 4, 3, 5, 6 };
+			var expected = new List<int> { 4, 3, 5, 6 };
 			var actual = serializer.Deserialize<List<int>>(json);
 			Assert.AreEqual(expected.Count, actual.Count);
 			for (int i = 0; i < expected.Count; i++)
@@ -352,7 +369,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Dictionary_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterDictionaryType<string, double>();
 			var expected = new Dictionary<string, double> {{"four", 4}, {"three", 3}, {"five", 5}, {"six", 6}};
 			JsonValue json = new JsonArray
@@ -373,7 +390,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Queue_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterQueueType<int>();
 			JsonValue json = new JsonArray {4, 3, 5, 6};
 			var expected = new Queue<int>();
@@ -391,7 +408,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Stack_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterStackType<int>();
 			JsonValue json = new JsonArray {4, 3, 5, 6};
 			var expected = new Stack<int>();
@@ -409,7 +426,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void DeserializeType_Successfull()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var stringProp = "staticStringValue";
 			var intProp = 42;
 			var doubleProp = 6.0;
@@ -430,7 +447,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_DefaultOptions_IgnoresExtraProperties()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -453,7 +470,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_CustomOptions_ThrowsTypeDoesNotContainPropertyException()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			try
 			{
 				serializer.Options = new JsonSerializerOptions
@@ -496,7 +513,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_CircularStructure_MaintainsReferences()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
 					{
@@ -542,7 +559,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_UnimplementedInterface_ReturnsRunTimeImplementation()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var json = new JsonObject {{"RequiredProp", "test"}};
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
 
@@ -555,8 +572,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Deserialize_Fields()
 		{
-			var serializer = GetSerializer();
-			serializer.Options.AutoSerializeFields = true;
+			var serializer = new JsonSerializer {Options = {AutoSerializeFields = true}};
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -620,7 +636,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_RegisteredType_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var obj = TimeSpan.FromDays(1);
 			JsonValue expected = TimeSpan.FromDays(1).ToString();
 			var actual = serializer.Serialize(obj);
@@ -629,7 +645,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_DateTimeDefaultOptions_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var obj = DateTime.Today;
 			JsonValue expected = DateTime.Today.ToString("s");
 			var actual = serializer.Serialize(obj);
@@ -638,11 +654,13 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_DateTimeJavaFormat_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options = new JsonSerializerOptions
-			                      	{
-			                      		DateTimeSerializationFormat = DateTimeSerializationFormat.JavaConstructor
-			                      	};
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DateTimeSerializationFormat = DateTimeSerializationFormat.JavaConstructor
+						}
+				};
 			var obj = DateTime.Today;
 			JsonValue expected = string.Format("/Date({0})/", DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond);
 			var actual = serializer.Serialize(obj);
@@ -652,11 +670,13 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_DateTimeMilliseconds_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options = new JsonSerializerOptions
-			{
-				DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
-			};
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
+						}
+				};
 			var obj = DateTime.Today;
 			JsonValue expected = DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond;
 			var actual = serializer.Serialize(obj);
@@ -666,12 +686,14 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_DateTimeCustom_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options = new JsonSerializerOptions
-			{
-				DateTimeSerializationFormat = DateTimeSerializationFormat.Custom,
-				CustomDateTimeSerializationFormat = "yyyy.MM.dd"
-			};
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DateTimeSerializationFormat = DateTimeSerializationFormat.Custom,
+							CustomDateTimeSerializationFormat = "yyyy.MM.dd"
+						}
+				};
 			var obj = DateTime.Today;
 			JsonValue expected = DateTime.Today.ToString("yyyy.MM.dd");
 			var actual = serializer.Serialize(obj);
@@ -681,7 +703,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_Basic_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var obj = new ObjectWithBasicProps
 			{
 				StringProp = "stringValue",
@@ -706,8 +728,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_BasicWithNamedEnum_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
 			var obj = new ObjectWithBasicProps
 			{
 				StringProp = "stringValue",
@@ -732,8 +753,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_BasicWithNamedEnumWithDescription_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
 			var obj = new ObjectWithBasicProps
 			{
 				StringProp = "stringValue",
@@ -758,8 +778,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_BasicWithNamedFlagsEnum_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
 			var obj = new ObjectWithBasicProps
 			{
 				StringProp = "stringValue",
@@ -786,8 +805,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_BasicWithNamedFlagsEnumWithDescription_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
 			var obj = new ObjectWithBasicProps
 			{
 				StringProp = "stringValue",
@@ -814,9 +832,14 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_BasicWithNamedMultivalueFlagsEnumWithDescription_Successful()
 		{
-			var serializer = GetSerializer();
-			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
-			serializer.Options.FlagsEnumSeparator = " | ";
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							EnumSerializationFormat = EnumSerializationFormat.AsName,
+							FlagsEnumSeparator = " | "
+						}
+				};
 			var obj = new ObjectWithBasicProps
 			{
 				StringProp = "stringValue",
@@ -846,7 +869,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_AbstractAndInterfaceProps_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var obj = new ObjectWithAbstractAndInterfaceProps
 			          	{
 			          		AbstractProp = new DerivedClass {SomeProp = 42},
@@ -875,7 +898,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_AbstractClass_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			AbstractClass obj = new DerivedClass
 			{
 				SomeProp = 42,
@@ -897,7 +920,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_Interface_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			IInterface obj = new ImplementationClass { RequiredProp = "test" };
 			JsonValue expected = new JsonObject
 				{
@@ -911,7 +934,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_Nullable_Null_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? i = null;
 			var expected = JsonValue.Null;
@@ -921,7 +944,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_Nullable_NonNull_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? i = 42;
 			JsonValue expected = 42;
@@ -931,7 +954,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_IJsonSerializable_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var obj = new JsonSerializableClass("test string", 42);
 			var expected = new JsonObject
 				{
@@ -942,19 +965,29 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
+		public void Serialize_Array_Successfull()
+		{
+			var serializer = new JsonSerializer();
+			JsonSerializationTypeRegistry.RegisterArrayType<int>();
+			var list = new[] {4, 3, 5, 6};
+			JsonValue expected = new JsonArray { 4, 3, 5, 6 };
+			var actual = serializer.Serialize(list);
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
 		public void Serialize_List_Successfull()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterListType<int>();
-			var list = new List<int> {4, 3, 5, 6};
-			JsonValue expected = new JsonArray {4, 3, 5, 6};
+			var list = new List<int> { 4, 3, 5, 6 };
+			JsonValue expected = new JsonArray { 4, 3, 5, 6 };
 			var actual = serializer.Serialize(list);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
 		public void Serialize_Dictionary_Successful()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterDictionaryType<string, double>();
 			var dict = new Dictionary<string, double> {{"four", 4}, {"three", 3}, {"five", 5}, {"six", 6}};
 			JsonValue expected = new JsonArray
@@ -970,7 +1003,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_Queue_Successfull()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterQueueType<int>();
 			var queue = new Queue<int>();
 			queue.Enqueue(4);
@@ -984,7 +1017,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_Stack_Successfull()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			JsonSerializationTypeRegistry.RegisterStackType<int>();
 			var stack = new Stack<int>();
 			stack.Push(4);
@@ -998,7 +1031,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void SerializeType_Successfull()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			ObjectWithBasicProps.StaticStringProp = "staticStringValue";
 			ObjectWithBasicProps.StaticIntProp = 42;
 			ObjectWithBasicProps.StaticDoubleProp = 6.0;
@@ -1016,7 +1049,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_DefaultOptions_IgnoresDefaultValues()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			// DoubleProp remains default
 			var obj = new ObjectWithBasicProps
 			{
@@ -1036,11 +1069,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_CustomOptions_SerializesDefaultValues()
 		{
-			var serializer = GetSerializer();
-			serializer.Options = new JsonSerializerOptions
-			                      	{
-			                      		EncodeDefaultValues = true
-			                      	};
+			var serializer = new JsonSerializer {Options = {EncodeDefaultValues = true}};
 			// DoubleProp remains default
 			var obj = new ObjectWithBasicProps
 				{
@@ -1056,8 +1085,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"BoolProp", true},
 					{"EnumProp", 0},
 					{"FlagsEnumProp", 0},
-					{"MapToMe", 0},
-					{"ReadOnlyProp", JsonValue.Null}
+					{"MapToMe", 0}
 				};
 			var actual = serializer.Serialize(obj);
 			serializer.Options = null;
@@ -1066,7 +1094,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_CircularStructure_SerializesWithReference()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			var obj = new ObjectWithExtendedProps
 				{
 					StringProp = "stringValue",
@@ -1098,7 +1126,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Serialize_Fields()
 		{
-			var serializer = GetSerializer();
+			var serializer = new JsonSerializer();
 			serializer.Options.AutoSerializeFields = true;
 			var obj = new ObjectWithBasicProps
 			{
@@ -1133,13 +1161,6 @@ namespace Manatee.Json.Tests.Serialization
 			var json = serializer.Serialize(obj);
 
 			Console.WriteLine(json);
-		}
-		#endregion
-
-		#region Support
-		private static JsonSerializer GetSerializer()
-		{
-			return new JsonSerializer();
 		}
 		#endregion
 	}

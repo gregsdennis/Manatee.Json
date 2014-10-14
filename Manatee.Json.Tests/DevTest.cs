@@ -40,14 +40,12 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
-			JsonSerializationAbstractionMap.MapGeneric(typeof(Impl<>), typeof(Derived<>));
+			JsonSerializationTypeRegistry.RegisterListType<int>();
+			JsonSerializationTypeRegistry.RegisterArrayType<bool>();
+			var serializer = new JsonSerializer {Options = {EncodeDefaultValues = true, AutoSerializeFields = true}};
+			var json = serializer.GenerateTemplate<ObjectWithExtendedProps>();
 
-			var serializer = new JsonSerializer();
-			var json = new JsonObject {{"Value", 1}};
-			var value = serializer.Deserialize<Impl<int>>(json);
-
-			Console.WriteLine(value.Value);
-			Console.WriteLine(value.GetType());
+			Console.WriteLine(json);
 		}
 		[TestMethod]
 		public void Test2()

@@ -23,11 +23,15 @@
 
 ***************************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Manatee.Tests.Test_References
 {
 	public class ObjectWithExtendedProps : ObjectWithBasicProps
 	{
 		public ObjectWithExtendedProps LoopProperty { get; set; }
+		public List<int> ListProperty { get; set; }
+		public bool[] ArrayProperty { get; set; }
 
 		#region Equality Testing
 
