@@ -156,10 +156,11 @@
     <Compile Include="Schema\SchemaValidationError.cs" />
     <Compile Include="Schema\SchemaValidationResults.cs" />
     <Compile Include="Serialization\IJsonSerializable.cs" />
-    <Compile Include="Serialization\Internal\ActivatorResolver.cs" />
+    <Compile Include="Serialization\Internal\ConstructorResolver.cs" />
     <Compile Include="Serialization\Internal\FieldReference.cs" />
     <Compile Include="Serialization\Internal\JsonSerializableSerializer.cs" />
     <Compile Include="Serialization\Internal\MemberReference.cs" />
+    <Compile Include="Serialization\Internal\TemplateGenerator.cs" />
     <Compile Include="Serialization\IResolver.cs" />
     <Compile Include="Serialization\JsonMapToAttribute.cs" />
     <Compile Include="Serialization\EnumSerializationFormat.cs" />

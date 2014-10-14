@@ -160,6 +160,20 @@ namespace Manatee.Json.Serialization
 			FromJsonConverters[nullableType] = Delegate.CreateDelegate(typeof(FromJsonDelegate<T?>), fromJson);
 		}
 		/// <summary>
+		/// Registers an encode/decode method pair for a typed array.
+		/// </summary>
+		/// <typeparam name="T">The underlying type of the array.</typeparam>
+		/// <remarks>To register a array of ints, the call should be RegisterArrayType{int}()</remarks>
+		public static void RegisterArrayType<T>()
+		{
+			var type = typeof(T);
+			var arrayType = typeof(T[]);
+			var toJson = typeof(JsonSerializationTypeRegistry).GetMethod("EncodeGenericArray").MakeGenericMethod(type);
+			var fromJson = typeof(JsonSerializationTypeRegistry).GetMethod("DecodeGenericArray").MakeGenericMethod(type);
+			ToJsonConverters[arrayType] = Delegate.CreateDelegate(typeof(ToJsonDelegate<T[]>), toJson);
+			FromJsonConverters[arrayType] = Delegate.CreateDelegate(typeof(FromJsonDelegate<T[]>), fromJson);
+		}
+		/// <summary>
 		/// Registers an encode/decode method pair for a typed list.
 		/// </summary>
 		/// <typeparam name="T">The underlying type of the list.</typeparam>
@@ -167,11 +181,11 @@ namespace Manatee.Json.Serialization
 		public static void RegisterListType<T>()
 		{
 			var type = typeof(T);
-			var listType = typeof (List<T>);
+			var listType = typeof(List<T>);
 			var toJson = typeof(JsonSerializationTypeRegistry).GetMethod("EncodeGenericList").MakeGenericMethod(type);
 			var fromJson = typeof(JsonSerializationTypeRegistry).GetMethod("DecodeGenericList").MakeGenericMethod(type);
-			ToJsonConverters[listType] = Delegate.CreateDelegate(typeof (ToJsonDelegate<List<T>>), toJson);
-			FromJsonConverters[listType] = Delegate.CreateDelegate(typeof (FromJsonDelegate<List<T>>), fromJson);
+			ToJsonConverters[listType] = Delegate.CreateDelegate(typeof(ToJsonDelegate<List<T>>), toJson);
+			FromJsonConverters[listType] = Delegate.CreateDelegate(typeof(FromJsonDelegate<List<T>>), fromJson);
 		}
 		/// <summary>
 		/// Registers an encode/decode method pair for a typed dictionary.
@@ -341,6 +355,34 @@ namespace Manatee.Json.Serialization
 			if (json == JsonValue.Null) return null;
 			T? nullable = serializer.Deserialize<T>(json);
 			return nullable;
+		}
+		#endregion
+		#region Array<T>
+		/// <summary>
+		/// Encodes a <see cref="T"/>[] to its JSON representation.
+		/// </summary>
+		/// <typeparam name="T">The underlying type of the array.</typeparam>
+		/// <param name="list">The <see cref="T"/>[] object.</param>
+		/// <param name="serializer">The serializer to be used.</param>
+		/// <returns>The JSON representation of the <see cref="T"/>[].</returns>
+		public static JsonValue EncodeGenericArray<T>(T[] list, JsonSerializer serializer)
+		{
+			var array = new JsonArray();
+			array.AddRange(list.Select(serializer.Serialize));
+			return array;
+		}
+		/// <summary>
+		/// Decodes a <see cref="T"/>[] object from its JSON representation.
+		/// </summary>
+		/// <typeparam name="T">The underlying type of the array.</typeparam>
+		/// <param name="json">A JSON representation of a <see cref="T"/>[].</param>
+		/// <param name="serializer">The serializer to be used.</param>
+		/// <returns>The <see cref="T"/>[] object.</returns>
+		public static T[] DecodeGenericArray<T>(JsonValue json, JsonSerializer serializer)
+		{
+			var list = new List<T>();
+			list.AddRange(json.Array.Select(serializer.Deserialize<T>));
+			return list.ToArray();
 		}
 		#endregion
 		#region List<T>

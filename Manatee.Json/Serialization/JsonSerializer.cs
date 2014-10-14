@@ -77,6 +77,10 @@ namespace Manatee.Json.Serialization
 			SerializationMap.Clear();
 			return json;
 		}
+		public JsonValue GenerateTemplate<T>()
+		{
+			return TemplateGenerator.FromType<T>(this);
+		}
 		/// <summary>
 		/// Deserializes a JSON structure to an object of the appropriate type.
 		/// </summary>

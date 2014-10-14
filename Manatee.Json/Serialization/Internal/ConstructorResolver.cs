@@ -14,26 +14,35 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ActivatorResolver.cs
+	File Name:		ConstructorResolver.cs
 	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		ActivatorResolver
+	Class Name:		ConstructorResolver
 	Purpose:		Implements IResolver using the Activator.
 
 ***************************************************************************************/
 
 using System;
+using System.Linq;
 
 namespace Manatee.Json.Serialization.Internal
 {
-	internal class ActivatorResolver : IResolver
+	internal class ConstructorResolver : IResolver
 	{
 		public T Resolve<T>()
 		{
-			return Activator.CreateInstance<T>();
+			return (T) Resolve(typeof (T));
 		}
 		public object Resolve(Type type)
 		{
-			return Activator.CreateInstance(type);
+			var constructors = type.GetConstructors().ToList();
+			if (!constructors.Any())
+				return Activator.CreateInstance(type);
+			var parameterless = constructors.FirstOrDefault(c => !c.GetParameters().Any());
+			if (parameterless != null)
+				return parameterless.Invoke(null);
+			var constructor = constructors.OrderBy(c => c.GetParameters().Count()).First();
+			var parameters = constructor.GetParameters().Select(p => Resolve(p.ParameterType)).ToArray();
+			return constructor.Invoke(parameters);
 		}
 	}
 }

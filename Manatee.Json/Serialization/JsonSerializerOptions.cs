@@ -97,6 +97,8 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public bool AutoSerializeFields { get; set; }
 
+		internal bool IncludeContentSample { get; set; }
+
 		static JsonSerializerOptions()
 		{
 			Default = new JsonSerializerOptions
@@ -109,19 +111,22 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Creates a new instance of <see cref="JsonSerializerOptions"/> with default options.
 		/// </summary>
-		public JsonSerializerOptions() {}
+		public JsonSerializerOptions()
+		{
+			PropertySelectionStrategy = PropertySelectionStrategy.ReadWriteOnly;
+		}
 		/// <summary>
 		/// Creates a new instance of <see cref="JsonSerializerOptions"/> by copying an existing
 		/// <see cref="JsonSerializerOptions"/> instance.
 		/// </summary>
 		/// <param name="options">The <see cref="JsonSerializerOptions"/> instance to copy.</param>
 		public JsonSerializerOptions(JsonSerializerOptions options)
+			: this()
 		{
 			EncodeDefaultValues = options.EncodeDefaultValues;
 			InvalidPropertyKeyBehavior = options.InvalidPropertyKeyBehavior;
 			DateTimeSerializationFormat = options.DateTimeSerializationFormat;
 			EnumSerializationFormat = options.EnumSerializationFormat;
-			PropertySelectionStrategy = PropertySelectionStrategy.ReadWriteOnly;
 		}
 	}
 }

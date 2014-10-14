@@ -41,7 +41,7 @@ namespace Manatee.Json.Serialization
 		static JsonSerializationAbstractionMap()
 		{
 			_registry = new Dictionary<Type, Type>();
-			_defaultResolver = new ActivatorResolver();
+			_defaultResolver = new ConstructorResolver();
 		}
 
 		/// <summary>
@@ -116,14 +116,14 @@ namespace Manatee.Json.Serialization
 
 		internal static T CreateInstance<T>(JsonValue json, IResolver resolver)
 		{
-			var type = typeof (T);
+			var type = typeof(T);
 			resolver = resolver ?? _defaultResolver;
 			if (type.IsAbstract || type.IsInterface || type.IsGenericType)
 			{
-				if ((json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
+				if ((json != null) && (json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
 				{
 					var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
-					return (T) resolver.Resolve(concrete);
+					return (T)resolver.Resolve(concrete);
 				}
 				if (!_registry.ContainsKey(type) && type.IsGenericType)
 					type = type.GetGenericTypeDefinition();
@@ -131,8 +131,8 @@ namespace Manatee.Json.Serialization
 				{
 					var concrete = _registry[type];
 					if (concrete.IsGenericTypeDefinition)
-						concrete = concrete.MakeGenericType(typeof (T).GetGenericArguments());
-					return (T) resolver.Resolve(concrete);
+						concrete = concrete.MakeGenericType(typeof(T).GetGenericArguments());
+					return (T)resolver.Resolve(concrete);
 				}
 #if !IOS
 				if (type.IsInterface)

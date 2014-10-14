@@ -35,10 +35,10 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Indicates that read/write properties will be serialized.
 		/// </summary>
-		ReadWriteOnly = 1,
+		ReadWriteOnly = 0x01,
 		/// <summary>
 		/// Indicates that read-only properties will be serialized.
 		/// </summary>
-		ReadOnly = 2,
+		ReadOnly = 0x02,
 	}
 }

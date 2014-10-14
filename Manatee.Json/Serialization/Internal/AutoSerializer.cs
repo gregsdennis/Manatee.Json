@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -88,12 +89,12 @@ namespace Manatee.Json.Serialization.Internal
 		private static IEnumerable<MemberInfo> GetProperties(Type type, PropertySelectionStrategy propertyTypes)
 		{
 			var properties = new List<PropertyInfo>();
-			if ((propertyTypes | PropertySelectionStrategy.ReadWriteOnly) != 0)
+			if ((propertyTypes & PropertySelectionStrategy.ReadWriteOnly) != 0)
 				properties.AddRange(type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 										.Where(p => p.GetSetMethod() != null)
 										.Where(p => p.GetGetMethod() != null)
 										.Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any()));
-			if ((propertyTypes | PropertySelectionStrategy.ReadOnly) != 0)
+			if ((propertyTypes & PropertySelectionStrategy.ReadOnly) != 0)
 				properties.AddRange(type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 										.Where(p => p.GetSetMethod() == null)
 										.Where(p => p.GetGetMethod() != null)
@@ -175,6 +176,11 @@ namespace Manatee.Json.Serialization.Internal
 					json = (JsonValue) serialize.Invoke(serializer, new[] {value});
 				}
 				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
+				if (serializer.Options.IncludeContentSample && json.Type == JsonValueType.Array)
+				{
+					AddSample(type, json.Array, serializer);
+				}
+
 				dict.Add(memberInfo, json);
 			}
 			return dict;
@@ -306,6 +312,22 @@ namespace Manatee.Json.Serialization.Internal
 				else
 					((FieldInfo) memberInfo).SetValue(obj, memberMap[memberInfo]);
 			}
+		}
+		private static void AddSample(Type type, JsonArray json, JsonSerializer serializer)
+		{
+			var elementType = GetElementType(type);
+			var buildMethod = TemplateGenerator.GetBuildMethod(elementType);
+			var value = buildMethod.Invoke(null, new object[] { serializer.Options });
+			var serialize = SerializerCache.Default.GetSerializeMethod(elementType);
+			json.Add((JsonValue)serialize.Invoke(serializer, new[] { value }));
+		}
+		private static Type GetElementType(Type collectionType)
+		{
+			if (collectionType.IsArray)
+				return collectionType.GetElementType();
+			if (collectionType.IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof(IEnumerable<>)))
+				return collectionType.GetGenericArguments().First();
+			return typeof(object);
 		}
 	}
 }
