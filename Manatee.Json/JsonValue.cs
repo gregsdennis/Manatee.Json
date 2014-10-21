@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json
@@ -253,7 +254,7 @@ namespace Manatee.Json
 			switch (Type)
 			{
 				case JsonValueType.Number:
-					return string.Format("{0}", _numberValue);
+					return string.Format(CultureInfo.InvariantCulture, "{0}", _numberValue);
 				case JsonValueType.String:
 					return string.Format("\"{0}\"", _stringValue.InsertEscapeSequences());
 				case JsonValueType.Boolean:
@@ -325,6 +326,7 @@ namespace Manatee.Json
 				case JsonValueType.Null:
 					return JsonValueType.Null.GetHashCode();
 			}
+// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
 			return base.GetHashCode();
 		}
 		/// <summary>
@@ -498,7 +500,7 @@ namespace Manatee.Json
 					while (!found && length < temp.Length)
 					{
 						if (temp[length] == '\\')
-							if (!GeneralExtensions.EscapeChars.Contains(temp[length + 1].ToString()))
+							if (!GeneralExtensions.EscapeChars.Contains(temp[length + 1].ToString(CultureInfo.InvariantCulture)))
 								throw new JsonStringInvalidEscapeSequenceException(temp.Substring(length, 2), index + length);
 							else
 								if (temp[length + 1] == 'u')
@@ -540,7 +542,7 @@ namespace Manatee.Json
 							return Null;
 						default:
 							double d;
-							if (!double.TryParse(temp, out d))
+							if (!double.TryParse(temp, NumberStyles.Float, CultureInfo.InvariantCulture, out d))
 								throw new JsonValueParseException(index, temp, source);
 							index += temp.Length - 1;
 							return d;
