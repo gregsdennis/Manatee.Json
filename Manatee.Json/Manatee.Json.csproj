@@ -24,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
+    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +36,7 @@
     <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
+    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>

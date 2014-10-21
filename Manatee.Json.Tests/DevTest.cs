@@ -40,12 +40,6 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
-			JsonSerializationTypeRegistry.RegisterListType<int>();
-			JsonSerializationTypeRegistry.RegisterArrayType<bool>();
-			var serializer = new JsonSerializer {Options = {EncodeDefaultValues = true, AutoSerializeFields = true}};
-			var json = serializer.GenerateTemplate<ObjectWithExtendedProps>();
-
-			Console.WriteLine(json);
 		}
 		[TestMethod]
 		public void Test2()
