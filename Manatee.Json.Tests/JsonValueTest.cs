@@ -261,7 +261,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonValueParseException))]
+		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringWithBadToken_ThrowsJsonValueParseException()
 		{
 			var s = "invalid data";

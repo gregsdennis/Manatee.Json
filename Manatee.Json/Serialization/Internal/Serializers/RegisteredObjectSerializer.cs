@@ -14,30 +14,31 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NumericSerializer.cs
-	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		NumericSerializer
-	Purpose:		Converts numeric types to and from JsonValues.
+	File Name:		RegisteredObjectSerializer.cs
+	Namespace:		Manatee.Json.Serialization.Internal.Serializers
+	Class Name:		RegisteredObjectSerializer
+	Purpose:		Converts an object whose type has registered serialize methods
+					to and from JsonValues.
 
 ***************************************************************************************/
 
-using System;
-
-namespace Manatee.Json.Serialization.Internal
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class NumericSerializer : ISerializer
+	internal class RegisteredObjectSerializer : ISerializer
 	{
-		public bool ShouldMaintainReferences { get { return false; } }
+		public bool ShouldMaintainReferences { get { return true; } }
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			double value = Convert.ToDouble(obj);
-			return value;
+			JsonValue json;
+			serializer.Encode(obj, out json);
+			return json;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var value = json.Number;
-			return (T) Convert.ChangeType(value, typeof (T));
+			T value;
+			serializer.Decode(json, out value);
+			return value;
 		}
 	}
 }

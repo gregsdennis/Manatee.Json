@@ -322,7 +322,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Deserialize_Nullable_Null_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? expected = null;
 			var json = JsonValue.Null;
 			var actual = serializer.Deserialize<int?>(json);
@@ -332,7 +331,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Deserialize_Nullable_NonNull_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? expected = 42;
 			JsonValue json = 42;
 			var actual = serializer.Deserialize<int?>(json);
@@ -342,7 +340,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Deserialize_Array_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterArrayType<int>();
 			JsonValue json = new JsonArray { 4, 3, 5, 6 };
 			var expected = new[] { 4, 3, 5, 6 };
 			var actual = serializer.Deserialize<int[]>(json);
@@ -356,7 +353,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Deserialize_List_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterListType<int>();
 			JsonValue json = new JsonArray { 4, 3, 5, 6 };
 			var expected = new List<int> { 4, 3, 5, 6 };
 			var actual = serializer.Deserialize<List<int>>(json);
@@ -370,7 +366,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Deserialize_Dictionary_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterDictionaryType<string, double>();
 			var expected = new Dictionary<string, double> {{"four", 4}, {"three", 3}, {"five", 5}, {"six", 6}};
 			JsonValue json = new JsonArray
 				{
@@ -391,7 +386,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Deserialize_Queue_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterQueueType<int>();
 			JsonValue json = new JsonArray {4, 3, 5, 6};
 			var expected = new Queue<int>();
 			expected.Enqueue(4);
@@ -409,7 +403,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Deserialize_Stack_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterStackType<int>();
 			JsonValue json = new JsonArray {4, 3, 5, 6};
 			var expected = new Stack<int>();
 			expected.Push(4);
@@ -935,7 +928,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Serialize_Nullable_Null_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? i = null;
 			var expected = JsonValue.Null;
 			var actual = serializer.Serialize(i);
@@ -945,7 +937,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Serialize_Nullable_NonNull_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterNullableType<int>();
 			int? i = 42;
 			JsonValue expected = 42;
 			var actual = serializer.Serialize(i);
@@ -968,7 +959,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Serialize_Array_Successfull()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterArrayType<int>();
 			var list = new[] {4, 3, 5, 6};
 			JsonValue expected = new JsonArray { 4, 3, 5, 6 };
 			var actual = serializer.Serialize(list);
@@ -978,7 +968,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Serialize_List_Successfull()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterListType<int>();
 			var list = new List<int> { 4, 3, 5, 6 };
 			JsonValue expected = new JsonArray { 4, 3, 5, 6 };
 			var actual = serializer.Serialize(list);
@@ -988,7 +977,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Serialize_Dictionary_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterDictionaryType<string, double>();
 			var dict = new Dictionary<string, double> {{"four", 4}, {"three", 3}, {"five", 5}, {"six", 6}};
 			JsonValue expected = new JsonArray
 				{
@@ -1004,7 +992,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Serialize_Queue_Successfull()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterQueueType<int>();
 			var queue = new Queue<int>();
 			queue.Enqueue(4);
 			queue.Enqueue(3);
@@ -1018,7 +1005,6 @@ namespace Manatee.Json.Tests.Serialization
 		public void Serialize_Stack_Successfull()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationTypeRegistry.RegisterStackType<int>();
 			var stack = new Stack<int>();
 			stack.Push(4);
 			stack.Push(3);

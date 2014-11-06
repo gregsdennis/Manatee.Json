@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2014 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumValueSerializer.cs
+	File Name:		ISerializationDelegateProvider.cs
 	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		EnumValueSerializer
-	Purpose:		Converts enumerations to and from JsonValues by integral value.
+	Class Name:		ISerializationDelegateProvider
+	Purpose:		Defines methods required to provide registration methods
+					to the JsonSerializerTypeRegistry class.
 
 ***************************************************************************************/
 
@@ -25,19 +26,10 @@ using System;
 
 namespace Manatee.Json.Serialization.Internal
 {
-	internal class EnumValueSerializer : ISerializer
+	internal interface ISerializationDelegateProvider
 	{
-		public bool ShouldMaintainReferences { get { return false; } }
-
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
-		{
-			var value = Convert.ToInt32(obj);
-			return value;
-		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
-		{
-			var value = (int) json.Number;
-			return (T) Enum.ToObject(typeof (T), value);
-		}
+		bool CanHandle(Type type);
+		JsonSerializationTypeRegistry.ToJsonDelegate<T> GetEncoder<T>();
+		JsonSerializationTypeRegistry.FromJsonDelegate<T> GetDecoder<T>();
 	}
 }

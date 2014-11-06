@@ -216,7 +216,7 @@ namespace Manatee.Json
 			var temp = source.Substring(index);
 			var length = temp.IndexOf('"');
 			if (length < 0)
-				throw new JsonKeyParseException(index);
+				throw new JsonSyntaxException("Could not find end of string.");
 			if (length == 0)
 			{
 				index += 1;

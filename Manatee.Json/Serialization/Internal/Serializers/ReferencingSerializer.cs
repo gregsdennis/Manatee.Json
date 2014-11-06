@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		ReferencingSerializer.cs
-	Namespace:		Manatee.Json.Serialization.Internal
+	Namespace:		Manatee.Json.Serialization.Internal.Serializers
 	Class Name:		ReferencingSerializer
 	Purpose:		Tracks references to objects so that they are not serialized
 					more than once.
@@ -24,7 +24,7 @@
 
 using System;
 
-namespace Manatee.Json.Serialization.Internal
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ReferencingSerializer : ISerializer
 	{

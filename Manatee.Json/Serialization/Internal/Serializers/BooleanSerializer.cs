@@ -14,29 +14,26 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		StringSerializer.cs
-	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		StringSerializer
-	Purpose:		Converts strings to and from JsonValues.
+	File Name:		BooleanSerializer.cs
+	Namespace:		Manatee.Json.Serialization.Internal.Serializers
+	Class Name:		BooleanSerializer
+	Purpose:		Converts booleans to and from JsonValues.
 
 ***************************************************************************************/
 
-using System;
-
-namespace Manatee.Json.Serialization.Internal
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class StringSerializer : ISerializer
+	internal class BooleanSerializer : ISerializer
 	{
 		public bool ShouldMaintainReferences { get { return false; } }
-
+		
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			return obj as string;
+			return (bool) (object) obj;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var value = (IConvertible) json.String;
-			return (T) value;
+			return (T) (object) json.Boolean;
 		}
 	}
 }

@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		SchemaSerializer.cs
-	Namespace:		Manatee.Json.Serialization.Internal
+	Namespace:		Manatee.Json.Serialization.Internal.Serializers
 	Class Name:		SchemaSerializer
 	Purpose:		Converts ISchema implementations to and from JsonValues.
 
@@ -23,7 +23,7 @@
 
 using Manatee.Json.Schema;
 
-namespace Manatee.Json.Serialization.Internal
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class SchemaSerializer : ISerializer
 	{

@@ -14,26 +14,30 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		BooleanSerializer.cs
-	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		BooleanSerializer
-	Purpose:		Converts booleans to and from JsonValues.
+	File Name:		JsonSerializableSerializer.cs
+	Namespace:		Manatee.Json.Serialization.Internal.Serializers
+	Class Name:		JsonSerializableSerializer
+	Purpose:		Converts objects which implement IJsonSerializable to and from
+					JsonValues.
 
 ***************************************************************************************/
 
-namespace Manatee.Json.Serialization.Internal
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class BooleanSerializer : ISerializer
+	internal class JsonSerializableSerializer : ISerializer
 	{
-		public bool ShouldMaintainReferences { get { return false; } }
-		
+		public bool ShouldMaintainReferences { get { return true; } }
+
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			return (bool) (object) obj;
+			var serializable = (IJsonSerializable) obj;
+			return serializable.ToJson(serializer);
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			return (T) (object) json.Boolean;
+			var value = (IJsonSerializable) JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
+			value.FromJson(json, serializer);
+			return (T) value;
 		}
 	}
 }

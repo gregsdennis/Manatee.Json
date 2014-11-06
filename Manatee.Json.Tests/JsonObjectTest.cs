@@ -104,7 +104,7 @@ namespace Manatee.Json.Tests
 			var actual = new JsonObject(s);
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonValueParseException))]
+		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingDelimiter_ThrowsJsonValueParseException()
 		{
 			var s = "{\"bool\":false,\"int\":42\"string\":\"a string\"}";

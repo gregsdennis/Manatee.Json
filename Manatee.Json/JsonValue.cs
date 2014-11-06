@@ -494,7 +494,7 @@ namespace Manatee.Json
 				case '"':										// string
 					temp = source.Substring(index);
 					if (temp.Length < 2)
-						throw new JsonValueParseException(JsonValueType.String, index, source);
+						throw new JsonSyntaxException("End of string not found.");
 					length = 0;
 					var found = false;
 					while (!found && length < temp.Length)
@@ -511,7 +511,7 @@ namespace Manatee.Json
 						length++;
 					}
 					if (!found)
-						throw new JsonValueParseException(JsonValueType.String, index, source);
+						throw new JsonSyntaxException("End of string not found.");
 					if (length == 0)
 					{
 						index += 2;
@@ -543,7 +543,7 @@ namespace Manatee.Json
 						default:
 							double d;
 							if (!double.TryParse(temp, NumberStyles.Float, CultureInfo.InvariantCulture, out d))
-								throw new JsonValueParseException(index, temp, source);
+								throw new JsonSyntaxException("Could not parse value '{0}'.", temp);
 							index += temp.Length - 1;
 							return d;
 					}
