@@ -14,27 +14,30 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonKeyParseException.cs
-	Namespace:		Manatee.Json
-	Class Name:		JsonKeyParseException
-	Purpose:		Thrown when an input string contains an invalid key.
+	File Name:		EnumValueSerializer.cs
+	Namespace:		Manatee.Json.Serialization.Internal.Serializers
+	Class Name:		EnumValueSerializer
+	Purpose:		Converts enumerations to and from JsonValues by integral value.
 
 ***************************************************************************************/
 
 using System;
 
-namespace Manatee.Json
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	/// <summary>
-	/// Thrown when an input string contains an invalid key.
-	/// </summary>
-	[Serializable]
-	public class JsonKeyParseException : Exception
+	internal class EnumValueSerializer : ISerializer
 	{
-		/// <summary>
-		/// Creates a new instance of this exception.
-		/// </summary>
-		internal JsonKeyParseException(int index)
-			: base(string.Format("Parse of key failed at index {0}.", index)) { }
+		public bool ShouldMaintainReferences { get { return false; } }
+
+		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		{
+			var value = Convert.ToInt32(obj);
+			return value;
+		}
+		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		{
+			var value = (int) json.Number;
+			return (T) Enum.ToObject(typeof (T), value);
+		}
 	}
 }

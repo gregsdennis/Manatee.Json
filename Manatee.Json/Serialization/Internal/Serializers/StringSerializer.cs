@@ -14,29 +14,28 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonSerializableSerializer.cs
-	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		JsonSerializableSerializer
-	Purpose:		Converts objects which implement IJsonSerializable to and from
-					JsonValues.
+	File Name:		StringSerializer.cs
+	Namespace:		Manatee.Json.Serialization.Internal.Serializers
+	Class Name:		StringSerializer
+	Purpose:		Converts strings to and from JsonValues.
 
 ***************************************************************************************/
 
-namespace Manatee.Json.Serialization.Internal
+using System;
+
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class JsonSerializableSerializer : ISerializer
+	internal class StringSerializer : ISerializer
 	{
-		public bool ShouldMaintainReferences { get { return true; } }
+		public bool ShouldMaintainReferences { get { return false; } }
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			var serializable = (IJsonSerializable) obj;
-			return serializable.ToJson(serializer);
+			return obj as string;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var value = (IJsonSerializable) JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
-			value.FromJson(json, serializer);
+			var value = (IConvertible) json.String;
 			return (T) value;
 		}
 	}

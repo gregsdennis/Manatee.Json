@@ -40,6 +40,11 @@ namespace Manatee.Json.Tests
 		//[Ignore]
 		public void Test1()
 		{
+			var serializer = new JsonSerializer();
+			var list = (int?) 5;
+			var json = serializer.Serialize(list);
+
+			Console.WriteLine(json);
 		}
 		[TestMethod]
 		public void Test2()
