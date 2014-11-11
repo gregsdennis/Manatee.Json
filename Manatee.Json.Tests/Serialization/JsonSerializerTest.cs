@@ -1148,6 +1148,15 @@ namespace Manatee.Json.Tests.Serialization
 
 			Console.WriteLine(json);
 		}
+		[TestMethod]
+		public void Serialize_NullableWithNonNullDefaultValue()
+		{
+			bool? obj = false;
+			JsonValue expected = false;
+			var serializer = new JsonSerializer();
+			var actual = serializer.Serialize(obj);
+			Assert.AreEqual(expected, actual);
+		}
 		#endregion
 	}
 }
