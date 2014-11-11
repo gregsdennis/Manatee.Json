@@ -34,7 +34,12 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 		private static JsonValue Encode<T>(T? nullable, JsonSerializer serializer)
 			where T : struct
 		{
-			return nullable.HasValue ? serializer.Serialize(nullable.Value) : JsonValue.Null;
+			if (!nullable.HasValue) return JsonValue.Null;
+			var encodeDefaultValues = serializer.Options.EncodeDefaultValues;
+			serializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
+			var json = serializer.Serialize(nullable.Value);
+			serializer.Options.EncodeDefaultValues = encodeDefaultValues;
+			return json;
 		}
 		private static T? Decode<T>(JsonValue json, JsonSerializer serializer)
 			where T : struct
