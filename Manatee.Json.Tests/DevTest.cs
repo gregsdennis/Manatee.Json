@@ -25,10 +25,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
-using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -41,8 +41,7 @@ namespace Manatee.Json.Tests
 		public void Test1()
 		{
 			var serializer = new JsonSerializer();
-			var list = (int?) 5;
-			var json = serializer.Serialize(list);
+			var json = serializer.GenerateTemplate<ExtensionDataObject>();
 
 			Console.WriteLine(json);
 		}

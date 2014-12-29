@@ -224,6 +224,7 @@
     <Compile Include="JsonObjectExtensions.cs" />
     <Compile Include="JsonObject.cs" />
     <Compile Include="Serialization\PropertySelectionStrategy.cs" />
+    <Compile Include="Serialization\TypeInstantiationException.cs" />
     <Compile Include="Serialization\TypeNameSerializationBehavior.cs" />
     <Compile Include="XmlExtensions.cs" />
     <Compile Include="JsonValue.cs" />

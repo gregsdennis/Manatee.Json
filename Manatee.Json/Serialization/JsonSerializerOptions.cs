@@ -22,6 +22,7 @@
 ***************************************************************************************/
 
 using System;
+using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
@@ -30,6 +31,9 @@ namespace Manatee.Json.Serialization
 	/// </summary>
 	public class JsonSerializerOptions
 	{
+		private static readonly IResolver DefaultResolver = new ConstructorResolver();
+		private IResolver _resolver;
+
 		/// <summary>
 		/// Default options used by the serializer.
 		/// </summary>
@@ -91,7 +95,11 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Gets and sets an <see cref="IResolver"/> implementation for instantiating objects while deserializing.
 		/// </summary>
-		public IResolver Resolver { get; set; }
+		public IResolver Resolver
+		{
+			get { return _resolver ?? (_resolver = DefaultResolver); }
+			set { _resolver = value; }
+		}
 		/// <summary>
 		/// Gets and sets whether public fields should be serialized during autoserialization.
 		/// </summary>
