@@ -162,6 +162,7 @@ namespace Manatee.Json.Serialization
 																	   .MakeGenericMethod(type);
 			registerMethod.Invoke(null, new object[] {delegateProvider});
 		}
+		// ReSharper disable once UnusedMember.Local
 		private static void RegisterProviderDelegates<T>(ISerializationDelegateProvider provider)
 		{
 			var type = typeof (T);

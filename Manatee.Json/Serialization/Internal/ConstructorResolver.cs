@@ -23,6 +23,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -34,15 +35,22 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		public object Resolve(Type type)
 		{
-			var constructors = type.GetConstructors().ToList();
-			if (!constructors.Any())
-				return Activator.CreateInstance(type);
-			var parameterless = constructors.FirstOrDefault(c => !c.GetParameters().Any());
-			if (parameterless != null)
-				return parameterless.Invoke(null);
-			var constructor = constructors.OrderBy(c => c.GetParameters().Count()).First();
-			var parameters = constructor.GetParameters().Select(p => Resolve(p.ParameterType)).ToArray();
-			return constructor.Invoke(parameters);
+			try
+			{
+				var constructors = type.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).ToList();
+				if (!constructors.Any())
+					return Activator.CreateInstance(type);
+				var parameterless = constructors.FirstOrDefault(c => !c.GetParameters().Any());
+				if (parameterless != null)
+					return parameterless.Invoke(null);
+				var constructor = constructors.OrderBy(c => c.GetParameters().Count()).First();
+				var parameters = constructor.GetParameters().Select(p => Resolve(p.ParameterType)).ToArray();
+				return constructor.Invoke(parameters);
+			}
+			catch
+			{
+				throw new TypeInstantiationException(type);
+			}
 		}
 	}
 }
