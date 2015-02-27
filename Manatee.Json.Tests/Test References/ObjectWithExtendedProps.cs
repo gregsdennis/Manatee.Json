@@ -58,6 +58,11 @@ namespace Manatee.Tests.Test_References
 			}
 		}
 		#endregion
+	}
 
+	public class ObjectWithDuplicateProps
+	{
+		public ObjectWithBasicProps Prop1 { get; set; }
+		public ObjectWithBasicProps Prop2 { get; set; }
 	}
 }

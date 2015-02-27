@@ -98,7 +98,7 @@ namespace Manatee.Json.Serialization
 		public T Deserialize<T>(JsonValue json)
 		{
 			_callCount++;
-			var serializer = SerializerFactory.GetSerializer<T>(Options);
+			var serializer = SerializerFactory.GetSerializer<T>(Options, json);
 			var obj = serializer.Deserialize<T>(json, this);
 			if (--_callCount == 0)
 			{

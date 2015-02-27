@@ -71,7 +71,7 @@ namespace Manatee.Json.Serialization.Internal
 				};
 		}
 
-		public ISerializer GetSerializer<T>(JsonSerializerOptions options)
+		public ISerializer GetSerializer<T>(JsonSerializerOptions options, JsonValue json = null)
 		{
 			var type = typeof (T);
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
@@ -83,6 +83,13 @@ namespace Manatee.Json.Serialization.Internal
 				return BuildSerializer(JsonSerializableSerializer);
 			if (typeof (Enum).IsAssignableFrom(typeToSerialize))
 			{
+				if (json != null)
+				{
+					if (json.Type == JsonValueType.Number)
+						return BuildSerializer(EnumValueSerializer);
+					if (json.Type == JsonValueType.String)
+						return BuildSerializer(EnumNameSerializer);
+				}
 				switch (options.EnumSerializationFormat)
 				{
 					case EnumSerializationFormat.AsInteger:

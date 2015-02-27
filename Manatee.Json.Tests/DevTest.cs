@@ -25,10 +25,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
+using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -41,21 +41,28 @@ namespace Manatee.Json.Tests
 		public void Test1()
 		{
 			var serializer = new JsonSerializer();
-			var json = serializer.GenerateTemplate<ExtensionDataObject>();
+			var json = serializer.GenerateTemplate<ObjectWithDuplicateProps>();
 
-			Console.WriteLine(json);
+			var prop = new ObjectWithBasicProps
+				{
+					BoolProp = true
+				};
+			var obj = new ObjectWithDuplicateProps
+				{
+					Prop1 = prop,
+					Prop2 = prop
+				};
+
+			Console.WriteLine("Serialized:");
+			Console.WriteLine(serializer.Serialize(obj).GetIndentedString(1));
+
+			Console.WriteLine("Template:");
+			Console.WriteLine(json.GetIndentedString(1));
 		}
 		[TestMethod]
 		public void Test2()
 		{
-			var text = "{\"key\" : \"value\", \"key2\" : [\"arrayValue1\", \"innerValue\", null, false]}";
-			var json = JsonValue.Parse(text);
-
-			var value = 2;
-			var path = JsonPathWith.Name("key2").Array(ja => ja.Length() * (5 - value));
-
-			Console.WriteLine(path);
-			Console.WriteLine(path.Evaluate(json));
+			Console.WriteLine(JsonSchema.Draft04.ToJson(null).GetIndentedString());
 		}
 
 		[TestMethod]

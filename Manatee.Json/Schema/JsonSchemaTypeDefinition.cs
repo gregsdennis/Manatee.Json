@@ -166,8 +166,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			if (Definition == null)
-				return Name;
+			if (Definition == null || _isReadOnly) return Name;
 			return new JsonObject {{Name, Definition.ToJson(null)}};
 		}
 	}
