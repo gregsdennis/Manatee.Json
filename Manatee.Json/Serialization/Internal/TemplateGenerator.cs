@@ -45,6 +45,7 @@ namespace Manatee.Json.Serialization.Internal
 			_defaultInstances = new Dictionary<Type, object>
 				{
 					{typeof (string), string.Empty},
+					{typeof (Guid), Guid.Empty},
 				};
 		}
 

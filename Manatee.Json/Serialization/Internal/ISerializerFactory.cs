@@ -26,7 +26,7 @@ namespace Manatee.Json.Serialization.Internal
 {
 	internal interface ISerializerFactory
 	{
-		ISerializer GetSerializer<T>(JsonSerializerOptions options);
+		ISerializer GetSerializer<T>(JsonSerializerOptions options, JsonValue json = null);
 		ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options);
 	}
 }

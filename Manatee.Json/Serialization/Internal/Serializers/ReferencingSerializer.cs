@@ -45,6 +45,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var guid = serializer.SerializationMap.GetKey(obj);
 				pair = serializer.SerializationMap[guid];
 				pair.UsageCount++;
+				pair.Json.Object.Add(Constants.DefKey, guid.ToString());
 				return new JsonObject {{Constants.RefKey, guid.ToString()}};
 			}
 			if (_innerSerializer.ShouldMaintainReferences)
