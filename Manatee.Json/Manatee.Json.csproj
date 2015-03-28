@@ -49,6 +49,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Manatee.StateMachine.1.1\lib\net40\Manatee.StateMachine.dll</HintPath>
@@ -152,7 +155,6 @@
     <Compile Include="Path\Operators\WildCardOperator.cs" />
     <Compile Include="Path\ArrayParameters\WildCardQuery.cs" />
     <Compile Include="Path\SearchParameters\WildCardSearchParameter.cs" />
-    <Compile Include="Properties\ResharperAnnotations.cs" />
     <Compile Include="Schema\AdditionalPropertiesDefinition.cs" />
     <Compile Include="Schema\StringFormat.cs" />
     <Compile Include="Schema\SchemaValidationError.cs" />

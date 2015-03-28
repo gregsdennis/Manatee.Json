@@ -36,6 +36,9 @@
     <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70F1.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\..\..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Manatee.StateMachine">
       <HintPath>..\..\..\packages\Manatee.StateMachine.1.1\lib\net35-client\Manatee.StateMachine.dll</HintPath>
     </Reference>
