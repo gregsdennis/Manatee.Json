@@ -32,6 +32,9 @@
     <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\..\..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Manatee.StateMachine">
       <HintPath>..\..\..\packages\Manatee.StateMachine.1.1\lib\net35\Manatee.StateMachine.dll</HintPath>
     </Reference>
