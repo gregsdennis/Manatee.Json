@@ -152,6 +152,7 @@ namespace Manatee.Json.Schema
 			if (json.Type == JsonValueType.String)
 			{
 				Name = json.String;
+				Definition = GetWellKnownDefinition(json.String);
 				return;
 			}
 			var details = json.Object.First();
@@ -168,6 +169,29 @@ namespace Manatee.Json.Schema
 		{
 			if (Definition == null || _isReadOnly) return Name;
 			return new JsonObject {{Name, Definition.ToJson(null)}};
+		}
+
+		private static IJsonSchema GetWellKnownDefinition(string name)
+		{
+			switch (name)
+			{
+				case "array":
+					return Array.Definition;
+				case "boolean":
+					return Boolean.Definition;
+				case "integer":
+					return Integer.Definition;
+				case "null":
+					return Null.Definition;
+				case "number":
+					return Number.Definition;
+				case "object":
+					return Object.Definition;
+				case "string":
+					return String.Definition;
+				default:
+					throw new ArgumentOutOfRangeException("name");
+			}
 		}
 	}
 }
