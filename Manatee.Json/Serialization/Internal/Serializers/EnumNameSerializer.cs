@@ -52,7 +52,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
 			EnsureDescriptions<T>();
-			var value = _descriptions[typeof(T)].First(d => Equals(d.String, json.String)).Value;
+			var options = serializer.Options.CaseSensitiveDeserialization
+							  ? StringComparison.InvariantCultureIgnoreCase
+							  : StringComparison.InvariantCulture;
+			var value = _descriptions[typeof(T)].First(d => string.Equals(d.String, json.String, options)).Value;
 			return (T) value;
 		}
 
