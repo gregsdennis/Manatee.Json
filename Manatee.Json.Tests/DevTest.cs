@@ -62,7 +62,9 @@ namespace Manatee.Json.Tests
 		[TestMethod]
 		public void Test2()
 		{
-			Console.WriteLine(JsonSchema.Draft04.ToJson(null).GetIndentedString());
+			var json = JsonSchema.Draft04.ToJson(null);
+			var validation = JsonSchema.Draft04.Validate(json);
+			Console.WriteLine(validation.Valid);
 		}
 
 		[TestMethod]
