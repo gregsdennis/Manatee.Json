@@ -89,11 +89,12 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type != JsonValueType.Object)
 				return new SchemaValidationResults(string.Empty, string.Format("Expected: Object; Actual: {0}.", json.Type));
-			if (Properties == null) return new SchemaValidationResults();
+			//if (Properties == null) return new SchemaValidationResults();
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
 			var jValue = root ?? ToJson(null);
-			foreach (var property in Properties)
+			var properties = Properties ?? new JsonSchemaPropertyDefinitionCollection();
+			foreach (var property in properties)
 			{
 				if (!obj.ContainsKey(property.Name))
 				{
@@ -105,7 +106,7 @@ namespace Manatee.Json.Schema
 				if (!result.Valid)
 					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Name)));
 			}
-			var extraData = obj.Where(kvp => Properties.All(p => p.Name != kvp.Key))
+			var extraData = obj.Where(kvp => properties.All(p => p.Name != kvp.Key))
 			                   .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 			if (AdditionalProperties != null && AdditionalProperties.Equals(AdditionalProperties.False))
 			{
@@ -118,7 +119,7 @@ namespace Manatee.Json.Schema
 						var matches = extraData.Keys.Where(k => pattern.IsMatch(k));
 						foreach (var match in matches)
 						{
-							var matchErrors = schema.Validate(extraData[match]).Errors;
+							var matchErrors = schema.Validate(extraData[match], jValue).Errors;
 							errors.AddRange(matchErrors.Select(e => new SchemaValidationError(match, e.Message)));
 						}
 						extraData = extraData.Where(kvp => !pattern.IsMatch(kvp.Key))
@@ -132,7 +133,7 @@ namespace Manatee.Json.Schema
 				var schema = AdditionalProperties.Definition;
 				foreach (var key in extraData.Keys)
 				{
-					var extraErrors = schema.Validate(extraData[key]).Errors;
+					var extraErrors = schema.Validate(extraData[key], jValue).Errors;
 					errors.AddRange(extraErrors.Select(e => new SchemaValidationError(key, e.Message)));
 				}
 			}
@@ -193,7 +194,9 @@ namespace Manatee.Json.Schema
 				var requiredProperties = obj["required"].Array.Select(v => v.String);
 				foreach (var propertyName in requiredProperties)
 				{
-					Properties[propertyName].IsRequired = true;
+					var property = Properties.FirstOrDefault(p => p.Name == propertyName);
+					if (property != null)
+						property.IsRequired = true;
 				}
 			}
 		}
