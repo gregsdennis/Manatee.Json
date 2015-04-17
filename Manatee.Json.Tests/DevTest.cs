@@ -25,6 +25,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
@@ -41,23 +43,20 @@ namespace Manatee.Json.Tests
 		public void Test1()
 		{
 			var serializer = new JsonSerializer();
-			var json = serializer.GenerateTemplate<ObjectWithDuplicateProps>();
-
-			var prop = new ObjectWithBasicProps
+			var text = File.ReadAllText(@"c:\MetricDefinitionSchema.json");
+			var json = JsonValue.Parse(text);
+			var results = JsonSchema.Draft04.Validate(json);
+			if (!results.Valid)
+			{
+				foreach (var error in results.Errors)
 				{
-					BoolProp = true
-				};
-			var obj = new ObjectWithDuplicateProps
-				{
-					Prop1 = prop,
-					Prop2 = prop
-				};
+					Console.WriteLine(error);
+				}
+				throw new Exception();
+			}
+			var schema = serializer.Deserialize<IJsonSchema>(json);
 
-			Console.WriteLine("Serialized:");
-			Console.WriteLine(serializer.Serialize(obj).GetIndentedString(1));
-
-			Console.WriteLine("Template:");
-			Console.WriteLine(json.GetIndentedString(1));
+			Console.WriteLine(schema.ToJson(null));
 		}
 		[TestMethod]
 		public void Test2()

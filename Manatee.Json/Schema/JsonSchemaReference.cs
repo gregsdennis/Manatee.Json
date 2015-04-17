@@ -38,6 +38,7 @@ namespace Manatee.Json.Schema
 		/// Defines a reference to the root schema.
 		/// </summary>
 		public static readonly JsonSchemaReference Root = new JsonSchemaReference("#");
+		private static readonly JsonValue RootJson = Root.ToJson(null);
 
 		private IJsonSchema _schema;
 
@@ -115,6 +116,8 @@ namespace Manatee.Json.Schema
 		{
 			if (root == null)
 				throw new ArgumentNullException("root");
+			if (root == RootJson)
+				throw new ArgumentException("Cannot use a root reference as the base schema.");
 			_schema = Reference[0] == '#' ? ResolveLocalReference(root) : ResolveExternalReference();
 		}
 		private IJsonSchema ResolveLocalReference(JsonValue root)

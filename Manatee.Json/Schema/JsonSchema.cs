@@ -69,13 +69,13 @@ namespace Manatee.Json.Schema
 							{
 								Definition = new EnumSchema {Values = new List<JsonSchemaTypeDefinition>
 									{
-										JsonSchemaTypeDefinition.Array,
-										JsonSchemaTypeDefinition.Boolean,
-										JsonSchemaTypeDefinition.Integer,
-										JsonSchemaTypeDefinition.Null,
-										JsonSchemaTypeDefinition.Number,
-										JsonSchemaTypeDefinition.Object,
-										JsonSchemaTypeDefinition.String
+										JsonSchemaTypeDefinition.CreateEnumValue("array"),
+										JsonSchemaTypeDefinition.CreateEnumValue("boolean"),
+										JsonSchemaTypeDefinition.CreateEnumValue("integer"),
+										JsonSchemaTypeDefinition.CreateEnumValue("null"),
+										JsonSchemaTypeDefinition.CreateEnumValue("number"),
+										JsonSchemaTypeDefinition.CreateEnumValue("object"),
+										JsonSchemaTypeDefinition.CreateEnumValue("string")
 									}}
 							},
 						new JsonSchemaTypeDefinition("stringArray")
