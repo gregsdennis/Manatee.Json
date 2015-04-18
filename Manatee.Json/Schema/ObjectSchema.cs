@@ -134,7 +134,7 @@ namespace Manatee.Json.Schema
 				foreach (var key in extraData.Keys)
 				{
 					var extraErrors = schema.Validate(extraData[key], jValue).Errors;
-					errors.AddRange(extraErrors.Select(e => new SchemaValidationError(key, e.Message)));
+					errors.AddRange(extraErrors.Select(e => e.PrependPropertyName(key)));
 				}
 			}
 			return new SchemaValidationResults(errors);

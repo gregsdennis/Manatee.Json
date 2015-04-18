@@ -43,7 +43,7 @@ namespace Manatee.Json.Tests
 		public void Test1()
 		{
 			var serializer = new JsonSerializer();
-			var text = File.ReadAllText(@"c:\MetricDefinitionSchema.json");
+			var text = File.ReadAllText(@"e:\schema.json");
 			var json = JsonValue.Parse(text);
 			var results = JsonSchema.Draft04.Validate(json);
 			if (!results.Valid)
@@ -55,8 +55,23 @@ namespace Manatee.Json.Tests
 				throw new Exception();
 			}
 			var schema = serializer.Deserialize<IJsonSchema>(json);
+			Console.WriteLine("schema verified");
 
-			Console.WriteLine(schema.ToJson(null));
+			text = File.ReadAllText(@"e:\example.json");
+			json = JsonValue.Parse(text);
+
+			results = schema.Validate(json);
+			if (!results.Valid)
+			{
+				foreach (var error in results.Errors)
+				{
+					Console.WriteLine(error);
+				}
+				Console.WriteLine();
+				throw new Exception();
+			}
+
+			Console.WriteLine("json verified");
 		}
 		[TestMethod]
 		public void Test2()

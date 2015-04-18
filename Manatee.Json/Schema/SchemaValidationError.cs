@@ -50,7 +50,7 @@ namespace Manatee.Json.Schema
 			if (PropertyName.IsNullOrWhiteSpace())
 				PropertyName = parent;
 			else
-				PropertyName = parent + "." + PropertyName;
+				PropertyName = parent + (PropertyName[0] == '[' ? string.Empty : ".") + PropertyName;
 			return this;
 		}
 
