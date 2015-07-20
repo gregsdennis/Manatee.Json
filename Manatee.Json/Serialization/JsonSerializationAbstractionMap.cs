@@ -107,7 +107,11 @@ namespace Manatee.Json.Serialization
 				var genericDefinition = type.GetGenericTypeDefinition();
 				var genericMatches = _registry.Where(t => t.Key.IsGenericTypeDefinition && t.Key.GetGenericTypeDefinition() == genericDefinition).ToList();
 				if (genericMatches.Any())
-					return genericMatches.First().Value;
+				{
+					var typeArguments = type.GetGenericArguments();
+					return genericMatches.First().Value.MakeGenericType(typeArguments);
+				}
+				return genericMatches.First().Value;
 			}
 			return type;
 		}

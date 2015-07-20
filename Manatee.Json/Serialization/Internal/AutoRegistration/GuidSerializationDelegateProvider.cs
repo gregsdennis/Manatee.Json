@@ -28,7 +28,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 	{
 		public override bool CanHandle(Type type)
 		{
-			return type == typeof(TimeSpan);
+			return type == typeof(Guid);
 		}
 
 		private static JsonValue Encode(Guid guid, JsonSerializer serializer)

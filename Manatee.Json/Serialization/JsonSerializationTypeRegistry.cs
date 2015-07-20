@@ -91,6 +91,12 @@ namespace Manatee.Json.Serialization
 				((toJson != null) && (fromJson == null)))
 				throw new TypeRegistrationException(typeof(T));
 			var type = typeof(T);
+			if (toJson == null)
+			{
+				ToJsonConverters.Remove(type);
+				FromJsonConverters.Remove(type);
+				return;
+			}
 			ToJsonConverters[type] = toJson;
 			FromJsonConverters[type] = fromJson;
 		}
@@ -124,7 +130,7 @@ namespace Manatee.Json.Serialization
 			}
 			lock (LockHolder)
 			{
-				json = converter(obj, serializer);
+				json = (JsonValue) converter.DynamicInvoke(obj, serializer);
 			}
 		}
 		internal static void Decode<T>(this JsonSerializer serializer, JsonValue json, out T obj)
@@ -137,29 +143,29 @@ namespace Manatee.Json.Serialization
 			}
 			lock (LockHolder)
 			{
-				obj = converter(json, serializer);
+				obj = (T) converter.DynamicInvoke(json, serializer);
 			}
 		}
 
-		private static ToJsonDelegate<T> GetToJsonConverter<T>()
+		private static Delegate GetToJsonConverter<T>()
 		{
-			var type = typeof (T);
-			return ToJsonConverters.ContainsKey(type) ? (ToJsonDelegate<T>) ToJsonConverters[type] : null;
+			var type = JsonSerializationAbstractionMap.GetMap(typeof (T));
+			return ToJsonConverters.ContainsKey(type) ? ToJsonConverters[type] : null;
 		}
-		private static FromJsonDelegate<T> GetFromJsonConverter<T>()
+		private static Delegate GetFromJsonConverter<T>()
 		{
-			var type = typeof (T);
-			return FromJsonConverters.ContainsKey(type) ? (FromJsonDelegate<T>) FromJsonConverters[type] : null;
+			var type = JsonSerializationAbstractionMap.GetMap(typeof (T));
+			return FromJsonConverters.ContainsKey(type) ? FromJsonConverters[type] : null;
 		}
 		private static void ValidatePotentialAutoregisteredType(Type type)
 		{
-			if (ToJsonConverters.ContainsKey(type)) return;
+			if (ToJsonConverters.ContainsKey(type) || type.IsGenericTypeDefinition) return;
 
 			var delegateProvider = DelegateProviders.FirstOrDefault(p => p.CanHandle(type));
 			if (delegateProvider == null) return;
 
-			var registerMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates", BindingFlags.Static | BindingFlags.NonPublic)
-																	   .MakeGenericMethod(type);
+			var baseMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates", BindingFlags.Static | BindingFlags.NonPublic);
+			var registerMethod = baseMethod.MakeGenericMethod(type);
 			registerMethod.Invoke(null, new object[] {delegateProvider});
 		}
 		// ReSharper disable once UnusedMember.Local
