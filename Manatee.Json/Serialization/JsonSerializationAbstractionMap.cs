@@ -111,7 +111,6 @@ namespace Manatee.Json.Serialization
 					var typeArguments = type.GetGenericArguments();
 					return genericMatches.First().Value.MakeGenericType(typeArguments);
 				}
-				return genericMatches.First().Value;
 			}
 			return type;
 		}

@@ -263,8 +263,7 @@ namespace Manatee.Json
 
 		private static void GetNextInput(object owner)
 		{
-			var obj = owner as JsonObject;
-			if (obj == null) return;
+			var obj = (JsonObject) owner;
 			if (obj._done || (obj._index == obj._source.Length)) return;
 			var c = default(char);
 			try
@@ -284,7 +283,7 @@ namespace Manatee.Json
 		}
 		private static State GotKey(object owner, JsonInput input)
 		{
-			var obj = owner as JsonObject;
+			var obj = (JsonObject) owner;
 			obj._key = GetKey(obj._source, ref obj._index);
 			return State.Colon;
 		}
@@ -294,19 +293,19 @@ namespace Manatee.Json
 		}
 		private static State GotValue(object owner, JsonInput input)
 		{
-			var obj = owner as JsonObject;
+			var obj = (JsonObject) owner;
 			obj._value = JsonValue.Parse(obj._source, ref obj._index);
 			return State.End;
 		}
 		private static State GotEmpty(object owner, JsonInput input)
 		{
-			var obj = owner as JsonObject;
+			var obj = (JsonObject) owner;
 			obj._done = true;
 			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{
-			var obj = owner as JsonObject;
+			var obj = (JsonObject) owner;
 			obj[obj._key] = obj._value;
 			obj._done = (input == JsonInput.CloseBrace);
 			return State.Key;

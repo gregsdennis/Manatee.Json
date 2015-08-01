@@ -37,7 +37,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			Default = new SerializerCache();
 		}
-		public SerializerCache()
+		private SerializerCache()
 		{
 			_cache = new Dictionary<Type, SerializerMethodPair>();
 		}

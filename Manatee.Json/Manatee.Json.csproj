@@ -175,6 +175,7 @@
     <Compile Include="Serialization\Internal\ISerializerDelegateProvider.cs" />
     <Compile Include="Serialization\Internal\MemberReference.cs" />
     <Compile Include="Serialization\Internal\AutoRegistration\SerializationDelegateProviderBase.cs" />
+    <Compile Include="Serialization\Internal\ReflectionCache.cs" />
     <Compile Include="Serialization\Internal\Serializers\AutoSerializer.cs" />
     <Compile Include="Serialization\Internal\Serializers\BooleanSerializer.cs" />
     <Compile Include="Serialization\Internal\Serializers\DefaultValueSerializer.cs" />
