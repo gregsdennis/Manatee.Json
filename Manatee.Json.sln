@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other Frameworks", "Other Frameworks", "{BC78C5E9-1030-41BD-8796-CB1FC1D10776}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Performance", "Manatee.Json.Performance\Manatee.Json.Performance.csproj", "{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5} = {E51BA75F-50F0-4B01-B39E-AB27C097BA8F}
 		{4A934D21-3C20-4F6C-B529-6E2D793C5FDA} = {BC78C5E9-1030-41BD-8796-CB1FC1D10776}
 		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139} = {4A934D21-3C20-4F6C-B529-6E2D793C5FDA}
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Json.vsmdi

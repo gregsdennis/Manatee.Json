@@ -22,13 +22,12 @@
 ***************************************************************************************/
 
 using System;
-using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal
 {
 	internal interface ISerializerCache
 	{
-		MethodInfo GetSerializeMethod(Type type);
-		MethodInfo GetDeserializeMethod(Type type);
+		Func<T, JsonValue> GetSerializeMethod<T>(JsonSerializer serializer);
+		Func<JsonValue, T> GetDeserializeMethod<T>(JsonSerializer serializer);
 	}
 }

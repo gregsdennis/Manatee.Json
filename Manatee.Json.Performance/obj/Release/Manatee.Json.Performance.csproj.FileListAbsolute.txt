@@ -1,0 +1,14 @@
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Associates.json
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.Json.Performance.dll
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.Json.Performance.pdb
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.Json.dll
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.StateMachine.dll
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\JetBrains.Annotations.dll
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.Json.pdb
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.Json.xml
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.StateMachine.pdb
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\Manatee.StateMachine.xml
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\bin\Release\JetBrains.Annotations.xml
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\obj\Release\Manatee.Json.Performance.csprojResolveAssemblyReference.cache
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\obj\Release\Manatee.Json.Performance.dll
+C:\Users\gdennis\Desktop\New folder\Projects\Manatee.Json\Manatee.Json.Performance\obj\Release\Manatee.Json.Performance.pdb

@@ -44,8 +44,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				type = obj.GetType();
 				json.Add(Constants.TypeKey, type.AssemblyQualifiedName);
 			}
-			var propertyInfoList = GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
-			var map = SerializeValues(obj, serializer, propertyInfoList);
+			var typeDescription = ReflectionCache.GetTypeDescription(type, serializer.Options.PropertySelectionStrategy);
+			var map = SerializeValues(obj, serializer, typeDescription.GetSerializableMembers(serializer.Options.AutoSerializeFields));
 			ConstructJsonObject(json, map);
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
@@ -62,8 +62,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			var obj = JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			var type = obj.GetType();
-			var propertyInfoList = GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
-			var map = DeserializeValues(obj, json, serializer, propertyInfoList, !serializer.Options.CaseSensitiveDeserialization);
+			var typeDescription = ReflectionCache.GetTypeDescription(type, serializer.Options.PropertySelectionStrategy);
+			var map = DeserializeValues(obj, json, serializer, typeDescription.GetSerializableMembers(serializer.Options.AutoSerializeFields),
+										!serializer.Options.CaseSensitiveDeserialization);
 			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(type, json);
 			AssignObjectProperties(obj, map);
@@ -77,45 +78,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(type, json);
 			AssignObjectProperties(null, map);
-		}
-
-		private static IEnumerable<MemberInfo> GetMembers(Type type, PropertySelectionStrategy propertyTypes, bool includeFields)
-		{
-			var members = GetProperties(type, propertyTypes);
-			if (includeFields)
-				members = members.Concat(GetFields(type));
-			return members;
-		}
-		private static IEnumerable<MemberInfo> GetProperties(Type type, PropertySelectionStrategy propertyTypes)
-		{
-			var properties = new List<PropertyInfo>();
-			if ((propertyTypes & PropertySelectionStrategy.ReadWriteOnly) != 0)
-				properties.AddRange(type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
-										.Where(p => p.GetSetMethod() != null)
-										.Where(p => p.GetGetMethod() != null)
-										.Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any()));
-			if ((propertyTypes & PropertySelectionStrategy.ReadOnly) != 0)
-				properties.AddRange(type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
-										.Where(p => p.GetSetMethod() == null)
-										.Where(p => p.GetGetMethod() != null)
-										.Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any()));
-#if NET35 || NET35C
-			return properties.Cast<MemberInfo>();
-#elif NET4 || NET4C || NET45
-			return properties;
-#endif
-		}
-		private static IEnumerable<MemberInfo> GetFields(Type type)
-		{
-			var fields = new List<FieldInfo>();
-			fields.AddRange(type.GetFields(BindingFlags.Instance | BindingFlags.Public)
-								.Where(p => !p.IsInitOnly)
-								.Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any()));
-#if NET35 || NET35C
-			return fields.Cast<MemberInfo>();
-#elif NET4 || NET4C || NET45
-			return fields;
-#endif
 		}
 		private static IEnumerable<MemberInfo> GetTypeMembers(Type type, bool includeFields)
 		{
@@ -139,8 +101,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static IEnumerable<MemberInfo> GetTypeFields(Type type)
 		{
 			var fieldInfoList = type.GetFields(BindingFlags.Static | BindingFlags.Public)
-									   .Where(p => !p.IsInitOnly)
-									   .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
+									.Where(p => !p.IsInitOnly)
+									.Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
 #if NET35 || NET35C
 			return fieldInfoList.Cast<MemberInfo>();
 #elif NET4 || NET4C || NET45
@@ -172,8 +134,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var json = JsonValue.Null;
 				if (value != null)
 				{
-					var serialize = SerializerCache.Default.GetSerializeMethod(type);
-					json = (JsonValue) serialize.Invoke(serializer, new[] {value});
+					var serialize = SerializerCache.Default.GetSerializeMethod<T>(serializer);
+					json = serialize(obj);
 				}
 				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
 				if (serializer.Options.IncludeContentSample && json.Type == JsonValueType.Array)
@@ -207,7 +169,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					if (value == null) continue;
 					type = fieldInfo.FieldType;
 				}
-				var serialize = SerializerCache.Default.GetSerializeMethod(type);
+				var serialize = SerializerCache.Default.GetSerializeMethod<T>(type);
 				var json = (JsonValue) serialize.Invoke(serializer, new[] {value});
 				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
 				dict.Add(memberInfo, json);
@@ -234,7 +196,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					name = mapper.MapToKey;
 				if (json.Object.Keys.Any(key => string.Compare(key, name, ignoreCase) == 0))
 				{
-					var value = json.Object[name];
+					var value = json.Object.First(kvp => string.Compare(kvp.Key, name, ignoreCase) == 0).Value;
 					MethodInfo deserialize;
 					if (memberInfo is PropertyInfo)
 						deserialize = SerializerCache.Default.GetDeserializeMethod(((PropertyInfo) memberInfo).PropertyType);
@@ -274,7 +236,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					name = mapper.MapToKey;
 				if (json.Object.Keys.Any(key => string.Compare(key, name, ignoreCase) == 0))
 				{
-					var value = json.Object[name];
+					var value = json.Object.First(kvp => string.Compare(kvp.Key, name, ignoreCase) == 0).Value;
 					MethodInfo deserialize;
 					if (memberInfo is PropertyInfo)
 						deserialize = SerializerCache.Default.GetDeserializeMethod(((PropertyInfo) memberInfo).PropertyType);
@@ -317,17 +279,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			var elementType = GetElementType(type);
 			var buildMethod = TemplateGenerator.GetBuildMethod(elementType);
-			var value = buildMethod.Invoke(null, new object[] { serializer.Options });
+			var value = buildMethod.Invoke(null, new object[] {serializer.Options});
 			var serialize = SerializerCache.Default.GetSerializeMethod(elementType);
-			json.Add((JsonValue)serialize.Invoke(serializer, new[] { value }));
+			json.Add((JsonValue) serialize.Invoke(serializer, new[] {value}));
 		}
 		private static Type GetElementType(Type collectionType)
 		{
 			if (collectionType.IsArray)
 				return collectionType.GetElementType();
-			if (collectionType.IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof(IEnumerable<>)))
+			if (collectionType.IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof (IEnumerable<>)))
 				return collectionType.GetGenericArguments().First();
-			return typeof(object);
+			return typeof (object);
 		}
 	}
 }

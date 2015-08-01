@@ -204,8 +204,7 @@ namespace Manatee.Json
 
 		private static void GetNextInput(object owner)
 		{
-			var array = owner as JsonArray;
-			if (array == null) return;
+			var array = (JsonArray) owner;
 			if (array._done || (array._index == array._source.Length)) return;
 			var c = default(char);
 			try
@@ -225,19 +224,19 @@ namespace Manatee.Json
 		}
 		private static State GotValue(object owner, JsonInput input)
 		{
-			var array = owner as JsonArray;
+			var array = (JsonArray) owner;
 			array._value = JsonValue.Parse(array._source, ref array._index);
 			return State.End;
 		}
 		private static State GotEmpty(object owner, JsonInput input)
 		{
-			var array = owner as JsonArray;
+			var array = (JsonArray) owner;
 			array._done = true;
 			return State.Value;
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{
-			var array = owner as JsonArray;
+			var array = (JsonArray) owner;
 			array.Add(array._value);
 			array._done = (input == JsonInput.CloseBracket);
 			return State.Value;
