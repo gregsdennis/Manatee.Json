@@ -68,6 +68,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\JsonPathExpressionInput.cs" />
+    <Compile Include="Internal\JsonPathInput.cs" />
+    <Compile Include="Internal\XmlNamespacePair.cs" />
+    <Compile Include="Internal\XmlNamespaceRegistry.cs" />
     <Compile Include="JsonArrayExtensions.cs" />
     <Compile Include="Internal\GeneralExtensions.cs" />
     <Compile Include="Internal\CharacterConverter.cs" />
@@ -80,8 +84,288 @@
     <Compile Include="JsonValue.cs" />
     <Compile Include="JsonValueType.cs" />
     <Compile Include="LinqExtensions.cs" />
+    <Compile Include="Path\ArrayParameters\FilterExpressionQuery.cs" />
+    <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />
+    <Compile Include="Path\ArrayParameters\IndexQuery.cs" />
+    <Compile Include="Path\ArrayParameters\SliceQuery.cs" />
+    <Compile Include="Path\ArrayParameters\WildCardQuery.cs" />
+    <Compile Include="Path\Expressions\AddExpression.cs" />
+    <Compile Include="Path\Expressions\AndExpression.cs" />
+    <Compile Include="Path\Expressions\ArrayIndexExpression.cs" />
+    <Compile Include="Path\Expressions\ConversionExpression.cs" />
+    <Compile Include="Path\Expressions\DivideExpression.cs" />
+    <Compile Include="Path\Expressions\ExponentExpression.cs" />
+    <Compile Include="Path\Expressions\Expression.cs" />
+    <Compile Include="Path\Expressions\ExpressionTreeBranch.cs" />
+    <Compile Include="Path\Expressions\ExpressionTreeNode.cs" />
+    <Compile Include="Path\Expressions\FieldExpression.cs" />
+    <Compile Include="Path\Expressions\GroupExpression.cs" />
+    <Compile Include="Path\Expressions\HasPropertyExpression.cs" />
+    <Compile Include="Path\Expressions\IndexOfExpression.cs" />
+    <Compile Include="Path\Expressions\IsEqualExpression.cs" />
+    <Compile Include="Path\Expressions\IsGreaterThanEqualExpression.cs" />
+    <Compile Include="Path\Expressions\IsGreaterThanExpression.cs" />
+    <Compile Include="Path\Expressions\IsLessThanEqualExpression.cs" />
+    <Compile Include="Path\Expressions\IsLessThanExpression.cs" />
+    <Compile Include="Path\Expressions\IsNotEqualExpression.cs" />
+    <Compile Include="Path\Expressions\LengthExpression.cs" />
+    <Compile Include="Path\Expressions\ModuloExpression.cs" />
+    <Compile Include="Path\Expressions\MultiplyExpression.cs" />
+    <Compile Include="Path\Expressions\NameExpresssion.cs" />
+    <Compile Include="Path\Expressions\NegateExpression.cs" />
+    <Compile Include="Path\Expressions\NotExpression.cs" />
+    <Compile Include="Path\Expressions\OrExpression.cs" />
+    <Compile Include="Path\Expressions\PathExpression.cs" />
+    <Compile Include="Path\Expressions\SubtractExpression.cs" />
+    <Compile Include="Path\Expressions\Translation\AddExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\AndExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ArrayIndexExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\BooleanValueExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ConversionExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\DivideExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ExponentExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\FieldExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\HasPropertyExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IndexOfExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsGreaterThanEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsGreaterThanExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsLessThanEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsLessThanExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\IsNotEqualExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\LengthExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\ModuloExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\MultiplyExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NameExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NegateExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NotExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NullValueExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\NumberValueExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\OrExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\PathExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\StringValueExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\Translation\SubtractExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\ValueExpression.cs" />
+    <Compile Include="Path\IJsonPathArrayQuery.cs" />
+    <Compile Include="Path\IJsonPathOperator.cs" />
+    <Compile Include="Path\IJsonPathQuery.cs" />
+    <Compile Include="Path\IJsonPathSearchParameter.cs" />
+    <Compile Include="Path\JsonPath.cs" />
+    <Compile Include="Path\JsonPathArray.cs" />
+    <Compile Include="Path\JsonPathRoot.cs" />
+    <Compile Include="Path\JsonPathSyntaxException.cs" />
+    <Compile Include="Path\JsonPathValue.cs" />
+    <Compile Include="Path\JsonPathWith.cs" />
+    <Compile Include="Path\Operators\ArrayOperator.cs" />
+    <Compile Include="Path\Operators\IndexOfOperator.cs" />
+    <Compile Include="Path\Operators\LengthOperator.cs" />
+    <Compile Include="Path\Operators\NameOperator.cs" />
+    <Compile Include="Path\Operators\SearchOperator.cs" />
+    <Compile Include="Path\Operators\WildCardOperator.cs" />
+    <Compile Include="Path\PathExpressionExtensions.cs" />
+    <Compile Include="Path\SearchParameters\ArraySearchParameter.cs" />
+    <Compile Include="Path\SearchParameters\LengthSearchParameter.cs" />
+    <Compile Include="Path\SearchParameters\NameSearchParameter.cs" />
+    <Compile Include="Path\SearchParameters\WildCardSearchParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Internal\JsonInput.cs" />
+    <Compile Include="Schema\AdditionalPropertiesDefinition.cs" />
+    <Compile Include="Schema\AllOfSchema.cs" />
+    <Compile Include="Schema\AnyOfSchema.cs" />
+    <Compile Include="Schema\ArraySchema.cs" />
+    <Compile Include="Schema\BooleanSchema.cs" />
+    <Compile Include="Schema\EnumSchema.cs" />
+    <Compile Include="Schema\IJsonSchema.cs" />
+    <Compile Include="Schema\IntegerSchema.cs" />
+    <Compile Include="Schema\JsonSchema.cs" />
+    <Compile Include="Schema\JsonSchemaFactory.cs" />
+    <Compile Include="Schema\JsonSchemaPropertyDefinition.cs" />
+    <Compile Include="Schema\JsonSchemaPropertyDefinitionCollection.cs" />
+    <Compile Include="Schema\JsonSchemaReference.cs" />
+    <Compile Include="Schema\JsonSchemaTypeDefinition.cs" />
+    <Compile Include="Schema\JsonSchemaTypeDefinitionCollection.cs" />
+    <Compile Include="Schema\NotSchema.cs" />
+    <Compile Include="Schema\NullSchema.cs" />
+    <Compile Include="Schema\NumberSchema.cs" />
+    <Compile Include="Schema\ObjectSchema.cs" />
+    <Compile Include="Schema\OneOfSchema.cs" />
+    <Compile Include="Schema\SchemaValidationError.cs" />
+    <Compile Include="Schema\SchemaValidationResults.cs" />
+    <Compile Include="Schema\StringFormat.cs" />
+    <Compile Include="Schema\StringSchema.cs" />
+    <Compile Include="Serialization\DateTimeSerializationFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\EnumSerializationFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\IJsonSerializable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\ArraySerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\DateTimeSerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\DictionarySerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\GuidSerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\ListSerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\NullableSerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\QueueSerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\SerializationDelegateProviderBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\StackSerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\AutoRegistration\TimeSpanSerializationDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\ConstructorResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\FieldReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\ISerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\ISerializerCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\ISerializerDelegateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\ISerializerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\ITypeSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\MemberReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\PropertyReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\ReflectionCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\SerializationPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\SerializationPairCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\SerializerCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\SerializerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\SerializerMethodPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\AutoSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\BooleanSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\DefaultValueSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\EnumNameSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\EnumValueSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\JsonSerializableSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\NumericSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\ReferencingSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\RegisteredObjectSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\SchemaSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\Serializers\StringSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\TemplateGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\Internal\TypeGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\InvalidPropertyKeyBehavior.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\IResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonIgnoreAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonMapToAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonSerializationAbstractionMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonSerializationTypeRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonSerializerOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\JsonTypeMapException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\MapBaseAbstractionBehavior.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\PropertySelectionStrategy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\TypeDoesNotContainPropertyException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\TypeInstantiationException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\TypeNameSerializationBehavior.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Serialization\TypeRegistrationException.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

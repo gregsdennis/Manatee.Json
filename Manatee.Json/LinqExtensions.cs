@@ -24,6 +24,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Serialization;
+
 //using Manatee.Json.Serialization;
 
 namespace Manatee.Json
@@ -133,75 +135,78 @@ namespace Manatee.Json
 			json.AddRange(list.Select(j => new JsonValue(j)));
 			return json;
 		}
-		///// <summary>
-		///// Serializes a collection of objects which implement <see cref="IJsonSerializable"/> to a <see cref="JsonArray"/> of equivalent JsonValues.
-		///// </summary>
-		///// <param name="list">A collection of equivalent <see cref="JsonValue"/>s</param>
-		///// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		///// serialization of values.</param>
-		///// <returns>A <see cref="JsonArray"/> containing the equivalent JsonValues</returns>
-		//public static JsonValue ToJson<T>(this IEnumerable<T> list, JsonSerializer serializer)
-		//	where T : IJsonSerializable
-		//{
-		//	if (list == null) return JsonValue.Null;
-		//	var json = new JsonArray();
-		//	json.AddRange(list.Select(j => j == null ? JsonValue.Null : j.ToJson(serializer)));
-		//	return json;
-		//}
-		///// <summary>
-		///// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a
-		///// LINQ query back into a <see cref="JsonObject"/>.
-		///// </summary>
-		///// <param name="results">An <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/></param>
-		///// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		///// serialization of values.</param>
-		///// <returns>An equivalent <see cref="JsonObject"/></returns>
-		//public static JsonObject ToJson<T>(this IEnumerable<KeyValuePair<string, T>> results, JsonSerializer serializer)
-		//	where T : IJsonSerializable
-		//{
-		//	var json = new JsonObject();
-		//	foreach (var keyValuePair in results)
-		//	{
-		//		json.Add(keyValuePair.Key, keyValuePair.Value == null ? JsonValue.Null : keyValuePair.Value.ToJson(serializer));
-		//	}
-		//	return json;
-		//}
-		///// <summary>
-		///// Deserializes a collection of <see cref="JsonValue"/>s to an <see cref="IEnumerable{T}"/> of the objects.
-		///// </summary>
-		///// <typeparam name="T">The type of object contained in the collection</typeparam>
-		///// <param name="json">The collection of <see cref="JsonValue"/>s</param>
-		///// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		///// serialization of values.</param>
-		///// <returns>A collection of the deserialized objects</returns>
-		//public static IEnumerable<T> FromJson<T>(this IEnumerable<JsonValue> json, JsonSerializer serializer)
-		//	where T : IJsonSerializable, new()
-		//{
-		//	if (json == null) return null;
-		//	var list = new List<T>();
-		//	foreach (var value in json)
-		//	{
-		//		T item = new T();
-		//		item.FromJson(value, serializer);
-		//		list.Add(item);
-		//	}
-		//	return list;
-		//}
-		///// <summary>
-		///// Deserializes a <see cref="JsonValue"/> to its equivalent object.
-		///// </summary>
-		///// <typeparam name="T">The type of object</typeparam>
-		///// <param name="json">The <see cref="JsonValue"/> to deserialize</param>
-		///// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		///// serialization of values.</param>
-		///// <returns>A collection of the deserialized objects</returns>
-		//public static T FromJson<T>(this JsonObject json, JsonSerializer serializer)
-		//	where T : IJsonSerializable, new()
-		//{
-		//	if (json == null) return default(T);
-		//	T obj = new T();
-		//	obj.FromJson(json, serializer);
-		//	return obj;
-		//}
+		/// <summary>
+		/// Serializes a collection of objects which implement <see cref="IJsonSerializable"/> to a <see cref="JsonArray"/> of equivalent JsonValues.
+		/// </summary>
+		/// <param name="list">A collection of equivalent <see cref="JsonValue"/>s</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>A <see cref="JsonArray"/> containing the equivalent JsonValues</returns>
+		public static JsonValue ToJson<T>(this IEnumerable<T> list, JsonSerializer serializer)
+			where T : IJsonSerializable
+		{
+			if (list == null)
+				return JsonValue.Null;
+			var json = new JsonArray();
+			json.AddRange(list.Select(j => j == null ? JsonValue.Null : j.ToJson(serializer)));
+			return json;
+		}
+		/// <summary>
+		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a
+		/// LINQ query back into a <see cref="JsonObject"/>.
+		/// </summary>
+		/// <param name="results">An <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/></param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>An equivalent <see cref="JsonObject"/></returns>
+		public static JsonObject ToJson<T>(this IEnumerable<KeyValuePair<string, T>> results, JsonSerializer serializer)
+			where T : IJsonSerializable
+		{
+			var json = new JsonObject();
+			foreach (var keyValuePair in results)
+			{
+				json.Add(keyValuePair.Key, keyValuePair.Value == null ? JsonValue.Null : keyValuePair.Value.ToJson(serializer));
+			}
+			return json;
+		}
+		/// <summary>
+		/// Deserializes a collection of <see cref="JsonValue"/>s to an <see cref="IEnumerable{T}"/> of the objects.
+		/// </summary>
+		/// <typeparam name="T">The type of object contained in the collection</typeparam>
+		/// <param name="json">The collection of <see cref="JsonValue"/>s</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>A collection of the deserialized objects</returns>
+		public static IEnumerable<T> FromJson<T>(this IEnumerable<JsonValue> json, JsonSerializer serializer)
+			where T : IJsonSerializable, new()
+		{
+			if (json == null)
+				return null;
+			var list = new List<T>();
+			foreach (var value in json)
+			{
+				T item = new T();
+				item.FromJson(value, serializer);
+				list.Add(item);
+			}
+			return list;
+		}
+		/// <summary>
+		/// Deserializes a <see cref="JsonValue"/> to its equivalent object.
+		/// </summary>
+		/// <typeparam name="T">The type of object</typeparam>
+		/// <param name="json">The <see cref="JsonValue"/> to deserialize</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>A collection of the deserialized objects</returns>
+		public static T FromJson<T>(this JsonObject json, JsonSerializer serializer)
+			where T : IJsonSerializable, new()
+		{
+			if (json == null)
+				return default(T);
+			T obj = new T();
+			obj.FromJson(json, serializer);
+			return obj;
+		}
 	}
 }
