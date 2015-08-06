@@ -67,21 +67,6 @@ namespace Manatee.Json.Internal
 		{
 			return items.Where(i => i != null);
 		}
-		public static string StripExternalSpaces(this string s)
-		{
-			var getNonDelimitedQuote = new Regex("((([^\"]*\\\\\\\")*)|([^\"]*))[^\"]*(\\\"|$)");
-			var whitespace = new Regex("\\s+");
-			var match = getNonDelimitedQuote.Match(s);
-			var remove = true;
-			var sb = new StringBuilder();
-			while (match.Success)
-			{
-				sb.Append(remove ? whitespace.Replace(match.Value, string.Empty) : match.Value);
-				remove = !remove;
-				match = match.NextMatch();
-			}
-			return sb.ToString();
-		}
 		public static string EvaluateEscapeSequences(this string s)
 		{
 			var i = 0;

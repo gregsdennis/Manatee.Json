@@ -24,6 +24,7 @@ namespace Manatee.Json.Internal
 {
 	internal enum JsonInput
 	{
+		Unknown,
 		OpenBrace,
 		Quote,
 		Colon,
