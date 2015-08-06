@@ -31,15 +31,6 @@ using Manatee.StateMachine.Exceptions;
 
 namespace Manatee.Json
 {
-	/// <summary>
-	/// Represents a collection of key:value pairs in a JSON structure.
-	/// </summary>
-	/// <remarks>
-	/// A key is always represented as a string.  A value can consist of a string, a numerical value, 
-	/// a boolean (true or false), a null placeholder, a JSON array of values, or a nested JSON object.
-	/// </remarks>
-	public class JsonObject : Dictionary<string, JsonValue>
-	{
 		enum State
 		{
 			Start,
@@ -49,6 +40,15 @@ namespace Manatee.Json
 			End
 		}
 
+	/// <summary>
+	/// Represents a collection of key:value pairs in a JSON structure.
+	/// </summary>
+	/// <remarks>
+	/// A key is always represented as a string.  A value can consist of a string, a numerical value, 
+	/// a boolean (true or false), a null placeholder, a JSON array of values, or a nested JSON object.
+	/// </remarks>
+	public class JsonObject : Dictionary<string, JsonValue>
+	{
 		private static readonly StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
 
 		private readonly string _source;
@@ -109,7 +109,7 @@ namespace Manatee.Json
 		public JsonObject(string source)
 			: this()
 		{
-			_source = source.StripExternalSpaces();
+			_source = source;
 			Parse(0);
 		}
 		internal JsonObject(string s, ref int i)
@@ -268,8 +268,11 @@ namespace Manatee.Json
 			var c = default(char);
 			try
 			{
-				c = obj._source[obj._index++];
-				var next = CharacterConverter.Item(c);
+				JsonInput next;
+				do
+				{
+					c = obj._source[obj._index++];
+				} while (!CharacterConverter.Item(c, out next));
 				obj._stream.Add(next);
 			}
 			catch (KeyNotFoundException)
@@ -305,11 +308,10 @@ namespace Manatee.Json
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{
-			var obj = (JsonObject) owner;
+			var obj = (JsonObject)owner;
 			obj[obj._key] = obj._value;
 			obj._done = (input == JsonInput.CloseBrace);
 			return State.Key;
 		}
-
 	}
 }

@@ -209,8 +209,11 @@ namespace Manatee.Json
 			var c = default(char);
 			try
 			{
-				c = array._source[array._index++];
-				var next = CharacterConverter.Item(c);
+				JsonInput next;
+				do
+				{
+					c = array._source[array._index++];
+				} while (!CharacterConverter.Item(c, out next));
 				array._stream.Add(next);
 			}
 			catch (KeyNotFoundException)

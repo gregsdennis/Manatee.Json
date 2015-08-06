@@ -1,0 +1,11 @@
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Associates.json
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Manatee.Json.Performance.dll
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Manatee.Json.Performance.pdb
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Manatee.Json.dll
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Manatee.StateMachine.dll
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Manatee.Json.pdb
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Manatee.StateMachine.pdb
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Manatee.StateMachine.xml
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\obj\Debug\Manatee.Json.Performance.csprojResolveAssemblyReference.cache
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\obj\Debug\Manatee.Json.Performance.dll
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\obj\Debug\Manatee.Json.Performance.pdb

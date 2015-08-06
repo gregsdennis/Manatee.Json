@@ -346,7 +346,7 @@ namespace Manatee.Json
 			if (source.IsNullOrWhiteSpace())
 				throw new ArgumentException("Source string contains no data.");
 			var i = 1;
-			return Parse(source.StripExternalSpaces(), ref i);
+			return Parse(source, ref i);
 		}
 
 		/// <summary>
