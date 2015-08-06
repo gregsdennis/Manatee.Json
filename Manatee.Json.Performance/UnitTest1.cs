@@ -16,11 +16,8 @@ namespace Manatee.Json.Performance
 			var serializer = new JsonSerializer { Options = { CaseSensitiveDeserialization = false } };
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
 			var content = File.ReadAllText("Associates.json");
-			var start = DateTime.Now;
 			var json = JsonValue.Parse(content);
 			serializer.Deserialize<IEnumerable<Associate>>(json);
-			var end = DateTime.Now;
-			Console.WriteLine(end - start);
 		}
 		[TestMethod]
 		public void Performance_Deserialize_10000()
