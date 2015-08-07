@@ -25,15 +25,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Internal
 {
 	internal static class GeneralExtensions
 	{
-		public const string EscapeChars = @"\""/bfnrtu";
-
 		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
 																			 .Select(n => (char)n)
 																			 .Where(c => !char.IsControl(c));
@@ -67,95 +63,113 @@ namespace Manatee.Json.Internal
 		{
 			return items.Where(i => i != null);
 		}
-		public static string EvaluateEscapeSequences(this string s)
+		public static string Unescape(this string source, int index)
 		{
-			var i = 0;
-			while (i < s.Length)
+			var count = 0;
+			string replace = null;
+			var length = 2;
+			switch (source[index + 1])
 			{
-				var length = 1;
-				if (s[i] == '\\')
-					switch (s[i + 1])
+				case '"':
+				case '/':
+				case '\\':
+					source = source.Remove(index, 1);
+					break;
+				case 'b':
+					count = 2;
+					replace = "\b";
+					break;
+				case 'f':
+					count = 2;
+					replace = "\f";
+					break;
+				case 'n':
+					count = 2;
+					replace = "\n";
+					break;
+				case 'r':
+					count = 2;
+					replace = "\r";
+					break;
+				case 't':
+					count = 2;
+					replace = "\t";
+					break;
+				case 'u':
+					length = 6;
+					var hex = int.Parse(source.Substring(index + 2, 4), NumberStyles.HexNumber);
+					if (source.Substring(index + 6, 2) == "\\u")
 					{
-						case '"':
-						case '/':
-						case '\\':
-							s = s.Remove(i, 1);
-							break;
-						case 'b':
-							s = s.Substring(0, i) + '\b' + s.Substring(i + length + 1);
-							break;
-						case 'f':
-							s = s.Substring(0, i) + '\f' + s.Substring(i + length + 1);
-							break;
-						case 'n':
-							s = s.Substring(0, i) + '\n' + s.Substring(i + length + 1);
-							break;
-						case 'r':
-							s = s.Substring(0, i) + '\r' + s.Substring(i + length + 1);
-							break;
-						case 't':
-							s = s.Substring(0, i) + '\t' + s.Substring(i + length + 1);
-							break;
-						case 'u':
-							length = 6;
-							var hex = int.Parse(s.Substring(i + 2, 4), NumberStyles.HexNumber);
-							if (s.Substring(i + 6, 2) == "\\u")
-							{
-								var hex2 = int.Parse(s.Substring(i + 8, 4), NumberStyles.HexNumber);
-								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
-								length += 6;
-							}
-							s = s.Substring(0, i) + char.ConvertFromUtf32(hex) + s.Substring(i + length);
-							break;
+						var hex2 = int.Parse(source.Substring(index + 8, 4), NumberStyles.HexNumber);
+						hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
+						length += 6;
 					}
-				i += length;
+					source = source.Substring(0, index) + char.ConvertFromUtf32(hex) + source.Substring(index + length);
+					break;
+				default:
+					throw new JsonStringInvalidEscapeSequenceException(source.Substring(index, 2), index + length);
 			}
-			return s;
+			if (replace != null)
+				source = Replace(source, index, count, replace);
+			return source;
 		}
-		public static string InsertEscapeSequences(this string s)
+		public static string InsertEscapeSequences(this string source)
 		{
-			var i = 0;
-			while (i < s.Length)
+			var index = 0;
+			while (index < source.Length)
 			{
-				switch (s[i])
+				var count = 0;
+				string replace = null;
+				switch (source[index])
 				{
 					case '"':
 					case '\\':
-						s = s.Insert(i, "\\");
-						i++;
+						source = source.Insert(index, "\\");
+						index++;
 						break;
 					case '\b':
-						s = s.Substring(0, i) + "\\b" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\b";
 						break;
 					case '\f':
-						s = s.Substring(0, i) + "\\f" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\f";
 						break;
 					case '\n':
-						s = s.Substring(0, i) + "\\n" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\n";
 						break;
 					case '\r':
-						s = s.Substring(0, i) + "\\r" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\r";
 						break;
 					case '\t':
-						s = s.Substring(0, i) + "\\t" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\t";
 						break;
 					default:
-						if (!AvailableChars.Contains(s[i]))
+						if (!AvailableChars.Contains(source[index]))
 						{
-							var hex = Convert.ToInt16(s[i]).ToString("X4");
-							s = s.Substring(0, i) + "\\u" + hex + s.Substring(i + 1);
-							i += 5;
+							var hex = Convert.ToInt16(source[index]).ToString("X4");
+							source = source.Substring(0, index) + "\\u" + hex + source.Substring(index + 1);
+							index += 5;
 						}
 						break;
 				}
-				i++;
+				if (replace != null)
+				{
+					source = Replace(source, index, count, replace);
+					index++;
+				}
+				index++;
 			}
-			return s;
+			return source;
+		}
+		private static string Replace(string source, int index, int count, string content)
+		{
+			// I've checked both of these methods with ILSpy.  They occur in external methods, so
+			// we're not going to do much better than this.
+			return source.Remove(index, count).Insert(index, content);
 		}
 		// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
