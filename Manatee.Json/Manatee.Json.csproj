@@ -307,12 +307,14 @@
     <Compile Include="Serialization\Internal\Serializers\ReferencingSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serialization\Internal\Serializers\ReflectionCache.cs" />
     <Compile Include="Serialization\Internal\Serializers\RegisteredObjectSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Serialization\Internal\Serializers\SchemaSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serialization\Internal\Serializers\SerializationInfo.cs" />
     <Compile Include="Serialization\Internal\Serializers\StringSerializer.cs">
       <SubType>Code</SubType>
     </Compile>

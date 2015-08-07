@@ -27,11 +27,20 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 {
 	internal abstract class SerializationDelegateProviderBase : ISerializationDelegateProvider
 	{
+		private readonly MethodInfo _encodeMethod;
+		private readonly MethodInfo _decodeMethod;
+
+		protected SerializationDelegateProviderBase()
+		{
+			_encodeMethod = GetType().GetMethod("Encode", BindingFlags.NonPublic | BindingFlags.Static);
+			_decodeMethod = GetType().GetMethod("Decode", BindingFlags.NonPublic | BindingFlags.Static);
+		}
+
 		public abstract bool CanHandle(Type type);
 		public JsonSerializationTypeRegistry.ToJsonDelegate<T> GetEncoder<T>()
 		{
 			var typeArguments = GetTypeArguments(typeof (T));
-			var toJson = GetType().GetMethod("Encode", BindingFlags.NonPublic | BindingFlags.Static);
+			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
 			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), toJson);
@@ -39,7 +48,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 		public JsonSerializationTypeRegistry.FromJsonDelegate<T> GetDecoder<T>()
 		{
 			var typeArguments = GetTypeArguments(typeof (T));
-			var fromJson = GetType().GetMethod("Decode", BindingFlags.NonPublic | BindingFlags.Static);
+			var fromJson = _decodeMethod;
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
 			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.FromJsonDelegate<T>), fromJson);
