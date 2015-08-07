@@ -21,12 +21,12 @@
 					implement IJsonCompatible and cannot be automatically serialized.
 
 ***************************************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Manatee.Json.Serialization.Internal;
-using Manatee.Json.Serialization.Internal.AutoRegistration;
 
 namespace Manatee.Json.Serialization
 {
@@ -58,23 +58,20 @@ namespace Manatee.Json.Serialization
 		private static readonly Dictionary<Type, Delegate> ToJsonConverters;
 		private static readonly Dictionary<Type, Delegate> FromJsonConverters;
 		private static readonly object LockHolder = new object();
+		private static readonly MethodInfo AutoregistrationMethod;
 
 		static JsonSerializationTypeRegistry()
 		{
-			DelegateProviders = new List<ISerializationDelegateProvider>
-				{
-					new DateTimeSerializationDelegateProvider(),
-					new TimeSpanSerializationDelegateProvider(),
-					new GuidSerializationDelegateProvider(),
-					new NullableSerializationDelegateProvider(),
-					new ArraySerializationDelegateProvider(),
-					new ListSerializationDelegateProvider(),
-					new DictionarySerializationDelegateProvider(),
-					new QueueSerializationDelegateProvider(),
-					new StackSerializationDelegateProvider(),
-				};
+			DelegateProviders = typeof (JsonSerializationTypeRegistry).Assembly.GetTypes()
+																	  .Where(t => typeof (ISerializationDelegateProvider).IsAssignableFrom(t) &&
+																				  !t.IsAbstract &&
+																				  t.IsClass)
+																	  .Select(Activator.CreateInstance)
+																	  .Cast<ISerializationDelegateProvider>()
+																	  .ToList();
 			ToJsonConverters = new Dictionary<Type, Delegate>();
 			FromJsonConverters = new Dictionary<Type, Delegate>();
+			AutoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates", BindingFlags.Static | BindingFlags.NonPublic);
 		}
 
 		/// <summary>
@@ -116,8 +113,15 @@ namespace Manatee.Json.Serialization
 		/// <returns>True if an entry exists for the type; otherwise false.</returns>
 		public static bool IsRegistered(Type type)
 		{
-			ValidatePotentialAutoregisteredType(type);
-			return ToJsonConverters.ContainsKey(type);
+			if (ToJsonConverters.ContainsKey(type)) return true;
+			if (type.IsGenericTypeDefinition) return false;
+
+			var delegateProvider = DelegateProviders.FirstOrDefault(p => p.CanHandle(type));
+			if (delegateProvider == null) return false;
+
+			var registerMethod = AutoregistrationMethod.MakeGenericMethod(type);
+			registerMethod.Invoke(null, new object[] { delegateProvider });
+			return true;
 		}
 
 		internal static void Encode<T>(this JsonSerializer serializer, T obj, out JsonValue json)
@@ -143,30 +147,19 @@ namespace Manatee.Json.Serialization
 			}
 			lock (LockHolder)
 			{
-				obj = (T) converter.DynamicInvoke(json, serializer);
+				obj = converter(json, serializer);
 			}
 		}
 
 		private static Delegate GetToJsonConverter<T>()
 		{
-			var type = JsonSerializationAbstractionMap.GetMap(typeof (T));
+			var type = JsonSerializationAbstractionMap.GetMap(typeof(T));
 			return ToJsonConverters.ContainsKey(type) ? ToJsonConverters[type] : null;
 		}
-		private static Delegate GetFromJsonConverter<T>()
+		private static FromJsonDelegate<T> GetFromJsonConverter<T>()
 		{
 			var type = JsonSerializationAbstractionMap.GetMap(typeof (T));
-			return FromJsonConverters.ContainsKey(type) ? FromJsonConverters[type] : null;
-		}
-		private static void ValidatePotentialAutoregisteredType(Type type)
-		{
-			if (ToJsonConverters.ContainsKey(type) || type.IsGenericTypeDefinition) return;
-
-			var delegateProvider = DelegateProviders.FirstOrDefault(p => p.CanHandle(type));
-			if (delegateProvider == null) return;
-
-			var baseMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates", BindingFlags.Static | BindingFlags.NonPublic);
-			var registerMethod = baseMethod.MakeGenericMethod(type);
-			registerMethod.Invoke(null, new object[] {delegateProvider});
+			return FromJsonConverters.ContainsKey(type) ? (FromJsonDelegate<T>) FromJsonConverters[type] : null;
 		}
 		// ReSharper disable once UnusedMember.Local
 		private static void RegisterProviderDelegates<T>(ISerializationDelegateProvider provider)

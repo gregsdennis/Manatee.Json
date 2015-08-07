@@ -16,7 +16,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_FullAutoSerialize_Single()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.0790045");
+			Console.WriteLine("Time To Beat: 00:00:00.0770077");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -33,7 +33,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_FullAutoSerialize_10000()
 		{
-			Console.WriteLine("Time To Beat: 00:00:02.7321563");
+			Console.WriteLine("Time To Beat: 00:00:02.3022302");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
