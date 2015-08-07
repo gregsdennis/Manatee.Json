@@ -6,12 +6,12 @@ namespace Manatee.Json.Performance
 {
 	[TestClass]
 	[DeploymentItem("Associates.json")]
-	public class Performace
+	public class ParseTest
 	{
-		// Time to beat: 00:00:00.0570000
 		[TestMethod]
 		public void Performance_Parse_Single()
 		{
+			Console.WriteLine("Time To Beat: 00:00:00.0570000");
 			var content = File.ReadAllText("Associates.json");
 			var start = DateTime.Now;
 			var json = JsonValue.Parse(content);
@@ -19,12 +19,10 @@ namespace Manatee.Json.Performance
 			Console.WriteLine(json);
 			Console.WriteLine(end - start);
 		}
-		// Time to beat: 00:00:04.1-ish
-		// Time to beat: 00:00:02.5930000
-		// Time to beat: 00:00:00.8660866
 		[TestMethod]
 		public void Performance_Parse_10000()
 		{
+			Console.WriteLine("Time To Beat: 00:00:00.7570433");
 			var content = File.ReadAllText("Associates.json");
 			var start = DateTime.Now;
 			JsonValue json = null;

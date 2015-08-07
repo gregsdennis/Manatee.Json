@@ -358,6 +358,13 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected.String, actual.String);
 		}
 		[TestMethod]
+		[ExpectedException(typeof(JsonStringInvalidEscapeSequenceException))]
+		public void Parse_StringValueWithInvalidEscapeSequence_ThrowsException()
+		{
+			var json = "\"An \\rescaped\\a carriage return\"";
+			var actual = JsonValue.Parse(json);
+		}
+		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Parse_NullString_ThrowsException()
 		{

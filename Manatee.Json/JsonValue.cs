@@ -496,14 +496,9 @@ namespace Manatee.Json
 					while (!found && length < temp.Length)
 					{
 						if (temp[length] == '\\')
-							if (!GeneralExtensions.EscapeChars.Contains(temp[length + 1].ToString(CultureInfo.InvariantCulture)))
-								throw new JsonStringInvalidEscapeSequenceException(temp.Substring(length, 2), index + length);
-							else
-								if (temp[length + 1] == 'u')
-									length += 4;
-								else
-									length++;
-						else found = (temp[length] == '"');
+							temp = temp.Unescape(length);
+						else
+							found = (temp[length] == '"');
 						length++;
 					}
 					if (!found)
@@ -514,7 +509,7 @@ namespace Manatee.Json
 						return string.Empty;
 					}
 					index += length;
-					return temp.Substring(0, length-1).EvaluateEscapeSequences();
+					return temp.Substring(0, length-1);
 				case '{':										// object
 					index--;
 					return new JsonObject(source, ref index);

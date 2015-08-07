@@ -232,9 +232,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var mapper = (JsonMapToAttribute) memberInfo.GetCustomAttributes(typeof (JsonMapToAttribute), false).FirstOrDefault();
 				if (mapper != null)
 					name = mapper.MapToKey;
-				if (json.Object.Keys.Any(key => string.Compare(key, name, ignoreCase) == 0))
+				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
+				if (kvp.Key != null)
 				{
-					var value = json.Object[name];
+					var value = kvp.Value;
 					MethodInfo deserialize;
 					if (memberInfo is PropertyInfo)
 						deserialize = SerializerCache.Default.GetDeserializeMethod(((PropertyInfo) memberInfo).PropertyType);
@@ -272,9 +273,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var mapper = (JsonMapToAttribute) memberInfo.GetCustomAttributes(typeof (JsonMapToAttribute), false).FirstOrDefault();
 				if (mapper != null)
 					name = mapper.MapToKey;
-				if (json.Object.Keys.Any(key => string.Compare(key, name, ignoreCase) == 0))
+				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
+				if (kvp.Key != null)
 				{
-					var value = json.Object[name];
+					var value = kvp.Value;
 					MethodInfo deserialize;
 					if (memberInfo is PropertyInfo)
 						deserialize = SerializerCache.Default.GetDeserializeMethod(((PropertyInfo) memberInfo).PropertyType);

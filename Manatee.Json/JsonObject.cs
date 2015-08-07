@@ -31,15 +31,6 @@ using Manatee.StateMachine.Exceptions;
 
 namespace Manatee.Json
 {
-		enum State
-		{
-			Start,
-			Key,
-			Colon,
-			Value,
-			End
-		}
-
 	/// <summary>
 	/// Represents a collection of key:value pairs in a JSON structure.
 	/// </summary>
@@ -49,6 +40,15 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonObject : Dictionary<string, JsonValue>
 	{
+		enum State
+		{
+			Start,
+			Key,
+			Colon,
+			Value,
+			End
+		}
+
 		private static readonly StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
 
 		private readonly string _source;
@@ -308,7 +308,7 @@ namespace Manatee.Json
 		}
 		private static State GotEnd(object owner, JsonInput input)
 		{
-			var obj = (JsonObject)owner;
+			var obj = (JsonObject) owner;
 			obj[obj._key] = obj._value;
 			obj._done = (input == JsonInput.CloseBrace);
 			return State.Key;

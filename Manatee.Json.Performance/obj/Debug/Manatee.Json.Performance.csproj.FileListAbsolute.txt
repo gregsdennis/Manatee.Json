@@ -9,3 +9,5 @@ C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance
 C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\obj\Debug\Manatee.Json.Performance.csprojResolveAssemblyReference.cache
 C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\obj\Debug\Manatee.Json.Performance.dll
 C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\obj\Debug\Manatee.Json.Performance.pdb
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Newtonsoft.Json.dll
+C:\Users\gdennis\Desktop\GregData\Projects\Manatee.Json\Manatee.Json.Performance\bin\Debug\Newtonsoft.Json.xml
