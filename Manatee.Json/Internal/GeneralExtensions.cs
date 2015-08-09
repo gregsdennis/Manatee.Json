@@ -63,102 +63,54 @@ namespace Manatee.Json.Internal
 		{
 			return items.Where(i => i != null);
 		}
-		public static string EvaluateEscapeSequences(this string s)
+		public static string EvaluateEscapeSequences(this string source, out string result)
 		{
 			var i = 0;
-			while (i < s.Length)
+			while (i < source.Length)
 			{
 				var length = 1;
-				if (s[i] == '\\')
-					switch (s[i + 1])
+				if (source[i] == '\\')
+					switch (source[i + 1])
 					{
 						case '"':
 						case '/':
 						case '\\':
-							s = s.Remove(i, 1);
+							source = source.Remove(i, 1);
 							break;
 						case 'b':
-							s = s.Substring(0, i) + '\b' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\b' + source.Substring(i + length + 1);
 							break;
 						case 'f':
-							s = s.Substring(0, i) + '\f' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\f' + source.Substring(i + length + 1);
 							break;
 						case 'n':
-							s = s.Substring(0, i) + '\n' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\n' + source.Substring(i + length + 1);
 							break;
 						case 'r':
-							s = s.Substring(0, i) + '\r' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\r' + source.Substring(i + length + 1);
 							break;
 						case 't':
-							s = s.Substring(0, i) + '\t' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\t' + source.Substring(i + length + 1);
 							break;
 						case 'u':
 							length = 6;
-							var hex = int.Parse(s.Substring(i + 2, 4), NumberStyles.HexNumber);
-							if (s.Substring(i + 6, 2) == "\\u")
+							var hex = int.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
+							if (source.Substring(i + 6, 2) == "\\u")
 							{
-								var hex2 = int.Parse(s.Substring(i + 8, 4), NumberStyles.HexNumber);
+								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
 								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
 								length += 6;
 							}
-							s = s.Substring(0, i) + char.ConvertFromUtf32(hex) + s.Substring(i + length);
+							source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
 							break;
 						default:
-							throw new JsonStringInvalidEscapeSequenceException(string.Format("\\{0}", s[i + 1]), i);
+							result = source;
+							return string.Format("Invalid escape sequence: '\\{0}'.", source[i + 1]);
 					}
 				i += length;
 			}
-			return s;
-		}
-		public static string Unescape(this string source, int index)
-		{
-			var count = 0;
-			string replace = null;
-			var length = 2;
-			switch (source[index + 1])
-			{
-				case '"':
-				case '/':
-				case '\\':
-					source = source.Remove(index, 1);
-					break;
-				case 'b':
-					count = 2;
-					replace = "\b";
-					break;
-				case 'f':
-					count = 2;
-					replace = "\f";
-					break;
-				case 'n':
-					count = 2;
-					replace = "\n";
-					break;
-				case 'r':
-					count = 2;
-					replace = "\r";
-					break;
-				case 't':
-					count = 2;
-					replace = "\t";
-					break;
-				case 'u':
-					length = 6;
-					var hex = int.Parse(source.Substring(index + 2, 4), NumberStyles.HexNumber);
-					if (source.Substring(index + 6, 2) == "\\u")
-					{
-						var hex2 = int.Parse(source.Substring(index + 8, 4), NumberStyles.HexNumber);
-						hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
-						length += 6;
-					}
-					source = source.Substring(0, index) + char.ConvertFromUtf32(hex) + source.Substring(index + length);
-					break;
-				default:
-					throw new JsonStringInvalidEscapeSequenceException(source.Substring(index, 2), index + length);
-			}
-			if (replace != null)
-				source = Replace(source, index, count, replace);
-			return source;
+			result = source;
+			return null;
 		}
 		public static string InsertEscapeSequences(this string source)
 		{
@@ -218,10 +170,13 @@ namespace Manatee.Json.Internal
 			// we're not going to do much better than this.
 			return source.Remove(index, count).Insert(index, content);
 		}
-		public static char SkipWhiteSpace(this string source, ref int index, int length)
+		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
 		{
 			if (index >= length)
-				throw new JsonSyntaxException("Unexpected end of input");
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
 			var c = source[index];
 			while (index < length)
 			{
@@ -230,8 +185,12 @@ namespace Manatee.Json.Internal
 				c = source[index];
 			}
 			if (index >= length)
-				throw new JsonSyntaxException("Unexpected end of input");
-			return c;
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
+			ch = c;
+			return null;
 		}
 		// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)

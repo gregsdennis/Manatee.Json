@@ -11,7 +11,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_Parse_Single()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.0570000");
+			Console.WriteLine("Time To Beat: 00:00:00.0110006");
 			var content = File.ReadAllText("Associates.json");
 			var start = DateTime.Now;
 			var json = JsonValue.Parse(content);
@@ -22,7 +22,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_Parse_10000()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.7570433");
+			Console.WriteLine("Time To Beat: 00:00:00.3410196");
 			var content = File.ReadAllText("Associates.json");
 			var start = DateTime.Now;
 			JsonValue json = null;

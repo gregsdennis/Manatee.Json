@@ -24,6 +24,7 @@
 ***************************************************************************************/
 
 using System;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Manatee.Json
@@ -51,12 +52,30 @@ namespace Manatee.Json
 		public override string Message { get { return string.Format("{0} Path: '{1}'", base.Message, Path); } }
 
 		[StringFormatMethod("format")]
-		internal JsonSyntaxException(string format, params object[] parameters)
-			: base(string.Format(format, parameters)) { }
-
-		internal void PrependPath(string part)
+		internal JsonSyntaxException(string message, JsonValue value)
+			: base(message)
 		{
-			_path = part + _path;
+			_path = BuildPath(value);
+		}
+
+		private static string BuildPath(JsonValue value)
+		{
+			if (value == null) return string.Empty;
+			switch (value.Type)
+			{
+				case JsonValueType.Object:
+					if (!value.Object.Any()) return string.Empty;
+					var pair = value.Object.Last();
+					var key = pair.Key;
+					return string.Format(".{0}{1}", key, BuildPath(pair.Value));
+				case JsonValueType.Array:
+					if (!value.Array.Any()) return string.Empty;
+					var item = value.Array.Last();
+					var index = value.Array.Count - 1;
+					return string.Format("[{0}]{1}", index, BuildPath(item));
+				default:
+					return string.Empty;
+			}
 		}
 	}
 }

@@ -30,40 +30,50 @@ namespace Manatee.Json.Parsing
 		{
 			return c == '{';
 		}
-		public JsonValue Parse(string source, ref int index)
+		public string TryParse(string source, ref int index, out JsonValue value)
 		{
 			var obj = new JsonObject();
+			value = obj;
 			var length = source.Length;
 			index++;
 			while (index < length)
 			{
-				// allow whitespace
-				var c = source.SkipWhiteSpace(ref index, length);
+				char c;
+				var message = source.SkipWhiteSpace(ref index, length, out c);
+				if (message != null) return message;
 				// check for empty object
 				if (c == '}')
 					if (obj.Count == 0) break;
-					else throw new JsonSyntaxException("Expected key");
+					else return "Expected key.";
 				// get key
-				c = source.SkipWhiteSpace(ref index, length);
-				if (c != '\"')
-					throw new JsonSyntaxException("Expected key");
-				var key = JsonParser.Parse(source, ref index).String;
+				message = source.SkipWhiteSpace(ref index, length, out c);
+				if (message != null) return message;
+				if (c != '\"') return "Expected key.";
+				JsonValue item;
+				message = JsonParser.Parse(source, ref index, out item);
+				if (message != null) return message;
+				var key = item.String;
 				// check for colon
-				// allow whitespace
-				c = source.SkipWhiteSpace(ref index, length);
+				message = source.SkipWhiteSpace(ref index, length, out c);
+				if (message != null) return message;
 				if (c != ':')
-					throw new JsonSyntaxException("Expected ','");
+				{
+					obj.Add(key, null);
+					return "Expected ':'.";
+				}
 				index++;
 				// get value (whitespace is removed in Parse)
-				obj.Add(key, JsonParser.Parse(source, ref index));
-				c = source.SkipWhiteSpace(ref index, length);
+				message = JsonParser.Parse(source, ref index, out item);
+				obj.Add(key, item);
+				if (message != null) return message;
+				message = source.SkipWhiteSpace(ref index, length, out c);
+				if (message != null) return message;
 				// check for end or separator
 				index++;
 				if (c == '}') break;
-				if (c != ',')
-					throw new JsonSyntaxException("Expected ','");
+				if (c != ',') return "Expected ','.";
 			}
-			return obj;
+			return null;
 		}
 	}
 }

@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -75,39 +76,69 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingValue_ThrowsJsonSyntaxException()
 		{
 			var s = "{\"bool\":false,\"int\":,\"string\":\"a string\"}";
-			var actual = JsonValue.Parse(s);
+			try
+			{
+				var actual = JsonValue.Parse(s);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Cannot determine type. Path: '$.int'", e.Message);
+			}
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingKey_ThrowsJsonSyntaxException()
 		{
 			var s = "{\"bool\":false,:42,\"string\":\"a string\"}";
-			var actual = JsonValue.Parse(s);
+			try
+			{
+				var actual = JsonValue.Parse(s);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Expected key. Path: '$.bool'", e.Message);
+			}
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingKeyValue_ThrowsJsonSyntaxException()
 		{
 			var s = "{\"bool\":false,,\"string\":\"a string\"}";
-			var actual = JsonValue.Parse(s);
+			try
+			{
+				var actual = JsonValue.Parse(s);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Expected key. Path: '$.bool'", e.Message);
+			}
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingKeyValueDelimiter_ThrowsJsonSyntaxException()
 		{
 			var s = "{\"bool\":false,\"int\"42,\"string\":\"a string\"}";
-			var actual = JsonValue.Parse(s);
+			try
+			{
+				var actual = JsonValue.Parse(s);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Expected ':'. Path: '$.int'", e.Message);
+			}
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingDelimiter_ThrowsJsonValueParseException()
 		{
 			var s = "{\"bool\":false,\"int\":42\"string\":\"a string\"}";
-			var actual = JsonValue.Parse(s);
+			try
+			{
+				var actual = JsonValue.Parse(s);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Expected ','. Path: '$.int'", e.Message);
+			}
 		}
 		[TestMethod]
 		public void Parse_StringMissingOpenBrace_ParsesFirstElementOnly()
@@ -117,11 +148,17 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual("bool", actual);
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingCloseBrace_ThrowsJsonSyntaxException()
 		{
 			var s = "{\"bool\":false,\"int\":42,\"string\":\"a string\"";
-			var actual = JsonValue.Parse(s);
+			try
+			{
+				var actual = JsonValue.Parse(s);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Unexpected end of input. Path: '$.string'", e.Message);
+			}
 		}
 		[TestMethod]
 		public void Parse_StringFromSourceForge_kheimric()

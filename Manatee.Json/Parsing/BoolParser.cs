@@ -32,7 +32,7 @@ namespace Manatee.Json.Parsing
 		{
 			return c.In('t', 'T', 'f', 'F');
 		}
-		public JsonValue Parse(string source, ref int index)
+		public string TryParse(string source, ref int index, out JsonValue value)
 		{
 			char[] buffer;
 			int count;
@@ -55,14 +55,17 @@ namespace Manatee.Json.Parsing
 			if (result == "true")
 			{
 				index += 4;
-				return true;
+				value = true;
+				return null;
 			}
 			if (result == "false")
 			{
 				index += 5;
-				return false;
+				value = false;
+				return null;
 			}
-			throw new JsonSyntaxException("Unrecognized token");
+			value = null;
+			return string.Format("Value not recognized: '{0}'", result);
 		}
 	}
 }

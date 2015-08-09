@@ -261,11 +261,17 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringWithBadToken_ThrowsJsonValueParseException()
 		{
 			var s = "invalid data";
-			var actual = JsonValue.Parse(s);
+			try
+			{
+				var actual = JsonValue.Parse(s);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Cannot determine type. Path: '$'", e.Message);
+			}
 		}
 		[TestMethod]
 		public void Parse_StringValueWithEscapedQuote_ReturnsCorrectJsonValue()
@@ -358,11 +364,17 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected.String, actual.String);
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonStringInvalidEscapeSequenceException))]
 		public void Parse_StringValueWithInvalidEscapeSequence_ThrowsException()
 		{
 			var json = "\"An \\rescaped\\a carriage return\"";
-			var actual = JsonValue.Parse(json);
+			try
+			{
+				var actual = JsonValue.Parse(json);
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Invalid escape sequence: '\\a'. Path: '$'", e.Message);
+			}
 		}
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
