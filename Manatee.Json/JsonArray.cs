@@ -21,12 +21,8 @@
 
 ***************************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Internal;
-using Manatee.StateMachine;
-using Manatee.StateMachine.Exceptions;
 
 namespace Manatee.Json
 {
@@ -39,36 +35,6 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonArray : List<JsonValue>
 	{
-		enum State
-		{
-			Start,
-			Value,
-			End
-		}
-
-		private static readonly StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
-
-		private readonly string _source;
-		private int _index;
-		private JsonValue _value;
-		private bool _done;
-		readonly InputStream<JsonInput> _stream = new InputStream<JsonInput>();
-
-		static JsonArray()
-		{
-			StateMachine[State.Start, JsonInput.OpenBracket] = GotStart;
-			StateMachine[State.Value, JsonInput.OpenBrace] = GotValue;
-			StateMachine[State.Value, JsonInput.Quote] = GotValue;
-			StateMachine[State.Value, JsonInput.Number] = GotValue;
-			StateMachine[State.Value, JsonInput.Boolean] = GotValue;
-			StateMachine[State.Value, JsonInput.Null] = GotValue;
-			StateMachine[State.Value, JsonInput.OpenBracket] = GotValue;
-			StateMachine[State.Value, JsonInput.CloseBracket] = GotEmpty;
-			StateMachine[State.End, JsonInput.Comma] = GotEnd;
-			StateMachine[State.End, JsonInput.CloseBracket] = GotEnd;
-			StateMachine.UpdateFunction = GetNextInput;
-		}
-
 		/// <summary>
 		/// Creates an empty instance of a JSON array.
 		/// </summary>
@@ -82,21 +48,6 @@ namespace Manatee.Json
 			: base(collection)
 		{
 			
-		}
-
-		internal JsonArray(string s, ref int i)
-			: this()
-		{
-			_source = s;
-			i = Parse(i);
-		}
-
-		/// <summary>
-		/// Finalizes memory management responsibilities.
-		/// </summary>
-		~JsonArray()
-		{
-			StateMachine.UnregisterOwner(this);
 		}
 
 		/// <summary>
@@ -118,48 +69,6 @@ namespace Manatee.Json
 			}
 			s += string.Format("{0}{1}\n{2}]", tab1, this[i].GetIndentedString(indentLevel + 1), tab0);
 			return s;
-		}
-
-		private int Parse(int i)
-		{
-			_stream.Clear();
-			_value = null;
-			_index = i;
-			_done = false;
-			try
-			{
-				StateMachine.Run(this, State.Start, _stream);
-				if (!_done)
-					throw new JsonSyntaxException("Found incomplete JSON array.");
-			}
-			catch (InputNotValidForStateException<State, JsonInput> e)
-			{
-				switch (e.State)
-				{
-					case State.Start:
-						throw new JsonSyntaxException("Expected '['.");
-					case State.Value:
-						throw new JsonSyntaxException("Expected a value at array index {0}.", Count);
-					case State.End:
-						throw new JsonSyntaxException("Expected either ',' or ']' after array index {0}.", Count);
-					default:
-						throw new IndexOutOfRangeException();
-				}
-			}
-			catch (StateNotValidException<State>)
-			{
-				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON array. Please report to littlecrabsolutions@yahoo.com.");
-			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
-			{
-				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON array. Please report to littlecrabsolutions@yahoo.com.");
-			}
-			catch (JsonSyntaxException e)
-			{
-				e.PrependPath(string.Format("[{0}]", Count));
-				throw;
-			}
-			return _index;
 		}
 
 		/// <summary>
@@ -199,50 +108,8 @@ namespace Manatee.Json
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
+			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
 			return base.GetHashCode();
-		}
-
-		private static void GetNextInput(object owner)
-		{
-			var array = (JsonArray) owner;
-			if (array._done || (array._index == array._source.Length)) return;
-			var c = default(char);
-			try
-			{
-				JsonInput next;
-				do
-				{
-					c = array._source[array._index++];
-				} while (!CharacterConverter.Item(c, out next));
-				array._stream.Add(next);
-			}
-			catch (KeyNotFoundException)
-			{
-				throw new JsonSyntaxException("Unrecognized character '{0}' in input string.", c);
-			}
-		}
-		private static State GotStart(object owner, JsonInput input)
-		{
-			return State.Value;
-		}
-		private static State GotValue(object owner, JsonInput input)
-		{
-			var array = (JsonArray) owner;
-			array._value = JsonValue.Parse(array._source, ref array._index);
-			return State.End;
-		}
-		private static State GotEmpty(object owner, JsonInput input)
-		{
-			var array = (JsonArray) owner;
-			array._done = true;
-			return State.Value;
-		}
-		private static State GotEnd(object owner, JsonInput input)
-		{
-			var array = (JsonArray) owner;
-			array.Add(array._value);
-			array._done = (input == JsonInput.CloseBracket);
-			return State.Value;
 		}
 	}
 }

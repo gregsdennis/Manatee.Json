@@ -63,6 +63,53 @@ namespace Manatee.Json.Internal
 		{
 			return items.Where(i => i != null);
 		}
+		public static string EvaluateEscapeSequences(this string s)
+		{
+			var i = 0;
+			while (i < s.Length)
+			{
+				var length = 1;
+				if (s[i] == '\\')
+					switch (s[i + 1])
+					{
+						case '"':
+						case '/':
+						case '\\':
+							s = s.Remove(i, 1);
+							break;
+						case 'b':
+							s = s.Substring(0, i) + '\b' + s.Substring(i + length + 1);
+							break;
+						case 'f':
+							s = s.Substring(0, i) + '\f' + s.Substring(i + length + 1);
+							break;
+						case 'n':
+							s = s.Substring(0, i) + '\n' + s.Substring(i + length + 1);
+							break;
+						case 'r':
+							s = s.Substring(0, i) + '\r' + s.Substring(i + length + 1);
+							break;
+						case 't':
+							s = s.Substring(0, i) + '\t' + s.Substring(i + length + 1);
+							break;
+						case 'u':
+							length = 6;
+							var hex = int.Parse(s.Substring(i + 2, 4), NumberStyles.HexNumber);
+							if (s.Substring(i + 6, 2) == "\\u")
+							{
+								var hex2 = int.Parse(s.Substring(i + 8, 4), NumberStyles.HexNumber);
+								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
+								length += 6;
+							}
+							s = s.Substring(0, i) + char.ConvertFromUtf32(hex) + s.Substring(i + length);
+							break;
+						default:
+							throw new JsonStringInvalidEscapeSequenceException(string.Format("\\{0}", s[i + 1]), i);
+					}
+				i += length;
+			}
+			return s;
+		}
 		public static string Unescape(this string source, int index)
 		{
 			var count = 0;
@@ -170,6 +217,21 @@ namespace Manatee.Json.Internal
 			// I've checked both of these methods with ILSpy.  They occur in external methods, so
 			// we're not going to do much better than this.
 			return source.Remove(index, count).Insert(index, content);
+		}
+		public static char SkipWhiteSpace(this string source, ref int index, int length)
+		{
+			if (index >= length)
+				throw new JsonSyntaxException("Unexpected end of input");
+			var c = source[index];
+			while (index < length)
+			{
+				if (!char.IsWhiteSpace(c)) break;
+				index++;
+				c = source[index];
+			}
+			if (index >= length)
+				throw new JsonSyntaxException("Unexpected end of input");
+			return c;
 		}
 		// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)

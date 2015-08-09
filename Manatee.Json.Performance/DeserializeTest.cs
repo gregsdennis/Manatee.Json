@@ -120,13 +120,37 @@ namespace Manatee.Json.Performance
 			}
 			var end = DateTime.Now;
 			Console.WriteLine("Manatee: {0}", end - start);
-			start = DateTime.Now;
+			//start = DateTime.Now;
+			//for (int i = 0; i < 10000; i++)
+			//{
+			//	obj = JsonConvert.DeserializeObject<IEnumerable<SerializableAssociate>>(content);
+			//}
+			//end = DateTime.Now;
+			//Console.WriteLine("NewtonSoft: {0}", end - start);
+		}
+		[TestMethod]
+		public void Performance_IJsonSerializeOnly_10000()
+		{
+			Console.WriteLine("Time To Beat: 00:00:02.7321563");
+			var content = File.ReadAllText("Associates.json");
+			var serializer = new JsonSerializer();
+			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
+			IEnumerable<SerializableAssociate> obj;
+			var json = JsonValue.Parse(content);
+			var start = DateTime.Now;
 			for (int i = 0; i < 10000; i++)
 			{
-				obj = JsonConvert.DeserializeObject<IEnumerable<SerializableAssociate>>(content);
+				obj = serializer.Deserialize<IEnumerable<SerializableAssociate>>(json);
 			}
-			end = DateTime.Now;
-			Console.WriteLine("NewtonSoft: {0}", end - start);
+			var end = DateTime.Now;
+			Console.WriteLine("Manatee: {0}", end - start);
+			//start = DateTime.Now;
+			//for (int i = 0; i < 10000; i++)
+			//{
+			//	obj = JsonConvert.DeserializeObject<IEnumerable<SerializableAssociate>>(content);
+			//}
+			//end = DateTime.Now;
+			//Console.WriteLine("NewtonSoft: {0}", end - start);
 		}
 	}
 }

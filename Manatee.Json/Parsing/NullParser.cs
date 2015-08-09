@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2015 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -14,21 +14,34 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ISerializerCache.cs
-	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		ISerializerCache
-	Purpose:		Defines methods to cache typed serializer methods.
+	File Name:		NullParser.cs
+	Namespace:		Manatee.Json.Parsing
+	Class Name:		NullParser
+	Purpose:		Parses JSON null.
 
 ***************************************************************************************/
+using Manatee.Json.Internal;
 
-using System;
-using System.Reflection;
-
-namespace Manatee.Json.Serialization.Internal
+namespace Manatee.Json.Parsing
 {
-	internal interface ISerializerCache
+	internal class NullParser : IJsonParser
 	{
-		MethodInfo GetSerializeMethod(Type type);
-		MethodInfo GetDeserializeMethod(Type type);
+		public bool Handles(char c)
+		{
+			return c.In('n', 'N');
+		}
+		public JsonValue Parse(string source, ref int index)
+		{
+			var buffer = new char[4];
+			for (int i = 0; i < 4 && index + i < source.Length; i++)
+			{
+				buffer[i] = source[index + i];
+			}
+			var result = new string(buffer).ToLower();
+			if (result != "null")
+				throw new JsonSyntaxException("Unrecognized token");
+			index += 4;
+			return JsonValue.Null;
+		}
 	}
 }
