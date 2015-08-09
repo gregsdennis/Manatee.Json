@@ -33,14 +33,15 @@ namespace Manatee.Json.Parsing
 		{
 			return c == '\"';
 		}
-		public JsonValue Parse(string source, ref int index)
+		public string TryParse(string source, ref int index, out JsonValue value)
 		{
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
 			var buffer = new char[bufferLength];
-			int bufferIndex = 0;
+			var bufferIndex = 0;
 			var sourceLength = source.Length;
 			var foundEscape = false;
+			var complete = false;
 			index++;
 			while (index < sourceLength)
 			{
@@ -55,13 +56,25 @@ namespace Manatee.Json.Parsing
 				}
 				var c = source[index];
 				index++;
-				if (c == '"' && !foundEscape) break;
+				if (c == '"' && !foundEscape)
+				{
+					complete = true;
+					break;
+				}
 				foundEscape = c == '\\';
 				buffer[bufferIndex] = c;
 				bufferIndex++;
 			}
+			if (!complete)
+			{
+				value = null;
+				return "Could not find end of string value.";
+			}
 			var result = new string(buffer, 0, bufferIndex);
-			return result.EvaluateEscapeSequences();
+			string escaped;
+			var errorMessage = result.EvaluateEscapeSequences(out escaped);
+			value = escaped;
+			return errorMessage;
 		}
 	}
 }

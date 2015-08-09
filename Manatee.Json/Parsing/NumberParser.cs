@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 using System;
+using System.Linq;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -28,12 +29,13 @@ namespace Manatee.Json.Parsing
 	internal class NumberParser : IJsonParser
 	{
 		private static readonly int[] FibSequence = {8, 13, 21, 34, 55, 89, 144, 233, 377, 610};
+		private static readonly char[] NumberChars = "0123456798-+.eE".ToCharArray();
 
 		public bool Handles(char c)
 		{
 			return c.In('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-');
 		}
-		public JsonValue Parse(string source, ref int index)
+		public string TryParse(string source, ref int index, out JsonValue value)
 		{
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
@@ -53,15 +55,24 @@ namespace Manatee.Json.Parsing
 				}
 				var c = source[index];
 				if (c == ',') break;
+				if (!NumberChars.Contains(c))
+				{
+					value = null;
+					return "Expected \',\'.";
+				}
 				buffer[bufferIndex] = c;
 				index++;
 				bufferIndex++;
 			}
-			double value;
+			double dbl;
 			var result = new string(buffer, 0, bufferIndex);
-			if (!double.TryParse(result, out value))
-				throw new JsonSyntaxException("Unrecognized token");
-			return value;
+			if (!double.TryParse(result, out dbl))
+			{
+				value = null;
+				return string.Format("Value not recognized: '{0}'", result);
+			}
+			value = dbl;
+			return null;
 		}
 	}
 }

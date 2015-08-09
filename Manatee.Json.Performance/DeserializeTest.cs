@@ -16,7 +16,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_FullAutoSerialize_Single()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.0770077");
+			Console.WriteLine("Time To Beat: 00:00:00.0280016");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -33,7 +33,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_FullAutoSerialize_10000()
 		{
-			Console.WriteLine("Time To Beat: 00:00:02.3022302");
+			Console.WriteLine("Time To Beat: 00:00:01.6560947");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -57,7 +57,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_FullIJsonSerialize_Single()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.0719928");
+			Console.WriteLine("Time To Beat: 00:00:00.0230013");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -82,7 +82,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_FullIJsonSerialize_Single2()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.0719928");
+			Console.WriteLine("Time To Beat: 00:00:00.0230013");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -107,7 +107,7 @@ namespace Manatee.Json.Performance
 		[TestMethod]
 		public void Performance_FullIJsonSerialize_10000()
 		{
-			Console.WriteLine("Time To Beat: 00:00:02.7321563");
+			Console.WriteLine("Time To Beat: 00:00:00.6970399");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -120,18 +120,18 @@ namespace Manatee.Json.Performance
 			}
 			var end = DateTime.Now;
 			Console.WriteLine("Manatee: {0}", end - start);
-			//start = DateTime.Now;
-			//for (int i = 0; i < 10000; i++)
-			//{
-			//	obj = JsonConvert.DeserializeObject<IEnumerable<SerializableAssociate>>(content);
-			//}
-			//end = DateTime.Now;
-			//Console.WriteLine("NewtonSoft: {0}", end - start);
+			start = DateTime.Now;
+			for (int i = 0; i < 10000; i++)
+			{
+				obj = JsonConvert.DeserializeObject<IEnumerable<SerializableAssociate>>(content);
+			}
+			end = DateTime.Now;
+			Console.WriteLine("NewtonSoft: {0}", end - start);
 		}
 		[TestMethod]
 		public void Performance_IJsonSerializeOnly_10000()
 		{
-			Console.WriteLine("Time To Beat: 00:00:02.7321563");
+			Console.WriteLine("Time To Beat: 00:00:00.3400194");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -144,13 +144,6 @@ namespace Manatee.Json.Performance
 			}
 			var end = DateTime.Now;
 			Console.WriteLine("Manatee: {0}", end - start);
-			//start = DateTime.Now;
-			//for (int i = 0; i < 10000; i++)
-			//{
-			//	obj = JsonConvert.DeserializeObject<IEnumerable<SerializableAssociate>>(content);
-			//}
-			//end = DateTime.Now;
-			//Console.WriteLine("NewtonSoft: {0}", end - start);
 		}
 	}
 }

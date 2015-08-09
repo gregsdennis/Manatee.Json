@@ -30,7 +30,7 @@ namespace Manatee.Json.Parsing
 		{
 			return c.In('n', 'N');
 		}
-		public JsonValue Parse(string source, ref int index)
+		public string TryParse(string source, ref int index, out JsonValue value)
 		{
 			var buffer = new char[4];
 			for (int i = 0; i < 4 && index + i < source.Length; i++)
@@ -39,9 +39,13 @@ namespace Manatee.Json.Parsing
 			}
 			var result = new string(buffer).ToLower();
 			if (result != "null")
-				throw new JsonSyntaxException("Unrecognized token");
+			{
+				value = null;
+				return string.Format("Value not recognized: '{0}'", result);
+			}
 			index += 4;
-			return JsonValue.Null;
+			value = JsonValue.Null;
+			return null;
 		}
 	}
 }

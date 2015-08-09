@@ -30,28 +30,34 @@ namespace Manatee.Json.Parsing
 		{
 			return c == '[';
 		}
-		public JsonValue Parse(string source, ref int index)
+		public string TryParse(string source, ref int index, out JsonValue value)
 		{
 			var array = new JsonArray();
+			value = array;
 			var length = source.Length;
 			index++;
 			while (index < length)
 			{
-				var c = source.SkipWhiteSpace(ref index, length);
+				char c;
+				var message = source.SkipWhiteSpace(ref index, length, out c);
+				if (message != null) return message;
 				// check for empty array
 				if (c == ']')
 					if (array.Count == 0) break;
-					else throw new JsonSyntaxException("Expected value");
+					else return "Expected value.";
 				// get value
-				array.Add(JsonParser.Parse(source, ref index));
-				c = source.SkipWhiteSpace(ref index, length);
+				JsonValue item;
+				message = JsonParser.Parse(source, ref index, out item);
+				array.Add(item);
+				if (message != null) return message;
+				message = source.SkipWhiteSpace(ref index, length, out c);
+				if (message != null) return message;
 				// check for end or separator
 				index++;
 				if (c == ']') break;
-				if (c != ',')
-					throw new JsonSyntaxException("Expected ','");
+				if (c != ',') return "Expected ','";
 			}
-			return array;
+			return null;
 		}
 	}
 }

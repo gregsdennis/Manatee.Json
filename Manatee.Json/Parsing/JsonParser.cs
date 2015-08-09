@@ -43,17 +43,31 @@ namespace Manatee.Json.Parsing
 
 		public static JsonValue Parse(string source)
 		{
-			int index = 0;
-			return Parse(source, ref index);
+			var index = 0;
+			JsonValue value;
+			var errorMessage = Parse(source, ref index, out value);
+			if (errorMessage != null)
+				throw new JsonSyntaxException(errorMessage, value);
+			return value;
 		}
-		public static JsonValue Parse(string source, ref int index)
+		public static string Parse(string source, ref int index, out JsonValue value)
 		{
 			var length = source.Length;
-			var c = source.SkipWhiteSpace(ref index, length);
+			char c;
+			var errorMessage = source.SkipWhiteSpace(ref index, length, out  c);
+			if (errorMessage != null)
+			{
+				value = null;
+				return errorMessage;
+			}
 			var parser = Parsers.FirstOrDefault(p => p.Handles(c));
 			if (parser == null)
-				throw new JsonSyntaxException("Unrecognized token");
-			return parser.Parse(source, ref index);
+			{
+				value = null;
+				return "Cannot determine type.";
+			}
+			errorMessage = parser.TryParse(source, ref index, out value);
+			return errorMessage;
 		}
 	}
 }
