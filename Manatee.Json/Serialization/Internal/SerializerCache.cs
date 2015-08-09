@@ -22,31 +22,31 @@
 ***************************************************************************************/
 
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal
 {
 	internal static class SerializerCache
 	{
-		private static readonly Dictionary<Type, SerializerMethodPair> _cache;
+		private static readonly ConcurrentDictionary<Type, SerializerMethodPair> _cache;
 
 		static SerializerCache()
 		{
-			_cache = new Dictionary<Type, SerializerMethodPair>();
+			_cache = new ConcurrentDictionary<Type, SerializerMethodPair>();
 		}
 
 		public static MethodInfo GetSerializeMethod(Type type)
 		{
 			if (!_cache.ContainsKey(type))
-				_cache.Add(type, new SerializerMethodPair(type));
+				_cache.TryAdd(type, new SerializerMethodPair(type));
 			return _cache[type].Serializer;
 		}
 
 		public static MethodInfo GetDeserializeMethod(Type type)
 		{
 			if (!_cache.ContainsKey(type))
-				_cache.Add(type, new SerializerMethodPair(type));
+				_cache.TryAdd(type, new SerializerMethodPair(type));
 			return _cache[type].Deserializer;
 		}
 	}

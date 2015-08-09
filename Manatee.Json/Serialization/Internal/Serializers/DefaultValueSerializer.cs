@@ -42,7 +42,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			if (json == JsonValue.Null) return default(T);
+			if (json.Type == JsonValueType.Null) return default(T);
 			return _innerSerializer.Deserialize<T>(json, serializer);
 		}
 	}

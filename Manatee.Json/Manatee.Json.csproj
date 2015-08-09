@@ -85,6 +85,14 @@
     <Compile Include="JsonValue.cs" />
     <Compile Include="JsonValueType.cs" />
     <Compile Include="LinqExtensions.cs" />
+    <Compile Include="Parsing\ArrayParser.cs" />
+    <Compile Include="Parsing\BoolParser.cs" />
+    <Compile Include="Parsing\IJsonParser.cs" />
+    <Compile Include="Parsing\JsonParser.cs" />
+    <Compile Include="Parsing\NullParser.cs" />
+    <Compile Include="Parsing\NumberParser.cs" />
+    <Compile Include="Parsing\ObjectParser.cs" />
+    <Compile Include="Parsing\StringParser.cs" />
     <Compile Include="Path\ArrayParameters\FilterExpressionQuery.cs" />
     <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />
     <Compile Include="Path\ArrayParameters\IndexQuery.cs" />
@@ -171,7 +179,6 @@
     <Compile Include="Path\SearchParameters\NameSearchParameter.cs" />
     <Compile Include="Path\SearchParameters\WildCardSearchParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Internal\JsonInput.cs" />
     <Compile Include="Schema\AdditionalPropertiesDefinition.cs" />
     <Compile Include="Schema\AllOfSchema.cs" />
     <Compile Include="Schema\AnyOfSchema.cs" />
@@ -247,13 +254,7 @@
     <Compile Include="Serialization\Internal\ISerializer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Serialization\Internal\ISerializerCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Serialization\Internal\ISerializerDelegateProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Serialization\Internal\ISerializerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Serialization\Internal\ITypeSerializer.cs">
