@@ -20,6 +20,8 @@
 	Purpose:		Parses JSON null.
 
 ***************************************************************************************/
+
+using System.IO;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -44,6 +46,27 @@ namespace Manatee.Json.Parsing
 				return string.Format("Value not recognized: '{0}'", result);
 			}
 			index += 4;
+			value = JsonValue.Null;
+			return null;
+		}
+		public string TryParse(StreamReader stream, out JsonValue value)
+		{
+			var buffer = new char[4];
+			for (int i = 0; i < 4 && !stream.EndOfStream; i++)
+			{
+				buffer[i] = (char) stream.Read();
+			}
+			if (buffer[3] == (char) 0 && stream.EndOfStream)
+			{
+				value = null;
+				return "Unexpected end of input.";
+			}
+			var result = new string(buffer).ToLower();
+			if (result != "null")
+			{
+				value = null;
+				return string.Format("Value not recognized: '{0}'", result);
+			}
 			value = JsonValue.Null;
 			return null;
 		}

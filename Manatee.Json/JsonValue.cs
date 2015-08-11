@@ -23,6 +23,7 @@
 
 using System;
 using System.Globalization;
+using System.IO;
 using Manatee.Json.Internal;
 using Manatee.Json.Parsing;
 
@@ -338,8 +339,6 @@ namespace Manatee.Json
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty or whitespace.</exception>
 		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
-		/// <exception cref="JsonStringInvalidEscapeSequenceException">Thrown if <paramref name="source"/> contains a
-		/// string value with an invalid escape sequence.</exception>
 		public static JsonValue Parse(string source)
 		{
 			if (source == null)
@@ -347,6 +346,22 @@ namespace Manatee.Json
 			if (source.IsNullOrWhiteSpace())
 				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.Parse(source);
+		}
+		/// <summary>
+		/// Parses data from a <see cref="StreamReader"/> containing a JSON value.
+		/// </summary>
+		/// <param name="stream">the <see cref="StreamReader"/> to parse.</param>
+		/// <returns>The JSON value represented by the <see cref="string"/>.</returns>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is at the end.</exception>
+		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
+		public static JsonValue Parse(StreamReader stream)
+		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
+			if (stream.EndOfStream)
+				throw new ArgumentException("Source string contains no data.");
+			return JsonParser.Parse(stream);
 		}
 
 		/// <summary>

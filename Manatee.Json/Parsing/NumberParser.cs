@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 using System;
+using System.IO;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -62,6 +63,43 @@ namespace Manatee.Json.Parsing
 				}
 				buffer[bufferIndex] = c;
 				index++;
+				bufferIndex++;
+			}
+			double dbl;
+			var result = new string(buffer, 0, bufferIndex);
+			if (!double.TryParse(result, out dbl))
+			{
+				value = null;
+				return string.Format("Value not recognized: '{0}'", result);
+			}
+			value = dbl;
+			return null;
+		}
+		public string TryParse(StreamReader stream, out JsonValue value)
+		{
+			var bufferSize = 0;
+			var bufferLength = FibSequence[bufferSize];
+			var buffer = new char[bufferLength];
+			int bufferIndex = 0;
+			while (!stream.EndOfStream)
+			{
+				if (bufferIndex == bufferLength)
+				{
+					var currentLength = bufferLength;
+					bufferSize++;
+					bufferLength = FibSequence[bufferSize];
+					var newBuffer = new char[bufferLength];
+					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength * 2);
+					buffer = newBuffer;
+				}
+				var c = (char) stream.Read();
+				if (c == ',') break;
+				if (!NumberChars.Contains(c))
+				{
+					value = null;
+					return "Expected \',\'.";
+				}
+				buffer[bufferIndex] = c;
 				bufferIndex++;
 			}
 			double dbl;
