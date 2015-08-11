@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -50,6 +51,14 @@ namespace Manatee.Json.Parsing
 				throw new JsonSyntaxException(errorMessage, value);
 			return value;
 		}
+		public static JsonValue Parse(StreamReader stream)
+		{
+			JsonValue value;
+			var errorMessage = Parse(stream, out value);
+			if (errorMessage != null)
+				throw new JsonSyntaxException(errorMessage, value);
+			return value;
+		}
 		public static string Parse(string source, ref int index, out JsonValue value)
 		{
 			var length = source.Length;
@@ -67,6 +76,24 @@ namespace Manatee.Json.Parsing
 				return "Cannot determine type.";
 			}
 			errorMessage = parser.TryParse(source, ref index, out value);
+			return errorMessage;
+		}
+		public static string Parse(StreamReader stream, out JsonValue value)
+		{
+			char c;
+			var errorMessage = stream.SkipWhiteSpace(out  c);
+			if (errorMessage != null)
+			{
+				value = null;
+				return errorMessage;
+			}
+			var parser = Parsers.FirstOrDefault(p => p.Handles(c));
+			if (parser == null)
+			{
+				value = null;
+				return "Cannot determine type.";
+			}
+			errorMessage = parser.TryParse(stream, out value);
 			return errorMessage;
 		}
 	}

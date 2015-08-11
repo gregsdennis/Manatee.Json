@@ -22,6 +22,7 @@
 ***************************************************************************************/
 
 using System;
+using System.IO;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -61,6 +62,44 @@ namespace Manatee.Json.Parsing
 			if (result == "false")
 			{
 				index += 5;
+				value = false;
+				return null;
+			}
+			value = null;
+			return string.Format("Value not recognized: '{0}'", result);
+		}
+		public string TryParse(StreamReader stream, out JsonValue value)
+		{
+			char[] buffer;
+			int count;
+			var current = (char) stream.Read();
+			if (current.In('t', 'T'))
+			{
+				buffer = new char[4];
+				count = 4;
+			}
+			else
+			{
+				buffer = new char[5];
+				count = 5;
+			}
+			for (int i = 0; i < count && !stream.EndOfStream; i++)
+			{
+				buffer[i] = (char) stream.Read();
+			}
+			if (buffer[count - 1] == (char) 0 && stream.EndOfStream)
+			{
+				value = null;
+				return "Unexpected end of input.";
+			}
+			var result = new string(buffer).ToLower();
+			if (result == "true")
+			{
+				value = true;
+				return null;
+			}
+			if (result == "false")
+			{
 				value = false;
 				return null;
 			}

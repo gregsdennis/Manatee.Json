@@ -80,34 +80,9 @@ namespace Manatee.Json.Performance
 			}
 		}
 		[TestMethod]
-		public void Performance_FullIJsonSerialize_Single2()
-		{
-			Console.WriteLine("Time To Beat: 00:00:00.0230013");
-			var content = File.ReadAllText("Associates.json");
-			var serializer = new JsonSerializer();
-			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
-			var start = DateTime.Now;
-			var json = JsonValue.Parse(content);
-			var obj = serializer.Deserialize<IEnumerable<SerializableAssociate2>>(json);
-			var end = DateTime.Now;
-			Console.WriteLine("Manatee: {0}", end - start);
-			foreach (var serializableAssociate in obj)
-			{
-				Console.WriteLine("\t{0}", serializableAssociate);
-			}
-			start = DateTime.Now;
-			var obj2 = JsonConvert.DeserializeObject<IEnumerable<SerializableAssociate2>>(content);
-			end = DateTime.Now;
-			Console.WriteLine("NewtonSoft: {0}", end - start);
-			foreach (var serializableAssociate in obj2)
-			{
-				Console.WriteLine("\t{0}", serializableAssociate);
-			}
-		}
-		[TestMethod]
 		public void Performance_FullIJsonSerialize_10000()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.6970399");
+			Console.WriteLine("Time To Beat: 00:00:00.6080608");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
@@ -129,9 +104,23 @@ namespace Manatee.Json.Performance
 			Console.WriteLine("NewtonSoft: {0}", end - start);
 		}
 		[TestMethod]
+		public void Performance_IJsonSerializeOnly_Single()
+		{
+			Console.WriteLine("Time To Beat: 00:00:00.0120012");
+			var content = File.ReadAllText("Associates.json");
+			var serializer = new JsonSerializer();
+			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
+			IEnumerable<SerializableAssociate> obj;
+			var json = JsonValue.Parse(content);
+			var start = DateTime.Now;
+			obj = serializer.Deserialize<IEnumerable<SerializableAssociate>>(json);
+			var end = DateTime.Now;
+			Console.WriteLine("Manatee: {0}", end - start);
+		}
+		[TestMethod]
 		public void Performance_IJsonSerializeOnly_10000()
 		{
-			Console.WriteLine("Time To Beat: 00:00:00.3400194");
+			Console.WriteLine("Time To Beat: 00:00:00.2130213");
 			var content = File.ReadAllText("Associates.json");
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));

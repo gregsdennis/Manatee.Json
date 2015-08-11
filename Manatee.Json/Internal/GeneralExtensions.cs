@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace Manatee.Json.Internal
@@ -180,7 +181,8 @@ namespace Manatee.Json.Internal
 			var c = source[index];
 			while (index < length)
 			{
-				if (!char.IsWhiteSpace(c)) break;
+				if (!char.IsWhiteSpace(c))
+					break;
 				index++;
 				c = source[index];
 			}
@@ -192,7 +194,36 @@ namespace Manatee.Json.Internal
 			ch = c;
 			return null;
 		}
-		// Note: These methods assume that if a generic type is passed, the type is open.
+		public static string SkipWhiteSpace(this StreamReader stream, out char ch)
+		{
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
+			ch = (char) stream.Peek();
+			while (!stream.EndOfStream)
+			{
+				if (!char.IsWhiteSpace(ch)) break;
+				stream.Read();
+				ch = (char) stream.Peek();
+			}
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
+			return null;
+		}
+		public static Stream ToStream(this string str)
+		{
+			var stream = new MemoryStream();
+			var writer = new StreamWriter(stream);
+			writer.Write(str);
+			writer.Flush();
+			stream.Position = 0;
+			return stream;
+		}	// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived.IsSubtypeOf(tBase)) return true;
