@@ -39,7 +39,7 @@ namespace Manatee.Json.Tests
 	public class DevTest
 	{
 		[TestMethod]
-		//[Ignore]
+		[Ignore]
 		public void Test1()
 		{
 			var serializer = new JsonSerializer();

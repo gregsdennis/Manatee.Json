@@ -22,12 +22,8 @@
 
 ***************************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Internal;
-using Manatee.StateMachine;
-using Manatee.StateMachine.Exceptions;
 
 namespace Manatee.Json
 {
@@ -40,24 +36,6 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonObject : Dictionary<string, JsonValue>
 	{
-		enum State
-		{
-			Start,
-			Key,
-			Colon,
-			Value,
-			End
-		}
-
-		private static readonly StateMachine<State, JsonInput> StateMachine = new StateMachine<State, JsonInput>();
-
-		private readonly string _source;
-		private string _key;
-		private int _index;
-		private JsonValue _value;
-		private bool _done;
-		private readonly InputStream<JsonInput> _stream = new InputStream<JsonInput>();
-
 		/// <summary>
 		/// Gets or sets the value associated with the specified key.
 		/// </summary>
@@ -69,22 +47,6 @@ namespace Manatee.Json
 			set { base[key] = value ?? JsonValue.Null; }
 		}
 
-		static JsonObject()
-		{
-			StateMachine[State.Start, JsonInput.OpenBrace] = GotStart;
-			StateMachine[State.Key, JsonInput.Quote] = GotKey;
-			StateMachine[State.Key, JsonInput.CloseBrace] = GotEmpty;
-			StateMachine[State.Colon, JsonInput.Colon] = GotColon;
-			StateMachine[State.Value, JsonInput.OpenBrace] = GotValue;
-			StateMachine[State.Value, JsonInput.Quote] = GotValue;
-			StateMachine[State.Value, JsonInput.Number] = GotValue;
-			StateMachine[State.Value, JsonInput.Boolean] = GotValue;
-			StateMachine[State.Value, JsonInput.Null] = GotValue;
-			StateMachine[State.Value, JsonInput.OpenBracket] = GotValue;
-			StateMachine[State.End, JsonInput.Comma] = GotEnd;
-			StateMachine[State.End, JsonInput.CloseBrace] = GotEnd;
-			StateMachine.UpdateFunction = GetNextInput;
-		}
 		/// <summary>
 		/// Creates an empty instance of a JSON object.
 		/// </summary>
@@ -96,35 +58,6 @@ namespace Manatee.Json
 		/// <param name="collection"></param>
 		public JsonObject(IDictionary<string, JsonValue> collection)
 			: base(collection) {}
-		/// <summary>
-		/// Creates an instance of a JSON object and fills it by parsing the
-		/// supplied string.
-		/// </summary>
-		/// <param name="source">A string.</param>
-		/// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
-		/// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty or whitespace.</exception>
-		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
-		/// <exception cref="JsonStringInvalidEscapeSequenceException">Thrown if <paramref name="source"/> contains a
-		/// string value with an invalid escape sequence.</exception>
-		public JsonObject(string source)
-			: this()
-		{
-			_source = source.StripExternalSpaces();
-			Parse(0);
-		}
-		internal JsonObject(string s, ref int i)
-			: this()
-		{
-			_source = s;
-			i = Parse(i);
-		}
-		/// <summary>
-		/// Finalizes memory management responsibilities.
-		/// </summary>
-		~JsonObject()
-		{
-			StateMachine.UnregisterOwner(this);
-		}
 
 		/// <summary>
 		/// Creates a string representation of the JSON data.
@@ -157,69 +90,6 @@ namespace Manatee.Json
 		public new void Add(string key, JsonValue value)
 		{
 			base.Add(key, value ?? JsonValue.Null);
-		}
-
-		private int Parse(int i)
-		{
-			_stream.Clear();
-			_value = null;
-			_index = i;
-			_done = false;
-			try
-			{
-				StateMachine.Run(this, State.Start, _stream);
-				if (!_done)
-					throw new JsonSyntaxException("Found incomplete JSON object.");
-			}
-			catch (InputNotValidForStateException<State, JsonInput> e)
-			{
-				switch (e.State)
-				{
-					case State.Start:
-						throw new JsonSyntaxException("Expected '{{'.");
-					case State.Key:
-						if (_key != null)
-							throw new JsonSyntaxException("Expected a key. Last key: `{0}`.", _key);
-						throw new JsonSyntaxException("Expected a key.");
-					case State.Colon:
-						throw new JsonSyntaxException("Expected ':' after key '{0}'.", _key);
-					case State.Value:
-						throw new JsonSyntaxException("Expected a value for key '{0}'", _key);
-					case State.End:
-						throw new JsonSyntaxException("Expected either ',' or '}}'. Last key: `{0}`.", _key);
-					default:
-						throw new IndexOutOfRangeException();
-				}
-			}
-			catch (StateNotValidException<State>)
-			{
-				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON object. Please report to littlecrabsolutions@yahoo.com.");
-			}
-			catch (ActionNotDefinedForStateAndInputException<State, JsonInput>)
-			{
-				throw new JsonSyntaxException("An unrecoverable error occurred while parsing a JSON object. Please report to littlecrabsolutions@yahoo.com.");
-			}
-			catch (JsonSyntaxException e)
-			{
-				e.PrependPath(string.Format(".{0}", _key));
-				throw;
-			}
-			return _index;
-		}
-
-		private static string GetKey(string source, ref int index)
-		{
-			var temp = source.Substring(index);
-			var length = temp.IndexOf('"');
-			if (length < 0)
-				throw new JsonSyntaxException("Could not find end of string.");
-			if (length == 0)
-			{
-				index += 1;
-				return string.Empty;
-			}
-			index += length + 1;
-			return temp.Substring(0, length);
 		}
 
 		/// <summary>
@@ -260,57 +130,5 @@ namespace Manatee.Json
 		{
 			return base.GetHashCode();
 		}
-
-		private static void GetNextInput(object owner)
-		{
-			var obj = owner as JsonObject;
-			if (obj == null) return;
-			if (obj._done || (obj._index == obj._source.Length)) return;
-			var c = default(char);
-			try
-			{
-				c = obj._source[obj._index++];
-				var next = CharacterConverter.Item(c);
-				obj._stream.Add(next);
-			}
-			catch (KeyNotFoundException)
-			{
-				throw new JsonSyntaxException("Unrecognized character '{0}' in input string.  Last key: '{1}'", c, obj._key);
-			}
-		}
-		private static State GotStart(object owner, JsonInput input)
-		{
-			return State.Key;
-		}
-		private static State GotKey(object owner, JsonInput input)
-		{
-			var obj = owner as JsonObject;
-			obj._key = GetKey(obj._source, ref obj._index);
-			return State.Colon;
-		}
-		private static State GotColon(object owner, JsonInput input)
-		{
-			return State.Value;
-		}
-		private static State GotValue(object owner, JsonInput input)
-		{
-			var obj = owner as JsonObject;
-			obj._value = JsonValue.Parse(obj._source, ref obj._index);
-			return State.End;
-		}
-		private static State GotEmpty(object owner, JsonInput input)
-		{
-			var obj = owner as JsonObject;
-			obj._done = true;
-			return State.Value;
-		}
-		private static State GotEnd(object owner, JsonInput input)
-		{
-			var obj = owner as JsonObject;
-			obj[obj._key] = obj._value;
-			obj._done = (input == JsonInput.CloseBrace);
-			return State.Key;
-		}
-
 	}
 }

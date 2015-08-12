@@ -35,8 +35,9 @@
     <Reference Include="JetBrains.Annotations">
       <HintPath>..\..\..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\..\..\packages\Manatee.StateMachine.1.1\lib\net35\Manatee.StateMachine.dll</HintPath>
+    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Manatee.StateMachine.1.1.1\lib\net35\Manatee.StateMachine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -31,8 +31,6 @@ namespace Manatee.Json.Serialization
 	/// </summary>
 	public class JsonSerializer
 	{
-		private static readonly ISerializerFactory SerializerFactory = new SerializerFactory();
-
 		private readonly SerializationPairCache _serializationMap = new SerializationPairCache();
 		private int _callCount;
 		private JsonSerializerOptions _options;

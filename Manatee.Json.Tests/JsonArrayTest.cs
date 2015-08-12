@@ -62,8 +62,7 @@ namespace Manatee.Json.Tests
 		{
 			var s = "[false,42,\"a string\"]";
 			var expected = new JsonArray { false, 42, "a string" };
-			var i = 0;
-			var actual = new JsonArray(s, ref i);
+			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -71,8 +70,7 @@ namespace Manatee.Json.Tests
 		{
 			var s = "[]";
 			var expected = new JsonArray();
-			var i = 0;
-			var actual = new JsonArray(s, ref i);
+			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -80,24 +78,21 @@ namespace Manatee.Json.Tests
 		public void Parse_StringMissingValue_ThrowsJsonSyntaxException()
 		{
 			var s = "[false,,\"a string\"]";
-			var i = 0;
-			var actual = new JsonArray(s, ref i);
+			var actual = JsonValue.Parse(s);
 		}
 		[TestMethod]
-		[ExpectedException(typeof(JsonSyntaxException))]
-		public void Parse_StringMissingOpenBracket_ThrowsJsonSyntaxException()
+		public void Parse_StringMissingOpenBracket_ReturnsFirstElement()
 		{
 			var s = "false,42,\"a string\"]";
-			var i = 0;
-			var actual = new JsonArray(s, ref i);
+			var actual = JsonValue.Parse(s);
+			Assert.AreEqual(false, actual);
 		}
 		[TestMethod]
 		[ExpectedException(typeof(JsonSyntaxException))]
 		public void Parse_StringMissingCloseBracket_ThrowsJsonSyntaxException()
 		{
 			var s = "[false,42,\"a string\"";
-			var i = 0;
-			var actual = new JsonArray(s, ref i);
+			var actual = JsonValue.Parse(s);
 		}
 		[TestMethod]
 		public void Ctor_InitializationIsSuccessful()

@@ -43,11 +43,11 @@ namespace Manatee.Json.Serialization.Internal
 
 		public void AddReference(PropertyInfo property, object obj)
 		{
-			_references.Add(new PropertyReference { Info = property, Owner = obj });
+			_references.Add(new PropertyReference {Info = property, Owner = obj});
 		}
 		public void AddReference(FieldInfo field, object obj)
 		{
-			_references.Add(new FieldReference { Info = field, Owner = obj });
+			_references.Add(new FieldReference {Info = field, Owner = obj});
 		}
 		public void Reconcile()
 		{
