@@ -137,7 +137,7 @@ namespace Manatee.Json.Tests
 			}
 			catch (JsonSyntaxException e)
 			{
-				Assert.AreEqual("Expected ','. Path: '$.int'", e.Message);
+				Assert.AreEqual("Expected ',', ']', or '}'. Path: '$.int'", e.Message);
 			}
 		}
 		[TestMethod]

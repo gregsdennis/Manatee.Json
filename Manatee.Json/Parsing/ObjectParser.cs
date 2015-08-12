@@ -45,7 +45,11 @@ namespace Manatee.Json.Parsing
 				if (message != null) return message;
 				// check for empty object
 				if (c == '}')
-					if (obj.Count == 0) break;
+					if (obj.Count == 0)
+					{
+						index++;
+						break;
+					}
 					else return "Expected key.";
 				// get key
 				message = source.SkipWhiteSpace(ref index, length, out c);
@@ -72,7 +76,10 @@ namespace Manatee.Json.Parsing
 				if (message != null) return message;
 				// check for end or separator
 				index++;
-				if (c == '}') break;
+				if (c == '}')
+				{
+					break;
+				}
 				if (c != ',') return "Expected ','.";
 			}
 			return null;
