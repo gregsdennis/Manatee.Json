@@ -78,7 +78,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if ((propertyTypes & PropertySelectionStrategy.ReadOnly) != 0)
 				properties.AddRange(info.ReadOnlyProperties);
 #if NET35 || NET35C
-			return properties.Cast<MemberInfo>();
+			return properties;
 #elif NET4 || NET4C || NET45
 			return properties;
 #endif
@@ -88,7 +88,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var fields = new List<SerializationInfo>();
 			fields.AddRange(info.Fields);
 #if NET35 || NET35C
-			return fields.Cast<MemberInfo>();
+			return fields;
 #elif NET4 || NET4C || NET45
 			return fields;
 #endif
