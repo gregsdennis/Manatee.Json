@@ -45,7 +45,11 @@ namespace Manatee.Json.Parsing
 				if (message != null) return message;
 				// check for empty array
 				if (c == ']')
-					if (array.Count == 0) break;
+					if (array.Count == 0)
+					{
+						index++;
+						break;
+					}
 					else return "Expected value.";
 				// get value
 				JsonValue item;
@@ -56,8 +60,11 @@ namespace Manatee.Json.Parsing
 				if (message != null) return message;
 				// check for end or separator
 				index++;
-				if (c == ']') break;
-				if (c != ',') return "Expected ','";
+				if (c == ']')
+				{
+					break;
+				}
+				if (c != ',') return "Expected ','.";
 			}
 			return null;
 		}
@@ -92,7 +99,7 @@ namespace Manatee.Json.Parsing
 					stream.Read(); // waste the ']'
 					break;
 				}
-				if (c != ',') return "Expected ','";
+				if (c != ',') return "Expected ','.";
 			}
 			return null;
 		}

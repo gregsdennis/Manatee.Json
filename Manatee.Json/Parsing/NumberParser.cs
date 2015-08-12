@@ -29,7 +29,7 @@ namespace Manatee.Json.Parsing
 {
 	internal class NumberParser : IJsonParser
 	{
-		private static readonly int[] FibSequence = {8, 13, 21, 34, 55, 89, 144, 233, 377, 610};
+		private static readonly int[] FibSequence = {8, 13, 21, 34, 55, 89, 144};
 		private static readonly char[] NumberChars = "0123456798-+.eE".ToCharArray();
 
 		public bool Handles(char c)
@@ -55,11 +55,11 @@ namespace Manatee.Json.Parsing
 					buffer = newBuffer;
 				}
 				var c = source[index];
-				if (c == ',') break;
+				if (char.IsWhiteSpace(c) || c.In(',', ']', '}')) break;
 				if (!NumberChars.Contains(c))
 				{
 					value = null;
-					return "Expected \',\'.";
+					return "Expected \',\', \']\', or \'}\'.";
 				}
 				buffer[bufferIndex] = c;
 				index++;

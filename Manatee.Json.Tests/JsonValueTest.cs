@@ -22,6 +22,7 @@
 ***************************************************************************************/
 
 using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -403,6 +404,14 @@ namespace Manatee.Json.Tests
 			var str = "{\"string\":\"double\\n\\nspaced\"}";
 			var json = JsonValue.Parse(str).Object;
 			Console.WriteLine(json["string"].String);
+		}
+		[TestMethod]
+		[DeploymentItem("TrelloCard.json")]
+		public void Parse_TrelloCard()
+		{
+			var str = File.ReadAllText("TrelloCard.json");
+			var json = JsonValue.Parse(str);
+			Console.WriteLine(json);
 		}
 		#endregion
 
