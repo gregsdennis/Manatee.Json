@@ -265,9 +265,6 @@
     <Compile Include="Serialization\Internal\PropertyReference.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Serialization\Internal\ReflectionCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Serialization\Internal\SerializationPair.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -307,7 +304,9 @@
     <Compile Include="Serialization\Internal\Serializers\ReferencingSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Serialization\Internal\Serializers\ReflectionCache.cs" />
+    <Compile Include="Serialization\Internal\Serializers\ReflectionCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Serialization\Internal\Serializers\RegisteredObjectSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
