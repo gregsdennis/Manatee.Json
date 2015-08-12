@@ -20,10 +20,12 @@
 	Purpose:		Represents a JSON value.
 
 ***************************************************************************************/
+
 using System;
-using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using Manatee.Json.Internal;
+using Manatee.Json.Parsing;
 
 namespace Manatee.Json
 {
@@ -326,7 +328,7 @@ namespace Manatee.Json
 				case JsonValueType.Null:
 					return JsonValueType.Null.GetHashCode();
 			}
-// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
+			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
 			return base.GetHashCode();
 		}
 		/// <summary>
@@ -337,16 +339,29 @@ namespace Manatee.Json
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty or whitespace.</exception>
 		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
-		/// <exception cref="JsonStringInvalidEscapeSequenceException">Thrown if <paramref name="source"/> contains a
-		/// string value with an invalid escape sequence.</exception>
 		public static JsonValue Parse(string source)
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
 			if (source.IsNullOrWhiteSpace())
 				throw new ArgumentException("Source string contains no data.");
-			var i = 1;
-			return Parse(source.StripExternalSpaces(), ref i);
+			return JsonParser.Parse(source);
+		}
+		/// <summary>
+		/// Parses data from a <see cref="StreamReader"/> containing a JSON value.
+		/// </summary>
+		/// <param name="stream">the <see cref="StreamReader"/> to parse.</param>
+		/// <returns>The JSON value represented by the <see cref="string"/>.</returns>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is at the end.</exception>
+		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
+		public static JsonValue Parse(StreamReader stream)
+		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
+			if (stream.EndOfStream)
+				throw new ArgumentException("Source string contains no data.");
+			return JsonParser.Parse(stream);
 		}
 
 		/// <summary>
@@ -478,73 +493,6 @@ namespace Manatee.Json
 			return !Equals(a, b);
 		}
 
-		internal static JsonValue Parse(string source, ref int index)
-		{
-			string temp;
-			int length;
-#if !IOS
-			Debug.WriteLineIf(index == 0, source);
-#endif
-			switch (source[index-1])
-			{
-				case '"':										// string
-					temp = source.Substring(index);
-					if (temp.Length < 2)
-						throw new JsonSyntaxException("End of string not found.");
-					length = 0;
-					var found = false;
-					while (!found && length < temp.Length)
-					{
-						if (temp[length] == '\\')
-							if (!GeneralExtensions.EscapeChars.Contains(temp[length + 1].ToString(CultureInfo.InvariantCulture)))
-								throw new JsonStringInvalidEscapeSequenceException(temp.Substring(length, 2), index + length);
-							else
-								if (temp[length + 1] == 'u')
-									length += 4;
-								else
-									length++;
-						else found = (temp[length] == '"');
-						length++;
-					}
-					if (!found)
-						throw new JsonSyntaxException("End of string not found.");
-					if (length == 0)
-					{
-						index += 2;
-						return string.Empty;
-					}
-					index += length;
-					return temp.Substring(0, length-1).EvaluateEscapeSequences();
-				case '{':										// object
-					index--;
-					return new JsonObject(source, ref index);
-				case '[':										// array
-					index--;
-					return new JsonArray(source, ref index);
-				default:										// bool, number, null
-					temp = source.Substring(index-1);
-					length = temp.IndexOfAny(new[] { ',', ']', '}' });
-					if (length > 0) temp = temp.Substring(0, length);
-					switch (temp.ToLower())
-					{
-						case "true":
-							index += temp.Length - 1;
-							return true;
-						case "false":
-							index += temp.Length - 1;
-							return false;
-						case "null":
-							index += temp.Length - 1;
-							return Null;
-						default:
-							double d;
-							if (!double.TryParse(temp, NumberStyles.Float, CultureInfo.InvariantCulture, out d))
-								throw new JsonSyntaxException("Could not parse value '{0}'.", temp);
-							index += temp.Length - 1;
-							return d;
-					}
-			}
-		}
 		internal object GetValue()
 		{
 			switch (Type)

@@ -26,6 +26,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Serialization;
 
+//using Manatee.Json.Serialization;
+
 namespace Manatee.Json
 {
 	/// <summary>
@@ -143,7 +145,8 @@ namespace Manatee.Json
 		public static JsonValue ToJson<T>(this IEnumerable<T> list, JsonSerializer serializer)
 			where T : IJsonSerializable
 		{
-			if (list == null) return JsonValue.Null;
+			if (list == null)
+				return JsonValue.Null;
 			var json = new JsonArray();
 			json.AddRange(list.Select(j => j == null ? JsonValue.Null : j.ToJson(serializer)));
 			return json;
@@ -177,7 +180,8 @@ namespace Manatee.Json
 		public static IEnumerable<T> FromJson<T>(this IEnumerable<JsonValue> json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
 		{
-			if (json == null) return null;
+			if (json == null)
+				return null;
 			var list = new List<T>();
 			foreach (var value in json)
 			{
@@ -198,7 +202,8 @@ namespace Manatee.Json
 		public static T FromJson<T>(this JsonObject json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
 		{
-			if (json == null) return default(T);
+			if (json == null)
+				return default(T);
 			T obj = new T();
 			obj.FromJson(json, serializer);
 			return obj;

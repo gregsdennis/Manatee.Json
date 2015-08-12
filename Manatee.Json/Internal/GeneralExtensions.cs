@@ -24,16 +24,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Internal
 {
 	internal static class GeneralExtensions
 	{
-		public const string EscapeChars = @"\""/bfnrtu";
-
 		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
 																			 .Select(n => (char)n)
 																			 .Where(c => !char.IsControl(c));
@@ -67,112 +64,166 @@ namespace Manatee.Json.Internal
 		{
 			return items.Where(i => i != null);
 		}
-		public static string StripExternalSpaces(this string s)
-		{
-			var getNonDelimitedQuote = new Regex("((([^\"]*\\\\\\\")*)|([^\"]*))[^\"]*(\\\"|$)");
-			var whitespace = new Regex("\\s+");
-			var match = getNonDelimitedQuote.Match(s);
-			var remove = true;
-			var sb = new StringBuilder();
-			while (match.Success)
-			{
-				sb.Append(remove ? whitespace.Replace(match.Value, string.Empty) : match.Value);
-				remove = !remove;
-				match = match.NextMatch();
-			}
-			return sb.ToString();
-		}
-		public static string EvaluateEscapeSequences(this string s)
+		public static string EvaluateEscapeSequences(this string source, out string result)
 		{
 			var i = 0;
-			while (i < s.Length)
+			while (i < source.Length)
 			{
 				var length = 1;
-				if (s[i] == '\\')
-					switch (s[i + 1])
+				if (source[i] == '\\')
+					switch (source[i + 1])
 					{
 						case '"':
 						case '/':
 						case '\\':
-							s = s.Remove(i, 1);
+							source = source.Remove(i, 1);
 							break;
 						case 'b':
-							s = s.Substring(0, i) + '\b' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\b' + source.Substring(i + length + 1);
 							break;
 						case 'f':
-							s = s.Substring(0, i) + '\f' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\f' + source.Substring(i + length + 1);
 							break;
 						case 'n':
-							s = s.Substring(0, i) + '\n' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\n' + source.Substring(i + length + 1);
 							break;
 						case 'r':
-							s = s.Substring(0, i) + '\r' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\r' + source.Substring(i + length + 1);
 							break;
 						case 't':
-							s = s.Substring(0, i) + '\t' + s.Substring(i + length + 1);
+							source = source.Substring(0, i) + '\t' + source.Substring(i + length + 1);
 							break;
 						case 'u':
 							length = 6;
-							var hex = int.Parse(s.Substring(i + 2, 4), NumberStyles.HexNumber);
-							if (s.Substring(i + 6, 2) == "\\u")
+							var hex = int.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
+							if (source.Substring(i + 6, 2) == "\\u")
 							{
-								var hex2 = int.Parse(s.Substring(i + 8, 4), NumberStyles.HexNumber);
+								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
 								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
 								length += 6;
 							}
-							s = s.Substring(0, i) + char.ConvertFromUtf32(hex) + s.Substring(i + length);
+							source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
 							break;
+						default:
+							result = source;
+							return string.Format("Invalid escape sequence: '\\{0}'.", source[i + 1]);
 					}
 				i += length;
 			}
-			return s;
+			result = source;
+			return null;
 		}
-		public static string InsertEscapeSequences(this string s)
+		public static string InsertEscapeSequences(this string source)
 		{
-			var i = 0;
-			while (i < s.Length)
+			var index = 0;
+			while (index < source.Length)
 			{
-				switch (s[i])
+				var count = 0;
+				string replace = null;
+				switch (source[index])
 				{
 					case '"':
 					case '\\':
-						s = s.Insert(i, "\\");
-						i++;
+						source = source.Insert(index, "\\");
+						index++;
 						break;
 					case '\b':
-						s = s.Substring(0, i) + "\\b" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\b";
 						break;
 					case '\f':
-						s = s.Substring(0, i) + "\\f" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\f";
 						break;
 					case '\n':
-						s = s.Substring(0, i) + "\\n" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\n";
 						break;
 					case '\r':
-						s = s.Substring(0, i) + "\\r" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\r";
 						break;
 					case '\t':
-						s = s.Substring(0, i) + "\\t" + s.Substring(i + 1);
-						i++;
+						count = 1;
+						replace = "\\t";
 						break;
 					default:
-						if (!AvailableChars.Contains(s[i]))
+						if (!AvailableChars.Contains(source[index]))
 						{
-							var hex = Convert.ToInt16(s[i]).ToString("X4");
-							s = s.Substring(0, i) + "\\u" + hex + s.Substring(i + 1);
-							i += 5;
+							var hex = Convert.ToInt16(source[index]).ToString("X4");
+							source = source.Substring(0, index) + "\\u" + hex + source.Substring(index + 1);
+							index += 5;
 						}
 						break;
 				}
-				i++;
+				if (replace != null)
+				{
+					source = Replace(source, index, count, replace);
+					index++;
+				}
+				index++;
 			}
-			return s;
+			return source;
 		}
-		// Note: These methods assume that if a generic type is passed, the type is open.
+		private static string Replace(string source, int index, int count, string content)
+		{
+			// I've checked both of these methods with ILSpy.  They occur in external methods, so
+			// we're not going to do much better than this.
+			return source.Remove(index, count).Insert(index, content);
+		}
+		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
+		{
+			if (index >= length)
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
+			var c = source[index];
+			while (index < length)
+			{
+				if (!char.IsWhiteSpace(c))
+					break;
+				index++;
+				c = source[index];
+			}
+			if (index >= length)
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
+			ch = c;
+			return null;
+		}
+		public static string SkipWhiteSpace(this StreamReader stream, out char ch)
+		{
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
+			ch = (char) stream.Peek();
+			while (!stream.EndOfStream)
+			{
+				if (!char.IsWhiteSpace(ch)) break;
+				stream.Read();
+				ch = (char) stream.Peek();
+			}
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return "Unexpected end of input.";
+			}
+			return null;
+		}
+		public static Stream ToStream(this string str)
+		{
+			var stream = new MemoryStream();
+			var writer = new StreamWriter(stream);
+			writer.Write(str);
+			writer.Flush();
+			stream.Position = 0;
+			return stream;
+		}	// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived.IsSubtypeOf(tBase)) return true;

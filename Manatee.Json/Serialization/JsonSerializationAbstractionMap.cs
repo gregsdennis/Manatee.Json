@@ -101,6 +101,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The mapped type if a mapping exists; otherwise the abstraction type.</returns>
 		public static Type GetMap(Type type)
 		{
+			if (!type.IsAbstract && !type.IsInterface) return type;
 			if (_registry.ContainsKey(type)) return _registry[type];
 			if (type.IsGenericType)
 			{

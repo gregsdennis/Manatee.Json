@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2015 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -14,19 +14,22 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ISerializerFactory.cs
-	Namespace:		Manatee.Json.Serialization.Internal
-	Class Name:		ISerializerFactory
-	Purpose:		Defines methods required to produce IJsonSerializer
-					implementations based on a given type.
+	File Name:		IJsonParser.cs
+	Namespace:		Manatee.Json.Parsing
+	Class Name:		IJsonParser
+	Purpose:		Defines a parser for a single JSON type.
 
 ***************************************************************************************/
 
-namespace Manatee.Json.Serialization.Internal
+using System.IO;
+
+namespace Manatee.Json.Parsing
 {
-	internal interface ISerializerFactory
+	internal interface IJsonParser
 	{
-		ISerializer GetSerializer<T>(JsonSerializerOptions options, JsonValue json = null);
-		ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options);
+		bool Handles(char c);
+		// returns error message, if any.  Null return implies success.
+		string TryParse(string source, ref int index, out JsonValue value);
+		string TryParse(StreamReader stream, out JsonValue value);
 	}
 }

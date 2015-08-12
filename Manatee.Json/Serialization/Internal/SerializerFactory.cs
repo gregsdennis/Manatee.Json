@@ -28,7 +28,7 @@ using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization.Internal
 {
-	internal class SerializerFactory : ISerializerFactory
+	internal static class SerializerFactory
 	{
 		private static readonly AutoSerializer AutoSerializer;
 		private static readonly BooleanSerializer BooleanSerializer;
@@ -71,7 +71,7 @@ namespace Manatee.Json.Serialization.Internal
 				};
 		}
 
-		public ISerializer GetSerializer<T>(JsonSerializerOptions options, JsonValue json = null)
+		public static ISerializer GetSerializer<T>(JsonSerializerOptions options, JsonValue json = null)
 		{
 			var type = typeof (T);
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
@@ -104,7 +104,7 @@ namespace Manatee.Json.Serialization.Internal
 				return BuildSerializer(Library[typeToSerialize]);
 			return BuildSerializer(AutoSerializer);
 		}
-		public ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
+		public static ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
 		{
 			return AutoSerializer;
 		}
