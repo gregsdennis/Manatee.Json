@@ -1,0 +1,100 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Manatee.Json\Manatee.Json.csproj", "{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
+	ProjectSection(SolutionItems) = preProject
+		..\Apache License 2.0.txt = ..\Apache License 2.0.txt
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{E74B7538-5E17-43C7-925B-33784945312E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6E84846A-D11A-4B3F-9588-C815FB0A22C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.5", "3.5", "{C7B94F9D-BDEB-45E1-809E-F687BA7715D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.5 Client", "3.5 Client", "{93D5BD41-C245-4650-B629-0AA8D137A75E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.0 Client", "4.0 Client", "{DDF2E4C0-0717-412F-9DDB-A4E7457B1A86}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.5", "4.5", "{E51BA75F-50F0-4B01-B39E-AB27C097BA8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\3.5\Manatee.Json\Manatee.Json.csproj", "{2FF3277B-E5D4-4B23-86BD-32246D6AB4A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\3.5 Client\Manatee.Json\Manatee.Json.csproj", "{A8F74E88-C5B0-4ABF-8AE7-3B2A4DD012C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\4.0 Client\Manatee.Json\Manatee.Json.csproj", "{98D2DA6F-3776-4AFA-BBB9-3F2C3F0DE3C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\4.5\Manatee.Json\Manatee.Json.csproj", "{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iOS", "iOS", "{4A934D21-3C20-4F6C-B529-6E2D793C5FDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Frameworks\iOS\Manatee.Json\Manatee.Json.csproj", "{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other Frameworks", "Other Frameworks", "{BC78C5E9-1030-41BD-8796-CB1FC1D10776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Performance", "Manatee.Json.Performance\Manatee.Json.Performance.csproj", "{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FF3277B-E5D4-4B23-86BD-32246D6AB4A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF3277B-E5D4-4B23-86BD-32246D6AB4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FF3277B-E5D4-4B23-86BD-32246D6AB4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FF3277B-E5D4-4B23-86BD-32246D6AB4A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8F74E88-C5B0-4ABF-8AE7-3B2A4DD012C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8F74E88-C5B0-4ABF-8AE7-3B2A4DD012C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8F74E88-C5B0-4ABF-8AE7-3B2A4DD012C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8F74E88-C5B0-4ABF-8AE7-3B2A4DD012C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98D2DA6F-3776-4AFA-BBB9-3F2C3F0DE3C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98D2DA6F-3776-4AFA-BBB9-3F2C3F0DE3C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98D2DA6F-3776-4AFA-BBB9-3F2C3F0DE3C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98D2DA6F-3776-4AFA-BBB9-3F2C3F0DE3C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E74B7538-5E17-43C7-925B-33784945312E} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+		{C7B94F9D-BDEB-45E1-809E-F687BA7715D9} = {BC78C5E9-1030-41BD-8796-CB1FC1D10776}
+		{93D5BD41-C245-4650-B629-0AA8D137A75E} = {BC78C5E9-1030-41BD-8796-CB1FC1D10776}
+		{DDF2E4C0-0717-412F-9DDB-A4E7457B1A86} = {BC78C5E9-1030-41BD-8796-CB1FC1D10776}
+		{E51BA75F-50F0-4B01-B39E-AB27C097BA8F} = {BC78C5E9-1030-41BD-8796-CB1FC1D10776}
+		{2FF3277B-E5D4-4B23-86BD-32246D6AB4A6} = {C7B94F9D-BDEB-45E1-809E-F687BA7715D9}
+		{A8F74E88-C5B0-4ABF-8AE7-3B2A4DD012C9} = {93D5BD41-C245-4650-B629-0AA8D137A75E}
+		{98D2DA6F-3776-4AFA-BBB9-3F2C3F0DE3C5} = {DDF2E4C0-0717-412F-9DDB-A4E7457B1A86}
+		{E98AEA94-6CDF-4EC2-BB40-CBD746ECC3A5} = {E51BA75F-50F0-4B01-B39E-AB27C097BA8F}
+		{4A934D21-3C20-4F6C-B529-6E2D793C5FDA} = {BC78C5E9-1030-41BD-8796-CB1FC1D10776}
+		{FCD5393D-B0C8-47DA-8DE5-B97B91D5F139} = {4A934D21-3C20-4F6C-B529-6E2D793C5FDA}
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Json.vsmdi
+	EndGlobalSection
+EndGlobal

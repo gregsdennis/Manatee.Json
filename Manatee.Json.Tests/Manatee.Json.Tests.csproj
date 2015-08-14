@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E74B7538-5E17-43C7-925B-33784945312E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Manatee.Json.Tests</RootNamespace>
+    <AssemblyName>Manatee.Json.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70E0.tmp\Debug\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70E0.tmp\Release\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Manatee.StateMachine.1.1\lib\net40\Manatee.StateMachine.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DevTest.cs" />
+    <Compile Include="JsonArrayExtensionsTest.cs" />
+    <Compile Include="JsonObjectExtensionsTest.cs" />
+    <Compile Include="Schema\AllOfSchemaTest.cs" />
+    <Compile Include="Schema\ArraySchemaTest.cs" />
+    <Compile Include="Schema\AnyOfSchemaTest.cs" />
+    <Compile Include="Schema\BooleanSchemaTest.cs" />
+    <Compile Include="Schema\Draft04SchemaTest.cs" />
+    <Compile Include="Schema\StringSchemaTest.cs" />
+    <Compile Include="Schema\OneOfSchemaTest.cs" />
+    <Compile Include="Schema\ObjectSchemaTest.cs" />
+    <Compile Include="Schema\NumberSchemaTest.cs" />
+    <Compile Include="Schema\NullSchemaTest.cs" />
+    <Compile Include="Schema\NotSchemaTest.cs" />
+    <Compile Include="Schema\IntegerSchemaTest.cs" />
+    <Compile Include="Schema\EnumSchemaTest.cs" />
+    <Compile Include="Test References\JsonSerializableClass.cs" />
+    <Compile Include="Test References\JsonSerializableImplementationClass.cs" />
+    <Compile Include="XmlExtensionsTest.cs" />
+    <Compile Include="JsonObjectTest.cs" />
+    <Compile Include="JsonArrayTest.cs" />
+    <Compile Include="JsonValueTest.cs" />
+    <Compile Include="LinqExtensionsTest.cs" />
+    <Compile Include="Serialization\Internal\TypeGeneratorTest.cs" />
+    <Compile Include="Serialization\JsonSerializerTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test References\AbstractClass.cs" />
+    <Compile Include="Test References\DerivedClass.cs" />
+    <Compile Include="Test References\ImplementationClass.cs" />
+    <Compile Include="Test References\IInterface.cs" />
+    <Compile Include="Test References\ObjectWithAbstractAndInterfaceProps.cs" />
+    <Compile Include="Test References\ObjectWithBasicProps.cs" />
+    <Compile Include="Test References\ObjectWithExtendedProps.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="TrelloCard.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj">
+      <Project>{6adf0bcf-4e46-4605-a784-51ea6dac81c7}</Project>
+      <Name>Manatee.Json</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Path\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
