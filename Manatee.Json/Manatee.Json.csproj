@@ -28,28 +28,28 @@
     </DocumentationFile>
     <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-4.0|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release-4.0\</OutputPath>
     <DefineConstants>TRACE;NET4, JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DocumentationFile>bin\Release-4.0\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-4.0\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-3.5|AnyCPU' ">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release-3.5\</OutputPath>
     <DefineConstants>TRACE;NET35, JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DocumentationFile>bin\Release-3.5\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-3.5\</IntermediateOutputPath>
@@ -59,11 +59,11 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release-3.5C\</OutputPath>
     <DefineConstants>TRACE;NET35C, JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DocumentationFile>bin\Release-3.5C\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-3.5C\</IntermediateOutputPath>
@@ -73,11 +73,11 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release-4.0C\</OutputPath>
     <DefineConstants>TRACE;NET4C, JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DocumentationFile>bin\Release-4.0C\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-4.0C\</IntermediateOutputPath>
@@ -86,14 +86,27 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release-4.5\</OutputPath>
     <DefineConstants>TRACE;NET45, JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DocumentationFile>bin\Release-4.5\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-4.5\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-Mono|AnyCPU' ">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release-Mono\</OutputPath>
+    <DefineConstants>TRACE;NET35, IOS, JETBRAINS_ANNOTATIONS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release-Mono\Manatee.Json.XML</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
+    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-Mono\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -107,8 +120,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-4.5|AnyCPU'">
     <OutputPath>bin\Release-4.5\</OutputPath>
-    <DefineConstants>TRACE;NET4, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DefineConstants>TRACE;NET45, JETBRAINS_ANNOTATIONS</DefineConstants>
+    <DocumentationFile>bin\Release-4.5\Manatee.Json.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -117,8 +130,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-3.5|AnyCPU'">
     <OutputPath>bin\Release-3.5\</OutputPath>
-    <DefineConstants>TRACE;NET4, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DefineConstants>TRACE;NET35, JETBRAINS_ANNOTATIONS</DefineConstants>
+    <DocumentationFile>bin\Release-3.5\Manatee.Json.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -127,8 +140,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-3.5C|AnyCPU'">
     <OutputPath>bin\Release-3.5C\</OutputPath>
-    <DefineConstants>TRACE;NET4, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DefineConstants>TRACE;NET35C, JETBRAINS_ANNOTATIONS</DefineConstants>
+    <DocumentationFile>bin\Release-3.5C\Manatee.Json.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -137,21 +150,31 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-4.0C|AnyCPU'">
     <OutputPath>bin\Release-4.0C\</OutputPath>
-    <DefineConstants>TRACE;NET4, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <DocumentationFile>bin\Release\Manatee.Json.XML</DocumentationFile>
+    <DefineConstants>TRACE;NET4C, JETBRAINS_ANNOTATIONS</DefineConstants>
+    <DocumentationFile>bin\Release-4.0C\Manatee.Json.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-Mono|AnyCPU'">
+    <OutputPath>bin\Release-Mono\</OutputPath>
+    <DefineConstants>TRACE;NET35, IOS, JETBRAINS_ANNOTATIONS</DefineConstants>
+    <DocumentationFile>bin\Release-Mono\Manatee.Json.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release-4.0'">
     <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Manatee.StateMachine.1.1.1\lib\net40\Manatee.StateMachine.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-3.5'">
+  <ItemGroup Condition="'$(Configuration)' == 'Release-3.5' OR '$(Configuration)' == 'Release-Mono'">
     <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Manatee.StateMachine.1.1.1\lib\net35\Manatee.StateMachine.dll</HintPath>
       <Private>True</Private>
@@ -180,14 +203,12 @@
       <HintPath>..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>

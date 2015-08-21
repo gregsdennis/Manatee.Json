@@ -354,7 +354,7 @@ namespace Manatee.Json
 		/// <returns>The JSON value represented by the <see cref="string"/>.</returns>
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is at the end.</exception>
-		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="source"/> contains invalid JSON syntax.</exception>
+		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="stream"/> contains invalid JSON syntax.</exception>
 		public static JsonValue Parse(StreamReader stream)
 		{
 			if (stream == null)
