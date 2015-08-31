@@ -93,11 +93,11 @@ namespace Manatee.Json.Parsing
 					buffer = newBuffer;
 				}
 				var c = (char) stream.Read();
-				if (c == ',') break;
+				if (char.IsWhiteSpace(c) || c.In(',', ']', '}')) break;
 				if (!NumberChars.Contains(c))
 				{
 					value = null;
-					return "Expected \',\'.";
+					return "Expected \',\', \']\', or \'}\'.";
 				}
 				buffer[bufferIndex] = c;
 				bufferIndex++;
