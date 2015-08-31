@@ -92,8 +92,9 @@ namespace Manatee.Json.Parsing
 					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength * 2);
 					buffer = newBuffer;
 				}
-				var c = (char) stream.Read();
+				var c = (char) stream.Peek();
 				if (char.IsWhiteSpace(c) || c.In(',', ']', '}')) break;
+				stream.Read();
 				if (!NumberChars.Contains(c))
 				{
 					value = null;

@@ -83,7 +83,8 @@ namespace Manatee.Json.Parsing
 				buffer = new char[5];
 				count = 5;
 			}
-			for (int i = 0; i < count && !stream.EndOfStream; i++)
+			buffer[0] = current;
+			for (int i = 1; i < count && !stream.EndOfStream; i++)
 			{
 				buffer[i] = (char) stream.Read();
 			}
