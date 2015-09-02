@@ -26,7 +26,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Lovell\AppData\Local\Temp\vs257B.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-4.0|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -39,7 +39,7 @@
     <DocumentationFile>bin\Release-4.0\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-4.0\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Lovell\AppData\Local\Temp\vs257B.tmp\Release-4.0\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-3.5|AnyCPU' ">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -52,7 +52,7 @@
     <DocumentationFile>bin\Release-3.5\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-3.5\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Lovell\AppData\Local\Temp\vs257B.tmp\Release-3.5\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-3.5C|AnyCPU' ">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -66,7 +66,7 @@
     <DocumentationFile>bin\Release-3.5C\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-3.5C\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Lovell\AppData\Local\Temp\vs257B.tmp\Release-3.5C\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-4.0C|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -80,7 +80,7 @@
     <DocumentationFile>bin\Release-4.0C\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-4.0C\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Lovell\AppData\Local\Temp\vs257B.tmp\Release-4.0C\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-4.5|AnyCPU' ">
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -93,7 +93,7 @@
     <DocumentationFile>bin\Release-4.5\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-4.5\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Lovell\AppData\Local\Temp\vs257B.tmp\Release-4.5\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-Mono|AnyCPU' ">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -106,14 +106,13 @@
     <DocumentationFile>bin\Release-Mono\Manatee.Json.XML</DocumentationFile>
     <NoWarn>
     </NoWarn>
-    <IntermediateOutputPath>C:\Users\gdennis\AppData\Local\Temp\vs70CF.tmp\Release-Mono\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Lovell\AppData\Local\Temp\vs257B.tmp\Release-Mono\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -168,39 +167,39 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release-4.0'">
-    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.1\lib\net40\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release-3.5' OR '$(Configuration)' == 'Release-Mono'">
-    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.1\lib\net35\Manatee.StateMachine.dll</HintPath>
+    <Reference Include="Manatee.StateMachine">
+      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net35\Manatee.StateMachine.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release-3.5C'">
-    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.1\lib\net35-client\Manatee.StateMachine.dll</HintPath>
+    <Reference Include="Manatee.StateMachine">
+      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net35-client\Manatee.StateMachine.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-4.0C'">
-    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.1\lib\net40-client\Manatee.StateMachine.dll</HintPath>
+  <ItemGroup Condition="'$(Configuration)' == 'Release-4.0'">
+    <Reference Include="Manatee.StateMachine">
+      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40\Manatee.StateMachine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release-4.0C' OR '$(Configuration)' == 'Debug'">
+    <Reference Include="Manatee.StateMachine">
+      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40-client\Manatee.StateMachine.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release-4.5'">
-    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.1\lib\net45\Manatee.StateMachine.dll</HintPath>
+    <Reference Include="Manatee.StateMachine">
+      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net45\Manatee.StateMachine.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=9.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=9.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.9.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -515,6 +514,7 @@
     <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Manatee.Json.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
