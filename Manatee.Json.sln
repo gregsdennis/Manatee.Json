@@ -1,0 +1,80 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Manatee.Json\Manatee.Json.csproj", "{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
+	ProjectSection(SolutionItems) = preProject
+		..\Apache License 2.0.txt = ..\Apache License 2.0.txt
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{E74B7538-5E17-43C7-925B-33784945312E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6E84846A-D11A-4B3F-9588-C815FB0A22C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Performance", "Manatee.Json.Performance\Manatee.Json.Performance.csproj", "{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1ABD3999-AC0F-434C-86D5-FF6B90E259C4}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release-3.5|Any CPU = Release-3.5|Any CPU
+		Release-3.5C|Any CPU = Release-3.5C|Any CPU
+		Release-4.0|Any CPU = Release-4.0|Any CPU
+		Release-4.0C|Any CPU = Release-4.0C|Any CPU
+		Release-4.5|Any CPU = Release-4.5|Any CPU
+		Release-Mono|Any CPU = Release-Mono|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-3.5|Any CPU.ActiveCfg = Release-3.5|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-3.5|Any CPU.Build.0 = Release-3.5|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-3.5C|Any CPU.ActiveCfg = Release-3.5C|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-3.5C|Any CPU.Build.0 = Release-3.5C|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-4.0|Any CPU.ActiveCfg = Release-4.0|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-4.0|Any CPU.Build.0 = Release-4.0|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-4.0C|Any CPU.ActiveCfg = Release-4.0C|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-4.0C|Any CPU.Build.0 = Release-4.0C|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-4.5|Any CPU.ActiveCfg = Release-4.5|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-4.5|Any CPU.Build.0 = Release-4.5|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-Mono|Any CPU.ActiveCfg = Release-Mono|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release-Mono|Any CPU.Build.0 = Release-Mono|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Release-3.5|Any CPU.ActiveCfg = Release-3.5|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Release-3.5C|Any CPU.ActiveCfg = Release-3.5C|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Release-4.0|Any CPU.ActiveCfg = Release|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Release-4.0C|Any CPU.ActiveCfg = Release-4.0C|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Release-4.5|Any CPU.ActiveCfg = Release-4.5|Any CPU
+		{E74B7538-5E17-43C7-925B-33784945312E}.Release-Mono|Any CPU.ActiveCfg = Release-Mono|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release-3.5|Any CPU.ActiveCfg = Release-3.5|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release-3.5C|Any CPU.ActiveCfg = Release-3.5C|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release-4.0|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release-4.0C|Any CPU.ActiveCfg = Release-4.0C|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release-4.5|Any CPU.ActiveCfg = Release-4.5|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release-Mono|Any CPU.ActiveCfg = Release-Mono|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E74B7538-5E17-43C7-925B-33784945312E} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Json.vsmdi
+	EndGlobalSection
+EndGlobal

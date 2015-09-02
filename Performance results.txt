@@ -1,0 +1,54 @@
+Before caching reflection results
+
+	Run 1
+		Manatee.Json using Autoserializer: 00:00:55.9700000
+		Manatee.Json using IJsonSerializable: 00:00:38.3080000
+		Newtonsoft.Json : 00:00:01.7520000
+	Run 2
+		Manatee.Json using Autoserializer: 00:00:55.8490000
+		Manatee.Json using IJsonSerializable: 00:00:38.5210000
+		Newtonsoft.Json : 00:00:01.6650000
+	Run 3
+		Manatee.Json using Autoserializer: 00:00:55.9210000
+		Manatee.Json using IJsonSerializable: 00:00:38.7610000
+		Newtonsoft.Json : 00:00:01.6680000
+
+------------
+
+After caching reflection results
+
+	Run 1
+		Manatee.Json using Autoserializer: 00:00:53.4710000
+		Manatee.Json using IJsonSerializable: 00:00:39.5496787
+		Newtonsoft.Json : 00:00:01.6151615
+	Run 2
+		Manatee.Json using Autoserializer: 00:00:52.5262521
+		Manatee.Json using IJsonSerializable: 00:00:38.6318628
+		Newtonsoft.Json : 00:00:01.6701670
+	Run 3
+		Manatee.Json using Autoserializer: 00:00:53.2513246
+		Manatee.Json using IJsonSerializable: 00:00:39.2399236
+		Newtonsoft.Json : 00:00:01.6331633
+
+------------
+
+Deserialize only
+
+	Run 1
+		Manatee.Json using Autoserializer: 00:00:17.1327131
+		Manatee.Json using IJsonSerializable: 00:00:04.0544054
+	Run 2
+		Manatee.Json using Autoserializer: 00:00:15.8515850
+		Manatee.Json using IJsonSerializable: 00:00:03.8253825
+	Run 3
+		Manatee.Json using Autoserializer: 00:00:15.8815880
+		Manatee.Json using IJsonSerializable: 00:00:03.9523952
+		
+-----
+
+Updates (in order)
+
+- Changed StateMachine owner registry to perform reference comparisons only (don't call Equals())
+	- Cut parse time almost in half (4.1s -> 2.6s)
+- Removed Regex process to remove external whitespace and made parsers whitespace tolerant.
+	- Cut parse time to more than half again (2.6s -> 0.85s)

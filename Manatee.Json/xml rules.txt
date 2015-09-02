@@ -1,0 +1,55 @@
+business rules for json to xml
+
+1. all values will be contained in the element.
+
+	<aKey>5</aKey>
+	<anotherKey>a string</anotherKey>
+	<moreKeys>false</moreKeys>
+
+2. objects
+   a) the xml value maps to the object value.
+   b) the xml element name maps to the object key.
+   c) non-existent xml values map to json null.
+	
+	<aKey>5</aKey>		<->		{"aKey":5}
+	<aKey/>				<->		{"aKey":null}
+
+3. arrays
+   a) when an xml name appears more than once, the associated values are combined into an array under a key of that name.
+   b) array items will have an "nest" attribute to indicates a nested array.
+   c) names of nested elements must match the name of the parent element.
+
+	<aKey>5</aKey>
+	<anotherKey>a string</anotherKey>
+	<aKey>false</aKey>
+	<aKey nest="true">
+		<aKey/>
+		<aKey>true</aKey>
+		<aKey nest="true">				<-> 		{"aKey":[5,false,[null,true,[42]],[{"innerKey":-6},null]],"anotherKey":"a string"}
+			<aKey>42</aKey>
+		</aKey>
+	</aKey>
+	<aKey nest="true">
+		<aKey>
+			<innerKey>-6</innerKey>
+		</aKey>
+		<aKey/>
+	</aKey>
+   
+4. attributes
+   a) when attributes exist on xml elements, they will be prefixed with a hyphen ('-') and collected into an object which will then be stored in a json array along with the element's value.
+   
+	<aKey attrib="someValue">a string</aKey>	<->		{"aKey":[{"-attrib":"someValue"},"a string"]}
+
+5. data type inference
+   a) types will be inferred by default.
+   b) type inferrence can be explicitly specified by using the "type" attribute.
+   c) an exception will be thrown if a value cannot be interpreted as the specified type.
+   d) json to xml will make a "best guess" as to whether to place the "type" attribute.
+	  ex. type is string but properly parses to boolean or double.
+   e) type inference will also occur on attributes.
+
+	<aKey>5</aKey>							<->		{"aKey":5}
+	<aKey type="String">5</aKey>			<->		{"aKey":"5"}
+	<aKey type="Number">true</aKey>			 ->		exception
+	<aKey attrib="false">5</aKey>			<->		{"aKey":[{"-attrib":false},5]}
