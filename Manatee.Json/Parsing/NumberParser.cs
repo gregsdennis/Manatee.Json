@@ -92,12 +92,13 @@ namespace Manatee.Json.Parsing
 					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength * 2);
 					buffer = newBuffer;
 				}
-				var c = (char) stream.Read();
-				if (c == ',') break;
+				var c = (char) stream.Peek();
+				if (char.IsWhiteSpace(c) || c.In(',', ']', '}')) break;
+				stream.Read();
 				if (!NumberChars.Contains(c))
 				{
 					value = null;
-					return "Expected \',\'.";
+					return "Expected \',\', \']\', or \'}\'.";
 				}
 				buffer[bufferIndex] = c;
 				bufferIndex++;
