@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Manatee.Json.Path;
 
 namespace Manatee.Json.Transform
@@ -39,24 +37,35 @@ namespace Manatee.Json.Transform
 		private static JsonValue TransformArray(JsonValue source, JsonArray template)
 		{
 			if (template.Count != 2 || template[0].Type != JsonValueType.String)
-				throw new ArgumentException("Arrays in templates must contain only two values: an item source path, and a template for each item.");
-			var path = JsonPath.Parse(template[0].String);
+				return TransformArrayElements(source, template);
+			var path = TryGetPath(template[0].String);
+			if (path == null)
+				return TransformArrayElements(source, template);
 			var items = path.Evaluate(source);
 			return new JsonArray(items.Select(item => Transform(item, template[1])));
 		}
+		private static JsonValue TransformArrayElements(JsonValue source, JsonArray array)
+		{
+			return new JsonArray(array.Select(jv => Transform(source, jv)));
+		}
 		private static JsonValue TransformString(JsonValue source, string template)
 		{
-			JsonPath path;
+			var path = TryGetPath(template);
+			if (path == null) return template;
+			var items = path.Evaluate(source);
+			return items.Count == 1 ? items[0] : items;
+		}
+
+		private static JsonPath TryGetPath(string text)
+		{
 			try
 			{
-				path = JsonPath.Parse(template);
+				return JsonPath.Parse(text);
 			}
 			catch
 			{
-				return template;
+				return null;
 			}
-			var items = path.Evaluate(source);
-			return items.Count == 1 ? items[0] : items;
 		}
 	}
 }
