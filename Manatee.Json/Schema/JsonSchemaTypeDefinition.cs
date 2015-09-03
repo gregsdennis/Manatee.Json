@@ -27,6 +27,7 @@ using System.Data;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
+using Manatee.StateMachine;
 
 namespace Manatee.Json.Schema
 {
@@ -84,6 +85,17 @@ namespace Manatee.Json.Schema
 				if (_isReadOnly)
 					throw new ReadOnlyException(string.Format("The '{0}' member is not editable.", Name));
 				_definition = value;
+			}
+		}
+
+		internal List<JsonSchemaPropertyDefinition> PropertyReferences { get; set; }
+		internal List<ArraySchema> ArrayReferences { get; set; }
+		internal int ReferenceCount
+		{
+			get
+			{
+				return (PropertyReferences == null ? 0 : PropertyReferences.Count) +
+				       (ArrayReferences == null ? 0 : ArrayReferences.Count);
 			}
 		}
 

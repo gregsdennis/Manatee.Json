@@ -23,7 +23,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -34,24 +33,12 @@ namespace Manatee.Json.Schema
 	public class ObjectSchema : JsonSchema
 	{
 		/// <summary>
-		/// Used to specify which this schema defines.
-		/// </summary>
-		public string Id { get; set; }
-		/// <summary>
 		/// Used to specify a schema which contains the definitions used by this schema.
 		/// </summary>
 		/// <remarks>
 		/// if left null, the default of http://json-schema.org/draft-04/schema# is used.
 		/// </remarks>
 		public string Schema { get; set; }
-		/// <summary>
-		/// Defines a title for this schema.
-		/// </summary>
-		public string Title { get; set; }
-		/// <summary>
-		/// Defines a description for this schema.
-		/// </summary>
-		public string Description { get; set; }
 		/// <summary>
 		/// Defines a collection of schema type definitions.
 		/// </summary>
@@ -89,7 +76,6 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type != JsonValueType.Object)
 				return new SchemaValidationResults(string.Empty, string.Format("Expected: Object; Actual: {0}.", json.Type));
-			//if (Properties == null) return new SchemaValidationResults();
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
 			var jValue = root ?? ToJson(null);
