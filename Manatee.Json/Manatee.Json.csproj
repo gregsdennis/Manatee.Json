@@ -511,6 +511,7 @@
     <Compile Include="Serialization\TypeRegistrationException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Transform\JsonTransformer.cs" />
     <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

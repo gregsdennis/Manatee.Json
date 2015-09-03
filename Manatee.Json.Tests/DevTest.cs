@@ -30,6 +30,7 @@ using System.Linq;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
+using Manatee.Json.Transform;
 using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -39,39 +40,34 @@ namespace Manatee.Json.Tests
 	public class DevTest
 	{
 		[TestMethod]
-		[Ignore]
 		public void Test1()
 		{
-			var serializer = new JsonSerializer();
-			var text = File.ReadAllText(@"e:\schema.json");
-			var json = JsonValue.Parse(text);
-			var results = JsonSchema.Draft04.Validate(json);
-			if (!results.Valid)
-			{
-				foreach (var error in results.Errors)
+			JsonValue source = new JsonObject
 				{
-					Console.WriteLine(error);
-				}
-				throw new Exception();
-			}
-			var schema = serializer.Deserialize<IJsonSchema>(json);
-			Console.WriteLine("schema verified");
-
-			text = File.ReadAllText(@"e:\example.json");
-			json = JsonValue.Parse(text);
-
-			results = schema.Validate(json);
-			if (!results.Valid)
-			{
-				foreach (var error in results.Errors)
+					{"a", new JsonObject {{"example", new JsonObject {{"demo", "baz"}}}}},
+					{"b", new JsonObject {{"example", new JsonObject {{"demo", "qux"}}}}},
+				};
+			JsonValue template = new JsonObject
 				{
-					Console.WriteLine(error);
-				}
-				Console.WriteLine();
-				throw new Exception();
-			}
+					{
+						"foo", new JsonArray {"$..example", new JsonObject {{"bar", "$.demo"}}}
+					}
+				};
+			JsonValue expected = new JsonObject
+				{
+					{
+						"foo", new JsonArray
+							{
+								new JsonObject {{"bar", "baz"}},
+								new JsonObject {{"bar", "qux"}}
+							}
+					}
+				};
+			var result = source.Transform(template);
 
-			Console.WriteLine("json verified");
+			Console.WriteLine(expected);
+			Console.WriteLine(result);
+			Assert.AreEqual(expected, result);
 		}
 		[TestMethod]
 		public void Test2()
@@ -82,14 +78,8 @@ namespace Manatee.Json.Tests
 		}
 
 		[TestMethod]
-		//[Ignore]
 		public void SchemaGenerationTest()
 		{
-			// Having some problems with generating schema from complex or immutable types.
-			// For example, the system can't generate for KeyValuePair<,> since the properties aren't read/write.
-			// Try Dictionary<string, int>.
-			//var schema = JsonSchemaFactory.FromType(typeof (Dictionary<string, int>));
-
 			var schema = JsonSchemaFactory.FromType<List<Dictionary<JsonValueType, JsonValue>>>();
 			Console.WriteLine(schema.ToJson(null).GetIndentedString());
 		}
