@@ -215,15 +215,7 @@ namespace Manatee.Json.Internal
 			}
 			return null;
 		}
-		public static Stream ToStream(this string str)
-		{
-			var stream = new MemoryStream();
-			var writer = new StreamWriter(stream);
-			writer.Write(str);
-			writer.Flush();
-			stream.Position = 0;
-			return stream;
-		}	// Note: These methods assume that if a generic type is passed, the type is open.
+		// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived.IsSubtypeOf(tBase)) return true;

@@ -42,27 +42,9 @@ namespace Manatee.Json.Tests
 		[TestMethod]
 		public void Test1()
 		{
-			JsonValue source = new JsonObject
-				{
-					{"a", new JsonObject {{"example", new JsonObject {{"demo", "baz"}}}}},
-					{"b", new JsonObject {{"example", new JsonObject {{"demo", "qux"}}}}},
-				};
-			JsonValue template = new JsonObject
-				{
-					{
-						"foo", new JsonArray {"$..example", new JsonObject {{"bar", "$.demo"}}}
-					}
-				};
-			JsonValue expected = new JsonObject
-				{
-					{
-						"foo", new JsonArray
-							{
-								new JsonObject {{"bar", "baz"}},
-								new JsonObject {{"bar", "qux"}}
-							}
-					}
-				};
+			JsonValue source = JsonValue.Parse("[{\"Key1\":87,\"Key2\":99},{\"Key1\":42,\"Key2\":-8}]");
+			JsonValue template = JsonValue.Parse("[[\"Key1\",\"Key2\"],[\"$[*]\",\"$.Key1\"],[\"$[*]\",\"$.Key2\"]]");
+			JsonValue expected = JsonValue.Parse("[[\"Key1\",\"Key2\"],[87,42],[99,-8]]");
 			var result = source.Transform(template);
 
 			Console.WriteLine(expected);
