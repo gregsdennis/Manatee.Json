@@ -182,6 +182,18 @@ namespace Manatee.Json.Schema
 		/// to a .Net data structure.
 		/// </remarks>
 		public JsonValue Default { get; set; }
+		/// <summary>
+		/// Used to specify which this schema defines.
+		/// </summary>
+		public string Id { get; set; }
+		/// <summary>
+		/// Defines a title for this schema.
+		/// </summary>
+		public string Title { get; set; }
+		/// <summary>
+		/// Defines a description for this schema.
+		/// </summary>
+		public string Description { get; set; }
 
 		internal JsonSchema() {}
 		/// <summary>

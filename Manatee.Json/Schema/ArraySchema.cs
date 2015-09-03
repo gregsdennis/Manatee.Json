@@ -33,6 +33,10 @@ namespace Manatee.Json.Schema
 	public class ArraySchema : JsonSchema
 	{
 		/// <summary>
+		/// Defines a collection of schema type definitions.
+		/// </summary>
+		public JsonSchemaTypeDefinitionCollection Definitions { get; set; }
+		/// <summary>
 		/// Gets and sets a minimum number of items required for the array.
 		/// </summary>
 		public uint? MinItems { get; set; }
@@ -91,10 +95,19 @@ namespace Manatee.Json.Schema
 		{
 			base.FromJson(json, serializer);
 			var obj = json.Object;
-			MinItems = (uint?)obj.TryGetNumber("minItems");
-			MaxItems = (uint?)obj.TryGetNumber("maxItems");
+			MinItems = (uint?) obj.TryGetNumber("minItems");
+			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			if (obj.ContainsKey("items")) Items = JsonSchemaFactory.FromJson(obj["items"]);
 			if (obj.ContainsKey("uniqueItems")) UniqueItems = obj["uniqueItems"].Boolean;
+			if (obj.ContainsKey("definitions"))
+			{
+				Definitions = new JsonSchemaTypeDefinitionCollection();
+				foreach (var defn in obj["definitions"].Object)
+				{
+					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = JsonSchemaFactory.FromJson(defn.Value)};
+					Definitions.Add(definition);
+				}
+			}
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -105,6 +118,7 @@ namespace Manatee.Json.Schema
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{
 			var json = base.ToJson(serializer).Object;
+			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
 			if (Items != null) json["items"] = Items.ToJson(serializer);
 			if (MinItems.HasValue) json["minItems"] = MinItems;
 			if (MaxItems.HasValue) json["maxItems"] = MinItems;
@@ -124,7 +138,8 @@ namespace Manatee.Json.Schema
 			return base.Equals(schema) &&
 			       MinItems == schema.MinItems &&
 			       MaxItems == schema.MaxItems &&
-			       Items.Equals(schema.Items) &&
+				   Definitions.SequenceEqual(schema.Definitions) &&
+				   Items.Equals(schema.Items) &&
 			       UniqueItems == schema.UniqueItems;
 		}
 	}
