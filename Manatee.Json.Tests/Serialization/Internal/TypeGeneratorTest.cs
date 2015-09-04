@@ -23,7 +23,7 @@
 ***************************************************************************************/
 using System;
 using Manatee.Json.Serialization.Internal;
-using Manatee.Tests.Test_References;
+using Manatee.Json.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Serialization.Internal

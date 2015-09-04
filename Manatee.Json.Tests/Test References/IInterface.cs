@@ -21,9 +21,10 @@
 					library.
 
 ***************************************************************************************/
+
 using System;
 
-namespace Manatee.Tests.Test_References
+namespace Manatee.Json.Tests.Test_References
 {
 	public interface IInterface : IComparable
 	{

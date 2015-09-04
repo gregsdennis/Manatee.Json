@@ -155,9 +155,17 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientTest.cs" />
     <Compile Include="DevTest.cs" />
     <Compile Include="JsonArrayExtensionsTest.cs" />
     <Compile Include="JsonObjectExtensionsTest.cs" />
+    <Compile Include="JsonValueAccessorTest.cs" />
+    <Compile Include="JsonValueEqualsTest.cs" />
+    <Compile Include="JsonValueOperatorTest.cs" />
+    <Compile Include="JsonValueParseTest.cs" />
+    <Compile Include="Schema\SelfValidationTest.cs" />
+    <Compile Include="Transform\ClientTest.cs" />
+    <Compile Include="Path\GoessnerExamplesTest.cs" />
     <Compile Include="Schema\AllOfSchemaTest.cs" />
     <Compile Include="Schema\ArraySchemaTest.cs" />
     <Compile Include="Schema\AnyOfSchemaTest.cs" />
@@ -179,7 +187,7 @@
     <Compile Include="XmlExtensionsTest.cs" />
     <Compile Include="JsonObjectTest.cs" />
     <Compile Include="JsonArrayTest.cs" />
-    <Compile Include="JsonValueTest.cs" />
+    <Compile Include="JsonValueToStringTest.cs" />
     <Compile Include="LinqExtensionsTest.cs" />
     <Compile Include="Serialization\JsonSerializerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -204,9 +212,7 @@
       <Name>Manatee.Json</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Path\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

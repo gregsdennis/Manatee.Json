@@ -23,15 +23,6 @@
 
 ***************************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Manatee.Json.Path;
-using Manatee.Json.Schema;
-using Manatee.Json.Serialization;
-using Manatee.Json.Transform;
-using Manatee.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -40,39 +31,6 @@ namespace Manatee.Json.Tests
 	public class DevTest
 	{
 		[TestMethod]
-		public void Test1()
-		{
-			JsonValue source = JsonValue.Parse("[{\"Key1\":87,\"Key2\":99,\"Key3\":11},{\"Key1\":42,\"Key2\":-8,\"Key3\":12}]");
-			JsonValue template = JsonValue.Parse("[[\"Key1\",\"Key2\",\"Key3\"],[\"$[*]\",\"@.Key1\"],[\"$[*]\",\"@.Key2\"],[\"$[*]\",\"@.Key3\"]]");
-			JsonValue reverseTemplate = JsonValue.Parse("[\"$[1][*]\",{\"Key1\":\"@\",\"Key2\":\"$[2][*]\",\"Key3\":\"$[3][*]\"}]");
-			JsonValue expected = JsonValue.Parse("[[\"Key1\",\"Key2\",\"Key3\"],[87,42],[99,-8],[11,12]]");
-			var result = source.Transform(template);
-
-			Console.WriteLine(expected);
-			Console.WriteLine(result);
-			Assert.AreEqual(expected, result);
-
-			Console.WriteLine();
-
-			result = expected.Transform(reverseTemplate);
-
-			Console.WriteLine(source);
-			Console.WriteLine(result);
-			Assert.AreEqual(source, result);
-		}
-		[TestMethod]
-		public void Test2()
-		{
-			var json = JsonSchema.Draft04.ToJson(null);
-			var validation = JsonSchema.Draft04.Validate(json);
-			Console.WriteLine(validation.Valid);
-		}
-
-		[TestMethod]
-		public void SchemaGenerationTest()
-		{
-			var schema = JsonSchemaFactory.FromType<List<Dictionary<JsonValueType, JsonValue>>>();
-			Console.WriteLine(schema.ToJson(null).GetIndentedString());
-		}
+		public void Test1() {}
 	}
 }

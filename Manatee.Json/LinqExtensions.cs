@@ -136,6 +136,18 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
+		/// Converts a collection of doubles to a <see cref="JsonArray"/>.
+		/// </summary>
+		/// <param name="list">A collection of doubles</param>
+		/// <returns>A <see cref="JsonArray"/> containing the doubles</returns>
+		public static JsonValue ToJson(this IEnumerable<double?> list)
+		{
+			if (list == null) return JsonValue.Null;
+			var json = new JsonArray();
+			json.AddRange(list.Select(j => new JsonValue(j)));
+			return json;
+		}
+		/// <summary>
 		/// Serializes a collection of objects which implement <see cref="IJsonSerializable"/> to a <see cref="JsonArray"/> of equivalent JsonValues.
 		/// </summary>
 		/// <param name="list">A collection of equivalent <see cref="JsonValue"/>s</param>
@@ -145,8 +157,7 @@ namespace Manatee.Json
 		public static JsonValue ToJson<T>(this IEnumerable<T> list, JsonSerializer serializer)
 			where T : IJsonSerializable
 		{
-			if (list == null)
-				return JsonValue.Null;
+			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
 			json.AddRange(list.Select(j => j == null ? JsonValue.Null : j.ToJson(serializer)));
 			return json;
@@ -180,8 +191,7 @@ namespace Manatee.Json
 		public static IEnumerable<T> FromJson<T>(this IEnumerable<JsonValue> json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
 		{
-			if (json == null)
-				return null;
+			if (json == null) return null;
 			var list = new List<T>();
 			foreach (var value in json)
 			{
@@ -202,8 +212,7 @@ namespace Manatee.Json
 		public static T FromJson<T>(this JsonObject json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
 		{
-			if (json == null)
-				return default(T);
+			if (json == null) return default(T);
 			T obj = new T();
 			obj.FromJson(json, serializer);
 			return obj;

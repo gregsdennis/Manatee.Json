@@ -57,15 +57,15 @@ namespace Manatee.Json
 		/// <returns>A string.</returns>
 		public string GetIndentedString(int indentLevel = 0)
 		{
-			if (Count == 0) return JsonValue.Null.ToString();
+			if (Count == 0) return "[]";
 			string tab0 = string.Empty.PadLeft(indentLevel, '\t'),
 				   tab1 = string.Empty.PadLeft(indentLevel + 1, '\t'),
 				   s = "[\n";
 			int i;
 			for (i = 0; i < Count - 1; i++)
 			{
-				if (this[i] == null) this[i] = new JsonValue();
-				s += string.Format("{0}{1},\n", tab1, this[i].GetIndentedString(indentLevel + 1));
+				var value = this[i] ?? JsonValue.Null;
+				s += string.Format("{0}{1},\n", tab1, value.GetIndentedString(indentLevel + 1));
 			}
 			s += string.Format("{0}{1}\n{2}]", tab1, this[i].GetIndentedString(indentLevel + 1), tab0);
 			return s;
@@ -82,7 +82,7 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "[]";
-			return "[" + string.Join(",", this.Select(value => value.ToString()).ToArray()) + "]";
+			return "[" + string.Join(",", this.Select(value => value == null ? JsonValue.Null.ToString() : value.ToString()).ToArray()) + "]";
 		}
 
 		/// <summary>

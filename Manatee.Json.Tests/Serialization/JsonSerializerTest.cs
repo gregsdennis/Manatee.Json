@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Serialization;
-using Manatee.Tests.Test_References;
+using Manatee.Json.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Serialization

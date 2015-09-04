@@ -66,7 +66,7 @@ namespace Manatee.Json
 		/// <returns>A string.</returns>
 		public string GetIndentedString(int indentLevel = 0)
 		{
-			if (Count == 0) return string.Empty;
+			if (Count == 0) return "{}";
 			string key, tab0 = string.Empty.PadLeft(indentLevel, '\t'),
 				   tab1 = string.Empty.PadLeft(indentLevel + 1, '\t'),
 				   tab2 = string.Empty.PadLeft(indentLevel + 2, '\t'),
@@ -75,11 +75,11 @@ namespace Manatee.Json
 			for (i = 0; i < Count - 1; i++)
 			{
 				key = Keys.ElementAt(i);
-				if (this[key] == null) this[key] = new JsonValue();
-				s += string.Format("{0}\"{1}\" : {3},\n", tab1, key, tab2, this[key].GetIndentedString(indentLevel + 2));
+				var value = this[key] ?? new JsonValue();
+				s += string.Format("{0}\"{1}\" : {2},\n", tab1, key, value.GetIndentedString(indentLevel + 2));
 			}
 			key = Keys.ElementAt(i);
-			s += string.Format("{0}\"{1}\" : {3}\n{4}}}", tab1, key, tab2, this[key].GetIndentedString(indentLevel + 2), tab0);
+			s += string.Format("{0}\"{1}\" : {2}\n{3}}}", tab1, key, this[key].GetIndentedString(indentLevel + 2), tab0);
 			return s;
 		}
 		/// <summary>

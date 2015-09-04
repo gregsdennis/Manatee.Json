@@ -29,14 +29,6 @@ namespace Manatee.Json.Tests
 	public class JsonArrayTest
 	{
 		[TestMethod]
-		public void ToString_ReturnsCorrectString()
-		{
-			var json = new JsonArray {false, 42, "a string"};
-			var expected = "[false,42,\"a string\"]";
-			var actual = json.ToString();
-			Assert.AreEqual(expected, actual);
-		}
-		[TestMethod]
 		public void Equals_SameValuesSameOrder_ReturnsTrue()
 		{
 			var json1 = new JsonArray { false, 42, "a string" };
