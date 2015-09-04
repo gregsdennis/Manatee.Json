@@ -21,10 +21,10 @@
 					testing the Manatee.Json library.
 
 ***************************************************************************************/
-using Manatee.Json;
+
 using Manatee.Json.Serialization;
 
-namespace Manatee.Tests.Test_References
+namespace Manatee.Json.Tests.Test_References
 {
 	public class JsonSerializableImplementationClass : ImplementationClass, IJsonSerializable
 	{

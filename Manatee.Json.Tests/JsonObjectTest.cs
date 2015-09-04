@@ -31,14 +31,6 @@ namespace Manatee.Json.Tests
 	public class JsonObjectTest
 	{
 		[TestMethod]
-		public void ToString_ReturnsCorrectString()
-		{
-			var json = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
-			var expected = "{\"bool\":false,\"int\":42,\"string\":\"a string\"}";
-			var actual = json.ToString();
-			Assert.AreEqual(expected, actual);
-		}
-		[TestMethod]
 		public void Equals_SameValuesSameOrder_ReturnsTrue()
 		{
 			var json1 = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
@@ -159,33 +151,6 @@ namespace Manatee.Json.Tests
 			{
 				Assert.AreEqual("Unexpected end of input. Path: '$.string'", e.Message);
 			}
-		}
-		[TestMethod]
-		public void Parse_StringFromSourceForge_kheimric()
-		{
-			var s = @"{
-  ""self"": ""self"",
-  ""name"": ""name"",
-  ""emailAddress"": ""test at test dot com"",
-  ""avatarUrls"": {
-	""16x16"": ""http://smallUrl"",
-	""48x48"": ""https://largeUrl""
-  },
-  ""displayName"": ""Display Name"",
-  ""active"": true,
-  ""timeZone"": ""Europe"",
-  ""groups"": {
-	""size"": 1,
-	""items"": [
-	  {
-		""name"": ""users""
-	  }
-	]
-  },
-  ""expand"": ""groups""
-}";
-			var actual = JsonValue.Parse(s);
-			var newString = actual.ToString();
 		}
 		[TestMethod]
 		public void Add_NullValueAddsJsonNull()

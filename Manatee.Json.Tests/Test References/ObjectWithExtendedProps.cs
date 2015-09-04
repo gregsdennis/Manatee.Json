@@ -25,7 +25,7 @@
 
 using System.Collections.Generic;
 
-namespace Manatee.Tests.Test_References
+namespace Manatee.Json.Tests.Test_References
 {
 	public class ObjectWithExtendedProps : ObjectWithBasicProps
 	{

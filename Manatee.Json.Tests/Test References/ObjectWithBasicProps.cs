@@ -27,7 +27,7 @@ using System;
 using System.ComponentModel;
 using Manatee.Json.Serialization;
 
-namespace Manatee.Tests.Test_References
+namespace Manatee.Json.Tests.Test_References
 {
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local

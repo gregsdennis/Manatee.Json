@@ -20,9 +20,10 @@
 	Purpose:		Basic implementation of IInterface.
 
 ***************************************************************************************/
+
 using System;
 
-namespace Manatee.Tests.Test_References
+namespace Manatee.Json.Tests.Test_References
 {
 	public class ImplementationClass : IInterface
 	{
