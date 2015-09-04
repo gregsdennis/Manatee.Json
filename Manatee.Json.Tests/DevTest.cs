@@ -42,14 +42,23 @@ namespace Manatee.Json.Tests
 		[TestMethod]
 		public void Test1()
 		{
-			JsonValue source = JsonValue.Parse("[{\"Key1\":87,\"Key2\":99},{\"Key1\":42,\"Key2\":-8}]");
-			JsonValue template = JsonValue.Parse("[[\"Key1\",\"Key2\"],[\"$[*]\",\"$.Key1\"],[\"$[*]\",\"$.Key2\"]]");
-			JsonValue expected = JsonValue.Parse("[[\"Key1\",\"Key2\"],[87,42],[99,-8]]");
+			JsonValue source = JsonValue.Parse("[{\"Key1\":87,\"Key2\":99,\"Key3\":11},{\"Key1\":42,\"Key2\":-8,\"Key3\":12}]");
+			JsonValue template = JsonValue.Parse("[[\"Key1\",\"Key2\",\"Key3\"],[\"$[*]\",\"@.Key1\"],[\"$[*]\",\"@.Key2\"],[\"$[*]\",\"@.Key3\"]]");
+			JsonValue reverseTemplate = JsonValue.Parse("[\"$[1][*]\",{\"Key1\":\"@\",\"Key2\":\"$[2][*]\",\"Key3\":\"$[3][*]\"}]");
+			JsonValue expected = JsonValue.Parse("[[\"Key1\",\"Key2\",\"Key3\"],[87,42],[99,-8],[11,12]]");
 			var result = source.Transform(template);
 
 			Console.WriteLine(expected);
 			Console.WriteLine(result);
 			Assert.AreEqual(expected, result);
+
+			Console.WriteLine();
+
+			result = expected.Transform(reverseTemplate);
+
+			Console.WriteLine(source);
+			Console.WriteLine(result);
+			Assert.AreEqual(source, result);
 		}
 		[TestMethod]
 		public void Test2()
