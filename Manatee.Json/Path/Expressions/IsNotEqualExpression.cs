@@ -35,10 +35,7 @@ namespace Manatee.Json.Path.Expressions
 			var right = Right.Evaluate(json, root);
 			if (left == null && right == null) return true;
 			if (left == null || right == null) return false;
-			var compare = left as IComparable;
-			if (compare != null)
-				return compare.CompareTo(Convert.ChangeType(right, left.GetType())) != 0;
-			return left != right && !left.Equals(right) && !right.Equals(left);
+			return !ValueComparer.Equal(left, right);
 		}
 		public override string ToString()
 		{

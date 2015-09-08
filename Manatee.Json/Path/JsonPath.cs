@@ -472,13 +472,20 @@ namespace Manatee.Json.Path
 		{
 			var chars = new List<char>();
 			path._index--;
+			var negate = path._source[path._index] == '-';
+			int sign = 1;
+			if (negate)
+			{
+				sign = -1;
+				path._index++;
+			}
 			while (path._index < path._source.Length && char.IsNumber(path._source[path._index]))
 			{
 				chars.Add(path._source[path._index]);
 				path._index++;
 			}
 			var name = new string(chars.ToArray());
-			return int.Parse(name);
+			return int.Parse(name)*sign;
 		}
 	}
 }

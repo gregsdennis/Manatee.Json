@@ -298,6 +298,7 @@
     <Compile Include="Path\Expressions\Translation\PathExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\StringValueExpressionTranslator.cs" />
     <Compile Include="Path\Expressions\Translation\SubtractExpressionTranslator.cs" />
+    <Compile Include="Path\Expressions\ValueComparer.cs" />
     <Compile Include="Path\Expressions\ValueExpression.cs" />
     <Compile Include="Path\IJsonPathArrayQuery.cs" />
     <Compile Include="Path\IJsonPathOperator.cs" />

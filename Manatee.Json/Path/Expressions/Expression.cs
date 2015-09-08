@@ -61,6 +61,7 @@ namespace Manatee.Json.Path.Expressions
 			StateMachine[State.Start, JsonPathExpressionInput.OpenParenth] = GotStart;
 			StateMachine[State.Value, JsonPathExpressionInput.OpenParenth] = GotGroup;
 			StateMachine[State.Value, JsonPathExpressionInput.Number] = GotNumber;
+			StateMachine[State.Value, JsonPathExpressionInput.Minus] = GotNumber;
 			StateMachine[State.Value, JsonPathExpressionInput.Root] = GotRoot;
 			StateMachine[State.Value, JsonPathExpressionInput.Current] = GotCurrent;
 			StateMachine[State.Value, JsonPathExpressionInput.Bang] = GotNot;
