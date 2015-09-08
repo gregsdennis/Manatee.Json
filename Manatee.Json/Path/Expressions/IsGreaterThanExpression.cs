@@ -31,14 +31,7 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var left = Left.Evaluate(json, root);
 			var right = Right.Evaluate(json, root);
-			if (!(left is double) || !(right is double))
-			{
-				var sleft = left as string;
-				var sright = right as string;
-				if (sleft == null || sright == null) return false;
-				return string.Compare(sleft, sright, System.StringComparison.Ordinal) > 0;
-			}
-			return (double)left > (double)right;
+			return ValueComparer.GreaterThan(left, right);
 		}
 		public override string ToString()
 		{
