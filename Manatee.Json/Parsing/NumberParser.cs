@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -67,7 +68,7 @@ namespace Manatee.Json.Parsing
 			}
 			double dbl;
 			var result = new string(buffer, 0, bufferIndex);
-			if (!double.TryParse(result, out dbl))
+			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out dbl))
 			{
 				value = null;
 				return string.Format("Value not recognized: '{0}'", result);
@@ -105,7 +106,7 @@ namespace Manatee.Json.Parsing
 			}
 			double dbl;
 			var result = new string(buffer, 0, bufferIndex);
-			if (!double.TryParse(result, out dbl))
+			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out dbl))
 			{
 				value = null;
 				return string.Format("Value not recognized: '{0}'", result);

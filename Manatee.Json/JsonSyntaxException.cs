@@ -35,7 +35,7 @@ namespace Manatee.Json
 	[Serializable]
 	public class JsonSyntaxException : Exception
 	{
-		private string _path;
+		private readonly string _path;
 
 		/// <summary>
 		/// Gets the path up to the point at which the error was found.
