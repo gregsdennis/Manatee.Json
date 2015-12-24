@@ -24,7 +24,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class OrExpression<T> : ExpressionTreeBranch<T>
 	{
-		public override int Priority { get { return 0; } }
+		public override int Priority => 0;
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -32,7 +32,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return string.Format("{0} || {1}", Left, Right);
+			return $"{Left} || {Right}";
 		}
 	}
 }

@@ -37,18 +37,18 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Gets the type.
 		/// </summary>
-		public Type Type { get; private set; }
+		public Type Type { get; }
 		/// <summary>
 		/// Gets the portion of the JSON structure which contain the invalid properties.
 		/// </summary>
-		public JsonValue Json { get; private set; }
+		public JsonValue Json { get; }
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeDoesNotContainPropertyException"/> class.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="json">The invalid JSON structure.</param>
 		internal TypeDoesNotContainPropertyException(Type type, JsonValue json)
-			: base(string.Format("Type {0} does not contain any properties within {1}.", type, json))
+			: base($"Type {type} does not contain any properties within {json}.")
 		{
 			Type = type;
 			Json = json;

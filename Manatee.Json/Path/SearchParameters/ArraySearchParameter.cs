@@ -29,8 +29,6 @@ namespace Manatee.Json.Path.SearchParameters
 	{
 		private readonly IJsonPathArrayQuery _query;
 
-		public IJsonPathArrayQuery Query { get { return _query; } }
-
 		public ArraySearchParameter(IJsonPathArrayQuery query)
 		{
 			_query = query;
@@ -45,7 +43,7 @@ namespace Manatee.Json.Path.SearchParameters
 						case JsonValueType.Object:
 							return v.Object.Values.SelectMany(jv => Find(new[] {jv}, root)).ToList();
 						case JsonValueType.Array:
-							var matches = Query.Find(v.Array, root).ToList();
+							var matches = _query.Find(v.Array, root).ToList();
 							var search = v.Array.SelectMany(jv => Find(new[] {jv}, root));
 							matches.AddRange(search);
 							return matches;
@@ -56,7 +54,7 @@ namespace Manatee.Json.Path.SearchParameters
 		}
 		public override string ToString()
 		{
-			return string.Format("[{0}]", Query);
+			return $"[{_query}]";
 		}
 	}
 }

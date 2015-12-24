@@ -28,7 +28,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class FieldExpression<T> : ExpressionTreeNode<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public FieldInfo Field { get; set; }
 		public object Source { get; set; }
 
@@ -42,8 +42,8 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var value = Evaluate(default(T), null);
 			return value is string
-					   ? string.Format("\"{0}\"", value)
-					   : value.ToString();
+					   ? $"\"{value}\""
+				       : value.ToString();
 		}
 	}
 }

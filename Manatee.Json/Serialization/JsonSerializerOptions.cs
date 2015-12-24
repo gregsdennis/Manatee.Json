@@ -31,7 +31,7 @@ namespace Manatee.Json.Serialization
 	/// </summary>
 	public class JsonSerializerOptions
 	{
-		private static readonly IResolver DefaultResolver = new ConstructorResolver();
+		private static readonly IResolver _defaultResolver = new ConstructorResolver();
 		private IResolver _resolver;
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public IResolver Resolver
 		{
-			get { return _resolver ?? (_resolver = DefaultResolver); }
+			get { return _resolver ?? (_resolver = _defaultResolver); }
 			set { _resolver = value; }
 		}
 		/// <summary>

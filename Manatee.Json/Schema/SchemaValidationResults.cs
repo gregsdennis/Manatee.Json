@@ -34,11 +34,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets whether the validation was successful.
 		/// </summary>
-		public bool Valid { get { return !Errors.Any(); } }
+		public bool Valid => !Errors.Any();
+
 		/// <summary>
 		/// Gets a collection of any errors which may have occurred during validation.
 		/// </summary>
-		public IEnumerable<SchemaValidationError> Errors { get; private set; }
+		public IEnumerable<SchemaValidationError> Errors { get; }
 
 		internal SchemaValidationResults(string propertyName, string message)
 		{

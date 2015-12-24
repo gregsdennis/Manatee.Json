@@ -28,7 +28,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class ArrayIndexExpression<T> : PathExpression<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public int Index { get; set; }
 		public ExpressionTreeNode<T> IndexExpression { get; set; }
 
@@ -39,7 +39,7 @@ namespace Manatee.Json.Path.Expressions
 				throw new NotSupportedException("ArrayIndex requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
 			if (results.Count > 1)
-				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
+				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
 			var index = GetIndex();
 			return result != null && result.Type == JsonValueType.Array && index >= 0 && index < result.Array.Count
@@ -54,11 +54,8 @@ namespace Manatee.Json.Path.Expressions
 
 		private int GetIndex()
 		{
-			if (IndexExpression != null)
-			{
-				var value = IndexExpression.Evaluate(default(T), null);
-				if (value != null) return (int) value;
-			}
+			var value = IndexExpression?.Evaluate(default(T), null);
+			if (value != null) return (int) value;
 			return Index;
 		}
 	}

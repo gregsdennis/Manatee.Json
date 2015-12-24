@@ -24,7 +24,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class ModuloExpression<T> : ExpressionTreeBranch<T>
 	{
-		public override int Priority { get { return 2; } }
+		public override int Priority => 2;
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -35,9 +35,9 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			var left = Left.Priority <= Priority ? string.Format("({0})", Left) : Left.ToString();
-			var right = Right.Priority <= Priority ? string.Format("({0})", Right) : Right.ToString();
-			return string.Format("{0}%{1}", left, right);
+			var left = Left.Priority <= Priority ? $"({Left})" : Left.ToString();
+			var right = Right.Priority <= Priority ? $"({Right})" : Right.ToString();
+			return $"{left}%{right}";
 		}
 	}
 }

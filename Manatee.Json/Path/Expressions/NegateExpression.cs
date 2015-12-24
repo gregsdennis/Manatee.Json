@@ -26,7 +26,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class NegateExpression<T> : ExpressionTreeNode<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public ExpressionTreeNode<T> Root { get; set; }
 
 		public override object Evaluate(T json, JsonValue root)
@@ -36,8 +36,8 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			return Root is AddExpression<T> || Root is SubtractExpression<T>
-					   ? string.Format("-({0})", Root)
-					   : string.Format("-{0}", Root);
+					   ? $"-({Root})"
+				       : $"-{Root}";
 		}
 	}
 }

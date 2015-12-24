@@ -258,13 +258,13 @@ namespace Manatee.Json
 				case JsonValueType.Number:
 					return string.Format(CultureInfo.InvariantCulture, "{0}", _numberValue);
 				case JsonValueType.String:
-					return string.Format("\"{0}\"", _stringValue.InsertEscapeSequences());
+					return $"\"{_stringValue.InsertEscapeSequences()}\"";
 				case JsonValueType.Boolean:
 					return _boolValue ? "true" : "false";
 				case JsonValueType.Object:
-					return string.Format("{0}", _objectValue);
+					return $"{_objectValue}";
 				case JsonValueType.Array:
-					return string.Format("{0}", _arrayValue);
+					return $"{_arrayValue}";
 				default:
 					return "null";
 			}
@@ -342,7 +342,7 @@ namespace Manatee.Json
 		public static JsonValue Parse(string source)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 			if (source.IsNullOrWhiteSpace())
 				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.Parse(source);
@@ -358,7 +358,7 @@ namespace Manatee.Json
 		public static JsonValue Parse(StreamReader stream)
 		{
 			if (stream == null)
-				throw new ArgumentNullException("stream");
+				throw new ArgumentNullException(nameof(stream));
 			if (stream.EndOfStream)
 				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.Parse(stream);

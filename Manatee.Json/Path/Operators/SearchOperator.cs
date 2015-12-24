@@ -26,8 +26,6 @@ namespace Manatee.Json.Path.Operators
 	{
 		private readonly IJsonPathSearchParameter _parameter;
 
-		public IJsonPathSearchParameter Parameter { get { return _parameter; } }
-
 		public SearchOperator(IJsonPathSearchParameter parameter)
 		{
 			_parameter = parameter;
@@ -35,11 +33,11 @@ namespace Manatee.Json.Path.Operators
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			return new JsonArray(Parameter.Find(json, root));
+			return new JsonArray(_parameter.Find(json, root));
 		}
 		public override string ToString()
 		{
-			return string.Format("..{0}", Parameter);
+			return $"..{_parameter}";
 		}
 	}
 }

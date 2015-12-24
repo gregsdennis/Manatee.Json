@@ -59,7 +59,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		public override string ToString()
 		{
-			return string.Format("Usage: {0}, Object: {1}, Json: {2}", UsageCount, Object, Json);
+			return $"Usage: {UsageCount}, Object: {Object}, Json: {Json}";
 		}
 	}
 }

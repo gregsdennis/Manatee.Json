@@ -32,9 +32,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	{
 		private class ReflectionInfo
 		{
-			public IEnumerable<SerializationInfo> ReadOnlyProperties { get; private set; }
-			public IEnumerable<SerializationInfo> ReadWriteProperties { get; private set; }
-			public IEnumerable<SerializationInfo> Fields { get; private set; }
+			public IEnumerable<SerializationInfo> ReadOnlyProperties { get; }
+			public IEnumerable<SerializationInfo> ReadWriteProperties { get; }
+			public IEnumerable<SerializationInfo> Fields { get; }
 
 			public ReflectionInfo(IEnumerable<SerializationInfo> readOnlyProperties, IEnumerable<SerializationInfo> readWriteProperties, IEnumerable<SerializationInfo> fields)
 			{
@@ -44,13 +44,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 		}
 
-		private static readonly Dictionary<Type, ReflectionInfo> InstanceCache;
-		private static readonly Dictionary<Type, ReflectionInfo> StaticCache;
+		private static readonly Dictionary<Type, ReflectionInfo> _instanceCache;
+		private static readonly Dictionary<Type, ReflectionInfo> _staticCache;
 
 		static ReflectionCache()
 		{
-			InstanceCache = new Dictionary<Type, ReflectionInfo>();
-			StaticCache = new Dictionary<Type, ReflectionInfo>();
+			_instanceCache = new Dictionary<Type, ReflectionInfo>();
+			_staticCache = new Dictionary<Type, ReflectionInfo>();
 		}
 
 		public static IEnumerable<SerializationInfo> GetMembers(Type type, PropertySelectionStrategy propertyTypes, bool includeFields)
@@ -96,7 +96,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static ReflectionInfo InitializeInstanceCache(Type type)
 		{
 			ReflectionInfo info;
-			if (!InstanceCache.TryGetValue(type, out info))
+			if (!_instanceCache.TryGetValue(type, out info))
 			{
 				var read = type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 							   .Where(p => p.GetSetMethod() == null)
@@ -112,14 +112,14 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 								 .Where(p => !p.IsInitOnly)
 								 .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 								 .Select(BuildSerializationInfo);
-				InstanceCache[type] = info = new ReflectionInfo(read, readWrite, fields);
+				_instanceCache[type] = info = new ReflectionInfo(read, readWrite, fields);
 			}
 			return info;
 		}
 		private static ReflectionInfo InitializeStaticCache(Type type)
 		{
 			ReflectionInfo info;
-			if (!StaticCache.TryGetValue(type, out info))
+			if (!_staticCache.TryGetValue(type, out info))
 			{
 				var read = type.GetProperties(BindingFlags.Static | BindingFlags.Public)
 							   .Where(p => p.GetSetMethod() == null)
@@ -135,7 +135,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 								 .Where(p => !p.IsInitOnly)
 								 .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 								 .Select(BuildSerializationInfo);
-				StaticCache[type] = info = new ReflectionInfo(read, readWrite, fields);
+				_staticCache[type] = info = new ReflectionInfo(read, readWrite, fields);
 			}
 			return info;
 		}

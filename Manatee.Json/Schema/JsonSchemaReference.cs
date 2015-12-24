@@ -52,7 +52,7 @@ namespace Manatee.Json.Schema
 		/// <remarks>
 		/// The <see cref="Resolve"/> method must first be called.
 		/// </remarks>
-		public virtual IJsonSchema Resolved { get { return _schema; } }
+		public virtual IJsonSchema Resolved => _schema;
 
 		internal JsonSchemaReference() {}
 		/// <summary>
@@ -62,8 +62,7 @@ namespace Manatee.Json.Schema
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is nulll, empty, or whitespace.</exception>
 		public JsonSchemaReference(string reference)
 		{
-			if (reference.IsNullOrWhiteSpace())
-				throw new ArgumentNullException("reference");
+			if (reference.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(reference));
 			Reference = reference;
 		}
 		/// <summary>
@@ -114,10 +113,8 @@ namespace Manatee.Json.Schema
 
 		private void Resolve(JsonValue root)
 		{
-			if (root == null)
-				throw new ArgumentNullException("root");
-			if (root == RootJson)
-				throw new ArgumentException("Cannot use a root reference as the base schema.");
+			if (root == null) throw new ArgumentNullException(nameof(root));
+			if (root == RootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
 			_schema = Reference[0] == '#' ? ResolveLocalReference(root) : ResolveExternalReference();
 		}
 		private IJsonSchema ResolveLocalReference(JsonValue root)

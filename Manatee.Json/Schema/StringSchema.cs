@@ -63,18 +63,18 @@ namespace Manatee.Json.Schema
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			if (json.Type != JsonValueType.String)
-				return new SchemaValidationResults(string.Empty, string.Format("Expected: String; Actual: {0}.", json.Type));
+				return new SchemaValidationResults(string.Empty, $"Expected: String; Actual: {json.Type}.");
 			var str = json.String;
 			var length = str.Length;
 			var errors = new List<SchemaValidationError>();
 			if (MinLength.HasValue && (length < MinLength))
-				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: length >= {0}; Actual: {1}.", MinLength, length)));
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected: length >= {MinLength}; Actual: {length}."));
 			if (MaxLength.HasValue && (length > MaxLength))
-				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: length <= {0}; Actual: {1}.", MaxLength, length)));
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected: length <= {MaxLength}; Actual: {length}."));
 			if (Format != null && !Format.Validate(str))
-				errors.Add(new SchemaValidationError(string.Empty, string.Format("Value [{0}] is not in an acceptable {1} format.", str, Format.Key)));
+				errors.Add(new SchemaValidationError(string.Empty, $"Value [{str}] is not in an acceptable {Format.Key} format."));
 			if (Pattern != null && !Regex.IsMatch(str, Pattern))
-				errors.Add(new SchemaValidationError(string.Empty, string.Format("Value [{0}] does not match required Regex pattern [{1}].", str, Pattern)));
+				errors.Add(new SchemaValidationError(string.Empty, $"Value [{str}] does not match required Regex pattern [{Pattern}]."));
 			return new SchemaValidationResults(errors);
 		}
 		/// <summary>

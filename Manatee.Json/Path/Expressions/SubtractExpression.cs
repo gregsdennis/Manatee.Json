@@ -25,7 +25,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class SubtractExpression<T> : ExpressionTreeBranch<T>
 	{
-		public override int Priority { get { return 2; } }
+		public override int Priority => 2;
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -37,8 +37,8 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			if (Right.Priority == Priority)
-				return string.Format("{0}-({1})", Left, Right);
-			return string.Format("{0}-{1}", Left, Right);
+				return $"{Left}-({Right})";
+			return $"{Left}-{Right}";
 		}
 	}
 }

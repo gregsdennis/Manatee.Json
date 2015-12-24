@@ -27,9 +27,7 @@ namespace Manatee.Json.Path.Operators
 {
 	internal class LengthOperator : IJsonPathOperator
 	{
-		private static readonly LengthOperator _instance = new LengthOperator();
-
-		public static LengthOperator Instance { get { return _instance; } }
+		public static LengthOperator Instance { get; } = new LengthOperator();
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{

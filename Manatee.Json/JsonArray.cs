@@ -65,9 +65,9 @@ namespace Manatee.Json
 			for (i = 0; i < Count - 1; i++)
 			{
 				var value = this[i] ?? JsonValue.Null;
-				s += string.Format("{0}{1},\n", tab1, value.GetIndentedString(indentLevel + 1));
+				s += $"{tab1}{value.GetIndentedString(indentLevel + 1)},\n";
 			}
-			s += string.Format("{0}{1}\n{2}]", tab1, this[i].GetIndentedString(indentLevel + 1), tab0);
+			s += $"{tab1}{this[i].GetIndentedString(indentLevel + 1)}\n{tab0}]";
 			return s;
 		}
 
@@ -82,7 +82,7 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "[]";
-			return "[" + string.Join(",", this.Select(value => value == null ? JsonValue.Null.ToString() : value.ToString()).ToArray()) + "]";
+			return "[" + string.Join(",", this.Select(value => value?.ToString() ?? JsonValue.Null.ToString()).ToArray()) + "]";
 		}
 
 		/// <summary>

@@ -28,7 +28,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	{
 		private readonly ISerializer _innerSerializer;
 
-		public bool ShouldMaintainReferences { get { return _innerSerializer.ShouldMaintainReferences; } }
+		public bool ShouldMaintainReferences => _innerSerializer.ShouldMaintainReferences;
 
 		public DefaultValueSerializer(ISerializer innerSerializer)
 		{

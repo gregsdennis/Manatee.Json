@@ -28,7 +28,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class NameExpression<T> : PathExpression<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public string Name { get; set; }
 		public ExpressionTreeNode<T> NameExp { get; set; }
 
@@ -39,7 +39,7 @@ namespace Manatee.Json.Path.Expressions
 				throw new NotSupportedException("Name requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
 			if (results.Count > 1)
-				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
+				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
 			var name = GetName();
 			return result != null && result.Type == JsonValueType.Object && result.Object.ContainsKey(name)
@@ -54,12 +54,9 @@ namespace Manatee.Json.Path.Expressions
 
 		private string GetName()
 		{
-			if (NameExp != null)
-			{
-				var value = NameExp.Evaluate(default(T), null);
-				if (value != null)
-					return (string)value;
-			}
+			var value = NameExp?.Evaluate(default(T), null);
+			if (value != null)
+				return (string)value;
 			return Name;
 		}
 	}

@@ -55,7 +55,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 			var constant = (ConstantExpression) e;
 			if (constant.Value == null)
 				return new NullValueExpressionTranslator();
-			throw new NotSupportedException(string.Format("Values of type '{0}' are not supported.", type));
+			throw new NotSupportedException($"Values of type '{type}' are not supported.");
 		}
 		private static IExpressionTranslator GetNodeTypeBasedTranslator(ExpressionType type)
 		{
@@ -168,7 +168,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 #endif
 					break;
 			}
-			throw new NotSupportedException(string.Format("Expression type '{0}' is not supported.", type));
+			throw new NotSupportedException($"Expression type '{type}' is not supported.");
 		}
 		private static IExpressionTranslator GetMethodCallTranslator(Expression exp)
 		{
@@ -186,7 +186,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 				case "IndexOf":
 					return new IndexOfExpressionTranslator();
 			}
-			throw new NotSupportedException(string.Format("The method '{0}' is not supported.", method.Method.Name));
+			throw new NotSupportedException($"The method '{method.Method.Name}' is not supported.");
 		}
 		private static IExpressionTranslator GetMemberTranslator(Expression exp)
 		{
@@ -206,7 +206,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 				if (translator != null)
 					return translator.Translate<T>(source);
 			}
-			throw new NotSupportedException(string.Format("Expression type '{0}' is not supported.", type));
+			throw new NotSupportedException($"Expression type '{type}' is not supported.");
 		}
 		public static Expression<T, JsonValue> Translate<T>(Expression<Func<JsonPathValue, T>> source)
 		{

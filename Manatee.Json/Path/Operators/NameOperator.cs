@@ -28,13 +28,11 @@ namespace Manatee.Json.Path.Operators
 {
 	internal class NameOperator : IJsonPathOperator
 	{
-		private readonly string _name;
-
-		public string Name { get { return _name; } }
+		public string Name { get; }
 
 		public NameOperator(string name)
 		{
-			_name = name;
+			Name = name;
 		}
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
@@ -45,7 +43,7 @@ namespace Manatee.Json.Path.Operators
 		}
 		public override string ToString()
 		{
-			return string.Format(".{0}", Name);
+			return $".{Name}";
 		}
 	}
 }

@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class ConversionExpression<T> : ExpressionTreeNode<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public ExpressionTreeNode<T> Root { get; set; }
 		public Type TargetType { get; set; }
 

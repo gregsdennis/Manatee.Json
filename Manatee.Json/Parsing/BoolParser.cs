@@ -66,7 +66,7 @@ namespace Manatee.Json.Parsing
 				return null;
 			}
 			value = null;
-			return string.Format("Value not recognized: '{0}'", result);
+			return $"Value not recognized: '{result}'";
 		}
 		public string TryParse(StreamReader stream, out JsonValue value)
 		{
@@ -105,7 +105,7 @@ namespace Manatee.Json.Parsing
 				return null;
 			}
 			value = null;
-			return string.Format("Value not recognized: '{0}'", result);
+			return $"Value not recognized: '{result}'";
 		}
 	}
 }

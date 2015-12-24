@@ -24,7 +24,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class NotExpression<T> : ExpressionTreeNode<T>
 	{
-		public override int Priority { get { return 5; } }
+		public override int Priority => 5;
 		public ExpressionTreeNode<T> Root { get; set; }
 
 		public override object Evaluate(T json, JsonValue root)
@@ -38,8 +38,8 @@ namespace Manatee.Json.Path.Expressions
 				   Root is IsEqualExpression<T> || Root is IsNotEqualExpression<T> ||
 				   Root is IsLessThanExpression<T> || Root is IsLessThanEqualExpression<T> ||
 				   Root is IsGreaterThanExpression<T> || Root is IsGreaterThanEqualExpression<T>
-					   ? string.Format("!({0})", Root)
-					   : string.Format("!{0}", Root);
+					   ? $"!({Root})"
+				       : $"!{Root}";
 		}
 	}
 }

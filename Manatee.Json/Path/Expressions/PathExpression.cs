@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class PathExpression<T> : ExpressionTreeNode<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public JsonPath Path { get; set; }
 		public bool IsLocal { get; set; }
 
@@ -35,15 +35,15 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var value = IsLocal ? json as JsonValue : root;
 			if (value == null)
-				throw new InvalidOperationException(string.Format("Path must evaluate to a JsonValue. Returned value is {0}.", json.GetType().Name));
+				throw new InvalidOperationException($"Path must evaluate to a JsonValue. Returned value is {json.GetType().Name}.");
 			var results = Path.Evaluate(value);
 			if (results.Count > 1)
-				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
+				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			return results.FirstOrDefault();
 		}
 		public override string ToString()
 		{
-			return string.Format(IsLocal ? "@{0}" : "${0}", Path.GetRawString());
+			return (IsLocal ? "@" : "$") + Path.GetRawString();
 		}
 	}
 }

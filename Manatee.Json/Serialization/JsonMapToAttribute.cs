@@ -35,7 +35,7 @@ namespace Manatee.Json.Serialization
 		/// Specifies the key in the JSON object which maps to the property to which
 		/// this attribute is applied.
 		///</summary>
-		public string MapToKey { get; set; }
+		public string MapToKey { get; }
 
 		/// <summary>
 		/// Creates a new instance fo the <see cref="JsonMapToAttribute"/> class.

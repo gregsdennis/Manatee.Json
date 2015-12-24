@@ -42,7 +42,7 @@ namespace Manatee.Json.Schema
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			return json.Type != JsonValueType.Null
-				? new SchemaValidationResults(string.Empty, string.Format("Expected: Null; Actual: {0}.", json.Type))
+				? new SchemaValidationResults(string.Empty, $"Expected: Null; Actual: {json.Type}.")
 				: new SchemaValidationResults();
 		}
 	}

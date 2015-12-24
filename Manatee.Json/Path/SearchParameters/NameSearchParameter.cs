@@ -29,8 +29,6 @@ namespace Manatee.Json.Path.SearchParameters
 	{
 		private readonly string _name;
 
-		public string Name { get { return _name; } }
-
 		public NameSearchParameter(string name)
 		{
 			_name = name;
@@ -43,7 +41,7 @@ namespace Manatee.Json.Path.SearchParameters
 				switch (v.Type)
 				{
 					case JsonValueType.Object:
-						var match = v.Object.ContainsKey(Name) ? v.Object[Name] : null;
+						var match = v.Object.ContainsKey(_name) ? v.Object[_name] : null;
 						var search = v.Object.Values.SelectMany(jv => Find(new[] {jv}, root)).ToList();
 						if (match != null)
 							search.Insert(0, match);
@@ -57,7 +55,7 @@ namespace Manatee.Json.Path.SearchParameters
 		}
 		public override string ToString()
 		{
-			return Name;
+			return _name;
 		}
 	}
 }

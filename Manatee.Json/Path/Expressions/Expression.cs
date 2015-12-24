@@ -44,7 +44,7 @@ namespace Manatee.Json.Path.Expressions
 			End,
 		}
 
-		private static readonly StateMachine<State, JsonPathExpressionInput> StateMachine = new StateMachine<State, JsonPathExpressionInput>();
+		private static readonly StateMachine<State, JsonPathExpressionInput> _stateMachine = new StateMachine<State, JsonPathExpressionInput>();
 
 		private List<ExpressionTreeNode<TIn>> _nodeList;
 		private readonly InputStream<JsonPathExpressionInput> _stream = new InputStream<JsonPathExpressionInput>();
@@ -58,46 +58,46 @@ namespace Manatee.Json.Path.Expressions
 
 		static Expression()
 		{
-			StateMachine[State.Start, JsonPathExpressionInput.OpenParenth] = GotStart;
-			StateMachine[State.Value, JsonPathExpressionInput.OpenParenth] = GotGroup;
-			StateMachine[State.Value, JsonPathExpressionInput.Number] = GotNumber;
-			StateMachine[State.Value, JsonPathExpressionInput.Minus] = GotNumber;
-			StateMachine[State.Value, JsonPathExpressionInput.Root] = GotRoot;
-			StateMachine[State.Value, JsonPathExpressionInput.Current] = GotCurrent;
-			StateMachine[State.Value, JsonPathExpressionInput.Bang] = GotNot;
-			StateMachine[State.Value, JsonPathExpressionInput.Quote] = GotString;
-			StateMachine[State.Value, JsonPathExpressionInput.Letter] = GotNamedConstant;
-			StateMachine[State.NumberOrPath, JsonPathExpressionInput.OpenParenth] = GotGroup;
-			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Number] = GotNumber;
-			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Root] = GotRoot;
-			StateMachine[State.NumberOrPath, JsonPathExpressionInput.Current] = GotCurrent;
-			StateMachine[State.Operator, JsonPathExpressionInput.Plus] = GotPlus;
-			StateMachine[State.Operator, JsonPathExpressionInput.Minus] = GotMinus;
-			StateMachine[State.Operator, JsonPathExpressionInput.Star] = GotMultiply;
-			StateMachine[State.Operator, JsonPathExpressionInput.Slash] = GotDivide;
-			StateMachine[State.Operator, JsonPathExpressionInput.Caret] = GotExponent;
-			StateMachine[State.Operator, JsonPathExpressionInput.LessThan] = GotLessThan;
-			StateMachine[State.Operator, JsonPathExpressionInput.Equal] = GotEqual;
-			StateMachine[State.Operator, JsonPathExpressionInput.And] = GotAnd;
-			StateMachine[State.Operator, JsonPathExpressionInput.Or] = GotOr;
-			StateMachine[State.Operator, JsonPathExpressionInput.GreaterThan] = GotGreaterThan;
-			StateMachine[State.Operator, JsonPathExpressionInput.Bang] = GotNot;
-			StateMachine[State.Operator, JsonPathExpressionInput.CloseParenth] = CompleteExpression;
-			StateMachine[State.Comparison, JsonPathExpressionInput.Equal] = GotEqual;
-			StateMachine[State.Comparison, JsonPathExpressionInput.And] = GotAnd;
-			StateMachine[State.Comparison, JsonPathExpressionInput.Or] = GotOr;
-			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.OpenParenth] = GotGroup;
-			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Number] = GotNumber;
-			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Root] = GotRoot;
-			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Current] = GotCurrent;
-			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Equal] = FinalizeComparison;
-			StateMachine[State.ValueOrOperator, JsonPathExpressionInput.Letter] = GotNamedConstant;
-			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.OpenParenth] = GotGroup;
-			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Root] = GotRoot;
-			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Current] = GotCurrent;
-			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Equal] = GotEqual;
-			StateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Letter] = GotNamedConstant;
-			StateMachine.UpdateFunction = GetNextInput;
+			_stateMachine[State.Start, JsonPathExpressionInput.OpenParenth] = GotStart;
+			_stateMachine[State.Value, JsonPathExpressionInput.OpenParenth] = GotGroup;
+			_stateMachine[State.Value, JsonPathExpressionInput.Number] = GotNumber;
+			_stateMachine[State.Value, JsonPathExpressionInput.Minus] = GotNumber;
+			_stateMachine[State.Value, JsonPathExpressionInput.Root] = GotRoot;
+			_stateMachine[State.Value, JsonPathExpressionInput.Current] = GotCurrent;
+			_stateMachine[State.Value, JsonPathExpressionInput.Bang] = GotNot;
+			_stateMachine[State.Value, JsonPathExpressionInput.Quote] = GotString;
+			_stateMachine[State.Value, JsonPathExpressionInput.Letter] = GotNamedConstant;
+			_stateMachine[State.NumberOrPath, JsonPathExpressionInput.OpenParenth] = GotGroup;
+			_stateMachine[State.NumberOrPath, JsonPathExpressionInput.Number] = GotNumber;
+			_stateMachine[State.NumberOrPath, JsonPathExpressionInput.Root] = GotRoot;
+			_stateMachine[State.NumberOrPath, JsonPathExpressionInput.Current] = GotCurrent;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Plus] = GotPlus;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Minus] = GotMinus;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Star] = GotMultiply;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Slash] = GotDivide;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Caret] = GotExponent;
+			_stateMachine[State.Operator, JsonPathExpressionInput.LessThan] = GotLessThan;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Equal] = GotEqual;
+			_stateMachine[State.Operator, JsonPathExpressionInput.And] = GotAnd;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Or] = GotOr;
+			_stateMachine[State.Operator, JsonPathExpressionInput.GreaterThan] = GotGreaterThan;
+			_stateMachine[State.Operator, JsonPathExpressionInput.Bang] = GotNot;
+			_stateMachine[State.Operator, JsonPathExpressionInput.CloseParenth] = CompleteExpression;
+			_stateMachine[State.Comparison, JsonPathExpressionInput.Equal] = GotEqual;
+			_stateMachine[State.Comparison, JsonPathExpressionInput.And] = GotAnd;
+			_stateMachine[State.Comparison, JsonPathExpressionInput.Or] = GotOr;
+			_stateMachine[State.ValueOrOperator, JsonPathExpressionInput.OpenParenth] = GotGroup;
+			_stateMachine[State.ValueOrOperator, JsonPathExpressionInput.Number] = GotNumber;
+			_stateMachine[State.ValueOrOperator, JsonPathExpressionInput.Root] = GotRoot;
+			_stateMachine[State.ValueOrOperator, JsonPathExpressionInput.Current] = GotCurrent;
+			_stateMachine[State.ValueOrOperator, JsonPathExpressionInput.Equal] = FinalizeComparison;
+			_stateMachine[State.ValueOrOperator, JsonPathExpressionInput.Letter] = GotNamedConstant;
+			_stateMachine[State.BooleanOrComparison, JsonPathExpressionInput.OpenParenth] = GotGroup;
+			_stateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Root] = GotRoot;
+			_stateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Current] = GotCurrent;
+			_stateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Equal] = GotEqual;
+			_stateMachine[State.BooleanOrComparison, JsonPathExpressionInput.Letter] = GotNamedConstant;
+			_stateMachine.UpdateFunction = GetNextInput;
 		}
 
 		public T Evaluate(TIn json, JsonValue root)
@@ -144,7 +144,7 @@ namespace Manatee.Json.Path.Expressions
 			_done = false;
 			try
 			{
-				StateMachine.Run(this, State.Start, _stream);
+				_stateMachine.Run(this, State.Start, _stream);
 				if (!_done)
 					throw new JsonPathSyntaxException(GetErrorLocation(), "Found incomplete expression.");
 			}

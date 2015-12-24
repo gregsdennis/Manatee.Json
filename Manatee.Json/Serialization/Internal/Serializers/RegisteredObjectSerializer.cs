@@ -26,7 +26,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class RegisteredObjectSerializer : ISerializer
 	{
-		public bool ShouldMaintainReferences { get { return true; } }
+		public bool ShouldMaintainReferences => true;
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{

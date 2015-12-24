@@ -27,7 +27,6 @@ using System.Data;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
-using Manatee.StateMachine;
 
 namespace Manatee.Json.Schema
 {
@@ -83,21 +82,15 @@ namespace Manatee.Json.Schema
 			set
 			{
 				if (_isReadOnly)
-					throw new ReadOnlyException(string.Format("The '{0}' member is not editable.", Name));
+					throw new ReadOnlyException($"The '{Name}' member is not editable.");
 				_definition = value;
 			}
 		}
 
 		internal List<JsonSchemaPropertyDefinition> PropertyReferences { get; set; }
 		internal List<ArraySchema> ArrayReferences { get; set; }
-		internal int ReferenceCount
-		{
-			get
-			{
-				return (PropertyReferences == null ? 0 : PropertyReferences.Count) +
-				       (ArrayReferences == null ? 0 : ArrayReferences.Count);
-			}
-		}
+		internal int ReferenceCount => (PropertyReferences?.Count ?? 0) +
+		                               (ArrayReferences?.Count ?? 0);
 
 		static JsonSchemaTypeDefinition()
 		{
@@ -125,7 +118,7 @@ namespace Manatee.Json.Schema
 		public JsonSchemaTypeDefinition(string name)
 		{
 			if (name.IsNullOrWhiteSpace())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			Name = name;
 		}
@@ -164,7 +157,7 @@ namespace Manatee.Json.Schema
 			if (json.Type == JsonValueType.String)
 			{
 				Name = json.String;
-				Definition = GetWellKnownDefinition(json.String);
+				Definition = new StringSchema {Pattern = json.String};
 				return;
 			}
 			var details = json.Object.First();
@@ -181,29 +174,6 @@ namespace Manatee.Json.Schema
 		{
 			if (Definition == null || _isReadOnly) return Name;
 			return new JsonObject {{Name, Definition.ToJson(null)}};
-		}
-
-		private static IJsonSchema GetWellKnownDefinition(string name)
-		{
-			switch (name)
-			{
-				case "array":
-					return Array.Definition;
-				case "boolean":
-					return Boolean.Definition;
-				case "integer":
-					return Integer.Definition;
-				case "null":
-					return Null.Definition;
-				case "number":
-					return Number.Definition;
-				case "object":
-					return Object.Definition;
-				case "string":
-					return String.Definition;
-				default:
-					throw new ArgumentOutOfRangeException("name");
-			}
 		}
 	}
 }

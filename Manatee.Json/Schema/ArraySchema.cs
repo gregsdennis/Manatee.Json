@@ -67,13 +67,13 @@ namespace Manatee.Json.Schema
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			if (json.Type != JsonValueType.Array)
-				return new SchemaValidationResults(string.Empty, string.Format("Expected: Array; Actual: {0}.", json.Type));
+				return new SchemaValidationResults(string.Empty, $"Expected: Array; Actual: {json.Type}.");
 			var array = json.Array;
 			var errors = new List<SchemaValidationError>();
 			if (MinItems.HasValue && array.Count < MinItems)
-				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: >= {0} items; Actual: {1} items.", MinItems, array.Count)));
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected: >= {MinItems} items; Actual: {array.Count} items."));
 			if (MaxItems.HasValue && array.Count > MaxItems)
-				errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: <= {0} items; Actual: {1} items.", MaxItems, array.Count)));
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected: <= {MaxItems} items; Actual: {array.Count} items."));
 			if (UniqueItems && (array.Count != array.Distinct().Count()))
 				errors.Add(new SchemaValidationError(string.Empty, "Expected unique items; Duplicates were found."));
 			if (Items != null)
@@ -81,7 +81,7 @@ namespace Manatee.Json.Schema
 				var jValue = root ?? ToJson(null);
 				var itemValidations = array.Select(v => Items.Validate(v, jValue));
 
-				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertyName(string.Format("[{0}]", i)))));
+				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertyName($"[{i}]"))));
 			}
 			return new SchemaValidationResults(errors);
 		}

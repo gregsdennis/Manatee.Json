@@ -83,16 +83,15 @@ namespace Manatee.Json.Schema
 				};
 
 		private readonly Regex _validationRule;
-		private readonly string _key;
 
 		/// <summary>
 		/// A string key which specifies this string format.
 		/// </summary>
-		public string Key { get { return _key; } }
+		public string Key { get; }
 
 		private StringFormat(string key, string regex)
 		{
-			_key = key;
+			Key = key;
 			if (regex != null)
 				_validationRule = new Regex(regex);
 		}

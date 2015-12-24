@@ -32,9 +32,7 @@ namespace Manatee.Json.Serialization
 	public class JsonTypeMapException : Exception
 	{
 		internal JsonTypeMapException(Type abstractType, Type concreteType)
-			: base(string.Format("Cannot create map from type '{0}' to type '{1}' because the destination type is either abstract or an interface.",
-								 abstractType,
-								 concreteType)) {}
+			: base($"Cannot create map from type '{abstractType}' to type '{concreteType}' because the destination type is either abstract or an interface.") {}
 	}
 
 	///<summary>

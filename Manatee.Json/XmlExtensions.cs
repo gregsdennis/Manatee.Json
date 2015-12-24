@@ -109,7 +109,7 @@ namespace Manatee.Json
 								if (attribute.Name.LocalName == XmlNamespaceAttribute)
 								{
 									XNamespace ns = XmlNamespaceRegistry.Instance.GetNamespace(XmlNamespaceAttribute);
-									xml.Name = ns + xml.Name.LocalName;
+									xml.Name = ns + xml.Name?.LocalName;
 								}
 								else
 									xml.Add(attribute);
@@ -221,9 +221,9 @@ namespace Manatee.Json
 			foreach (var xAttribute in attributes)
 			{
 				var name = xAttribute.IsNamespaceDeclaration && (xAttribute.Name.LocalName != XmlNamespaceAttribute)
-							? string.Format("{0}:{1}", XmlNamespaceAttribute, xAttribute.Name.LocalName)
-							: GetNamespaceForElement(xElement, xAttribute.Name.NamespaceName) + xAttribute.Name.LocalName;
-				obj.Add(string.Format("-{0}", name), ParseValue(xAttribute.Value));
+							? $"{XmlNamespaceAttribute}:{xAttribute.Name.LocalName}"
+					           : GetNamespaceForElement(xElement, xAttribute.Name.NamespaceName) + xAttribute.Name.LocalName;
+				obj.Add($"-{name}", ParseValue(xAttribute.Value));
 			}
 			return new JsonArray { obj, json };
 		}
@@ -255,7 +255,7 @@ namespace Manatee.Json
 					var label = XmlNamespaceRegistry.Instance.GetLabel(parent, search);
 					return label == XmlNamespaceAttribute
 					       	? string.Empty
-					       	: string.Format("{0}:", XmlNamespaceRegistry.Instance.GetLabel(parent, search));
+					       	: $"{XmlNamespaceRegistry.Instance.GetLabel(parent, search)}:";
 				}
 				parent = parent.Parent;
 			}
@@ -270,7 +270,7 @@ namespace Manatee.Json
 			{
 				var label = key.Substring(0, key.IndexOf(':'));
 				var local = key.Substring(label.Length + 1);
-				XNamespace ns = XmlNamespaceRegistry.Instance.GetNamespace(label == XmlNamespaceAttribute ? local : label) ?? XNamespace.Xmlns;
+				var ns = XmlNamespaceRegistry.Instance.GetNamespace(label == XmlNamespaceAttribute ? local : label) ?? XNamespace.Xmlns;
 				name = ns + local;
 			}
 			else

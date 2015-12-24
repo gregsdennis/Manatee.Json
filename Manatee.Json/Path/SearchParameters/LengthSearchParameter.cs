@@ -28,9 +28,7 @@ namespace Manatee.Json.Path.SearchParameters
 {
 	internal class LengthSearchParameter : IJsonPathSearchParameter
 	{
-		private static readonly LengthSearchParameter _instance = new LengthSearchParameter();
-
-		public static LengthSearchParameter Instance { get { return _instance; } }
+		public static LengthSearchParameter Instance { get; } = new LengthSearchParameter();
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{

@@ -39,7 +39,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		private static readonly Dictionary<Type, List<Description>> _descriptions = new Dictionary<Type,List<Description>>();
 
-		public bool ShouldMaintainReferences { get { return false; } }
+		public bool ShouldMaintainReferences => false;
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
