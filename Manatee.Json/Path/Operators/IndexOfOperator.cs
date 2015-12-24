@@ -28,25 +28,23 @@ namespace Manatee.Json.Path.Operators
 {
 	internal class IndexOfOperator : IJsonPathOperator
 	{
-		private readonly Expression<JsonValue, JsonArray> _parameter;
-
-		public Expression<JsonValue, JsonArray> Parameter { get { return _parameter; } }
+		public Expression<JsonValue, JsonArray> Parameter { get; }
 
 		public IndexOfOperator(Expression<JsonValue, JsonArray> parameter)
 		{
-			_parameter = parameter;
+			Parameter = parameter;
 		}
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			var parameter = _parameter.Evaluate(json, root);
+			var parameter = Parameter.Evaluate(json, root);
 			return json.Where(v => v.Type == JsonValueType.Array)
 			           .Select(v => (JsonValue) v.Array.IndexOf(parameter))
 			           .ToJson();
 		}
 		public override string ToString()
 		{
-			return string.Format(".indexOf({0})", _parameter);
+			return $".indexOf({Parameter})";
 		}
 	}
 }

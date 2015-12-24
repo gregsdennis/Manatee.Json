@@ -69,17 +69,16 @@ namespace Manatee.Json
 			if (Count == 0) return "{}";
 			string key, tab0 = string.Empty.PadLeft(indentLevel, '\t'),
 				   tab1 = string.Empty.PadLeft(indentLevel + 1, '\t'),
-				   tab2 = string.Empty.PadLeft(indentLevel + 2, '\t'),
 				   s = "{\n";
 			int i;
 			for (i = 0; i < Count - 1; i++)
 			{
 				key = Keys.ElementAt(i);
 				var value = this[key] ?? new JsonValue();
-				s += string.Format("{0}\"{1}\" : {2},\n", tab1, key, value.GetIndentedString(indentLevel + 2));
+				s += $"{tab1}\"{key}\" : {value.GetIndentedString(indentLevel + 2)},\n";
 			}
 			key = Keys.ElementAt(i);
-			s += string.Format("{0}\"{1}\" : {2}\n{3}}}", tab1, key, this[key].GetIndentedString(indentLevel + 2), tab0);
+			s += $"{tab1}\"{key}\" : {this[key].GetIndentedString(indentLevel + 2)}\n{tab0}}}";
 			return s;
 		}
 		/// <summary>
@@ -103,7 +102,7 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "{}";
-			return "{" + string.Join(",", this.Select(kvp => string.Format("\"{0}\":{1}", kvp.Key, kvp.Value)).ToArray()) + "}";
+			return "{" + string.Join(",", this.Select(kvp => $"\"{kvp.Key}\":{kvp.Value}").ToArray()) + "}";
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="object"/> is equal to the current <see cref="object"/>.

@@ -61,8 +61,7 @@ namespace Manatee.Json.Serialization.Internal
 			if (_cache.ContainsKey(type))
 				return (T) ConstructInstance(_cache[type]);
 			if (!type.IsInterface)
-				throw new ArgumentException(string.Format("Type generation only works for interface types.  " +
-				                                          "Type '{0}' is not valid.", type));
+				throw new ArgumentException($"Type generation only works for interface types. Type '{type}' is not valid.");
 			var typeBuilder = CreateType(type);
 			ImplementProperties<T>(typeBuilder);
 			ImplementMethods<T>(typeBuilder);

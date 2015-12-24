@@ -30,44 +30,44 @@ namespace Manatee.Json.Serialization.Internal
 {
 	internal static class SerializerFactory
 	{
-		private static readonly AutoSerializer AutoSerializer;
-		private static readonly BooleanSerializer BooleanSerializer;
-		private static readonly EnumNameSerializer EnumNameSerializer;
-		private static readonly EnumValueSerializer EnumValueSerializer;
-		private static readonly JsonSerializableSerializer JsonSerializableSerializer;
-		private static readonly NumericSerializer NumericSerializer;
-		private static readonly RegisteredObjectSerializer RegisteredObjectSerializer;
-		private static readonly StringSerializer StringSerializer;
-		private static readonly Dictionary<Type, ISerializer> Library;
-		private static readonly SchemaSerializer SchemaSerializer;
+		private static readonly AutoSerializer _autoSerializer;
+		private static readonly BooleanSerializer _booleanSerializer;
+		private static readonly EnumNameSerializer _enumNameSerializer;
+		private static readonly EnumValueSerializer _enumValueSerializer;
+		private static readonly JsonSerializableSerializer _jsonSerializableSerializer;
+		private static readonly NumericSerializer _numericSerializer;
+		private static readonly RegisteredObjectSerializer _registeredObjectSerializer;
+		private static readonly StringSerializer _stringSerializer;
+		private static readonly Dictionary<Type, ISerializer> _library;
+		private static readonly SchemaSerializer _schemaSerializer;
 
 		static SerializerFactory()
 		{
-			AutoSerializer = new AutoSerializer();
-			BooleanSerializer = new BooleanSerializer();
-			EnumNameSerializer = new EnumNameSerializer();
-			EnumValueSerializer = new EnumValueSerializer();
-			JsonSerializableSerializer = new JsonSerializableSerializer();
-			NumericSerializer = new NumericSerializer();
-			RegisteredObjectSerializer = new RegisteredObjectSerializer();
-			StringSerializer = new StringSerializer();
-			SchemaSerializer = new SchemaSerializer();
-			Library = new Dictionary<Type, ISerializer>
+			_autoSerializer = new AutoSerializer();
+			_booleanSerializer = new BooleanSerializer();
+			_enumNameSerializer = new EnumNameSerializer();
+			_enumValueSerializer = new EnumValueSerializer();
+			_jsonSerializableSerializer = new JsonSerializableSerializer();
+			_numericSerializer = new NumericSerializer();
+			_registeredObjectSerializer = new RegisteredObjectSerializer();
+			_stringSerializer = new StringSerializer();
+			_schemaSerializer = new SchemaSerializer();
+			_library = new Dictionary<Type, ISerializer>
 				{
-					{typeof (sbyte), NumericSerializer},
-					{typeof (byte), NumericSerializer},
-					{typeof (char), NumericSerializer},
-					{typeof (short), NumericSerializer},
-					{typeof (ushort), NumericSerializer},
-					{typeof (int), NumericSerializer},
-					{typeof (uint), NumericSerializer},
-					{typeof (long), NumericSerializer},
-					{typeof (ulong), NumericSerializer},
-					{typeof (float), NumericSerializer},
-					{typeof (double), NumericSerializer},
-					{typeof (decimal), NumericSerializer},
-					{typeof (bool), BooleanSerializer},
-					{typeof (string), StringSerializer},
+					{typeof (sbyte), _numericSerializer},
+					{typeof (byte), _numericSerializer},
+					{typeof (char), _numericSerializer},
+					{typeof (short), _numericSerializer},
+					{typeof (ushort), _numericSerializer},
+					{typeof (int), _numericSerializer},
+					{typeof (uint), _numericSerializer},
+					{typeof (long), _numericSerializer},
+					{typeof (ulong), _numericSerializer},
+					{typeof (float), _numericSerializer},
+					{typeof (double), _numericSerializer},
+					{typeof (decimal), _numericSerializer},
+					{typeof (bool), _booleanSerializer},
+					{typeof (string), _stringSerializer},
 				};
 		}
 
@@ -76,37 +76,37 @@ namespace Manatee.Json.Serialization.Internal
 			var type = typeof (T);
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
 			if (typeof (IJsonSchema).IsAssignableFrom(typeToSerialize))
-				return BuildSerializer(SchemaSerializer);
+				return BuildSerializer(_schemaSerializer);
 			if (JsonSerializationTypeRegistry.IsRegistered(typeToSerialize))
-				return BuildSerializer(RegisteredObjectSerializer);
+				return BuildSerializer(_registeredObjectSerializer);
 			if (typeof (IJsonSerializable).IsAssignableFrom(typeToSerialize))
-				return BuildSerializer(JsonSerializableSerializer);
+				return BuildSerializer(_jsonSerializableSerializer);
 			if (typeof (Enum).IsAssignableFrom(typeToSerialize))
 			{
 				if (json != null)
 				{
 					if (json.Type == JsonValueType.Number)
-						return BuildSerializer(EnumValueSerializer);
+						return BuildSerializer(_enumValueSerializer);
 					if (json.Type == JsonValueType.String)
-						return BuildSerializer(EnumNameSerializer);
+						return BuildSerializer(_enumNameSerializer);
 				}
 				switch (options.EnumSerializationFormat)
 				{
 					case EnumSerializationFormat.AsInteger:
-						return BuildSerializer(EnumValueSerializer);
+						return BuildSerializer(_enumValueSerializer);
 					case EnumSerializationFormat.AsName:
-						return BuildSerializer(EnumNameSerializer);
+						return BuildSerializer(_enumNameSerializer);
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			if (Library.ContainsKey(typeToSerialize))
-				return BuildSerializer(Library[typeToSerialize]);
-			return BuildSerializer(AutoSerializer);
+			if (_library.ContainsKey(typeToSerialize))
+				return BuildSerializer(_library[typeToSerialize]);
+			return BuildSerializer(_autoSerializer);
 		}
 		public static ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
 		{
-			return AutoSerializer;
+			return _autoSerializer;
 		}
 
 		private static ISerializer BuildSerializer(ISerializer innerSerializer)

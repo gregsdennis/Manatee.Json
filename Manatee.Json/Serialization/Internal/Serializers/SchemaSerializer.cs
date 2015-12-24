@@ -27,6 +27,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class SchemaSerializer : ISerializer
 	{
+		public bool ShouldMaintainReferences => false;
+
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var schema = (IJsonSchema) obj;
@@ -37,6 +39,5 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var value = JsonSchemaFactory.FromJson(json);
 			return (T)value;
 		}
-		public bool ShouldMaintainReferences { get { return false; } }
 	}
 }

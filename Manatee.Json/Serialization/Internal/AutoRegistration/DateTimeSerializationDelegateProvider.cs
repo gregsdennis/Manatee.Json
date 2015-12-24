@@ -41,7 +41,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 				case DateTimeSerializationFormat.Iso8601:
 					return dt.ToString("s");
 				case DateTimeSerializationFormat.JavaConstructor:
-					return string.Format("/Date({0})/", dt.Ticks / TimeSpan.TicksPerMillisecond);
+					return $"/Date({dt.Ticks/TimeSpan.TicksPerMillisecond})/";
 				case DateTimeSerializationFormat.Milliseconds:
 					return dt.Ticks / TimeSpan.TicksPerMillisecond;
 				case DateTimeSerializationFormat.Custom:

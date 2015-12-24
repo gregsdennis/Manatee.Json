@@ -149,12 +149,12 @@ namespace Manatee.Json.Schema
 		{
 			var schema = FromType(type, null);
 			var objSchema = schema as ObjectSchema;
-			if (objSchema != null && objSchema.Definitions != null)
+			if (objSchema?.Definitions != null)
 			{
 				RemoveSingleDefinitionReferences(objSchema);
 			}
 			var arrSchema = schema as ArraySchema;
-			if (arrSchema != null && arrSchema.Definitions != null)
+			if (arrSchema?.Definitions != null)
 			{
 				RemoveSingleDefinitionReferences(arrSchema);
 			}
@@ -163,14 +163,11 @@ namespace Manatee.Json.Schema
 
 		private static IJsonSchema FromType(Type type, JsonSchemaTypeDefinitionCollection definitions)
 		{
-			if (definitions != null)
-			{
-				var self = definitions.FirstOrDefault(d => d.Name == type.FullName);
-				if (self != null && self.Definition != null)
-					return self.Definition != JsonSchemaReference.Root
-						       ? new JsonSchemaReference(string.Format("#/definitions/{0}", type.FullName))
-						       : self.Definition;
-			}
+			var self = definitions?.FirstOrDefault(d => d.Name == type.FullName);
+			if (self?.Definition != null)
+				return self.Definition != JsonSchemaReference.Root
+					       ? new JsonSchemaReference($"#/definitions/{type.FullName}")
+					       : self.Definition;
 			var definitionList = definitions ?? new JsonSchemaTypeDefinitionCollection
 				{
 					new JsonSchemaTypeDefinition(type.FullName) {Definition = JsonSchemaReference.Root}
@@ -200,7 +197,7 @@ namespace Manatee.Json.Schema
 					itemDefinition.ArrayReferences = new List<ArraySchema>();
 				var arraySchema = new ArraySchema
 					{
-						Items = new JsonSchemaReference(string.Format("#/definitions/{0}", itemType.FullName)),
+						Items = new JsonSchemaReference($"#/definitions/{itemType.FullName}"),
 						Definitions = definitions == null && definitionList.Any(d => d.Definition != null)
 							              ? definitionList
 							              : null
@@ -231,7 +228,7 @@ namespace Manatee.Json.Schema
 					}
 					if (definition.PropertyReferences == null)
 						definition.PropertyReferences = new List<JsonSchemaPropertyDefinition>();
-					propertyDefinition.Type = new JsonSchemaReference(string.Format("#/definitions/{0}", property.PropertyType.FullName));
+					propertyDefinition.Type = new JsonSchemaReference($"#/definitions/{property.PropertyType.FullName}");
 					definition.PropertyReferences.Add(propertyDefinition);
 				}
 				propertyList.Add(propertyDefinition);

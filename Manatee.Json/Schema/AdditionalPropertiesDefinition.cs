@@ -55,7 +55,7 @@ namespace Manatee.Json.Schema
 			set
 			{
 				if (_isReadOnly)
-					throw new ReadOnlyException(string.Format("The '{0}' member is not editable.", Equals(True) ? "True" : "False"));
+					throw new ReadOnlyException($"The '{(Equals(True) ? "True" : "False")}' member is not editable.");
 				_definition = value;
 			}
 		}
@@ -102,7 +102,7 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				return (_isReadOnly.GetHashCode() * 397) ^ (_definition != null ? _definition.GetHashCode() : 0);
+				return (_isReadOnly.GetHashCode() * 397) ^ (_definition?.GetHashCode() ?? 0);
 			}
 		}
 		/// <summary>

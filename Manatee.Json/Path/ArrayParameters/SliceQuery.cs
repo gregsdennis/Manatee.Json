@@ -27,22 +27,22 @@ namespace Manatee.Json.Path.ArrayParameters
 {
 	internal class SliceQuery : IJsonPathArrayQuery
 	{
-		public int? Start { get; private set; }
-		public int? End { get; private set; }
-		public int? Step { get; private set; }
+		private int? _start;
+		private int? _end;
+		private int? _step;
 
 		public SliceQuery(int? start, int? end, int? step = null)
 		{
-			Start = start;
-			End = end;
-			Step = step;
+			_start = start;
+			_end = end;
+			_step = step;
 		}
 
 		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
-			var start = ResolveIndex(Start ?? 0, json.Count);
-			var end = ResolveIndex(End ?? json.Count, json.Count);
-			var step = Math.Max(Step ?? 1, 1);
+			var start = ResolveIndex(_start ?? 0, json.Count);
+			var end = ResolveIndex(_end ?? json.Count, json.Count);
+			var step = Math.Max(_step ?? 1, 1);
 
 			var index = start;
 			while (index < end)
@@ -53,14 +53,14 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override string ToString()
 		{
-			return Step.HasValue
+			return _step.HasValue
 				       ? string.Format("{0}:{1}:{2}",
-				                       Start.HasValue ? Start.ToString() : string.Empty,
-				                       End.HasValue ? End.ToString() : string.Empty,
-				                       Step)
+				                       _start.HasValue ? _start.ToString() : string.Empty,
+				                       _end.HasValue ? _end.ToString() : string.Empty,
+				                       _step)
 				       : string.Format("{0}:{1}",
-				                       Start.HasValue ? Start.ToString() : string.Empty,
-				                       End.HasValue ? End.ToString() : string.Empty);
+				                       _start.HasValue ? _start.ToString() : string.Empty,
+				                       _end.HasValue ? _end.ToString() : string.Empty);
 
 		}
 

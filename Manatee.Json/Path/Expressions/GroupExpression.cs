@@ -26,7 +26,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class GroupExpression<T> : ExpressionTreeNode<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public ExpressionTreeNode<T> Group { get; set; }
 
 		public override object Evaluate(T json, JsonValue root)
@@ -35,7 +35,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return string.Format("({0})", Group);
+			return $"({Group})";
 		}
 	}
 }

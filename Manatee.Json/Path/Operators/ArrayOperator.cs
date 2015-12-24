@@ -27,23 +27,23 @@ namespace Manatee.Json.Path.Operators
 {
 	internal class ArrayOperator : IJsonPathOperator
 	{
-		public IJsonPathArrayQuery Query { get; private set; }
+		private readonly IJsonPathArrayQuery _query;
 
 		public ArrayOperator(IJsonPathArrayQuery query)
 		{
-			Query = query;
+			_query = query;
 		}
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
 			return new JsonArray(json.SelectMany(v => v.Type == JsonValueType.Array
-				                                          ? Query.Find(v.Array, root)
+				                                          ? _query.Find(v.Array, root)
 				                                          : Enumerable.Empty<JsonValue>()).NotNull());
 		}
 
 		public override string ToString()
 		{
-			return string.Format("[{0}]", Query);
+			return $"[{_query}]";
 		}
 	}
 }

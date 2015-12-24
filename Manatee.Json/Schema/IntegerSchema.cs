@@ -62,7 +62,8 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (json.Type != JsonValueType.Number) return new SchemaValidationResults(string.Empty, string.Format("Expected: Integer; Actual: {0}.", json.Type));
+			if (json.Type != JsonValueType.Number)
+				return new SchemaValidationResults(string.Empty, $"Expected: Integer; Actual: {json.Type}.");
 			var number = json.Number;
 			if (!number.IsInt()) return new SchemaValidationResults(string.Empty, "Expected: Integer; Actual: Number.");
 			var integer = (int) number;
@@ -70,22 +71,22 @@ namespace Manatee.Json.Schema
 			if (ExclusiveMinimum)
 			{
 				if (integer <= Minimum)
-					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: > {0}; Actual: {1}.", Minimum, integer)));
+					errors.Add(new SchemaValidationError(string.Empty, $"Expected: > {Minimum}; Actual: {integer}."));
 			}
 			else
 			{
 				if (integer < Minimum)
-					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: >= {0}; Actual: {1}.", Minimum, integer)));
+					errors.Add(new SchemaValidationError(string.Empty, $"Expected: >= {Minimum}; Actual: {integer}."));
 			}
 			if (ExclusiveMaximum)
 			{
 				if (integer >= Maximum)
-					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: < {0}; Actual: {1}.", Maximum, integer)));
+					errors.Add(new SchemaValidationError(string.Empty, $"Expected: < {Maximum}; Actual: {integer}."));
 			}
 			else
 			{
 				if (integer > Maximum)
-					errors.Add(new SchemaValidationError(string.Empty, string.Format("Expected: <= {0}; Actual: {1}.", Maximum, integer)));
+					errors.Add(new SchemaValidationError(string.Empty, $"Expected: <= {Maximum}; Actual: {integer}."));
 			}
 			return new SchemaValidationResults(errors);
 		}

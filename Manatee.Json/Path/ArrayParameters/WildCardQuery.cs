@@ -26,9 +26,12 @@ namespace Manatee.Json.Path.ArrayParameters
 {
 	internal class WildCardQuery : IJsonPathArrayQuery
 	{
-		private static readonly WildCardQuery _instance = new WildCardQuery();
+		public static WildCardQuery Instance { get; }
 
-		public static WildCardQuery Instance { get { return _instance; } }
+		static WildCardQuery()
+		{
+			Instance = new WildCardQuery();
+		}
 
 		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{

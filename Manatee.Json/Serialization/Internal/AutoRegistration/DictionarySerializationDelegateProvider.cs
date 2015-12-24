@@ -38,8 +38,8 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var array = new JsonArray();
 			array.AddRange(dict.Select(item => (JsonValue)(new JsonObject
 				{
-					{"Key", serializer.Serialize<TKey>(item.Key)},
-					{"Value", serializer.Serialize<TValue>(item.Value)}
+					{"Key", serializer.Serialize(item.Key)},
+					{"Value", serializer.Serialize(item.Value)}
 				})));
 			return array;
 		}

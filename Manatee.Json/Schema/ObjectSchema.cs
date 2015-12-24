@@ -76,7 +76,7 @@ namespace Manatee.Json.Schema
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			if (json.Type != JsonValueType.Object)
-				return new SchemaValidationResults(string.Empty, string.Format("Expected: Object; Actual: {0}.", json.Type));
+				return new SchemaValidationResults(string.Empty, $"Expected: Object; Actual: {json.Type}.");
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
 			var jValue = root ?? ToJson(null);
@@ -197,17 +197,10 @@ namespace Manatee.Json.Schema
 		{
 			var requiredProperties = new List<string>();
 			var json = new JsonObject();
-#if NET35 || NET35C
 			if (!Id.IsNullOrWhiteSpace()) json["id"] = Id;
 			if (!Schema.IsNullOrWhiteSpace()) json["$schema"] = Schema;
 			if (!Title.IsNullOrWhiteSpace()) json["title"] = Title;
 			if (!Description.IsNullOrWhiteSpace()) json["description"] = Description;
-#elif NET4 || NET4C || NET45
-			if (!string.IsNullOrWhiteSpace(Id)) json["id"] = Id;
-			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
-			if (!string.IsNullOrWhiteSpace(Title)) json["title"] = Title;
-			if (!string.IsNullOrWhiteSpace(Description)) json["description"] = Description;
-#endif
 			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
 			if (Type != null) json["type"] = Type.Name;
 			if (Properties != null)

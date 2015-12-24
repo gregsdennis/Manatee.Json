@@ -28,9 +28,7 @@ namespace Manatee.Json.Path.Operators
 {
 	internal class WildCardOperator : IJsonPathOperator
 	{
-		private static readonly WildCardOperator _instance = new WildCardOperator();
-
-		public static WildCardOperator Instance { get { return _instance; } }
+		public static WildCardOperator Instance { get; } = new WildCardOperator();
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{

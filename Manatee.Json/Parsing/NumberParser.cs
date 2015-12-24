@@ -71,7 +71,7 @@ namespace Manatee.Json.Parsing
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out dbl))
 			{
 				value = null;
-				return string.Format("Value not recognized: '{0}'", result);
+				return $"Value not recognized: '{result}'";
 			}
 			value = dbl;
 			return null;
@@ -109,7 +109,7 @@ namespace Manatee.Json.Parsing
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out dbl))
 			{
 				value = null;
-				return string.Format("Value not recognized: '{0}'", result);
+				return $"Value not recognized: '{result}'";
 			}
 			value = dbl;
 			return null;

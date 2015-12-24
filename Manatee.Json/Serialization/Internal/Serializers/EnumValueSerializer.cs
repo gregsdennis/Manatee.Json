@@ -27,7 +27,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class EnumValueSerializer : ISerializer
 	{
-		public bool ShouldMaintainReferences { get { return false; } }
+		public bool ShouldMaintainReferences => false;
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{

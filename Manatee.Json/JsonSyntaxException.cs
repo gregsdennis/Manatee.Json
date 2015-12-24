@@ -40,7 +40,7 @@ namespace Manatee.Json
 		/// <summary>
 		/// Gets the path up to the point at which the error was found.
 		/// </summary>
-		public string Path { get { return string.Format("${0}", _path); } }
+		public string Path => $"${_path}";
 
 		/// <summary>
 		/// Gets a message that describes the current exception.
@@ -49,7 +49,7 @@ namespace Manatee.Json
 		/// The error message that explains the reason for the exception, or an empty string("").
 		/// </returns>
 		/// <filterpriority>1</filterpriority>
-		public override string Message { get { return string.Format("{0} Path: '{1}'", base.Message, Path); } }
+		public override string Message => $"{base.Message} Path: '{Path}'";
 
 		[StringFormatMethod("format")]
 		internal JsonSyntaxException(string message, JsonValue value)
@@ -67,12 +67,12 @@ namespace Manatee.Json
 					if (!value.Object.Any()) return string.Empty;
 					var pair = value.Object.Last();
 					var key = pair.Key;
-					return string.Format(".{0}{1}", key, BuildPath(pair.Value));
+					return $".{key}{BuildPath(pair.Value)}";
 				case JsonValueType.Array:
 					if (!value.Array.Any()) return string.Empty;
 					var item = value.Array.Last();
 					var index = value.Array.Count - 1;
-					return string.Format("[{0}]{1}", index, BuildPath(item));
+					return $"[{index}]{BuildPath(item)}";
 				default:
 					return string.Empty;
 			}

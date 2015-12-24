@@ -30,8 +30,6 @@ namespace Manatee.Json.Path.ArrayParameters
 	{
 		private readonly IEnumerable<int> _indices;
 
-		public IEnumerable<int> Indices { get { return _indices; } }
-
 		public IndexQuery(params int[] indices)
 		{
 			_indices = indices;
@@ -49,7 +47,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override string ToString()
 		{
-			return Indices.Join(",");
+			return _indices.Join(",");
 		}
 	}
 }

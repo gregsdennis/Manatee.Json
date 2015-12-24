@@ -31,7 +31,6 @@ namespace Manatee.Json.Serialization
 	/// </summary>
 	public class JsonSerializer
 	{
-		private readonly SerializationPairCache _serializationMap = new SerializationPairCache();
 		private int _callCount;
 		private JsonSerializerOptions _options;
 
@@ -43,7 +42,7 @@ namespace Manatee.Json.Serialization
 			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
 			set { _options = value ?? new JsonSerializerOptions(JsonSerializerOptions.Default); }
 		}
-		internal SerializationPairCache SerializationMap { get { return _serializationMap; } }
+		internal SerializationPairCache SerializationMap { get; } = new SerializationPairCache();
 
 		#region Public Methods
 		/// <summary>

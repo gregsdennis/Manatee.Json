@@ -20,7 +20,7 @@
 	Purpose:		Provides expression-based filtering for array queries.
 
 ***************************************************************************************/
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Path.Expressions;

@@ -34,16 +34,16 @@ namespace Manatee.Json
 		/// <summary>
 		/// The correct type for the <see cref="JsonValue"/> that threw the exception.
 		/// </summary>
-		public JsonValueType ValidType { get; private set; }
+		public JsonValueType ValidType { get; }
 		/// <summary>
 		/// The type requested.
 		/// </summary>
-		public JsonValueType RequestedType { get; private set; }
+		public JsonValueType RequestedType { get; }
 		/// <summary>
 		/// Creates a new instance of this exception.
 		/// </summary>
 		internal JsonValueIncorrectTypeException(JsonValueType valid, JsonValueType requested)
-			: base(string.Format("Cannot access value of type {0} as type {1}.", valid, requested))
+			: base($"Cannot access value of type {valid} as type {requested}.")
 		{
 			ValidType = valid;
 			RequestedType = requested;

@@ -27,9 +27,7 @@ namespace Manatee.Json.Path.SearchParameters
 {
 	internal class WildCardSearchParameter : IJsonPathSearchParameter
 	{
-		private static readonly WildCardSearchParameter _instance = new WildCardSearchParameter();
-
-		public static WildCardSearchParameter Instance { get { return _instance; } }
+		public static WildCardSearchParameter Instance { get; } = new WildCardSearchParameter();
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{

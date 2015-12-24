@@ -43,7 +43,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <param name="type">The type.</param>
 		internal TypeRegistrationException(Type type)
-			: base(string.Format("Attempted to register type {0} without supplying both an encoder and decoder.", type))
+			: base($"Attempted to register type {type} without supplying both an encoder and decoder.")
 		{
 			Type = type;
 		}

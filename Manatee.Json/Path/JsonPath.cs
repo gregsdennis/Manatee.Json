@@ -56,9 +56,8 @@ namespace Manatee.Json.Path
 			End
 		}
 
-		private static readonly StateMachine<State, JsonPathInput> StateMachine = new StateMachine<State, JsonPathInput>();
+		private static readonly StateMachine<State, JsonPathInput> _stateMachine = new StateMachine<State, JsonPathInput>();
 
-		private readonly List<IJsonPathOperator> _operators;
 		private bool _gotObject;
 		private string _source;
 		private int _index;
@@ -70,52 +69,48 @@ namespace Manatee.Json.Path
 		private bool _isSearch;
 		private bool _allowLocalRoot;
 
-		internal List<IJsonPathOperator> Operators { get { return _operators; } }
+		internal List<IJsonPathOperator> Operators { get; } = new List<IJsonPathOperator>();
 
 		static JsonPath()
 		{
-			StateMachine[State.Start, JsonPathInput.Dollar] = GotRoot;
-			StateMachine[State.Start, JsonPathInput.Current] = GotCurrent;
-			StateMachine[State.ObjectOrArray, JsonPathInput.OpenBracket] = GotArray;
-			StateMachine[State.ObjectOrArray, JsonPathInput.Period] = GotObject;
-			StateMachine[State.ObjectOrArray, JsonPathInput.OpenParenth] = GotFunction;
-			StateMachine[State.ObjectOrArray, JsonPathInput.Number] = CompletePath;
-			StateMachine[State.ObjectOrArray, JsonPathInput.End] = CompletePath;
-			StateMachine[State.ArrayContent, JsonPathInput.Star] = GotArrayWildCard;
-			StateMachine[State.ArrayContent, JsonPathInput.OpenParenth] = ParseIndexExpression;
-			StateMachine[State.ArrayContent, JsonPathInput.Question] = ParseFilterExpression;
-			StateMachine[State.ArrayContent, JsonPathInput.Number] = GotIndexOrSlice;
-			StateMachine[State.ArrayContent, JsonPathInput.Colon] = GotSlice;
-			StateMachine[State.IndexOrSlice, JsonPathInput.Colon] = GotSlice;
-			StateMachine[State.IndexOrSlice, JsonPathInput.Comma] = GotIndex;
-			StateMachine[State.IndexOrSlice, JsonPathInput.CloseBracket] = FinalizeIndex;
-			StateMachine[State.Colon, JsonPathInput.CloseBracket] = FinalizeSlice;
-			StateMachine[State.Colon, JsonPathInput.Number] = GotSliceValue;
-			StateMachine[State.Colon, JsonPathInput.Colon] = GotSlice;
-			StateMachine[State.SliceValue, JsonPathInput.CloseBracket] = FinalizeSlice;
-			StateMachine[State.SliceValue, JsonPathInput.Colon] = GotSlice;
-			StateMachine[State.Comma, JsonPathInput.Number] = GotIndexValue;
-			StateMachine[State.IndexValue, JsonPathInput.CloseBracket] = FinalizeIndex;
-			StateMachine[State.IndexValue, JsonPathInput.Comma] = GotIndex;
-			StateMachine[State.CloseArray, JsonPathInput.CloseBracket] = FinalizeArray;
-			StateMachine[State.ObjectContent, JsonPathInput.Period] = GotSearch;
-			StateMachine[State.ObjectContent, JsonPathInput.Star] = GotObjectWildCard;
-			StateMachine[State.ObjectContent, JsonPathInput.Letter] = GotName;
-			StateMachine[State.Search, JsonPathInput.OpenBracket] = GotSearchArray;
-			StateMachine[State.Search, JsonPathInput.Star] = GotSearchWildCard;
-			StateMachine[State.Search, JsonPathInput.Letter] = GotSearchName;
-			StateMachine.UpdateFunction = GetNextInput;
-		}
-		internal JsonPath()
-		{
-			_operators = new List<IJsonPathOperator>();
+			_stateMachine[State.Start, JsonPathInput.Dollar] = GotRoot;
+			_stateMachine[State.Start, JsonPathInput.Current] = GotCurrent;
+			_stateMachine[State.ObjectOrArray, JsonPathInput.OpenBracket] = GotArray;
+			_stateMachine[State.ObjectOrArray, JsonPathInput.Period] = GotObject;
+			_stateMachine[State.ObjectOrArray, JsonPathInput.OpenParenth] = GotFunction;
+			_stateMachine[State.ObjectOrArray, JsonPathInput.Number] = CompletePath;
+			_stateMachine[State.ObjectOrArray, JsonPathInput.End] = CompletePath;
+			_stateMachine[State.ArrayContent, JsonPathInput.Star] = GotArrayWildCard;
+			_stateMachine[State.ArrayContent, JsonPathInput.OpenParenth] = ParseIndexExpression;
+			_stateMachine[State.ArrayContent, JsonPathInput.Question] = ParseFilterExpression;
+			_stateMachine[State.ArrayContent, JsonPathInput.Number] = GotIndexOrSlice;
+			_stateMachine[State.ArrayContent, JsonPathInput.Colon] = GotSlice;
+			_stateMachine[State.IndexOrSlice, JsonPathInput.Colon] = GotSlice;
+			_stateMachine[State.IndexOrSlice, JsonPathInput.Comma] = GotIndex;
+			_stateMachine[State.IndexOrSlice, JsonPathInput.CloseBracket] = FinalizeIndex;
+			_stateMachine[State.Colon, JsonPathInput.CloseBracket] = FinalizeSlice;
+			_stateMachine[State.Colon, JsonPathInput.Number] = GotSliceValue;
+			_stateMachine[State.Colon, JsonPathInput.Colon] = GotSlice;
+			_stateMachine[State.SliceValue, JsonPathInput.CloseBracket] = FinalizeSlice;
+			_stateMachine[State.SliceValue, JsonPathInput.Colon] = GotSlice;
+			_stateMachine[State.Comma, JsonPathInput.Number] = GotIndexValue;
+			_stateMachine[State.IndexValue, JsonPathInput.CloseBracket] = FinalizeIndex;
+			_stateMachine[State.IndexValue, JsonPathInput.Comma] = GotIndex;
+			_stateMachine[State.CloseArray, JsonPathInput.CloseBracket] = FinalizeArray;
+			_stateMachine[State.ObjectContent, JsonPathInput.Period] = GotSearch;
+			_stateMachine[State.ObjectContent, JsonPathInput.Star] = GotObjectWildCard;
+			_stateMachine[State.ObjectContent, JsonPathInput.Letter] = GotName;
+			_stateMachine[State.Search, JsonPathInput.OpenBracket] = GotSearchArray;
+			_stateMachine[State.Search, JsonPathInput.Star] = GotSearchWildCard;
+			_stateMachine[State.Search, JsonPathInput.Letter] = GotSearchName;
+			_stateMachine.UpdateFunction = GetNextInput;
 		}
 		/// <summary>
 		/// Finalizes memory management responsibilities.
 		/// </summary>
 		~JsonPath()
 		{
-			StateMachine.UnregisterOwner(this);
+			_stateMachine.UnregisterOwner(this);
 		}
 
 		/// <summary>
@@ -129,7 +124,7 @@ namespace Manatee.Json.Path
 		public static JsonPath Parse(string source)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 			if (source.IsNullOrWhiteSpace())
 				throw new ArgumentException("Source string contains no data.");
 			var path = new JsonPath {_source = Regex.Replace(source, @"\s+", string.Empty)};
@@ -156,7 +151,7 @@ namespace Manatee.Json.Path
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return string.Format("${0}", GetRawString());
+			return $"${GetRawString()}";
 		}
 
 		internal string GetRawString()
@@ -178,7 +173,7 @@ namespace Manatee.Json.Path
 			_done = false;
 			try
 			{
-				StateMachine.Run(this, State.Start, _stream);
+				_stateMachine.Run(this, State.Start, _stream);
 				if (!_done)
 					throw new JsonPathSyntaxException(this, "Found incomplete JSON path.");
 			}

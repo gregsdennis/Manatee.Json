@@ -32,7 +32,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class AutoSerializer : ISerializer, ITypeSerializer
 	{
-		public bool ShouldMaintainReferences { get { return true; } }
+		public bool ShouldMaintainReferences => true;
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
@@ -157,7 +157,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var dict = new Dictionary<SerializationInfo, object>();
 			foreach (var memberInfo in members)
 			{
-				string name = memberInfo.SerializationName;
+				var name = memberInfo.SerializationName;
 				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
 				if (kvp.Key != null)
 				{
@@ -195,7 +195,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var dict = new Dictionary<SerializationInfo, object>();
 			foreach (var memberInfo in members)
 			{
-				string name = memberInfo.SerializationName;
+				var name = memberInfo.SerializationName;
 				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
 				if (kvp.Key != null)
 				{

@@ -43,7 +43,7 @@ namespace Manatee.Json.Parsing
 			if (result != "null")
 			{
 				value = null;
-				return string.Format("Value not recognized: '{0}'.", result);
+				return $"Value not recognized: '{result}'.";
 			}
 			index += 4;
 			value = JsonValue.Null;
@@ -65,7 +65,7 @@ namespace Manatee.Json.Parsing
 			if (result != "null")
 			{
 				value = null;
-				return string.Format("Value not recognized: '{0}'.", result);
+				return $"Value not recognized: '{result}'.";
 			}
 			value = JsonValue.Null;
 			return null;

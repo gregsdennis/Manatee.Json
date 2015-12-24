@@ -204,7 +204,7 @@ namespace Manatee.Json.Schema
 		protected JsonSchema(JsonSchemaTypeDefinition type)
 		{
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			Type = type;
 		}
 

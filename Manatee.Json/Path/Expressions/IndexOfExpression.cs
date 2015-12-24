@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class IndexOfExpression<T> : PathExpression<T>
 	{
-		public override int Priority { get { return 6; } }
+		public override int Priority => 6;
 		public JsonValue Parameter { get; set; }
 		public ExpressionTreeNode<JsonArray> ParameterExpression { get; set; }
 
@@ -38,7 +38,7 @@ namespace Manatee.Json.Path.Expressions
 				throw new NotSupportedException("IndexOf requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
 			if (results.Count > 1)
-				throw new InvalidOperationException(string.Format("Path '{0}' returned more than one result on value '{1}'", Path, value));
+				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
 			var parameter = GetParameter();
 			return result != null && result.Type == JsonValueType.Array && parameter != null
@@ -48,30 +48,27 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
-			var parameter = ParameterExpression == null ? Parameter.ToString() : ParameterExpression.ToString();
+			var parameter = ParameterExpression?.ToString() ?? Parameter.ToString();
 			return string.Format(IsLocal ? "@{0}.indexOf({1})" : "${0}.indexOf({1})", path, parameter);
 		}
 
 		private JsonValue GetParameter()
 		{
-			if (ParameterExpression != null)
+			var value = ParameterExpression?.Evaluate(null, null);
+			if (value != null)
 			{
-				var value = ParameterExpression.Evaluate(null, null);
-				if (value != null)
-				{
-					if (value is double)
-						return new JsonValue((double)value);
-					if (value is bool)
-						return new JsonValue((bool)value);
-					if (value is string)
-						return new JsonValue((string)value);
-					if (value is JsonArray)
-						return new JsonValue((JsonArray)value);
-					if (value is JsonObject)
-						return new JsonValue((JsonObject)value);
-					if (value is JsonValue)
-						return (JsonValue) value;
-				}
+				if (value is double)
+					return new JsonValue((double)value);
+				if (value is bool)
+					return new JsonValue((bool)value);
+				if (value is string)
+					return new JsonValue((string)value);
+				if (value is JsonArray)
+					return new JsonValue((JsonArray)value);
+				if (value is JsonObject)
+					return new JsonValue((JsonObject)value);
+				if (value is JsonValue)
+					return (JsonValue) value;
 			}
 			return Parameter;
 		}

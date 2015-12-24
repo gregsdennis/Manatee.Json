@@ -106,7 +106,7 @@ namespace Manatee.Json.Internal
 							break;
 						default:
 							result = source;
-							return string.Format("Invalid escape sequence: '\\{0}'.", source[i + 1]);
+							return $"Invalid escape sequence: '\\{source[i + 1]}'.";
 					}
 				i += length;
 			}

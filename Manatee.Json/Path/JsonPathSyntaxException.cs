@@ -33,13 +33,12 @@ namespace Manatee.Json.Path
 	[Serializable]
 	public class JsonPathSyntaxException : Exception
 	{
-		private readonly string _path;
 		private readonly bool _isExpression;
 		
 		/// <summary>
 		/// Gets the path up to the point at which the error was found.
 		/// </summary>
-		public string Path { get { return _path; } }
+		public string Path { get; }
 
 		/// <summary>
 		/// Gets a message that describes the current exception.
@@ -48,20 +47,20 @@ namespace Manatee.Json.Path
 		/// The error message that explains the reason for the exception, or an empty string("").
 		/// </returns>
 		/// <filterpriority>1</filterpriority>
-		public override string Message { get { return string.Format(_isExpression ? "{0} Expression up to error: {1}" : "{0} Path up to error: {1}", base.Message, Path); } }
+		public override string Message => string.Format(_isExpression ? "{0} Expression up to error: {1}" : "{0} Path up to error: {1}", base.Message, Path);
 
 		[StringFormatMethod("format")]
 		internal JsonPathSyntaxException(JsonPath path, string format, params object[] parameters)
 			: base(string.Format(format, parameters))
 		{
-			_path = path.ToString();
+			Path = path.ToString();
 		}
 		[StringFormatMethod("format")]
 		internal JsonPathSyntaxException(string expression, string format, params object[] parameters)
 			: base(string.Format(format, parameters))
 		{
 			_isExpression = true;
-			_path = expression;
+			Path = expression;
 		}
 	}
 }
