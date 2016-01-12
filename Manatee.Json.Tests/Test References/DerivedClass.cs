@@ -21,6 +21,9 @@
 					library.
 
 ***************************************************************************************/
+
+using Manatee.Json.Schema;
+
 namespace Manatee.Json.Tests.Test_References
 {
 	public class DerivedClass : AbstractClass

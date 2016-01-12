@@ -198,10 +198,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=9.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.9.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -481,6 +477,7 @@
     <Compile Include="Serialization\JsonSerializationAbstractionMap.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serialization\JsonSerializationException.cs" />
     <Compile Include="Serialization\JsonSerializationTypeRegistry.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -511,6 +508,7 @@
     <Compile Include="Serialization\TypeRegistrationException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\StringFormatMethodAttribute.cs" />
     <Compile Include="Transform\JsonTransformer.cs" />
     <Compile Include="XmlExtensions.cs" />
   </ItemGroup>

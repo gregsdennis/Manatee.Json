@@ -128,10 +128,6 @@
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=9.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.9.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=15909d91027a225e, processorArchitecture=MSIL">
       <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40\Manatee.StateMachine.dll</HintPath>
       <Private>True</Private>
@@ -165,6 +161,12 @@
     <Compile Include="JsonValueParseTest.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
     <Compile Include="Serialization\JsonDeserializerTest.cs" />
+    <None Include="Test References\InvalidSchemaValidatedClass.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Test References\SchemaValidatedClass.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Transform\ClientTest.cs" />
     <Compile Include="Path\GoessnerExamplesTest.cs" />
     <Compile Include="Schema\AllOfSchemaTest.cs" />

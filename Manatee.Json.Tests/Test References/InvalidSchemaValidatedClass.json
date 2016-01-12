@@ -1,0 +1,6 @@
+﻿{
+	"type": "object",
+	"properties":{
+		"Value":{ "type": "error" }
+	}
+}
