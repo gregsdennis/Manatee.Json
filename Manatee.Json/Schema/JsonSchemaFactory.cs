@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -60,6 +61,23 @@ namespace Manatee.Json.Schema
 				typeof (decimal)
 			};
 
+		/// <summary>
+		/// Returns
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public static IJsonSchema Load(string path)
+		{
+			var text = File.ReadAllText(path);
+			var json = JsonValue.Parse(text);
+			var validation = JsonSchema.Draft04.Validate(json);
+			if (!validation.Valid)
+			{
+				var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
+				throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+			}
+			return FromJson(json);
+		}
 		/// <summary>
 		/// Creates a schema object from its JSON representation.
 		/// </summary>
