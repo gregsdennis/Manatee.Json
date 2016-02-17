@@ -44,10 +44,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			EnsureDescriptions<T>();
-			var attributes = (typeof (T)).GetCustomAttributes(typeof (FlagsAttribute), false);
-			return !attributes.Any()
-				? _descriptions[typeof (T)].First(d => Equals(d.Value, obj)).String
-				: BuildFlagsValues(obj, serializer.Options.FlagsEnumSeparator);
+			var attributes = typeof (T).GetCustomAttributes(typeof (FlagsAttribute), false);
+			if (!attributes.Any())
+			{
+				var entry = _descriptions[typeof (T)].FirstOrDefault(d => Equals(d.Value, obj));
+				return entry == null ? obj.ToString() : entry.String;
+			}
+			return BuildFlagsValues(obj, serializer.Options.FlagsEnumSeparator);
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -55,8 +58,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var options = serializer.Options.CaseSensitiveDeserialization
 							  ? StringComparison.InvariantCultureIgnoreCase
 							  : StringComparison.InvariantCulture;
-			var value = _descriptions[typeof(T)].First(d => string.Equals(d.String, json.String, options)).Value;
-			return (T) value;
+			var entry = _descriptions[typeof (T)].FirstOrDefault(d => string.Equals(d.String, json.String, options));
+			if (entry == null)
+			{
+				return (T) Enum.Parse(typeof (T), json.String);
+			}
+			return (T) entry.Value;
 		}
 
 		private static void EnsureDescriptions<T>()

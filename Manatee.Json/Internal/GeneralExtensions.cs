@@ -181,9 +181,13 @@ namespace Manatee.Json.Internal
 			var c = source[index];
 			while (index < length)
 			{
-				if (!char.IsWhiteSpace(c))
-					break;
+				if (!char.IsWhiteSpace(c)) break;
 				index++;
+				if (index >= length)
+				{
+					ch = default(char);
+					return "Unexpected end of input.";
+				}
 				c = source[index];
 			}
 			if (index >= length)

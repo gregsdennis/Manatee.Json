@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -73,7 +74,7 @@ namespace Manatee.Json.Schema
 			var validation = JsonSchema.Draft04.Validate(json);
 			if (!validation.Valid)
 			{
-				var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
+				var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
 				throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 			}
 			return FromJson(json);
