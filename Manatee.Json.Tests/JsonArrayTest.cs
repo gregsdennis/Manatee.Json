@@ -87,6 +87,13 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 		}
 		[TestMethod]
+		[ExpectedException(typeof(JsonSyntaxException))]
+		public void Parse_IncompleteEndingWithWhitespaceBetweenTokens_ThrowsJsonSyntaxException()
+		{
+			var s = "[  false,  42,  \"a string\"  ";
+			var actual = JsonValue.Parse(s);
+		}
+		[TestMethod]
 		public void Ctor_InitializationIsSuccessful()
 		{
 			var expected = new JsonArray {5, "a string", false, JsonValue.Null};
