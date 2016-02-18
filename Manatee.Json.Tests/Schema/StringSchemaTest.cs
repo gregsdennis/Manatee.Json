@@ -144,8 +144,19 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnValidEmailFormat()
 		{
-			var schema = new StringSchema {Format = StringFormat.Email};
-			var json = (JsonValue) "me@you.com";
+			var schema = new StringSchema { Format = StringFormat.Email };
+			var json = (JsonValue)"me@you.com";
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
+		}
+		[TestMethod]
+		public void ValidateReturnsValidOnValidEmailFormat2()
+		{
+			var schema = new StringSchema { Format = StringFormat.Email };
+			var json = (JsonValue)"Me@You.net";
 
 			var results = schema.Validate(json);
 

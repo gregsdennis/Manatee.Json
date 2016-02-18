@@ -64,7 +64,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a regular expression format.
 		/// </summary>
-		public static readonly StringFormat Regex = new StringFormat("regex", null);
+		public static readonly StringFormat Regex = new StringFormat("regex", null, true);
 		// from http://mathiasbynens.be/demo/url-regex
 		/// <summary>
 		/// Defines a URI format.
@@ -89,11 +89,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public string Key { get; }
 
-		private StringFormat(string key, string regex)
+		private StringFormat(string key, string regex, bool isCaseSensitive = false)
 		{
 			Key = key;
 			if (regex != null)
-				_validationRule = new Regex(regex);
+				_validationRule = new Regex(regex, isCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 		}
 
 		/// <summary>
