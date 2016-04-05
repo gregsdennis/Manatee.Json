@@ -31,6 +31,10 @@ namespace Manatee.Json.Tests
 	public class DevTest
 	{
 		[TestMethod]
-		public void Test1() {}
+		public void Test1()
+		{
+			var text = "{\"key\":4,int:\"no\"}";
+			var json = JsonValue.Parse(text);
+		}
 	}
 }

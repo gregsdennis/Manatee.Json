@@ -108,7 +108,18 @@ namespace Manatee.Json.Schema
 		public virtual bool Equals(IJsonSchema other)
 		{
 			var schema = other as JsonSchemaReference;
-			return (schema != null) && (schema.Reference == Reference);
+			return schema != null && schema.Reference == Reference;
+		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			return Reference?.GetHashCode() ?? 0;
 		}
 
 		private void Resolve(JsonValue root)

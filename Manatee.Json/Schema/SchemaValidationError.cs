@@ -37,7 +37,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// A message indicating the failure.
 		/// </summary>
-		public string Message { get; private set; }
+		public string Message { get; }
 
 		internal SchemaValidationError(string propertyName, string message)
 		{
@@ -65,7 +65,7 @@ namespace Manatee.Json.Schema
 		{
 			return PropertyName.IsNullOrWhiteSpace()
 				? Message
-				: string.Format("Property: {0} - {1}", PropertyName, Message);
+				: $"Property: {PropertyName} - {Message}";
 		}
 	}
 }

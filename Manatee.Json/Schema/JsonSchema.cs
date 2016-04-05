@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -67,15 +68,15 @@ namespace Manatee.Json.Schema
 							},
 						new JsonSchemaTypeDefinition("simpleTypes")
 							{
-								Definition = new EnumSchema {Values = new List<JsonSchemaTypeDefinition>
+								Definition = new EnumSchema {Values = new List<EnumSchemaValue>
 									{
-										JsonSchemaTypeDefinition.CreateEnumValue("array"),
-										JsonSchemaTypeDefinition.CreateEnumValue("boolean"),
-										JsonSchemaTypeDefinition.CreateEnumValue("integer"),
-										JsonSchemaTypeDefinition.CreateEnumValue("null"),
-										JsonSchemaTypeDefinition.CreateEnumValue("number"),
-										JsonSchemaTypeDefinition.CreateEnumValue("object"),
-										JsonSchemaTypeDefinition.CreateEnumValue("string")
+										new EnumSchemaValue("array"),
+										new EnumSchemaValue("boolean"),
+										new EnumSchemaValue("integer"),
+										new EnumSchemaValue("null"),
+										new EnumSchemaValue("number"),
+										new EnumSchemaValue("object"),
+										new EnumSchemaValue("string")
 									}}
 							},
 						new JsonSchemaTypeDefinition("stringArray")
@@ -173,7 +174,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// The JSON Schema type which defines this schema.
 		/// </summary>
-		public JsonSchemaTypeDefinition Type { get; private set; }
+		public JsonSchemaTypeDefinition Type { get; set; }
 		/// <summary>
 		/// The default value for this schema.
 		/// </summary>
@@ -229,33 +230,25 @@ namespace Manatee.Json.Schema
 			var obj = json.Object;
 			if (obj.ContainsKey("type"))
 			{
-				switch (obj["type"].String)
+				var typeEntry = obj["type"];
+				switch (typeEntry.Type)
 				{
-					case "array":
-						Type = JsonSchemaTypeDefinition.Array;
+					case JsonValueType.String:
+						// string implies primitive type
+						Type = GetPrimitiveDefinition(typeEntry.String);
 						break;
-					case "boolean":
-						Type = JsonSchemaTypeDefinition.Boolean;
-						break;
-					case "integer":
-						Type = JsonSchemaTypeDefinition.Integer;
-						break;
-					case "null":
-						Type = JsonSchemaTypeDefinition.Null;
-						break;
-					case "number":
-						Type = JsonSchemaTypeDefinition.Number;
-						break;
-					case "object":
-						Type = JsonSchemaTypeDefinition.Object;
-						break;
-					case "string":
-						Type = JsonSchemaTypeDefinition.String;
+					case JsonValueType.Array:
+						// array implies "oneOf" several primitive types
+						Type = new JsonSchemaMultiTypeDefinition(typeEntry.Array.Select(j => JsonSchemaFactory.GetPrimitiveSchema(j.String)));
+						Type.FromJson(json, serializer);
 						break;
 				}
 			}
 			if (obj.ContainsKey("default")) Default = obj["default"];
+			Id = obj.TryGetString("id");
+			Title = obj.TryGetString("title");
 		}
+
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
@@ -265,7 +258,14 @@ namespace Manatee.Json.Schema
 		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
 			var json = new JsonObject();
-			if (Type != null) json["type"] = Type.Name;
+			if (Id != null) json["id"] = Id;
+			if (Title != null) json["title"] = Title;
+			if (Type != null)
+			{
+				json["type"] = Type.ToJson(serializer);
+				var multiType = Type as JsonSchemaMultiTypeDefinition;
+				multiType?.AppendJson(json, serializer);
+			}
 			if (Default != null) json["default"] = Default;
 			return json;
 		}
@@ -279,7 +279,65 @@ namespace Manatee.Json.Schema
 		public virtual bool Equals(IJsonSchema other)
 		{
 			var schema = other as JsonSchema;
-			return (schema != null) && (schema.Type == Type);
+			return schema != null &&
+			       schema.Id == Id &&
+			       schema.Title == Title &&
+			       schema.Default == Default &&
+			       schema.Type.Equals(Type);
+		}
+		/// <summary>
+		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+		/// </returns>
+		/// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
+		public override bool Equals(object obj)
+		{
+			var schema = obj as IJsonSchema;
+			return schema != null && schema.Equals(this);
+		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = Type?.GetHashCode() ?? 0;
+				hashCode = (hashCode*397) ^ (Default?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Id?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Title?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Description?.GetHashCode() ?? 0);
+				return hashCode;
+			}
+		}
+
+		internal static JsonSchemaTypeDefinition GetPrimitiveDefinition(string type)
+		{
+			switch (type)
+			{
+				case "array":
+					return JsonSchemaTypeDefinition.Array;
+				case "boolean":
+					return JsonSchemaTypeDefinition.Boolean;
+				case "integer":
+					return JsonSchemaTypeDefinition.Integer;
+				case "null":
+					return JsonSchemaTypeDefinition.Null;
+				case "number":
+					return JsonSchemaTypeDefinition.Number;
+				case "object":
+					return JsonSchemaTypeDefinition.Object;
+				case "string":
+					return JsonSchemaTypeDefinition.String;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }

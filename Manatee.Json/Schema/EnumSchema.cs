@@ -20,8 +20,10 @@
 	Purpose:		Defines a schema which expects one of an explicit list of values.
 
 ***************************************************************************************/
+
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -29,12 +31,12 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a schema which expects one of an explicit list of values.
 	/// </summary>
-	public class EnumSchema : IJsonSchema
+	public class EnumSchema : JsonSchema
 	{
 		/// <summary>
 		/// A collection of acceptable values.
 		/// </summary>
-		public IEnumerable<JsonSchemaTypeDefinition> Values { get; set; }
+		public IEnumerable<EnumSchemaValue> Values { get; set; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -42,10 +44,9 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			var jValue = root ?? ToJson(null);
-			var errors = Values.Select(d => d.Definition.Validate(json, jValue)).ToList();
+			var errors = Values.Select(d => d.Validate(json)).ToList();
 			return errors.Any(r => r.Valid)
 				? new SchemaValidationResults()
 				: new SchemaValidationResults(errors);
@@ -56,14 +57,10 @@ namespace Manatee.Json.Schema
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
-		public void FromJson(JsonValue json, JsonSerializer serializer)
+		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Values = json.Object["enum"].Array.Select(v =>
-				{
-					var defn = new JsonSchemaTypeDefinition();
-					defn.FromJson(v, serializer);
-					return defn;
-				});
+			base.FromJson(json, serializer);
+			Values = json.Object["enum"].Array.Select(jv => new EnumSchemaValue(jv));
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -71,9 +68,11 @@ namespace Manatee.Json.Schema
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public JsonValue ToJson(JsonSerializer serializer)
+		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonObject {{"enum", Values.ToJson(serializer)}};
+			var json = base.ToJson(serializer);
+			json.Object.Add("enum", Values.ToJson(serializer));
+			return json;
 		}
 		/// <summary>
 		/// Indicates whether the current object is equal to another object of the same type.
@@ -82,10 +81,24 @@ namespace Manatee.Json.Schema
 		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
 		/// </returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public virtual bool Equals(IJsonSchema other)
+		public override bool Equals(IJsonSchema other)
 		{
 			var schema = other as EnumSchema;
-			return (schema != null) && (Values.SequenceEqual(schema.Values));
+			return base.Equals(other) && Values.ContentsEqual(schema?.Values);
+		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (base.GetHashCode()*397) ^ (Values?.GetCollectionHashCode() ?? 0);
+			}
 		}
 	}
 }

@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -135,12 +136,33 @@ namespace Manatee.Json.Schema
 		public override bool Equals(IJsonSchema other)
 		{
 			var schema = other as ArraySchema;
-			return base.Equals(schema) &&
+			return schema != null &&
+			       base.Equals(schema) &&
 			       MinItems == schema.MinItems &&
 			       MaxItems == schema.MaxItems &&
-				   Definitions.SequenceEqual(schema.Definitions) &&
-				   Items.Equals(schema.Items) &&
+			       Definitions.ContentsEqual(schema.Definitions) &&
+			       Items.Equals(schema.Items) &&
 			       UniqueItems == schema.UniqueItems;
+		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode*397) ^ (Definitions?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ MinItems.GetHashCode();
+				hashCode = (hashCode*397) ^ MaxItems.GetHashCode();
+				hashCode = (hashCode*397) ^ (Items?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ UniqueItems.GetHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

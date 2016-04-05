@@ -89,34 +89,7 @@ namespace Manatee.Json.Schema
 			if (json == null) return null;
 			IJsonSchema schema = new JsonSchema();
 			var obj = json.Object;
-			if (obj.ContainsKey("type"))
-			{
-				switch (obj["type"].String)
-				{
-					case "array":
-						schema = new ArraySchema();
-						break;
-					case "boolean":
-						schema = new BooleanSchema();
-						break;
-					case "integer":
-						schema = new IntegerSchema();
-						break;
-					case "null":
-						schema = new NullSchema();
-						break;
-					case "number":
-						schema = new NumberSchema();
-						break;
-					case "object":
-						schema = new ObjectSchema();
-						break;
-					case "string":
-						schema = new StringSchema();
-						break;
-				}
-			}
-			else if (obj.ContainsKey("$ref"))
+			if (obj.ContainsKey("$ref"))
 			{
 				// if has "$ref" key, select SchemaReference
 				schema = new JsonSchemaReference();
@@ -146,9 +119,25 @@ namespace Manatee.Json.Schema
 				// if has "enum" key, select EnumSchema
 				schema = new EnumSchema();
 			}
+			else if (obj.ContainsKey("type"))
+			{
+				var typeEntry = obj["type"];
+				switch (typeEntry.Type)
+				{
+					case JsonValueType.String:
+						// string implies primitive type
+						schema = GetPrimitiveSchema(typeEntry);
+						break;
+					case JsonValueType.Array:
+						// array implies "oneOf" several primitive types
+						schema = new MultiSchema();
+						break;
+				}
+			}
 			schema.FromJson(json, null);
 			return schema;
 		}
+
 		/// <summary>
 		/// Builds a <see cref="IJsonSchema"/> implementation which can validate JSON for a given type.
 		/// </summary>
@@ -180,6 +169,36 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 
+		internal static IJsonSchema GetPrimitiveSchema(JsonValue typeEntry)
+		{
+			IJsonSchema schema = null;
+			switch (typeEntry.String)
+			{
+				case "array":
+					schema = new ArraySchema();
+					break;
+				case "boolean":
+					schema = new BooleanSchema();
+					break;
+				case "integer":
+					schema = new IntegerSchema();
+					break;
+				case "null":
+					schema = new NullSchema();
+					break;
+				case "number":
+					schema = new NumberSchema();
+					break;
+				case "object":
+					schema = new ObjectSchema();
+					break;
+				case "string":
+					schema = new StringSchema();
+					break;
+			}
+			return schema;
+		}
+
 		private static IJsonSchema FromType(Type type, JsonSchemaTypeDefinitionCollection definitions)
 		{
 			var self = definitions?.FirstOrDefault(d => d.Name == type.FullName);
@@ -196,7 +215,7 @@ namespace Manatee.Json.Schema
 			if (schema != null) return schema;
 			// Enums
 			if (typeof (Enum).IsAssignableFrom(type))
-				return new EnumSchema {Values = Enum.GetNames(type).Select(n => new JsonSchemaTypeDefinition(n))};
+				return new EnumSchema {Values = Enum.GetNames(type).Select(n => new EnumSchemaValue(n))};
 			// Arrays
 			var asIEnumerable = type.GetInterfaces().FirstOrDefault(t => t.IsGenericType && (t.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
 			if (asIEnumerable != null)

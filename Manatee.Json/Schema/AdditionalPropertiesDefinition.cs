@@ -41,6 +41,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static readonly AdditionalProperties False;
 
+		// ReSharper disable once FieldCanBeMadeReadOnly.Local
 		private bool _isReadOnly;
 		private IJsonSchema _definition;
 

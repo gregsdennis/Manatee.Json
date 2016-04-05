@@ -124,5 +124,24 @@ namespace Manatee.Json.Schema
 			       MaxLength == schema.MaxLength &&
 			       Pattern == schema.Pattern;
 		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode*397) ^ (Format?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ MinLength.GetHashCode();
+				hashCode = (hashCode*397) ^ MaxLength.GetHashCode();
+				hashCode = (hashCode*397) ^ (Pattern?.GetHashCode() ?? 0);
+				return hashCode;
+			}
+		}
 	}
 }

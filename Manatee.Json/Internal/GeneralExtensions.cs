@@ -238,5 +238,19 @@ namespace Manatee.Json.Internal
 			}
 			return false;
 		}
+		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
+		{
+			return collection.Aggregate(0, (current, obj) => unchecked (current ^ 397) ^ obj.GetHashCode());
+		}
+		public static bool ContentsEqual<T>(this IEnumerable<T> a, IEnumerable<T> b)
+		{
+			if (a == null && b != null) return false;
+			if (a != null && b == null) return false;
+			if (a == null) return true;
+
+			var listA = a.ToList();
+			var listB = b.ToList();
+			return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
+		}
 	}
 }
