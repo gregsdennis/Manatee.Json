@@ -283,7 +283,8 @@ namespace Manatee.Json.Schema
 			       schema.Id == Id &&
 			       schema.Title == Title &&
 			       schema.Default == Default &&
-			       schema.Type.Equals(Type);
+			       ((schema.Type == null && Type == null) ||
+			        (schema.Type != null && schema.Type.Equals(Type)));
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
