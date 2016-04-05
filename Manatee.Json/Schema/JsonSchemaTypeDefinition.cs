@@ -64,6 +64,16 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static readonly JsonSchemaTypeDefinition String = new JsonSchemaTypeDefinition("string");
 
+		internal static readonly IEnumerable<JsonSchemaTypeDefinition> PrimitiveDefinitions = new[]
+			{
+				Array,
+				Boolean,
+				Integer,
+				Null,
+				Object,
+				String
+			};
+
 		private bool _isReadOnly;
 		private IJsonSchema _definition;
 
@@ -89,8 +99,7 @@ namespace Manatee.Json.Schema
 
 		internal List<JsonSchemaPropertyDefinition> PropertyReferences { get; set; }
 		internal List<ArraySchema> ArrayReferences { get; set; }
-		internal int ReferenceCount => (PropertyReferences?.Count ?? 0) +
-		                               (ArrayReferences?.Count ?? 0);
+		internal int ReferenceCount => (PropertyReferences?.Count ?? 0) + (ArrayReferences?.Count ?? 0);
 
 		static JsonSchemaTypeDefinition()
 		{
@@ -124,35 +133,12 @@ namespace Manatee.Json.Schema
 		}
 
 		/// <summary>
-		/// Builds a <see cref="JsonSchemaTypeDefinition"/> which can be used to represent an enumeration value.
-		/// </summary>
-		/// <param name="value">A string value.</param>
-		/// <returns>A <see cref="JsonSchemaTypeDefinition"/> which can be used in an <see cref="EnumSchema"/>.</returns>
-		public static JsonSchemaTypeDefinition CreateEnumValue(string value)
-		{
-			return new JsonSchemaTypeDefinition(value) {Definition = new StringSchema {Pattern = value}};
-		}
-		/// <summary>
-		/// Builds an <see cref="IEnumerable{T}"/> of <see cref="JsonSchemaTypeDefinition"/> which contains
-		/// enumeration definitions for each member of an enumeration type.
-		/// </summary>
-		/// <typeparam name="T">The enumeration type.</typeparam>
-		/// <returns>A collection of <see cref="JsonSchemaTypeDefinition"/>s which can be used in an <see cref="EnumSchema"/>.</returns>
-		/// <exception cref="ArgumentException">Thrown when <typeparamref name="T"/> is not an enumeration type.</exception>
-		public static IEnumerable<JsonSchemaTypeDefinition> CreateEnumValues<T>()
-		{
-			if (!typeof(Enum).IsAssignableFrom(typeof(T)))
-				throw new ArgumentException("Type '{0}' is not an enumeration.");
-
-			return Enum.GetNames(typeof (T)).Select(CreateEnumValue);
-		}
-		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
-		public void FromJson(JsonValue json, JsonSerializer serializer)
+		public virtual void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			if (json.Type == JsonValueType.String)
 			{
@@ -170,10 +156,46 @@ namespace Manatee.Json.Schema
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public JsonValue ToJson(JsonSerializer serializer)
+		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
 			if (Definition == null || _isReadOnly) return Name;
 			return new JsonObject {{Name, Definition.ToJson(null)}};
+		}
+		/// <summary>
+		/// Determines whether the specified <see cref="JsonSchemaTypeDefinition"/> is equal to the current <see cref="JsonSchemaTypeDefinition"/>.
+		/// </summary>
+		/// <returns>
+		/// true if the specified <see cref="JsonSchemaTypeDefinition"/> is equal to the current <see cref="JsonSchemaTypeDefinition"/>; otherwise, false.
+		/// </returns>
+		/// <param name="other">The object to compare with the current object. </param><filterpriority>2</filterpriority>
+		protected bool Equals(JsonSchemaTypeDefinition other)
+		{
+			return Equals(_definition, other._definition);
+		}
+		/// <summary>
+		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+		/// </returns>
+		/// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != GetType()) return false;
+			return Equals((JsonSchemaTypeDefinition) obj);
+		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			return _definition?.GetHashCode() ?? 0;
 		}
 	}
 }

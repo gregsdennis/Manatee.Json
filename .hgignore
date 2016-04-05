@@ -20,3 +20,4 @@ Manatee.Json/obj/
 Manatee.Json.Performance/bin/
 Manatee.Json.Performance/obj/
 *.orig
+.vs/

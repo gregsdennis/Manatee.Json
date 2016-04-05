@@ -19,7 +19,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -323,15 +323,18 @@
     <Compile Include="Schema\ArraySchema.cs" />
     <Compile Include="Schema\BooleanSchema.cs" />
     <Compile Include="Schema\EnumSchema.cs" />
+    <Compile Include="Schema\EnumSchemaValue.cs" />
     <Compile Include="Schema\IJsonSchema.cs" />
     <Compile Include="Schema\IntegerSchema.cs" />
     <Compile Include="Schema\JsonSchema.cs" />
     <Compile Include="Schema\JsonSchemaFactory.cs" />
+    <Compile Include="Schema\JsonSchemaMultiTypeDefinition.cs" />
     <Compile Include="Schema\JsonSchemaPropertyDefinition.cs" />
     <Compile Include="Schema\JsonSchemaPropertyDefinitionCollection.cs" />
     <Compile Include="Schema\JsonSchemaReference.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinition.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionCollection.cs" />
+    <Compile Include="Schema\MultiSchema.cs" />
     <Compile Include="Schema\NotSchema.cs" />
     <Compile Include="Schema\NullSchema.cs" />
     <Compile Include="Schema\NumberSchema.cs" />

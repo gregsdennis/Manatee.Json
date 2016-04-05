@@ -130,11 +130,31 @@ namespace Manatee.Json.Schema
 		public override bool Equals(IJsonSchema other)
 		{
 			var schema = other as NumberSchema;
-			return base.Equals(schema) &&
-				   Minimum == schema.Minimum &&
-				   Maximum == schema.Maximum &&
-				   ExclusiveMinimum == schema.ExclusiveMinimum &&
-				   ExclusiveMaximum == schema.ExclusiveMaximum;
+			return schema != null &&
+			       base.Equals(schema) &&
+			       Minimum == schema.Minimum &&
+			       Maximum == schema.Maximum &&
+			       ExclusiveMinimum == schema.ExclusiveMinimum &&
+			       ExclusiveMaximum == schema.ExclusiveMaximum;
+		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode*397) ^ Minimum.GetHashCode();
+				hashCode = (hashCode*397) ^ Maximum.GetHashCode();
+				hashCode = (hashCode*397) ^ ExclusiveMinimum.GetHashCode();
+				hashCode = (hashCode*397) ^ ExclusiveMaximum.GetHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

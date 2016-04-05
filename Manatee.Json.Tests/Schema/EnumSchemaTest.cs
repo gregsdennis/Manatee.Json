@@ -36,10 +36,10 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new EnumSchema
 				{
-					Values = new List<JsonSchemaTypeDefinition>
+					Values = new List<EnumSchemaValue>
 						{
-							JsonSchemaTypeDefinition.CreateEnumValue("test1"),
-							JsonSchemaTypeDefinition.CreateEnumValue("test2")
+							new EnumSchemaValue("test1"),
+							new EnumSchemaValue("test2")
 						}
 				};
 			var json = (JsonValue) "string";
@@ -54,10 +54,10 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new EnumSchema
 				{
-					Values = new List<JsonSchemaTypeDefinition>
+					Values = new List<EnumSchemaValue>
 						{
-							JsonSchemaTypeDefinition.CreateEnumValue("test1"),
-							JsonSchemaTypeDefinition.CreateEnumValue("test2")
+							new EnumSchemaValue("test1"),
+							new EnumSchemaValue("test2")
 						}
 				};
 			var json = (JsonValue) "test1";

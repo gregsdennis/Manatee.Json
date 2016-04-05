@@ -235,16 +235,39 @@ namespace Manatee.Json.Schema
 		public override bool Equals(IJsonSchema other)
 		{
 			var schema = other as ObjectSchema;
-			return base.Equals(schema) &&
-			       Id == schema.Id &&
-			       Schema == schema.Schema &&
-			       Title == schema.Title &&
-			       Description == schema.Description &&
-			       Definitions.SequenceEqual(schema.Definitions) &&
-			       Properties.SequenceEqual(schema.Properties) &&
-			       AdditionalProperties.Equals(schema.AdditionalProperties) &&
-			       PatternProperties.SequenceEqual(PatternProperties) &&
-			       Dependencies.SequenceEqual(schema.Dependencies);
+			if (schema == null) return false;
+			if (!base.Equals(schema)) return false;
+			if (Id != schema.Id) return false;
+			if (Schema != schema.Schema) return false;
+			if (Title != schema.Title) return false;
+			if (Description != schema.Description) return false;
+			if (!Definitions.ContentsEqual(schema.Definitions)) return false;
+			if (!Properties.ContentsEqual(schema.Properties)) return false;
+			if (!(AdditionalProperties == null && schema.AdditionalProperties == null) &&
+			    AdditionalProperties != null && !AdditionalProperties.Equals(schema.AdditionalProperties)) return false;
+			if (!PatternProperties.ContentsEqual(PatternProperties)) return false;
+			return Dependencies.ContentsEqual(schema.Dependencies);
+		}
+		/// <summary>
+		/// Serves as a hash function for a particular type. 
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"/>.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode*397) ^ (Schema?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Definitions?.ToList().GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Properties?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (AdditionalProperties?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (PatternProperties?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Dependencies?.GetCollectionHashCode() ?? 0);
+				return hashCode;
+			}
 		}
 	}
 }

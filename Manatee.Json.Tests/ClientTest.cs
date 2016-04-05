@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Transform;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,10 +36,40 @@ namespace Manatee.Json.Tests
   },
   ""expand"": ""groups""
 }";
-			var actual = JsonValue.Parse(s);
-			var newString = actual.ToString();
+			JsonValue expected = new JsonObject
+				{
+					{"self", "self"},
+					{"name", "name"},
+					{"emailAddress", "test at test dot com"},
+					{
+						"avatarUrls", new JsonObject
+							{
+								{"16x16", "http://smallUrl"},
+								{"48x48", "https://largeUrl"},
+							}
+					},
+					{"displayName", "Display Name"},
+					{"active", true},
+					{"timeZone", "Europe"},
+					{
+						"groups", new JsonObject
+							{
+								{"size", 1},
+								{
+									"items", new JsonArray
+										{
+											new JsonObject {{"name", "users"}}
+										}
+								},
+							}
+					},
+					{"expand", "groups"},
+				};
 
-			Assert.AreEqual(s, newString);
+			var actual = JsonValue.Parse(s);
+			
+
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -79,6 +110,56 @@ namespace Manatee.Json.Tests
 			var expected = (NoNamedZero) 10;
 
 			var actual = serializer.Deserialize<NoNamedZero>(json);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void DeserializeSchema_TypePropertyIsArray_Issue14()
+		{
+			var text = "{\"type\":\"object\",\"properties\":{\"home\":{\"type\":[\"object\",\"null\"],\"properties\":{\"street\":{\"type\":\"string\"}}}}}";
+			var json = JsonValue.Parse(text);
+			var expected = new ObjectSchema
+				{
+					Properties = new JsonSchemaPropertyDefinitionCollection
+						{
+							new JsonSchemaPropertyDefinition("home")
+								{
+									Type = new MultiSchema(new ObjectSchema
+										{
+											Properties = new JsonSchemaPropertyDefinitionCollection
+												{
+													new JsonSchemaPropertyDefinition("street")
+														{
+															Type = new StringSchema()
+														}
+												}
+										},
+									                       new NullSchema())
+								}
+						}
+				};
+
+			var actual = JsonSchemaFactory.FromJson(json);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void DeclaredTypeWithDeclaredEnum_Issue15()
+		{
+			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
+			var json = JsonValue.Parse(text);
+			var expected = new EnumSchema
+				{
+					Type = JsonSchemaTypeDefinition.String,
+					Values = new List<EnumSchemaValue>
+						{
+							new EnumSchemaValue("FeatureCollection")
+						}
+				};
+
+			var actual = JsonSchemaFactory.FromJson(json);
 
 			Assert.AreEqual(expected, actual);
 		}
