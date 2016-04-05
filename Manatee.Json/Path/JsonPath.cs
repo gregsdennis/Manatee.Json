@@ -455,7 +455,7 @@ namespace Manatee.Json.Path
 		{
 			var chars = new List<char>();
 			path._index--;
-			while (path._index < path._source.Length && char.IsLetterOrDigit(path._source[path._index]))
+			while (path._index < path._source.Length && (char.IsLetterOrDigit(path._source[path._index]) || path._source[path._index] == '_'))
 			{
 				chars.Add(path._source[path._index]);
 				path._index++;

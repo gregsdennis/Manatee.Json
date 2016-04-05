@@ -51,6 +51,7 @@ namespace Manatee.Json.Internal
 				{',', JsonPathInput.Comma},
 				{'*', JsonPathInput.Star},
 				{'?', JsonPathInput.Question},
+				{'_', JsonPathInput.Letter},
 			};
 		private static readonly Dictionary<char, JsonPathExpressionInput> ExpressionConverter =
 			new Dictionary<char, JsonPathExpressionInput>

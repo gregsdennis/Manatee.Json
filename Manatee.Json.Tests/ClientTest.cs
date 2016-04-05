@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Transform;
@@ -162,6 +163,16 @@ namespace Manatee.Json.Tests
 			var actual = JsonSchemaFactory.FromJson(json);
 
 			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void PathIntolerantOfUndscoresInPropertyNames_Issue16()
+		{
+			var expected = JsonPathWith.Name("properties").Name("id_person");
+
+			var actual = JsonPath.Parse("$.properties.id_person");
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
 		}
 	}
 }
