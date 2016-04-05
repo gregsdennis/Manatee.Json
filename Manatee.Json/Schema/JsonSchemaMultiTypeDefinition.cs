@@ -20,6 +20,8 @@
 	Purpose:		Supports a collection of types.
 
 ***************************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -34,6 +36,9 @@ namespace Manatee.Json.Schema
 		public JsonSchemaMultiTypeDefinition(IEnumerable<IJsonSchema> definitions)
 		{
 			_definitions = definitions.ToList();
+
+			if (_definitions.Any(d => PrimitiveDefinitions.All(p => p.Definition.GetType() != d.GetType())))
+				throw new InvalidOperationException("Only primitive types are allowed in type collections.");
 
 			Definition = new OneOfSchema {Options = _definitions};
 		}
