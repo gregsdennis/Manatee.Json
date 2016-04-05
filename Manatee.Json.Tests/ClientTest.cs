@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
-using Manatee.Json.Transform;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -173,6 +171,18 @@ namespace Manatee.Json.Tests
 			var actual = JsonPath.Parse("$.properties.id_person");
 
 			Assert.AreEqual(expected.ToString(), actual.ToString());
+		}
+
+		[TestMethod]
+		public void UriValidationIntolerantOfLocalHost_Issue17()
+		{
+			var text = "{\"id\": \"http://localhost/json-schemas/address.json\"}";
+			var json = JsonValue.Parse(text);
+
+			var results = JsonSchema.Draft04.Validate(json);
+
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
 		}
 	}
 }

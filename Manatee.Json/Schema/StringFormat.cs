@@ -22,6 +22,7 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -32,13 +33,15 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class StringFormat
 	{
+		private readonly Func<string, bool> _validate;
 		/// <summary>
-		/// Defines a date/time format.
+		/// Defines a date/time format via <see cref="DateTime.TryParse(string, out DateTime)"/>
 		/// </summary>
-		/// <remarks>
-		/// From https://bugzilla.mozilla.org/show_bug.cgi?id=468020
-		/// </remarks>
-		public static readonly StringFormat DateTime = new StringFormat("date-time", "^([0-9]{4})-([0-9]{2})-([0-9]{2})([Tt]([0-9]{2}):([0-9]{2}):([0-9]{2})(\\.[0-9]+)?)?(([Zz]|([+-])([0-9]{2}):([0-9]{2})))?");
+		public static readonly StringFormat DateTime = new StringFormat("date-time", s =>
+			{
+				DateTime date;
+				return System.DateTime.TryParse(s, out date);
+			});
 		/// <summary>
 		/// Defines an email address format.
 		/// </summary>
@@ -65,11 +68,10 @@ namespace Manatee.Json.Schema
 		/// Defines a regular expression format.
 		/// </summary>
 		public static readonly StringFormat Regex = new StringFormat("regex", null, true);
-		// from http://mathiasbynens.be/demo/url-regex
 		/// <summary>
-		/// Defines a URI format.
+		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
 		/// </summary>
-		public static readonly StringFormat Uri = new StringFormat("uri", "^([a-zA-Z]{3,})://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%#&=]*)?$");
+		public static readonly StringFormat Uri = new StringFormat("uri", s => System.Uri.IsWellFormedUriString(s, UriKind.Absolute));
 
 		private static readonly Dictionary<string, StringFormat> _lookup = new Dictionary<string, StringFormat>
 				{
@@ -95,6 +97,11 @@ namespace Manatee.Json.Schema
 			if (regex != null)
 				_validationRule = new Regex(regex, isCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 		}
+		private StringFormat(string key, Func<string, bool> validate)
+		{
+			_validate = validate;
+			Key = key;
+		}
 
 		/// <summary>
 		/// Validates a value to the specified format.
@@ -103,7 +110,11 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the value is valid, otherwise false.</returns>
 		public bool Validate(string value)
 		{
-			return _validationRule == null || _validationRule.IsMatch(value);
+			if (_validationRule == null)
+			{
+				return _validate == null || _validate(value);
+			}
+			return _validationRule.IsMatch(value);
 		}
 
 		/// <summary>
@@ -113,7 +124,7 @@ namespace Manatee.Json.Schema
 		/// <returns>A <see cref="StringFormat"/> object, or null if none exists for the key.</returns>
 		public static StringFormat GetFormat(string formatKey)
 		{
-			return (formatKey != null) && _lookup.ContainsKey(formatKey)
+			return formatKey != null && _lookup.ContainsKey(formatKey)
 				       ? _lookup[formatKey]
 				       : null;
 		}
