@@ -70,6 +70,7 @@ namespace Manatee.Json.Schema
 				Boolean,
 				Integer,
 				Null,
+				Number,
 				Object,
 				String
 			};
