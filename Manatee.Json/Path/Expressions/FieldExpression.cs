@@ -42,8 +42,8 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var value = Evaluate(default(T), null);
 			return value is string
-					   ? $"\"{value}\""
-				       : value.ToString();
+				       ? $"\"{value}\""
+				       : value?.ToString() ?? "null";
 		}
 	}
 }
