@@ -29,6 +29,9 @@ namespace JetBrains.Annotations
 			FormatParameterName = formatParameterName;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string FormatParameterName { get; private set; }
 	}
 }
