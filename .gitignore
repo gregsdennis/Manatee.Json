@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Manatee.Json/bin
+/Manatee.Json/obj
+/Manatee.Json.Performance/bin
+/Manatee.Json.Performance/obj
+/packages
+/Manatee.Json.Tests/bin
+/Manatee.Json.Tests/obj
+/NuGet
+/TestResults

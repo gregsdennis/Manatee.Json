@@ -28,6 +28,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Manatee.Json.Tests
 {
 	[TestClass]
+    [Ignore]
 	public class DevTest
 	{
 		[TestMethod]
