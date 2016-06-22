@@ -1,6 +1,6 @@
 #Manatee.Json
 
-The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.
+The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
 ##Read from a file
 
