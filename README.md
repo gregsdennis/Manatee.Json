@@ -1,5 +1,7 @@
 #Manatee.Json
 
+[![Join the chat at https://gitter.im/gregsdennis/Manatee.Json](https://badges.gitter.im/gregsdennis/Manatee.Json.svg)](https://gitter.im/gregsdennis/Manatee.Json?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
 ##Read from a file
