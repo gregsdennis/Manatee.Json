@@ -71,7 +71,7 @@ Manatee.Json also:
 - Supports JSONPath (with object model and compile-time checking)
 - Is fully LINQ-compatible
 - Converts between JSON and XML
-- Parsing errors are reported using JSONPath to identify location
+- Reports parsing errors using JSONPath to identify location
 - Supports streamed parsing
 - Is fully open-source
 - Uses the Apache 2.0 license
