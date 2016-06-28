@@ -85,7 +85,7 @@ Serialization features:
 - De/Serialize static types/properties
 - De/Serialize fields
 - De/Serialize enumerations by name or numeric value
-- Maintian object references/graphs
+- Maintain object references/graphs
 - De/Serialize circular references
 - Optionally include type names
 - Each serializer instance can be independently configured
