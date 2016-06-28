@@ -80,7 +80,7 @@ Serialization features:
 
 - De/Serialize abstraction types (abstract classes and interfaces) by type registration
 - JIT type creation for unregistered abstraction types
-- De/Serializes anonymous types
+- De/Serialize anonymous types
 - Fully customizable serialization of both 1st- and 3rd-party types
 - De/Serialize static types/properties
 - De/Serialize fields
