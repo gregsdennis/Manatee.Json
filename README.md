@@ -38,7 +38,7 @@ Manatee.Json defines implicit conversions to `JsonValue` from `Boolean`, `Double
               num = 10,
               boolean = false;
 
-Because the collection types are derived from common .Net types, you get all of the initialization capabilities.
+Because the collection types are derived from core .Net types, you also get all of the initialization capabilities.
 
     var obj = new JsonObject
         {
