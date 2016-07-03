@@ -4,6 +4,8 @@
 
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
+Secondarily, Manatee.Json is *intended* to be strictly ECMA-404 compliant, which means that it purposefully does not support JSON variants, like single-quoted strings or BSON.
+
 ##Read from a file
 
     var text = File.ReadAllText("content.json");
