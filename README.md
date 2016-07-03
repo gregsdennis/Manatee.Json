@@ -49,7 +49,7 @@ Because the collection types are derived from core .Net types, you also get all 
 
 ##Serialization
 
-Converting .Net object to and from JSON is also simple:
+Converting .Net objects to and from JSON is also simple:
 
 1. Create a serializer
 
