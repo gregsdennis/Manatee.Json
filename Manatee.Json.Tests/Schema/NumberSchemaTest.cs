@@ -129,5 +129,49 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
+		[TestMethod]
+		public void ValidateReturnsValidOnMultipleOf_Positive()
+		{
+			var schema = new NumberSchema { MultipleOf = 2.5 };
+			var json = (JsonValue)7.5;
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
+		}
+		[TestMethod]
+		public void ValidateReturnsValidOnMultipleOf_Negative()
+		{
+			var schema = new NumberSchema { MultipleOf = 2.5 };
+			var json = (JsonValue)(-7.5);
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
+		}
+		[TestMethod]
+		public void ValidateReturnsValidOnMultipleOf_Zero()
+		{
+			var schema = new NumberSchema { MultipleOf = 2.5 };
+			var json = (JsonValue)0;
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
+		}
+		[TestMethod]
+		public void ValidateReturnsInvalicOnMultipleOf()
+		{
+			var schema = new NumberSchema { MultipleOf = 2.5 };
+			var json = (JsonValue)16;
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(1, results.Errors.Count());
+			Assert.AreEqual(false, results.Valid);
+		}
 	}
 }

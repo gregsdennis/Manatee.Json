@@ -35,11 +35,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a minimum acceptable value.
 		/// </summary>
-		public int? Minimum { get; set; }
+		public double? Minimum { get; set; }
 		/// <summary>
 		/// Defines a maximum acceptable value;
 		/// </summary>
-		public int? Maximum { get; set; }
+		public double? Maximum { get; set; }
 		/// <summary>
 		/// Defines whether the minimum value is itself acceptable.
 		/// </summary>
@@ -48,6 +48,10 @@ namespace Manatee.Json.Schema
 		/// Defines whether the maximum value is itself acceptable.
 		/// </summary>
 		public bool ExclusiveMaximum { get; set; }
+		/// <summary>
+		/// Defines a divisor for acceptable values.
+		/// </summary>
+		public double? MultipleOf { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="IntegerSchema"/> class.
@@ -88,6 +92,8 @@ namespace Manatee.Json.Schema
 				if (integer > Maximum)
 					errors.Add(new SchemaValidationError(string.Empty, $"Expected: <= {Maximum}; Actual: {integer}."));
 			}
+			if (MultipleOf.HasValue && integer%MultipleOf != 0)
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected: {integer}%{MultipleOf}=0; Actual: {integer%MultipleOf}."));
 			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
@@ -100,10 +106,11 @@ namespace Manatee.Json.Schema
 		{
 			base.FromJson(json, serializer);
 			var obj = json.Object;
-			Minimum = (int?) obj.TryGetNumber("minimum");
-			Maximum = (int?) obj.TryGetNumber("maximum");
+			Minimum = obj.TryGetNumber("minimum");
+			Maximum = obj.TryGetNumber("maximum");
 			if (obj.ContainsKey("exclusiveMinimum")) ExclusiveMinimum = obj["exclusiveMinimum"].Boolean;
 			if (obj.ContainsKey("exclusiveMaximum")) ExclusiveMaximum = obj["minimum"].Boolean;
+			MultipleOf = obj.TryGetNumber("multipleOf");
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -118,6 +125,7 @@ namespace Manatee.Json.Schema
 			if (Maximum.HasValue) json["maximum"] = Maximum;
 			if (ExclusiveMinimum) json["exclusiveMinimum"] = ExclusiveMinimum;
 			if (ExclusiveMaximum) json["exclusiveMaximum"] = ExclusiveMaximum;
+			if (MultipleOf.HasValue) json["multipleOf"] = MultipleOf;
 			return json;
 		}
 		/// <summary>
@@ -129,13 +137,14 @@ namespace Manatee.Json.Schema
 		/// <param name="other">An object to compare with this object.</param>
 		public override bool Equals(IJsonSchema other)
 		{
-			var schema = other as NumberSchema;
+			var schema = other as IntegerSchema;
 			return schema != null &&
 			       base.Equals(schema) &&
 			       Minimum == schema.Minimum &&
 			       Maximum == schema.Maximum &&
 			       ExclusiveMinimum == schema.ExclusiveMinimum &&
-			       ExclusiveMaximum == schema.ExclusiveMaximum;
+			       ExclusiveMaximum == schema.ExclusiveMaximum &&
+			       MultipleOf == schema.MultipleOf;
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -153,6 +162,7 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ Maximum.GetHashCode();
 				hashCode = (hashCode*397) ^ ExclusiveMinimum.GetHashCode();
 				hashCode = (hashCode*397) ^ ExclusiveMaximum.GetHashCode();
+				hashCode = (hashCode*397) ^ MultipleOf.GetHashCode();
 				return hashCode;
 			}
 		}

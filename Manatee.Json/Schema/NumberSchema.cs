@@ -47,6 +47,10 @@ namespace Manatee.Json.Schema
 		/// Defines whether the maximum value is itself acceptable.
 		/// </summary>
 		public bool ExclusiveMaximum { get; set; }
+		/// <summary>
+		/// Defines a divisor for acceptable values.
+		/// </summary>
+		public double? MultipleOf { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="NumberSchema"/> class.
@@ -85,6 +89,8 @@ namespace Manatee.Json.Schema
 				if (number > Maximum)
 					errors.Add(new SchemaValidationError(string.Empty, $"Expected: <= {Maximum}; Actual: {number}."));
 			}
+			if (MultipleOf.HasValue && number%MultipleOf != 0)
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected: {number}%{MultipleOf}=0; Actual: {number%MultipleOf}."));
 			return new SchemaValidationResults(errors);
 		}
 		/// <summary>
@@ -101,6 +107,7 @@ namespace Manatee.Json.Schema
 			Maximum = obj.TryGetNumber("maximum");
 			if (obj.ContainsKey("exclusiveMinimum")) ExclusiveMinimum = obj["exclusiveMinimum"].Boolean;
 			if (obj.ContainsKey("exclusiveMaximum")) ExclusiveMaximum = obj["minimum"].Boolean;
+			MultipleOf = obj.TryGetNumber("multipleOf");
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -115,6 +122,7 @@ namespace Manatee.Json.Schema
 			if (Maximum.HasValue) json["maximum"] = Maximum;
 			if (ExclusiveMinimum) json["exclusiveMinimum"] = ExclusiveMinimum;
 			if (ExclusiveMaximum) json["exclusiveMaximum"] = ExclusiveMaximum;
+			if (MultipleOf.HasValue) json["multipleOf"] = MultipleOf;
 			return json;
 		}
 		/// <summary>
@@ -131,7 +139,8 @@ namespace Manatee.Json.Schema
 				   Minimum == schema.Minimum &&
 				   Maximum == schema.Maximum &&
 				   ExclusiveMinimum == schema.ExclusiveMinimum &&
-				   ExclusiveMaximum == schema.ExclusiveMaximum;
+				   ExclusiveMaximum == schema.ExclusiveMaximum &&
+				   MultipleOf == schema.MultipleOf;
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -149,6 +158,7 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ Maximum.GetHashCode();
 				hashCode = (hashCode*397) ^ ExclusiveMinimum.GetHashCode();
 				hashCode = (hashCode*397) ^ ExclusiveMaximum.GetHashCode();
+				hashCode = (hashCode*397) ^ MultipleOf.GetHashCode();
 				return hashCode;
 			}
 		}
