@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2016 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -123,7 +123,7 @@ namespace Manatee.Json.Tests.Schema
 		public void ValidateReturnsValidOnValidDateTimeFormat()
 		{
 			var schema = new StringSchema {Format = StringFormat.DateTime};
-			var json = (JsonValue)"2014-01-25T10:32:02Z";
+			var json = (JsonValue)"2016-01-25T10:32:02Z";
 
 			var results = schema.Validate(json);
 

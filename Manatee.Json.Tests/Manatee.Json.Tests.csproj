@@ -27,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Debug\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-4.5|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +48,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Debug-4.5\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-4.5|AnyCPU'">
     <OutputPath>bin\Release-4.5\</OutputPath>
@@ -56,6 +59,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-4.5\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-3.5|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +70,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Debug-3.5\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-3.5|AnyCPU'">
     <OutputPath>bin\Release-3.5\</OutputPath>
@@ -76,6 +81,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-3.5\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-3.5C|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -86,6 +92,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Debug-3.5C\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-3.5C|AnyCPU'">
     <OutputPath>bin\Release-3.5C\</OutputPath>
@@ -96,10 +103,12 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-3.5C\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-4.0C|AnyCPU'">
     <OutputPath>bin\Debug-4.0C\</OutputPath>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Debug-4.0C\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-4.0C|AnyCPU'">
     <OutputPath>bin\Release-4.0C\</OutputPath>
@@ -110,6 +119,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-4.0C\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-Mono|AnyCPU'">
     <OutputPath>bin\Release-Mono\</OutputPath>
@@ -120,6 +130,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-Mono\</IntermediateOutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -163,6 +174,9 @@
     <Compile Include="JsonValueParseTest.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
     <Compile Include="Schema\MultiSchemaTest.cs" />
+    <Compile Include="Schema\TestSuite\JsonSchemaTestSuite.cs" />
+    <Compile Include="Schema\TestSuite\SchemaTest.cs" />
+    <Compile Include="Schema\TestSuite\SchemaTestSet.cs" />
     <Compile Include="Serialization\JsonDeserializerTest.cs" />
     <None Include="Test References\InvalidSchemaValidatedClass.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

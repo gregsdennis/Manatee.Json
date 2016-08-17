@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 
-	Copyright 2012 Greg Dennis
+	Copyright 2016 Greg Dennis
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -119,6 +119,7 @@ namespace Manatee.Json.Schema
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
+			// ReSharper disable once NonReadonlyMemberInGetHashCode
 			return Reference?.GetHashCode() ?? 0;
 		}
 
@@ -126,19 +127,21 @@ namespace Manatee.Json.Schema
 		{
 			if (root == null) throw new ArgumentNullException(nameof(root));
 			if (root == RootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
-			_schema = Reference[0] == '#' ? ResolveLocalReference(root) : ResolveExternalReference();
+			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
+			if (referenceParts.Length != 2)
+				throw new ArgumentException($"Error attempting to dereference `{Reference}`.");
+			var address = referenceParts[0];
+			var path = referenceParts[1];
+			if (!string.IsNullOrWhiteSpace(address))
+				root = OnlineSchemaCache.Get(address).ToJson(null);
+			_schema = ResolveLocalReference(root, path);
 		}
-		private IJsonSchema ResolveLocalReference(JsonValue root)
+		private static IJsonSchema ResolveLocalReference(JsonValue root, string path)
 		{
-			var properties = Reference.Split('/').Skip(1).ToList();
+			var properties = path.Split('/').Skip(1).ToList();
 			if (!properties.Any()) return JsonSchemaFactory.FromJson(root);
 			var value = properties.Aggregate(root, (current, property) => current.Object[property]);
 			return JsonSchemaFactory.FromJson(value);
-		}
-		private IJsonSchema ResolveExternalReference()
-		{
-			var schemaJson = new WebClient().DownloadString(Reference);
-			return JsonSchemaFactory.FromJson(JsonValue.Parse(schemaJson));
 		}
 	}
 }

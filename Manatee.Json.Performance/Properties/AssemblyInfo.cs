@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("GameStop, Inc.")]
 [assembly: AssemblyProduct("Manatee.Json.Performance")]
-[assembly: AssemblyCopyright("Copyright © GameStop, Inc. 2015")]
+[assembly: AssemblyCopyright("Copyright © GameStop, Inc. 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
