@@ -15,7 +15,7 @@
 	   limitations under the License.
  
 	File Name:		MultiSchemaTest.cs
-	Namespace:		Manatee.Json.Tests
+	Namespace:		Manatee.Json.Tests.Schema
 	Class Name:		MultiSchemaTest
 	Purpose:		Tests for MultiSchema.
 

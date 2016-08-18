@@ -329,6 +329,7 @@
     <Compile Include="Schema\JsonSchema.cs" />
     <Compile Include="Schema\JsonSchemaFactory.cs" />
     <Compile Include="Schema\JsonSchemaMultiTypeDefinition.cs" />
+    <Compile Include="Schema\JsonSchemaOptions.cs" />
     <Compile Include="Schema\JsonSchemaPropertyDefinition.cs" />
     <Compile Include="Schema\JsonSchemaPropertyDefinitionCollection.cs" />
     <Compile Include="Schema\JsonSchemaReference.cs" />

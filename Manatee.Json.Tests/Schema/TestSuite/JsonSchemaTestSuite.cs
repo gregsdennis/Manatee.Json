@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -33,7 +34,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 	public class JsonSchemaTestSuite
 	{
 		private const string TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
-		//private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
+		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 		private int _failures;
 		private int _passes;
@@ -85,11 +86,19 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		{
 			foreach (var test in testSet.Tests)
 			{
+				// paste the description of a test to debug it.
+				if (test.Description == "")
+				{
+					System.Diagnostics.Debugger.Break();
+				}
+
 				var results = testSet.Schema.Validate(test.Data);
 
 				if (results.Valid == test.Valid)
 				{
-					Console.WriteLine($"  {test.Description} - Passed");
+					// It's difficult to see the failures when everything shows.
+					// The Stack Trace Explorer needs to show color output. :/
+					//Console.WriteLine($"  {test.Description} - Passed");
 					_passes++;
 				}
 				else
@@ -102,7 +111,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 		private void _StartServer()
 		{
-			//var stub = HttpMockRepository.At("localhost:1234");
+			const string baseUri = "http://localhost:1234/";
+
+			JsonSchemaOptions.Download = uri =>
+				{
+					var localPath = uri.Replace(baseUri, string.Empty);
+					var newPath = System.IO.Path.Combine(RemotesFolder, localPath);
+					return File.ReadAllText(newPath);
+				};
 		}
 	}
 }

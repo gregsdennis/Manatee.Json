@@ -21,9 +21,6 @@
 					which may be satisfied.
 
 ***************************************************************************************/
-using System.Collections.Generic;
-using System.Linq;
-using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -36,7 +33,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// A collection of schema which must not be satisfied.
 		/// </summary>
-		public IEnumerable<IJsonSchema> Restrictions { get; set; }
+		public IJsonSchema Restriction { get; set; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -47,10 +44,10 @@ namespace Manatee.Json.Schema
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			var jValue = root ?? ToJson(null);
-			var errors = Restrictions.Select(s => s.Validate(json, jValue)).ToList();
-			return errors.All(r => !r.Valid)
-				? new SchemaValidationResults()
-				: new SchemaValidationResults(errors);
+			var errors = Restriction.Validate(json, jValue);
+			return errors.Valid
+				       ? new SchemaValidationResults()
+				       : new SchemaValidationResults(new[] {errors});
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
@@ -62,7 +59,7 @@ namespace Manatee.Json.Schema
 		{
 			base.FromJson(json, serializer);
 			var obj = json.Object;
-			Restrictions = obj["not"].Array.Select(JsonSchemaFactory.FromJson);
+			Restriction = JsonSchemaFactory.FromJson(obj["not"]);
 			if (obj.ContainsKey("default")) Default = obj["default"];
 		}
 		/// <summary>
@@ -73,7 +70,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			var json = new JsonObject {{"not", Restrictions.ToJson(serializer)}};
+			var json = new JsonObject {{"not", Restriction.ToJson(serializer)}};
 			if (Default != null) json["default"] = Default;
 			return json;
 		}
@@ -87,7 +84,7 @@ namespace Manatee.Json.Schema
 		public override bool Equals(IJsonSchema other)
 		{
 			var schema = other as NotSchema;
-			return base.Equals(other) && Restrictions.ContentsEqual(schema?.Restrictions);
+			return base.Equals(other) && Restriction.Equals(schema?.Restriction);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -100,7 +97,7 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				return (base.GetHashCode()*397) ^ (Restrictions?.GetCollectionHashCode() ?? 0);
+				return (base.GetHashCode()*397) ^ (Restriction?.GetHashCode() ?? 0);
 			}
 		}
 	}

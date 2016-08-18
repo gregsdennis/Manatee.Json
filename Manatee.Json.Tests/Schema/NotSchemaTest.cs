@@ -21,7 +21,6 @@
 
 ***************************************************************************************/
 
-using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,40 +31,32 @@ namespace Manatee.Json.Tests.Schema
 	public class NotSchemaTest
 	{
 		[TestMethod]
-		public void ValidateReturnsErrorOnAnyInvalid()
+		public void ValidateReturnsValid()
 		{
 			var schema = new NotSchema
 				{
-					Restrictions = new List<IJsonSchema>
-						{
-							new ArraySchema(),
-							new NumberSchema()
-						}
+					Restriction = new ArraySchema()
 				};
 			var json = new JsonArray();
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
 		}
 		[TestMethod]
-		public void ValidateReturnsValidOnAllValid()
+		public void ValidateReturnsErrorOnInvalid()
 		{
 			var schema = new NotSchema
 				{
-					Restrictions = new List<IJsonSchema>
-						{
-							new NumberSchema {Maximum = 10},
-							new NumberSchema {Minimum = 20}
-						}
+					Restriction = new NumberSchema {Maximum = 10}
 				};
-			var json = new JsonObject();
+			var json = (JsonValue) 15;
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			Assert.AreEqual(1, results.Errors.Count());
+			Assert.AreEqual(false, results.Valid);
 		}
 	}
 }

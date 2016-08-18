@@ -73,10 +73,10 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			var jValue = root ?? ToJson(null);
 			if (_schema == null)
-				Resolve(jValue);
-			return Resolved.Validate(json, jValue);
+				Resolve(root);
+			return Resolved?.Validate(json, root) ??
+			       new SchemaValidationResults(new[] {new SchemaValidationError(null, "Error finding referenced schema.")});
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
@@ -125,22 +125,25 @@ namespace Manatee.Json.Schema
 
 		private void Resolve(JsonValue root)
 		{
-			if (root == null) throw new ArgumentNullException(nameof(root));
-			if (root == RootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
 			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
-			if (referenceParts.Length != 2)
-				throw new ArgumentException($"Error attempting to dereference `{Reference}`.");
 			var address = referenceParts[0];
-			var path = referenceParts[1];
+			var path = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
+			var jValue = root;
 			if (!string.IsNullOrWhiteSpace(address))
-				root = OnlineSchemaCache.Get(address).ToJson(null);
-			_schema = ResolveLocalReference(root, path);
+				jValue = OnlineSchemaCache.Get(address).ToJson(null);
+			if (jValue == null) return;
+			if (jValue == RootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
+ 
+			_schema = ResolveLocalReference(jValue, path);
 		}
 		private static IJsonSchema ResolveLocalReference(JsonValue root, string path)
 		{
 			var properties = path.Split('/').Skip(1).ToList();
 			if (!properties.Any()) return JsonSchemaFactory.FromJson(root);
-			var value = properties.Aggregate(root, (current, property) => current.Object[property]);
+			var value = root;
+			foreach (var property in properties)
+				if (!value.Object.ContainsKey(property)) return null;
+				else value = value.Object[property];
 			return JsonSchemaFactory.FromJson(value);
 		}
 	}

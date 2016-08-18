@@ -14,41 +14,31 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		OnlineSchemaCache.cs
+	File Name:		JsonSchemaMultiTypeDefinition.cs
 	Namespace:		Manatee.Json.Schema
-	Class Name:		OnlineSchemaCache
-	Purpose:		Provides caching around downloading schema definitions.
+	Class Name:		JsonSchemaMultiTypeDefinition
+	Purpose:		Defines options associated with JSON Schema.
 
 ***************************************************************************************/
-using System.Collections.Concurrent;
+using System;
+using System.Net;
 
 namespace Manatee.Json.Schema
 {
-	internal static class OnlineSchemaCache
+	/// <summary>
+	/// Defines options associated with JSON Schema.
+	/// </summary>
+	public static class JsonSchemaOptions
 	{
-		private static readonly ConcurrentDictionary<string, IJsonSchema> _schemaLookup;
+		private static Func<string, string> _download;
 
-		static OnlineSchemaCache()
+		/// <summary>
+		/// Gets and sets a method used to download online schema.
+		/// </summary>
+		public static Func<string, string> Download
 		{
-			var draft04Uri = JsonSchema.Draft04.Id.Split('#')[0];
-			_schemaLookup = new ConcurrentDictionary<string, IJsonSchema>
-				{
-					[draft04Uri] = JsonSchema.Draft04
-				};
-		}
-
-		public static IJsonSchema Get(string uri)
-		{
-			IJsonSchema schema;
-			if (!_schemaLookup.TryGetValue(uri, out schema))
-			{
-				var schemaJson = JsonSchemaOptions.Download(uri);
-				schema = JsonSchemaFactory.FromJson(JsonValue.Parse(schemaJson));
-
-				_schemaLookup[uri] = schema;
-			}
-
-			return schema;
+			get { return _download ?? (_download = uri => new WebClient().DownloadString(uri)); }
+			set { _download = value; }
 		}
 	}
 }
