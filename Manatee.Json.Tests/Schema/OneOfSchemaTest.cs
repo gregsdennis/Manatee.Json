@@ -36,7 +36,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new OneOfSchema
 			{
-				Options = new List<IJsonSchema>
+				OneOf = new List<IJsonSchema>
 						{
 							new NumberSchema {Minimum = 5},
 							new NumberSchema {Minimum = 10}
@@ -54,7 +54,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new OneOfSchema
 			{
-				Options = new List<IJsonSchema>
+				OneOf = new List<IJsonSchema>
 						{
 							new NumberSchema {Minimum = 5},
 							new NumberSchema {Minimum = 10}
@@ -72,7 +72,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new AnyOfSchema
 				{
-					Options = new List<IJsonSchema>
+					AnyOf = new List<IJsonSchema>
 						{
 							new NumberSchema {Minimum = 5},
 							new NumberSchema {Minimum = 10}

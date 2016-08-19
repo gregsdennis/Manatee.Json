@@ -23,7 +23,6 @@
 
 using System.Collections.Generic;
 using Manatee.Json.Internal;
-using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -32,27 +31,6 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class IntegerSchema : JsonSchema
 	{
-		/// <summary>
-		/// Defines a minimum acceptable value.
-		/// </summary>
-		public double? Minimum { get; set; }
-		/// <summary>
-		/// Defines a maximum acceptable value;
-		/// </summary>
-		public double? Maximum { get; set; }
-		/// <summary>
-		/// Defines whether the minimum value is itself acceptable.
-		/// </summary>
-		public bool ExclusiveMinimum { get; set; }
-		/// <summary>
-		/// Defines whether the maximum value is itself acceptable.
-		/// </summary>
-		public bool ExclusiveMaximum { get; set; }
-		/// <summary>
-		/// Defines a divisor for acceptable values.
-		/// </summary>
-		public double? MultipleOf { get; set; }
-
 		/// <summary>
 		/// Creates a new instance of the <see cref="IntegerSchema"/> class.
 		/// </summary>
@@ -72,7 +50,7 @@ namespace Manatee.Json.Schema
 			if (!number.IsInt()) return new SchemaValidationResults(string.Empty, "Expected: Integer; Actual: Number.");
 			var integer = (int) number;
 			var errors = new List<SchemaValidationError>();
-			if (ExclusiveMinimum)
+			if (ExclusiveMinimum ?? false)
 			{
 				if (integer <= Minimum)
 					errors.Add(new SchemaValidationError(string.Empty, $"Expected: > {Minimum}; Actual: {integer}."));
@@ -82,7 +60,7 @@ namespace Manatee.Json.Schema
 				if (integer < Minimum)
 					errors.Add(new SchemaValidationError(string.Empty, $"Expected: >= {Minimum}; Actual: {integer}."));
 			}
-			if (ExclusiveMaximum)
+			if (ExclusiveMaximum ?? false)
 			{
 				if (integer >= Maximum)
 					errors.Add(new SchemaValidationError(string.Empty, $"Expected: < {Maximum}; Actual: {integer}."));
@@ -95,76 +73,6 @@ namespace Manatee.Json.Schema
 			if (MultipleOf.HasValue && integer%MultipleOf != 0)
 				errors.Add(new SchemaValidationError(string.Empty, $"Expected: {integer}%{MultipleOf}=0; Actual: {integer%MultipleOf}."));
 			return new SchemaValidationResults(errors);
-		}
-		/// <summary>
-		/// Builds an object from a <see cref="JsonValue"/>.
-		/// </summary>
-		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
-		public override void FromJson(JsonValue json, JsonSerializer serializer)
-		{
-			base.FromJson(json, serializer);
-			var obj = json.Object;
-			Minimum = obj.TryGetNumber("minimum");
-			Maximum = obj.TryGetNumber("maximum");
-			if (obj.ContainsKey("exclusiveMinimum")) ExclusiveMinimum = obj["exclusiveMinimum"].Boolean;
-			if (obj.ContainsKey("exclusiveMaximum")) ExclusiveMaximum = obj["minimum"].Boolean;
-			MultipleOf = obj.TryGetNumber("multipleOf");
-		}
-		/// <summary>
-		/// Converts an object to a <see cref="JsonValue"/>.
-		/// </summary>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
-		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson(JsonSerializer serializer)
-		{
-			var json = base.ToJson(serializer).Object;
-			if (Minimum.HasValue) json["minimum"] = Minimum;
-			if (Maximum.HasValue) json["maximum"] = Maximum;
-			if (ExclusiveMinimum) json["exclusiveMinimum"] = ExclusiveMinimum;
-			if (ExclusiveMaximum) json["exclusiveMaximum"] = ExclusiveMaximum;
-			if (MultipleOf.HasValue) json["multipleOf"] = MultipleOf;
-			return json;
-		}
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public override bool Equals(IJsonSchema other)
-		{
-			var schema = other as IntegerSchema;
-			return schema != null &&
-			       base.Equals(schema) &&
-			       Minimum == schema.Minimum &&
-			       Maximum == schema.Maximum &&
-			       ExclusiveMinimum == schema.ExclusiveMinimum &&
-			       ExclusiveMaximum == schema.ExclusiveMaximum &&
-			       MultipleOf == schema.MultipleOf;
-		}
-		/// <summary>
-		/// Serves as a hash function for a particular type. 
-		/// </summary>
-		/// <returns>
-		/// A hash code for the current <see cref="T:System.Object"/>.
-		/// </returns>
-		/// <filterpriority>2</filterpriority>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-				hashCode = (hashCode*397) ^ Minimum.GetHashCode();
-				hashCode = (hashCode*397) ^ Maximum.GetHashCode();
-				hashCode = (hashCode*397) ^ ExclusiveMinimum.GetHashCode();
-				hashCode = (hashCode*397) ^ ExclusiveMaximum.GetHashCode();
-				hashCode = (hashCode*397) ^ MultipleOf.GetHashCode();
-				return hashCode;
-			}
 		}
 	}
 }

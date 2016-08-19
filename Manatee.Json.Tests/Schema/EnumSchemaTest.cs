@@ -36,7 +36,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new EnumSchema
 				{
-					Values = new List<EnumSchemaValue>
+					Enum = new List<EnumSchemaValue>
 						{
 							new EnumSchemaValue("test1"),
 							new EnumSchemaValue("test2")
@@ -54,7 +54,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new EnumSchema
 				{
-					Values = new List<EnumSchemaValue>
+					Enum = new List<EnumSchemaValue>
 						{
 							new EnumSchemaValue("test1"),
 							new EnumSchemaValue("test2")

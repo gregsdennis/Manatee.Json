@@ -40,7 +40,7 @@ namespace Manatee.Json.Schema
 			if (_definitions.Any(d => PrimitiveDefinitions.All(p => p.Definition.GetType() != d.GetType())))
 				throw new InvalidOperationException("Only primitive types are allowed in type collections.");
 
-			Definition = new OneOfSchema {Options = _definitions};
+			Definition = new OneOfSchema {OneOf = _definitions};
 		}
 
 		public void AppendJson(JsonValue json, JsonSerializer serializer)
@@ -70,7 +70,7 @@ namespace Manatee.Json.Schema
 					return schema;
 				}).ToList();
 
-			Definition = new OneOfSchema {Options = _definitions};
+			Definition = new OneOfSchema {OneOf = _definitions};
 		}
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{

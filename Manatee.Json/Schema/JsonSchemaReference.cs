@@ -23,7 +23,6 @@
 
 using System;
 using System.Linq;
-using System.Net;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 

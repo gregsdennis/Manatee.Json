@@ -47,25 +47,5 @@ namespace Manatee.Json.Schema
 				? new SchemaValidationResults(string.Empty, $"Expected: Boolean; Actual: {json.Type}.")
 				: new SchemaValidationResults();
 		}
-		/// <summary>
-		/// Converts an object to a <see cref="JsonValue"/>.
-		/// </summary>
-		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson(JsonSerializer serializer)
-		{
-			var json = base.ToJson(serializer).Object;
-			return json;
-		}
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public override bool Equals(IJsonSchema other)
-		{
-			return other is BooleanSchema && base.Equals(other);
-		}
 	}
 }

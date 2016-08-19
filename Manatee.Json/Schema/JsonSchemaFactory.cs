@@ -215,7 +215,7 @@ namespace Manatee.Json.Schema
 			if (schema != null) return schema;
 			// Enums
 			if (typeof (Enum).IsAssignableFrom(type))
-				return new EnumSchema {Values = Enum.GetNames(type).Select(n => new EnumSchemaValue(n))};
+				return new EnumSchema {Enum = Enum.GetNames(type).Select(n => new EnumSchemaValue(n))};
 			// Arrays
 			var asIEnumerable = type.GetInterfaces().FirstOrDefault(t => t.IsGenericType && (t.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
 			if (asIEnumerable != null)

@@ -149,7 +149,8 @@ namespace Manatee.Json.Schema
 			}
 			var details = json.Object.First();
 			Name = details.Key;
-			Definition = JsonSchemaFactory.FromJson(details.Value);
+			Definition = new JsonSchema();
+			Definition.FromJson(details.Value, null);
 		}
 
 		public override string ToString()

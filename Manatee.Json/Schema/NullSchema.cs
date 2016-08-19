@@ -45,27 +45,5 @@ namespace Manatee.Json.Schema
 				? new SchemaValidationResults(string.Empty, $"Expected: Null; Actual: {json.Type}.")
 				: new SchemaValidationResults();
 		}
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public override bool Equals(IJsonSchema other)
-		{
-			return other != null && base.Equals(other);
-		}
-		/// <summary>
-		/// Serves as a hash function for a particular type. 
-		/// </summary>
-		/// <returns>
-		/// A hash code for the current <see cref="T:System.Object"/>.
-		/// </returns>
-		/// <filterpriority>2</filterpriority>
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
 	}
 }

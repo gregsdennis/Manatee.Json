@@ -35,7 +35,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new NotSchema
 				{
-					Restriction = new ArraySchema()
+					Not = new ArraySchema()
 				};
 			var json = new JsonArray();
 
@@ -49,7 +49,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new NotSchema
 				{
-					Restriction = new NumberSchema {Maximum = 10}
+					Not = new NumberSchema {Maximum = 10}
 				};
 			var json = (JsonValue) 15;
 

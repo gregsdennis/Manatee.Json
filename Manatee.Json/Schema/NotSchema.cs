@@ -21,7 +21,6 @@
 					which may be satisfied.
 
 ***************************************************************************************/
-using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -31,11 +30,6 @@ namespace Manatee.Json.Schema
 	public class NotSchema : JsonSchema
 	{
 		/// <summary>
-		/// A collection of schema which must not be satisfied.
-		/// </summary>
-		public IJsonSchema Restriction { get; set; }
-
-		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
 		/// <param name="json">A <see cref="JsonValue"/></param>
@@ -44,61 +38,10 @@ namespace Manatee.Json.Schema
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			var jValue = root ?? ToJson(null);
-			var errors = Restriction.Validate(json, jValue);
+			var errors = Not.Validate(json, jValue);
 			return errors.Valid
 				       ? new SchemaValidationResults()
 				       : new SchemaValidationResults(new[] {errors});
-		}
-		/// <summary>
-		/// Builds an object from a <see cref="JsonValue"/>.
-		/// </summary>
-		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
-		public override void FromJson(JsonValue json, JsonSerializer serializer)
-		{
-			base.FromJson(json, serializer);
-			var obj = json.Object;
-			Restriction = JsonSchemaFactory.FromJson(obj["not"]);
-			if (obj.ContainsKey("default")) Default = obj["default"];
-		}
-		/// <summary>
-		/// Converts an object to a <see cref="JsonValue"/>.
-		/// </summary>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
-		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson(JsonSerializer serializer)
-		{
-			var json = new JsonObject {{"not", Restriction.ToJson(serializer)}};
-			if (Default != null) json["default"] = Default;
-			return json;
-		}
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public override bool Equals(IJsonSchema other)
-		{
-			var schema = other as NotSchema;
-			return base.Equals(other) && Restriction.Equals(schema?.Restriction);
-		}
-		/// <summary>
-		/// Serves as a hash function for a particular type. 
-		/// </summary>
-		/// <returns>
-		/// A hash code for the current <see cref="T:System.Object"/>.
-		/// </returns>
-		/// <filterpriority>2</filterpriority>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				return (base.GetHashCode()*397) ^ (Restriction?.GetHashCode() ?? 0);
-			}
 		}
 	}
 }

@@ -152,7 +152,7 @@ namespace Manatee.Json.Tests
 			var expected = new EnumSchema
 				{
 					Type = JsonSchemaTypeDefinition.String,
-					Values = new List<EnumSchemaValue>
+					Enum = new List<EnumSchemaValue>
 						{
 							new EnumSchemaValue("FeatureCollection")
 						}

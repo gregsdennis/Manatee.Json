@@ -23,8 +23,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Internal;
-using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -33,27 +31,6 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class ArraySchema : JsonSchema
 	{
-		/// <summary>
-		/// Defines a collection of schema type definitions.
-		/// </summary>
-		public JsonSchemaTypeDefinitionCollection Definitions { get; set; }
-		/// <summary>
-		/// Gets and sets a minimum number of items required for the array.
-		/// </summary>
-		public uint? MinItems { get; set; }
-		/// <summary>
-		/// Defines a maximum number of items required for the array.
-		/// </summary>
-		public uint? MaxItems { get; set; }
-		/// <summary>
-		/// Defines the schema for the items contained in the array.
-		/// </summary>
-		public IJsonSchema Items { get; set; }
-		/// <summary>
-		/// Defines whether the array should contain only unique items.
-		/// </summary>
-		public bool UniqueItems { get; set; }
-
 		/// <summary>
 		/// Creates a new instance of the <see cref="ArraySchema"/> class.
 		/// </summary>
@@ -75,7 +52,7 @@ namespace Manatee.Json.Schema
 				errors.Add(new SchemaValidationError(string.Empty, $"Expected: >= {MinItems} items; Actual: {array.Count} items."));
 			if (MaxItems.HasValue && array.Count > MaxItems)
 				errors.Add(new SchemaValidationError(string.Empty, $"Expected: <= {MaxItems} items; Actual: {array.Count} items."));
-			if (UniqueItems && (array.Count != array.Distinct().Count()))
+			if ((UniqueItems ?? false) && (array.Count != array.Distinct().Count()))
 				errors.Add(new SchemaValidationError(string.Empty, "Expected unique items; Duplicates were found."));
 			if (Items != null)
 			{
@@ -85,84 +62,6 @@ namespace Manatee.Json.Schema
 				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertyName($"[{i}]"))));
 			}
 			return new SchemaValidationResults(errors);
-		}
-		/// <summary>
-		/// Builds an object from a <see cref="JsonValue"/>.
-		/// </summary>
-		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
-		public override void FromJson(JsonValue json, JsonSerializer serializer)
-		{
-			base.FromJson(json, serializer);
-			var obj = json.Object;
-			MinItems = (uint?) obj.TryGetNumber("minItems");
-			MaxItems = (uint?) obj.TryGetNumber("maxItems");
-			if (obj.ContainsKey("items")) Items = JsonSchemaFactory.FromJson(obj["items"]);
-			if (obj.ContainsKey("uniqueItems")) UniqueItems = obj["uniqueItems"].Boolean;
-			if (obj.ContainsKey("definitions"))
-			{
-				Definitions = new JsonSchemaTypeDefinitionCollection();
-				foreach (var defn in obj["definitions"].Object)
-				{
-					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = JsonSchemaFactory.FromJson(defn.Value)};
-					Definitions.Add(definition);
-				}
-			}
-		}
-		/// <summary>
-		/// Converts an object to a <see cref="JsonValue"/>.
-		/// </summary>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
-		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson(JsonSerializer serializer)
-		{
-			var json = base.ToJson(serializer).Object;
-			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
-			if (Items != null) json["items"] = Items.ToJson(serializer);
-			if (MinItems.HasValue) json["minItems"] = MinItems;
-			if (MaxItems.HasValue) json["maxItems"] = MinItems;
-			if (UniqueItems) json["uniqueItems"] = UniqueItems;
-			return json;
-		}
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public override bool Equals(IJsonSchema other)
-		{
-			var schema = other as ArraySchema;
-			return schema != null &&
-			       base.Equals(schema) &&
-			       MinItems == schema.MinItems &&
-			       MaxItems == schema.MaxItems &&
-			       Definitions.ContentsEqual(schema.Definitions) &&
-			       Items.Equals(schema.Items) &&
-			       UniqueItems == schema.UniqueItems;
-		}
-		/// <summary>
-		/// Serves as a hash function for a particular type. 
-		/// </summary>
-		/// <returns>
-		/// A hash code for the current <see cref="T:System.Object"/>.
-		/// </returns>
-		/// <filterpriority>2</filterpriority>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-				hashCode = (hashCode*397) ^ (Definitions?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ MinItems.GetHashCode();
-				hashCode = (hashCode*397) ^ MaxItems.GetHashCode();
-				hashCode = (hashCode*397) ^ (Items?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ UniqueItems.GetHashCode();
-				return hashCode;
-			}
 		}
 	}
 }
