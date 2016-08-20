@@ -85,6 +85,10 @@ namespace Manatee.Json.Schema.Validators
 					errors.AddRange(extraErrors.Select(e => e.PrependPropertyName(key)));
 				}
 			}
+			if (schema.Dependencies != null)
+			{
+				errors.AddRange(schema.Dependencies.SelectMany(d => d.Validate(json, root).Errors));
+			}
 			return new SchemaValidationResults(errors);
 		}
 	}

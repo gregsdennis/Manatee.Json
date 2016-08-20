@@ -31,9 +31,11 @@ namespace Manatee.Json.Schema
 {
 	internal class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
 	{
+		private readonly bool _nonPrimitiveAllowed;
 		private IEnumerable<JsonSchemaTypeDefinition> _definitions;
 
-		public JsonSchemaMultiTypeDefinition(IEnumerable<JsonSchemaTypeDefinition> definitions)
+		public JsonSchemaMultiTypeDefinition(params JsonSchemaTypeDefinition[] definitions)
+			: this(false)
 		{
 			_definitions = definitions.ToList();
 
@@ -42,30 +44,17 @@ namespace Manatee.Json.Schema
 
 			Definition = new JsonSchema { OneOf = _definitions.Select(d => d.Definition) };
 		}
-		public JsonSchemaMultiTypeDefinition(params JsonSchemaTypeDefinition[] definitions)
-			: this((IEnumerable<JsonSchemaTypeDefinition>) definitions) {}
-
-		public void AppendJson(JsonValue json, JsonSerializer serializer)
+		internal JsonSchemaMultiTypeDefinition(bool nonPrimitiveAllowed)
 		{
-			if (json.Type != JsonValueType.Object) return;
-
-			// we want to reverse so that the first entry has priority
-			var properties = _definitions.Select(d => d.ToJson(serializer))
-			                             .SelectMany(jv => jv.Object)
-										 .GroupBy(kvp => kvp.Key)
-										 .Select(g => g.First())
-			                             .ToList();
-			foreach (var property in properties)
-			{
-				json.Object[property.Key] = property.Value;
-			}
+			_nonPrimitiveAllowed = nonPrimitiveAllowed;
 		}
 
 		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			var typeEntry = json.Object["type"].Array;
+			var typeEntry = json.Array;
 			_definitions = typeEntry.Select(jv =>
 				{
+					if (_nonPrimitiveAllowed) return new JsonSchemaTypeDefinition(JsonSchemaFactory.FromJson(jv));
 					var definition = PrimitiveDefinitions.FirstOrDefault(p => p.Name == jv.String);
 					if (definition == null)
 						throw new InvalidOperationException("Only primitive types are allowed in type collections.");

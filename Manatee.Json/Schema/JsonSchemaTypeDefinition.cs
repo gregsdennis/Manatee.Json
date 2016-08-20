@@ -115,7 +115,6 @@ namespace Manatee.Json.Schema
 			String.Definition = new JsonSchema {Type = String};
 			String._isReadOnly = true;
 		}
-		internal JsonSchemaTypeDefinition() {}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaTypeDefinition"/> type.
 		/// </summary>
@@ -127,6 +126,10 @@ namespace Manatee.Json.Schema
 				throw new ArgumentNullException(nameof(name));
 
 			Name = name;
+		}
+		internal JsonSchemaTypeDefinition(IJsonSchema definition = null)
+		{
+			Definition = definition;
 		}
 
 		/// <summary>
@@ -165,6 +168,7 @@ namespace Manatee.Json.Schema
 		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
 			if (Definition == null || _isReadOnly) return Name;
+			if (Name == null) return Definition.ToJson(null);
 			return new JsonObject {{Name, Definition.ToJson(null)}};
 		}
 		/// <summary>
