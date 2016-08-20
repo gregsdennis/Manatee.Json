@@ -31,32 +31,32 @@ namespace Manatee.Json.Tests.Schema
 	public class NotSchemaTest
 	{
 		[TestMethod]
-		public void ValidateReturnsValid()
+		public void ValidateReturnsErrorOnInvalid()
 		{
-			var schema = new NotSchema
+			var schema = new JsonSchema
 				{
-					Not = new ArraySchema()
+					Not = new JsonSchema {Type = JsonSchemaTypeDefinition.Array}
 				};
 			var json = new JsonArray();
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			Assert.AreEqual(1, results.Errors.Count());
+			Assert.AreEqual(false, results.Valid);
 		}
 		[TestMethod]
-		public void ValidateReturnsErrorOnInvalid()
+		public void ValidateReturnsValid()
 		{
-			var schema = new NotSchema
-				{
-					Not = new NumberSchema {Maximum = 10}
+			var schema = new JsonSchema
+			{
+					Not = new JsonSchema { Type = JsonSchemaTypeDefinition.Number,Maximum = 10}
 				};
 			var json = (JsonValue) 15;
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(1, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
 		}
 	}
 }

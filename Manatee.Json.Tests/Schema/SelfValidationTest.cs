@@ -20,7 +20,6 @@
 	Purpose:		Tests to verify that Draft-04 is self-validating.
 
 ***************************************************************************************/
-using System;
 using Manatee.Json.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -34,8 +33,6 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var json = JsonSchema.Draft04.ToJson(null);
 			var validation = JsonSchema.Draft04.Validate(json);
-
-			Console.WriteLine(validation.Valid);
 
 			Assert.IsTrue(validation.Valid);
 		}

@@ -14,42 +14,33 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ObjectSchema.cs
-	Namespace:		Manatee.Json.Schema
-	Class Name:		ObjectSchema
-	Purpose:		Defines a schema which expects an object.
+	File Name:		ObjectSchemaValidator.cs
+	Namespace:		Manatee.Json.Schema.Validators
+	Class Name:		ObjectSchemaValidator
+	Purpose:		Validates schemas with object-specific properties.
 
 ***************************************************************************************/
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manatee.Json.Schema
+namespace Manatee.Json.Schema.Validators
 {
-	/// <summary>
-	/// Defines a schema which expects an object.
-	/// </summary>
-	public class ObjectSchema : JsonSchema
+	internal class ObjectSchemaValidator : IJsonSchemaValidator
 	{
-		/// <summary>
-		/// Creates a new instance of the <see cref="ObjectSchema"/> class.
-		/// </summary>
-		public ObjectSchema()
-			: base(JsonSchemaTypeDefinition.Object) {}
-
-		/// <summary>
-		/// Validates a <see cref="JsonValue"/> against the schema.
-		/// </summary>
-		/// <param name="json">A <see cref="JsonValue"/></param>
-		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
-		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public bool Applies(JsonSchema schema)
+		{
+			return Equals(schema.Type, JsonSchemaTypeDefinition.Object) ||
+			       schema.Properties != null ||
+			       schema.AdditionalProperties != null ||
+				   schema.PatternProperties != null;
+		}
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			if (json.Type != JsonValueType.Object)
 				return new SchemaValidationResults(string.Empty, $"Expected: Object; Actual: {json.Type}.");
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
-			var jValue = root ?? ToJson(null);
-			var properties = Properties ?? new JsonSchemaPropertyDefinitionCollection();
+			var properties = schema.Properties ?? new JsonSchemaPropertyDefinitionCollection();
 			foreach (var property in properties)
 			{
 				if (!obj.ContainsKey(property.Name))
@@ -58,38 +49,39 @@ namespace Manatee.Json.Schema
 						errors.Add(new SchemaValidationError(property.Name, "Required property not found."));
 					continue;
 				}
-				var result = property.Type.Validate(obj[property.Name], jValue);
+				var result = property.Type.Validate(obj[property.Name], root);
 				if (!result.Valid)
 					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Name)));
 			}
 			var extraData = obj.Where(kvp => properties.All(p => p.Name != kvp.Key))
-			                   .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-			if (AdditionalProperties != null && AdditionalProperties.Equals(AdditionalProperties.False))
+							   .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+			// TODO: validate this process
+			if (schema.AdditionalProperties != null && schema.AdditionalProperties.Equals(AdditionalProperties.False))
 			{
-				if (PatternProperties != null)
+				if (schema.PatternProperties != null)
 				{
-					foreach (var patternProperty in PatternProperties)
+					foreach (var patternProperty in schema.PatternProperties)
 					{
 						var pattern = patternProperty.Key;
-						var schema = patternProperty.Value;
+						var localSchema = patternProperty.Value;
 						var matches = extraData.Keys.Where(k => pattern.IsMatch(k));
 						foreach (var match in matches)
 						{
-							var matchErrors = schema.Validate(extraData[match], jValue).Errors;
+							var matchErrors = localSchema.Validate(extraData[match], root).Errors;
 							errors.AddRange(matchErrors.Select(e => new SchemaValidationError(match, e.Message)));
 						}
 						extraData = extraData.Where(kvp => !pattern.IsMatch(kvp.Key))
-						                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+											 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 					}
 				}
 				errors.AddRange(extraData.Keys.Select(k => new SchemaValidationError(k, "Cannot find a match within Properties or PatternProperties.")));
 			}
-			else if (AdditionalProperties != null)
+			else if (schema.AdditionalProperties != null)
 			{
-				var schema = AdditionalProperties.Definition;
+				var localSchema = schema.AdditionalProperties.Definition;
 				foreach (var key in extraData.Keys)
 				{
-					var extraErrors = schema.Validate(extraData[key], jValue).Errors;
+					var extraErrors = localSchema.Validate(extraData[key], root).Errors;
 					errors.AddRange(extraErrors.Select(e => e.PrependPropertyName(key)));
 				}
 			}

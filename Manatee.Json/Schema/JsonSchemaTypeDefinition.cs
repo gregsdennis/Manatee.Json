@@ -75,8 +75,8 @@ namespace Manatee.Json.Schema
 				String
 			};
 
-		private bool _isReadOnly;
 		private IJsonSchema _definition;
+		private bool _isReadOnly;
 
 		/// <summary>
 		/// Defines the name of the type.
@@ -98,25 +98,21 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		internal List<JsonSchemaPropertyDefinition> PropertyReferences { get; set; }
-		internal List<ArraySchema> ArrayReferences { get; set; }
-		internal int ReferenceCount => (PropertyReferences?.Count ?? 0) + (ArrayReferences?.Count ?? 0);
-
 		static JsonSchemaTypeDefinition()
 		{
-			Array.Definition = new ArraySchema();
+			Array.Definition = new JsonSchema {Type = Array};
 			Array._isReadOnly = true;
-			Boolean.Definition = new BooleanSchema();
+			Boolean.Definition = new JsonSchema {Type = Boolean};
 			Boolean._isReadOnly = true;
-			Integer.Definition = new IntegerSchema();
+			Integer.Definition = new JsonSchema {Type = Integer};
 			Integer._isReadOnly = true;
-			Null.Definition = new NullSchema();
+			Null.Definition = new JsonSchema {Type = Null};
 			Null._isReadOnly = true;
-			Number.Definition = new NumberSchema();
+			Number.Definition = new JsonSchema {Type = Number};
 			Number._isReadOnly = true;
-			Object.Definition = new ObjectSchema();
+			Object.Definition = new JsonSchema {Type = Object};
 			Object._isReadOnly = true;
-			String.Definition = new StringSchema();
+			String.Definition = new JsonSchema {Type = String};
 			String._isReadOnly = true;
 		}
 		internal JsonSchemaTypeDefinition() {}
@@ -144,7 +140,7 @@ namespace Manatee.Json.Schema
 			if (json.Type == JsonValueType.String)
 			{
 				Name = json.String;
-				Definition = new StringSchema {Pattern = json.String};
+				Definition = new JsonSchema {Type = String, Pattern = json.String};
 				return;
 			}
 			var details = json.Object.First();
@@ -180,6 +176,13 @@ namespace Manatee.Json.Schema
 		/// <param name="other">The object to compare with the current object. </param><filterpriority>2</filterpriority>
 		protected bool Equals(JsonSchemaTypeDefinition other)
 		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			// Check to see if either are a predefined definition.
+			// There is an edge case where the client could make a definition that clones one of these,
+			//   that would result in a StackOverflow error.  But as the client would have to purposefully
+			//   try to break the library (it happens).
+			if (_isReadOnly || other._isReadOnly) return false;
 			return Equals(_definition, other._definition);
 		}
 		/// <summary>
@@ -191,10 +194,7 @@ namespace Manatee.Json.Schema
 		/// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != GetType()) return false;
-			return Equals((JsonSchemaTypeDefinition) obj);
+			return Equals(obj as JsonSchemaTypeDefinition);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -205,6 +205,7 @@ namespace Manatee.Json.Schema
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
+			if (_isReadOnly) return Name?.GetHashCode() ?? 0;
 			return _definition?.GetHashCode() ?? 0;
 		}
 	}

@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
@@ -88,52 +87,6 @@ namespace Manatee.Json.Schema
 		{
 			if (json == null) return null;
 			IJsonSchema schema = new JsonSchema();
-			var obj = json.Object;
-			if (obj.ContainsKey("$ref"))
-			{
-				// if has "$ref" key, select SchemaReference
-				schema = new JsonSchemaReference();
-			}
-			else if (obj.ContainsKey("anyOf"))
-			{
-				// if has "anyOf" key, select AnyOfSchema
-				schema = new AnyOfSchema();
-			}
-			else if (obj.ContainsKey("allOf"))
-			{
-				// if has "allOf" key, select AllOfSchema
-				schema = new AllOfSchema();
-			}
-			else if (obj.ContainsKey("oneOf"))
-			{
-				// if has "oneOf" key, select OneOfSchema
-				schema = new OneOfSchema();
-			}
-			else if (obj.ContainsKey("not"))
-			{
-				// if has "not" key, select NotSchema
-				schema = new NotSchema();
-			}
-			else if (obj.ContainsKey("enum"))
-			{
-				// if has "enum" key, select EnumSchema
-				schema = new EnumSchema();
-			}
-			else if (obj.ContainsKey("type"))
-			{
-				var typeEntry = obj["type"];
-				switch (typeEntry.Type)
-				{
-					case JsonValueType.String:
-						// string implies primitive type
-						schema = GetPrimitiveSchema(typeEntry);
-						break;
-					case JsonValueType.Array:
-						// array implies "oneOf" several primitive types
-						schema = new MultiSchema();
-						break;
-				}
-			}
 			schema.FromJson(json, null);
 			return schema;
 		}
@@ -155,18 +108,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The schema object.</returns>
 		public static IJsonSchema FromType(Type type)
 		{
-			var schema = FromType(type, null);
-			var objSchema = schema as ObjectSchema;
-			if (objSchema?.Definitions != null)
-			{
-				RemoveSingleDefinitionReferences(objSchema);
-			}
-			var arrSchema = schema as ArraySchema;
-			if (arrSchema?.Definitions != null)
-			{
-				RemoveSingleDefinitionReferences(arrSchema);
-			}
-			return schema;
+			throw new NotImplementedException();
 		}
 
 		internal static IJsonSchema GetPrimitiveSchema(JsonValue typeEntry)
@@ -175,25 +117,25 @@ namespace Manatee.Json.Schema
 			switch (typeEntry.String)
 			{
 				case "array":
-					schema = new ArraySchema();
+					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array};
 					break;
 				case "boolean":
-					schema = new BooleanSchema();
+					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Boolean};
 					break;
 				case "integer":
-					schema = new IntegerSchema();
+					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
 					break;
 				case "null":
-					schema = new NullSchema();
+					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
 					break;
 				case "number":
-					schema = new NumberSchema();
+					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Number};
 					break;
 				case "object":
-					schema = new ObjectSchema();
+					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Object};
 					break;
 				case "string":
-					schema = new StringSchema();
+					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.String};
 					break;
 			}
 			return schema;
@@ -201,123 +143,19 @@ namespace Manatee.Json.Schema
 
 		private static IJsonSchema FromType(Type type, JsonSchemaTypeDefinitionCollection definitions)
 		{
-			var self = definitions?.FirstOrDefault(d => d.Name == type.FullName);
-			if (self?.Definition != null)
-				return self.Definition != JsonSchemaReference.Root
-					       ? new JsonSchemaReference($"#/definitions/{type.FullName}")
-					       : self.Definition;
-			var definitionList = definitions ?? new JsonSchemaTypeDefinitionCollection
-				{
-					new JsonSchemaTypeDefinition(type.FullName) {Definition = JsonSchemaReference.Root}
-				};
-			// Basic types
-			var schema = GetBasicSchema(type);
-			if (schema != null) return schema;
-			// Enums
-			if (typeof (Enum).IsAssignableFrom(type))
-				return new EnumSchema {Enum = Enum.GetNames(type).Select(n => new EnumSchemaValue(n))};
-			// Arrays
-			var asIEnumerable = type.GetInterfaces().FirstOrDefault(t => t.IsGenericType && (t.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
-			if (asIEnumerable != null)
-			{
-				var itemType = asIEnumerable.GetGenericArguments().First();
-				var itemDefinition = definitionList.FirstOrDefault(d => d.Name == itemType.FullName);
-				if (itemDefinition == null)
-				{
-					itemDefinition = new JsonSchemaTypeDefinition(itemType.FullName)
-						{
-							ArrayReferences = new List<ArraySchema>()
-						};
-					definitionList.Add(itemDefinition);
-					itemDefinition.Definition = FromType(itemType, definitionList);
-				}
-				if (itemDefinition.ArrayReferences == null)
-					itemDefinition.ArrayReferences = new List<ArraySchema>();
-				var arraySchema = new ArraySchema
-					{
-						Items = new JsonSchemaReference($"#/definitions/{itemType.FullName}"),
-						Definitions = definitions == null && definitionList.Any(d => d.Definition != null)
-							              ? definitionList
-							              : null
-					};
-				itemDefinition.ArrayReferences.Add(arraySchema);
-				return arraySchema;
-			}
-			// Objects
-			var propertyList = new JsonSchemaPropertyDefinitionCollection();
-			var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-			foreach (var property in properties)
-			{
-				if (!property.CanRead || property.GetIndexParameters().Any()) continue;
-				var propertyDefinition = new JsonSchemaPropertyDefinition(property.Name);
-				schema = GetBasicSchema(property.PropertyType);
-				if (schema != null)
-				{
-					propertyDefinition.Type = schema;
-				}
-				else
-				{
-					var definition = definitionList.FirstOrDefault(d => d.Name == property.PropertyType.FullName);
-					if (definition == null)
-					{
-						definition = new JsonSchemaTypeDefinition(property.PropertyType.FullName);
-						definitionList.Add(definition);
-						definition.Definition = FromType(property.PropertyType, definitionList);
-					}
-					if (definition.PropertyReferences == null)
-						definition.PropertyReferences = new List<JsonSchemaPropertyDefinition>();
-					propertyDefinition.Type = new JsonSchemaReference($"#/definitions/{property.PropertyType.FullName}");
-					definition.PropertyReferences.Add(propertyDefinition);
-				}
-				propertyList.Add(propertyDefinition);
-			}
-			return new ObjectSchema
-				{
-					Properties = propertyList.Any() ? propertyList : null,
-					Definitions = definitions == null && definitionList.Any(d => d.Definition != null)
-						              ? definitionList
-						              : null
-				};
+			throw new NotImplementedException();
 		}
 		private static IJsonSchema GetBasicSchema(Type type)
 		{
 			if (type == typeof(string))
-				return new StringSchema();
+				return new JsonSchema {Type = JsonSchemaTypeDefinition.String};
 			if (type == typeof(bool))
-				return new BooleanSchema();
+				return new JsonSchema {Type = JsonSchemaTypeDefinition.Boolean};
 			if (_integerTypes.Contains(type))
-				return new IntegerSchema();
+				return new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
 			if (_numberTypes.Contains(type))
-				return new NumberSchema();
+				return new JsonSchema {Type = JsonSchemaTypeDefinition.Number};
 			return null;
-		}
-		private static void RemoveSingleDefinitionReferences(ObjectSchema objSchema)
-		{
-			var references = objSchema.Definitions.Where(d => d.ReferenceCount == 1 || d.Definition == JsonSchemaReference.Root).ToList();
-			foreach (var definition in references)
-			{
-				if (definition.PropertyReferences != null && definition.PropertyReferences.Any())
-					definition.PropertyReferences[0].Type = definition.Definition;
-				if (definition.ArrayReferences != null && definition.ArrayReferences.Any())
-					definition.ArrayReferences[0].Items = definition.Definition;
-				objSchema.Definitions.Remove(definition);
-			}
-			if (!objSchema.Definitions.Any())
-				objSchema.Definitions = null;
-		}
-		private static void RemoveSingleDefinitionReferences(ArraySchema arrSchema)
-		{
-			var references = arrSchema.Definitions.Where(d => d.ReferenceCount == 1 || d.Definition == JsonSchemaReference.Root).ToList();
-			foreach (var definition in references)
-			{
-				if (definition.PropertyReferences != null && definition.PropertyReferences.Any())
-					definition.PropertyReferences[0].Type = definition.Definition;
-				if (definition.ArrayReferences != null && definition.ArrayReferences.Any())
-					definition.ArrayReferences[0].Items = definition.Definition;
-				arrSchema.Definitions.Remove(definition);
-			}
-			if (!arrSchema.Definitions.Any())
-				arrSchema.Definitions = null;
 		}
 	}
 }

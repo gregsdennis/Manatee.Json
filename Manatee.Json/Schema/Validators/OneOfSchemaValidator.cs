@@ -14,34 +14,25 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		OneOfSchema.cs
-	Namespace:		Manatee.Json.Schema
-	Class Name:		OneOfSchema
-	Purpose:		Used to define a collection of schema conditions, exactly
-					one of which must be satisfied.
+	File Name:		OneOfSchemaValidator.cs
+	Namespace:		Manatee.Json.Schema.Validators
+	Class Name:		OneOfSchemaValidator
+	Purpose:		Validates schemas with a "oneOf" property.
 
 ***************************************************************************************/
-
 using System.Linq;
 
-namespace Manatee.Json.Schema
+namespace Manatee.Json.Schema.Validators
 {
-	/// <summary>
-	/// Used to define a collection of schema conditions, exactly one of which must
-	/// be satisfied.
-	/// </summary>
-	public class OneOfSchema : JsonSchema
+	internal class OneOfSchemaValidator : IJsonSchemaValidator
 	{
-		/// <summary>
-		/// Validates a <see cref="JsonValue"/> against the schema.
-		/// </summary>
-		/// <param name="json">A <see cref="JsonValue"/></param>
-		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
-		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public bool Applies(JsonSchema schema)
 		{
-			var jValue = root ?? ToJson(null);
-			var errors = OneOf.Select(s => s.Validate(json, jValue)).ToList();
+			return schema.OneOf != null;
+		}
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		{
+			var errors = schema.OneOf.Select(s => s.Validate(json, root)).ToList();
 			var validCount = errors.Count(r => r.Valid);
 			switch (validCount)
 			{

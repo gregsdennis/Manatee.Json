@@ -14,32 +14,21 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		BooleanSchema.cs
-	Namespace:		Manatee.Json.Schema
-	Class Name:		BooleanSchema
-	Purpose:		Defines a schema which expects a null value.
+	File Name:		NullSchemaValidator.cs
+	Namespace:		Manatee.Json.Schema.Validators
+	Class Name:		NullSchemaValidator
+	Purpose:		Validates schemas with null type.
 
 ***************************************************************************************/
-
-namespace Manatee.Json.Schema
+namespace Manatee.Json.Schema.Validators
 {
-	/// <summary>
-	/// Defines a schema which expects a null value.
-	/// </summary>
-	public class NullSchema : JsonSchema
+	internal class NullSchemaValidator : IJsonSchemaValidator
 	{
-		/// <summary>
-		/// Creates an instance of the <see cref="NullSchema"/> class.
-		/// </summary>
-		public NullSchema() : base(JsonSchemaTypeDefinition.Null) {}
-
-		/// <summary>
-		/// Validates a <see cref="JsonValue"/> against the schema.
-		/// </summary>
-		/// <param name="json">A <see cref="JsonValue"/></param>
-		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
-		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public bool Applies(JsonSchema schema)
+		{
+			return Equals(schema.Type, JsonSchemaTypeDefinition.Null);
+		}
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			return json.Type != JsonValueType.Null
 				? new SchemaValidationResults(string.Empty, $"Expected: Null; Actual: {json.Type}.")

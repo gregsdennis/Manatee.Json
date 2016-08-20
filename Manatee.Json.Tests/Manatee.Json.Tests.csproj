@@ -175,7 +175,6 @@
     <Compile Include="JsonValueOperatorTest.cs" />
     <Compile Include="JsonValueParseTest.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
-    <Compile Include="Schema\MultiSchemaTest.cs" />
     <Compile Include="Schema\TestSuite\JsonSchemaTestSuite.cs" />
     <Compile Include="Schema\TestSuite\SchemaTest.cs" />
     <Compile Include="Schema\TestSuite\SchemaTestSet.cs" />
@@ -192,7 +191,6 @@
     <Compile Include="Schema\ArraySchemaTest.cs" />
     <Compile Include="Schema\AnyOfSchemaTest.cs" />
     <Compile Include="Schema\BooleanSchemaTest.cs" />
-    <Compile Include="Schema\Draft04SchemaTest.cs" />
     <Compile Include="Schema\StringSchemaTest.cs" />
     <Compile Include="Schema\OneOfSchemaTest.cs" />
     <Compile Include="Schema\ObjectSchemaTest.cs" />

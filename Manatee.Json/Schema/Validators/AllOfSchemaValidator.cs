@@ -14,30 +14,27 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		Draft04SchemaTest.cs
-	Namespace:		Manatee.Json.Tests.Schema
-	Class Name:		Draft04SchemaTest
-	Purpose:		Tests that the Draft04 schema object validates itself.
+	File Name:		AllOfSchemaValidator.cs
+	Namespace:		Manatee.Json.Schema.Validators
+	Class Name:		AllOfSchemaValidator
+	Purpose:		Validates schema with an "allOf" property.
 
 ***************************************************************************************/
 
 using System.Linq;
-using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Manatee.Json.Tests.Schema
+namespace Manatee.Json.Schema.Validators
 {
-	[TestClass]
-	public class Draft04SchemaTest
+	internal class AllOfSchemaValidator : IJsonSchemaValidator
 	{
-		 [TestMethod]
-		 public void Draft04IsSelfValidating()
-		 {
-			 var json = JsonSchema.Draft04.ToJson(null);
-			 var results = JsonSchema.Draft04.Validate(json);
+		public bool Applies(JsonSchema schema)
+		{
+			return schema.AllOf != null;
+		}
 
-			 Assert.IsTrue(results.Valid);
-			 Assert.AreEqual(0, results.Errors.Count());
-		 }
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		{
+			return new SchemaValidationResults(schema.AllOf.Select(s => s.Validate(json, root)));
+		}
 	}
 }

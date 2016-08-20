@@ -63,7 +63,7 @@ namespace Manatee.Json.Schema
 
 		static AdditionalProperties()
 		{
-			True = new AdditionalProperties {Definition = new ObjectSchema(), _isReadOnly = true};
+			True = new AdditionalProperties {Definition = new JsonSchema {Type=JsonSchemaTypeDefinition.Object}, _isReadOnly = true};
 			False = new AdditionalProperties {_isReadOnly = true};
 		}
 
@@ -129,7 +129,7 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type == JsonValueType.Boolean)
 			{
-				if (json.Boolean) Definition = new ObjectSchema();
+				if (json.Boolean) Definition = new JsonSchema {Type=JsonSchemaTypeDefinition.Object};
 			}
 			else
 			{

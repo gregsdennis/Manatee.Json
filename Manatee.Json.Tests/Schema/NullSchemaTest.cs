@@ -33,7 +33,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNonNull()
 		{
-			var schema = new NullSchema();
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
@@ -44,7 +44,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnNull()
 		{
-			var schema = new NullSchema();
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
 			var json = JsonValue.Null;
 
 			var results = schema.Validate(json);

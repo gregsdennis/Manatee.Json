@@ -34,7 +34,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnValueOutOfRange()
 		{
-			var schema = new EnumSchema
+			var schema = new JsonSchema
 				{
 					Enum = new List<EnumSchemaValue>
 						{
@@ -52,8 +52,8 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnValueInRange()
 		{
-			var schema = new EnumSchema
-				{
+			var schema = new JsonSchema
+			{
 					Enum = new List<EnumSchemaValue>
 						{
 							new EnumSchemaValue("test1"),

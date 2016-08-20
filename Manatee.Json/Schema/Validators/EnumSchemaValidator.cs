@@ -14,31 +14,27 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumSchema.cs
-	Namespace:		Manatee.Json.Schema
-	Class Name:		EnumSchema
-	Purpose:		Defines a schema which expects one of an explicit list of values.
+	File Name:		EnumSchemaValidator.cs
+	Namespace:		Manatee.Json.Schema.Validators
+	Class Name:		EnumSchemaValidator
+	Purpose:		Validates schema with an "enum" property.
 
 ***************************************************************************************/
 
 using System.Linq;
 
-namespace Manatee.Json.Schema
+namespace Manatee.Json.Schema.Validators
 {
-	/// <summary>
-	/// Defines a schema which expects one of an explicit list of values.
-	/// </summary>
-	public class EnumSchema : JsonSchema
+	internal class EnumSchemaValidator : IJsonSchemaValidator
 	{
-		/// <summary>
-		/// Validates a <see cref="JsonValue"/> against the schema.
-		/// </summary>
-		/// <param name="json">A <see cref="JsonValue"/></param>
-		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
-		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public bool Applies(JsonSchema schema)
 		{
-			var errors = Enum.Select(d => d.Validate(json)).ToList();
+			return schema.Enum != null;
+		}
+
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		{
+			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
 			return errors.Any(r => r.Valid)
 				? new SchemaValidationResults()
 				: new SchemaValidationResults(errors);

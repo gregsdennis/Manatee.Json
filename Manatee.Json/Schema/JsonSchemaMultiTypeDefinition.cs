@@ -31,17 +31,19 @@ namespace Manatee.Json.Schema
 {
 	internal class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
 	{
-		private IEnumerable<IJsonSchema> _definitions;
+		private IEnumerable<JsonSchemaTypeDefinition> _definitions;
 
-		public JsonSchemaMultiTypeDefinition(IEnumerable<IJsonSchema> definitions)
+		public JsonSchemaMultiTypeDefinition(IEnumerable<JsonSchemaTypeDefinition> definitions)
 		{
 			_definitions = definitions.ToList();
 
-			if (_definitions.Any(d => PrimitiveDefinitions.All(p => p.Definition.GetType() != d.GetType())))
+			if (_definitions.Except(PrimitiveDefinitions).Any())
 				throw new InvalidOperationException("Only primitive types are allowed in type collections.");
 
-			Definition = new OneOfSchema {OneOf = _definitions};
+			Definition = new JsonSchema { OneOf = _definitions.Select(d => d.Definition) };
 		}
+		public JsonSchemaMultiTypeDefinition(params JsonSchemaTypeDefinition[] definitions)
+			: this((IEnumerable<JsonSchemaTypeDefinition>) definitions) {}
 
 		public void AppendJson(JsonValue json, JsonSerializer serializer)
 		{
@@ -62,15 +64,15 @@ namespace Manatee.Json.Schema
 		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			var typeEntry = json.Object["type"].Array;
-			var jsonWithoutType = json.Object.Where(kvp => kvp.Key != "type").ToJson();
 			_definitions = typeEntry.Select(jv =>
 				{
-					var schema = JsonSchemaFactory.GetPrimitiveSchema(jv.String);
-					schema.FromJson(jsonWithoutType, serializer);
-					return schema;
+					var definition = PrimitiveDefinitions.FirstOrDefault(p => p.Name == jv.String);
+					if (definition == null)
+						throw new InvalidOperationException("Only primitive types are allowed in type collections.");
+					return definition;
 				}).ToList();
 
-			Definition = new OneOfSchema {OneOf = _definitions};
+			Definition = new JsonSchema {OneOf = _definitions.Select(d => d.Definition)};
 		}
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{
@@ -84,7 +86,7 @@ namespace Manatee.Json.Schema
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 			return Equals((JsonSchemaMultiTypeDefinition) obj);
 		}
 		public override int GetHashCode()

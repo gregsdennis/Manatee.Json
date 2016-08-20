@@ -21,15 +21,17 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
 	/// <summary>
 	/// Contains the results of schema validation.
 	/// </summary>
-	public class SchemaValidationResults
+	public class SchemaValidationResults 
 	{
 		/// <summary>
 		/// Gets whether the validation was successful.
@@ -47,11 +49,11 @@ namespace Manatee.Json.Schema
 		}
 		internal SchemaValidationResults(IEnumerable<SchemaValidationError> errors = null)
 		{
-			Errors = errors ?? Enumerable.Empty<SchemaValidationError>();
+			Errors = errors?.Distinct() ?? Enumerable.Empty<SchemaValidationError>();
 		}
 		internal SchemaValidationResults(IEnumerable<SchemaValidationResults> aggregate)
 		{
-			Errors = aggregate.SelectMany(r => r.Errors);
+			Errors = aggregate.SelectMany(r => r.Errors).Distinct();
 		}
 	}
 }

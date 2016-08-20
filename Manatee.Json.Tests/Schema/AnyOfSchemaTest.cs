@@ -34,12 +34,12 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNoneValid()
 		{
-			var schema = new AnyOfSchema
+			var schema = new JsonSchema
 				{
 					AnyOf = new List<IJsonSchema>
 						{
-							new ArraySchema(),
-							new NumberSchema()
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Array},
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number}
 						}
 				};
 			var json = new JsonObject();
@@ -52,12 +52,12 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnSingleValid()
 		{
-			var schema = new AnyOfSchema
+			var schema = new JsonSchema
 				{
 					AnyOf = new List<IJsonSchema>
 						{
-							new NumberSchema {Minimum = 10},
-							new NumberSchema {Maximum = 20}
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
 						}
 				};
 			var json = (JsonValue) 25;
