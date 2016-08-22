@@ -29,10 +29,13 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	internal class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
+	public class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
 	{
 		private readonly bool _nonPrimitiveAllowed;
 		private IEnumerable<JsonSchemaTypeDefinition> _definitions;
+
+		internal IEnumerable<JsonSchemaTypeDefinition> Defintions => _definitions;
+		internal bool IsPrimitive => !_nonPrimitiveAllowed; 
 
 		public JsonSchemaMultiTypeDefinition(params JsonSchemaTypeDefinition[] definitions)
 			: this(false)

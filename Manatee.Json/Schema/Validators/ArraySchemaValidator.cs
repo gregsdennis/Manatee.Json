@@ -34,21 +34,17 @@ namespace Manatee.Json.Schema.Validators
 			       schema.Items != null ||
 			       schema.MinItems.HasValue ||
 			       schema.MaxItems.HasValue ||
-			       schema.UniqueItems.HasValue;// ||
-			       // TODO: schema.AdditionalItems != null;
+			       schema.UniqueItems.HasValue ||
+			       schema.AdditionalItems != null;
 		}
 
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (Equals(schema.Type, JsonSchemaTypeDefinition.Array))
-			{
-				if (json.Type != JsonValueType.Array)
-					return new SchemaValidationResults(string.Empty, $"Expected: Array; Actual: {json.Type}.");
-			}
-			else
-				return new SchemaValidationResults();
+			if (json.Type != JsonValueType.Array) return new SchemaValidationResults();
 			var array = json.Array;
 			var errors = new List<SchemaValidationError>();
+			if (Equals(schema.Type, JsonSchemaTypeDefinition.Array))
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected: Array; Actual: {json.Type}."));
 			if (schema.MinItems.HasValue && array.Count < schema.MinItems)
 				errors.Add(new SchemaValidationError(string.Empty, $"Expected: >= {schema.MinItems} items; Actual: {array.Count} items."));
 			if (schema.MaxItems.HasValue && array.Count > schema.MaxItems)
@@ -57,9 +53,28 @@ namespace Manatee.Json.Schema.Validators
 				errors.Add(new SchemaValidationError(string.Empty, "Expected unique items; Duplicates were found."));
 			if (schema.Items != null)
 			{
-				var itemValidations = array.Select(v => schema.Items.Validate(v, root));
-
-				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertyName($"[{i}]"))));
+				var items = schema.Items as JsonSchemaCollection;
+				if (items != null)
+				{
+					// have array of schemata: validate in sequence
+					var i = 0;
+					while (i < array.Count && i < items.Count)
+					{
+						errors.AddRange(items[i].Validate(array[i]).Errors);
+						i++;
+					}
+					if (i < array.Count && schema.AdditionalItems != null)
+						if (Equals(schema.AdditionalItems, AdditionalItems.False))
+							errors.Add(new SchemaValidationError(string.Empty, "Schema indicates no additional items are allowed."));
+						else if (!Equals(schema.AdditionalItems, AdditionalItems.True))
+							errors.AddRange(array.Skip(i).SelectMany(j => schema.AdditionalItems.Definition.Validate(j, root).Errors));
+				}
+				else
+				{
+					// have single schema: validate all against this
+					var itemValidations = array.Select(v => schema.Items.Validate(v, root));
+					errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertyName($"[{i}]"))));
+				}
 			}
 			return new SchemaValidationResults(errors);
 		}

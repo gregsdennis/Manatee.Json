@@ -232,7 +232,7 @@ namespace Manatee.Json.Tests.Schema
 		public void ValidateReturnsErrorOnInvalidUriFormat()
 		{
 			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Uri};
-			var json = (JsonValue) "test123";
+			var json = (JsonValue) "test123^%";
 
 			var results = schema.Validate(json);
 

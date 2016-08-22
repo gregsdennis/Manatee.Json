@@ -252,5 +252,65 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
+		[TestMethod]
+		public void ValidateReturnsValidOnNotTooManyProperties()
+		{
+			var schema = new JsonSchema
+			{
+				Type = JsonSchemaTypeDefinition.Object,
+				MaxProperties = 5
+			};
+			var json = new JsonObject { { "test1", "value" }, { "test2", 2 } };
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
+		}
+		[TestMethod]
+		public void ValidateReturnsInvalidOnTooManyProperties()
+		{
+			var schema = new JsonSchema
+			{
+				Type = JsonSchemaTypeDefinition.Object,
+				MaxProperties = 1
+			};
+			var json = new JsonObject { { "test1", "value" }, { "test2", 2 } };
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(1, results.Errors.Count());
+			Assert.AreEqual(false, results.Valid);
+		}
+		[TestMethod]
+		public void ValidateReturnsValidOnNotTooFewProperties()
+		{
+			var schema = new JsonSchema
+			{
+				Type = JsonSchemaTypeDefinition.Object,
+				MinProperties = 1
+			};
+			var json = new JsonObject { { "test1", "value" }, { "test2", 2 } };
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(0, results.Errors.Count());
+			Assert.AreEqual(true, results.Valid);
+		}
+		[TestMethod]
+		public void ValidateReturnsInvalidOnTooFewProperties()
+		{
+			var schema = new JsonSchema
+			{
+				Type = JsonSchemaTypeDefinition.Object,
+				MinProperties = 5
+			};
+			var json = new JsonObject { { "test1", "value" }, { "test2", 2 } };
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(1, results.Errors.Count());
+			Assert.AreEqual(false, results.Valid);
+		}
 	}
 }

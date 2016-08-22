@@ -40,6 +40,10 @@ namespace Manatee.Json.Schema.Validators
 				return new SchemaValidationResults(string.Empty, $"Expected: Object; Actual: {json.Type}.");
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
+			if (obj.Count > schema.MaxProperties)
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected {schema.MaxProperties} or fewer properties; found {obj.Count}."));
+			if (obj.Count < schema.MinProperties)
+				errors.Add(new SchemaValidationError(string.Empty, $"Expected {schema.MinProperties} or more properties; found {obj.Count}."));
 			var properties = schema.Properties ?? new JsonSchemaPropertyDefinitionCollection();
 			foreach (var property in properties)
 			{

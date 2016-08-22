@@ -317,7 +317,8 @@
     <Compile Include="Path\SearchParameters\NameSearchParameter.cs" />
     <Compile Include="Path\SearchParameters\WildCardSearchParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schema\AdditionalPropertiesDefinition.cs" />
+    <Compile Include="Schema\AdditionalItems.cs" />
+    <Compile Include="Schema\AdditionalProperties.cs" />
     <Compile Include="Schema\EnumSchemaValue.cs" />
     <Compile Include="Schema\IJsonSchema.cs" />
     <Compile Include="Schema\IJsonSchemaDependency.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Schema\JsonSchemaReference.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinition.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionCollection.cs" />
+    <Compile Include="Schema\JsonSchemaCollection.cs" />
     <Compile Include="Schema\OnlineSchemaCache.cs" />
     <Compile Include="Schema\PropertyDependency.cs" />
     <Compile Include="Schema\SchemaDependency.cs" />

@@ -87,7 +87,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			foreach (var test in testSet.Tests)
 			{
 				// paste the description of a test to debug it.
-				if (test.Description == "additionalItems as schema")
+				if (test.Description == "")
 				{
 					System.Diagnostics.Debugger.Break();
 				}

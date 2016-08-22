@@ -453,7 +453,10 @@ namespace Manatee.Json.Schema
 		/// Defines a <see cref="Regex"/> pattern for to which the value must adhere.
 		/// </summary>
 		public string Pattern { get; set; }
-		// TODO: AdditionalItems
+		/// <summary>
+		/// Defines any additional items to be expected by this schema.
+		/// </summary>
+		public AdditionalItems AdditionalItems { get; set; }
 		/// <summary>
 		/// Defines the schema for the items contained in the array.
 		/// </summary>
@@ -473,12 +476,10 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a maximum acceptable length.
 		/// </summary>
-		// TODO: MaxProperties
 		public uint? MaxProperties { get; set; }
 		/// <summary>
 		/// Defines a minimum acceptable length.
 		/// </summary>
-		// TODO: MinProperties
 		public uint? MinProperties { get; set; }
 		/// <summary>
 		/// Defines any additional properties to be expected by this schema.
@@ -576,26 +577,21 @@ namespace Manatee.Json.Schema
 			MaxLength = (uint?) obj.TryGetNumber("maxLength");
 			MinLength = (uint?) obj.TryGetNumber("minLength");
 			Pattern = obj.TryGetString("pattern");
+			if (obj.ContainsKey("additionalItems"))
+			{
+				if (obj["additionalItems"].Type == JsonValueType.Boolean)
+					AdditionalItems = obj["additionalItems"].Boolean ? AdditionalItems.True : AdditionalItems.False;
+				else
+					AdditionalItems = new AdditionalItems {Definition = JsonSchemaFactory.FromJson(obj["additionalItems"])};
+			}
 			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			MinItems = (uint?) obj.TryGetNumber("minItems");
 			if (obj.ContainsKey("items"))
-			{
-				var itemEntry = obj["items"];
-				switch (itemEntry.Type)
-				{
-					case JsonValueType.Object:
-						// string implies primitive type
-						Items = JsonSchemaFactory.FromJson(itemEntry);
-						break;
-					case JsonValueType.Array:
-						// array implies "oneOf" several primitive types
-						Type = new JsonSchemaMultiTypeDefinition(true);
-						Type.FromJson(itemEntry, serializer);
-						break;
-				}
-			}
-			if (obj.ContainsKey("uniqueItems")) UniqueItems = obj["uniqueItems"].Boolean;
+				Items = JsonSchemaFactory.FromJson(obj["items"]);
+			UniqueItems = obj.TryGetBoolean("uniqueItems");
 			// Must deserialize "properties" before "required".
+			MaxProperties = (uint?) obj.TryGetNumber("maxProperties");
+			MinProperties = (uint?) obj.TryGetNumber("minProperties");
 			if (obj.ContainsKey("properties"))
 			{
 				Properties = new JsonSchemaPropertyDefinitionCollection();
@@ -620,9 +616,7 @@ namespace Manatee.Json.Schema
 				if (obj["additionalProperties"].Type == JsonValueType.Boolean)
 					AdditionalProperties = obj["additionalProperties"].Boolean ? AdditionalProperties.True : AdditionalProperties.False;
 				else
-				{
 					AdditionalProperties = new AdditionalProperties {Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"])};
-				}
 			}
 			if (obj.ContainsKey("definitions"))
 			{
@@ -710,10 +704,22 @@ namespace Manatee.Json.Schema
 			if (MaxLength.HasValue) json["maxLength"] = MaxLength;
 			if (MinLength.HasValue) json["minLength"] = MinLength;
 			if (Pattern != null) json["pattern"] = Pattern;
-			if (Items != null) json["items"] = Items.ToJson(serializer);
+			if (AdditionalItems != null)
+				json["additionalItems"] = AdditionalItems.ToJson(serializer);
+			if (Items != null)
+			{
+				var items = Items as JsonSchema;
+				var type = items?.Type as JsonSchemaMultiTypeDefinition;
+				if (type != null && !type.IsPrimitive)
+					json["items"] = items.Type.ToJson(serializer);
+				else
+					json["items"] = Items.ToJson(serializer);
+			}
 			if (MaxItems.HasValue) json["maxItems"] = MinItems;
 			if (MinItems.HasValue) json["minItems"] = MinItems;
 			if (UniqueItems ?? false) json["uniqueItems"] = UniqueItems;
+			if (MaxProperties.HasValue) json["maxProperties"] = MaxProperties;
+			if (MinProperties.HasValue) json["minProperties"] = MinProperties;
 			if (requiredProperties.Any()) json["required"] = requiredProperties.ToJson();
 			if (AdditionalProperties != null)
 				json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
@@ -767,6 +773,7 @@ namespace Manatee.Json.Schema
 			if (MaxLength != schema.MaxLength) return false;
 			if (MinLength != schema.MinLength) return false;
 			if (Pattern != schema.Pattern) return false;
+			if (!Equals(AdditionalItems, schema.AdditionalItems)) return false;
 			if (!Equals(Items, schema.Items)) return false;
 			if (MaxItems != schema.MaxItems) return false;
 			if (MinItems != schema.MinItems) return false;
@@ -821,6 +828,7 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ (MaxLength?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (MinLength?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Pattern?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (AdditionalItems?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Items?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (MaxItems?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (MinItems?.GetHashCode() ?? 0);

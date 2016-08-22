@@ -86,7 +86,18 @@ namespace Manatee.Json.Schema
 		public static IJsonSchema FromJson(JsonValue json)
 		{
 			if (json == null) return null;
-			IJsonSchema schema = new JsonSchema();
+			IJsonSchema schema;
+			switch (json.Type)
+			{
+				case JsonValueType.Object:
+					schema = new JsonSchema();
+					break;
+				case JsonValueType.Array:
+					schema = new JsonSchemaCollection();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException("json.Type", "JSON Schema must be objects.");
+			}
 			schema.FromJson(json, null);
 			return schema;
 		}
