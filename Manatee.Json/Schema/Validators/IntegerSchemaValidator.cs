@@ -29,26 +29,15 @@ namespace Manatee.Json.Schema.Validators
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			if (Equals(schema.Type, JsonSchemaTypeDefinition.Integer)) return true;
-			return schema.Maximum.HasValue ||
-			       schema.ExclusiveMaximum.HasValue ||
-			       schema.Minimum.HasValue ||
-			       schema.ExclusiveMinimum.HasValue ||
-			       schema.MultipleOf.HasValue;
+			// we don't care about the other properties if not an integer.  Number will pick those up.
+			return Equals(schema.Type, JsonSchemaTypeDefinition.Integer);
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (Equals(schema.Type, JsonSchemaTypeDefinition.Integer))
-			{
-				if (json.Type != JsonValueType.Number)
-					return new SchemaValidationResults(string.Empty, $"Expected: Integer; Actual: {json.Type}.");
-			}
-			else
-				return new SchemaValidationResults();
-			var number = json.Number;
-			if (!number.IsInt()) return new SchemaValidationResults(string.Empty, "Expected: Integer; Actual: Number.");
-			var integer = (int)number;
+			if (json.Type != JsonValueType.Number || !json.Number.IsInt())
+				return new SchemaValidationResults(string.Empty, $"Expected: Integer; Actual: {json.Type}.");
 			var errors = new List<SchemaValidationError>();
+			var integer = (int)json.Number;
 			if (schema.ExclusiveMinimum ?? false)
 			{
 				if (integer <= schema.Minimum)

@@ -30,14 +30,19 @@ namespace Manatee.Json.Schema.Validators
 		public bool Applies(JsonSchema schema)
 		{
 			return Equals(schema.Type, JsonSchemaTypeDefinition.Object) ||
-			       schema.Properties != null ||
-			       schema.AdditionalProperties != null ||
-				   schema.PatternProperties != null;
+				   schema.Properties != null ||
+				   schema.AdditionalProperties != null ||
+				   schema.PatternProperties != null ||
+				   schema.Dependencies != null;
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			if (json.Type != JsonValueType.Object)
-				return new SchemaValidationResults(string.Empty, $"Expected: Object; Actual: {json.Type}.");
+			{
+				if (Equals(schema.Type, JsonSchemaTypeDefinition.Object))
+					return new SchemaValidationResults(string.Empty, $"Expected: Object; Actual: {json.Type}.");
+				return new SchemaValidationResults();
+			}
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
 			if (obj.Count > schema.MaxProperties)

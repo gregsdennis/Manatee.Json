@@ -39,7 +39,11 @@ namespace Manatee.Json.Schema.Validators
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			if (json.Type != JsonValueType.String)
-				return new SchemaValidationResults(string.Empty, $"Expected: String; Actual: {json.Type}.");
+			{
+				if (Equals(schema.Type, JsonSchemaTypeDefinition.String))
+					return new SchemaValidationResults(string.Empty, $"Expected: Object; String: {json.Type}.");
+				return new SchemaValidationResults();
+			}
 			var str = json.String;
 			var length = str.Length;
 			var errors = new List<SchemaValidationError>();

@@ -32,6 +32,8 @@ namespace Manatee.Json.Schema.Validators
 
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root = null)
 		{
+			// This is a special case in the validator logic that doesn't need the other pattern.
+			// Here we only have to check for boolean: there are no other properties.
 			return json.Type != JsonValueType.Boolean
 				? new SchemaValidationResults(string.Empty, $"Expected: Boolean; Actual: {json.Type}.")
 				: new SchemaValidationResults();

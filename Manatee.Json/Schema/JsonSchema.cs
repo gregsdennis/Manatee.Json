@@ -556,7 +556,7 @@ namespace Manatee.Json.Schema
 		{
 			var jValue = root ?? ToJson(null);
 			var validators = JsonSchemaValidatorFactory.Get(this);
-			var results = validators.Select(v => v.Validate(this, json, jValue));
+			var results = validators.Select(v => v.Validate(this, json, jValue)).ToList();
 			return new SchemaValidationResults(results);
 		}
 		/// <summary>
@@ -574,6 +574,11 @@ namespace Manatee.Json.Schema
 			Description = obj.TryGetString("description");
 			if (obj.ContainsKey("default"))
 				Default = obj["default"];
+			MultipleOf = obj.TryGetNumber("multipleOf");
+			Maximum = obj.TryGetNumber("maximum");
+			ExclusiveMaximum = obj.TryGetBoolean("exclusiveMaximum");
+			Minimum = obj.TryGetNumber("minimum");
+			ExclusiveMinimum = obj.TryGetBoolean("exclusiveMinimum");
 			MaxLength = (uint?) obj.TryGetNumber("maxLength");
 			MinLength = (uint?) obj.TryGetNumber("minLength");
 			Pattern = obj.TryGetString("pattern");

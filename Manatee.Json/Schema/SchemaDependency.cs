@@ -59,6 +59,8 @@ namespace Manatee.Json.Schema
 		/// <returns>The results of the validation.</returns>
 		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
+			if (json.Type != JsonValueType.Object || !json.Object.ContainsKey(PropertyName))
+				return new SchemaValidationResults();
 			return _schema.Validate(json, root);
 		}
 		/// <summary>

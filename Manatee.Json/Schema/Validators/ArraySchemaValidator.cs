@@ -40,11 +40,14 @@ namespace Manatee.Json.Schema.Validators
 
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Type != JsonValueType.Array) return new SchemaValidationResults();
+			if (json.Type != JsonValueType.Array)
+			{
+				if (Equals(schema.Type, JsonSchemaTypeDefinition.Array))
+					return new SchemaValidationResults(string.Empty, $"Expected: Array; Actual: {json.Type}.");
+				return new SchemaValidationResults();
+			}
 			var array = json.Array;
 			var errors = new List<SchemaValidationError>();
-			if (Equals(schema.Type, JsonSchemaTypeDefinition.Array))
-				errors.Add(new SchemaValidationError(string.Empty, $"Expected: Array; Actual: {json.Type}."));
 			if (schema.MinItems.HasValue && array.Count < schema.MinItems)
 				errors.Add(new SchemaValidationError(string.Empty, $"Expected: >= {schema.MinItems} items; Actual: {array.Count} items."));
 			if (schema.MaxItems.HasValue && array.Count > schema.MaxItems)

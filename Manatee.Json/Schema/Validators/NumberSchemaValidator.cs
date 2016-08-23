@@ -37,10 +37,11 @@ namespace Manatee.Json.Schema.Validators
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (Equals(schema.Type, JsonSchemaTypeDefinition.Number))
+			if (json.Type != JsonValueType.Number)
 			{
-				if (json.Type != JsonValueType.Number)
+				if (Equals(schema.Type, JsonSchemaTypeDefinition.Number))
 					return new SchemaValidationResults(string.Empty, $"Expected: Number; Actual: {json.Type}.");
+				return new SchemaValidationResults();
 			}
 			var number = json.Number;
 			var errors = new List<SchemaValidationError>();
