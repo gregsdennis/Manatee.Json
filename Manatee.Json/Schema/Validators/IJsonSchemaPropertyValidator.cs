@@ -14,27 +14,19 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NullSchemaValidator.cs
+	File Name:		IJsonSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		NullSchemaValidator
-	Purpose:		Validates schemas with null type.
+	Class Name:		IJsonSchemaPropertyValidator
+	Purpose:		Defines functionality required to validate JSON in accordance with
+					a schema.
 
 ***************************************************************************************/
+
 namespace Manatee.Json.Schema.Validators
 {
-	internal class NullSchemaValidator : IJsonSchemaValidator
+	internal interface IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema)
-		{
-			return Equals(schema.Type, JsonSchemaTypeDefinition.Null);
-		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
-		{
-			// This is a special case in the validator logic that doesn't need the other pattern.
-			// Here we only have to check for null: there are no other properties.
-			return json.Type != JsonValueType.Null
-				? new SchemaValidationResults(string.Empty, $"Expected: Null; Actual: {json.Type}.")
-				: new SchemaValidationResults();
-		}
+		bool Applies(JsonSchema schema);
+		SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root);
 	}
 }

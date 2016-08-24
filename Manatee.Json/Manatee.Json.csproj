@@ -340,18 +340,27 @@
     <Compile Include="Schema\StringFormat.cs" />
     <Compile Include="Schema\Validators\AllOfSchemaValidator.cs" />
     <Compile Include="Schema\Validators\AnyOfSchemaValidator.cs" />
-    <Compile Include="Schema\Validators\ArraySchemaValidator.cs" />
-    <Compile Include="Schema\Validators\BooleanSchemaValidator.cs" />
+    <Compile Include="Schema\Validators\DependenciesSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\FormatSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\ItemsSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\EnumSchemaValidator.cs" />
-    <Compile Include="Schema\Validators\IJsonSchemaValidator.cs" />
-    <Compile Include="Schema\Validators\NumberSchemaValidator.cs" />
-    <Compile Include="Schema\Validators\IntegerSchemaValidator.cs" />
+    <Compile Include="Schema\Validators\IJsonSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MaxPropertySchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MaxItemsSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MaximumSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MinimumSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MaxLengthSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MinLengthSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MinPropertiesSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MinItemsSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\MultipleOfSchemaValidator.cs" />
     <Compile Include="Schema\Validators\JsonSchemaValidatorFactory.cs" />
     <Compile Include="Schema\Validators\NotSchemaValidator.cs" />
-    <Compile Include="Schema\Validators\NullSchemaValidator.cs" />
-    <Compile Include="Schema\Validators\ObjectSchemaValidator.cs" />
+    <Compile Include="Schema\Validators\PropertiesSchemaValidator.cs" />
     <Compile Include="Schema\Validators\OneOfSchemaValidator.cs" />
-    <Compile Include="Schema\Validators\StringSchemaValidator.cs" />
+    <Compile Include="Schema\Validators\PatternSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\TypeShemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\UniqueItemsSchemaPropertyValidator.cs" />
     <Compile Include="Serialization\DateTimeSerializationFormat.cs">
       <SubType>Code</SubType>
     </Compile>

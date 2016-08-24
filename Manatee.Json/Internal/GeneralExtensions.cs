@@ -99,10 +99,11 @@ namespace Manatee.Json.Internal
 							if (source.Substring(i + 6, 2) == "\\u")
 							{
 								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
-								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
+								hex = (hex - 0xD800)*0x400 + (hex2 - 0xDC00)%0x400 + 0x10000;
 								length += 6;
 							}
 							source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
+							length = 2; // unicode pairs are 2 chars in .Net strings.
 							break;
 						default:
 							result = source;
@@ -252,5 +253,10 @@ namespace Manatee.Json.Internal
 			var listB = b.ToList();
 			return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
 		}
+		public static double Remainder(this double a, double b)
+		{
+			return a - Math.Floor(a/b)*b;
+		}
+
 	}
 }

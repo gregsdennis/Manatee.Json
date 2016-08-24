@@ -14,20 +14,27 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		IJsonSchemaValidator.cs
+	File Name:		PatternSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		IJsonSchemaValidator
-	Purpose:		Defines functionality required to validate JSON in accordance with
-					a schema.
+	Class Name:		PatternSchemaPropertyValidator
+	Purpose:		Validates string-typed schemas with a "pattern" property.
 
 ***************************************************************************************/
+using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal interface IJsonSchemaValidator
+	internal class PatternSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		bool Applies(JsonSchema schema);
-
-		SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root);
+		public bool Applies(JsonSchema schema)
+		{
+			return schema.Pattern != null;
+		}
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		{
+			if (json.Type == JsonValueType.String && schema.Pattern != null && !Regex.IsMatch(json.String, schema.Pattern))
+				return new SchemaValidationResults(string.Empty, $"Value [{json.String}] does not match required Regex pattern [{schema.Pattern}].");
+			return new SchemaValidationResults();
+		}
 	}
 }

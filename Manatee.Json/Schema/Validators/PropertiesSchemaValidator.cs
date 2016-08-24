@@ -14,10 +14,11 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ObjectSchemaValidator.cs
+	File Name:		PropertiesSchemaValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		ObjectSchemaValidator
-	Purpose:		Validates schemas with object-specific properties.
+	Class Name:		PropertiesSchemaValidator
+	Purpose:		Validates schemas with "properties", "additionalProperties",
+					or "patternProperties" properties.
 
 ***************************************************************************************/
 using System.Collections.Generic;
@@ -25,30 +26,19 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class ObjectSchemaValidator : IJsonSchemaValidator
+	internal class PropertiesSchemaValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return Equals(schema.Type, JsonSchemaTypeDefinition.Object) ||
-				   schema.Properties != null ||
+			return schema.Properties != null ||
 				   schema.AdditionalProperties != null ||
-				   schema.PatternProperties != null ||
-				   schema.Dependencies != null;
+				   schema.PatternProperties != null;
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Type != JsonValueType.Object)
-			{
-				if (Equals(schema.Type, JsonSchemaTypeDefinition.Object))
-					return new SchemaValidationResults(string.Empty, $"Expected: Object; Actual: {json.Type}.");
-				return new SchemaValidationResults();
-			}
+			if (json.Type != JsonValueType.Object) return new SchemaValidationResults();
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
-			if (obj.Count > schema.MaxProperties)
-				errors.Add(new SchemaValidationError(string.Empty, $"Expected {schema.MaxProperties} or fewer properties; found {obj.Count}."));
-			if (obj.Count < schema.MinProperties)
-				errors.Add(new SchemaValidationError(string.Empty, $"Expected {schema.MinProperties} or more properties; found {obj.Count}."));
 			var properties = schema.Properties ?? new JsonSchemaPropertyDefinitionCollection();
 			foreach (var property in properties)
 			{
@@ -93,10 +83,6 @@ namespace Manatee.Json.Schema.Validators
 					var extraErrors = localSchema.Validate(extraData[key], root).Errors;
 					errors.AddRange(extraErrors.Select(e => e.PrependPropertyName(key)));
 				}
-			}
-			if (schema.Dependencies != null)
-			{
-				errors.AddRange(schema.Dependencies.SelectMany(d => d.Validate(json, root).Errors));
 			}
 			return new SchemaValidationResults(errors);
 		}

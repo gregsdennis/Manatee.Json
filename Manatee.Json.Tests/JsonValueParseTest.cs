@@ -173,8 +173,17 @@ namespace Manatee.Json.Tests
 		[TestMethod]
 		public void Parse_StringValueWithSurrogateUnicodePair_ReturnsCorrectJsonValue()
 		{
-			var json = "\"\\uD85A\\uDC21\"";
-			JsonValue expected = char.ConvertFromUtf32(0x16821);
+			var json = "\"\\uD83D\\uDCA9\"";
+			JsonValue expected = char.ConvertFromUtf32(0x1F4A9);
+			var actual = JsonValue.Parse(json);
+
+			Assert.AreEqual(expected.String, actual.String);
+		}
+		[TestMethod]
+		public void Parse_StringValueWith2SurrogateUnicodePairs_ReturnsCorrectJsonValue()
+		{
+			var json = "\"\\uD83D\\uDCA9\\uD83D\\uDCA9\"";
+			JsonValue expected = char.ConvertFromUtf32(0x1F4A9) + char.ConvertFromUtf32(0x1F4A9);
 			var actual = JsonValue.Parse(json);
 
 			Assert.AreEqual(expected.String, actual.String);

@@ -14,30 +14,25 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumSchemaValidator.cs
+	File Name:		FormatSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		EnumSchemaValidator
-	Purpose:		Validates schema with an "enum" property.
+	Class Name:		FormatSchemaPropertyValidator
+	Purpose:		Validates string-typed schema with the "format" keyword.
 
 ***************************************************************************************/
-
-using System.Linq;
-
 namespace Manatee.Json.Schema.Validators
 {
-	internal class EnumSchemaValidator : IJsonSchemaPropertyValidator
+	internal class FormatSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.Enum != null;
+			return schema.Format != null;
 		}
-
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
-			return errors.Any(r => r.Valid)
-				? new SchemaValidationResults()
-				: new SchemaValidationResults(errors);
+			if (json.Type == JsonValueType.String && schema.Format != null && !schema.Format.Validate(json.String))
+				return new SchemaValidationResults(string.Empty, $"Value [{json.String}] is not in an acceptable {schema.Format.Key} format.");
+			return new SchemaValidationResults();
 		}
 	}
 }

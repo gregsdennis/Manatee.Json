@@ -14,30 +14,36 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumSchemaValidator.cs
+	File Name:		MinimumSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		EnumSchemaValidator
-	Purpose:		Validates schema with an "enum" property.
+	Class Name:		MinimumSchemaPropertyValidator
+	Purpose:		Validates schema with "minimum" or "exclusiveMinimum" properties.
 
 ***************************************************************************************/
-
-using System.Linq;
-
 namespace Manatee.Json.Schema.Validators
 {
-	internal class EnumSchemaValidator : IJsonSchemaPropertyValidator
+	internal class MinimumSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.Enum != null;
+			return schema.Minimum.HasValue || (schema.ExclusiveMinimum ?? false);
 		}
-
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
-			return errors.Any(r => r.Valid)
-				? new SchemaValidationResults()
-				: new SchemaValidationResults(errors);
+			if (json.Type == JsonValueType.Number)
+			{
+				if (schema.ExclusiveMinimum ?? false)
+				{
+					if (json.Number <= schema.Minimum)
+						return new SchemaValidationResults(string.Empty, $"Expected: > {schema.Minimum}; Actual: {json.Number}.");
+				}
+				else
+				{
+					if (json.Number < schema.Minimum)
+						return new SchemaValidationResults(string.Empty, $"Expected: >= {schema.Minimum}; Actual: {json.Number}.");
+				}
+			}
+			return new SchemaValidationResults();
 		}
 	}
 }

@@ -14,30 +14,36 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumSchemaValidator.cs
+	File Name:		MaximumSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		EnumSchemaValidator
-	Purpose:		Validates schema with an "enum" property.
+	Class Name:		MaximumSchemaPropertyValidator
+	Purpose:		Validates schema with "maximum" or "exclusiveMaximum" properties.
 
 ***************************************************************************************/
-
-using System.Linq;
-
 namespace Manatee.Json.Schema.Validators
 {
-	internal class EnumSchemaValidator : IJsonSchemaPropertyValidator
+	internal class MaximumSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.Enum != null;
+			return schema.Maximum.HasValue || (schema.ExclusiveMaximum ?? false);
 		}
-
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
-			return errors.Any(r => r.Valid)
-				? new SchemaValidationResults()
-				: new SchemaValidationResults(errors);
+			if (json.Type == JsonValueType.Number)
+			{
+				if (schema.ExclusiveMaximum ?? false)
+				{
+					if (json.Number >= schema.Maximum)
+						return new SchemaValidationResults(string.Empty, $"Expected: < {schema.Maximum}; Actual: {json.Number}.");
+				}
+				else
+				{
+					if (json.Number > schema.Maximum)
+						return new SchemaValidationResults(string.Empty, $"Expected: <= {schema.Maximum}; Actual: {json.Number}.");
+				}
+			}
+			return new SchemaValidationResults();
 		}
 	}
 }

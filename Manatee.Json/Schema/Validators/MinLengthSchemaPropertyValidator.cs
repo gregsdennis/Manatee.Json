@@ -14,30 +14,31 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumSchemaValidator.cs
+	File Name:		MinLengthSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		EnumSchemaValidator
-	Purpose:		Validates schema with an "enum" property.
+	Class Name:		MinLengthSchemaPropertyValidator
+	Purpose:		Validates schema with a "minLength" property.
 
 ***************************************************************************************/
-
-using System.Linq;
+using System.Globalization;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class EnumSchemaValidator : IJsonSchemaPropertyValidator
+	internal class MinLengthSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.Enum != null;
+			return schema.MinLength.HasValue;
 		}
-
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
-			return errors.Any(r => r.Valid)
-				? new SchemaValidationResults()
-				: new SchemaValidationResults(errors);
+			if (json.Type == JsonValueType.String)
+			{
+				var length = new StringInfo(json.String).LengthInTextElements;
+				if (schema.MinLength.HasValue && (length < schema.MinLength))
+					return new SchemaValidationResults(string.Empty, $"Expected: length >= {schema.MinLength}; Actual: {length}.");
+			}
+			return new SchemaValidationResults();
 		}
 	}
 }

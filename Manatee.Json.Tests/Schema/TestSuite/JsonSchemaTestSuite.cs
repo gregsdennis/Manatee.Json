@@ -70,6 +70,12 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 		private void _RunFile(string fileName)
 		{
+			// paste the filename of a test suite to debug it.
+			if (fileName == @"")
+			{
+				System.Diagnostics.Debugger.Break();
+			}
+
 			var contents = File.ReadAllText(fileName);
 			var json = JsonValue.Parse(contents);
 

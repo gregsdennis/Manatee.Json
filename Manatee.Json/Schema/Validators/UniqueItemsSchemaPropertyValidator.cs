@@ -14,29 +14,30 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		BooleanSchemaValidator.cs
+	File Name:		UniqueItemsSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		BooleanSchemaValidator
-	Purpose:		Validates schemas with boolean type.
+	Class Name:		UniqueItemsSchemaPropertyValidator
+	Purpose:		Validates schema with a "uniqueItems" property.
 
 ***************************************************************************************/
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class BooleanSchemaValidator : IJsonSchemaValidator
+	internal class UniqueItemsSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return Equals(schema.Type, JsonSchemaTypeDefinition.Boolean);
+			return schema.UniqueItems ?? false;
 		}
-
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root = null)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			// This is a special case in the validator logic that doesn't need the other pattern.
-			// Here we only have to check for boolean: there are no other properties.
-			return json.Type != JsonValueType.Boolean
-				? new SchemaValidationResults(string.Empty, $"Expected: Boolean; Actual: {json.Type}.")
-				: new SchemaValidationResults();
+			if (json.Type == JsonValueType.Array && (json.Array.Count != json.Array.Distinct().Count()))
+				return new SchemaValidationResults(string.Empty, "Expected unique items; Duplicates were found.");
+			return new SchemaValidationResults();
 		}
 	}
 }

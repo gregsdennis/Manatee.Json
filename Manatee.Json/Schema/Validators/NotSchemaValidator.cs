@@ -22,7 +22,7 @@
 ***************************************************************************************/
 namespace Manatee.Json.Schema.Validators
 {
-	internal class NotSchemaValidator : IJsonSchemaValidator
+	internal class NotSchemaValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{

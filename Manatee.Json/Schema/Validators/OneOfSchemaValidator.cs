@@ -24,7 +24,7 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class OneOfSchemaValidator : IJsonSchemaValidator
+	internal class OneOfSchemaValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{

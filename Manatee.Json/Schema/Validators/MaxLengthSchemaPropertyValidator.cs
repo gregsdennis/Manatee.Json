@@ -14,30 +14,31 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumSchemaValidator.cs
+	File Name:		MaxLengthSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		EnumSchemaValidator
-	Purpose:		Validates schema with an "enum" property.
+	Class Name:		MaxLengthSchemaPropertyValidator
+	Purpose:		Validates schema with a "maxLength" property.
 
 ***************************************************************************************/
-
-using System.Linq;
+using System.Globalization;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class EnumSchemaValidator : IJsonSchemaPropertyValidator
+	internal class MaxLengthSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.Enum != null;
+			return schema.MaxLength.HasValue;
 		}
-
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
-			return errors.Any(r => r.Valid)
-				? new SchemaValidationResults()
-				: new SchemaValidationResults(errors);
+			if (json.Type == JsonValueType.String)
+			{
+				var length = new StringInfo(json.String).LengthInTextElements;
+				if (schema.MaxLength.HasValue && (length > schema.MaxLength))
+					return new SchemaValidationResults(string.Empty, $"Expected: length <= {schema.MaxLength}; Actual: {length}.");
+			}
+			return new SchemaValidationResults();
 		}
 	}
 }

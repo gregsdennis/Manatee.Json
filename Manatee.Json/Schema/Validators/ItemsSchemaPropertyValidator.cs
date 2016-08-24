@@ -14,10 +14,10 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ArraySchemaValidator.cs
+	File Name:		ItemsSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		ArraySchemaValidator
-	Purpose:		Validates schema with array-specific properties.
+	Class Name:		ItemsSchemaPropertyValidator
+	Purpose:		Validates schema with "items" or "additionalItems" properties.
 
 ***************************************************************************************/
 
@@ -26,36 +26,19 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class ArraySchemaValidator : IJsonSchemaValidator
+	internal class ItemsSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return Equals(schema.Type, JsonSchemaTypeDefinition.Array) ||
-			       schema.Items != null ||
-			       schema.MinItems.HasValue ||
-			       schema.MaxItems.HasValue ||
-			       schema.UniqueItems.HasValue ||
-			       schema.AdditionalItems != null;
+			return schema.Items != null || schema.AdditionalItems != null;
 		}
 
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Type != JsonValueType.Array)
-			{
-				if (Equals(schema.Type, JsonSchemaTypeDefinition.Array))
-					return new SchemaValidationResults(string.Empty, $"Expected: Array; Actual: {json.Type}.");
-				return new SchemaValidationResults();
-			}
-			var array = json.Array;
 			var errors = new List<SchemaValidationError>();
-			if (schema.MinItems.HasValue && array.Count < schema.MinItems)
-				errors.Add(new SchemaValidationError(string.Empty, $"Expected: >= {schema.MinItems} items; Actual: {array.Count} items."));
-			if (schema.MaxItems.HasValue && array.Count > schema.MaxItems)
-				errors.Add(new SchemaValidationError(string.Empty, $"Expected: <= {schema.MaxItems} items; Actual: {array.Count} items."));
-			if ((schema.UniqueItems ?? false) && (array.Count != array.Distinct().Count()))
-				errors.Add(new SchemaValidationError(string.Empty, "Expected unique items; Duplicates were found."));
-			if (schema.Items != null)
+			if (json.Type == JsonValueType.Array)
 			{
+				var array = json.Array;
 				var items = schema.Items as JsonSchemaCollection;
 				if (items != null)
 				{
@@ -72,7 +55,7 @@ namespace Manatee.Json.Schema.Validators
 						else if (!Equals(schema.AdditionalItems, AdditionalItems.True))
 							errors.AddRange(array.Skip(i).SelectMany(j => schema.AdditionalItems.Definition.Validate(j, root).Errors));
 				}
-				else
+				else if (schema.Items != null)
 				{
 					// have single schema: validate all against this
 					var itemValidations = array.Select(v => schema.Items.Validate(v, root));
