@@ -40,5 +40,7 @@ namespace Manatee.Json.Schema
 			get { return _download ?? (_download = uri => new WebClient().DownloadString(uri)); }
 			set { _download = value; }
 		}
+
+		public static bool ValidateFormat { get; set; }
 	}
 }

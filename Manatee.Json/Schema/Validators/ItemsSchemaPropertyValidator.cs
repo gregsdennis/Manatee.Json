@@ -46,7 +46,7 @@ namespace Manatee.Json.Schema.Validators
 					var i = 0;
 					while (i < array.Count && i < items.Count)
 					{
-						errors.AddRange(items[i].Validate(array[i]).Errors);
+						errors.AddRange(items[i].Validate(array[i], root).Errors);
 						i++;
 					}
 					if (i < array.Count && schema.AdditionalItems != null)

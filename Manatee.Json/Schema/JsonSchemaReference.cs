@@ -22,8 +22,11 @@
 ***************************************************************************************/
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Path;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -51,7 +54,7 @@ namespace Manatee.Json.Schema
 		/// <remarks>
 		/// The <see cref="Resolve"/> method must first be called.
 		/// </remarks>
-		public virtual IJsonSchema Resolved => _schema;
+		public IJsonSchema Resolved => _schema;
 
 		internal JsonSchemaReference() {}
 		/// <summary>
@@ -129,7 +132,16 @@ namespace Manatee.Json.Schema
 			var path = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
 			var jValue = root;
 			if (!string.IsNullOrWhiteSpace(address))
+			{
+				Uri uri;
+				var search = JsonPathWith.Search("id");
+				var allIds = new Stack<string>(search.Evaluate(root ?? new JsonObject()).Select(jv => jv.String));
+				while (allIds.Any() && !Uri.TryCreate(address, UriKind.Absolute, out uri))
+				{
+					address = allIds.Pop() + address;
+				}
 				jValue = OnlineSchemaCache.Get(address).ToJson(null);
+			}
 			if (jValue == null) return;
 			if (jValue == RootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
@@ -141,8 +153,19 @@ namespace Manatee.Json.Schema
 			if (!properties.Any()) return JsonSchemaFactory.FromJson(root);
 			var value = root;
 			foreach (var property in properties)
-				if (!value.Object.ContainsKey(property)) return null;
-				else value = value.Object[property];
+			{
+				if (value.Type == JsonValueType.Object)
+				{
+					if (!value.Object.ContainsKey(property)) return null;
+					value = value.Object[property];
+				}
+				else if (value.Type == JsonValueType.Array)
+				{
+					int index;
+					if (!int.TryParse(property, out index) || index >= value.Array.Count) return null;
+					value = value.Array[index];
+				}
+			}
 			return JsonSchemaFactory.FromJson(value);
 		}
 	}

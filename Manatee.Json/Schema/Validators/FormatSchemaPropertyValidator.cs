@@ -26,7 +26,7 @@ namespace Manatee.Json.Schema.Validators
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.Format != null;
+			return schema.Format != null && JsonSchemaOptions.ValidateFormat;
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{

@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Manatee.Json.Schema;
 
 namespace Manatee.Json.Internal
 {
@@ -253,10 +254,5 @@ namespace Manatee.Json.Internal
 			var listB = b.ToList();
 			return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
 		}
-		public static double Remainder(this double a, double b)
-		{
-			return a - Math.Floor(a/b)*b;
-		}
-
 	}
 }

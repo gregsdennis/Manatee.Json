@@ -534,17 +534,6 @@ namespace Manatee.Json.Schema
 		/// Creates a new instance of the <see cref="JsonSchema"/> class.
 		/// </summary>
 		public JsonSchema() {}
-		/// <summary>
-		/// Creates a new instance of the <see cref="JsonSchema"/> class.
-		/// </summary>
-		/// <param name="type">The JSON Schema type which defines this schema.</param>
-		/// <exception cref="ArgumentNullException">Thrown when <paramref name="type"/> is null.</exception>
-		protected JsonSchema(JsonSchemaTypeDefinition type)
-		{
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
-			Type = type;
-		}
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -594,9 +583,9 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("items"))
 				Items = JsonSchemaFactory.FromJson(obj["items"]);
 			UniqueItems = obj.TryGetBoolean("uniqueItems");
-			// Must deserialize "properties" before "required".
 			MaxProperties = (uint?) obj.TryGetNumber("maxProperties");
 			MinProperties = (uint?) obj.TryGetNumber("minProperties");
+			// Must deserialize "properties" before "required".
 			if (obj.ContainsKey("properties"))
 			{
 				Properties = new JsonSchemaPropertyDefinitionCollection();
