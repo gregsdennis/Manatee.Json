@@ -531,11 +531,6 @@ namespace Manatee.Json.Schema
 		public StringFormat Format { get; set; }
 
 		/// <summary>
-		/// Creates a new instance of the <see cref="JsonSchema"/> class.
-		/// </summary>
-		public JsonSchema() {}
-
-		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
 		/// <param name="json">A <see cref="JsonValue"/></param>

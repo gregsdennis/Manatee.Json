@@ -22,9 +22,11 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json
 {
@@ -116,8 +118,10 @@ namespace Manatee.Json
 		{
 			var json = obj as JsonObject;
 			if (json == null) return false;
-			return Keys.All(json.ContainsKey) && (Keys.Count == json.Keys.Count) &&
-			       this.All(pair => json[pair.Key].Equals(pair.Value));
+
+			if (!Keys.ContentsEqual(json.Keys)) return false;
+
+			return this.All(pair => json[pair.Key].Equals(pair.Value));
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -128,7 +132,7 @@ namespace Manatee.Json
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return this.GetCollectionHashCode();
 		}
 	}
 }

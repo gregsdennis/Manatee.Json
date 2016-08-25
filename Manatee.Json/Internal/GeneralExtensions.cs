@@ -242,7 +242,20 @@ namespace Manatee.Json.Internal
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
 		{
-			return collection.Aggregate(0, (current, obj) => unchecked (current ^ 397) ^ obj.GetHashCode());
+			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ obj.GetHashCode());
+		}
+		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
+		{
+			return collection.OrderBy(kvp => kvp.Key, StringComparer.InvariantCulture)
+			                 .Aggregate(0, (current, kvp) =>
+				                            {
+					                            unchecked
+					                            {
+						                            var code = (current*397) ^ kvp.Key.GetHashCode();
+						                            code = (code*397) ^ (kvp.Value?.GetHashCode() ?? 0);
+						                            return code;
+					                            }
+				                            });
 		}
 		public static bool ContentsEqual<T>(this IEnumerable<T> a, IEnumerable<T> b)
 		{

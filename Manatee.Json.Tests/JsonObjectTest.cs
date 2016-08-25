@@ -21,7 +21,7 @@
 
 ***************************************************************************************/
 
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -36,6 +36,7 @@ namespace Manatee.Json.Tests
 			var json1 = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
 			var json2 = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
 			Assert.IsTrue(json1.Equals(json2));
+			Assert.AreEqual(json1.GetHashCode(), json2.GetHashCode());
 		}
 		[TestMethod]
 		public void Equals_SameValuesDifferentOrder_ReturnsTrue()
@@ -43,6 +44,7 @@ namespace Manatee.Json.Tests
 			var json1 = new JsonObject {{"int", 42}, {"bool", false}, {"string", "a string"}};
 			var json2 = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
 			Assert.IsTrue(json1.Equals(json2));
+			Assert.AreEqual(json1.GetHashCode(), json2.GetHashCode());
 		}
 		[TestMethod]
 		public void Equals_DifferentValues_ReturnsFalse()
@@ -50,6 +52,8 @@ namespace Manatee.Json.Tests
 			var json1 = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
 			var json2 = new JsonObject {{"bool", false}, {"int", "42"}, {"string", "a string"}};
 			Assert.IsFalse(json1.Equals(json2));
+			Assert.AreNotEqual(((JsonValue) 42).GetHashCode(), ((JsonValue) "42").GetHashCode());
+			//Assert.AreNotEqual(json1.GetHashCode(), json2.GetHashCode());
 		}
 		[TestMethod]
 		public void Parse_ValidString_ReturnsCorrectObject()

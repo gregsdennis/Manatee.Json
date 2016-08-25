@@ -24,6 +24,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json
 {
@@ -110,7 +111,7 @@ namespace Manatee.Json
 		public override int GetHashCode()
 		{
 			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
-			return base.GetHashCode();
+			return this.GetCollectionHashCode();
 		}
 	}
 }
