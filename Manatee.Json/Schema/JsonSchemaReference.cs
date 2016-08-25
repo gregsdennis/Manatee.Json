@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Manatee.Json.Internal;
 using Manatee.Json.Path;
 using Manatee.Json.Serialization;
@@ -33,15 +35,15 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
-	public class JsonSchemaReference : IJsonSchema
+	public class JsonSchemaReference : JsonSchema
 	{
 		/// <summary>
 		/// Defines a reference to the root schema.
 		/// </summary>
 		public static readonly JsonSchemaReference Root = new JsonSchemaReference("#");
-		private static readonly JsonValue RootJson = Root.ToJson(null);
 
-		private IJsonSchema _schema;
+		private static readonly JsonValue _rootJson = Root.ToJson(null);
+		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
 		/// <summary>
 		/// Defines the reference in respect to the root schema.
@@ -53,7 +55,7 @@ namespace Manatee.Json.Schema
 		/// <remarks>
 		/// The <see cref="Resolve"/> method must first be called.
 		/// </remarks>
-		public IJsonSchema Resolved => _schema;
+		public IJsonSchema Resolved { get; private set; }
 
 		internal JsonSchemaReference() {}
 		/// <summary>
@@ -72,12 +74,13 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (_schema == null)
+			var results = base.Validate(json, root);
+			if (Resolved == null)
 				Resolve(root);
 			return Resolved?.Validate(json, root) ??
-			       new SchemaValidationResults(new[] {new SchemaValidationError(null, "Error finding referenced schema.")});
+			       new SchemaValidationResults(new[] {new SchemaValidationError(null, "Error finding referenced schema.")}.Union(results.Errors));
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
@@ -85,8 +88,9 @@ namespace Manatee.Json.Schema
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
-		public void FromJson(JsonValue json, JsonSerializer serializer)
+		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
+			base.FromJson(json, serializer);
 			Reference = json.Object["$ref"].String;
 		}
 		/// <summary>
@@ -95,9 +99,11 @@ namespace Manatee.Json.Schema
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public JsonValue ToJson(JsonSerializer serializer)
+		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonObject {{"$ref", Reference}};
+			var json = base.ToJson(serializer);
+			json.Object["$ref"] = Reference;
+			return json;
 		}
 		/// <summary>
 		/// Indicates whether the current object is equal to another object of the same type.
@@ -106,7 +112,7 @@ namespace Manatee.Json.Schema
 		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
 		/// </returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public virtual bool Equals(IJsonSchema other)
+		public override bool Equals(IJsonSchema other)
 		{
 			var schema = other as JsonSchemaReference;
 			return schema != null && schema.Reference == Reference;
@@ -142,9 +148,9 @@ namespace Manatee.Json.Schema
 				jValue = OnlineSchemaCache.Get(address).ToJson(null);
 			}
 			if (jValue == null) return;
-			if (jValue == RootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
+			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
-			_schema = ResolveLocalReference(jValue, path);
+			Resolved = ResolveLocalReference(jValue, path);
 		}
 		private static IJsonSchema ResolveLocalReference(JsonValue root, string path)
 		{
@@ -170,9 +176,16 @@ namespace Manatee.Json.Schema
 		}
 		private static string Unescape(string reference)
 		{
-			return reference.Replace("~1", "/")
-			                .Replace("~0", "~")
-			                .Replace("%25", "%");
+			var unescaped = reference.Replace("~1", "/")
+			                .Replace("~0", "~");
+			var matches = _generalEscapePattern.Matches(unescaped);
+			foreach (Match match in matches)
+			{
+				var value = int.Parse(match.Groups["Value"].Value, NumberStyles.HexNumber);
+				var ch = (char) value;
+				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
+			}
+			return unescaped;
 		}
 	}
 }

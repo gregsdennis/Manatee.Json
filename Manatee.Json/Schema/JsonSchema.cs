@@ -363,11 +363,12 @@ namespace Manatee.Json.Schema
 				Default = new JsonObject()
 			};
 
-		private static readonly IEnumerable<string> DefinedProperties =
+		private static readonly IEnumerable<string> _definedProperties =
 			Draft04.Properties.Select(p => p.Name)
 			       .Union(new[]
 				              {
-					              "format"
+					              "format",
+								  "$ref"
 				              }).ToList();
 
 		private string _id;
@@ -676,7 +677,9 @@ namespace Manatee.Json.Schema
 				Not = JsonSchemaFactory.FromJson(obj["not"]);
 			var formatKey = obj.TryGetString("format");
 			Format = StringFormat.GetFormat(formatKey);
-			ExtraneousDetails = obj.Where(kvp => !DefinedProperties.Contains(kvp.Key)).ToJson();
+			var details = obj.Where(kvp => !_definedProperties.Contains(kvp.Key)).ToJson();
+			if (details.Any())
+				ExtraneousDetails = details;
 		}
 
 		/// <summary>
@@ -748,7 +751,7 @@ namespace Manatee.Json.Schema
 			if (Format != null) json["format"] = Format.Key;
 			if (ExtraneousDetails != null)
 			{
-				foreach (var kvp in ExtraneousDetails.Where(kvp => !DefinedProperties.Contains(kvp.Key)))
+				foreach (var kvp in ExtraneousDetails.Where(kvp => !_definedProperties.Contains(kvp.Key)))
 				{
 					json[kvp.Key] = kvp.Value;
 				}
