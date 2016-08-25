@@ -40,7 +40,6 @@ namespace Manatee.Json.Schema
 		/// Defines an empty Schema.  Useful for specifying that any schema is valid.
 		/// </summary>
 		public static readonly JsonSchema Empty = new JsonSchema();
-
 		/// <summary>
 		/// Defines the Draft-04 Schema as presented at http://json-schema.org/draft-04/schema#
 		/// </summary>
@@ -364,6 +363,13 @@ namespace Manatee.Json.Schema
 				Default = new JsonObject()
 			};
 
+		private static readonly IEnumerable<string> DefinedProperties =
+			Draft04.Properties.Select(p => p.Name)
+			       .Union(new[]
+				              {
+					              "format"
+				              }).ToList();
+
 		private string _id;
 		private string _schema;
 		private double? _multipleOf;
@@ -529,6 +535,10 @@ namespace Manatee.Json.Schema
 		/// Defines a required format for the string.
 		/// </summary>
 		public StringFormat Format { get; set; }
+		/// <summary>
+		/// Gets other, non-schema-defined properties.
+		/// </summary>
+		public JsonObject ExtraneousDetails { get; set; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -666,6 +676,7 @@ namespace Manatee.Json.Schema
 				Not = JsonSchemaFactory.FromJson(obj["not"]);
 			var formatKey = obj.TryGetString("format");
 			Format = StringFormat.GetFormat(formatKey);
+			ExtraneousDetails = obj.Where(kvp => !DefinedProperties.Contains(kvp.Key)).ToJson();
 		}
 
 		/// <summary>
@@ -735,6 +746,13 @@ namespace Manatee.Json.Schema
 			if (OneOf != null) json["oneOf"] = OneOf.ToJson(serializer);
 			if (Not != null) json["not"] = Not.ToJson(serializer);
 			if (Format != null) json["format"] = Format.Key;
+			if (ExtraneousDetails != null)
+			{
+				foreach (var kvp in ExtraneousDetails.Where(kvp => !DefinedProperties.Contains(kvp.Key)))
+				{
+					json[kvp.Key] = kvp.Value;
+				}
+			}
 			return json;
 		}
 		/// <summary>

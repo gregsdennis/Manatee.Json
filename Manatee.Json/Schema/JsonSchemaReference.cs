@@ -22,7 +22,6 @@
 ***************************************************************************************/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -154,19 +153,26 @@ namespace Manatee.Json.Schema
 			var value = root;
 			foreach (var property in properties)
 			{
+				var unescaped = Unescape(property);
 				if (value.Type == JsonValueType.Object)
 				{
-					if (!value.Object.ContainsKey(property)) return null;
-					value = value.Object[property];
+					if (!value.Object.ContainsKey(unescaped)) return null;
+					value = value.Object[unescaped];
 				}
 				else if (value.Type == JsonValueType.Array)
 				{
 					int index;
-					if (!int.TryParse(property, out index) || index >= value.Array.Count) return null;
+					if (!int.TryParse(unescaped, out index) || index >= value.Array.Count) return null;
 					value = value.Array[index];
 				}
 			}
 			return JsonSchemaFactory.FromJson(value);
+		}
+		private static string Unescape(string reference)
+		{
+			return reference.Replace("~1", "/")
+			                .Replace("~0", "~")
+			                .Replace("%25", "%");
 		}
 	}
 }

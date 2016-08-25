@@ -93,7 +93,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			foreach (var test in testSet.Tests)
 			{
 				// paste the description of a test to debug it.
-				if (test.Description == "")
+				if (test.Description == "nested ref valid")
 				{
 					System.Diagnostics.Debugger.Break();
 				}
