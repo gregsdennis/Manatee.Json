@@ -14,35 +14,30 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		OneOfSchemaValidator.cs
+	File Name:		EnumSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		OneOfSchemaValidator
-	Purpose:		Validates schemas with a "oneOf" property.
+	Class Name:		EnumSchemaPropertyValidator
+	Purpose:		Validates schema with an "enum" property.
 
 ***************************************************************************************/
+
 using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class OneOfSchemaValidator : IJsonSchemaPropertyValidator
+	internal class EnumSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.OneOf != null;
+			return schema.Enum != null;
 		}
+
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.OneOf.Select(s => s.Validate(json, root)).ToList();
-			var validCount = errors.Count(r => r.Valid);
-			switch (validCount)
-			{
-				case 0:
-					return new SchemaValidationResults(errors);
-				case 1:
-					return new SchemaValidationResults();
-				default:
-					return new SchemaValidationResults(string.Empty, "More than one option was valid.");
-			}
+			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
+			return errors.Any(r => r.Valid)
+				? new SchemaValidationResults()
+				: new SchemaValidationResults(errors);
 		}
 	}
 }

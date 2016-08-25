@@ -14,25 +14,27 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		MultipleOfSchemaValidator.cs
+	File Name:		AllOfSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		MultipleOfSchemaValidator
-	Purpose:		Validates schemas with a "multipleOf" property.
+	Class Name:		AllOfSchemaPropertyValidator
+	Purpose:		Validates schema with an "allOf" property.
 
 ***************************************************************************************/
+
+using System.Linq;
+
 namespace Manatee.Json.Schema.Validators
 {
-	internal class MultipleOfSchemaValidator : IJsonSchemaPropertyValidator
+	internal class AllOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.MultipleOf.HasValue;
+			return schema.AllOf != null;
 		}
+
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Type == JsonValueType.Number && (decimal) json.Number%(decimal) schema.MultipleOf.Value != 0)
-				return new SchemaValidationResults(string.Empty, $"Expected: {json.Number}%{schema.MultipleOf}=0; Actual: {json.Number%schema.MultipleOf}.");
-			return new SchemaValidationResults();
+			return new SchemaValidationResults(schema.AllOf.Select(s => s.Validate(json, root)));
 		}
 	}
 }

@@ -555,7 +555,7 @@ namespace Manatee.Json.Schema
 		public virtual SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			var jValue = root ?? ToJson(null);
-			var validators = JsonSchemaValidatorFactory.Get(this);
+			var validators = JsonSchemaPropertyValidatorFactory.Get(this);
 			var results = validators.Select(v => v.Validate(this, json, jValue)).ToList();
 			return new SchemaValidationResults(results);
 		}

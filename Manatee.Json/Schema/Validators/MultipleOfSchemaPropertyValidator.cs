@@ -14,30 +14,25 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		EnumSchemaValidator.cs
+	File Name:		MultipleOfSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		EnumSchemaValidator
-	Purpose:		Validates schema with an "enum" property.
+	Class Name:		MultipleOfSchemaPropertyValidator
+	Purpose:		Validates schemas with a "multipleOf" property.
 
 ***************************************************************************************/
-
-using System.Linq;
-
 namespace Manatee.Json.Schema.Validators
 {
-	internal class EnumSchemaValidator : IJsonSchemaPropertyValidator
+	internal class MultipleOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
-			return schema.Enum != null;
+			return schema.MultipleOf.HasValue;
 		}
-
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
-			return errors.Any(r => r.Valid)
-				? new SchemaValidationResults()
-				: new SchemaValidationResults(errors);
+			if (json.Type == JsonValueType.Number && (decimal) json.Number%(decimal) schema.MultipleOf.Value != 0)
+				return new SchemaValidationResults(string.Empty, $"Expected: {json.Number}%{schema.MultipleOf}=0; Actual: {json.Number%schema.MultipleOf}.");
+			return new SchemaValidationResults();
 		}
 	}
 }

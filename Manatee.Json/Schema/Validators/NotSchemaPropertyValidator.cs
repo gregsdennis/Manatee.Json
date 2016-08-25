@@ -14,15 +14,15 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NotSchemaValidator.cs
+	File Name:		NotSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		NotSchemaValidator
+	Class Name:		NotSchemaPropertyValidator
 	Purpose:		Validates schemas with a "not" property.
 
 ***************************************************************************************/
 namespace Manatee.Json.Schema.Validators
 {
-	internal class NotSchemaValidator : IJsonSchemaPropertyValidator
+	internal class NotSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{

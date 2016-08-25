@@ -14,9 +14,9 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		AnyOfSchemaValidator.cs
+	File Name:		AnyOfSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		AnyOfSchemaValidator
+	Class Name:		AnyOfSchemaPropertyValidator
 	Purpose:		Validates schema with an "anyOf" property.
 
 ***************************************************************************************/
@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class AnyOfSchemaValidator : IJsonSchemaPropertyValidator
+	internal class AnyOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{

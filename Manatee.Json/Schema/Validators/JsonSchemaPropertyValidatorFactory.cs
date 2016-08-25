@@ -14,9 +14,9 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		JsonSchemaValidatorFactory.cs
+	File Name:		JsonSchemaPropertyValidatorFactory.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		JsonSchemaValidatorFactory
+	Class Name:		JsonSchemaPropertyValidatorFactory
 	Purpose:		Provides applicable validators.
 
 ***************************************************************************************/
@@ -26,11 +26,11 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal static class JsonSchemaValidatorFactory
+	internal static class JsonSchemaPropertyValidatorFactory
 	{
 		private static readonly IEnumerable<IJsonSchemaPropertyValidator> AllValidators;
 
-		static JsonSchemaValidatorFactory()
+		static JsonSchemaPropertyValidatorFactory()
 		{
 			AllValidators = typeof(IJsonSchemaPropertyValidator).Assembly.GetTypes()
 			                                            .Where(t => typeof(IJsonSchemaPropertyValidator).IsAssignableFrom(t) &&
