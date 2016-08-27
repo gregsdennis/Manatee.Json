@@ -27,7 +27,7 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class AllOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema.AllOf != null;
 		}

@@ -24,7 +24,7 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class NotSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema.Not != null;
 		}

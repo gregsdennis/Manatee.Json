@@ -41,9 +41,9 @@ namespace Manatee.Json.Schema.Validators
 			                                            .ToList();
 		}
 
-		public static IEnumerable<IJsonSchemaPropertyValidator> Get(JsonSchema schema)
+		public static IEnumerable<IJsonSchemaPropertyValidator> Get(JsonSchema schema, JsonValue json)
 		{
-			return AllValidators.Where(v => v.Applies(schema));
+			return AllValidators.Where(v => v.Applies(schema, json));
 		}
 	}
 }

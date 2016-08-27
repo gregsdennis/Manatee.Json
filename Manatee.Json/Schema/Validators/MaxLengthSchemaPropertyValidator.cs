@@ -26,18 +26,15 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class MaxLengthSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
-			return schema.MaxLength.HasValue;
+			return schema.MaxLength.HasValue && json.Type == JsonValueType.String;
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Type == JsonValueType.String)
-			{
-				var length = new StringInfo(json.String).LengthInTextElements;
-				if (schema.MaxLength.HasValue && (length > schema.MaxLength))
-					return new SchemaValidationResults(string.Empty, $"Expected: length <= {schema.MaxLength}; Actual: {length}.");
-			}
+			var length = new StringInfo(json.String).LengthInTextElements;
+			if (schema.MaxLength.HasValue && (length > schema.MaxLength))
+				return new SchemaValidationResults(string.Empty, $"Expected: length <= {schema.MaxLength}; Actual: {length}.");
 			return new SchemaValidationResults();
 		}
 	}

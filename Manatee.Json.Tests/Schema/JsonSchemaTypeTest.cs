@@ -49,6 +49,9 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ConcoctedExampleFails()
 		{
+			// This test is intended to demontrate that it's not possible to create
+			// a primitive definition; you must use the built-in definitions.
+			// The type definition equality logic relies on this fact.
 			var schema = new JsonSchema
 				{
 					Type = new JsonSchemaTypeDefinition("number")

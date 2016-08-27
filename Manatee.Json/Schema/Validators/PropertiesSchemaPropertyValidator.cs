@@ -28,15 +28,15 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class PropertiesSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
-			return schema.Properties != null ||
-				   schema.AdditionalProperties != null ||
-				   schema.PatternProperties != null;
+			return (schema.Properties != null ||
+			        schema.AdditionalProperties != null ||
+			        schema.PatternProperties != null) &&
+					json.Type == JsonValueType.Object;
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Type != JsonValueType.Object) return new SchemaValidationResults();
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
 			var properties = schema.Properties ?? new JsonSchemaPropertyDefinitionCollection();
