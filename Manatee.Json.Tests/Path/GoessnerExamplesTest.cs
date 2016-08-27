@@ -30,7 +30,7 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class GoessnerExamplesTest
 	{
-		private static readonly JsonValue GoessnerData =
+		public static readonly JsonValue GoessnerData =
 			new JsonObject
 				{
 					{

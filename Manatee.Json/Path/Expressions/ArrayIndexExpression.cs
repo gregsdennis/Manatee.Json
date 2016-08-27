@@ -42,9 +42,14 @@ namespace Manatee.Json.Path.Expressions
 				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
 			var index = GetIndex();
-			return result != null && result.Type == JsonValueType.Array && index >= 0 && index < result.Array.Count
-					   ? result.Array[index]
-					   : null;
+			if (result != null && index >= 0)
+			{
+				if (result.Type == JsonValueType.Array && index < result.Array.Count)
+					return result.Array[index];
+				if (result.Type == JsonValueType.Object && index < result.Object.Count)
+					return result.Object.ElementAt(index).Value;
+			}
+			return null;
 		}
 		public override string ToString()
 		{

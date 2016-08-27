@@ -38,7 +38,10 @@ namespace Manatee.Json.Path.Operators
 		{
 			return new JsonArray(json.SelectMany(v => v.Type == JsonValueType.Array
 				                                          ? _query.Find(v.Array, root)
-				                                          : Enumerable.Empty<JsonValue>()).NotNull());
+				                                          : v.Type == JsonValueType.Object
+					                                          ? _query.Find(v.Object.Values.ToJson(), root)
+					                                          : Enumerable.Empty<JsonValue>())
+			                         .NotNull());
 		}
 
 		public override string ToString()
