@@ -90,10 +90,9 @@ namespace Manatee.Json.Schema
 			switch (json.Type)
 			{
 				case JsonValueType.Object:
-					if (json.Object.ContainsKey("$ref"))
-						schema = new JsonSchemaReference();
-					else
-						schema = new JsonSchema();
+					schema = json.Object.ContainsKey("$ref")
+						         ? new JsonSchemaReference()
+						         : new JsonSchema();
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();

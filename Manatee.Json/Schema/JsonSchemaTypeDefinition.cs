@@ -182,11 +182,7 @@ namespace Manatee.Json.Schema
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			// Check to see if either are a predefined definition.
-			// There is an edge case where the client could make a definition that clones one of these,
-			//   that would result in a StackOverflow error.  But as the client would have to purposefully
-			//   try to break the library (it happens).
-			if (_isReadOnly || other._isReadOnly) return false;
+			if (PrimitiveDefinitions.Any(d => ReferenceEquals(d, this) || ReferenceEquals(d, other))) return false;
 			return Equals(_definition, other._definition);
 		}
 		/// <summary>

@@ -174,6 +174,8 @@
     <Compile Include="JsonValueEqualsTest.cs" />
     <Compile Include="JsonValueOperatorTest.cs" />
     <Compile Include="JsonValueParseTest.cs" />
+    <Compile Include="Schema\JsonSchemaTypeDefinitionTest.cs" />
+    <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
     <Compile Include="Schema\TestSuite\JsonSchemaTestSuite.cs" />
     <Compile Include="Schema\TestSuite\SchemaTest.cs" />

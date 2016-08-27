@@ -340,6 +340,7 @@
     <Compile Include="Schema\StringFormat.cs" />
     <Compile Include="Schema\Validators\AllOfSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\AnyOfSchemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\DefinitionsSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\DependenciesSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\FormatSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\ItemsSchemaPropertyValidator.cs" />
@@ -359,7 +360,7 @@
     <Compile Include="Schema\Validators\PropertiesSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\OneOfSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\PatternSchemaPropertyValidator.cs" />
-    <Compile Include="Schema\Validators\TypeShemaPropertyValidator.cs" />
+    <Compile Include="Schema\Validators\TypeSchemaPropertyValidator.cs" />
     <Compile Include="Schema\Validators\UniqueItemsSchemaPropertyValidator.cs" />
     <Compile Include="Serialization\DateTimeSerializationFormat.cs">
       <SubType>Code</SubType>

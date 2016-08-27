@@ -14,21 +14,19 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		TypeShemaPropertyValidator.cs
+	File Name:		TypeSchemaPropertyValidator.cs
 	Namespace:		Manatee.Json.Schema.Validators
-	Class Name:		TypeShemaPropertyValidator
+	Class Name:		TypeSchemaPropertyValidator
 	Purpose:		Validates schema with a "type" property.
 
 ***************************************************************************************/
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class TypeShemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal class TypeSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
 		public bool Applies(JsonSchema schema)
 		{
@@ -57,6 +55,7 @@ namespace Manatee.Json.Schema.Validators
 					if (json.Number.IsInt() && Equals(schema.Type, JsonSchemaTypeDefinition.Integer)) break;
 					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 				case JsonValueType.String:
+					if (JsonSchemaTypeDefinition.PrimitiveDefinitions.Any(d => d.Name == json.String)) break;
 					if (Equals(schema.Type, JsonSchemaTypeDefinition.String)) break;
 					return new SchemaValidationResults(string.Empty, $"Expected: String; Actual: {json.Type}.");
 				case JsonValueType.Boolean:
