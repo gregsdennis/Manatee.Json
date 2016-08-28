@@ -20,18 +20,18 @@
 	Purpose:		Provides caching around downloading schema definitions.
 
 ***************************************************************************************/
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Manatee.Json.Schema
 {
 	internal static class OnlineSchemaCache
 	{
-		private static readonly ConcurrentDictionary<string, IJsonSchema> _schemaLookup;
+		private static readonly Dictionary<string, IJsonSchema> _schemaLookup;
 
 		static OnlineSchemaCache()
 		{
 			var draft04Uri = JsonSchema.Draft04.Id.Split('#')[0];
-			_schemaLookup = new ConcurrentDictionary<string, IJsonSchema>
+			_schemaLookup = new Dictionary<string, IJsonSchema>
 				{
 					[draft04Uri] = JsonSchema.Draft04
 				};
@@ -40,12 +40,15 @@ namespace Manatee.Json.Schema
 		public static IJsonSchema Get(string uri)
 		{
 			IJsonSchema schema;
-			if (!_schemaLookup.TryGetValue(uri, out schema))
+			lock (_schemaLookup)
 			{
-				var schemaJson = JsonSchemaOptions.Download(uri);
-				schema = JsonSchemaFactory.FromJson(JsonValue.Parse(schemaJson));
+				if (!_schemaLookup.TryGetValue(uri, out schema))
+				{
+					var schemaJson = JsonSchemaOptions.Download(uri);
+					schema = JsonSchemaFactory.FromJson(JsonValue.Parse(schemaJson));
 
-				_schemaLookup[uri] = schema;
+					_schemaLookup[uri] = schema;
+				}
 			}
 
 			return schema;

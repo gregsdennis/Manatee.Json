@@ -152,6 +152,9 @@ namespace Manatee.Json.Schema
 			Definition.FromJson(details.Value, null);
 		}
 
+		/// <summary>Returns a string that represents the current object.</summary>
+		/// <returns>A string that represents the current object.</returns>
+		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
 			if (!Name.IsNullOrWhiteSpace()) return Name;

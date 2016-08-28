@@ -138,7 +138,7 @@ namespace Manatee.Json.Schema
 			var address = referenceParts[0];
 			var path = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
 			var jValue = root;
-			if (!string.IsNullOrWhiteSpace(address))
+			if (!address.IsNullOrWhiteSpace())
 			{
 				Uri uri;
 				var search = JsonPathWith.Search("id");
