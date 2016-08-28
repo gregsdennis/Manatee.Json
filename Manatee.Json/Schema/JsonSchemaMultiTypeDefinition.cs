@@ -29,48 +29,42 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	internal class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
+	public class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
 	{
-		private IEnumerable<IJsonSchema> _definitions;
+		private readonly bool _nonPrimitiveAllowed;
+		private IEnumerable<JsonSchemaTypeDefinition> _definitions;
 
-		public JsonSchemaMultiTypeDefinition(IEnumerable<IJsonSchema> definitions)
+		internal IEnumerable<JsonSchemaTypeDefinition> Defintions => _definitions;
+		internal bool IsPrimitive => !_nonPrimitiveAllowed; 
+
+		public JsonSchemaMultiTypeDefinition(params JsonSchemaTypeDefinition[] definitions)
+			: this(false)
 		{
 			_definitions = definitions.ToList();
 
-			if (_definitions.Any(d => PrimitiveDefinitions.All(p => p.Definition.GetType() != d.GetType())))
+			if (_definitions.Except(PrimitiveDefinitions).Any())
 				throw new InvalidOperationException("Only primitive types are allowed in type collections.");
 
-			Definition = new OneOfSchema {Options = _definitions};
+			Definition = new JsonSchema { OneOf = _definitions.Select(d => d.Definition) };
 		}
-
-		public void AppendJson(JsonValue json, JsonSerializer serializer)
+		internal JsonSchemaMultiTypeDefinition(bool nonPrimitiveAllowed)
 		{
-			if (json.Type != JsonValueType.Object) return;
-
-			// we want to reverse so that the first entry has priority
-			var properties = _definitions.Select(d => d.ToJson(serializer))
-			                             .SelectMany(jv => jv.Object)
-										 .GroupBy(kvp => kvp.Key)
-										 .Select(g => g.First())
-			                             .ToList();
-			foreach (var property in properties)
-			{
-				json.Object[property.Key] = property.Value;
-			}
+			_nonPrimitiveAllowed = nonPrimitiveAllowed;
 		}
 
 		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			var typeEntry = json.Object["type"].Array;
-			var jsonWithoutType = json.Object.Where(kvp => kvp.Key != "type").ToJson();
+			var typeEntry = json.Array;
 			_definitions = typeEntry.Select(jv =>
 				{
-					var schema = JsonSchemaFactory.GetPrimitiveSchema(jv.String);
-					schema.FromJson(jsonWithoutType, serializer);
-					return schema;
+					if (_nonPrimitiveAllowed) return new JsonSchemaTypeDefinition(JsonSchemaFactory.FromJson(jv));
+					var definition = PrimitiveDefinitions.FirstOrDefault(p => p.Name == jv.String);
+					if (definition == null)
+						throw new InvalidOperationException("Only primitive types are allowed in type collections.");
+					return definition;
 				}).ToList();
 
-			Definition = new OneOfSchema {Options = _definitions};
+			Definition = new JsonSchema {OneOf = _definitions.Select(d => d.Definition)};
 		}
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{
@@ -84,7 +78,7 @@ namespace Manatee.Json.Schema
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 			return Equals((JsonSchemaMultiTypeDefinition) obj);
 		}
 		public override int GetHashCode()

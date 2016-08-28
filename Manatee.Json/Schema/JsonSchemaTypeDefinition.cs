@@ -75,8 +75,8 @@ namespace Manatee.Json.Schema
 				String
 			};
 
-		private bool _isReadOnly;
 		private IJsonSchema _definition;
+		private bool _isReadOnly;
 
 		/// <summary>
 		/// Defines the name of the type.
@@ -98,28 +98,23 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		internal List<JsonSchemaPropertyDefinition> PropertyReferences { get; set; }
-		internal List<ArraySchema> ArrayReferences { get; set; }
-		internal int ReferenceCount => (PropertyReferences?.Count ?? 0) + (ArrayReferences?.Count ?? 0);
-
 		static JsonSchemaTypeDefinition()
 		{
-			Array.Definition = new ArraySchema();
+			Array.Definition = new JsonSchema {Type = Array};
 			Array._isReadOnly = true;
-			Boolean.Definition = new BooleanSchema();
+			Boolean.Definition = new JsonSchema {Type = Boolean};
 			Boolean._isReadOnly = true;
-			Integer.Definition = new IntegerSchema();
+			Integer.Definition = new JsonSchema {Type = Integer};
 			Integer._isReadOnly = true;
-			Null.Definition = new NullSchema();
+			Null.Definition = new JsonSchema {Type = Null};
 			Null._isReadOnly = true;
-			Number.Definition = new NumberSchema();
+			Number.Definition = new JsonSchema {Type = Number};
 			Number._isReadOnly = true;
-			Object.Definition = new ObjectSchema();
+			Object.Definition = new JsonSchema {Type = Object};
 			Object._isReadOnly = true;
-			String.Definition = new StringSchema();
+			String.Definition = new JsonSchema {Type = String};
 			String._isReadOnly = true;
 		}
-		internal JsonSchemaTypeDefinition() {}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaTypeDefinition"/> type.
 		/// </summary>
@@ -131,6 +126,10 @@ namespace Manatee.Json.Schema
 				throw new ArgumentNullException(nameof(name));
 
 			Name = name;
+		}
+		internal JsonSchemaTypeDefinition(IJsonSchema definition = null)
+		{
+			Definition = definition;
 		}
 
 		/// <summary>
@@ -144,12 +143,13 @@ namespace Manatee.Json.Schema
 			if (json.Type == JsonValueType.String)
 			{
 				Name = json.String;
-				Definition = new StringSchema {Pattern = json.String};
+				Definition = new JsonSchema {Type = String, Pattern = json.String};
 				return;
 			}
 			var details = json.Object.First();
 			Name = details.Key;
-			Definition = JsonSchemaFactory.FromJson(details.Value);
+			Definition = new JsonSchema();
+			Definition.FromJson(details.Value, null);
 		}
 
 		public override string ToString()
@@ -168,6 +168,7 @@ namespace Manatee.Json.Schema
 		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
 			if (Definition == null || _isReadOnly) return Name;
+			if (Name == null) return Definition.ToJson(null);
 			return new JsonObject {{Name, Definition.ToJson(null)}};
 		}
 		/// <summary>
@@ -179,6 +180,9 @@ namespace Manatee.Json.Schema
 		/// <param name="other">The object to compare with the current object. </param><filterpriority>2</filterpriority>
 		protected bool Equals(JsonSchemaTypeDefinition other)
 		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			if (PrimitiveDefinitions.Any(d => ReferenceEquals(d, this) || ReferenceEquals(d, other))) return false;
 			return Equals(_definition, other._definition);
 		}
 		/// <summary>
@@ -190,10 +194,7 @@ namespace Manatee.Json.Schema
 		/// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != GetType()) return false;
-			return Equals((JsonSchemaTypeDefinition) obj);
+			return Equals(obj as JsonSchemaTypeDefinition);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -204,6 +205,7 @@ namespace Manatee.Json.Schema
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
+			if (_isReadOnly) return Name?.GetHashCode() ?? 0;
 			return _definition?.GetHashCode() ?? 0;
 		}
 	}

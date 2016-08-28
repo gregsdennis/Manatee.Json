@@ -34,14 +34,14 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNoneValid()
 		{
-			var schema = new OneOfSchema
-			{
-				Options = new List<IJsonSchema>
+			var schema = new JsonSchema
+				{
+					OneOf = new List<IJsonSchema>
 						{
-							new NumberSchema {Minimum = 5},
-							new NumberSchema {Minimum = 10}
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
 						}
-			};
+				};
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
@@ -52,15 +52,15 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnMoreThanOneValid()
 		{
-			var schema = new OneOfSchema
-			{
-				Options = new List<IJsonSchema>
+			var schema = new JsonSchema
+				{
+					OneOf = new List<IJsonSchema>
 						{
-							new NumberSchema {Minimum = 5},
-							new NumberSchema {Minimum = 10}
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
 						}
-			};
-			var json = (JsonValue)20;
+				};
+			var json = (JsonValue) 20;
 
 			var results = schema.Validate(json);
 
@@ -70,12 +70,12 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnSingleValid()
 		{
-			var schema = new AnyOfSchema
+			var schema = new JsonSchema
 				{
-					Options = new List<IJsonSchema>
+					OneOf = new List<IJsonSchema>
 						{
-							new NumberSchema {Minimum = 5},
-							new NumberSchema {Minimum = 10}
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
+							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
 						}
 				};
 			var json = (JsonValue) 7;

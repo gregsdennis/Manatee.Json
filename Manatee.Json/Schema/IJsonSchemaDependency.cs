@@ -1,4 +1,4 @@
-/***************************************************************************************
+﻿/***************************************************************************************
 
 	Copyright 2016 Greg Dennis
 
@@ -14,37 +14,37 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		MultiSchema.cs
+	File Name:		IJsonSchemaDependency.cs
 	Namespace:		Manatee.Json.Schema
-	Class Name:		MultiSchema
-	Purpose:		Provides a mechanism to define a mutli-type schema.
+	Class Name:		IJsonSchemaDependency
+	Purpose:		Defines properties and methods required to represent dependencies
+					within JSON Schema.
 
 ***************************************************************************************/
+using Manatee.Json.Serialization;
+
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Provides a mechanism to define a mutli-type schema.
+	/// Defines properties and methods required to represent dependencies within JSON Schema.
 	/// </summary>
-	public class MultiSchema : JsonSchema
+	public interface IJsonSchemaDependency
 	{
 		/// <summary>
-		/// Creates an instance of the <see cref="MultiSchema"/> class.
+		/// Gets or sets the property with the dependency.
 		/// </summary>
-		/// <param name="schemata">The collection of <see cref="IJsonSchema"/> objects.</param>
-		public MultiSchema(params IJsonSchema[] schemata)
-		{
-			Type = new JsonSchemaMultiTypeDefinition(schemata);
-		}
+		string PropertyName { get; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
-		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
-		{
-			return Type.Definition.Validate(json, root);
-		}
+		/// <returns>The results of the validation.</returns>
+		SchemaValidationResults Validate(JsonValue json, JsonValue root = null);
+		/// <summary>
+		/// Gets the JSON data to be used as the value portion in the dependency list of the schema.
+		/// </summary>
+		JsonValue GetJsonData();
 	}
 }

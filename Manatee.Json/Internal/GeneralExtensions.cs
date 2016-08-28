@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Manatee.Json.Schema;
 
 namespace Manatee.Json.Internal
 {
@@ -99,10 +100,11 @@ namespace Manatee.Json.Internal
 							if (source.Substring(i + 6, 2) == "\\u")
 							{
 								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
-								hex = (hex2 - 0xDC00) + ((hex - 0xD800) << 10);
+								hex = (hex - 0xD800)*0x400 + (hex2 - 0xDC00)%0x400 + 0x10000;
 								length += 6;
 							}
 							source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
+							length = 2; // unicode pairs are 2 chars in .Net strings.
 							break;
 						default:
 							result = source;
@@ -240,7 +242,20 @@ namespace Manatee.Json.Internal
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
 		{
-			return collection.Aggregate(0, (current, obj) => unchecked (current ^ 397) ^ obj.GetHashCode());
+			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ obj.GetHashCode());
+		}
+		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
+		{
+			return collection.OrderBy(kvp => kvp.Key, StringComparer.InvariantCulture)
+			                 .Aggregate(0, (current, kvp) =>
+				                            {
+					                            unchecked
+					                            {
+						                            var code = (current*397) ^ kvp.Key.GetHashCode();
+						                            code = (code*397) ^ (kvp.Value?.GetHashCode() ?? 0);
+						                            return code;
+					                            }
+				                            });
 		}
 		public static bool ContentsEqual<T>(this IEnumerable<T> a, IEnumerable<T> b)
 		{

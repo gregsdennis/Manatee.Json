@@ -17,7 +17,7 @@
 	File Name:		AdditionalProperties.cs
 	Namespace:		Manatee.Json.Schema
 	Class Name:		AdditionalProperties
-	Purpose:		Defines additional properties for ObjectSchema.
+	Purpose:		Defines additional properties for object-specific schemas.
 
 ***************************************************************************************/
 
@@ -28,16 +28,16 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines additional properties for ObjectSchema.
+	/// Defines additional properties for object-specific schemas.
 	/// </summary>
 	public class AdditionalProperties : IJsonSerializable, IEquatable<AdditionalProperties>
 	{
 		/// <summary>
-		/// Allows any additional property to be added to the schema.
+		/// Allows any additional property to be added to the JSON.
 		/// </summary>
 		public static readonly AdditionalProperties True;
 		/// <summary>
-		/// Prohibits additional properties in the schema.
+		/// Prohibits additional properties in the JSON.
 		/// </summary>
 		public static readonly AdditionalProperties False;
 
@@ -63,7 +63,7 @@ namespace Manatee.Json.Schema
 
 		static AdditionalProperties()
 		{
-			True = new AdditionalProperties {Definition = new ObjectSchema(), _isReadOnly = true};
+			True = new AdditionalProperties {Definition = JsonSchema.Empty, _isReadOnly = true};
 			False = new AdditionalProperties {_isReadOnly = true};
 		}
 
@@ -129,7 +129,7 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type == JsonValueType.Boolean)
 			{
-				if (json.Boolean) Definition = new ObjectSchema();
+				if (json.Boolean) Definition = JsonSchema.Empty;
 			}
 			else
 			{

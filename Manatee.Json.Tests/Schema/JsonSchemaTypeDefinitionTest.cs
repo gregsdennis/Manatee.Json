@@ -14,43 +14,42 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		NullSchemaTest.cs
-	Namespace:		Manatee.Json.Tests
-	Class Name:		NullSchemaTest
-	Purpose:		Tests for NullSchema.
+	File Name:		JsonSchemaTypeDefinitionTest.cs
+	Namespace:		Manatee.Json.Tests.Schema
+	Class Name:		JsonSchemaTypeDefinitionTest
+	Purpose:		Validates that JsonSchemaTypeDefinitions are working.
 
 ***************************************************************************************/
-
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Manatee.Json.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Schema
 {
 	[TestClass]
-	public class NullSchemaTest
+	public class JsonSchemaTypeDefinitionTest
 	{
 		[TestMethod]
-		public void ValidateReturnsErrorOnNonNull()
+		public void StandardDefinitionEqualsItself()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
-			var json = new JsonObject();
-
-			var results = schema.Validate(json);
-
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			Assert.AreEqual(JsonSchemaTypeDefinition.Integer, JsonSchemaTypeDefinition.Integer);
 		}
 		[TestMethod]
-		public void ValidateReturnsValidOnNull()
+		public void DifferentStandardDefinitionsNotEqual()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
-			var json = JsonValue.Null;
+			Assert.AreNotEqual(JsonSchemaTypeDefinition.Integer, JsonSchemaTypeDefinition.String);
+		}
+		[TestMethod]
+		public void CannotRecreatePrimitiveDefinitions()
+		{
+			var constructed = new JsonSchema {Type = new JsonSchemaTypeDefinition("integer")};
+			var predefined = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
 
-			var results = schema.Validate(json);
-
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			Assert.AreNotEqual(predefined, constructed);
 		}
 	}
 }

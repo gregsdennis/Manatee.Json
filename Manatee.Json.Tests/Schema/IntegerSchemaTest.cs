@@ -33,7 +33,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNonNumber()
 		{
-			var schema = new IntegerSchema();
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
@@ -44,7 +44,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNonInteger()
 		{
-			var schema = new IntegerSchema();
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
 			var json = (JsonValue) 1.2;
 
 			var results = schema.Validate(json);
@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnLessThanMinimum()
 		{
-			var schema = new IntegerSchema {Minimum = 5};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5};
 			var json = (JsonValue) 4;
 
 			var results = schema.Validate(json);
@@ -66,7 +66,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnMoreThanMinimum()
 		{
-			var schema = new IntegerSchema {Minimum = 5};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5};
 			var json = (JsonValue) 10;
 
 			var results = schema.Validate(json);
@@ -77,7 +77,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnEqualsExclusiveMinimum()
 		{
-			var schema = new IntegerSchema {Minimum = 5, ExclusiveMinimum = true};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5, ExclusiveMinimum = true};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -88,7 +88,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnMoreThanExclusiveMinimum()
 		{
-			var schema = new IntegerSchema {Minimum = 5, ExclusiveMinimum = true};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5, ExclusiveMinimum = true};
 			var json = (JsonValue) 10;
 
 			var results = schema.Validate(json);
@@ -99,7 +99,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnMoreThanMaximum()
 		{
-			var schema = new IntegerSchema {Maximum = 5};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5};
 			var json = (JsonValue) 10;
 
 			var results = schema.Validate(json);
@@ -110,7 +110,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnLessThanMaximum()
 		{
-			var schema = new IntegerSchema {Maximum = 5};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5};
 			var json = (JsonValue) 3;
 
 			var results = schema.Validate(json);
@@ -121,7 +121,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnEqualsExclusiveMaximum()
 		{
-			var schema = new IntegerSchema {Maximum = 5, ExclusiveMaximum = true};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5, ExclusiveMaximum = true};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -132,7 +132,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnLessThanExclusiveMaximum()
 		{
-			var schema = new IntegerSchema {Maximum = 5, ExclusiveMaximum = true};
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5, ExclusiveMaximum = true};
 			var json = (JsonValue) 3;
 
 			var results = schema.Validate(json);
@@ -143,8 +143,8 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnMultipleOf_Positive()
 		{
-			var schema = new IntegerSchema { MultipleOf = 5 };
-			var json = (JsonValue)15;
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
+			var json = (JsonValue) 15;
 
 			var results = schema.Validate(json);
 
@@ -154,8 +154,8 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnMultipleOf_Negative()
 		{
-			var schema = new IntegerSchema { MultipleOf = 5 };
-			var json = (JsonValue)(-15);
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
+			var json = (JsonValue) (-15);
 
 			var results = schema.Validate(json);
 
@@ -165,8 +165,8 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnMultipleOf_Zero()
 		{
-			var schema = new IntegerSchema { MultipleOf = 5 };
-			var json = (JsonValue)0;
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
+			var json = (JsonValue) 0;
 
 			var results = schema.Validate(json);
 
@@ -176,8 +176,8 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsInvalicOnMultipleOf()
 		{
-			var schema = new IntegerSchema { MultipleOf = 5 };
-			var json = (JsonValue)16;
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
+			var json = (JsonValue) 16;
 
 			var results = schema.Validate(json);
 

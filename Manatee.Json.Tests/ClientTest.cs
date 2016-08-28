@@ -119,23 +119,24 @@ namespace Manatee.Json.Tests
 		{
 			var text = "{\"type\":\"object\",\"properties\":{\"home\":{\"type\":[\"object\",\"null\"],\"properties\":{\"street\":{\"type\":\"string\"}}}}}";
 			var json = JsonValue.Parse(text);
-			var expected = new ObjectSchema
+			var expected = new JsonSchema
 				{
+					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("home")
 								{
-									Type = new MultiSchema(new ObjectSchema
+									Type = new JsonSchema
 										{
+											Type = new JsonSchemaMultiTypeDefinition(JsonSchemaTypeDefinition.Object, JsonSchemaTypeDefinition.Null),
 											Properties = new JsonSchemaPropertyDefinitionCollection
 												{
 													new JsonSchemaPropertyDefinition("street")
 														{
-															Type = new StringSchema()
+															Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
 														}
 												}
-										},
-									                       new NullSchema())
+										}
 								}
 						}
 				};
@@ -150,10 +151,10 @@ namespace Manatee.Json.Tests
 		{
 			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
 			var json = JsonValue.Parse(text);
-			var expected = new EnumSchema
+			var expected = new JsonSchema
 				{
 					Type = JsonSchemaTypeDefinition.String,
-					Values = new List<EnumSchemaValue>
+					Enum = new List<EnumSchemaValue>
 						{
 							new EnumSchemaValue("FeatureCollection")
 						}

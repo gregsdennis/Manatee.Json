@@ -38,6 +38,10 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private static readonly JsonSerializer _serializer;
 		private int _failures;
 		private int _passes;
+#pragma warning disable 649
+		private string _fileNameForDebugging;
+		private string _testNameForDebugging;
+#pragma warning restore 649
 
 		static JsonSchemaTestSuite()
 		{
@@ -47,6 +51,11 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestMethod]
 		public void RunSuite()
 		{
+			// uncomment and paste the filename of a test suite to debug it.
+			//_fileNameForDebugging = "";
+			// uncomment and paste the description of a test to debug it.
+			//_testNameForDebugging = "ref within ref valid";
+
 			try
 			{
 				_StartServer();
@@ -70,6 +79,11 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 		private void _RunFile(string fileName)
 		{
+			if (fileName == _fileNameForDebugging)
+			{
+				System.Diagnostics.Debugger.Break();
+			}
+
 			var contents = File.ReadAllText(fileName);
 			var json = JsonValue.Parse(contents);
 
@@ -86,8 +100,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		{
 			foreach (var test in testSet.Tests)
 			{
-				// paste the description of a test to debug it.
-				if (test.Description == "")
+				if (test.Description == _testNameForDebugging)
 				{
 					System.Diagnostics.Debugger.Break();
 				}
@@ -109,7 +122,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			}
 		}
 
-		private void _StartServer()
+		private static void _StartServer()
 		{
 			const string baseUri = "http://localhost:1234/";
 

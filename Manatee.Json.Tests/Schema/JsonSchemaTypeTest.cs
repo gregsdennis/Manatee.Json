@@ -14,58 +14,59 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		AnyOfSchemaTest.cs
+	File Name:		JsonSchemaTypeTest.cs
 	Namespace:		Manatee.Json.Tests.Schema
-	Class Name:		AnyOfSchemaTest
-	Purpose:		Tests for AnyOfSchema.
+	Class Name:		JsonSchemaTypeTest
+	Purpose:		Tests to validate the "type" property.
 
 ***************************************************************************************/
-
-using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Schema
 {
 	[TestClass]
-	public class AnyOfSchemaTest
+	public class JsonSchemaTypeTest
 	{
 		[TestMethod]
-		public void ValidateReturnsErrorOnNoneValid()
+		public void PrimitiveSchemaSucceeds()
 		{
-			var schema = new JsonSchema
-				{
-					AnyOf = new List<IJsonSchema>
-						{
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Array},
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number}
-						}
-				};
-			var json = new JsonObject();
+			var json = new JsonObject {{"type", "integer"}};
 
-			var results = schema.Validate(json);
+			var results = JsonSchema.Draft04.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			Assert.IsTrue(results.Valid);
 		}
 		[TestMethod]
-		public void ValidateReturnsValidOnSingleValid()
+		public void NonPrimitiveStringSchemaFails()
 		{
+			var json = new JsonObject {{"type", "other"}};
+
+			var results = JsonSchema.Draft04.Validate(json);
+
+			Assert.IsFalse(results.Valid);
+		}
+		[TestMethod]
+		public void ConcoctedExampleFails()
+		{
+			// This test is intended to demontrate that it's not possible to create
+			// a primitive definition; you must use the built-in definitions.
+			// The type definition equality logic relies on this fact.
 			var schema = new JsonSchema
 				{
-					AnyOf = new List<IJsonSchema>
+					Type = new JsonSchemaTypeDefinition("number")
 						{
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+							Definition = new JsonSchema
+								{
+									Type = JsonSchemaTypeDefinition.Number
+								}
 						}
 				};
-			var json = (JsonValue) 25;
+			var json = new JsonObject { { "type", "number" } };
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			Assert.IsFalse(results.Valid);
 		}
 	}
 }
