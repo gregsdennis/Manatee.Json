@@ -122,7 +122,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			}
 		}
 
-		private void _StartServer()
+		private static void _StartServer()
 		{
 			const string baseUri = "http://localhost:1234/";
 

@@ -78,7 +78,7 @@ namespace Manatee.Json.Schema
 		{
 			var jValue = root ?? ToJson(null);
 			var results = base.Validate(json, jValue);
-			if (Resolved == null)
+			if (Resolved == null || root == null)
 				jValue = Resolve(jValue);
 			var refResults = Resolved?.Validate(json, jValue) ??
 			                 new SchemaValidationResults(null, "Error finding referenced schema.");

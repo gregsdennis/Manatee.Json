@@ -41,6 +41,17 @@ namespace Manatee.Json.Schema
 			set { _download = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets whether the "format" schema keyword should be validated.  The default is true.
+		/// </summary>
 		public static bool ValidateFormat { get; set; }
+
+		/// <summary>
+		/// Initializes all properties.
+		/// </summary>
+		static JsonSchemaOptions()
+		{
+			ValidateFormat = true;
+		}
 	}
 }
