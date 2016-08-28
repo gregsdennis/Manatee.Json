@@ -52,7 +52,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			// uncomment and paste the filename of a test suite to debug it.
 			//_fileNameForDebugging = "";
 			// uncomment and paste the description of a test to debug it.
-			_testNameForDebugging = "remote ref valid";
+			//_testNameForDebugging = "remote ref valid";
 
 			try
 			{

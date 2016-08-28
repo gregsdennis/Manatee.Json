@@ -45,6 +45,8 @@ namespace Manatee.Json.Schema
 		private static readonly JsonValue _rootJson = Root.ToJson(null);
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
+		private bool _isExternalReference;
+
 		/// <summary>
 		/// Defines the reference in respect to the root schema.
 		/// </summary>
@@ -80,7 +82,9 @@ namespace Manatee.Json.Schema
 			var results = base.Validate(json, jValue);
 			if (Resolved == null)
 				Resolve(jValue);
-			var refResults = Resolved?.Validate(json, jValue) ??
+			var refResults = Resolved?.Validate(json, _isExternalReference
+				                                          ? Resolved.ToJson(null)
+				                                          : jValue) ??
 			                 new SchemaValidationResults(null, "Error finding referenced schema.");
 			return new SchemaValidationResults(new[] {results, refResults});
 		}
@@ -132,7 +136,7 @@ namespace Manatee.Json.Schema
 			return Reference?.GetHashCode() ?? 0;
 		}
 
-		private void Resolve(JsonValue root)
+		internal void Resolve(JsonValue root)
 		{
 			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
 			var address = referenceParts[0];
@@ -148,6 +152,7 @@ namespace Manatee.Json.Schema
 					address = allIds.Pop() + address;
 				}
 				jValue = OnlineSchemaCache.Get(address).ToJson(null);
+				_isExternalReference = true;
 			}
 			if (jValue == null) return;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
