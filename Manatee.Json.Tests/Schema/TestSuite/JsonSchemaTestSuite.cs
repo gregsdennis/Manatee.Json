@@ -38,8 +38,10 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private static readonly JsonSerializer _serializer;
 		private int _failures;
 		private int _passes;
+#pragma warning disable 649
 		private string _fileNameForDebugging;
 		private string _testNameForDebugging;
+#pragma warning restore 649
 
 		static JsonSchemaTestSuite()
 		{
@@ -52,7 +54,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			// uncomment and paste the filename of a test suite to debug it.
 			//_fileNameForDebugging = "";
 			// uncomment and paste the description of a test to debug it.
-			//_testNameForDebugging = "remote ref valid";
+			//_testNameForDebugging = "ref within ref valid";
 
 			try
 			{
