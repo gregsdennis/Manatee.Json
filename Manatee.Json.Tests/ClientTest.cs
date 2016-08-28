@@ -4,6 +4,7 @@ using System.Linq;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
+using Manatee.Json.Tests.Path;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
@@ -183,6 +184,30 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
+		}
+
+		[TestMethod]
+		public void Issue31_JsonPathArrayOperatorShouldWorkOnObjects_Parsed()
+		{
+			var json = GoessnerExamplesTest.GoessnerData;
+			var path = JsonPath.Parse(@"$.store.bicycle[?(1==1)]");
+
+			var results = path.Evaluate(json);
+
+			Assert.AreEqual(new JsonArray { "red", 19.95 }, results);
+		}
+
+		[TestMethod]
+		public void Issue31_JsonPathArrayOperatorShouldWorkOnObjects_Constructed()
+		{
+			var json = GoessnerExamplesTest.GoessnerData;
+			var path = JsonPathWith.Name("store")
+			                       .Name("bicycle")
+			                       .Array(jv => 1 == 1);
+
+			var results = path.Evaluate(json);
+
+			Assert.AreEqual(new JsonArray { "red", 19.95 }, results);
 		}
 	}
 }

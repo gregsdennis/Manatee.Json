@@ -42,7 +42,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override string ToString()
 		{
-			return string.Format("?({0})", _expression);
+			return $"?({_expression})";
 		}
 	}
 }
