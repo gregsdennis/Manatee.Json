@@ -433,7 +433,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 		/// <summary>
-		/// Defines a maximum acceptable value;
+		/// Defines a maximum acceptable value.
 		/// </summary>
 		public double? Maximum { get; set; }
 		/// <summary>

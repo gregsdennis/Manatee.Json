@@ -147,7 +147,7 @@ namespace Manatee.Json.Schema
 				{
 					address = allIds.Pop() + address;
 				}
-				jValue = OnlineSchemaCache.Get(address).ToJson(null);
+				jValue = JsonSchemaRegistry.Get(address).ToJson(null);
 			}
 			if (jValue == null) return root;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");

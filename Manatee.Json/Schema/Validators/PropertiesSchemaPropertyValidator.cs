@@ -53,12 +53,11 @@ namespace Manatee.Json.Schema.Validators
 					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Name)));
 			}
 			// if additionalProperties is false, we perform the property elimination,
-			// otherwise properties and patterProperties applies to all properties.
+			// otherwise properties and patternProperties applies to all properties.
 			var extraData = Equals(schema.AdditionalProperties, AdditionalProperties.False)
 				                ? obj.Where(kvp => properties.All(p => p.Name != kvp.Key))
 				                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
 				                : obj;
-			// TODO: validate this process
 			if (schema.PatternProperties != null)
 			{
 				var propertiesToRemove = new List<string>();

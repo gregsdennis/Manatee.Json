@@ -14,21 +14,30 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		OnlineSchemaCache.cs
+	File Name:		JsonSchemaRegistry.cs
 	Namespace:		Manatee.Json.Schema
-	Class Name:		OnlineSchemaCache
-	Purpose:		Provides caching around downloading schema definitions.
+	Class Name:		JsonSchemaRegistry
+	Purpose:		Provides a registry in which JSON schema can be saved to be
+					referenced by the system.
 
 ***************************************************************************************/
 using System.Collections.Generic;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
-	internal static class OnlineSchemaCache
+	/// <summary>
+	/// Provides a registry in which JSON schema can be saved to be referenced by the
+	/// system.
+	/// </summary>
+	public static class JsonSchemaRegistry
 	{
 		private static readonly Dictionary<string, IJsonSchema> _schemaLookup;
 
-		static OnlineSchemaCache()
+		/// <summary>
+		/// Initializes the <see cref="JsonSchemaRegistry"/> class.
+		/// </summary>
+		static JsonSchemaRegistry()
 		{
 			var draft04Uri = JsonSchema.Draft04.Id.Split('#')[0];
 			_schemaLookup = new Dictionary<string, IJsonSchema>
@@ -37,6 +46,9 @@ namespace Manatee.Json.Schema
 				};
 		}
 
+		/// <summary>
+		/// Downloads and registers a schema at the specified URI.
+		/// </summary>
 		public static IJsonSchema Get(string uri)
 		{
 			IJsonSchema schema;
@@ -52,6 +64,42 @@ namespace Manatee.Json.Schema
 			}
 
 			return schema;
+		}
+
+		/// <summary>
+		/// Explicitly registers an existing schema.
+		/// </summary>
+		public static void Register(JsonSchema schema)
+		{
+			if (schema.Id.IsNullOrWhiteSpace()) return;
+			lock (_schemaLookup)
+			{
+				_schemaLookup[schema.Id] = schema;
+			}
+		}
+
+		/// <summary>
+		/// Removes a schema from the registry.
+		/// </summary>
+		public static void Unregister(JsonSchema schema)
+		{
+			if (schema.Id.IsNullOrWhiteSpace()) return;
+			lock (_schemaLookup)
+			{
+				_schemaLookup.Remove(schema.Id);
+			}
+		}
+
+		/// <summary>
+		/// Removes a schema from the registry.
+		/// </summary>
+		public static void Unregister(string uri)
+		{
+			if (uri.IsNullOrWhiteSpace()) return;
+			lock (_schemaLookup)
+			{
+				_schemaLookup.Remove(uri);
+			}
 		}
 	}
 }

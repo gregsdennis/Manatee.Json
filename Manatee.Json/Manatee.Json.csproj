@@ -332,7 +332,7 @@
     <Compile Include="Schema\JsonSchemaTypeDefinition.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionCollection.cs" />
     <Compile Include="Schema\JsonSchemaCollection.cs" />
-    <Compile Include="Schema\OnlineSchemaCache.cs" />
+    <Compile Include="Schema\JsonSchemaRegistry.cs" />
     <Compile Include="Schema\PropertyDependency.cs" />
     <Compile Include="Schema\SchemaDependency.cs" />
     <Compile Include="Schema\SchemaValidationError.cs" />
