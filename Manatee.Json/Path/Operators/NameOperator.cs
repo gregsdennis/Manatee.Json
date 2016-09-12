@@ -43,7 +43,9 @@ namespace Manatee.Json.Path.Operators
 		}
 		public override string ToString()
 		{
-			return $".{Name}";
+			return Name.Any(c => !char.IsLetterOrDigit(c))
+				       ? $".'{Name}'"
+				       : $".{Name}";
 		}
 	}
 }

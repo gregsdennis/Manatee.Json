@@ -139,10 +139,6 @@
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Manatee.StateMachine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=15909d91027a225e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
@@ -174,6 +170,7 @@
     <Compile Include="JsonValueEqualsTest.cs" />
     <Compile Include="JsonValueOperatorTest.cs" />
     <Compile Include="JsonValueParseTest.cs" />
+    <Compile Include="Path\ParsingTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
@@ -223,7 +220,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Manatee.Json.snk" />
-    <None Include="packages.config" />
     <None Include="TrelloCard.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
