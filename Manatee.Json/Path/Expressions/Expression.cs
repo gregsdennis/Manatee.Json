@@ -21,18 +21,21 @@
 
 ***************************************************************************************/
 using System;
-using System.Collections.Generic;
 
 namespace Manatee.Json.Path.Expressions
 {
 	internal class Expression<T, TIn>
 	{
-		private List<ExpressionTreeNode<TIn>> _nodeList;
-		internal ExpressionTreeNode<TIn> Root { get; set; }
+		private readonly ExpressionTreeNode<TIn> _root;
+
+		public Expression(ExpressionTreeNode<TIn> root)
+		{
+			_root = root;
+		}
 
 		public T Evaluate(TIn json, JsonValue root)
 		{
-			var result = Root.Evaluate(json, root);
+			var result = _root.Evaluate(json, root);
 			if (typeof (T) == typeof (bool) && result == null)
 				return (T) (object) false;
 			if (typeof (T) == typeof (bool) && result != null && !(result is bool))
@@ -56,12 +59,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return Root.ToString();
-		}
-
-		internal int Parse(string source, int i)
-		{
-			throw new NotImplementedException();
+			return _root.ToString();
 		}
 	}
 }

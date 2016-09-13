@@ -332,7 +332,7 @@ namespace Manatee.Json.Tests.Path
 		[TestMethod]
 		public void GoessnerExample6BConstructed()
 		{
-			var path = JsonPathWith.Search("book").ArraySlice(-1, null);
+			var path = JsonPathWith.Search("book").Array(new Slice(-1, null));
 			var expected = new JsonArray
 				{
 					new JsonObject
@@ -426,7 +426,7 @@ namespace Manatee.Json.Tests.Path
 		[TestMethod]
 		public void GoessnerExample7BConstructed()
 		{
-			var path = JsonPathWith.Search("book").ArraySlice(null, 2);
+			var path = JsonPathWith.Search("book").Array(new Slice(null, 2));
 			var expected = new JsonArray
 				{
 					new JsonObject

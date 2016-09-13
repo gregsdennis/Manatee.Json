@@ -32,14 +32,14 @@ namespace Manatee.Json.Path.Expressions.Translation
 {
 	internal static class ExpressionTranslator
 	{
-		private static readonly Dictionary<Type, Func<Expression, IExpressionTranslator>> _translators =
+		private static readonly Dictionary<Type, Func<Expression, IExpressionTranslator>> Translators =
 			new Dictionary<Type, Func<Expression, IExpressionTranslator>>
 				{
-					{typeof (ConstantExpression), GetValueTranslator},
-					{typeof (BinaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
-					{typeof (UnaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
-					{typeof (MethodCallExpression), GetMethodCallTranslator},
-					{typeof (MemberExpression), GetMemberTranslator},
+						{typeof(ConstantExpression), GetValueTranslator},
+						{typeof(BinaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
+						{typeof(UnaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
+						{typeof(MethodCallExpression), GetMethodCallTranslator},
+						{typeof(MemberExpression), GetMemberTranslator},
 				};
 
 		private static IExpressionTranslator GetValueTranslator(Expression e)
@@ -50,7 +50,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 			if (type == typeof(string))
 				return new StringValueExpressionTranslator();
 			if (type.In(typeof(sbyte), typeof(byte), typeof(char), typeof(short), typeof(ushort), typeof(int),
-			                typeof (uint), typeof (long), typeof (ulong), typeof (float), typeof (double), typeof (decimal)))
+			            typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)))
 				return new NumberValueExpressionTranslator();
 			var constant = (ConstantExpression) e;
 			if (constant.Value == null)
@@ -199,10 +199,10 @@ namespace Manatee.Json.Path.Expressions.Translation
 		public static ExpressionTreeNode<T> TranslateNode<T>(Expression source)
 		{
 			var type = source.GetType();
-			var expressionKey = _translators.Keys.FirstOrDefault(t => t.IsAssignableFrom(type));
+			var expressionKey = Translators.Keys.FirstOrDefault(t => t.IsAssignableFrom(type));
 			if (expressionKey != null)
 			{
-				var translator = _translators[expressionKey](source);
+				var translator = Translators[expressionKey](source);
 				if (translator != null)
 					return translator.Translate<T>(source);
 			}
@@ -210,11 +210,11 @@ namespace Manatee.Json.Path.Expressions.Translation
 		}
 		public static Expression<T, JsonValue> Translate<T>(Expression<Func<JsonPathValue, T>> source)
 		{
-			return new Expression<T, JsonValue> {Root = TranslateNode<JsonValue>(source.Body)};
+			return new Expression<T, JsonValue>(TranslateNode<JsonValue>(source.Body));
 		}
 		public static Expression<T, JsonArray> Translate<T>(Expression<Func<JsonPathArray, T>> source)
 		{
-			return new Expression<T, JsonArray> {Root = TranslateNode<JsonArray>(source.Body)};
+			return new Expression<T, JsonArray>(TranslateNode<JsonArray>(source.Body));
 		}
 	}
 }
