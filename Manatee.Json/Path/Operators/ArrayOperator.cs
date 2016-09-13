@@ -20,12 +20,13 @@
 	Purpose:		Indicates that the current value should be an array.
 
 ***************************************************************************************/
+using System;
 using System.Linq;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Operators
 {
-	internal class ArrayOperator : IJsonPathOperator
+	internal class ArrayOperator : IJsonPathOperator, IEquatable<ArrayOperator>
 	{
 		private readonly IJsonPathArrayQuery _query;
 
@@ -47,6 +48,20 @@ namespace Manatee.Json.Path.Operators
 		public override string ToString()
 		{
 			return $"[{_query}]";
+		}
+		public bool Equals(ArrayOperator other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(_query, other._query);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ArrayOperator);
+		}
+		public override int GetHashCode()
+		{
+			return _query?.GetHashCode() ?? 0;
 		}
 	}
 }

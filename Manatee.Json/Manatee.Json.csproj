@@ -233,6 +233,11 @@
     <Compile Include="Parsing\StringParser.cs" />
     <Compile Include="Path\ArrayParameters\FilterExpressionQuery.cs" />
     <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />
+    <Compile Include="Path\Expressions\Parsing\IJsonPathExpressionParser.cs" />
+    <Compile Include="Path\Parsing\ExpressionFilterParser.cs" />
+    <Compile Include="Path\Parsing\ExpressionIndexParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\JsonPathExpressionParser.cs" />
+    <Compile Include="Path\Parsing\SearchIndexedArrayParser.cs" />
     <Compile Include="Path\Slice.cs" />
     <Compile Include="Path\ArrayParameters\SliceQuery.cs" />
     <Compile Include="Path\ArrayParameters\WildCardQuery.cs" />

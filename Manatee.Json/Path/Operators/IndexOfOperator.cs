@@ -21,12 +21,13 @@
 					returns the number of items.
 
 ***************************************************************************************/
+using System;
 using System.Linq;
 using Manatee.Json.Path.Expressions;
 
 namespace Manatee.Json.Path.Operators
 {
-	internal class IndexOfOperator : IJsonPathOperator
+	internal class IndexOfOperator : IJsonPathOperator, IEquatable<IndexOfOperator>
 	{
 		public Expression<JsonValue, JsonArray> Parameter { get; }
 
@@ -45,6 +46,20 @@ namespace Manatee.Json.Path.Operators
 		public override string ToString()
 		{
 			return $".indexOf({Parameter})";
+		}
+		public bool Equals(IndexOfOperator other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Parameter, other.Parameter);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as IndexOfOperator);
+		}
+		public override int GetHashCode()
+		{
+			return Parameter?.GetHashCode() ?? 0;
 		}
 	}
 }

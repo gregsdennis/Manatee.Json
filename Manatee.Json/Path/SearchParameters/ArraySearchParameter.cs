@@ -20,12 +20,13 @@
 	Purpose:		Indicates that a search should look for an array parameter.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
-	internal class ArraySearchParameter : IJsonPathSearchParameter
+	internal class ArraySearchParameter : IJsonPathSearchParameter, IEquatable<ArraySearchParameter>
 	{
 		private readonly IJsonPathArrayQuery _query;
 
@@ -55,6 +56,20 @@ namespace Manatee.Json.Path.SearchParameters
 		public override string ToString()
 		{
 			return $"[{_query}]";
+		}
+		public bool Equals(ArraySearchParameter other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(_query, other._query);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ArraySearchParameter);
+		}
+		public override int GetHashCode()
+		{
+			return _query?.GetHashCode() ?? 0;
 		}
 	}
 }

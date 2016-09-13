@@ -20,13 +20,14 @@
 	Purpose:		Provides array-slice-syntax queries for arrays.
 
 ***************************************************************************************/
+using System;
 using Manatee.Json.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manatee.Json.Path.ArrayParameters
 {
-	internal class SliceQuery : IJsonPathArrayQuery
+	internal class SliceQuery : IJsonPathArrayQuery, IEquatable<SliceQuery>
 	{
 		private readonly IEnumerable<Slice> _slices;
 
@@ -43,6 +44,20 @@ namespace Manatee.Json.Path.ArrayParameters
 		public override string ToString()
 		{
 			return _slices.Join(",");
+		}
+		public bool Equals(SliceQuery other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return _slices.ContentsEqual(other._slices);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as SliceQuery);
+		}
+		public override int GetHashCode()
+		{
+			return _slices?.GetCollectionHashCode() ?? 0;
 		}
 	}
 }

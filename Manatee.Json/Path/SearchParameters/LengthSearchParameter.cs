@@ -21,12 +21,13 @@
 					object and array values.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
-	internal class LengthSearchParameter : IJsonPathSearchParameter
+	internal class LengthSearchParameter : IJsonPathSearchParameter, IEquatable<LengthSearchParameter>
 	{
 		public static LengthSearchParameter Instance { get; } = new LengthSearchParameter();
 
@@ -50,6 +51,19 @@ namespace Manatee.Json.Path.SearchParameters
 		public override string ToString()
 		{
 			return "length";
+		}
+		public bool Equals(LengthSearchParameter other)
+		{
+			return !ReferenceEquals(null, other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as LengthSearchParameter);
+		}
+		public override int GetHashCode()
+		{
+			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
+			return base.GetHashCode();
 		}
 	}
 }

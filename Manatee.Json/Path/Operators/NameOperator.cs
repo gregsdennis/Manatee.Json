@@ -21,12 +21,13 @@
 					a named property should be retrieved.
 
 ***************************************************************************************/
+using System;
 using System.Linq;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Operators
 {
-	internal class NameOperator : IJsonPathOperator
+	internal class NameOperator : IJsonPathOperator, IEquatable<NameOperator>
 	{
 		public string Name { get; }
 
@@ -46,6 +47,20 @@ namespace Manatee.Json.Path.Operators
 			return Name.Any(c => !char.IsLetterOrDigit(c))
 				       ? $".'{Name}'"
 				       : $".{Name}";
+		}
+		public bool Equals(NameOperator other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(Name, other.Name);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as NameOperator);
+		}
+		public override int GetHashCode()
+		{
+			return Name?.GetHashCode() ?? 0;
 		}
 	}
 }

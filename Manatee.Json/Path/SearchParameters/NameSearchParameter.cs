@@ -20,12 +20,13 @@
 	Purpose:		Indicates that a search should look for a named parameter.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
-	internal class NameSearchParameter : IJsonPathSearchParameter
+	internal class NameSearchParameter : IJsonPathSearchParameter, IEquatable<NameSearchParameter>
 	{
 		private readonly string _name;
 
@@ -56,6 +57,20 @@ namespace Manatee.Json.Path.SearchParameters
 		public override string ToString()
 		{
 			return _name;
+		}
+		public bool Equals(NameSearchParameter other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(_name, other._name);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as NameSearchParameter);
+		}
+		public override int GetHashCode()
+		{
+			return _name?.GetHashCode() ?? 0;
 		}
 	}
 }

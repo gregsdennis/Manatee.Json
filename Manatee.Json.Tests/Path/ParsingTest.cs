@@ -15,8 +15,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -27,8 +26,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -39,8 +37,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -51,8 +48,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -63,8 +59,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -75,8 +70,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
 		public void SingleNamedSearch()
@@ -86,8 +80,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -98,8 +91,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -110,8 +102,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -122,8 +113,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -134,8 +124,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -146,8 +135,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -158,8 +146,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -170,8 +157,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -182,8 +168,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -194,8 +179,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -206,8 +190,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -218,8 +201,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -230,8 +212,7 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
@@ -260,8 +241,18 @@ namespace Manatee.Json.Tests.Path
 
 			var actual = JsonPath.Parse(text);
 
-			Assert.AreEqual(expected.ToString(), actual.ToString());
-			//Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void SearchIndexedArray()
+		{
+			var text = "$..[1]";
+			var expected = JsonPathWith.SearchArray(1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }
