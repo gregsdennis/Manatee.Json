@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace Manatee.Json.Path.Parsing
+﻿namespace Manatee.Json.Path.Parsing
 {
 	internal class ObjectParser : IJsonPathParser
 	{

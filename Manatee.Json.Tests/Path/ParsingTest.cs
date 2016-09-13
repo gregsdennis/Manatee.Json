@@ -1,4 +1,5 @@
 ﻿using Manatee.Json.Path;
+using Manatee.Json.Path.ArrayParameters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Path
@@ -147,6 +148,108 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected.ToString(), actual.ToString());
 			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void SingleIndexedArray()
+		{
+			var text = "$[1]";
+			var expected = JsonPathWith.Array(1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void SingleSlicedArray()
+		{
+			var text = "$[1:5]";
+			var expected = JsonPathWith.Array(new Slice(1, 5));
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void SteppedSlicedArray()
+		{
+			var text = "$[1:5:2]";
+			var expected = JsonPathWith.Array(new Slice(1, 5, 2));
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void IndexedSlicedArray()
+		{
+			var text = "$[1,5:7]";
+			var expected = JsonPathWith.Array(1, new Slice(5, 7));
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void SlicedIndexedArray()
+		{
+			var text = "$[1:5,7]";
+			var expected = JsonPathWith.Array(new Slice(1, 5), 7);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void MultiSlicedArray()
+		{
+			var text = "$[1:5,7:11:2]";
+			var expected = JsonPathWith.Array(new Slice(1, 5), new Slice(7, 11, 2));
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void MultiIndexedArray()
+		{
+			var text = "$[1,3]";
+			var expected = JsonPathWith.Array(1, 3);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(JsonPathSyntaxException))]
+		public void EmptyIndexedArray()
+		{
+			var text = "$[]";
+
+			JsonPath.Parse(text);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(JsonPathSyntaxException))]
+		public void EmptyObject()
+		{
+			var text = "$.";
+
+			JsonPath.Parse(text);
 		}
 	}
 }
