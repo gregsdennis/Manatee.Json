@@ -105,16 +105,6 @@ namespace Manatee.Json.Path
 			return path;
 		}
 		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by including all array values.
-		/// </summary>
-		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath SearchArray()
-		{
-			var path = new JsonPath();
-			path.Operators.Add(new SearchOperator(new ArraySearchParameter(WildCardQuery.Instance)));
-			return path;
-		}
-		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies.
 		/// </summary>
 		/// <param name="slices">The indices and slices of the <see cref="JsonValue"/>s to include.</param>
@@ -122,7 +112,9 @@ namespace Manatee.Json.Path
 		public static JsonPath SearchArray(params Slice[] slices)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new SliceQuery(slices))));
+			path.Operators.Add(new SearchOperator(slices.Any()
+				                                      ? new ArraySearchParameter(new SliceQuery(slices))
+				                                      : new ArraySearchParameter(WildCardQuery.Instance)));
 			return path;
 		}
 		/// <summary>
@@ -165,16 +157,6 @@ namespace Manatee.Json.Path
 			return path;
 		}
 		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by including all array values.
-		/// </summary>
-		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath Array()
-		{
-			var path = new JsonPath();
-			path.Operators.Add(new ArrayOperator(WildCardQuery.Instance));
-			return path;
-		}
-		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies.
 		/// </summary>
 		/// <param name="slices">The indices and slices of the <see cref="JsonValue"/>s to include.</param>
@@ -182,7 +164,9 @@ namespace Manatee.Json.Path
 		public static JsonPath Array(params Slice[] slices)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new ArrayOperator(new SliceQuery(slices)));
+			path.Operators.Add(!slices.Any()
+				                   ? new ArrayOperator(WildCardQuery.Instance)
+				                   : new ArrayOperator(new SliceQuery(slices)));
 			return path;
 		}
 		/// <summary>

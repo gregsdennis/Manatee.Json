@@ -233,7 +233,7 @@
     <Compile Include="Parsing\StringParser.cs" />
     <Compile Include="Path\ArrayParameters\FilterExpressionQuery.cs" />
     <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />
-    <Compile Include="Path\ArrayParameters\Slice.cs" />
+    <Compile Include="Path\Slice.cs" />
     <Compile Include="Path\ArrayParameters\SliceQuery.cs" />
     <Compile Include="Path\ArrayParameters\WildCardQuery.cs" />
     <Compile Include="Path\Expressions\AddExpression.cs" />
@@ -311,13 +311,14 @@
     <Compile Include="Path\Operators\NameOperator.cs" />
     <Compile Include="Path\Operators\SearchOperator.cs" />
     <Compile Include="Path\Operators\WildCardOperator.cs" />
-    <Compile Include="Path\Parsing\ArrayParser.cs" />
+    <Compile Include="Path\Parsing\IndexedArrayParser.cs" />
     <Compile Include="Path\Parsing\IJsonPathParser.cs" />
     <Compile Include="Path\Parsing\JsonPathParser.cs" />
     <Compile Include="Path\Parsing\ObjectParser.cs" />
     <Compile Include="Path\Parsing\PathParsingExtensions.cs" />
     <Compile Include="Path\Parsing\SearchParser.cs" />
     <Compile Include="Path\Parsing\StartParser.cs" />
+    <Compile Include="Path\Parsing\WildcardArrayParser.cs" />
     <Compile Include="Path\PathExpressionExtensions.cs" />
     <Compile Include="Path\SearchParameters\ArraySearchParameter.cs" />
     <Compile Include="Path\SearchParameters\LengthSearchParameter.cs" />

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manatee.Json.Path.ArrayParameters
+namespace Manatee.Json.Path
 {
 	public class Slice
 	{
@@ -26,7 +26,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		{
 			if (_index.HasValue)
 			{
-				return json.Count > _index.Value
+				return json.Count < _index.Value
 					       ? Enumerable.Empty<JsonValue>()
 					       : new[] {json[_index.Value]};
 			}

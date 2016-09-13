@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Manatee.Json.Internal;
-using Manatee.Json.Path.ArrayParameters;
 
 namespace Manatee.Json.Path.Parsing
 {
@@ -11,7 +8,7 @@ namespace Manatee.Json.Path.Parsing
 	{
 		public bool Handles(string input)
 		{
-			return input.Length > 1 && input[0] == '[' && char.IsDigit(input[1]);
+			return input.Length > 1 && input[0] == '[' && (char.IsDigit(input[1]) || input[1].In('-', ':'));
 			//return input.Length > 1 && input[0] == '[' && (char.IsDigit(input[1]) || input[1].In('"', '\''));
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
@@ -43,13 +40,13 @@ namespace Manatee.Json.Path.Parsing
 			slice = null;
 			if (source[index - 1] == ']') return null;
 
-			int n1, n2, n3;
+			int? n1, n2, n3;
 
 			var error = GetNumber(source, ref index, out n1);
 			if (error != null) return error;
-			if (source[index].In(',', ']'))
+			if (n1.HasValue && source[index].In(',', ']'))
 			{
-				slice = new Slice(n1);
+				slice = new Slice(n1.Value);
 				return null;
 			}
 			if (source[index] != ':')
@@ -77,13 +74,23 @@ namespace Manatee.Json.Path.Parsing
 			return "Expected ',' or ']'.";
 		}
 
-		private static string GetNumber(string source, ref int index, out int number)
+		private static string GetNumber(string source, ref int index, out int? number)
 		{
-			var text = new string(source.Substring(index).TakeWhile(char.IsDigit).ToArray());
-			if (!int.TryParse(text, out number))
+			int value;
+			var text = new string(source.Substring(index).TakeWhile(c => char.IsDigit(c) || c == '-').ToArray());
+			if (text.Length == 0 && source[index].In(':',',',']'))
+			{
+				number = null;
+				return null;
+			}
+			if (!int.TryParse(text, out value))
+			{
+				number = null;
 				return "Expected number.";
+			}
 
 			index += text.Length;
+			number = value;
 			return null;
 		}
 	}

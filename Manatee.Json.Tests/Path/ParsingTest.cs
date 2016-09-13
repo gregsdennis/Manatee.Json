@@ -251,5 +251,17 @@ namespace Manatee.Json.Tests.Path
 
 			JsonPath.Parse(text);
 		}
+
+		[TestMethod]
+		public void WildcardArray()
+		{
+			var text = "$[*]";
+			var expected = JsonPathWith.Array();
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+			//Assert.AreEqual(expected, actual);
+		}
 	}
 }
