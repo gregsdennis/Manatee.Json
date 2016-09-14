@@ -24,7 +24,7 @@ using System;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class HasPropertyExpression<T> : ExpressionTreeNode<T>
+	internal class HasPropertyExpression<T> : ExpressionTreeNode<T>, IEquatable<HasPropertyExpression<T>>
 	{
 		public override int Priority => 6;
 		public string Name { get; set; }
@@ -42,6 +42,20 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			return $"@.{Name}";
+		}
+		public bool Equals(HasPropertyExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(Name, other.Name);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as HasPropertyExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			return Name?.GetHashCode() ?? 0;
 		}
 	}
 }

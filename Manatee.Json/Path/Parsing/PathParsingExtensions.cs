@@ -157,7 +157,7 @@ namespace Manatee.Json.Path.Parsing
 
 			int? n1, n2, n3;
 
-			var error = GetNumber(source, ref index, out n1);
+			var error = GetInt(source, ref index, out n1);
 			if (error != null) return error;
 			if (n1.HasValue && source[index].In(',', ']'))
 			{
@@ -168,7 +168,7 @@ namespace Manatee.Json.Path.Parsing
 				return "Expected ':', ',', or ']'.";
 
 			index++;
-			error = GetNumber(source, ref index, out n2);
+			error = GetInt(source, ref index, out n2);
 			if (error != null) return error;
 			if (source[index].In(',', ']'))
 			{
@@ -179,7 +179,7 @@ namespace Manatee.Json.Path.Parsing
 				return "Expected ':', ',', or ']'.";
 
 			index++;
-			error = GetNumber(source, ref index, out n3);
+			error = GetInt(source, ref index, out n3);
 			if (error != null) return error;
 			if (source[index].In(',', ']'))
 			{
@@ -188,7 +188,7 @@ namespace Manatee.Json.Path.Parsing
 			}
 			return "Expected ',' or ']'.";
 		}
-		private static string GetNumber(string source, ref int index, out int? number)
+		public static string GetInt(string source, ref int index, out int? number)
 		{
 			int value;
 			var text = new string(source.Substring(index).TakeWhile(c => char.IsDigit(c) || c == '-').ToArray());
@@ -198,6 +198,32 @@ namespace Manatee.Json.Path.Parsing
 				return null;
 			}
 			if (!int.TryParse(text, out value))
+			{
+				number = null;
+				return "Expected number.";
+			}
+
+			index += text.Length;
+			number = value;
+			return null;
+		}
+
+		#endregion
+
+		#region GetNumber
+
+		private const string NumberChars = "0123456789e.-";
+
+		public static string GetNumber(this string source, ref int index, out double? number)
+		{
+			double value;
+			var text = new string(source.Substring(index).TakeWhile(c => NumberChars.Contains(c)).ToArray());
+			if (text.Length == 0 && source[index].In(':', ',', ']'))
+			{
+				number = null;
+				return null;
+			}
+			if (!double.TryParse(text, out value))
 			{
 				number = null;
 				return "Expected number.";

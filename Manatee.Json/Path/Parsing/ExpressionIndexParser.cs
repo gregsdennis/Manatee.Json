@@ -31,16 +31,18 @@ namespace Manatee.Json.Path.Parsing
 	{
 		public bool Handles(string input)
 		{
-			return input.StartsWith("[?(");
+			return input.StartsWith("[(");
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
+			index += 2;
 			Expression<int, JsonArray> expression;
 			var error = JsonPathExpressionParser.Parse(source, ref index, out expression);
 
 			if (error != null)
 				return error;
 
+			index++; // consume closing ']'
 			path.Operators.Add(new ArrayOperator(new IndexExpressionQuery(expression)));
 			return null;
 		}

@@ -20,9 +20,11 @@
 	Purpose:		Expresses the intent to perform a boolean OR.
 
 ***************************************************************************************/
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
-	internal class OrExpression<T> : ExpressionTreeBranch<T>
+	internal class OrExpression<T> : ExpressionTreeBranch<T>, IEquatable<OrExpression<T>>
 	{
 		public override int Priority => 0;
 
@@ -33,6 +35,25 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			return $"{Left} || {Right}";
+		}
+		public bool Equals(OrExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return base.Equals(other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as OrExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode * 397) ^ GetType().GetHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

@@ -20,9 +20,11 @@
 	Purpose:		Expresses the intent to invert a boolean.
 
 ***************************************************************************************/
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
-	internal class NotExpression<T> : ExpressionTreeNode<T>
+	internal class NotExpression<T> : ExpressionTreeNode<T>, IEquatable<NotExpression<T>>
 	{
 		public override int Priority => 5;
 		public ExpressionTreeNode<T> Root { get; set; }
@@ -40,6 +42,20 @@ namespace Manatee.Json.Path.Expressions
 				   Root is IsGreaterThanExpression<T> || Root is IsGreaterThanEqualExpression<T>
 					   ? $"!({Root})"
 				       : $"!{Root}";
+		}
+		public bool Equals(NotExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Root, other.Root);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as NotExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			return Root?.GetHashCode() ?? 0;
 		}
 	}
 }

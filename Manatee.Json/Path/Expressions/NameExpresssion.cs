@@ -26,7 +26,7 @@ using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class NameExpression<T> : PathExpression<T>
+	internal class NameExpression<T> : PathExpression<T>, IEquatable<NameExpression<T>>
 	{
 		public override int Priority => 6;
 		public string Name { get; set; }
@@ -58,6 +58,26 @@ namespace Manatee.Json.Path.Expressions
 			if (value != null)
 				return (string)value;
 			return Name;
+		}
+		public bool Equals(NameExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return base.Equals(other) && string.Equals(Name, other.Name) && Equals(NameExp, other.NameExp);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as NameExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode*397) ^ (Name?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (NameExp?.GetHashCode() ?? 0);
+				return hashCode;
+			}
 		}
 	}
 }

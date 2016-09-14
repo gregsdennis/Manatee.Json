@@ -21,9 +21,11 @@
 
 ***************************************************************************************/
 
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
-	internal class MultiplyExpression<T> : ExpressionTreeBranch<T>
+	internal class MultiplyExpression<T> : ExpressionTreeBranch<T>, IEquatable<MultiplyExpression<T>>
 	{
 		public override int Priority => 3;
 
@@ -39,6 +41,25 @@ namespace Manatee.Json.Path.Expressions
 			var left = Left.Priority <= Priority ? $"({Left})" : Left.ToString();
 			var right = Right.Priority <= Priority ? $"({Right})" : Right.ToString();
 			return $"{left}*{right}";
+		}
+		public bool Equals(MultiplyExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return base.Equals(other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as MultiplyExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode * 397) ^ GetType().GetHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

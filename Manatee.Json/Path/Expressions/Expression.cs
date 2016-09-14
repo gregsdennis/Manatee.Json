@@ -24,7 +24,7 @@ using System;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class Expression<T, TIn>
+	internal class Expression<T, TIn> : IEquatable<Expression<T, TIn>>
 	{
 		private readonly ExpressionTreeNode<TIn> _root;
 
@@ -60,6 +60,20 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			return _root.ToString();
+		}
+		public bool Equals(Expression<T, TIn> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(_root, other._root);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as Expression<T, TIn>);
+		}
+		public override int GetHashCode()
+		{
+			return _root?.GetHashCode() ?? 0;
 		}
 	}
 }

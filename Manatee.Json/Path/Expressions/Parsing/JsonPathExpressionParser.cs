@@ -22,8 +22,9 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		{
 			var nodes = new List<ExpressionTreeNode<TIn>>();
 			var length = source.Length;
+			ExpressionTreeNode<TIn> node;
 			expr = null;
-			while (index < length)
+			do
 			{
 				char c;
 				var errorMessage = source.SkipWhiteSpace(ref index, length, out c);
@@ -31,11 +32,11 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				var i = index;
 				var parser = Parsers.FirstOrDefault(p => p.Handles(source.Substring(i)));
 				if (parser == null) return "Unrecognized JSON Path Expression element.";
-				ExpressionTreeNode<TIn> node;
 				errorMessage = parser.TryParse(source, ref index, out node);
 				if (errorMessage != null) return errorMessage;
-				nodes.Add(node);
-			}
+				if (node != null)
+					nodes.Add(node);
+			} while (index < length && node != null);
 
 			expr = new Expression<T, TIn>(BuildTree(nodes));
 			return null;

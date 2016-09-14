@@ -235,6 +235,8 @@
     <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />
     <Compile Include="Path\Expressions\Parsing\AddExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\AndExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ConstantNumberExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ConstantStringExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\DivideExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\ExponentExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IJsonPathExpressionParser.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Path\Expressions\Parsing\IsNotEqualExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\ModuloExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\MultiplyExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\PathExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\SubtractExpressionParser.cs" />
     <Compile Include="Path\Parsing\ExpressionFilterParser.cs" />
     <Compile Include="Path\Parsing\ExpressionIndexParser.cs" />

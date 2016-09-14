@@ -25,7 +25,7 @@ using System;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class ConversionExpression<T> : ExpressionTreeNode<T>
+	internal class ConversionExpression<T> : ExpressionTreeNode<T>, IEquatable<ConversionExpression<T>>
 	{
 		public override int Priority => 6;
 		public ExpressionTreeNode<T> Root { get; set; }
@@ -40,6 +40,20 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			return Root.ToString();
+		}
+		public bool Equals(ConversionExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Root, other.Root) && TargetType == other.TargetType;
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ConversionExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked { return ((Root?.GetHashCode() ?? 0)*397) ^ (TargetType != null ? TargetType.GetHashCode() : 0); }
 		}
 
 		private object CastValue(object value)

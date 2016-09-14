@@ -22,9 +22,11 @@
 
 ***************************************************************************************/
 
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
-	internal class GroupExpression<T> : ExpressionTreeNode<T>
+	internal class GroupExpression<T> : ExpressionTreeNode<T>, IEquatable<GroupExpression<T>>
 	{
 		public override int Priority => 6;
 		public ExpressionTreeNode<T> Group { get; set; }
@@ -36,6 +38,20 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			return $"({Group})";
+		}
+		public bool Equals(GroupExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Group, other.Group);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as GroupExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			return Group?.GetHashCode() ?? 0;
 		}
 	}
 }

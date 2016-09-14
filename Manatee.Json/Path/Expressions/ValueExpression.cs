@@ -21,9 +21,11 @@
 
 ***************************************************************************************/
 
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
-	internal class ValueExpression<T> : ExpressionTreeNode<T>
+	internal class ValueExpression<T> : ExpressionTreeNode<T>, IEquatable<ValueExpression<T>>
 	{
 		public override int Priority => 6;
 		public object Value { get; set; }
@@ -37,6 +39,20 @@ namespace Manatee.Json.Path.Expressions
 			return Value is string
 				       ? $"\"{Value}\""
 				       : Value.ToString();
+		}
+		public bool Equals(ValueExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Value, other.Value);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ValueExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			return Value?.GetHashCode() ?? 0;
 		}
 	}
 }

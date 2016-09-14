@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class PathExpression<T> : ExpressionTreeNode<T>
+	internal class PathExpression<T> : ExpressionTreeNode<T>, IEquatable<PathExpression<T>>
 	{
 		public override int Priority => 6;
 		public JsonPath Path { get; set; }
@@ -44,6 +44,20 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			return (IsLocal ? "@" : "$") + Path.GetRawString();
+		}
+		public bool Equals(PathExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Path, other.Path) && IsLocal == other.IsLocal;
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as PathExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked { return ((Path?.GetHashCode() ?? 0)*397) ^ IsLocal.GetHashCode(); }
 		}
 	}
 }
