@@ -63,7 +63,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			{
 				var split = nodes.IndexOf(root);
 				var right = nodes.Skip(split + 1).FirstOrDefault();
-				not.Root = right;
+				not.Root = CheckNode(right, null);
 			}
 			return root;
 		}

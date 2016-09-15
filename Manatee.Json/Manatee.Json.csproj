@@ -248,6 +248,8 @@
     <Compile Include="Path\Expressions\Parsing\IsNotEqualExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\ModuloExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\MultiplyExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\NotExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\OrExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\PathExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\SubtractExpressionParser.cs" />
     <Compile Include="Path\Parsing\ExpressionFilterParser.cs" />

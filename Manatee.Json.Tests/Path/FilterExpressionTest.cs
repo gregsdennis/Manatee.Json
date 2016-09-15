@@ -1,5 +1,4 @@
-﻿using System;
-using Manatee.Json.Path;
+﻿using Manatee.Json.Path;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Path
@@ -12,6 +11,61 @@ namespace Manatee.Json.Tests.Path
 		{
 			var text = "$[?(@.test == 5)]";
 			var expected = JsonPathWith.Array(jv => jv.Name("test") == 5);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void PropertyNotEqualToValue()
+		{
+			var text = "$[?(@.test != 5)]";
+			var expected = JsonPathWith.Array(jv => jv.Name("test") != 5);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void PropertyGreaterThanValue()
+		{
+			var text = "$[?(@.test > 5)]";
+			var expected = JsonPathWith.Array(jv => jv.Name("test") > 5);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void PropertyGreaterThanEqualToValue()
+		{
+			var text = "$[?(@.test >= 5)]";
+			var expected = JsonPathWith.Array(jv => jv.Name("test") >= 5);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void PropertyLessThanValue()
+		{
+			var text = "$[?(@.test < 5)]";
+			var expected = JsonPathWith.Array(jv => jv.Name("test") < 5);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void PropertyLessThanEqualToValue()
+		{
+			var text = "$[?(@.test <= 5)]";
+			var expected = JsonPathWith.Array(jv => jv.Name("test") <= 5);
 
 			var actual = JsonPath.Parse(text);
 
@@ -102,6 +156,50 @@ namespace Manatee.Json.Tests.Path
 		{
 			var text = "$[?(@.test)]";
 			var expected = JsonPathWith.Array(jv => jv.HasProperty("test"));
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void DoesNotHaveProperty()
+		{
+			var text = "$[?(!@.test)]";
+			var expected = JsonPathWith.Array(jv => !jv.HasProperty("test"));
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void GroupedNot()
+		{
+			var text = "$[?(!(@.test && @.name == 5))]";
+			var expected = JsonPathWith.Array(jv => !(jv.HasProperty("test") && jv.Name("name") == 5));
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void And()
+		{
+			var text = "$[?(@.test && @.name == 5)]";
+			var expected = JsonPathWith.Array(jv => jv.HasProperty("test") && jv.Name("name") == 5);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Or()
+		{
+			var text = "$[?(@.test || @.name == 5)]";
+			var expected = JsonPathWith.Array(jv => jv.HasProperty("test") || jv.Name("name") == 5);
 
 			var actual = JsonPath.Parse(text);
 
