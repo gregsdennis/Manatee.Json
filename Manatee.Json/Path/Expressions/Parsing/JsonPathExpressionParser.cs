@@ -38,7 +38,9 @@ namespace Manatee.Json.Path.Expressions.Parsing
 					nodes.Add(node);
 			} while (index < length && node != null);
 
-			expr = new Expression<T, TIn>(BuildTree(nodes));
+			expr = new Expression<T, TIn>(nodes.Count == 1
+				                              ? CheckNode(nodes[0], null)
+				                              : BuildTree(nodes));
 			return null;
 		}
 
@@ -53,8 +55,8 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				var split = nodes.IndexOf(root);
 				var left = nodes.Take(split).ToList();
 				var right = nodes.Skip(split + 1).ToList();
-				branch.Left = BuildTree(left);
-				branch.Right = BuildTree(right);
+				branch.Left = CheckNode(BuildTree(left), branch);
+				branch.Right = CheckNode(BuildTree(right), branch);
 			}
 			var not = root as NotExpression<T>;
 			if (not != null)
@@ -64,6 +66,21 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				not.Root = right;
 			}
 			return root;
+		}
+
+		private static ExpressionTreeNode<T> CheckNode<T>(ExpressionTreeNode<T> node, ExpressionTreeBranch<T> root)
+		{
+			var named = node as NameExpression<T>;
+			if (named != null && (root == null || root.Priority == 0))
+			{
+				return new HasPropertyExpression<T>
+					{
+						Path = named.Path,
+						IsLocal = named.IsLocal,
+						Name = named.Name
+					};
+			}
+			return node;
 		}
 	}
 }

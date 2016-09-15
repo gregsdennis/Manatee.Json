@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Path.ArrayParameters;
 using Manatee.Json.Path.Operators;
 using Manatee.Json.Path.Parsing;
 
@@ -26,18 +28,57 @@ namespace Manatee.Json.Path.Expressions.Parsing
 
 			var name = path.Operators.Last() as NameOperator;
 			var indexOf = path.Operators.Last() as IndexOfOperator;
-			if (name != null && name.Name == "length")
+			var length = path.Operators.Last() as LengthOperator;
+			var array = path.Operators.Last() as ArrayOperator;
+			if (name != null)
 			{
 				path.Operators.Remove(name);
-				index -= 7; // back up to allow the LengthExpressionParser handle it.
+				node = new NameExpression<T>
+					{
+						Path = path,
+						IsLocal = isLocal,
+						Name = name.Name
+					};
 			}
 			else if (indexOf != null)
 			{
 				path.Operators.Remove(indexOf);
+				node = new IndexOfExpression<T>
+					{
+						Path = path,
+						IsLocal = isLocal
+					};
 				index -= 8; // back up to allow the IndexOfExpressionParser handle it.
 			}
+			else if (length != null)
+			{
+				path.Operators.Remove(length);
+				node = new LengthExpression<T>
+					{
+						Path = path,
+						IsLocal = isLocal
+					};
+			}
+			else if (array != null)
+			{
+				path.Operators.Remove(array);
+				var query = array.Query as SliceQuery;
+				var constant = query?.Slices.FirstOrDefault()?.Index;
+				if (query == null || query.Slices.Count() != 1 || !constant.HasValue)
+				{
+					node = null;
+					return "JSON Path expression indexers only support single constant values.";
+				}
+				node = new ArrayIndexExpression<T>
+					{
+						Path = path,
+						IsLocal = isLocal,
+						Index = constant.Value
+					};
+			}
+			else
+				throw new NotImplementedException();
 
-			node = new PathExpression<T> {Path = path, IsLocal = isLocal};
 			return null;
 		}
 	}

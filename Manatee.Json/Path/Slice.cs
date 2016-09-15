@@ -31,10 +31,11 @@ namespace Manatee.Json.Path
 	/// </summary>
 	public class Slice : IEquatable<Slice>
 	{
-		private int? _index;
 		private int? _start;
 		private int? _end;
 		private int? _step;
+
+		internal int? Index { get; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="Slice"/> class.
@@ -42,7 +43,7 @@ namespace Manatee.Json.Path
 		/// <param name="index">A single index.</param>
 		public Slice(int index)
 		{
-			_index = index;
+			Index = index;
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="Slice"/> class.
@@ -62,8 +63,8 @@ namespace Manatee.Json.Path
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return _index.HasValue
-				       ? _index.ToString()
+			return Index.HasValue
+				       ? Index.ToString()
 				       : _step.HasValue
 					       ? $"{(_start.HasValue ? _start.ToString() : string.Empty)}:{(_end.HasValue ? _end.ToString() : string.Empty)}:{_step}"
 					       : $"{(_start.HasValue ? _start.ToString() : string.Empty)}:{(_end.HasValue ? _end.ToString() : string.Empty)}";
@@ -75,7 +76,7 @@ namespace Manatee.Json.Path
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return _index == other._index &&
+			return Index == other.Index &&
 			       _start == other._start &&
 			       _end == other._end &&
 			       _step == other._step;
@@ -95,7 +96,7 @@ namespace Manatee.Json.Path
 		{
 			unchecked
 			{
-				var hashCode = _index.GetHashCode();
+				var hashCode = Index.GetHashCode();
 				hashCode = (hashCode*397) ^ _start.GetHashCode();
 				hashCode = (hashCode*397) ^ _end.GetHashCode();
 				hashCode = (hashCode*397) ^ _step.GetHashCode();
@@ -113,11 +114,11 @@ namespace Manatee.Json.Path
 
 		internal IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
-			if (_index.HasValue)
+			if (Index.HasValue)
 			{
-				return json.Count < _index.Value
+				return json.Count < Index.Value
 						   ? Enumerable.Empty<JsonValue>()
-						   : new[] { json[_index.Value] };
+						   : new[] { json[Index.Value] };
 			}
 
 			var start = ResolveIndex(_start ?? 0, json.Count);

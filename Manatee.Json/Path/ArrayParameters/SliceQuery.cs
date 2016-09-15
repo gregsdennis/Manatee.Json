@@ -29,27 +29,27 @@ namespace Manatee.Json.Path.ArrayParameters
 {
 	internal class SliceQuery : IJsonPathArrayQuery, IEquatable<SliceQuery>
 	{
-		private readonly IEnumerable<Slice> _slices;
+		internal IEnumerable<Slice> Slices { get; }
 
 		public SliceQuery(params Slice[] slices)
 			: this((IEnumerable<Slice>) slices) {}
 		public SliceQuery(IEnumerable<Slice> slices)
 		{
-			_slices = slices.ToList();
+			Slices = slices.ToList();
 		}
 		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
-			return _slices.SelectMany(s => s.Find(json, root)).Distinct();
+			return Slices.SelectMany(s => s.Find(json, root)).Distinct();
 		}
 		public override string ToString()
 		{
-			return _slices.Join(",");
+			return Slices.Join(",");
 		}
 		public bool Equals(SliceQuery other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return _slices.ContentsEqual(other._slices);
+			return Slices.ContentsEqual(other.Slices);
 		}
 		public override bool Equals(object obj)
 		{
@@ -57,7 +57,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override int GetHashCode()
 		{
-			return _slices?.GetCollectionHashCode() ?? 0;
+			return Slices?.GetCollectionHashCode() ?? 0;
 		}
 	}
 }

@@ -11,7 +11,6 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class IndexExpressionParseTest
 	{
-
 		[TestMethod]
 		public void Length()
 		{
@@ -22,5 +21,17 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
+		// TODO: Add .Name to JsonPathArray extension set.  Will need to make HasPropertyExpression derive from PathExpression.
+		// Paserser can handle it, but need the extension method to test against.
+		//[TestMethod]
+		//public void ExtendedLength()
+		//{
+		//	var text = "$[(@.name.length)]";
+		//	var expected = JsonPathWith.Array(jv => jv.Name("name").Length());
+
+		//	var actual = JsonPath.Parse(text);
+
+		//	Assert.AreEqual(expected, actual);
+		//}
 	}
 }
