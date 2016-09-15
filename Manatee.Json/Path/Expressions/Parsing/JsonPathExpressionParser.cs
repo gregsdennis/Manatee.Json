@@ -20,10 +20,23 @@ namespace Manatee.Json.Path.Expressions.Parsing
 
 		public static string Parse<T, TIn>(string source, ref int index, out Expression<T, TIn> expr)
 		{
+			ExpressionTreeNode<TIn> root;
+			var error = Parse(source, ref index, out root);
+			if (error != null)
+			{
+				expr = null;
+				return error;
+			}
+
+			expr = new Expression<T, TIn>(root);
+			return null;
+		}
+		public static string Parse<TIn>(string source, ref int index, out ExpressionTreeNode<TIn> root)
+		{
 			var nodes = new List<ExpressionTreeNode<TIn>>();
 			var length = source.Length;
 			ExpressionTreeNode<TIn> node;
-			expr = null;
+			root = null;
 			do
 			{
 				char c;
@@ -38,9 +51,9 @@ namespace Manatee.Json.Path.Expressions.Parsing
 					nodes.Add(node);
 			} while (index < length && node != null);
 
-			expr = new Expression<T, TIn>(nodes.Count == 1
-				                              ? CheckNode(nodes[0], null)
-				                              : BuildTree(nodes));
+			root = nodes.Count == 1
+				       ? CheckNode(nodes[0], null)
+				       : BuildTree(nodes);
 			return null;
 		}
 

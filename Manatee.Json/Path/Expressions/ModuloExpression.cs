@@ -26,7 +26,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class ModuloExpression<T> : ExpressionTreeBranch<T>, IEquatable<ModuloExpression<T>>
 	{
-		public override int Priority => 2;
+		protected override int BasePriority => 2;
 
 		public override object Evaluate(T json, JsonValue root)
 		{

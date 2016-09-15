@@ -26,7 +26,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class ExponentExpression<T> : ExpressionTreeBranch<T>, IEquatable<ExponentExpression<T>>
 	{
-		public override int Priority => 4;
+		protected override int BasePriority => 4;
 
 		public override object Evaluate(T json, JsonValue root)
 		{

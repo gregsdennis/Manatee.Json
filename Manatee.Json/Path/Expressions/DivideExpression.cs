@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class DivideExpression<T> : ExpressionTreeBranch<T>, IEquatable<DivideExpression<T>>
 	{
-		public override int Priority => 3;
+		protected override int BasePriority => 3;
 
 		public override object Evaluate(T json, JsonValue root)
 		{

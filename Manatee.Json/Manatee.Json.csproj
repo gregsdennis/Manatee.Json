@@ -239,6 +239,8 @@
     <Compile Include="Path\Expressions\Parsing\ConstantStringExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\DivideExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\ExponentExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ExpressionEndParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\GroupExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IJsonPathExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IsEqualExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IsGreaterThanEqualExpressionParser.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Path\Expressions\Parsing\IsLessThanEqualExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IsLessThanExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IsNotEqualExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\LengthExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\ModuloExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\MultiplyExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\NotExpressionParser.cs" />
@@ -269,7 +272,6 @@
     <Compile Include="Path\Expressions\ExpressionTreeBranch.cs" />
     <Compile Include="Path\Expressions\ExpressionTreeNode.cs" />
     <Compile Include="Path\Expressions\FieldExpression.cs" />
-    <Compile Include="Path\Expressions\GroupExpression.cs" />
     <Compile Include="Path\Expressions\HasPropertyExpression.cs" />
     <Compile Include="Path\Expressions\IndexOfExpression.cs" />
     <Compile Include="Path\Expressions\IsEqualExpression.cs" />

@@ -26,8 +26,9 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class NegateExpression<T> : ExpressionTreeNode<T>, IEquatable<NegateExpression<T>>
 	{
-		public override int Priority => 6;
 		public ExpressionTreeNode<T> Root { get; set; }
+
+		protected override int BasePriority => 6;
 
 		public override object Evaluate(T json, JsonValue root)
 		{

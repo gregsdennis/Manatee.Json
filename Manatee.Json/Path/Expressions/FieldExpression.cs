@@ -28,9 +28,10 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class FieldExpression<T> : ExpressionTreeNode<T>, IEquatable<FieldExpression<T>>
 	{
-		public override int Priority => 6;
 		public FieldInfo Field { get; set; }
 		public object Source { get; set; }
+
+		protected override int BasePriority => 6;
 
 		public override object Evaluate(T json, JsonValue root)
 		{

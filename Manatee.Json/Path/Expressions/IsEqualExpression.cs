@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class IsEqualExpression<T> : ExpressionTreeBranch<T>, IEquatable<IsEqualExpression<T>>
 	{
-		public override int Priority => 1;
+		protected override int BasePriority => 1;
 
 		public override object Evaluate(T json, JsonValue root)
 		{

@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class LengthExpression<T> : PathExpression<T>, IEquatable<LengthExpression<T>>
 	{
-		public override int Priority => 6;
+		protected override int BasePriority => 6;
 
 		public override object Evaluate(T json, JsonValue root)
 		{

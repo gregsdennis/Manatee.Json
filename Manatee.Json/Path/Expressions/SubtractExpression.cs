@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class SubtractExpression<T> : ExpressionTreeBranch<T>, IEquatable<SubtractExpression<T>>
 	{
-		public override int Priority => 2;
+		protected override int BasePriority => 2;
 
 		public override object Evaluate(T json, JsonValue root)
 		{
