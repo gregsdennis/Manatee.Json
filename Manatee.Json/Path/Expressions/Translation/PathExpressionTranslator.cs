@@ -36,8 +36,8 @@ namespace Manatee.Json.Path.Expressions.Translation
 		protected static JsonPath BuildPath(MethodCallExpression method, out bool isLocal)
 		{
 			var path = new JsonPath();
-			var currentMethod = method.Arguments.First() as MethodCallExpression;
-			isLocal = method.Method.Name== "Length" ? method.Arguments.Count != 0 : method.Arguments.Count != 1;
+			var currentMethod = method.Arguments.FirstOrDefault() as MethodCallExpression;
+			isLocal = method.Method.Name == "Length" ? method.Arguments.Count != 0 : method.Arguments.Count != 1;
 			while (currentMethod != null)
 			{
 				var parameter = currentMethod.Arguments.Last() as ConstantExpression;
@@ -55,7 +55,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 						break;
 				}
 				isLocal = currentMethod.Arguments.Count != 1;
-				currentMethod = currentMethod.Arguments.First() as MethodCallExpression;
+				currentMethod = currentMethod.Arguments.FirstOrDefault() as MethodCallExpression;
 			}
 			return path;
 		}

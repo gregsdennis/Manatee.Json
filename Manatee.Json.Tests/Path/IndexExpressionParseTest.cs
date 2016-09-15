@@ -21,17 +21,85 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		// TODO: Add .Name to JsonPathArray extension set.  Will need to make HasPropertyExpression derive from PathExpression.
-		// Paserser can handle it, but need the extension method to test against.
-		//[TestMethod]
-		//public void ExtendedLength()
-		//{
-		//	var text = "$[(@.name.length)]";
-		//	var expected = JsonPathWith.Array(jv => jv.Name("name").Length());
+		[TestMethod]
+		public void Length_Root()
+		{
+			var text = "$[($.length)]";
+			var expected = JsonPathWith.Array(jv => JsonPathRoot.Length());
 
-		//	var actual = JsonPath.Parse(text);
+			var actual = JsonPath.Parse(text);
 
-		//	Assert.AreEqual(expected, actual);
-		//}
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void ExtendedLength()
+		{
+			var text = "$[(@.name.length)]";
+			var expected = JsonPathWith.Array(jv => jv.Name("name").Length());
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Addition()
+		{
+			var text = "$[(@.length+1)]";
+			var expected = JsonPathWith.Array(jv => jv.Length() + 1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Subtraction()
+		{
+			var text = "$[(@.length-1)]";
+			var expected = JsonPathWith.Array(jv => jv.Length() - 1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Multiplication()
+		{
+			var text = "$[(@.length*1)]";
+			var expected = JsonPathWith.Array(jv => jv.Length()*1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Division()
+		{
+			var text = "$[(@.length/1)]";
+			var expected = JsonPathWith.Array(jv => jv.Length()/1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Modulus()
+		{
+			var text = "$[(@.length%1)]";
+			var expected = JsonPathWith.Array(jv => jv.Length()%1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void Exponent()
+		{
+			var text = "$[(@.length^1)]";
+			var expected = JsonPathWith.Array(jv => jv.Length() ^ 1);
+
+			var actual = JsonPath.Parse(text);
+
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }

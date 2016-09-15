@@ -44,6 +44,16 @@ namespace Manatee.Json.Path
 		/// Specifies the length of a <see cref="JsonArray"/>.
 		/// </summary>
 		/// <param name="json">The array.</param>
+		/// <param name="name">The name of the property.</param>
+		/// <returns>The length of the array.</returns>
+		public static JsonPathArray Name(this JsonPathArray json, string name)
+		{
+			throw new InvalidOperationException("This operation is reserved for JsonPath.");
+		}
+		/// <summary>
+		/// Specifies the length of a <see cref="JsonArray"/>.
+		/// </summary>
+		/// <param name="json">The array.</param>
 		/// <returns>The length of the array.</returns>
 		public static int Length(this JsonPathValue json)
 		{

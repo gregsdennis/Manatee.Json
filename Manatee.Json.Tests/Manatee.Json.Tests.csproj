@@ -170,6 +170,7 @@
     <Compile Include="JsonValueEqualsTest.cs" />
     <Compile Include="JsonValueOperatorTest.cs" />
     <Compile Include="JsonValueParseTest.cs" />
+    <Compile Include="Path\EvaluationTest.cs" />
     <Compile Include="Path\FilterExpressionTest.cs" />
     <Compile Include="Path\IndexExpressionParseTest.cs" />
     <Compile Include="Path\ParsingTest.cs" />

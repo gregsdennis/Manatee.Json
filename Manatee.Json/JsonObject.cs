@@ -88,7 +88,8 @@ namespace Manatee.Json
 		/// Adds the specified key and value to the dictionary.
 		/// </summary>
 		/// <param name="key">The key of the element to add.</param>
-		/// <param name="value">The value of the element to add. The value can be null for reference types.</param>
+		/// <param name="value">The value of the element to add. If the value is null,
+		/// it will be replaced by <see cref="JsonValue.Null"/>.</param>
 		public new void Add(string key, JsonValue value)
 		{
 			base.Add(key, value ?? JsonValue.Null);

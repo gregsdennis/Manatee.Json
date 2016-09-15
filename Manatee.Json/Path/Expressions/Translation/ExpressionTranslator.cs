@@ -71,6 +71,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 				case ExpressionType.Multiply:
 				case ExpressionType.MultiplyChecked:
 					return new MultiplyExpressionTranslator();
+				case ExpressionType.ExclusiveOr:
 				case ExpressionType.Power:
 					return new ExponentExpressionTranslator();
 				case ExpressionType.Subtract:
@@ -109,7 +110,6 @@ namespace Manatee.Json.Path.Expressions.Translation
 				case ExpressionType.Coalesce:
 				case ExpressionType.Conditional:
 				case ExpressionType.Constant:
-				case ExpressionType.ExclusiveOr:
 				case ExpressionType.Invoke:
 				case ExpressionType.Lambda:
 				case ExpressionType.LeftShift:
