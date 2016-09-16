@@ -38,7 +38,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			if (Right.Priority == Priority)
+			if (Right?.Priority == Priority)
 				return $"{Left}-({Right})";
 			return $"{Left}-{Right}";
 		}

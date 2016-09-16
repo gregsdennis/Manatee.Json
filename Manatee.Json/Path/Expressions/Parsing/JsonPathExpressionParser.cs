@@ -57,15 +57,15 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			return null;
 		}
 
-		private static ExpressionTreeNode<T> BuildTree<T>(IList<ExpressionTreeNode<T>> nodes)
+		private static ExpressionTreeNode<T> BuildTree<T>(List<ExpressionTreeNode<T>> nodes)
 		{
 			if (!nodes.Any()) return null;
 			var minPriority = nodes.Min(n => n.Priority);
 			var root = nodes.Last(n => n.Priority == minPriority);
 			var branch = root as ExpressionTreeBranch<T>;
-			if (branch != null)
+			if (branch != null && branch.Right == null && branch.Left == null)
 			{
-				var split = nodes.IndexOf(root);
+				var split = nodes.LastIndexOf(root);
 				var left = nodes.Take(split).ToList();
 				var right = nodes.Skip(split + 1).ToList();
 				branch.Left = CheckNode(BuildTree(left), branch);

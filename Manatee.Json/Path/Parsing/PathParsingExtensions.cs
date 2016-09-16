@@ -62,7 +62,7 @@ namespace Manatee.Json.Path.Parsing
 				}
 				c = source[index];
 				index++;
-				if (!char.IsLetterOrDigit(c))
+				if (!(char.IsLetterOrDigit(c) || c == '_'))
 				{
 					complete = true;
 					index--;

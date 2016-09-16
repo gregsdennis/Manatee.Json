@@ -16,7 +16,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void PropertyNotEqualToValue()
 		{
@@ -27,7 +26,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void PropertyGreaterThanValue()
 		{
@@ -38,7 +36,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void PropertyGreaterThanEqualToValue()
 		{
@@ -49,7 +46,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void PropertyLessThanValue()
 		{
@@ -60,7 +56,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void PropertyLessThanEqualToValue()
 		{
@@ -71,7 +66,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void ArrayIndexEqualsValue()
 		{
@@ -82,7 +76,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void ArrayMultiIndex()
@@ -99,7 +92,6 @@ namespace Manatee.Json.Tests.Path
 				throw;
 			}
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void ArraySliceEqualsValue()
@@ -116,7 +108,6 @@ namespace Manatee.Json.Tests.Path
 				throw;
 			}
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void ArrayIndexExpressionEqualsValue()
@@ -133,7 +124,6 @@ namespace Manatee.Json.Tests.Path
 				throw;
 			}
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void ArrayFilterExpressionEqualsValue()
@@ -150,7 +140,6 @@ namespace Manatee.Json.Tests.Path
 				throw;
 			}
 		}
-
 		[TestMethod]
 		public void HasProperty()
 		{
@@ -161,7 +150,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void DoesNotHaveProperty()
 		{
@@ -172,7 +160,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void GroupedNot()
 		{
@@ -183,7 +170,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void And()
 		{
@@ -194,7 +180,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void Or()
 		{
