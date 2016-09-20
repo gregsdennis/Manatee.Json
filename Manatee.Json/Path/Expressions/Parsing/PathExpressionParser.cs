@@ -43,6 +43,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			else if (indexOf != null)
 			{
 				path.Operators.Remove(indexOf);
+				// TODO: Get indexOf parameter
 				node = new IndexOfExpression<T>
 					{
 						Path = path,

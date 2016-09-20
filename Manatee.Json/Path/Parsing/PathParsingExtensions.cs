@@ -144,7 +144,6 @@ namespace Manatee.Json.Path.Parsing
 			} while (error == null && lastSlice != null);
 			if (error != null) return error;
 
-			//index++;
 			if (!slices.Any())
 				return "Index required inside '[]'";
 			return null;
