@@ -48,7 +48,6 @@ namespace Manatee.Json.Path.Expressions.Parsing
 						Path = path,
 						IsLocal = isLocal
 					};
-				index -= 8; // back up to allow the IndexOfExpressionParser handle it.
 			}
 			else if (length != null)
 			{
@@ -61,6 +60,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			}
 			else if (array != null)
 			{
+				index--;
 				path.Operators.Remove(array);
 				var query = array.Query as SliceQuery;
 				var constant = query?.Slices.FirstOrDefault()?.Index;

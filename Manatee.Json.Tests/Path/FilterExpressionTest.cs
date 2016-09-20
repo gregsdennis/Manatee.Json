@@ -6,15 +6,16 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class FilterExpressionTest
 	{
+		private void Run(JsonPath expected, string text)
+		{
+			var actual = JsonPath.Parse(text);
+			Assert.AreEqual(expected, actual);
+		}
+
 		[TestMethod]
 		public void PropertyEqualsValue()
 		{
-			var text = "$[?(@.test == 5)]";
-			var expected = JsonPathWith.Array(jv => jv.Name("test") == 5);
-
-			var actual = JsonPath.Parse(text);
-
-			Assert.AreEqual(expected, actual);
+			Run(JsonPathWith.Array(jv => jv.Name("test") == 5), "$[?(@.test == 5)]");
 		}
 		[TestMethod]
 		public void PropertyNotEqualToValue()
@@ -189,6 +190,41 @@ namespace Manatee.Json.Tests.Path
 			var actual = JsonPath.Parse(text);
 
 			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void IndexOfNumber()
+		{
+			Run(JsonPathWith.Array(jv => jv.IndexOf(5) == 4), "$[?(@.indexOf(5) == 4)]");
+		}
+		[TestMethod]
+		public void IndexOfBoolean()
+		{
+			Run(JsonPathWith.Array(jv => jv.IndexOf(false) == 4), "$[?(@.indexOf(false) == 4)]");
+		}
+		[TestMethod]
+		public void IndexOfString()
+		{
+			Run(JsonPathWith.Array(jv => jv.IndexOf("string") == 4), "$[?(@.indexOf(\"string\") == 4)]");
+		}
+		[TestMethod]
+		[Ignore]
+		// This won't work because there's not a way to get a FieldExpression when parsing,
+		// and there's not a way to construct this with a ValueExpression as a JsonArray.
+		// TODO: This should still create a valid path.
+		public void IndexOfArray()
+		{
+			var arr = new JsonArray {1, 2, 3};
+			Run(JsonPathWith.Array(jv => jv.IndexOf(arr) == 4), "$[?(@.indexOf([1,2,3]) == 4)]");
+		}
+		[TestMethod]
+		[Ignore]
+		// This won't work because there's not a way to get a FieldExpression when parsing,
+		// and there's not a way to construct this with a ValueExpression as a JsonObject.
+		// TODO: This should still create a valid path.
+		public void IndexOfObject()
+		{
+			var obj = new JsonObject {{"key", "value"}};
+			Run(JsonPathWith.Array(jv => jv.IndexOf(obj) == 4), "$[?(@.indexOf({\"key\":\"value\"}) == 4)]");
 		}
 	}
 }

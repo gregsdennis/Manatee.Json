@@ -42,8 +42,8 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				char c;
 				var errorMessage = source.SkipWhiteSpace(ref index, length, out c);
 				if (errorMessage != null) return errorMessage;
-				var i = index;
-				var parser = Parsers.FirstOrDefault(p => p.Handles(source.Substring(i)));
+				var substring = source.Substring(index);
+				var parser = Parsers.FirstOrDefault(p => p.Handles(substring));
 				if (parser == null) return "Unrecognized JSON Path Expression element.";
 				errorMessage = parser.TryParse(source, ref index, out node);
 				if (errorMessage != null) return errorMessage;

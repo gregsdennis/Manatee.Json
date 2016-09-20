@@ -174,7 +174,10 @@
     <Compile Include="Path\FilterExpressionTest.cs" />
     <Compile Include="Path\IndexExpressionParseTest.cs" />
     <Compile Include="Path\ParsingTest.cs" />
-    <Compile Include="Path\ToStringTests.cs" />
+    <Compile Include="Path\TestSuite\JsonPathTestSuite.cs" />
+    <Compile Include="Path\TestSuite\PathTest.cs" />
+    <Compile Include="Path\TestSuite\PathTestSet.cs" />
+    <Compile Include="Path\ToStringTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />

@@ -1,5 +1,5 @@
-﻿using System;
-using Manatee.Json.Internal;
+﻿using Manatee.Json.Internal;
+using Manatee.Json.Path.Parsing;
 
 namespace Manatee.Json.Path.Expressions.Parsing
 {
@@ -11,7 +11,15 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		}
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{
-			throw new NotImplementedException();
+			string value;
+			var error = source.GetKey(ref index, out value);
+			if (error != null)
+			{
+				node = null;
+				return error;
+			}
+			node = new ValueExpression<T> {Value = value};
+			return null;
 		}
 	}
 }

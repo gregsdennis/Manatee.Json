@@ -1,5 +1,4 @@
 ﻿using Manatee.Json.Path;
-using Manatee.Json.Path.ArrayParameters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests.Path
@@ -7,15 +6,17 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class ParsingTest
 	{
-		[TestMethod]
-		public void SingleNamedObject()
+		private void Run(JsonPath expected, string text)
 		{
-			var text = "$.name";
-			var expected = JsonPathWith.Name("name");
-
 			var actual = JsonPath.Parse(text);
 
 			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void SingleNamedObject()
+		{
+			Run(JsonPathWith.Name("name"), "$.name");
 		}
 
 		[TestMethod]
@@ -253,6 +254,30 @@ namespace Manatee.Json.Tests.Path
 			var actual = JsonPath.Parse(text);
 
 			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void ChainedNameIndexedArray()
+		{
+			Run(JsonPathWith.Name("name").Array(4), "$.name[4]");
+		}
+
+		[TestMethod]
+		public void ChainedIndexedArrayName()
+		{
+			Run(JsonPathWith.Array(4).Name("name"), "$[4].name");
+		}
+
+		[TestMethod]
+		public void ChainedNameName()
+		{
+			Run(JsonPathWith.Name("name").Name("test"), "$.name.test");
+		}
+
+		[TestMethod]
+		public void ChainedIndexedArrayIndexedArray()
+		{
+			Run(JsonPathWith.Array(2).Array(4), "$[2][4]");
 		}
 	}
 }

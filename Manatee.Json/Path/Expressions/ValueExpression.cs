@@ -39,7 +39,9 @@ namespace Manatee.Json.Path.Expressions
 		{
 			return Value is string
 				       ? $"\"{Value}\""
-				       : Value.ToString();
+				       : Value is bool
+					       ? Value.ToString().ToLower()
+					       : Value.ToString();
 		}
 		public bool Equals(ValueExpression<T> other)
 		{

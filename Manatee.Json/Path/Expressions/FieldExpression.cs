@@ -35,7 +35,10 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json, JsonValue root)
 		{
-			if (Field.FieldType == typeof(string))
+			if (Field.FieldType == typeof(string) ||
+				Field.FieldType == typeof(JsonArray) ||
+				Field.FieldType == typeof(JsonObject) ||
+				Field.FieldType == typeof(JsonValue))
 				return Field.GetValue(Source);
 			return Convert.ToDouble(Field.GetValue(Source));
 		}
