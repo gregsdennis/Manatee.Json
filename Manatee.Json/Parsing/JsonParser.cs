@@ -58,7 +58,7 @@ namespace Manatee.Json.Parsing
 				throw new JsonSyntaxException(errorMessage, value);
 			return value;
 		}
-		public static string Parse(string source, ref int index, out JsonValue value)
+		public static string Parse(string source, ref int index, out JsonValue value, bool allowExtraChars = false)
 		{
 			var length = source.Length;
 			char c;
@@ -74,7 +74,7 @@ namespace Manatee.Json.Parsing
 				value = null;
 				return "Cannot determine type.";
 			}
-			errorMessage = parser.TryParse(source, ref index, out value);
+			errorMessage = parser.TryParse(source, ref index, out value, allowExtraChars);
 			return errorMessage;
 		}
 		public static string Parse(StreamReader stream, out JsonValue value)

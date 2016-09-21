@@ -20,13 +20,14 @@
 	Purpose:		Provides expression-based indexing for array queries.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Path.Expressions;
 
 namespace Manatee.Json.Path.ArrayParameters
 {
-	internal class IndexExpressionQuery : IJsonPathArrayQuery
+	internal class IndexExpressionQuery : IJsonPathArrayQuery, IEquatable<IndexExpressionQuery>
 	{
 		private readonly Expression<int, JsonArray> _expression;
 
@@ -42,7 +43,21 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override string ToString()
 		{
-			return string.Format("({0})", _expression);
+			return $"({_expression})";
+		}
+		public bool Equals(IndexExpressionQuery other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(_expression, other._expression);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as IndexExpressionQuery);
+		}
+		public override int GetHashCode()
+		{
+			return _expression?.GetHashCode() ?? 0;
 		}
 	}
 }

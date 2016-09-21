@@ -36,21 +36,21 @@ namespace Manatee.Json.Path.Expressions.Translation
 			if (method == null)
 				throw new InvalidOperationException();
 			var parameter = method.Arguments.Last() as ConstantExpression;
-			if (parameter == null || parameter.Type != typeof (int))
+			if (parameter == null || parameter.Type != typeof(int))
 			{
 				return new ArrayIndexExpression<T>
+					{
+						Path = BuildPath(method, out isLocal),
+						IsLocal = isLocal,
+						IndexExpression = ExpressionTranslator.TranslateNode<T>(method.Arguments.Last())
+					};
+			}
+			return new ArrayIndexExpression<T>
 				{
 					Path = BuildPath(method, out isLocal),
 					IsLocal = isLocal,
-					IndexExpression = ExpressionTranslator.TranslateNode<T>(method.Arguments.Last())
+					Index = (int) parameter.Value,
 				};
-			}
-			return new ArrayIndexExpression<T>
-			{
-				Path = BuildPath(method, out isLocal),
-				IsLocal = isLocal,
-				Index = (int)parameter.Value,
-			};
 		}
 	}
 }

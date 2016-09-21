@@ -33,7 +33,7 @@ namespace Manatee.Json.Parsing
 		{
 			return c.In('t', 'T', 'f', 'F');
 		}
-		public string TryParse(string source, ref int index, out JsonValue value)
+		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
 			char[] buffer;
 			int count;

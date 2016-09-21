@@ -1,0 +1,6 @@
+[submodule "Json-Path-Test-Suite"]
+	path = Json-Path-Test-Suite
+	url = https://github.com/gregsdennis/JSON-Path-Test-Suite.git
+[submodule "Json-Schema-Test-Suite"]
+	path = Json-Schema-Test-Suite
+	url = https://github.com/json-schema-org/JSON-Schema-Test-Suite.git

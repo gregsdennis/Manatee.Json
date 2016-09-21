@@ -286,6 +286,7 @@ namespace Manatee.Json.Tests.Serialization
 				{
 					{"RequiredProp", "test"}
 				};
+			JsonSerializationAbstractionMap.RemoveMap<IInterface>();
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
 
 			var actual = serializer.Deserialize<IInterface>(json);
@@ -562,6 +563,7 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var serializer = new JsonSerializer();
 			var json = new JsonObject {{"RequiredProp", "test"}};
+			JsonSerializationAbstractionMap.RemoveMap<IInterface>();
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
 
 			var actual = serializer.Deserialize<IInterface>(json);

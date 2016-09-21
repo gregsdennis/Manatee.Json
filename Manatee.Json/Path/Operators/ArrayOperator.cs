@@ -20,33 +20,48 @@
 	Purpose:		Indicates that the current value should be an array.
 
 ***************************************************************************************/
+using System;
 using System.Linq;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Operators
 {
-	internal class ArrayOperator : IJsonPathOperator
+	internal class ArrayOperator : IJsonPathOperator, IEquatable<ArrayOperator>
 	{
-		private readonly IJsonPathArrayQuery _query;
+		public IJsonPathArrayQuery Query { get; }
 
 		public ArrayOperator(IJsonPathArrayQuery query)
 		{
-			_query = query;
+			Query = query;
 		}
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
 			return new JsonArray(json.SelectMany(v => v.Type == JsonValueType.Array
-				                                          ? _query.Find(v.Array, root)
+				                                          ? Query.Find(v.Array, root)
 				                                          : v.Type == JsonValueType.Object
-					                                          ? _query.Find(v.Object.Values.ToJson(), root)
+					                                          ? Query.Find(v.Object.Values.ToJson(), root)
 					                                          : Enumerable.Empty<JsonValue>())
 			                         .NotNull());
 		}
 
 		public override string ToString()
 		{
-			return $"[{_query}]";
+			return $"[{Query}]";
+		}
+		public bool Equals(ArrayOperator other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Query, other.Query);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ArrayOperator);
+		}
+		public override int GetHashCode()
+		{
+			return Query?.GetHashCode() ?? 0;
 		}
 	}
 }

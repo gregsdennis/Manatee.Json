@@ -25,9 +25,9 @@ using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class LengthExpression<T> : PathExpression<T>
+	internal class LengthExpression<T> : PathExpression<T>, IEquatable<LengthExpression<T>>
 	{
-		public override int Priority => 6;
+		protected override int BasePriority => 6;
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -65,6 +65,25 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
 			return (IsLocal ? "@" : "$") + $"{path}.length";
+		}
+		public bool Equals(LengthExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return base.Equals(other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as LengthExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode * 397) ^ GetType().GetHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

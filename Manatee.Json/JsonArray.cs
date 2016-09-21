@@ -21,8 +21,8 @@
 
 ***************************************************************************************/
 
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -72,7 +72,26 @@ namespace Manatee.Json
 			s += $"{tab1}{this[i].GetIndentedString(indentLevel + 1)}\n{tab0}]";
 			return s;
 		}
-
+		/// <summary>
+		/// Adds an object to the end of the <see cref="JsonArray"/>.
+		/// </summary>
+		/// <param name="item">The object to be added to the end of the <see cref="JsonArray"/>.
+		/// If the value is null, it will be replaced by <see cref="JsonValue.Null"/>.</param>
+		public new void Add(JsonValue item)
+		{
+			base.Add(item ?? JsonValue.Null);
+		}
+		/// <summary>
+		/// Adds the elements of the specified collection to the end of the <see cref="JsonArray"/>.
+		/// </summary>
+		/// <param name="collection">The collection whose elements should be added to the end of the
+		/// <see cref="JsonArray"/>. The collection itself cannot be null, but it can contain elements
+		/// that are null.  These elements will be replaced by <see cref="JsonValue.Null"/></param>
+		/// <exception cref="ArgumentNullException"><paramref name="collection"/> is null.</exception>
+		public new void AddRange(IEnumerable<JsonValue> collection)
+		{
+			base.AddRange(collection.Select(v => v ?? JsonValue.Null));
+		}
 		/// <summary>
 		/// Creates a string representation of the JSON data.
 		/// </summary>

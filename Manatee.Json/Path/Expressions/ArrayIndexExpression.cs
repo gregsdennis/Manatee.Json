@@ -23,18 +23,20 @@
 ***************************************************************************************/
 using System;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Expressions
 {
-	internal class ArrayIndexExpression<T> : PathExpression<T>
+	internal class ArrayIndexExpression<T> : PathExpression<T>, IEquatable<ArrayIndexExpression<T>>
 	{
-		public override int Priority => 6;
 		public int Index { get; set; }
 		public ExpressionTreeNode<T> IndexExpression { get; set; }
 
+		protected override int BasePriority => 6;
+
 		public override object Evaluate(T json, JsonValue root)
 		{
-			var value = IsLocal ? json as JsonValue : root;
+			var value = IsLocal ? json.AsJsonValue() : root;
 			if (value == null)
 				throw new NotSupportedException("ArrayIndex requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
@@ -55,6 +57,28 @@ namespace Manatee.Json.Path.Expressions
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
 			return string.Format(IsLocal ? "@{0}[{1}]" : "${0}[{1}]", path, GetIndex());
+		}
+		public bool Equals(ArrayIndexExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return base.Equals(other) &&
+			       Index == other.Index &&
+			       Equals(IndexExpression, other.IndexExpression);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ArrayIndexExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode*397) ^ Index;
+				hashCode = (hashCode*397) ^ (IndexExpression?.GetHashCode() ?? 0);
+				return hashCode;
+			}
 		}
 
 		private int GetIndex()

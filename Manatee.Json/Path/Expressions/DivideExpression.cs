@@ -21,11 +21,13 @@
 
 ***************************************************************************************/
 
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
-	internal class DivideExpression<T> : ExpressionTreeBranch<T>
+	internal class DivideExpression<T> : ExpressionTreeBranch<T>, IEquatable<DivideExpression<T>>
 	{
-		public override int Priority => 3;
+		protected override int BasePriority => 3;
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -39,6 +41,25 @@ namespace Manatee.Json.Path.Expressions
 			var left = Left.Priority <= Priority ? $"({Left})" : Left.ToString();
 			var right = Right.Priority <= Priority ? $"({Right})" : Right.ToString();
 			return $"{left}/{right}";
+		}
+		public bool Equals(DivideExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return base.Equals(other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as DivideExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode * 397) ^ GetType().GetHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

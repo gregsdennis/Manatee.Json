@@ -20,11 +20,13 @@
 	Purpose:		Expresses the intent to calculate the modulo of two numbers.
 
 ***************************************************************************************/
+using System;
+
 namespace Manatee.Json.Path.Expressions
 {
-	internal class ModuloExpression<T> : ExpressionTreeBranch<T>
+	internal class ModuloExpression<T> : ExpressionTreeBranch<T>, IEquatable<ModuloExpression<T>>
 	{
-		public override int Priority => 2;
+		protected override int BasePriority => 2;
 
 		public override object Evaluate(T json, JsonValue root)
 		{
@@ -38,6 +40,25 @@ namespace Manatee.Json.Path.Expressions
 			var left = Left.Priority <= Priority ? $"({Left})" : Left.ToString();
 			var right = Right.Priority <= Priority ? $"({Right})" : Right.ToString();
 			return $"{left}%{right}";
+		}
+		public bool Equals(ModuloExpression<T> other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return base.Equals(other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ModuloExpression<T>);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+				hashCode = (hashCode * 397) ^ GetType().GetHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

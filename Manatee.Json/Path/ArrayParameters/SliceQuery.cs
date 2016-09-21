@@ -21,52 +21,43 @@
 
 ***************************************************************************************/
 using System;
+using Manatee.Json.Internal;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Manatee.Json.Path.ArrayParameters
 {
-	internal class SliceQuery : IJsonPathArrayQuery
+	internal class SliceQuery : IJsonPathArrayQuery, IEquatable<SliceQuery>
 	{
-		private int? _start;
-		private int? _end;
-		private int? _step;
+		internal IEnumerable<Slice> Slices { get; }
 
-		public SliceQuery(int? start, int? end, int? step = null)
+		public SliceQuery(params Slice[] slices)
+			: this((IEnumerable<Slice>) slices) {}
+		public SliceQuery(IEnumerable<Slice> slices)
 		{
-			_start = start;
-			_end = end;
-			_step = step;
+			Slices = slices.ToList();
 		}
-
 		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
-			var start = ResolveIndex(_start ?? 0, json.Count);
-			var end = ResolveIndex(_end ?? json.Count, json.Count);
-			var step = Math.Max(_step ?? 1, 1);
-
-			var index = start;
-			while (index < end)
-			{
-				yield return json[index];
-				index += step;
-			}
+			return Slices.SelectMany(s => s.Find(json, root)).Distinct();
 		}
 		public override string ToString()
 		{
-			return _step.HasValue
-				       ? string.Format("{0}:{1}:{2}",
-				                       _start.HasValue ? _start.ToString() : string.Empty,
-				                       _end.HasValue ? _end.ToString() : string.Empty,
-				                       _step)
-				       : string.Format("{0}:{1}",
-				                       _start.HasValue ? _start.ToString() : string.Empty,
-				                       _end.HasValue ? _end.ToString() : string.Empty);
-
+			return Slices.Join(",");
 		}
-
-		private static int ResolveIndex(int index, int count)
+		public bool Equals(SliceQuery other)
 		{
-			return index < 0 ? count + index : index;
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Slices.ContentsEqual(other.Slices);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as SliceQuery);
+		}
+		public override int GetHashCode()
+		{
+			return Slices?.GetCollectionHashCode() ?? 0;
 		}
 	}
 }

@@ -28,41 +28,10 @@ namespace Manatee.Json.Path
 	/// <summary>
 	/// Serves as a stand-in for JsonValue in Path Expressions.
 	/// </summary>
-	public class JsonPathValue
+#pragma warning disable 660,661
+	public sealed class JsonPathValue
+#pragma warning restore 660,661
 	{
-		/// <summary>
-		/// Determines whether the specified <see cref="JsonPathValue"/> is equal to the current <see cref="JsonPathValue"/>.
-		/// </summary>
-		/// <returns>
-		/// true if the specified <see cref="JsonPathValue"/> is equal to the current <see cref="JsonPathValue"/>; otherwise, false.
-		/// </returns>
-		/// <param name="other">The <see cref="JsonPathValue"/> to compare with the current <see cref="JsonPathValue"/>. </param><filterpriority>2</filterpriority>
-		protected bool Equals(JsonPathValue other)
-		{
-			throw new InvalidOperationException("This operation is reserved for JsonPath.");
-		}
-		/// <summary>
-		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
-		/// </returns>
-		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
-		public override bool Equals(object obj)
-		{
-			throw new InvalidOperationException("This operation is reserved for JsonPath.");
-		}
-		/// <summary>
-		/// Serves as a hash function for a particular type. 
-		/// </summary>
-		/// <returns>
-		/// A hash code for the current <see cref="T:System.Object"/>.
-		/// </returns>
-		/// <filterpriority>2</filterpriority>
-		public override int GetHashCode()
-		{
-			throw new InvalidOperationException("This operation is reserved for JsonPath.");
-		}
 		///<summary>
 		///</summary>
 		///<param name="a"></param>

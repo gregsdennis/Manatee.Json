@@ -167,36 +167,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-3.5' OR '$(Configuration)' == 'Release-Mono'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net35\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-3.5C'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net35-client\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-4.0' OR '$(Configuration)' == 'Debug'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-4.0C'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40-client\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-4.5'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net45\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -233,7 +203,34 @@
     <Compile Include="Parsing\StringParser.cs" />
     <Compile Include="Path\ArrayParameters\FilterExpressionQuery.cs" />
     <Compile Include="Path\ArrayParameters\IndexExpressionQuery.cs" />
-    <Compile Include="Path\ArrayParameters\IndexQuery.cs" />
+    <Compile Include="Path\Expressions\Parsing\AddExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\AndExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ConstantBooleanExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ConstantNumberExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ConstantStringExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\DivideExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ExponentExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ExpressionEndParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\GroupExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\IJsonPathExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\IsEqualExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\IsGreaterThanEqualExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\IsGreaterThanExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\IsLessThanEqualExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\IsLessThanExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\IsNotEqualExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\LengthExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\ModuloExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\MultiplyExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\NotExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\OrExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\PathExpressionParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\SubtractExpressionParser.cs" />
+    <Compile Include="Path\Parsing\ExpressionFilterParser.cs" />
+    <Compile Include="Path\Parsing\ExpressionIndexParser.cs" />
+    <Compile Include="Path\Expressions\Parsing\JsonPathExpressionParser.cs" />
+    <Compile Include="Path\Parsing\SearchIndexedArrayParser.cs" />
+    <Compile Include="Path\Slice.cs" />
     <Compile Include="Path\ArrayParameters\SliceQuery.cs" />
     <Compile Include="Path\ArrayParameters\WildCardQuery.cs" />
     <Compile Include="Path\Expressions\AddExpression.cs" />
@@ -246,7 +243,6 @@
     <Compile Include="Path\Expressions\ExpressionTreeBranch.cs" />
     <Compile Include="Path\Expressions\ExpressionTreeNode.cs" />
     <Compile Include="Path\Expressions\FieldExpression.cs" />
-    <Compile Include="Path\Expressions\GroupExpression.cs" />
     <Compile Include="Path\Expressions\HasPropertyExpression.cs" />
     <Compile Include="Path\Expressions\IndexOfExpression.cs" />
     <Compile Include="Path\Expressions\IsEqualExpression.cs" />
@@ -311,6 +307,14 @@
     <Compile Include="Path\Operators\NameOperator.cs" />
     <Compile Include="Path\Operators\SearchOperator.cs" />
     <Compile Include="Path\Operators\WildCardOperator.cs" />
+    <Compile Include="Path\Parsing\IndexedArrayParser.cs" />
+    <Compile Include="Path\Parsing\IJsonPathParser.cs" />
+    <Compile Include="Path\Parsing\JsonPathParser.cs" />
+    <Compile Include="Path\Parsing\ObjectParser.cs" />
+    <Compile Include="Path\Parsing\PathParsingExtensions.cs" />
+    <Compile Include="Path\Parsing\SearchParser.cs" />
+    <Compile Include="Path\Parsing\StartParser.cs" />
+    <Compile Include="Path\Parsing\WildcardArrayParser.cs" />
     <Compile Include="Path\PathExpressionExtensions.cs" />
     <Compile Include="Path\SearchParameters\ArraySearchParameter.cs" />
     <Compile Include="Path\SearchParameters\LengthSearchParameter.cs" />
@@ -535,7 +539,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Manatee.Json.snk" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

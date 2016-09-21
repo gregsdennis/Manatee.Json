@@ -1,4 +1,4 @@
-/***************************************************************************************
+﻿/***************************************************************************************
 
 	Copyright 2016 Greg Dennis
 
@@ -14,28 +14,25 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		GroupExpression.cs
-	Namespace:		Manatee.Json.Path.Expressions
-	Class Name:		GroupExpression
-	Purpose:		Expresses the intent to group an expression as a component
-					in a larger expression.
+	File Name:		ExpressionEndParser.cs
+	Namespace:		Manatee.Json.Path.Expressions.Parsing
+	Class Name:		ExpressionEndParser
+	Purpose:		Indicates the end of expressions within JsonPath.
 
 ***************************************************************************************/
-
-namespace Manatee.Json.Path.Expressions
+namespace Manatee.Json.Path.Expressions.Parsing
 {
-	internal class GroupExpression<T> : ExpressionTreeNode<T>
+	internal class ExpressionEndParser : IJsonPathExpressionParser
 	{
-		public override int Priority => 6;
-		public ExpressionTreeNode<T> Group { get; set; }
-
-		public override object Evaluate(T json, JsonValue root)
+		public bool Handles(string input)
 		{
-			return Group.Evaluate(json, root);
+			return input[0] == ')';
 		}
-		public override string ToString()
+		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{
-			return $"({Group})";
+			index++;
+			node = null;
+			return null;
 		}
 	}
 }

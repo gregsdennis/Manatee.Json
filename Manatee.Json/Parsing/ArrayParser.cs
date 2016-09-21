@@ -32,7 +32,7 @@ namespace Manatee.Json.Parsing
 		{
 			return c == '[';
 		}
-		public string TryParse(string source, ref int index, out JsonValue value)
+		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
 			var array = new JsonArray();
 			value = array;

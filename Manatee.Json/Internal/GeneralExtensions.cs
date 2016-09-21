@@ -267,5 +267,16 @@ namespace Manatee.Json.Internal
 			var listB = b.ToList();
 			return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
 		}
+		public static JsonValue AsJsonValue(this object value)
+		{
+			if (value is JsonValue) return (JsonValue) value;
+			if (value is JsonArray) return (JsonArray) value;
+			if (value is JsonObject) return (JsonObject) value;
+			if (value is string) return (string) value;
+			if (value is bool) return (bool) value;
+			if (value is IConvertible) return Convert.ToDouble(value);
+
+			return null;
+		}
 	}
 }

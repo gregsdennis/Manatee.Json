@@ -20,12 +20,13 @@
 	Purpose:		Indicates that a search should return all values.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
-	internal class WildCardSearchParameter : IJsonPathSearchParameter
+	internal class WildCardSearchParameter : IJsonPathSearchParameter, IEquatable<WildCardSearchParameter>
 	{
 		public static WildCardSearchParameter Instance { get; } = new WildCardSearchParameter();
 
@@ -49,6 +50,19 @@ namespace Manatee.Json.Path.SearchParameters
 		public override string ToString()
 		{
 			return "*";
+		}
+		public bool Equals(WildCardSearchParameter other)
+		{
+			return !ReferenceEquals(null, other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as WildCardSearchParameter);
+		}
+		public override int GetHashCode()
+		{
+			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
+			return base.GetHashCode();
 		}
 	}
 }
