@@ -23,6 +23,7 @@
 ***************************************************************************************/
 using System;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Expressions
 {
@@ -35,7 +36,7 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json, JsonValue root)
 		{
-			var value = IsLocal ? json as JsonValue : root;
+			var value = IsLocal ? json.AsJsonValue() : root;
 			if (value == null)
 				throw new NotSupportedException("ArrayIndex requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);

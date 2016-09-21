@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Expressions
 {
@@ -34,7 +35,7 @@ namespace Manatee.Json.Path.Expressions
 
 		public override object Evaluate(T json, JsonValue root)
 		{
-			var value = IsLocal ? json as JsonValue : root;
+			var value = IsLocal ? json.AsJsonValue() : root;
 			if (value == null)
 				throw new NotSupportedException("IndexOf requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
@@ -56,7 +57,7 @@ namespace Manatee.Json.Path.Expressions
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return base.Equals(other) && Equals(Parameter, other.Parameter) && Equals(ParameterExpression, other.ParameterExpression);
+			return base.Equals(other) && Equals(ParameterExpression, other.ParameterExpression);
 		}
 		public override bool Equals(object obj)
 		{

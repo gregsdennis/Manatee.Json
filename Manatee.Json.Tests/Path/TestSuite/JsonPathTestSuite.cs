@@ -32,14 +32,14 @@ namespace Manatee.Json.Tests.Path.TestSuite
 	[TestClass]
 	public class JsonPathTestSuite
 	{
-		private const string TestFolder = @"http://github.com/gregsdennis/Json-Path-Test-Suite/trunk/tests/";
+		private const string TestFolder = @"..\..\..\Json-Path-Test-Suite\tests\";
+#pragma warning disable 649
+		private const string FileNameForDebugging = "";
+		private const string TestPathForDebugging = "";
+#pragma warning restore 649
 		private static readonly JsonSerializer Serializer;
 		private int _failures;
 		private int _passes;
-#pragma warning disable 649
-		private string _fileNameForDebugging;
-		private string _testPathForDebugging = "";
-#pragma warning restore 649
 
 		static JsonPathTestSuite()
 		{
@@ -76,7 +76,7 @@ namespace Manatee.Json.Tests.Path.TestSuite
 
 		private void _RunFile(string fileName)
 		{
-			if (fileName == _fileNameForDebugging)
+			if (fileName == FileNameForDebugging)
 			{
 				System.Diagnostics.Debugger.Break();
 			}
@@ -95,14 +95,14 @@ namespace Manatee.Json.Tests.Path.TestSuite
 			foreach (var test in testSet.Tests)
 			{
 				var pathString = test.Path.ToString();
-				if (pathString == _testPathForDebugging)
+				if (pathString == TestPathForDebugging)
 				{
 					System.Diagnostics.Debugger.Break();
 				}
 
 				var results = test.Path.Evaluate(testSet.Data);
 
-				if (results == test.Result)
+				if (Equals(results, test.Result))
 				{
 					// It's difficult to see the failures when everything shows.
 					// The Stack Trace Explorer needs to show color output. :/

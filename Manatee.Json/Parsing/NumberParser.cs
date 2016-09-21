@@ -37,7 +37,7 @@ namespace Manatee.Json.Parsing
 		{
 			return c.In('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-');
 		}
-		public string TryParse(string source, ref int index, out JsonValue value)
+		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
@@ -57,7 +57,9 @@ namespace Manatee.Json.Parsing
 				}
 				var c = source[index];
 				if (char.IsWhiteSpace(c) || c.In(',', ']', '}')) break;
-				if (!NumberChars.Contains(c))
+				var isNumber = NumberChars.Contains(c);
+				if (!isNumber && allowExtraChars) break;
+				if (!isNumber)
 				{
 					value = null;
 					return "Expected \',\', \']\', or \'}\'.";

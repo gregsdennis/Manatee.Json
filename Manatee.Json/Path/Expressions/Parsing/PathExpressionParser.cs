@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Parsing;
 using Manatee.Json.Path.ArrayParameters;
 using Manatee.Json.Path.Operators;
 using Manatee.Json.Path.Parsing;
@@ -27,28 +28,48 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			}
 
 			var name = path.Operators.Last() as NameOperator;
-			var indexOf = path.Operators.Last() as IndexOfOperator;
 			var length = path.Operators.Last() as LengthOperator;
 			var array = path.Operators.Last() as ArrayOperator;
 			if (name != null)
 			{
 				path.Operators.Remove(name);
-				node = new NameExpression<T>
+				if (name.Name == "indexOf")
+				{
+					JsonValue parameter;
+					if (source[index] != '(')
 					{
-						Path = path,
-						IsLocal = isLocal,
-						Name = name.Name
-					};
-			}
-			else if (indexOf != null)
-			{
-				path.Operators.Remove(indexOf);
-				// TODO: Get indexOf parameter
-				node = new IndexOfExpression<T>
+						node = null;
+						return "Expected '('.  'indexOf' operator requires a parameter.";
+					}
+					index++;
+					error = JsonParser.Parse(source, ref index, out parameter, true);
+					// Swallow this error from the JSON parser and assume the value just ended.
+					// If it's really a syntax error, the expression parser should catch it.
+					if (error != null && error != "Expected \',\', \']\', or \'}\'.")
 					{
-						Path = path,
-						IsLocal = isLocal
-					};
+						node = null;
+						return $"Error parsing parameter for 'indexOf' expression: {error}.";
+					}
+					if (source[index] != ')')
+					{
+						node = null;
+						return "Expected ')'.";
+					}
+					index++;
+					node = new IndexOfExpression<T>
+						{
+							Path = path,
+							IsLocal = isLocal,
+							Parameter = parameter
+						};
+				}
+				else
+					node = new NameExpression<T>
+						{
+							Path = path,
+							IsLocal = isLocal,
+							Name = name.Name
+						};
 			}
 			else if (length != null)
 			{
@@ -61,7 +82,6 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			}
 			else if (array != null)
 			{
-				index--;
 				path.Operators.Remove(array);
 				var query = array.Query as SliceQuery;
 				var constant = query?.Slices.FirstOrDefault()?.Index;

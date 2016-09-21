@@ -36,14 +36,18 @@ namespace Manatee.Json.Path.Expressions
 		public T Evaluate(TIn json, JsonValue root)
 		{
 			var result = _root.Evaluate(json, root);
-			if (typeof (T) == typeof (bool) && result == null)
+			if (typeof(T) == typeof(bool) && result == null)
 				return (T) (object) false;
-			if (typeof (T) == typeof (bool) && result != null && !(result is bool))
+			if (typeof(T) == typeof(bool) && result != null && !(result is bool))
 				return (T) (object) true;
-			if (typeof (T) == typeof (int) && result == null)
+			if (typeof(T) == typeof(int) && result == null)
 				return (T) (object) -1;
-			if (typeof (T) == typeof (JsonValue))
+			var resultAsJsonValue = result as JsonValue;
+			if (typeof(T) == typeof(int) && resultAsJsonValue?.Type == JsonValueType.Number)
+				return (T) Convert.ChangeType(resultAsJsonValue.Number, typeof(T));
+			if (typeof(T) == typeof(JsonValue))
 			{
+				if (result is JsonValue) return (T) result;
 				if (result is double)
 					return (T) (object) new JsonValue((double) result);
 				if (result is bool)
@@ -55,7 +59,7 @@ namespace Manatee.Json.Path.Expressions
 				if (result is JsonObject)
 					return (T) (object) new JsonValue((JsonObject) result);
 			}
-			return (T)Convert.ChangeType(result, typeof(T));
+			return (T) Convert.ChangeType(result, typeof(T));
 		}
 		public override string ToString()
 		{
