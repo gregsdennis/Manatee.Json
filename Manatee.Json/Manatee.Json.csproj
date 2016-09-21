@@ -167,36 +167,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-3.5' OR '$(Configuration)' == 'Release-Mono'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net35\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-3.5C'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net35-client\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-4.0' OR '$(Configuration)' == 'Debug'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-4.0C'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net40-client\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Release-4.5'">
-    <Reference Include="Manatee.StateMachine">
-      <HintPath>..\packages\Manatee.StateMachine.1.1.2\lib\net45\Manatee.StateMachine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
