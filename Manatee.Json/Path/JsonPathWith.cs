@@ -130,9 +130,7 @@ namespace Manatee.Json.Path
 		[Obsolete("Use the SearchArray(params Slice[]) overload instead.")]
 		public static JsonPath SearchArraySlice(int? start, int? end, int? step = null)
 		{
-			var path = new JsonPath();
-			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new SliceQuery(new Slice(start, end, step)))));
-			return path;
+			return SearchArray(new Slice(start, end, step));
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an expression which evaluates to the index to include.
@@ -182,9 +180,7 @@ namespace Manatee.Json.Path
 		[Obsolete("Use the Array(params Slice[]) overload instead.")]
 		public static JsonPath ArraySlice(int? start, int? end, int? step = null)
 		{
-			var path = new JsonPath();
-			path.Operators.Add(new ArrayOperator(new SliceQuery(new Slice(start, end, step))));
-			return path;
+			return Array(new Slice(start, end, step));
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an expression which evaluates to the index to include.
@@ -300,10 +296,12 @@ namespace Manatee.Json.Path
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
 		public static JsonPath SearchArray(this JsonPath path, params Slice[] slices)
 		{
-			path.Operators.Add(new SearchOperator(slices.Any()
-													  ? new ArraySearchParameter(new SliceQuery(slices))
-													  : new ArraySearchParameter(WildCardQuery.Instance)));
-			return path;
+			var newPath = new JsonPath();
+			newPath.Operators.AddRange(path.Operators);
+			newPath.Operators.Add(new SearchOperator(slices.Any()
+				                                         ? new ArraySearchParameter(new SliceQuery(slices))
+				                                         : new ArraySearchParameter(WildCardQuery.Instance)));
+			return newPath;
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an expression which evaluates to the index to include.
@@ -313,8 +311,10 @@ namespace Manatee.Json.Path
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
 		public static JsonPath SearchArray(this JsonPath path, Expression<Func<JsonPathArray, int>> expression)
 		{
-			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new IndexExpressionQuery(ExpressionTranslator.Translate(expression)))));
-			return path;
+			var newPath = new JsonPath();
+			newPath.Operators.AddRange(path.Operators);
+			newPath.Operators.Add(new SearchOperator(new ArraySearchParameter(new IndexExpressionQuery(ExpressionTranslator.Translate(expression)))));
+			return newPath;
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying a predicate expression which filters the values.
@@ -324,8 +324,10 @@ namespace Manatee.Json.Path
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
 		public static JsonPath SearchArray(this JsonPath path, Expression<Func<JsonPathValue, bool>> expression)
 		{
-			path.Operators.Add(new SearchOperator(new ArraySearchParameter(new FilterExpressionQuery(ExpressionTranslator.Translate(expression)))));
-			return path;
+			var newPath = new JsonPath();
+			newPath.Operators.AddRange(path.Operators);
+			newPath.Operators.Add(new SearchOperator(new ArraySearchParameter(new FilterExpressionQuery(ExpressionTranslator.Translate(expression)))));
+			return newPath;
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by including all array values.
@@ -366,10 +368,7 @@ namespace Manatee.Json.Path
 		[Obsolete("Use the Array(this JsonPath, params Slice[]) overload instead.")]
 		public static JsonPath ArraySlice(this JsonPath path, int? start, int? end, int? step = null)
 		{
-			var newPath = new JsonPath();
-			newPath.Operators.AddRange(path.Operators);
-			newPath.Operators.Add(new ArrayOperator(new SliceQuery(new Slice(start, end, step))));
-			return newPath;
+			return path.Array(new Slice(start, end, step));
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an expression which evaluates to the index to include.
