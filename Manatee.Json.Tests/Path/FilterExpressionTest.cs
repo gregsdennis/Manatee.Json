@@ -12,6 +12,31 @@ namespace Manatee.Json.Tests.Path
 			Assert.AreEqual(expected, actual);
 		}
 
+		private void CompareEval(JsonPath expected, string text)
+		{
+			var data = new JsonArray
+				{
+					1,
+					new JsonObject
+						{
+							["bool"] = false,
+							["int"] = 20,
+							["string"] = "value",
+						},
+					"hello",
+					true,
+					5,
+					new JsonArray {1,2,3 }
+				};
+
+			var actual = JsonPath.Parse(text);
+
+			var expectedResult = expected.Evaluate(data);
+			var actualResult = actual.Evaluate(data);
+
+			Assert.AreEqual(expectedResult, actualResult);
+		}
+
 		[TestMethod]
 		public void PropertyEqualsValue()
 		{
@@ -137,59 +162,56 @@ namespace Manatee.Json.Tests.Path
 			Run(JsonPathWith.Array(jv => jv.HasProperty("test") || jv.Name("name") == 5),"$[?(@.test || @.name == 5)]");
 		}
 		[TestMethod]
-		[Ignore]
 		// This won't work the same.  Parsing generates an IndexOfExpression with a distinct parameter,
 		// but when constructing the path, the parameter goes through several castings generating a
 		// parameter expression. The parsed path would be different in structure but should still
-		// represent the same thing.  We have to 
-		// TODO: Test by evaluation
+		// represent the same thing.  We have to test by evaluation.
 		public void IndexOfNumber()
 		{
-			Run(JsonPathWith.Array(jv => jv.IndexOf(5) == 4), "$[?(@.indexOf(5) == 4)]");
+			CompareEval(JsonPathWith.Array(jv => jv.IndexOf(5) == 4), "$[?(@.indexOf(5) == 4)]");
 		}
 		[TestMethod]
-		[Ignore]
 		// This won't work the same.  Parsing generates an IndexOfExpression with a distinct parameter,
 		// but when constructing the path, the parameter goes through several castings generating a
 		// parameter expression. The parsed path would be different in structure but should still
-		// represent the same thing.
-		// TODO: Test by evaluation
+		// represent the same thing.  We have to test by evaluation.
 		public void IndexOfBoolean()
 		{
-			Run(JsonPathWith.Array(jv => jv.IndexOf(false) == 4), "$[?(@.indexOf(false) == 4)]");
+			CompareEval(JsonPathWith.Array(jv => jv.IndexOf(true) == 3), "$[?(@.indexOf(true) == 3)]");
 		}
 		[TestMethod]
-		[Ignore]
 		// This won't work the same.  Parsing generates an IndexOfExpression with a distinct parameter,
 		// but when constructing the path, the parameter goes through several castings generating a
 		// parameter expression. The parsed path would be different in structure but should still
-		// represent the same thing.
-		// TODO: Test by evaluation
+		// represent the same thing.  We have to test by evaluation.
 		public void IndexOfString()
 		{
-			Run(JsonPathWith.Array(jv => jv.IndexOf("string") == 4), "$[?(@.indexOf(\"string\") == 4)]");
+			CompareEval(JsonPathWith.Array(jv => jv.IndexOf("string") == 2), "$[?(@.indexOf(\"hello\") == 2)]");
 		}
 		[TestMethod]
-		[Ignore]
 		// This won't work the same.  Parsing generates a ValueExpression, but the only way to
 		// construct the path is to pass the field, which generates a FieldExpression. The parsed
 		// path would be different in structure but should still represent the same thing.
-		// TODO: Test by evaluation
+		// We have to test by evaluation.
 		public void IndexOfArray()
 		{
 			var arr = new JsonArray {1, 2, 3};
-			Run(JsonPathWith.Array(jv => jv.IndexOf(arr) == 4), "$[?(@.indexOf([1,2,3]) == 4)]");
+			CompareEval(JsonPathWith.Array(jv => jv.IndexOf(arr) == 6), "$[?(@.indexOf([1,2,3]) == 6)]");
 		}
 		[TestMethod]
-		[Ignore]
 		// This won't work the same.  Parsing generates a ValueExpression, but the only way to
 		// construct the path is to pass the field, which generates a FieldExpression. The parsed
 		// path would be different in structure but should still represent the same thing.
-		// TODO: Test by evaluation
+		// We have to test by evaluation.
 		public void IndexOfObject()
 		{
-			var obj = new JsonObject {{"key", "value"}};
-			Run(JsonPathWith.Array(jv => jv.IndexOf(obj) == 4), "$[?(@.indexOf({\"key\":\"value\"}) == 4)]");
+			var obj = new JsonObject
+				{
+					["bool"] = false,
+					["int"] = 20,
+					["string"] = "value",
+				};
+			CompareEval(JsonPathWith.Array(jv => jv.IndexOf(obj) == 1), "$[?(@.indexOf({\"key\":\"value\"}) == 1)]");
 		}
 	}
 }
