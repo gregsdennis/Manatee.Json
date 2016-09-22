@@ -4,3 +4,6 @@
 [submodule "Json-Schema-Test-Suite"]
 	path = Json-Schema-Test-Suite
 	url = https://github.com/json-schema-org/JSON-Schema-Test-Suite.git
+[submodule "Wiki"]
+	path = Wiki
+	url = https://github.com/gregsdennis/Manatee.Json.wiki.git
