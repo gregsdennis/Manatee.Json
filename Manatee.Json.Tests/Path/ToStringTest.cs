@@ -6,7 +6,7 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class ToStringTest
 	{
-		private void Run(string expected, JsonPath path)
+		private static void Run(string expected, JsonPath path)
 		{
 			var actual = path.ToString();
 			Assert.AreEqual(expected, actual);

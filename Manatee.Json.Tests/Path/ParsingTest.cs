@@ -6,7 +6,7 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class ParsingTest
 	{
-		private void Run(JsonPath expected, string text)
+		private static void Run(JsonPath expected, string text)
 		{
 			var actual = JsonPath.Parse(text);
 
@@ -18,40 +18,21 @@ namespace Manatee.Json.Tests.Path
 		{
 			Run(JsonPathWith.Name("name"), "$.name");
 		}
-
 		[TestMethod]
 		public void SingleQuotedNamedObject()
 		{
-			var text = "$.'quoted name'";
-			var expected = JsonPathWith.Name("quoted name");
-
-			var actual = JsonPath.Parse(text);
-
-			Assert.AreEqual(expected, actual);
+			Run(JsonPathWith.Name("quoted name"), "$.'quoted name'");
 		}
-
 		[TestMethod]
 		public void DoubleQuotedNamedObject()
 		{
-			var text = "$.\"quoted name\"";
-			var expected = JsonPathWith.Name("quoted name");
-
-			var actual = JsonPath.Parse(text);
-
-			Assert.AreEqual(expected, actual);
+			Run(JsonPathWith.Name("quoted name"), "$.\"quoted name\"");
 		}
-
 		[TestMethod]
 		public void SingleWildcardObject()
 		{
-			var text = "$.*";
-			var expected = JsonPathWith.Wildcard();
-
-			var actual = JsonPath.Parse(text);
-
-			Assert.AreEqual(expected, actual);
+			Run(JsonPathWith.Wildcard(), "$.*");
 		}
-
 		[TestMethod]
 		public void NamedObjectWithWildcardObject()
 		{
@@ -62,7 +43,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void WildcardObjectWithNamedObject()
 		{
@@ -83,7 +63,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void SingleQuotedNamedSearch()
 		{
@@ -94,7 +73,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void DoubleQuotedNamedSearch()
 		{
@@ -105,7 +83,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void SingleWildcardSearch()
 		{
@@ -116,7 +93,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void NamedObjectWithWildcardSearch()
 		{
@@ -127,7 +103,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void WildcardObjectWithNamedSearch()
 		{
@@ -138,7 +113,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void SingleIndexedArray()
 		{
@@ -149,7 +123,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void SingleSlicedArray()
 		{
@@ -160,7 +133,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void SteppedSlicedArray()
 		{
@@ -171,7 +143,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void IndexedSlicedArray()
 		{
@@ -182,7 +153,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void SlicedIndexedArray()
 		{
@@ -193,7 +163,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void MultiSlicedArray()
 		{
@@ -204,7 +173,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void MultiIndexedArray()
 		{
@@ -215,7 +183,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void WildcardArray()
 		{
@@ -226,7 +193,6 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void SearchIndexedArray()
 		{
@@ -237,49 +203,41 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-
 		[TestMethod]
 		public void ChainedNameIndexedArray()
 		{
 			Run(JsonPathWith.Name("name").Array(4), "$.name[4]");
 		}
-
 		[TestMethod]
 		public void ChainedIndexedArrayName()
 		{
 			Run(JsonPathWith.Array(4).Name("name"), "$[4].name");
 		}
-
 		[TestMethod]
 		public void ChainedNameName()
 		{
 			Run(JsonPathWith.Name("name").Name("test"), "$.name.test");
 		}
-
 		[TestMethod]
 		public void ChainedIndexedArrayIndexedArray()
 		{
 			Run(JsonPathWith.Array(2).Array(4), "$[2][4]");
 		}
-
 		[TestMethod]
 		public void MultipleConditionsAdd()
 		{
 			Run(JsonPathWith.Array(jv => jv.Length() == 3 && jv.ArrayIndex(1) == false), "$[?(@.length == 3 && @[1] == false)]");
 		}
-
 		[TestMethod]
 		public void MultipleConditionsOr()
 		{
 			Run(JsonPathWith.Array(jv => jv.Length() == 3 || jv.ArrayIndex(1) == false), "$[?(@.length == 3 || @[1] == false)]");
 		}
-
 		[TestMethod]
 		public void Group()
 		{
 			Run(JsonPathWith.Array(jv => (jv.Length()+1)*2 == 6), "$[?((@.length+1)*2 == 6)]");
 		}
-
 		[TestMethod]
 		public void NotGroup()
 		{
@@ -287,7 +245,6 @@ namespace Manatee.Json.Tests.Path
 			// Don't simplify this.  It's a parsing test.
 			Run(JsonPathWith.Array(jv => !(jv.Length() == 3) && jv.ArrayIndex(1) == false), "$[?(!(@.length == 3) && @[1] == false)]");
 		}
-
 		[TestMethod]
 		public void WeirdPropertyNameQuoted()
 		{

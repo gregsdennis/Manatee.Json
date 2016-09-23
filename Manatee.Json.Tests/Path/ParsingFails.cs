@@ -7,7 +7,7 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class ParsingFails
 	{
-		private void Run(string text)
+		private static void Run(string text)
 		{
 			try
 			{
@@ -38,21 +38,18 @@ namespace Manatee.Json.Tests.Path
 		{
 			Run("$[?()]");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void EmptyObject()
 		{
 			Run("$.");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void InvalidPropertyName()
 		{
 			Run("$.tes*t");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void StringIndex()
@@ -60,84 +57,72 @@ namespace Manatee.Json.Tests.Path
 			// TODO: This may actually be the key to parsing bracket notation
 			Run("$[\"test\"]");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void BoolIndex()
 		{
 			Run("$[false]");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingCloseBracket()
 		{
 			Run("$[1.test");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void BadSliceFormat()
 		{
 			Run("$[1-5]");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingCloseParenthesisOnIndexExpression()
 		{
 			Run("$[(1]");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingCloseBracketOnIndexExpression()
 		{
 			Run("$[(1)");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingCloseBracketOnIndexExpression2()
 		{
 			Run("$[(1).test");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingCloseParenthesisOnFilterExpression()
 		{
 			Run("$[?(@.name == 4].test");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingCloseBracketOnFilterExpression()
 		{
 			Run("$[?(@.name == 4)");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingCloseBracketOnFilterExpression2()
 		{
 			Run("$[?(@.name == 4).test");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void MissingDot()
 		{
 			Run("$name");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void DotBeforeArray()
 		{
 			Run("$.[0]");
 		}
-
 		[TestMethod]
 		[ExpectedException(typeof(JsonPathSyntaxException))]
 		public void TooManyDots()

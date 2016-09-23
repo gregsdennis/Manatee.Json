@@ -28,7 +28,7 @@ namespace Manatee.Json.Path.Parsing
 	{
 		public bool Handles(string input)
 		{
-			return input.StartsWith("..") && input.Length > 3 && (char.IsLetterOrDigit(input[2]) || input[2].In('_', '\'', '"'));
+			return input.StartsWith("..") && input.Length >= 3 && (char.IsLetterOrDigit(input[2]) || input[2].In('_', '\'', '"', '*'));
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{

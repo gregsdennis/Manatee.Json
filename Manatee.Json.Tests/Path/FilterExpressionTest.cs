@@ -6,13 +6,13 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class FilterExpressionParseTest
 	{
-		private void Run(JsonPath expected, string text)
+		private static void Run(JsonPath expected, string text)
 		{
 			var actual = JsonPath.Parse(text);
 			Assert.AreEqual(expected, actual);
 		}
 
-		private void CompareEval(JsonPath expected, string text)
+		private static void CompareEval(JsonPath expected, string text)
 		{
 			var data = new JsonArray
 				{
