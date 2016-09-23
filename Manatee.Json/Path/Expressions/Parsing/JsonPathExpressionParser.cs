@@ -49,6 +49,11 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				expr = null;
 				return error;
 			}
+			if (root == null)
+			{
+				expr = null;
+				return "No expression found.";
+			}
 
 			expr = new Expression<T, TIn>(root);
 			return null;

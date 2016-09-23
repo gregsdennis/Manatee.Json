@@ -42,7 +42,11 @@ namespace Manatee.Json.Path.Parsing
 			if (error != null)
 				return error;
 
-			index++; // consume closing ']'
+			if (index >= source.Length)
+				return "Unexpected end of input.";
+			if (source[index] != ']')
+				return "Expected ']'";
+			index++;
 			path.Operators.Add(new ArrayOperator(new FilterExpressionQuery(expression)));
 			return null;
 		}

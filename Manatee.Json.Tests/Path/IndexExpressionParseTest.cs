@@ -6,6 +6,12 @@ namespace Manatee.Json.Tests.Path
 	[TestClass]
 	public class IndexExpressionParseTest
 	{
+		private void Run(JsonPath expected, string text)
+		{
+			var actual = JsonPath.Parse(text);
+			Assert.AreEqual(expected, actual);
+		}
+
 		[TestMethod]
 		public void Length()
 		{
@@ -119,6 +125,11 @@ namespace Manatee.Json.Tests.Path
 			var actual = JsonPath.Parse(text);
 
 			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
+		public void JustAnInteger()
+		{
+			Run(JsonPathWith.Array(jv => 1), "$[(1)]");
 		}
 	}
 }

@@ -219,7 +219,6 @@
     <Compile Include="Path\Expressions\Parsing\IsLessThanEqualExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IsLessThanExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\IsNotEqualExpressionParser.cs" />
-    <Compile Include="Path\Expressions\Parsing\LengthExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\ModuloExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\MultiplyExpressionParser.cs" />
     <Compile Include="Path\Expressions\Parsing\NotExpressionParser.cs" />

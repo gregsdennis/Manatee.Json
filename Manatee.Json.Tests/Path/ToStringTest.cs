@@ -35,7 +35,17 @@ namespace Manatee.Json.Tests.Path
 		{
 			Run("$.length", JsonPathWith.Length());
 		}
-		
+		[TestMethod]
+		public void EmptyKey()
+		{
+			Run("$.''", JsonPathWith.Name(""));
+		}
+		[TestMethod]
+		public void EmptySearch()
+		{
+			Run("$..''", JsonPathWith.Search(""));
+		}
+
 		#endregion
 
 		#region Indexed Arrays

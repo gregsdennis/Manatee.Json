@@ -173,6 +173,7 @@
     <Compile Include="Path\EvaluationTest.cs" />
     <Compile Include="Path\FilterExpressionTest.cs" />
     <Compile Include="Path\IndexExpressionParseTest.cs" />
+    <Compile Include="Path\ParsingFails.cs" />
     <Compile Include="Path\ParsingTest.cs" />
     <Compile Include="Path\TestSuite\JsonPathTestSuite.cs" />
     <Compile Include="Path\TestSuite\PathTest.cs" />

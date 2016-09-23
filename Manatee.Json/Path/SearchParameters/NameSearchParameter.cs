@@ -20,6 +20,7 @@
 	Purpose:		Indicates that a search should look for a named parameter.
 
 ***************************************************************************************/
+using Manatee.Json.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,9 @@ namespace Manatee.Json.Path.SearchParameters
 		}
 		public override string ToString()
 		{
-			return _name;
+			return _name.Any(c => !char.IsLetterOrDigit(c)) || _name.IsNullOrWhiteSpace()
+					   ? $"'{_name}'"
+					   : _name;
 		}
 		public bool Equals(NameSearchParameter other)
 		{

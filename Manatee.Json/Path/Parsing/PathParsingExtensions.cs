@@ -158,6 +158,8 @@ namespace Manatee.Json.Path.Parsing
 
 			var error = GetInt(source, ref index, out n1);
 			if (error != null) return error;
+			if (index >= source.Length)
+				return "Expected ':', ',', or ']'.";
 			if (n1.HasValue && source[index].In(',', ']'))
 			{
 				slice = new Slice(n1.Value);

@@ -217,24 +217,6 @@ namespace Manatee.Json.Tests.Path
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(JsonPathSyntaxException))]
-		public void EmptyIndexedArray()
-		{
-			var text = "$[]";
-
-			JsonPath.Parse(text);
-		}
-
-		[TestMethod]
-		[ExpectedException(typeof(JsonPathSyntaxException))]
-		public void EmptyObject()
-		{
-			var text = "$.";
-
-			JsonPath.Parse(text);
-		}
-
-		[TestMethod]
 		public void WildcardArray()
 		{
 			var text = "$[*]";
@@ -278,6 +260,48 @@ namespace Manatee.Json.Tests.Path
 		public void ChainedIndexedArrayIndexedArray()
 		{
 			Run(JsonPathWith.Array(2).Array(4), "$[2][4]");
+		}
+
+		[TestMethod]
+		public void MultipleConditionsAdd()
+		{
+			Run(JsonPathWith.Array(jv => jv.Length() == 3 && jv.ArrayIndex(1) == false), "$[?(@.length == 3 && @[1] == false)]");
+		}
+
+		[TestMethod]
+		public void MultipleConditionsOr()
+		{
+			Run(JsonPathWith.Array(jv => jv.Length() == 3 || jv.ArrayIndex(1) == false), "$[?(@.length == 3 || @[1] == false)]");
+		}
+
+		[TestMethod]
+		public void Group()
+		{
+			Run(JsonPathWith.Array(jv => (jv.Length()+1)*2 == 6), "$[?((@.length+1)*2 == 6)]");
+		}
+
+		[TestMethod]
+		public void NotGroup()
+		{
+			// ReSharper disable once NegativeEqualityExpression
+			// Don't simplify this.  It's a parsing test.
+			Run(JsonPathWith.Array(jv => !(jv.Length() == 3) && jv.ArrayIndex(1) == false), "$[?(!(@.length == 3) && @[1] == false)]");
+		}
+
+		[TestMethod]
+		public void WeirdPropertyNameQuoted()
+		{
+			Run(JsonPathWith.Name("tes*t"), "$.\"tes*t\"");
+		}
+		[TestMethod]
+		public void EmptyKey()
+		{
+			Run(JsonPathWith.Name(""), "$.''");
+		}
+		[TestMethod]
+		public void EmptySearch()
+		{
+			Run(JsonPathWith.Search(""), "$..''");
 		}
 	}
 }

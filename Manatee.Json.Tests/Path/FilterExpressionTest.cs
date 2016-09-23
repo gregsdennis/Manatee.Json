@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Manatee.Json.Tests.Path
 {
 	[TestClass]
-	public class FilterExpressionTest
+	public class FilterExpressionParseTest
 	{
 		private void Run(JsonPath expected, string text)
 		{
@@ -71,70 +71,6 @@ namespace Manatee.Json.Tests.Path
 		public void ArrayIndexEqualsValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.ArrayIndex(1) == 5), "$[?(@[1] == 5)]");
-		}
-		[TestMethod]
-		[ExpectedException(typeof(JsonPathSyntaxException))]
-		public void ArrayMultiIndex()
-		{
-			var text = "$[?(@[1,3] == 5)]";
-
-			try
-			{
-				var actual = JsonPath.Parse(text);
-			}
-			catch (JsonPathSyntaxException e)
-			{
-				Assert.IsTrue(e.Message.StartsWith("JSON Path expression indexers only support single constant values."));
-				throw;
-			}
-		}
-		[TestMethod]
-		[ExpectedException(typeof(JsonPathSyntaxException))]
-		public void ArraySliceEqualsValue()
-		{
-			var text = "$[?(@[1:3] == 5)]";
-
-			try
-			{
-				var actual = JsonPath.Parse(text);
-			}
-			catch (JsonPathSyntaxException e)
-			{
-				Assert.IsTrue(e.Message.StartsWith("JSON Path expression indexers only support single constant values."));
-				throw;
-			}
-		}
-		[TestMethod]
-		[ExpectedException(typeof(JsonPathSyntaxException))]
-		public void ArrayIndexExpressionEqualsValue()
-		{
-			var text = "$[?(@[(@.length-1))]";
-
-			try
-			{
-				var actual = JsonPath.Parse(text);
-			}
-			catch (JsonPathSyntaxException e)
-			{
-				Assert.IsTrue(e.Message.StartsWith("JSON Path expression indexers only support single constant values."));
-				throw;
-			}
-		}
-		[TestMethod]
-		[ExpectedException(typeof(JsonPathSyntaxException))]
-		public void ArrayFilterExpressionEqualsValue()
-		{
-			var text = "$[?(@[?(@.name == 5))]";
-
-			try
-			{
-				var actual = JsonPath.Parse(text);
-			}
-			catch (JsonPathSyntaxException e)
-			{
-				Assert.IsTrue(e.Message.StartsWith("JSON Path expression indexers only support single constant values."));
-				throw;
-			}
 		}
 		[TestMethod]
 		public void HasProperty()

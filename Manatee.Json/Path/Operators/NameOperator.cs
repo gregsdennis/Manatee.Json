@@ -44,7 +44,7 @@ namespace Manatee.Json.Path.Operators
 		}
 		public override string ToString()
 		{
-			return Name.Any(c => !char.IsLetterOrDigit(c))
+			return Name.Any(c => !char.IsLetterOrDigit(c)) || Name.IsNullOrWhiteSpace()
 				       ? $".'{Name}'"
 				       : $".{Name}";
 		}
