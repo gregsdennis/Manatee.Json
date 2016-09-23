@@ -20,13 +20,15 @@
 	Purpose:		Parses JSON Path named and wildcard search components.
 
 ***************************************************************************************/
+using Manatee.Json.Internal;
+
 namespace Manatee.Json.Path.Parsing
 {
 	internal class SearchParser : IJsonPathParser
 	{
 		public bool Handles(string input)
 		{
-			return input.StartsWith("..") && !input.StartsWith("..[");
+			return input.StartsWith("..") && input.Length > 3 && (char.IsLetterOrDigit(input[2]) || input[2].In('_', '\'', '"'));
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{

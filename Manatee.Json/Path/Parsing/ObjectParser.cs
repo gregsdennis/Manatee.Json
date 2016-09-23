@@ -20,13 +20,15 @@
 	Purpose:		Parses JSON Path object components.
 
 ***************************************************************************************/
+using Manatee.Json.Internal;
+
 namespace Manatee.Json.Path.Parsing
 {
 	internal class ObjectParser : IJsonPathParser
 	{
 		public bool Handles(string input)
 		{
-			return input.Length > 1 && input[0] == '.' && input[1] != '.';
+			return input.Length > 2 && input[0] == '.' && (char.IsLetterOrDigit(input[1]) || input[1].In('_', '\'', '"'));
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{

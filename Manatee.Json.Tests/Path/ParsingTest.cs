@@ -291,7 +291,7 @@ namespace Manatee.Json.Tests.Path
 		[TestMethod]
 		public void WeirdPropertyNameQuoted()
 		{
-			Run(JsonPathWith.Name("tes*t"), "$.\"tes*t\"");
+			Run(JsonPathWith.Name("tes* \"t"), "$.\"tes* \\\"t\"");
 		}
 		[TestMethod]
 		public void EmptyKey()
