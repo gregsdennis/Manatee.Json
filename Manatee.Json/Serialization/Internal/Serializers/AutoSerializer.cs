@@ -158,7 +158,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
-				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
+				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
+					                                                                            ? StringComparison.CurrentCultureIgnoreCase
+					                                                                            : StringComparison.CurrentCulture) == 0);
 				if (kvp.Key != null)
 				{
 					var value = kvp.Value;
@@ -196,7 +198,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
-				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
+				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
+																								? StringComparison.CurrentCultureIgnoreCase
+																								: StringComparison.CurrentCulture) == 0);
 				if (kvp.Key != null)
 				{
 					var value = kvp.Value;

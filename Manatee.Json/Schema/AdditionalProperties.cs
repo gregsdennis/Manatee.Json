@@ -22,7 +22,9 @@
 ***************************************************************************************/
 
 using System;
+#if !IOS
 using System.Data;
+#endif
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema

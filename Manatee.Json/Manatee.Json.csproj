@@ -309,7 +309,7 @@
     <Compile Include="Path\Parsing\IndexedArrayParser.cs" />
     <Compile Include="Path\Parsing\IJsonPathParser.cs" />
     <Compile Include="Path\Parsing\JsonPathParser.cs" />
-    <Compile Include="Path\Parsing\ObjectParser.cs" />
+    <Compile Include="Path\Parsing\PathObjectParser.cs" />
     <Compile Include="Path\Parsing\PathParsingExtensions.cs" />
     <Compile Include="Path\Parsing\SearchParser.cs" />
     <Compile Include="Path\Parsing\StartParser.cs" />
