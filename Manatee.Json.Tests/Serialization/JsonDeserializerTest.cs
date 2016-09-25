@@ -278,6 +278,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<IInterface>(json);
 			Assert.AreEqual(expected, actual);
 		}
+#if !IOS
 		[TestMethod]
 		public void InterfaceWithoutMap_Successful()
 		{
@@ -293,6 +294,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected.RequiredProp, actual.RequiredProp);
 			Assert.AreNotEqual(typeof (ImplementationClass), actual.GetType());
 		}
+#endif
 		[TestMethod]
 		public void InterfaceWithMap_Successful()
 		{
@@ -555,9 +557,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreSame(actual, actual.LoopProperty.LoopProperty);
 			Assert.AreEqual(0, serializer.SerializationMap.Count);
 		}
-		// This test fails when all tests are run together because the JsonSerializationAbstractionMap
-		// is static and one of the other tests has registered ImplementationClass to be used
-		// for IInterface, and VS is running the tests concurrently.
+#if !IOS
 		[TestMethod]
 		public void UnimplementedInterface_ReturnsRunTimeImplementation()
 		{
@@ -572,6 +572,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreNotEqual(expected.GetType(), actual.GetType());
 			Assert.AreEqual(expected.RequiredProp, actual.RequiredProp);
 		}
+#endif
 		[TestMethod]
 		public void Fields()
 		{
