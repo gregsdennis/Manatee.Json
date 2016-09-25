@@ -1,2 +1,31 @@
+version: 1.0.{build}
 install:
 - git submodule update --init --recursive
+configuration:
+- Release-3.5
+- Release-3.5C
+- Release-4.0
+- Release-4.0C
+- Release-4.5
+- Release-Mono
+init:
+- cmd: 
+build:
+  project: Manatee.Json.sln
+  verbosity: minimal
+before_test:
+- ps: >-
+    $pathDir = "Json-Path-Test-Suite"
+
+    $schemaDir = "Json-Schema-Test-Suite"
+
+
+    if (!(Test-Path -Path $pathDir)){
+    	git clone https://github.com/gregsdennis/JSON-Path-Test-Suite.git Json-Path-Test-Suite
+    }
+
+    if (!(Test-Path -Path $schemaDir)){
+    	git clone https://github.com/json-schema-org/JSON-Schema-Test-Suite.git Json-Schema-Test-Suite
+    }
+test:
+  assemblies: '**\bin\$(Configuration)\Manatee.Json.Tests.dll'
