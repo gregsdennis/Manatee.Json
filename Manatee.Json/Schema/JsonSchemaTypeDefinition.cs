@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections.Generic;
+#if !IOS
 using System.Data;
+#endif
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;

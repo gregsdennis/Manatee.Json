@@ -22,7 +22,7 @@
 ***************************************************************************************/
 
 using System;
-#if NET4 || NET4C || NET45
+#if NET4 || NET45
 using System.Collections.Concurrent;
 #else
 using System.Collections.Generic;
@@ -33,14 +33,14 @@ namespace Manatee.Json.Serialization.Internal
 {
 	internal static class SerializerCache
 	{
-#if NET4 || NET4C || NET45
+#if NET4 || NET45
 		private static readonly ConcurrentDictionary<Type, SerializerMethodPair> _cache;
 #else
 		private static readonly Dictionary<Type, SerializerMethodPair> _cache;
 #endif
 		static SerializerCache()
 		{
-#if NET4 || NET4C || NET45
+#if NET4 || NET45
 			_cache = new ConcurrentDictionary<Type, SerializerMethodPair>();
 #else
 			_cache = new Dictionary<Type, SerializerMethodPair>();
@@ -50,7 +50,7 @@ namespace Manatee.Json.Serialization.Internal
 		public static MethodInfo GetSerializeMethod(Type type)
 		{
 			if (!_cache.ContainsKey(type))
-#if NET4 || NET4C || NET45
+#if NET4 || NET45
 				_cache.TryAdd(type, new SerializerMethodPair(type));
 #else
 				_cache.Add(type, new SerializerMethodPair(type));
@@ -61,7 +61,7 @@ namespace Manatee.Json.Serialization.Internal
 		public static MethodInfo GetDeserializeMethod(Type type)
 		{
 			if (!_cache.ContainsKey(type))
-#if NET4 || NET4C || NET45
+#if NET4 || NET45
 				_cache.TryAdd(type, new SerializerMethodPair(type));
 #else
 				_cache.Add(type, new SerializerMethodPair(type));

@@ -280,6 +280,7 @@ namespace Manatee.Json
 			return name;
 		}
 
+#if !IOS
 		/// <summary>
 		/// Converts an <see cref="XmlNode"/> to an <see cref="XElement"/>.
 		/// </summary>
@@ -308,5 +309,7 @@ namespace Manatee.Json
 				return xmlDoc;
 			}
 		}
-	}
+		
+#endif
+		}
 }

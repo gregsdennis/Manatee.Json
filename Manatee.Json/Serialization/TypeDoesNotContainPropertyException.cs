@@ -31,7 +31,9 @@ namespace Manatee.Json.Serialization
 	/// Optionally thrown when deserializing and the JSON structure contains property names
 	/// which are not valid for the type requested.
 	/// </summary>
+#if !IOS
 	[Serializable]
+#endif
 	public class TypeDoesNotContainPropertyException : Exception
 	{
 		/// <summary>

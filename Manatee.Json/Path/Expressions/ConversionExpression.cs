@@ -54,7 +54,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override int GetHashCode()
 		{
-			unchecked { return ((Root?.GetHashCode() ?? 0)*397) ^ (TargetType != null ? TargetType.GetHashCode() : 0); }
+			unchecked { return ((Root?.GetHashCode() ?? 0)*397) ^ (TargetType?.GetHashCode() ?? 0); }
 		}
 
 		private object CastValue(object value)

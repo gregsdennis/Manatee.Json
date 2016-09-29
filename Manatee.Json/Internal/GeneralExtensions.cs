@@ -46,17 +46,17 @@ namespace Manatee.Json.Internal
 		}
 		public static bool IsNullOrWhiteSpace(this string value)
 		{
-#if NET35 || NET35C
+#if NET35
 			return string.IsNullOrEmpty(value) || string.IsNullOrEmpty(value.Trim());
-#elif NET4 || NET4C || NET45
+#elif NET4 || NET45 || IOS
 			return string.IsNullOrWhiteSpace(value);
 #endif
 		}
 		public static string Join<T>(this IEnumerable<T> segments, string separator)
 		{
-#if NET35 || NET35C
+#if NET35
 			return string.Join(separator, segments.Select(s => s.ToString()).ToArray());
-#elif NET4 || NET4C || NET45
+#elif NET4 || NET45 || IOS
 			return string.Join(separator, segments);
 #endif
 		}

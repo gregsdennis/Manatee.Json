@@ -29,28 +29,7 @@
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Debug\</IntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-4.0|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NET4, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release\</IntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-4.5|AnyCPU'">
-    <OutputPath>bin\Release-4.5\</OutputPath>
-    <DefineConstants>TRACE;NET45, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-4.5\</IntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-3.5|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release-3.5\</OutputPath>
     <DefineConstants>TRACE;NET35, JETBRAINS_ANNOTATIONS</DefineConstants>
     <Optimize>true</Optimize>
@@ -59,39 +38,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-3.5\</IntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-3.5C|AnyCPU'">
-    <OutputPath>bin\Release-3.5C\</OutputPath>
-    <DefineConstants>TRACE;NET35C, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-3.5C\</IntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-4.0C|AnyCPU'">
-    <OutputPath>bin\Release-4.0C\</OutputPath>
-    <DefineConstants>TRACE;NET4C, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-4.0C\</IntermediateOutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-Mono|AnyCPU'">
-    <OutputPath>bin\Release-Mono\</OutputPath>
-    <DefineConstants>TRACE;NET35, IOS, JETBRAINS_ANNOTATIONS</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\Greg\AppData\Local\Temp\vs7F7.tmp\Release-Mono\</IntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>

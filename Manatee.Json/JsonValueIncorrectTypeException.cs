@@ -28,7 +28,9 @@ namespace Manatee.Json
 	/// <summary>
 	/// Thrown when a value is accessed via the incorrect type accessor.
 	/// </summary>
+#if !IOS
 	[Serializable]
+#endif
 	public class JsonValueIncorrectTypeException : InvalidOperationException
 	{
 		/// <summary>
