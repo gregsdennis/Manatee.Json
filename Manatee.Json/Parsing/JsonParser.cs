@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -34,11 +35,16 @@ namespace Manatee.Json.Parsing
 
 		static JsonParser()
 		{
-			Parsers = typeof (JsonParser).Assembly.GetTypes()
-										 .Where(t => typeof (IJsonParser).IsAssignableFrom(t) && t.IsClass)
-										 .Select(Activator.CreateInstance)
-										 .Cast<IJsonParser>()
-										 .ToList();
+#if CORE
+			Parsers = typeof(JsonParser).GetTypeInfo().Assembly.GetTypes()
+			                            .Where(t => typeof(IJsonParser).IsAssignableFrom(t) && t.GetTypeInfo().IsClass)
+#else
+			Parsers = typeof(JsonParser).Assembly.GetTypes()
+										.Where(t => typeof(IJsonParser).IsAssignableFrom(t) && t.IsClass)
+#endif
+			                            .Select(Activator.CreateInstance)
+			                            .Cast<IJsonParser>()
+			                            .ToList();
 		}
 
 		public static JsonValue Parse(string source)

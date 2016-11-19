@@ -39,7 +39,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var json = new JsonObject();
 			var type = typeof (T);
 			if ((serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never) &&
+#if CORE
+				(type.GetTypeInfo().IsAbstract || type.GetTypeInfo().IsInterface || (serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always)))
+#else
 				(type.IsAbstract || type.IsInterface || (serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always)))
+#endif
 			{
 				type = obj.GetType();
 				json.Add(Constants.TypeKey, type.AssemblyQualifiedName);
@@ -254,8 +258,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			if (collectionType.IsArray)
 				return collectionType.GetElementType();
-			if (collectionType.IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof (IEnumerable<>)))
+#if CORE
+			if (collectionType.GetTypeInfo().IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof(IEnumerable<>)))
+				return collectionType.GetTypeInfo().GetGenericArguments().First();
+#else
+			if (collectionType.IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof(IEnumerable<>)))
 				return collectionType.GetGenericArguments().First();
+#endif
 			return typeof (object);
 		}
 	}

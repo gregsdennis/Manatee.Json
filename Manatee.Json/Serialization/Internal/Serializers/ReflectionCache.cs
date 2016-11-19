@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -77,21 +78,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				properties.AddRange(info.ReadWriteProperties);
 			if ((propertyTypes & PropertySelectionStrategy.ReadOnly) != 0)
 				properties.AddRange(info.ReadOnlyProperties);
-#if NET35
 			return properties;
-#elif NET4 || NET45
-			return properties;
-#endif
 		}
 		private static IEnumerable<SerializationInfo> GetFields(ReflectionInfo info)
 		{
 			var fields = new List<SerializationInfo>();
 			fields.AddRange(info.Fields);
-#if NET35
 			return fields;
-#elif NET4 || NET45
-			return fields;
-#endif
 		}
 		private static ReflectionInfo InitializeInstanceCache(Type type)
 		{

@@ -23,6 +23,7 @@
 
 using System;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {

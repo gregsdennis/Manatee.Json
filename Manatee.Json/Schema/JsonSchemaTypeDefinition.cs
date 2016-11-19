@@ -23,7 +23,7 @@
 
 using System;
 using System.Collections.Generic;
-#if !IOS
+#if !IOS && !CORE
 using System.Data;
 #endif
 using System.Linq;

@@ -1,0 +1,20 @@
+{
+  "title": "Manatee.Json",
+  "copyright": "Copyright � 2016 Little Crab Solutions",
+  "description": "Provides an intuitive approach to building JSON structures.",
+  "version": "5.1.1",
+  "dependencies": {
+    "NETStandard.Library": "1.6.0"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  },
+  "buildOptions": {
+    "define": [ "TRACE", "CORE", "JETBRAINS_ANNOTATIONS" ],
+    "optimize": true,
+    "xmlDoc": true,
+    "keyFile": "Manatee.Json.snk" 
+  }
+}

@@ -3,11 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json", "Manatee.Json\Manatee.Json.csproj", "{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-4.5", "Manatee.Json\Manatee.Json-4.5.csproj", "{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
 	ProjectSection(SolutionItems) = preProject
-		..\Apache License 2.0.txt = ..\Apache License 2.0.txt
 		Local.testsettings = Local.testsettings
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
@@ -25,13 +24,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1ABD39
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-3.5", "Manatee.Json-3.5\Manatee.Json-3.5.csproj", "{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-3.5", "Manatee.Json\Manatee.Json-3.5.csproj", "{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-4.5", "Manatee.Json-4.5\Manatee.Json-4.5.csproj", "{22713ACD-D26E-421C-9C33-7FC7AFA493FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-4.0", "Manatee.Json\Manatee.Json-4.0.csproj", "{67AC4D8A-ACC2-4966-B60E-5B20B0AB6C4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-Mono", "Manatee.Json-Mono\Manatee.Json-Mono.csproj", "{B0A832B8-06B7-4494-8416-FABE755F621F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-Portable", "Manatee.Json\Manatee.Json-Portable.csproj", "{B0A832B8-06B7-4494-8416-FABE755F621F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-4.0", "Manatee.Json-4.0\Manatee.Json-4.0.csproj", "{67AC4D8A-ACC2-4966-B60E-5B20B0AB6C4E}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Manatee.Json-Core", "Manatee.Json\Manatee.Json-Core.xproj", "{A83D9791-01A7-4031-886E-995B7A1320D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +41,7 @@ Global
 		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,18 +49,20 @@ Global
 		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22713ACD-D26E-421C-9C33-7FC7AFA493FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22713ACD-D26E-421C-9C33-7FC7AFA493FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22713ACD-D26E-421C-9C33-7FC7AFA493FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0A832B8-06B7-4494-8416-FABE755F621F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0A832B8-06B7-4494-8416-FABE755F621F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0A832B8-06B7-4494-8416-FABE755F621F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67AC4D8A-ACC2-4966-B60E-5B20B0AB6C4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67AC4D8A-ACC2-4966-B60E-5B20B0AB6C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67AC4D8A-ACC2-4966-B60E-5B20B0AB6C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A832B8-06B7-4494-8416-FABE755F621F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A832B8-06B7-4494-8416-FABE755F621F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A832B8-06B7-4494-8416-FABE755F621F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A83D9791-01A7-4031-886E-995B7A1320D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83D9791-01A7-4031-886E-995B7A1320D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A83D9791-01A7-4031-886E-995B7A1320D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A83D9791-01A7-4031-886E-995B7A1320D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

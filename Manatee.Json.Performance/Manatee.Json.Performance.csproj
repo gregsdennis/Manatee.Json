@@ -79,9 +79,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj">
+    <ProjectReference Include="..\Manatee.Json\Manatee.Json-4.5.csproj">
       <Project>{6ADF0BCF-4E46-4605-A784-51EA6DAC81C7}</Project>
-      <Name>Manatee.Json</Name>
+      <Name>Manatee.Json-4.5</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

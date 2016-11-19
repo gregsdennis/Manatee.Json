@@ -22,6 +22,7 @@
 ***************************************************************************************/
 using System;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.AutoRegistration
 {
@@ -43,7 +44,11 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
+#if CORE
+			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) toJson.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), toJson);
+#else
 			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), toJson);
+#endif
 		}
 		public JsonSerializationTypeRegistry.FromJsonDelegate<T> GetDecoder<T>()
 		{
@@ -51,12 +56,20 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var fromJson = _decodeMethod;
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
+#if CORE
+			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) fromJson.CreateDelegate(typeof(JsonSerializationTypeRegistry.FromJsonDelegate<T>), fromJson);
+#else
 			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.FromJsonDelegate<T>), fromJson);
+#endif
 		}
 
 		protected virtual Type[] GetTypeArguments(Type type)
 		{
+#if CORE
+			return type.GetTypeInfo().GetGenericArguments();
+#else
 			return type.GetGenericArguments();
+#endif
 		}
 	}
 }

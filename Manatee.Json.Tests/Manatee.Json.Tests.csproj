@@ -141,9 +141,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj">
+    <ProjectReference Include="..\Manatee.Json\Manatee.Json-4.5.csproj">
       <Project>{6adf0bcf-4e46-4605-a784-51ea6dac81c7}</Project>
-      <Name>Manatee.Json</Name>
+      <Name>Manatee.Json-4.5</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

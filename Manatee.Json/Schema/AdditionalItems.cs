@@ -22,7 +22,7 @@
 ***************************************************************************************/
 
 using System;
-#if !IOS
+#if !IOS && !CORE
 using System.Data;
 #endif
 using Manatee.Json.Serialization;

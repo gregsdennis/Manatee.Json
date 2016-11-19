@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Manatee.Json.Schema;
+using System.Reflection;
 
 namespace Manatee.Json.Internal
 {
@@ -48,7 +48,7 @@ namespace Manatee.Json.Internal
 		{
 #if NET35
 			return string.IsNullOrEmpty(value) || string.IsNullOrEmpty(value.Trim());
-#elif NET4 || NET45 || IOS
+#else
 			return string.IsNullOrWhiteSpace(value);
 #endif
 		}
@@ -56,7 +56,7 @@ namespace Manatee.Json.Internal
 		{
 #if NET35
 			return string.Join(separator, segments.Select(s => s.ToString()).ToArray());
-#elif NET4 || NET45 || IOS
+#else
 			return string.Join(separator, segments);
 #endif
 		}
@@ -225,29 +225,79 @@ namespace Manatee.Json.Internal
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived.IsSubtypeOf(tBase)) return true;
+#if CORE
+			var interfaces = tDerived.GetTypeInfo().GetInterfaces().Select(i => i.GetTypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
+#else
 			var interfaces = tDerived.GetInterfaces().Select(i => i.IsGenericType ? i.GetGenericTypeDefinition() : i);
+#endif
 			return interfaces.Contains(tBase);
 		}
 		private static bool IsSubtypeOf(this Type tDerived, Type tBase)
 		{
+#if CORE
+			var currentType = tDerived.GetTypeInfo().BaseType;
+#else
 			var currentType = tDerived.BaseType;
+#endif
 			while (currentType != null)
 			{
+#if CORE
+				if (currentType.GetTypeInfo().IsGenericType)
+#else
 				if (currentType.IsGenericType)
+#endif
 					currentType = currentType.GetGenericTypeDefinition();
 				if (currentType == tBase) return true;
+#if CORE
+				currentType = currentType.GetTypeInfo().BaseType;
+#else
 				currentType = currentType.BaseType;
+#endif
 			}
 			return false;
 		}
+		public static PropertyInfo[] GetProperties(this Type type, BindingFlags flags)
+		{
+#if CORE
+			return type.GetTypeInfo().GetProperties(flags);
+#else
+			return type.GetProperties(flags);
+#endif
+		}
+		public static FieldInfo[] GetFields(this Type type, BindingFlags flags)
+		{
+#if CORE
+			return type.GetTypeInfo().GetFields(flags);
+#else
+			return type.GetFields(flags);
+#endif
+		}
+#if CORE
+		public static bool IsAssignableFrom(this Type derivedType, Type baseType)
+		{
+			return derivedType.GetTypeInfo().IsAssignableFrom(baseType);
+		}
+		public static MethodInfo GetMethod(this Type type, string name, BindingFlags flags = BindingFlags.Default)
+		{
+			return type.GetTypeInfo().GetMethod(name, flags);
+		}
+		public static MethodInfo GetMethod(this Type type, string name, Type[] typeParams)
+		{
+			return type.GetTypeInfo().GetMethod(name, typeParams);
+		}
+#endif
 		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
 		{
 			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ obj.GetHashCode());
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
 		{
+#if CORE
+			return collection.OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
+#else
 			return collection.OrderBy(kvp => kvp.Key, StringComparer.InvariantCulture)
-			                 .Aggregate(0, (current, kvp) =>
+#endif
+							 .Aggregate(0, (current, kvp) =>
 				                            {
 					                            unchecked
 					                            {

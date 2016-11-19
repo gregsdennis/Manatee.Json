@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using Manatee.Json.Internal;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization.Internal.Serializers;
 

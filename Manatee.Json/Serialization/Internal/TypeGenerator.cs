@@ -21,7 +21,7 @@
 
 ***************************************************************************************/
 
-#if !IOS
+#if !IOS && !CORE
 
 using System;
 using System.Collections.Generic;
@@ -29,6 +29,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -48,7 +49,7 @@ namespace Manatee.Json.Serialization.Internal
 #if NET35
 			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName);
-#elif NET4 || NET45
+#else
 			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
 			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName, AssemblyName + ".dll");
 #endif

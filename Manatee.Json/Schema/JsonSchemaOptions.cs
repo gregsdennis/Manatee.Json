@@ -22,6 +22,9 @@
 ***************************************************************************************/
 using System;
 using System.Net;
+#if CORE
+using System.Net.Http;
+#endif
 
 namespace Manatee.Json.Schema
 {
@@ -37,14 +40,18 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Func<string, string> Download
 		{
+#if CORE
+			get { return _download ?? (_download = uri => new HttpClient().GetStringAsync(uri).Result); }
+#else
 			get { return _download ?? (_download = uri => new WebClient().DownloadString(uri)); }
+#endif
 			set { _download = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets whether the "format" schema keyword should be validated.  The default is true.
 		/// </summary>
-		public static bool ValidateFormat { get; set; }
+		public static bool ValidateFormat { get; }
 
 		/// <summary>
 		/// Initializes all properties.
