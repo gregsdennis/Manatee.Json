@@ -35,13 +35,8 @@ namespace Manatee.Json.Parsing
 
 		static JsonParser()
 		{
-#if CORE
 			Parsers = typeof(JsonParser).GetTypeInfo().Assembly.GetTypes()
 			                            .Where(t => typeof(IJsonParser).IsAssignableFrom(t) && t.GetTypeInfo().IsClass)
-#else
-			Parsers = typeof(JsonParser).Assembly.GetTypes()
-										.Where(t => typeof(IJsonParser).IsAssignableFrom(t) && t.IsClass)
-#endif
 			                            .Select(Activator.CreateInstance)
 			                            .Cast<IJsonParser>()
 			                            .ToList();

@@ -225,53 +225,35 @@ namespace Manatee.Json.Internal
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived.IsSubtypeOf(tBase)) return true;
-#if CORE
 			var interfaces = tDerived.GetTypeInfo().GetInterfaces().Select(i => i.GetTypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
-#else
-			var interfaces = tDerived.GetInterfaces().Select(i => i.IsGenericType ? i.GetGenericTypeDefinition() : i);
-#endif
 			return interfaces.Contains(tBase);
 		}
 		private static bool IsSubtypeOf(this Type tDerived, Type tBase)
 		{
-#if CORE
 			var currentType = tDerived.GetTypeInfo().BaseType;
-#else
-			var currentType = tDerived.BaseType;
-#endif
 			while (currentType != null)
 			{
-#if CORE
 				if (currentType.GetTypeInfo().IsGenericType)
-#else
-				if (currentType.IsGenericType)
-#endif
 					currentType = currentType.GetGenericTypeDefinition();
 				if (currentType == tBase) return true;
-#if CORE
 				currentType = currentType.GetTypeInfo().BaseType;
-#else
-				currentType = currentType.BaseType;
-#endif
 			}
 			return false;
 		}
 		public static PropertyInfo[] GetProperties(this Type type, BindingFlags flags)
 		{
-#if CORE
 			return type.GetTypeInfo().GetProperties(flags);
-#else
-			return type.GetProperties(flags);
-#endif
 		}
 		public static FieldInfo[] GetFields(this Type type, BindingFlags flags)
 		{
-#if CORE
 			return type.GetTypeInfo().GetFields(flags);
-#else
-			return type.GetFields(flags);
-#endif
 		}
+#if !IOS && !CORE
+		public static Type GetTypeInfo(this Type type)
+		{
+			return type;
+		}
+#endif
 #if CORE
 		public static bool IsAssignableFrom(this Type derivedType, Type baseType)
 		{

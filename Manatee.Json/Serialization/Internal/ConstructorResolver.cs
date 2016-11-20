@@ -24,6 +24,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -37,11 +38,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			try
 			{
-#if CORE
 				var constructors = type.GetTypeInfo().GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).ToList();
-#else
-				var constructors = type.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).ToList();
-#endif
 				if (!constructors.Any())
 					return Activator.CreateInstance(type);
 				var parameterless = constructors.FirstOrDefault(c => !c.GetParameters().Any());

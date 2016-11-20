@@ -65,11 +65,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 
 		protected virtual Type[] GetTypeArguments(Type type)
 		{
-#if CORE
 			return type.GetTypeInfo().GetGenericArguments();
-#else
-			return type.GetGenericArguments();
-#endif
 		}
 	}
 }
