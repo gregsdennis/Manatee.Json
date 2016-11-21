@@ -38,7 +38,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			try
 			{
-				var constructors = type.GetTypeInfo().GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).ToList();
+				var constructors = type.TypeInfo().GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).ToList();
 				if (!constructors.Any())
 					return Activator.CreateInstance(type);
 				var parameterless = constructors.FirstOrDefault(c => !c.GetParameters().Any());

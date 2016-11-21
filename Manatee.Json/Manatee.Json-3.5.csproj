@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Manatee.Json\Internal\CharacterConverter.cs" />
     <Compile Include="..\Manatee.Json\Internal\GeneralExtensions.cs" />
     <Compile Include="..\Manatee.Json\Internal\JsonPathExpressionInput.cs" />
     <Compile Include="..\Manatee.Json\Internal\JsonPathInput.cs" />
@@ -293,6 +292,7 @@
     <Compile Include="..\Manatee.Json\Serialization\TypeRegistrationException.cs" />
     <Compile Include="..\Manatee.Json\Transform\JsonTransformer.cs" />
     <Compile Include="..\Manatee.Json\XmlExtensions.cs" />
+    <Compile Include="Internal\CompatibilityExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Manatee.Json.snk" />

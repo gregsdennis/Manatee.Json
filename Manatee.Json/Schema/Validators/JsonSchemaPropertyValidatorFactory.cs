@@ -34,10 +34,10 @@ namespace Manatee.Json.Schema.Validators
 
 		static JsonSchemaPropertyValidatorFactory()
 		{
-			AllValidators = typeof(IJsonSchemaPropertyValidator).GetTypeInfo().Assembly.GetTypes()
+			AllValidators = typeof(IJsonSchemaPropertyValidator).TypeInfo().Assembly.GetTypes()
 														.Where(t => typeof(IJsonSchemaPropertyValidator).IsAssignableFrom(t) &&
-																	!t.GetTypeInfo().IsAbstract &&
-																	t.GetTypeInfo().IsClass)
+																	!t.TypeInfo().IsAbstract &&
+																	t.TypeInfo().IsClass)
 			                                            .Select(Activator.CreateInstance)
 			                                            .Cast<IJsonSchemaPropertyValidator>()
 			                                            .ToList();

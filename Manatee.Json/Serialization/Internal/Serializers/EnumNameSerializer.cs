@@ -45,7 +45,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			EnsureDescriptions<T>();
-			var attributes = typeof (T).GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
+			var attributes = typeof (T).TypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
 			if (!attributes.Any())
 			{
 				var entry = _descriptions[typeof (T)].FirstOrDefault(d => Equals(d.Value, obj));
@@ -86,7 +86,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static string GetDescription<T>(string name)
 		{
 			var type = typeof (T);
-			var memInfo = type.GetTypeInfo().GetMember(name);
+			var memInfo = type.TypeInfo().GetMember(name);
 			var attributes = memInfo[0].GetCustomAttributes(typeof (DescriptionAttribute), false);
 			return attributes.Any() ? ((DescriptionAttribute)attributes.First()).Description : name;
 		}

@@ -63,10 +63,10 @@ namespace Manatee.Json.Serialization
 
 		static JsonSerializationTypeRegistry()
 		{
-			_delegateProviders = typeof(JsonSerializationTypeRegistry).GetTypeInfo().Assembly.GetTypes()
+			_delegateProviders = typeof(JsonSerializationTypeRegistry).TypeInfo().Assembly.GetTypes()
 																	  .Where(t => typeof(ISerializationDelegateProvider).IsAssignableFrom(t) &&
-																				  !t.GetTypeInfo().IsAbstract &&
-																				  t.GetTypeInfo().IsClass)
+																				  !t.TypeInfo().IsAbstract &&
+																				  t.TypeInfo().IsClass)
 																	  .Select(Activator.CreateInstance)
 																	  .Cast<ISerializationDelegateProvider>()
 																	  .ToList();
@@ -115,7 +115,7 @@ namespace Manatee.Json.Serialization
 		public static bool IsRegistered(Type type)
 		{
 			if (_toJsonConverters.ContainsKey(type)) return true;
-			if (type.GetTypeInfo().IsGenericTypeDefinition) return false;
+			if (type.TypeInfo().IsGenericTypeDefinition) return false;
 
 			var delegateProvider = _delegateProviders.FirstOrDefault(p => p.CanHandle(type));
 			if (delegateProvider == null) return false;

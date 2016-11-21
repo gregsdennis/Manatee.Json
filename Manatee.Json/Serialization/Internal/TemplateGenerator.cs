@@ -78,9 +78,9 @@ namespace Manatee.Json.Serialization.Internal
 			_generatedTypes.Add(type);
 			T instance;
 
-			if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+			if (type.TypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
 			{
-				var valueType = type.GetTypeInfo().GetGenericArguments().First();
+				var valueType = type.TypeInfo().GetGenericArguments().First();
 				var buildMethod = GetBuildMethod(valueType);
 				var value = buildMethod.Invoke(null, new object[] {options});
 				instance = (T) value;
