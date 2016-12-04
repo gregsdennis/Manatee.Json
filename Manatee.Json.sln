@@ -17,13 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6E84846A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Performance", "Manatee.Json.Performance\Manatee.Json.Performance.csproj", "{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1ABD3999-AC0F-434C-86D5-FF6B90E259C4}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-3.5", "Manatee.Json\Manatee.Json-3.5.csproj", "{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-4.0", "Manatee.Json\Manatee.Json-4.0.csproj", "{67AC4D8A-ACC2-4966-B60E-5B20B0AB6C4E}"

@@ -224,14 +224,6 @@ namespace Manatee.Json.Internal
 			}
 			return false;
 		}
-		public static PropertyInfo[] GetProperties(this Type type, BindingFlags flags)
-		{
-			return type.TypeInfo().GetProperties(flags);
-		}
-		public static FieldInfo[] GetFields(this Type type, BindingFlags flags)
-		{
-			return type.TypeInfo().GetFields(flags);
-		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
 		{
 			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ obj.GetHashCode());

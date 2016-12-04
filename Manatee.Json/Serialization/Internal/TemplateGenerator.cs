@@ -41,7 +41,7 @@ namespace Manatee.Json.Serialization.Internal
 
 		static TemplateGenerator()
 		{
-			_buildMethod = typeof (TemplateGenerator).GetMethod("BuildInstance", BindingFlags.Static | BindingFlags.NonPublic);
+			_buildMethod = typeof (TemplateGenerator).TypeInfo().GetMethod("BuildInstance", BindingFlags.Static | BindingFlags.NonPublic);
 			_buildMethods = new Dictionary<Type, MethodInfo>();
 			_defaultInstances = new Dictionary<Type, object>
 				{
@@ -101,7 +101,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var type = typeof (T);
 
-			var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+			var properties = type.TypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public)
 								 .Where(p => p.GetSetMethod() != null)
 								 .Where(p => p.GetGetMethod() != null)
 								 .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
@@ -116,7 +116,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		private static void FillFields<T>(T instance, JsonSerializerOptions options)
 		{
-			var fields = typeof (T).GetFields(BindingFlags.Instance | BindingFlags.Public)
+			var fields = typeof (T).TypeInfo().GetFields(BindingFlags.Instance | BindingFlags.Public)
 								   .Where(p => !p.IsInitOnly)
 								   .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
 			foreach (var fieldInfo in fields)

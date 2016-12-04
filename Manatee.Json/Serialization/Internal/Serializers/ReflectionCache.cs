@@ -91,17 +91,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			ReflectionInfo info;
 			if (!_instanceCache.TryGetValue(type, out info))
 			{
-				var read = type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
-							   .Where(p => p.GetSetMethod() == null)
-							   .Where(p => p.GetGetMethod() != null)
-							   .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-							   .Select(BuildSerializationInfo);
-				var readWrite = type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+				var read = type.TypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public)
+				               .Where(p => p.GetSetMethod() == null)
+				               .Where(p => p.GetGetMethod() != null)
+				               .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
+				               .Select(BuildSerializationInfo);
+				var readWrite = type.TypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public)
 									.Where(p => p.GetSetMethod() != null)
 									.Where(p => p.GetGetMethod() != null)
 									.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 									.Select(BuildSerializationInfo);
-				var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public)
+				var fields = type.TypeInfo().GetFields(BindingFlags.Instance | BindingFlags.Public)
 								 .Where(p => !p.IsInitOnly)
 								 .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 								 .Select(BuildSerializationInfo);
@@ -114,17 +114,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			ReflectionInfo info;
 			if (!_staticCache.TryGetValue(type, out info))
 			{
-				var read = type.GetProperties(BindingFlags.Static | BindingFlags.Public)
+				var read = type.TypeInfo().GetProperties(BindingFlags.Static | BindingFlags.Public)
 							   .Where(p => p.GetSetMethod() == null)
 							   .Where(p => p.GetGetMethod() != null)
 							   .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 							   .Select(BuildSerializationInfo);
-				var readWrite = type.GetProperties(BindingFlags.Static | BindingFlags.Public)
+				var readWrite = type.TypeInfo().GetProperties(BindingFlags.Static | BindingFlags.Public)
 									.Where(p => p.GetSetMethod() != null)
 									.Where(p => p.GetGetMethod() != null)
 									.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 									.Select(BuildSerializationInfo);
-				var fields = type.GetFields(BindingFlags.Static | BindingFlags.Public)
+				var fields = type.TypeInfo().GetFields(BindingFlags.Static | BindingFlags.Public)
 								 .Where(p => !p.IsInitOnly)
 								 .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 								 .Select(BuildSerializationInfo);

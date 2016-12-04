@@ -4,7 +4,7 @@
   "description": "Provides an intuitive approach to building JSON structures.",
   "version": "5.1.1",
   "frameworks": {
-    ".NETFramework,Version=v4.5,Profile=Profile111": {}
+    ".NETPortable,Version=v4.5,Profile=Profile111": {}
   },
   "runtimes": {
     "win": {}
