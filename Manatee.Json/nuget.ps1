@@ -1,8 +1,4 @@
-$framework35 = "..\Manatee.Json\bin\Release-3.5\";
-$framework40 = "..\Manatee.Json\bin\Release-4.0\";
-$framework45 = "..\Manatee.Json\bin\Release-4.5\";
-$frameworkCore = "..\Manatee.Json\bin\Release\netstandard1.6\";
-$frameworkMono = "..\Manatee.Json\bin\Release-Portable\";
+param([String]$projfile)
 
 if (!(Test-Path -path $projFile)) {
   Write-Host "Cannot find project/nuspec file '$projFile'"

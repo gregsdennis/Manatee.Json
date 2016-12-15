@@ -422,9 +422,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Manatee.Json.snk" />
+    <None Include="nuget.ps1" />
+    <None Include="project.nuspec" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(Configuration)" == "Release" (powershell "&amp; $(ProjectDir)\nuget.ps1" -projFile "$(ProjectDir)\$(ProjectName).csproj")</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

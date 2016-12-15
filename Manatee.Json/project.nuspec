@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<!-- Required elements-->
+		<id>$id$</id>
+		<version>$version$</version>
+		<description>$description$</description>
+		<authors>$author$</authors>
+		<copyright>$copyright$</copyright>
+		<dependencies>
+			<!--Nuget dependencies must be declared here and should use version ranges:
+					[1,2) - Allows any major-version 1 package.
+						"[1" denotes start and include at 1 (1.0.0)
+						"2)" denotes end at but exclude 2 (2.0.0)
+					Without these ranges, the package will be tied to a specific version of
+					the dependency, causing Nuget Version Hell.-->
+			<!--<dependency id="Intergen.Logging" version="[0.0,0.1)"/>-->
+		</dependencies>
+		<files>
+			<file src="bin\Release\netstandard1.6\Manatee.Json.dll" target="lib\netstandard1.6"/>
+			<file src="bin\Release\netstandard1.6\Manatee.Json.pdb" target="lib\netstandard1.6"/>
+			<file src="bin\Release-3.5\Manatee.Json.dll" target="lib\net35-client"/>
+			<file src="bin\Release-3.5\Manatee.Json.pdb" target="lib\net35-client"/>
+			<file src="bin\Release-4.0\Manatee.Json.dll" target="lib\net40-client"/>
+			<file src="bin\Release-4.0\Manatee.Json.pdb" target="lib\net40-client"/>
+			<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoAndroid"/>
+			<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoAndroid"/>
+			<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoMac"/>
+			<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoMac"/>
+			<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoTouch"/>
+			<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoTouch"/>
+		</files>
+		<!-- ... -->
+	</metadata>
+	<!-- Optional 'files' node -->
+</package>
