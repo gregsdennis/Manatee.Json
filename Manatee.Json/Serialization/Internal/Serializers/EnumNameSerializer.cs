@@ -57,7 +57,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			EnsureDescriptions<T>();
 			var options = serializer.Options.CaseSensitiveDeserialization
-#if CORE
+#if IOS || CORE
 							  ? StringComparison.OrdinalIgnoreCase
 							  : StringComparison.Ordinal;
 #else

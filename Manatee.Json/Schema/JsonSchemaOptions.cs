@@ -22,7 +22,7 @@
 ***************************************************************************************/
 using System;
 using System.Net;
-#if CORE
+#if IOS || CORE
 using System.Net.Http;
 #endif
 
@@ -40,7 +40,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Func<string, string> Download
 		{
-#if CORE
+#if IOS || CORE
 			get { return _download ?? (_download = uri => new HttpClient().GetStringAsync(uri).Result); }
 #else
 			get { return _download ?? (_download = uri => new WebClient().DownloadString(uri)); }

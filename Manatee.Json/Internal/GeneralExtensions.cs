@@ -230,7 +230,7 @@ namespace Manatee.Json.Internal
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
 		{
-#if CORE
+#if IOS || CORE
 			return collection.OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
 #else
 			return collection.OrderBy(kvp => kvp.Key, StringComparer.InvariantCulture)
@@ -262,9 +262,21 @@ namespace Manatee.Json.Internal
 			if (value is JsonObject) return (JsonObject) value;
 			if (value is string) return (string) value;
 			if (value is bool) return (bool) value;
-			if (value is IConvertible) return Convert.ToDouble(value);
+			if (value.IsNumber()) return Convert.ToDouble(value);
 
 			return null;
+		}
+		public static bool IsNumber(this object value)
+		{
+			return value is double ||
+			       value is float ||
+			       value is int ||
+			       value is uint ||
+			       value is short ||
+			       value is ushort ||
+				   value is byte ||
+				   value is long ||
+				   value is ulong;
 		}
 	}
 }

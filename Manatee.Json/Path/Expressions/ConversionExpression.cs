@@ -22,6 +22,7 @@
 ***************************************************************************************/
 
 using System;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Expressions
 {
@@ -64,7 +65,7 @@ namespace Manatee.Json.Path.Expressions
 				return new JsonValue((bool)value);
 			if (value is string)
 				return new JsonValue((string)value);
-			if (value is IConvertible)
+			if (value.IsNumber())
 				return new JsonValue(Convert.ToDouble(value));
 			return value;
 		}

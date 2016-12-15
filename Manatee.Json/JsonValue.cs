@@ -279,14 +279,8 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			var json = obj as JsonValue;
-			if (json == null)
-			{
-				if (obj is string && Type == JsonValueType.String) return (string) obj == String;
-				if (obj is bool && Type == JsonValueType.Boolean) return (bool) obj == Boolean;
-				if (obj is IConvertible && !(obj is string || obj is bool) && Type == JsonValueType.Number) return Convert.ToDouble(obj) == Number;
-				return false;
-			}
+			var json = obj.AsJsonValue();
+			if (json == null) return false;
 			if (json.Type != Type) return false;
 			switch (Type)
 			{

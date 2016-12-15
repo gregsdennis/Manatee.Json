@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Manatee.Json.Internal
@@ -32,6 +33,20 @@ namespace Manatee.Json.Internal
 		public static Type TypeInfo(this Type type)
 		{
 			return type;
+		}
+#endif
+#if IOS
+		public static bool Any(this string value, Func<char, bool> predicate)
+		{
+			return value.ToCharArray().Any(predicate);
+		}
+		public static IEnumerable<char> TakeWhile(this string value, Func<char, bool> predicate)
+		{
+			return value.ToCharArray().TakeWhile(predicate);
+		}
+		public static bool Contains(this string value, char c)
+		{
+			return value.ToCharArray().Contains(c);
 		}
 #endif
 #if CORE
