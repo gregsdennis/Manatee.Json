@@ -94,11 +94,11 @@ namespace Manatee.Json.Internal
 		{
 			return property.GetMethod;
 		}
-		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		//public static MethodInfo GetMethod(this Type type, string name, Type[] typeParams)
-		//{
-		//	return type.TypeInfo().GetMethod(name, typeParams);
-		//}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static IEnumerable<Type> GetTypes(this Assembly assembly)
+		{
+			return assembly.ExportedTypes;
+		}
 #endif
 #if CORE
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
