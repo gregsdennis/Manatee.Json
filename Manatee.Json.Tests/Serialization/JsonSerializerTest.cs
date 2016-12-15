@@ -62,7 +62,7 @@ namespace Manatee.Json.Tests.Serialization
 						}
 				};
 			var obj = DateTime.Today;
-			JsonValue expected = string.Format("/Date({0})/", DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond);
+			JsonValue expected = $"/Date({DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond})/";
 			var actual = serializer.Serialize(obj);
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);
@@ -263,10 +263,10 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
-		// This test fails when all tests are run together because the JsonSerializationAbstractionMap
-		// is static and one of the other tests has registered ImplementationClass to be used
-		// for IInterface, and VS is running the tests concurrently.
 		[TestMethod]
+#if IOS
+		[Ignore]
+#endif
 		public void AbstractAndInterfaceProps_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -314,10 +314,10 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
-		// This test fails when all tests are run together because the JsonSerializationAbstractionMap
-		// is static and one of the other tests has registered ImplementationClass to be used
-		// for IInterface, and VS is running the tests concurrently.
 		[TestMethod]
+#if IOS
+		[Ignore]
+#endif
 		public void Interface_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -335,9 +335,8 @@ namespace Manatee.Json.Tests.Serialization
 		public void Nullable_Null_Successful()
 		{
 			var serializer = new JsonSerializer();
-			int? i = null;
 			var expected = JsonValue.Null;
-			var actual = serializer.Serialize(i);
+			var actual = serializer.Serialize((int?) null);
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
@@ -529,8 +528,7 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void Fields()
 		{
-			var serializer = new JsonSerializer();
-			serializer.Options.AutoSerializeFields = true;
+			var serializer = new JsonSerializer {Options = {AutoSerializeFields = true}};
 			var obj = new ObjectWithBasicProps
 				{
 					StringProp = "stringValue",
@@ -568,10 +566,9 @@ namespace Manatee.Json.Tests.Serialization
 		[TestMethod]
 		public void NullableWithNonNullDefaultValue()
 		{
-			bool? obj = false;
 			JsonValue expected = false;
 			var serializer = new JsonSerializer();
-			var actual = serializer.Serialize(obj);
+			var actual = serializer.Serialize((bool?) false);
 			Assert.AreEqual(expected, actual);
 		}
 	}
