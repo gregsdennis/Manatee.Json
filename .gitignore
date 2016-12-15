@@ -8,4 +8,5 @@
 /packages
 /NuGet
 /TestResults
-*project.lock.json
+**/*.lock.json
+**/*.nuget.targets

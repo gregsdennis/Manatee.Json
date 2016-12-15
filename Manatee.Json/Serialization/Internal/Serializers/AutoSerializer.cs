@@ -39,7 +39,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var json = new JsonObject();
 			var type = typeof (T);
 			if ((serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never) &&
-				(type.IsAbstract || type.IsInterface || (serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always)))
+				(type.TypeInfo().IsAbstract || type.TypeInfo().IsInterface || (serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always)))
 			{
 				type = obj.GetType();
 				json.Add(Constants.TypeKey, type.AssemblyQualifiedName);
@@ -158,7 +158,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
-				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
+				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
+					                                                                            ? StringComparison.CurrentCultureIgnoreCase
+					                                                                            : StringComparison.CurrentCulture) == 0);
 				if (kvp.Key != null)
 				{
 					var value = kvp.Value;
@@ -196,7 +198,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
-				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase) == 0);
+				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
+																								? StringComparison.CurrentCultureIgnoreCase
+																								: StringComparison.CurrentCulture) == 0);
 				if (kvp.Key != null)
 				{
 					var value = kvp.Value;
@@ -250,8 +254,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			if (collectionType.IsArray)
 				return collectionType.GetElementType();
-			if (collectionType.IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof (IEnumerable<>)))
-				return collectionType.GetGenericArguments().First();
+			if (collectionType.TypeInfo().IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof(IEnumerable<>)))
+				return collectionType.GetTypeArguments().First();
 			return typeof (object);
 		}
 	}

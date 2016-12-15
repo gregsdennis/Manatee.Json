@@ -125,7 +125,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 				case ExpressionType.RightShift:
 				case ExpressionType.TypeAs:
 				case ExpressionType.TypeIs:
-#if NET4 || NET4C || NET45
+#if NET4 || NET45
 				case ExpressionType.Assign:
 				case ExpressionType.Block:
 				case ExpressionType.DebugInfo:

@@ -23,6 +23,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -32,10 +34,10 @@ namespace Manatee.Json.Schema.Validators
 
 		static JsonSchemaPropertyValidatorFactory()
 		{
-			AllValidators = typeof(IJsonSchemaPropertyValidator).Assembly.GetTypes()
-			                                            .Where(t => typeof(IJsonSchemaPropertyValidator).IsAssignableFrom(t) &&
-			                                                        !t.IsAbstract &&
-			                                                        t.IsClass)
+			AllValidators = typeof(IJsonSchemaPropertyValidator).TypeInfo().Assembly.GetTypes()
+														.Where(t => typeof(IJsonSchemaPropertyValidator).IsAssignableFrom(t) &&
+																	!t.TypeInfo().IsAbstract &&
+																	t.TypeInfo().IsClass)
 			                                            .Select(Activator.CreateInstance)
 			                                            .Cast<IJsonSchemaPropertyValidator>()
 			                                            .ToList();

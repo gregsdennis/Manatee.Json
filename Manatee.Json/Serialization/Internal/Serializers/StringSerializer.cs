@@ -21,8 +21,6 @@
 
 ***************************************************************************************/
 
-using System;
-
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class StringSerializer : ISerializer
@@ -35,8 +33,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var value = (IConvertible) json.String;
-			return (T) value;
+			return (T) (object) json.String;
 		}
 	}
 }
