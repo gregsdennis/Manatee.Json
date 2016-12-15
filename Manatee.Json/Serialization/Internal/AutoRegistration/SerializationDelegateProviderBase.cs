@@ -33,8 +33,13 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 
 		protected SerializationDelegateProviderBase()
 		{
+#if !IOS
 			_encodeMethod = GetType().GetMethod("Encode", BindingFlags.NonPublic | BindingFlags.Static);
 			_decodeMethod = GetType().GetMethod("Decode", BindingFlags.NonPublic | BindingFlags.Static);
+#else
+			_encodeMethod = GetType().TypeInfo().GetDeclaredMethod("Encode");
+			_decodeMethod = GetType().TypeInfo().GetDeclaredMethod("Decode");
+#endif
 		}
 
 		public abstract bool CanHandle(Type type);
@@ -44,7 +49,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
-#if CORE
+#if IOS || CORE
 			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) toJson.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), toJson);
 #else
 			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), toJson);
@@ -56,7 +61,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var fromJson = _decodeMethod;
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
-#if CORE
+#if IOS || CORE
 			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) fromJson.CreateDelegate(typeof(JsonSerializationTypeRegistry.FromJsonDelegate<T>), fromJson);
 #else
 			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.FromJsonDelegate<T>), fromJson);
@@ -65,7 +70,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 
 		protected virtual Type[] GetTypeArguments(Type type)
 		{
-			return type.TypeInfo().GetGenericArguments();
+			return type.GetTypeArguments();
 		}
 	}
 }

@@ -72,7 +72,11 @@ namespace Manatee.Json.Serialization
 																	  .ToList();
 			_toJsonConverters = new Dictionary<Type, Delegate>();
 			_fromJsonConverters = new Dictionary<Type, Delegate>();
+#if IOS
+			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates");
+#else
 			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates", BindingFlags.Static | BindingFlags.NonPublic);
+#endif
 		}
 
 		/// <summary>

@@ -1,4 +1,4 @@
-﻿#if CORE
+﻿#if IOS || CORE
 using System;
 
 namespace Manatee.Json

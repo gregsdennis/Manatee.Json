@@ -110,7 +110,7 @@ namespace Manatee.Json.Serialization
 				var genericMatches = _registry.Where(t => t.Key.TypeInfo().IsGenericTypeDefinition && t.Key.GetGenericTypeDefinition() == genericDefinition).ToList();
 				if (genericMatches.Any())
 				{
-					var typeArguments = type.TypeInfo().GetGenericArguments();
+					var typeArguments = type.GetTypeArguments();
 					return genericMatches.First().Value.MakeGenericType(typeArguments);
 				}
 			}
@@ -133,7 +133,7 @@ namespace Manatee.Json.Serialization
 				{
 					var concrete = _registry[type];
 					if (concrete.TypeInfo().IsGenericTypeDefinition)
-						concrete = concrete.MakeGenericType(typeof (T).TypeInfo().GetGenericArguments());
+						concrete = concrete.MakeGenericType(typeof (T).GetTypeArguments());
 					return (T) resolver.Resolve(concrete);
 				}
 #if !IOS && !CORE

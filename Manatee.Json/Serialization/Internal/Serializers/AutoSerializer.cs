@@ -255,7 +255,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (collectionType.IsArray)
 				return collectionType.GetElementType();
 			if (collectionType.TypeInfo().IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof(IEnumerable<>)))
-				return collectionType.TypeInfo().GetGenericArguments().First();
+				return collectionType.GetTypeArguments().First();
 			return typeof (object);
 		}
 	}
