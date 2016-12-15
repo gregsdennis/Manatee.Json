@@ -3,12 +3,9 @@
 ################################################################################
 
 /.vs
-/Manatee.Json/bin
-/Manatee.Json/obj
-/Manatee.Json.Performance/bin
-/Manatee.Json.Performance/obj
+[Bb]in
+[Oo]bj
 /packages
-/Manatee.Json.Tests/bin
-/Manatee.Json.Tests/obj
 /NuGet
 /TestResults
+*project.lock.json
