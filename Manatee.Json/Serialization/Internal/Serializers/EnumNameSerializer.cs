@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
@@ -44,7 +45,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			EnsureDescriptions<T>();
-			var attributes = typeof (T).GetCustomAttributes(typeof (FlagsAttribute), false);
+			var attributes = typeof (T).TypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
 			if (!attributes.Any())
 			{
 				var entry = _descriptions[typeof (T)].FirstOrDefault(d => Equals(d.Value, obj));
@@ -56,8 +57,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			EnsureDescriptions<T>();
 			var options = serializer.Options.CaseSensitiveDeserialization
+#if IOS || CORE
+							  ? StringComparison.OrdinalIgnoreCase
+							  : StringComparison.Ordinal;
+#else
 							  ? StringComparison.InvariantCultureIgnoreCase
 							  : StringComparison.InvariantCulture;
+#endif
 			var entry = _descriptions[typeof (T)].FirstOrDefault(d => string.Equals(d.String, json.String, options));
 			if (entry == null)
 			{
@@ -80,9 +86,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static string GetDescription<T>(string name)
 		{
 			var type = typeof (T);
-			var memInfo = type.GetMember(name);
+			var memInfo = type.TypeInfo().GetMember(name);
 			var attributes = memInfo[0].GetCustomAttributes(typeof (DescriptionAttribute), false);
-			return attributes.Any() ? ((DescriptionAttribute)attributes[0]).Description : name;
+			return attributes.Any() ? ((DescriptionAttribute)attributes.First()).Description : name;
 		}
 		private static string BuildFlagsValues<T>(T obj, string separator)
 		{

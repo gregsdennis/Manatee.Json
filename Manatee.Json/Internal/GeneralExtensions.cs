@@ -26,7 +26,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Manatee.Json.Schema;
+using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Internal
 {
@@ -43,22 +44,6 @@ namespace Manatee.Json.Internal
 		public static bool IsInt(this double value)
 		{
 			return Math.Ceiling(value) == Math.Floor(value);
-		}
-		public static bool IsNullOrWhiteSpace(this string value)
-		{
-#if NET35 || NET35C
-			return string.IsNullOrEmpty(value) || string.IsNullOrEmpty(value.Trim());
-#elif NET4 || NET4C || NET45
-			return string.IsNullOrWhiteSpace(value);
-#endif
-		}
-		public static string Join<T>(this IEnumerable<T> segments, string separator)
-		{
-#if NET35 || NET35C
-			return string.Join(separator, segments.Select(s => s.ToString()).ToArray());
-#elif NET4 || NET4C || NET45
-			return string.Join(separator, segments);
-#endif
 		}
 		public static IEnumerable<T> NotNull<T>(this IEnumerable<T> items)
 			where T : class
@@ -225,18 +210,18 @@ namespace Manatee.Json.Internal
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived.IsSubtypeOf(tBase)) return true;
-			var interfaces = tDerived.GetInterfaces().Select(i => i.IsGenericType ? i.GetGenericTypeDefinition() : i);
+			var interfaces = tDerived.TypeInfo().GetInterfaces().Select(i => i.TypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
 			return interfaces.Contains(tBase);
 		}
 		private static bool IsSubtypeOf(this Type tDerived, Type tBase)
 		{
-			var currentType = tDerived.BaseType;
+			var currentType = tDerived.TypeInfo().BaseType;
 			while (currentType != null)
 			{
-				if (currentType.IsGenericType)
+				if (currentType.TypeInfo().IsGenericType)
 					currentType = currentType.GetGenericTypeDefinition();
 				if (currentType == tBase) return true;
-				currentType = currentType.BaseType;
+				currentType = currentType.TypeInfo().BaseType;
 			}
 			return false;
 		}
@@ -246,8 +231,12 @@ namespace Manatee.Json.Internal
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
 		{
+#if IOS || CORE
+			return collection.OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
+#else
 			return collection.OrderBy(kvp => kvp.Key, StringComparer.InvariantCulture)
-			                 .Aggregate(0, (current, kvp) =>
+#endif
+							 .Aggregate(0, (current, kvp) =>
 				                            {
 					                            unchecked
 					                            {
@@ -274,9 +263,21 @@ namespace Manatee.Json.Internal
 			if (value is JsonObject) return (JsonObject) value;
 			if (value is string) return (string) value;
 			if (value is bool) return (bool) value;
-			if (value is IConvertible) return Convert.ToDouble(value);
+			if (value.IsNumber()) return Convert.ToDouble(value);
 
 			return null;
+		}
+		public static bool IsNumber(this object value)
+		{
+			return value is double ||
+			       value is float ||
+			       value is int ||
+			       value is uint ||
+			       value is short ||
+			       value is ushort ||
+				   value is byte ||
+				   value is long ||
+				   value is ulong;
 		}
 	}
 }

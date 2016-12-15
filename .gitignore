@@ -3,12 +3,10 @@
 ################################################################################
 
 /.vs
-/Manatee.Json/bin
-/Manatee.Json/obj
-/Manatee.Json.Performance/bin
-/Manatee.Json.Performance/obj
+**/bin/
+**/obj/
 /packages
-/Manatee.Json.Tests/bin
-/Manatee.Json.Tests/obj
 /NuGet
 /TestResults
+**/*.lock.json
+**/*.nuget.targets

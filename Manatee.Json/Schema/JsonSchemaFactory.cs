@@ -61,6 +61,7 @@ namespace Manatee.Json.Schema
 				typeof (decimal)
 			};
 
+#if !IOS
 		/// <summary>
 		/// Returns
 		/// </summary>
@@ -78,6 +79,7 @@ namespace Manatee.Json.Schema
 			}
 			return FromJson(json);
 		}
+#endif
 		/// <summary>
 		/// Creates a schema object from its JSON representation.
 		/// </summary>

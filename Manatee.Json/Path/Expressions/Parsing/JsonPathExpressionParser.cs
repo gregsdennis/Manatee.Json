@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Expressions.Parsing
@@ -33,9 +34,9 @@ namespace Manatee.Json.Path.Expressions.Parsing
 
 		static JsonPathExpressionParser()
 		{
-			Parsers = typeof(JsonPathExpressionParser).Assembly.GetTypes()
-			                                          .Where(t => typeof(IJsonPathExpressionParser).IsAssignableFrom(t) && t.IsClass)
-			                                          .Select(Activator.CreateInstance)
+			Parsers = typeof(JsonPathExpressionParser).TypeInfo().Assembly.GetTypes()
+													  .Where(t => typeof(IJsonPathExpressionParser).IsAssignableFrom(t) && t.TypeInfo().IsClass)
+													  .Select(Activator.CreateInstance)
 			                                          .Cast<IJsonPathExpressionParser>()
 			                                          .ToList();
 		}

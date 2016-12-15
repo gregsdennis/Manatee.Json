@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.AutoRegistration
 {
@@ -30,7 +31,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 	{
 		public override bool CanHandle(Type type)
 		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Queue<>);
+			return type.TypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Queue<>);
 		}
 
 		private static JsonValue Encode<T>(Queue<T> queue, JsonSerializer serializer)

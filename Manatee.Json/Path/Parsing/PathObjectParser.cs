@@ -14,9 +14,9 @@
 	   See the License for the specific language governing permissions and
 	   limitations under the License.
  
-	File Name:		ObjectParser.cs
+	File Name:		PathObjectParser.cs
 	Namespace:		Manatee.Json.Path.Parsing
-	Class Name:		ObjectParser
+	Class Name:		PathObjectParser
 	Purpose:		Parses JSON Path object components.
 
 ***************************************************************************************/
@@ -24,7 +24,7 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Parsing
 {
-	internal class ObjectParser : IJsonPathParser
+	internal class PathObjectParser : IJsonPathParser
 	{
 		public bool Handles(string input)
 		{

@@ -21,6 +21,7 @@
 
 ***************************************************************************************/
 using System;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.AutoRegistration
 {
@@ -28,7 +29,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 	{
 		public override bool CanHandle(Type type)
 		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+			return type.TypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
 		private static JsonValue Encode<T>(T? nullable, JsonSerializer serializer)
