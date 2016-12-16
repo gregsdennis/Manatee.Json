@@ -145,7 +145,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 #if IOS
 			return type.TypeInfo().DeclaredProperties.Where(p => (p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
 #else
-			return type.TypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+			return type.TypeInfo().GetProperties(BindingFlags.Static | BindingFlags.Public);
 #endif
 		}
 		private static IEnumerable<FieldInfo> GetInstanceFields(Type type)
@@ -153,7 +153,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 #if IOS
 			return type.TypeInfo().DeclaredFields.Where(f => !f.IsStatic && f.IsPublic);
 #else
-			return type.TypeInfo().GetFields(BindingFlags.Static | BindingFlags.Public);
+			return type.TypeInfo().GetFields(BindingFlags.Instance | BindingFlags.Public);
 #endif
 		}
 		private static IEnumerable<FieldInfo> GetStaticFields(Type type)
