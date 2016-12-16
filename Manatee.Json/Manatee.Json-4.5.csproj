@@ -428,7 +428,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(Configuration)" == "Release" (powershell "&amp; $(ProjectDir)\nuget.ps1" -projFile "$(ProjectDir)\$(ProjectName).csproj")</PostBuildEvent>
+    <PostBuildEvent>if "$(Configuration)" == "Release" (powershell "&amp; $(ProjectDir)\nuget.ps1" -nuspecFile "$(ProjectDir)\project.nuspec")</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

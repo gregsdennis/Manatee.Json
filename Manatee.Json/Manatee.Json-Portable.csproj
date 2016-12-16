@@ -34,6 +34,7 @@
     <DefineConstants>TRACE;IOS, JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release-Portable\Manatee.Json.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

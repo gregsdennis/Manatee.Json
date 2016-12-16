@@ -1,8 +1,4 @@
 {
-  "title": "Manatee.Json",
-  "copyright": "Copyright © 2016 Little Crab Solutions",
-  "description": "Provides an intuitive approach to building JSON structures.",
-  "version": "5.1.1",
   "frameworks": {
     ".NETFramework,Version=v4.0,Profile=Client": {}
   },

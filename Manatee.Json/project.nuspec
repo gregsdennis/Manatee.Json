@@ -1,36 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
-		<!-- Required elements-->
-		<id>$id$</id>
-		<version>$version$</version>
-		<description>$description$</description>
-		<authors>$author$</authors>
-		<copyright>$copyright$</copyright>
-		<dependencies>
-			<!--Nuget dependencies must be declared here and should use version ranges:
-					[1,2) - Allows any major-version 1 package.
-						"[1" denotes start and include at 1 (1.0.0)
-						"2)" denotes end at but exclude 2 (2.0.0)
-					Without these ranges, the package will be tied to a specific version of
-					the dependency, causing Nuget Version Hell.-->
-			<!--<dependency id="Intergen.Logging" version="[0.0,0.1)"/>-->
-		</dependencies>
-		<files>
-			<file src="bin\Release\netstandard1.6\Manatee.Json.dll" target="lib\netstandard1.6"/>
-			<file src="bin\Release\netstandard1.6\Manatee.Json.pdb" target="lib\netstandard1.6"/>
-			<file src="bin\Release-3.5\Manatee.Json.dll" target="lib\net35-client"/>
-			<file src="bin\Release-3.5\Manatee.Json.pdb" target="lib\net35-client"/>
-			<file src="bin\Release-4.0\Manatee.Json.dll" target="lib\net40-client"/>
-			<file src="bin\Release-4.0\Manatee.Json.pdb" target="lib\net40-client"/>
-			<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoAndroid"/>
-			<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoAndroid"/>
-			<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoMac"/>
-			<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoMac"/>
-			<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoTouch"/>
-			<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoTouch"/>
-		</files>
-		<!-- ... -->
+		<id>Manatee.Json</id>
+		<version>5.2.0</version>
+		<description>
+			A fully object-oriented approach to JSON manipulation, validation, and serialization that focuses on modeling the JSON structure rather than mere string parsing.
+		</description>
+		<authors>gregsdennis</authors>
+		<copyright>Copyright © 2016 Little Crab Solutions</copyright>
+		<projectUrl>https://www.github.com/gregsdennis/manatee.json</projectUrl>
+		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+		<iconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</iconUrl>
+		<releaseNotes>
+			v5.2.0
+			.Net Core (netstandard1.6) now supported.
+			
+			v5.1.1
+			Minor fixes &amp; enhancements around JsonPath parsing.
+
+			v5.1.0
+			BUG FIX: #35 - Overhaul JsonPath parsing to eliminate reference to Manatee.StateMachine.
+			BUG FIX: #10 - Add support for quoted keys in JsonPath.
+			BUG FIX: #13 - Issues with tests running concurrently.
+			BUG FIX: #11 - JSONPath support for index list and slice combined in array operator.
+			Added missing extension methods for constructing JsonPaths.
+			Updated Array() and SearchArray() methods to accept params of Slice objects.
+			Added implicit cast from int to Slice to support new Array() and SearchArray() methods.
+			Obsoleted ArraySlice() and SearchArraySlice() methods to avoid breaking change.
+			Overrode Add() and AddRange() methods in JsonArray to coalesce null to JsonValue.Null.
+			Byproduct: Created JSON Path Test Suite. All tests pass.
+
+			v5.0.1
+			Added ability to register schemas.
+
+			v5.0.0
+			Major update to JsonSchema implementation.
+			- Now passes JsonSchema Official Test Suite (https://github.com/json-schema-org/JSON-Schema-Test-Suite)
+			- JsonSchema reorganized into single object to support combinations of properties.
+			- BUG FIX: #31 - JsonPath array indexer should support object values.
+		</releaseNotes>
+		<tags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</tags>
 	</metadata>
-	<!-- Optional 'files' node -->
+	<files>
+		<file src="bin\Release-3.5\Manatee.Json.dll" target="lib\net35-client"/>
+		<file src="bin\Release-3.5\Manatee.Json.pdb" target="lib\net35-client"/>
+		<file src="bin\Release-3.5\Manatee.Json.xml" target="lib\net35-client"/>
+		<file src="bin\Release-4.0\Manatee.Json.dll" target="lib\net40-client"/>
+		<file src="bin\Release-4.0\Manatee.Json.pdb" target="lib\net40-client"/>
+		<file src="bin\Release-4.0\Manatee.Json.xml" target="lib\net40-client"/>
+		<file src="bin\Release-4.5\Manatee.Json.dll" target="lib\net45"/>
+		<file src="bin\Release-4.5\Manatee.Json.pdb" target="lib\net45"/>
+		<file src="bin\Release-4.5\Manatee.Json.xml" target="lib\net45"/>
+		<file src="bin\Release\netstandard1.6\Manatee.Json.dll" target="lib\netstandard1.6"/>
+		<file src="bin\Release\netstandard1.6\Manatee.Json.pdb" target="lib\netstandard1.6"/>
+		<file src="bin\Release\netstandard1.6\Manatee.Json.xml" target="lib\netstandard1.6"/>
+		<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoAndroid"/>
+		<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoAndroid"/>
+		<file src="bin\Release-Portable\Manatee.Json.xml" target="lib\MonoAndroid"/>
+		<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoMac"/>
+		<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoMac"/>
+		<file src="bin\Release-Portable\Manatee.Json.xml" target="lib\MonoMac"/>
+		<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoTouch"/>
+		<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoTouch"/>
+		<file src="bin\Release-Portable\Manatee.Json.xml" target="lib\MonoTouch"/>
+	</files>
 </package>
