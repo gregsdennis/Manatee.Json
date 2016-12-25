@@ -242,6 +242,16 @@ namespace Manatee.Json.Tests
 			var json = JsonValue.Parse(jsonString);
 
 			var result = schema.Validate(json);
+
+			Console.WriteLine(schema.ToJson(null));
+			var refSchema = ((JsonSchemaReference)((JsonSchema)schema).Properties["prop2"].Type).Resolved;
+			Console.WriteLine(refSchema.ToJson(null));
+			Console.WriteLine(json);
+			foreach (var error in result.Errors)
+			{
+				Console.WriteLine(error);
+			}
+
 			Assert.IsTrue(result.Valid);
 		}
 	}
