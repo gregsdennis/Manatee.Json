@@ -1,5 +1,7 @@
 param([String]$nuspecfile)
 
+Write-Output "Post-build running..."
+
 if (!(Test-Path -path $nuspecfile)) {
   Write-Output "Cannot find project/nuspec file '$nuspecfile'"
   return 1
