@@ -8,6 +8,7 @@ if (!(Test-Path -path $nuspecfile)) {
 $nuget_exe = ".\nuget.exe"
 
 if (!(Test-Path -path $nuget_exe)) {
+  Write-Output "Attempting to download nuget.exe"
   $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
   Invoke-WebRequest $sourceNugetExe -OutFile $nuget_exe
 }
