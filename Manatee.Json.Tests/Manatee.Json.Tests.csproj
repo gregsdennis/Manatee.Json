@@ -94,6 +94,12 @@
     <Compile Include="Schema\TestSuite\SchemaTest.cs" />
     <Compile Include="Schema\TestSuite\SchemaTestSet.cs" />
     <Compile Include="Serialization\JsonDeserializerTest.cs" />
+    <None Include="Files\baseSchema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\refSchema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Test References\InvalidSchemaValidatedClass.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

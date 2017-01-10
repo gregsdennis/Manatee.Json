@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
@@ -209,6 +210,49 @@ namespace Manatee.Json.Tests
 			var results = path.Evaluate(json);
 
 			Assert.AreEqual(new JsonArray { "red", 19.95 }, results);
+		}
+
+		[TestMethod]
+		[DeploymentItem("Files\\baseSchema.json")]
+		[DeploymentItem("Files\\refSchema.json")]
+		public void Issue45a_Utf8SupportInReferenceSchemaEnums()
+		{
+			// replace with your full path to the schema file.
+			const string fileName = @"C:\Users\gregd\OneDrive\Projects\Manatee.Json\Manatee.Json.Tests\Files\baseSchema.json";
+			var directory = System.IO.Path.GetDirectoryName(fileName);
+			Directory.SetCurrentDirectory(directory);
+
+			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
+			var schema = JsonSchemaFactory.Load(fileName);
+			var json = JsonValue.Parse(jsonString);
+
+			var result = schema.Validate(json);
+			Assert.IsTrue(result.Valid);
+		}
+
+		[TestMethod]
+		[DeploymentItem("Files\\baseSchema.json")]
+		[DeploymentItem("Files\\refSchema.json")]
+		public void Issue45b_Utf8SupportInReferenceSchemaEnums()
+		{
+			const string fileName = @"baseSchema.json";
+
+			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
+			var schema = JsonSchemaFactory.Load(fileName);
+			var json = JsonValue.Parse(jsonString);
+
+			var result = schema.Validate(json);
+
+			Console.WriteLine(schema.ToJson(null));
+			var refSchema = ((JsonSchemaReference)((JsonSchema)schema).Properties["prop2"].Type).Resolved;
+			Console.WriteLine(refSchema.ToJson(null));
+			Console.WriteLine(json);
+			foreach (var error in result.Errors)
+			{
+				Console.WriteLine(error);
+			}
+
+			Assert.IsTrue(result.Valid);
 		}
 	}
 }
