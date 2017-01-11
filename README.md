@@ -1,7 +1,6 @@
 #Manatee.Json
 
-[![Join the chat at https://gitter.im/gregsdennis/Manatee.Json](https://badges.gitter.im/gregsdennis/Manatee.Json.svg)](https://gitter.im/gregsdennis/Manatee.Json?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![littlecrabsolutions MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)
+[![Join the chat at https://gitter.im/gregsdennis/Manatee.Json](https://badges.gitter.im/gregsdennis/Manatee.Json.svg)](https://gitter.im/gregsdennis/Manatee.Json?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![littlecrabsolutions MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)
 
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
