@@ -22,8 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests", "Manat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6E84846A-D11A-4B3F-9588-C815FB0A22C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Performance", "Manatee.Json.Performance\Manatee.Json.Performance.csproj", "{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-3.5", "Manatee.Json\Manatee.Json-3.5.csproj", "{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json-4.0", "Manatee.Json\Manatee.Json-4.0.csproj", "{67AC4D8A-ACC2-4966-B60E-5B20B0AB6C4E}"
@@ -45,10 +43,6 @@ Global
 		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E74B7538-5E17-43C7-925B-33784945312E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA1616A9-DF70-40E9-B7E8-AAD1D8AC8CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,7 +65,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E74B7538-5E17-43C7-925B-33784945312E} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
-		{2F8A54FB-B395-4BE4-9DF8-D9A13BF1D4F5} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Json.vsmdi
