@@ -34,7 +34,7 @@ namespace Manatee.Json.Internal
 		[ThreadStatic]
 		private static XmlNamespaceRegistry _instance;
 
-		public static XmlNamespaceRegistry Instance { get { return _instance ?? (_instance = new XmlNamespaceRegistry()); } }
+		public static XmlNamespaceRegistry Instance => _instance ?? (_instance = new XmlNamespaceRegistry());
 
 		private XmlNamespaceRegistry() {}
 
@@ -58,7 +58,8 @@ namespace Manatee.Json.Internal
 		}
 		public bool ElementDefinesNamespace(XElement element, string space)
 		{
-			return _registry.ContainsKey(element) && _registry[element].Any(pair => pair.Namespace == space);
+			List<XmlNamespacePair> entry;
+			return _registry.TryGetValue(element, out entry) && entry.Any(pair => pair.Namespace == space);
 		}
 		public string GetLabel(XElement element, string space)
 		{
@@ -67,9 +68,13 @@ namespace Manatee.Json.Internal
 
 		public void Register(string label, string space)
 		{
-			if (!_stack.ContainsKey(label))
-				_stack.Add(label, new Stack<string>());
-			_stack[label].Push(space);
+			Stack<string> entry;
+			if (!_stack.TryGetValue(label, out entry))
+			{
+				entry = new Stack<string>();
+				_stack.Add(label, entry);
+			}
+			entry.Push(space);
 		}
 		public void Unregister(string label)
 		{
@@ -79,8 +84,9 @@ namespace Manatee.Json.Internal
 		}
 		public string GetNamespace(string label)
 		{
-			if (!_stack.ContainsKey(label)) return null;
-			return _stack[label].Count == 0 ? null : _stack[label].Peek();
+			Stack<string> entry;
+			if (!_stack.TryGetValue(label, out entry)) return null;
+			return _stack.TryGetValue(label, out entry) && entry.Count != 0 ? entry.Peek() : null;
 		}
 	}
 }

@@ -23,9 +23,9 @@
 
 using System;
 #if !NET35 && !IOS
-using System.Collections.Concurrent;
+using Dictionary = System.Collections.Concurrent.ConcurrentDictionary<System.Type, Manatee.Json.Serialization.Internal.SerializerMethodPair>;
 #else
-using System.Collections.Generic;
+using Dictionary = System.Collections.Generic.Dictionary<System.Type, Manatee.Json.Serialization.Internal.SerializerMethodPair>;
 #endif
 using System.Reflection;
 
@@ -33,40 +33,35 @@ namespace Manatee.Json.Serialization.Internal
 {
 	internal static class SerializerCache
 	{
-#if !NET35 && !IOS
-		private static readonly ConcurrentDictionary<Type, SerializerMethodPair> _cache;
-#else
-		private static readonly Dictionary<Type, SerializerMethodPair> _cache;
-#endif
+		private static readonly Dictionary _cache;
+
 		static SerializerCache()
 		{
-#if !NET35 && !IOS
-			_cache = new ConcurrentDictionary<Type, SerializerMethodPair>();
-#else
-			_cache = new Dictionary<Type, SerializerMethodPair>();
-#endif
+			_cache = new Dictionary();
 		}
 
 		public static MethodInfo GetSerializeMethod(Type type)
 		{
-			if (!_cache.ContainsKey(type))
-#if !NET35 && !IOS
-				_cache.TryAdd(type, new SerializerMethodPair(type));
-#else
-				_cache.Add(type, new SerializerMethodPair(type));
-#endif
-			return _cache[type].Serializer;
+			var pair = EnsureMethodPair(type);
+			return pair.Serializer;
 		}
 
 		public static MethodInfo GetDeserializeMethod(Type type)
 		{
-			if (!_cache.ContainsKey(type))
-#if !NET35 && !IOS
-				_cache.TryAdd(type, new SerializerMethodPair(type));
-#else
-				_cache.Add(type, new SerializerMethodPair(type));
-#endif
-			return _cache[type].Deserializer;
+			var pair = EnsureMethodPair(type);
+			return pair.Deserializer;
+		}
+
+		private static SerializerMethodPair EnsureMethodPair(Type type)
+		{
+			SerializerMethodPair pair;
+			if (!_cache.TryGetValue(type, out pair))
+			{
+				pair = new SerializerMethodPair(type);
+				_cache[type] = pair;
+			}
+
+			return pair;
 		}
 	}
 }

@@ -147,12 +147,14 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		internal static MethodInfo GetBuildMethod(Type type)
 		{
-			if (_buildMethods.ContainsKey(type))
-				return _buildMethods[type];
+			MethodInfo methodInfo;
+			if (!_buildMethods.TryGetValue(type, out methodInfo))
+			{
+				methodInfo = _buildMethod.MakeGenericMethod(type);
+				_buildMethods[type] = methodInfo;
+			}
 
-			var method = _buildMethod.MakeGenericMethod(type);
-			_buildMethods[type] = method;
-			return method;
+			return methodInfo;
 		}
 	}
 }

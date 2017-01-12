@@ -78,6 +78,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				var type = typeof(T);
 				if (_descriptions.ContainsKey(type)) return;
+
 				var names = Enum.GetValues(type).Cast<T>();
 				var descriptions = names.Select(n => new Description { Value = n, String = GetDescription<T>(n.ToString()) }).ToList();
 				_descriptions.Add(type, descriptions);

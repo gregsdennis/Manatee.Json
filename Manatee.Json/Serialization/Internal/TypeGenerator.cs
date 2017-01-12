@@ -59,19 +59,21 @@ namespace Manatee.Json.Serialization.Internal
 		public static T Generate<T>()
 		{
 			var type = typeof (T);
-			if (_cache.ContainsKey(type))
-				return (T) ConstructInstance(_cache[type]);
-			if (!type.IsInterface)
-				throw new ArgumentException($"Type generation only works for interface types. Type '{type}' is not valid.");
-			var typeBuilder = CreateType(type);
-			ImplementProperties<T>(typeBuilder);
-			ImplementMethods<T>(typeBuilder);
-			ImplementEvents<T>(typeBuilder);
-			var concreteType = typeBuilder.CreateType();
-			_cache.Add(type, concreteType);
-			// Note: To debug IL generation, please uncomment the following line.  Also need to use the first _assemblyBuilder assignment in the static constructor.
-			//_assemblyBuilder.Save(@"Manatee.Json.DynamicTypes.dll");
-			return (T)ConstructInstance(concreteType);
+			Type concreteType;
+			if (!_cache.TryGetValue(type, out concreteType))
+			{
+				if (!type.IsInterface)
+					throw new ArgumentException($"Type generation only works for interface types. Type '{type}' is not valid.");
+				var typeBuilder = CreateType(type);
+				ImplementProperties<T>(typeBuilder);
+				ImplementMethods<T>(typeBuilder);
+				ImplementEvents<T>(typeBuilder);
+				concreteType = typeBuilder.CreateType();
+				_cache.Add(type, concreteType);
+				// Note: To debug IL generation, please uncomment the following line.  Also need to use the first _assemblyBuilder assignment in the static constructor.
+				//_assemblyBuilder.Save(@"Manatee.Json.DynamicTypes.dll");
+			}
+			return (T) ConstructInstance(concreteType);
 		}
 
 		private static TypeBuilder CreateType(Type type)

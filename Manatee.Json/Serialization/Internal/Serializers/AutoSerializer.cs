@@ -234,12 +234,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		private static void AssignObjectProperties(object obj, Dictionary<SerializationInfo, object> memberMap)
 		{
-			foreach (var memberInfo in memberMap.Keys)
+			foreach (var entry in memberMap)
 			{
+				var memberInfo = entry.Key;
 				if (memberInfo.MemberInfo is PropertyInfo)
-					((PropertyInfo) memberInfo.MemberInfo).SetValue(obj, memberMap[memberInfo], null);
+					((PropertyInfo) memberInfo.MemberInfo).SetValue(obj, entry.Value, null);
 				else
-					((FieldInfo) memberInfo.MemberInfo).SetValue(obj, memberMap[memberInfo]);
+					((FieldInfo) memberInfo.MemberInfo).SetValue(obj, entry.Value);
 			}
 		}
 		private static void AddSample(Type type, JsonArray json, JsonSerializer serializer)
