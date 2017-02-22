@@ -62,7 +62,7 @@ namespace Manatee.Json.Parsing
 					complete = true;
 					break;
 				}
-				foundEscape = c == '\\';
+				foundEscape = !foundEscape && c == '\\';
 				buffer[bufferIndex] = c;
 				bufferIndex++;
 			}

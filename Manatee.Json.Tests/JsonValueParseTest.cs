@@ -202,6 +202,15 @@ namespace Manatee.Json.Tests
 			}
 		}
 		[TestMethod]
+		public void Parse_StringWithEscapedBackslashAtEnd_ReturnsCorrectJsonValue()
+		{
+			var json = "\"some text\\\\\"";
+			JsonValue expected = "some text\\";
+			var actual = JsonValue.Parse(json);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Parse_NullString_ThrowsException()
 		{
