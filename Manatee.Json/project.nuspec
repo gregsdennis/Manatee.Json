@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>Manatee.Json</id>
-		<version>5.2.0.2</version>
+		<version>5.2.1</version>
 		<description>
 			A fully object-oriented approach to JSON manipulation, validation, and serialization that focuses on modeling the JSON structure rather than mere string parsing.
 		</description>
@@ -12,6 +12,9 @@
 		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
 		<iconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</iconUrl>
 		<releaseNotes>
+v5.2.1
+BUG FIX: #47 - Issue parsing strings that end with a backslash.
+			
 v5.2.0.x
 Repackaged
 
