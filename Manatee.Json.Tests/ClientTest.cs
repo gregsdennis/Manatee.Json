@@ -213,8 +213,8 @@ namespace Manatee.Json.Tests
 		}
 
 		[TestMethod]
-		[DeploymentItem("Files\\baseSchema.json")]
-		[DeploymentItem("Files\\refSchema.json")]
+		[DeploymentItem(@"Files\baseSchema.json")]
+		[DeploymentItem(@"Files\refSchema.json")]
 		public void Issue45a_Utf8SupportInReferenceSchemaEnums()
 		{
 			// replace with your full path to the schema file.
@@ -231,8 +231,8 @@ namespace Manatee.Json.Tests
 		}
 
 		[TestMethod]
-		[DeploymentItem("Files\\baseSchema.json")]
-		[DeploymentItem("Files\\refSchema.json")]
+		[DeploymentItem(@"Files\baseSchema.json")]
+		[DeploymentItem(@"Files\refSchema.json")]
 		public void Issue45b_Utf8SupportInReferenceSchemaEnums()
 		{
 			const string fileName = @"baseSchema.json";
@@ -253,6 +253,62 @@ namespace Manatee.Json.Tests
 			}
 
 			Assert.IsTrue(result.Valid);
+		}
+
+		[TestMethod]
+		[DeploymentItem(@"Files\issue49.json")]
+		public void Issue49_RequiredAndAllOfInSingleSchema()
+		{
+			const string fileName = "issue49.json";
+			var expected = new JsonSchema
+				{
+					Title = "JSON schema for Something",
+					Schema = "http://json-schema.org/draft-04/schema#",
+					Definitions = new JsonSchemaTypeDefinitionCollection
+						{
+							new JsonSchemaTypeDefinition("something")
+								{
+									Definition = new JsonSchema
+										{
+											Type = JsonSchemaTypeDefinition.Object,
+											Properties = new JsonSchemaPropertyDefinitionCollection
+												{
+													new JsonSchemaPropertyDefinition("name")
+														{
+															IsHidden = true,
+															IsRequired = true
+														}
+												},
+											AllOf = new[]
+												{
+													new JsonSchema
+														{
+															Properties = new JsonSchemaPropertyDefinitionCollection
+																{
+																	new JsonSchemaPropertyDefinition("name")
+																		{
+																			Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+																		}
+																}
+														}
+												}
+										}
+								}
+						},
+					Type = JsonSchemaTypeDefinition.Array,
+					Description = "An array of somethings.",
+					Items = new JsonSchemaReference("#/definitions/something")
+				};
+
+			var schema = JsonSchemaFactory.Load(fileName);
+
+			Assert.AreEqual(expected, schema);
+
+			var schemaJson = schema.ToJson(null);
+			var expectedJson = expected.ToJson(null);
+
+			Console.WriteLine(schemaJson);
+			Assert.AreEqual(expectedJson, schemaJson);
 		}
 	}
 }

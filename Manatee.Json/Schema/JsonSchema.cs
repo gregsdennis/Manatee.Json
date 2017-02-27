@@ -603,13 +603,25 @@ namespace Manatee.Json.Schema
 			}
 			if (obj.ContainsKey("required"))
 			{
+				var properties = Properties ?? new JsonSchemaPropertyDefinitionCollection();
+				var newProperties = new List<JsonSchemaPropertyDefinition>();
 				var requiredProperties = obj["required"].Array.Select(v => v.String);
 				foreach (var propertyName in requiredProperties)
 				{
-					var property = Properties.FirstOrDefault(p => p.Name == propertyName);
+					var property = properties.FirstOrDefault(p => p.Name == propertyName);
 					if (property != null)
 						property.IsRequired = true;
+					else
+					{
+						newProperties.Add(new JsonSchemaPropertyDefinition(propertyName)
+							{
+								IsHidden = true,
+								IsRequired = true
+							});
+					}
 				}
+				properties.AddRange(newProperties);
+				Properties = properties;
 			}
 			if (obj.ContainsKey("additionalProperties"))
 			{
@@ -727,8 +739,10 @@ namespace Manatee.Json.Schema
 			if (AdditionalProperties != null)
 				json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
 			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
-			if (Properties != null)
-				json["properties"] = Properties.ToDictionary(p => p.Name, p => p.Type).ToJson(serializer);
+			if (Properties != null && Properties.Any(p => !p.IsHidden))
+			{
+				json["properties"] = Properties.Where(p => !p.IsHidden).ToDictionary(p => p.Name, p => p.Type).ToJson(serializer);
+			}
 			if (PatternProperties != null && PatternProperties.Any())
 				json["patternProperties"] = PatternProperties.ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value).ToJson(serializer);
 			if ((Dependencies != null) && Dependencies.Any())

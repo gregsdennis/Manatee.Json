@@ -45,6 +45,11 @@ namespace Manatee.Json.Schema
 		/// Defines whether this property is required.
 		/// </summary>
 		public bool IsRequired { get; set; }
+		/// <summary>
+		/// Defines whether this property should be hidden from the schema Properties collection when serialized.
+		/// This is useful when the property is required but not included in the Properties collection.
+		/// </summary>
+		public bool IsHidden { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaPropertyDefinition"/> class.

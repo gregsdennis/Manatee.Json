@@ -1,0 +1,24 @@
+﻿{
+  "title": "JSON schema for Something",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "something": {
+      "type": "object",
+      "required": [ "name" ],
+      "allOf": [
+        {
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "type": "array",
+  "description": "An array of somethings.",
+  "items": {
+    "$ref": "#/definitions/something"
+  }
+} 
