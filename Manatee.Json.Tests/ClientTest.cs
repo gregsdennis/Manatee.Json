@@ -310,5 +310,13 @@ namespace Manatee.Json.Tests
 			Console.WriteLine(schemaJson);
 			Assert.AreEqual(expectedJson, schemaJson);
 		}
+
+		[TestMethod]
+		[DeploymentItem(@"Files\Issue50A.json", "Files")]
+		[DeploymentItem(@"Files\Issue50B.json", "Files")]
+		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
+		{
+			var schema = JsonSchemaFactory.Load(@"Files\Issue50A.json");
+		}
 	}
 }
