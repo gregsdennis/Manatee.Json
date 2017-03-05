@@ -62,6 +62,8 @@ namespace Manatee.Json.Schema
 			};
 
 #if !IOS
+		private static readonly object LoadLock = new object();
+
 		/// <summary>
 		/// Returns
 		/// </summary>
@@ -69,15 +71,25 @@ namespace Manatee.Json.Schema
 		/// <returns></returns>
 		public static IJsonSchema Load(string path)
 		{
-			var text = File.ReadAllText(path);
-			var json = JsonValue.Parse(text);
-			var validation = JsonSchema.Draft04.Validate(json);
-			if (!validation.Valid)
+			lock (LoadLock)
 			{
-				var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
-				throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+				var currentDirectory = Directory.GetCurrentDirectory();
+				var loadDirectory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(path));
+				var fileName = System.IO.Path.GetFileName(path);
+				Directory.SetCurrentDirectory(loadDirectory);
+				var text = File.ReadAllText(fileName);
+				var json = JsonValue.Parse(text);
+				var validation = JsonSchema.Draft04.Validate(json);
+				if (!validation.Valid)
+				{
+					var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
+					throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+				}
+				var schema = FromJson(json);
+				(schema as ICanReferenceSchema)?.ResolveReferences(null);
+				Directory.SetCurrentDirectory(currentDirectory);
+				return schema;
 			}
-			return FromJson(json);
 		}
 #endif
 		/// <summary>

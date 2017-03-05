@@ -20,6 +20,7 @@
 	Purpose:		Represents a collection of schemata.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Serialization;
@@ -29,7 +30,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Represents a collection of schemata.
 	/// </summary>
-	public class JsonSchemaCollection : List<IJsonSchema>, IJsonSchema
+	public class JsonSchemaCollection : List<IJsonSchema>, IJsonSchema, ICanReferenceSchema
 	{
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -70,6 +71,14 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return new JsonArray(this.Select(s => s.ToJson(serializer)));
+		}
+
+		void ICanReferenceSchema.ResolveReferences(JsonValue root)
+		{
+			foreach (var schema in this)
+			{
+				(schema as ICanReferenceSchema)?.ResolveReferences(root);
+			}
 		}
 	}
 }

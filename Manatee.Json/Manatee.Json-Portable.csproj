@@ -295,6 +295,7 @@
     <Compile Include="DescriptionAttribute.cs" />
     <Compile Include="Internal\CompatibilityExtensions.cs" />
     <Compile Include="ReadOnlyException.cs" />
+    <Compile Include="Schema\ICanReferenceSchema.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Manatee.Json.snk" />

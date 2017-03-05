@@ -35,7 +35,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
-	public class JsonSchemaReference : JsonSchema
+	public class JsonSchemaReference : JsonSchema, ICanReferenceSchema
 	{
 		/// <summary>
 		/// Defines a reference to the root schema.
@@ -130,6 +130,11 @@ namespace Manatee.Json.Schema
 		{
 			// ReSharper disable once NonReadonlyMemberInGetHashCode
 			return Reference?.GetHashCode() ?? 0;
+		}
+
+		void ICanReferenceSchema.ResolveReferences(JsonValue root)
+		{
+			Resolve(root);
 		}
 
 		private JsonValue Resolve(JsonValue root)
