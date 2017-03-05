@@ -317,6 +317,15 @@ namespace Manatee.Json.Tests
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
 			var schema = JsonSchemaFactory.Load(@"Files\Issue50A.json");
+			var json = new JsonObject
+				{
+					["text"] = "something",
+					["ref"] = new JsonObject {["text"] = "something else"}
+				};
+
+			var results = schema.Validate(json);
+
+			Assert.IsTrue(results.Valid);
 		}
 	}
 }
