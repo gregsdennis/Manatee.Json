@@ -1,6 +1,6 @@
 ﻿{
-  "properties": {
-    "text": { "type": "string" },
-    "ref": { "$ref": "Issue50B.json#" }
-  }
+	"properties": {
+		"text": { "type": "string" },
+		"refa": { "$ref": "Issue50B.json#" }
+	}
 }

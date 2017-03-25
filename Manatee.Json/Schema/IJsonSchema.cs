@@ -38,5 +38,7 @@ namespace Manatee.Json.Schema
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>The results of the validation.</returns>
 		SchemaValidationResults Validate(JsonValue json, JsonValue root = null);
+
+		string DocumentPath { get; set; }
 	}
 }

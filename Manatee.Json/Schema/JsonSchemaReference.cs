@@ -79,7 +79,7 @@ namespace Manatee.Json.Schema
 			var jValue = root ?? ToJson(null);
 			var results = base.Validate(json, jValue);
 			if (Resolved == null || root == null)
-				jValue = Resolve(jValue);
+				jValue = Resolve(jValue, DocumentPath);
 			var refResults = Resolved?.Validate(json, jValue) ??
 			                 new SchemaValidationResults(null, "Error finding referenced schema.");
 			return new SchemaValidationResults(new[] {results, refResults});
@@ -134,6 +134,12 @@ namespace Manatee.Json.Schema
 
 		private JsonValue Resolve(JsonValue root)
 		{
+			return Resolve(root, null);
+		}
+
+		private JsonValue Resolve(JsonValue root, string documentPath)
+		{
+			documentPath = documentPath?.Trim();
 			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
 			var address = referenceParts[0];
 			var path = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
@@ -147,18 +153,35 @@ namespace Manatee.Json.Schema
 				{
 					address = allIds.Pop() + address;
 				}
-				jValue = JsonSchemaRegistry.Get(address).ToJson(null);
+
+				if(!string.IsNullOrEmpty(documentPath) && (address.StartsWith("http://") || address.StartsWith("file://")))
+				{
+					address = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(documentPath), address);
+				}
+				else
+				{
+					documentPath = address;
+				}
+
+				jValue = JsonSchemaRegistry.Get(address, documentPath).ToJson(null);
 			}
 			if (jValue == null) return root;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
-			Resolved = ResolveLocalReference(jValue, path);
+			Resolved = ResolveLocalReference(jValue, path, address);
+			Resolved.DocumentPath = documentPath;
 			return jValue;
 		}
-		private static IJsonSchema ResolveLocalReference(JsonValue root, string path)
+		private static IJsonSchema ResolveLocalReference(JsonValue root, string path, string documentPath)
 		{
 			var properties = path.Split('/').Skip(1).ToList();
-			if (!properties.Any()) return JsonSchemaFactory.FromJson(root);
+			IJsonSchema schema = null;
+			if (!properties.Any())
+			{
+				schema = JsonSchemaFactory.FromJson(root);
+				schema.DocumentPath = documentPath;
+				schema.FromJson(root, null);
+			}
 			var value = root;
 			foreach (var property in properties)
 			{
@@ -175,7 +198,10 @@ namespace Manatee.Json.Schema
 					value = value.Array[index];
 				}
 			}
-			return JsonSchemaFactory.FromJson(value);
+			schema = JsonSchemaFactory.FromJson(value);
+			schema.DocumentPath = documentPath;
+			schema.FromJson(value, null);
+			return schema;
 		}
 		private static string Unescape(string reference)
 		{

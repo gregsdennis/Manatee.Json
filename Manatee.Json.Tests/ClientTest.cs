@@ -311,17 +311,37 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expectedJson, schemaJson);
 		}
 
+		private TestContext TestContext { get; set; }
+
 		[TestMethod]
 		[DeploymentItem(@"Files\Issue50A.json", "Files")]
 		[DeploymentItem(@"Files\Issue50B.json", "Files")]
+		[DeploymentItem(@"Files\Issue50C\Issue50D.json", @"Files\Issue50C\")]
+		[DeploymentItem(@"Files\Issue50C\Issue50E.json", @"Files\Issue50C\")]
+		[DeploymentItem(@"Files\Issue50C\Issue50F\Issue50G.json", @"Files\Issue50C\Issue50F\")]
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
-			var schema = JsonSchemaFactory.Load(@"Files\Issue50A.json");
+			string path = System.IO.Path.Combine(TestContext.TestRunDirectory, @"Files\Issue50A.json");
+			var schema = JsonSchemaFactory.Load(path);
 			var json = new JsonObject
+			{
+				["text"] = "something",
+				["refa"] = new JsonObject
 				{
-					["text"] = "something",
-					["ref"] = new JsonObject {["text"] = "something else"}
-				};
+					["text"] = "something else",
+					["refb"] = new JsonObject()
+					{
+						["refd"] = new JsonObject()
+						{
+							["refe"] = new JsonObject() {
+								["test"] = "test"
+							},
+							["text"] = "test"
+						}
+					}
+				}
+			}; 
+				
 
 			var results = schema.Validate(json);
 

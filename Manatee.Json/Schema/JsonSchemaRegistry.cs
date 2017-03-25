@@ -49,7 +49,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Downloads and registers a schema at the specified URI.
 		/// </summary>
-		public static IJsonSchema Get(string uri)
+		public static IJsonSchema Get(string uri, string documentPath)
 		{
 			IJsonSchema schema;
 			lock (_schemaLookup)
@@ -57,8 +57,9 @@ namespace Manatee.Json.Schema
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
-					schema = JsonSchemaFactory.FromJson(JsonValue.Parse(schemaJson));
-
+					schema = new JsonSchema();
+					schema.DocumentPath = documentPath;
+					schema.FromJson(JsonValue.Parse(schemaJson), null);
 					_schemaLookup[uri] = schema;
 				}
 			}

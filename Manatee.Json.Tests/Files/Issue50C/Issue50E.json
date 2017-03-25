@@ -1,0 +1,7 @@
+﻿{
+	"required": ["text"],
+	"properties": {
+		"text": { "type": "string" },
+		"refe": { "$ref": "Issue50F/Issue50G.json#" }
+	}
+}

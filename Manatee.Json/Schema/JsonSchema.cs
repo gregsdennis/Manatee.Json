@@ -541,6 +541,8 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonObject ExtraneousDetails { get; set; }
 
+		public string DocumentPath { get; set; }
+
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
@@ -580,14 +582,24 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("additionalItems"))
 			{
 				if (obj["additionalItems"].Type == JsonValueType.Boolean)
+				{
 					AdditionalItems = obj["additionalItems"].Boolean ? AdditionalItems.True : AdditionalItems.False;
+				}
+					
 				else
-					AdditionalItems = new AdditionalItems {Definition = JsonSchemaFactory.FromJson(obj["additionalItems"])};
+				{
+					AdditionalItems = new AdditionalItems();
+					AdditionalItems.Definition = JsonSchemaFactory.FromJson(obj["additionalItems"]);
+					AdditionalItems.Definition.DocumentPath = DocumentPath;
+				}
 			}
 			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			MinItems = (uint?) obj.TryGetNumber("minItems");
 			if (obj.ContainsKey("items"))
+			{
 				Items = JsonSchemaFactory.FromJson(obj["items"]);
+				Items.DocumentPath = DocumentPath;
+			}
 			UniqueItems = obj.TryGetBoolean("uniqueItems");
 			MaxProperties = (uint?) obj.TryGetNumber("maxProperties");
 			MinProperties = (uint?) obj.TryGetNumber("minProperties");
@@ -597,7 +609,9 @@ namespace Manatee.Json.Schema
 				Properties = new JsonSchemaPropertyDefinitionCollection();
 				foreach (var prop in obj["properties"].Object)
 				{
-					var property = new JsonSchemaPropertyDefinition(prop.Key) {Type = JsonSchemaFactory.FromJson(prop.Value)};
+					var property = new JsonSchemaPropertyDefinition(prop.Key);
+					property.Type  = JsonSchemaFactory.FromJson(prop.Value);
+					property.Type.DocumentPath = DocumentPath;
 					Properties.Add(property);
 				}
 			}
@@ -626,23 +640,35 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("additionalProperties"))
 			{
 				if (obj["additionalProperties"].Type == JsonValueType.Boolean)
+				{
 					AdditionalProperties = obj["additionalProperties"].Boolean ? AdditionalProperties.True : AdditionalProperties.False;
+				}
 				else
-					AdditionalProperties = new AdditionalProperties {Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"])};
+				{
+					AdditionalProperties = new AdditionalProperties();
+					AdditionalProperties.Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"]);
+					AdditionalProperties.Definition.DocumentPath = DocumentPath;
+				}
 			}
 			if (obj.ContainsKey("definitions"))
 			{
 				Definitions = new JsonSchemaTypeDefinitionCollection();
 				foreach (var defn in obj["definitions"].Object)
 				{
-					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = JsonSchemaFactory.FromJson(defn.Value)};
+					var definition = new JsonSchemaTypeDefinition(defn.Key);
+					definition.Definition = JsonSchemaFactory.FromJson(defn.Value);
+					definition.Definition.DocumentPath = DocumentPath;
 					Definitions.Add(definition);
 				}
 			}
 			if (obj.ContainsKey("patternProperties"))
 			{
 				var patterns = obj["patternProperties"].Object;
-				PatternProperties = patterns.ToDictionary(kvp => new Regex(kvp.Key), kvp => JsonSchemaFactory.FromJson(kvp.Value));
+				PatternProperties = patterns.ToDictionary(kvp => new Regex(kvp.Key), kvp => {
+					var v = JsonSchemaFactory.FromJson(kvp.Value);
+					v.DocumentPath = DocumentPath;
+					return v;
+				} );
 			}
 			if (obj.ContainsKey("dependencies"))
 				Dependencies = obj["dependencies"].Object.Select(v =>
@@ -651,7 +677,9 @@ namespace Manatee.Json.Schema
 						switch (v.Value.Type)
 						{
 							case JsonValueType.Object:
-								dependency = new SchemaDependency(v.Key, JsonSchemaFactory.FromJson(v.Value));
+								var schema = JsonSchemaFactory.FromJson(v.Value);
+								schema.DocumentPath = DocumentPath;
+								dependency = new SchemaDependency(v.Key, schema);
 								break;
 							case JsonValueType.Array:
 								dependency = new PropertyDependency(v.Key, v.Value.Array.Select(jv => jv.String));
@@ -676,17 +704,21 @@ namespace Manatee.Json.Schema
 						// array implies "oneOf" several primitive types
 						Type = new JsonSchemaMultiTypeDefinition(false);
 						Type.FromJson(typeEntry, serializer);
+						Type.Definition.DocumentPath = DocumentPath;
 						break;
 				}
 			}
 			if (obj.ContainsKey("allOf"))
-				AllOf = obj["allOf"].Array.Select(JsonSchemaFactory.FromJson);
+				AllOf = obj["allOf"].Array.Select((j) => { var s = JsonSchemaFactory.FromJson(j); s.DocumentPath = DocumentPath; return s; });
 			if (obj.ContainsKey("anyOf"))
-				AnyOf = json.Object["anyOf"].Array.Select(JsonSchemaFactory.FromJson);
+				AnyOf = json.Object["anyOf"].Array.Select((j) => { var s = JsonSchemaFactory.FromJson(j); s.DocumentPath = DocumentPath; return s; });
 			if (obj.ContainsKey("oneOf"))
-				OneOf = obj["oneOf"].Array.Select(JsonSchemaFactory.FromJson).ToList();
+				OneOf = obj["oneOf"].Array.Select((j) => { var s = JsonSchemaFactory.FromJson(j); s.DocumentPath = DocumentPath; return s; });
 			if (obj.ContainsKey("not"))
+			{
 				Not = JsonSchemaFactory.FromJson(obj["not"]);
+				Not.DocumentPath = DocumentPath;
+			}
 			var formatKey = obj.TryGetString("format");
 			Format = StringFormat.GetFormat(formatKey);
 			var details = obj.Where(kvp => !_definedProperties.Contains(kvp.Key)).ToJson();
