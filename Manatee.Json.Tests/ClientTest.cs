@@ -13,6 +13,8 @@ namespace Manatee.Json.Tests
 	[TestClass]
 	public class ClientTest
 	{
+		public static TestContext TestContext { get; set; }
+
 		[TestMethod]
 		public void Parse_StringFromSourceForge_kheimric()
 		{
@@ -311,7 +313,6 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expectedJson, schemaJson);
 		}
 
-		private TestContext TestContext { get; set; }
 
 		[TestMethod]
 		[DeploymentItem(@"Files\Issue50A.json", "Files")]
