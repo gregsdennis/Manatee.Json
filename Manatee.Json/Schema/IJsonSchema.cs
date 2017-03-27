@@ -39,6 +39,6 @@ namespace Manatee.Json.Schema
 		/// <returns>The results of the validation.</returns>
 		SchemaValidationResults Validate(JsonValue json, JsonValue root = null);
 
-		string DocumentPath { get; set; }
+		Uri DocumentPath { get; set; }
 	}
 }

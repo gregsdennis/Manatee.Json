@@ -32,7 +32,7 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class JsonSchemaCollection : List<IJsonSchema>, IJsonSchema
 	{
-		public string DocumentPath { get; set; }
+		public Uri DocumentPath { get; set; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.

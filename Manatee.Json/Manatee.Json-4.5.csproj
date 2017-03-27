@@ -416,6 +416,7 @@
     </Compile>
     <Compile Include="Properties\StringFormatMethodAttribute.cs" />
     <Compile Include="Transform\JsonTransformer.cs" />
+    <Compile Include="UriExtensions.cs" />
     <Compile Include="XmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

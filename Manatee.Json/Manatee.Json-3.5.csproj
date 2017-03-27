@@ -294,6 +294,7 @@
     <Compile Include="..\Manatee.Json\Transform\JsonTransformer.cs" />
     <Compile Include="..\Manatee.Json\XmlExtensions.cs" />
     <Compile Include="Internal\CompatibilityExtensions.cs" />
+    <Compile Include="UriExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Manatee.Json.snk" />

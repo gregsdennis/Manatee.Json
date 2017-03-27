@@ -69,18 +69,29 @@ namespace Manatee.Json.Schema
 		/// <returns></returns>
 		public static IJsonSchema Load(string path)
 		{
-            path = System.IO.Path.GetFullPath(path);
-            var text = File.ReadAllText(path);
-			var json = JsonValue.Parse(text);
-			var validation = JsonSchema.Draft04.Validate(json);
+			return Load(new Uri(System.IO.Path.GetFullPath(path)));
+
+		}
+
+		/// <summary>
+		/// Returns
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public static IJsonSchema Load(Uri uri)
+		{
+			var schemaJson = JsonSchemaOptions.Download(uri.AbsolutePath);
+			var validation = JsonSchema.Draft04.Validate(schemaJson);
+
 			if (!validation.Valid)
 			{
 				var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
 				throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 			}
+
 			var schema = new JsonSchema();
-			schema.DocumentPath = path;
-			schema.FromJson(json, null);
+			schema.DocumentPath = uri;
+			schema.FromJson(JsonValue.Parse(schemaJson), null);
 			return schema;
 
 		}
@@ -98,8 +109,8 @@ namespace Manatee.Json.Schema
 			{
 				case JsonValueType.Object:
 					schema = json.Object.ContainsKey("$ref")
-						         ? new JsonSchemaReference()
-						         : new JsonSchema();
+								 ? new JsonSchemaReference()
+								 : new JsonSchema();
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();
@@ -131,7 +142,7 @@ namespace Manatee.Json.Schema
 			throw new NotImplementedException();
 		}
 
-		internal static IJsonSchema GetPrimitiveSchema(JsonValue typeEntry, string documentPath)
+		internal static IJsonSchema GetPrimitiveSchema(JsonValue typeEntry, Uri documentPath)
 		{
 			IJsonSchema schema = null;
 			switch (typeEntry.String)

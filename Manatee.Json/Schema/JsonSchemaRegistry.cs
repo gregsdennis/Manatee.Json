@@ -1,6 +1,7 @@
 ﻿/***************************************************************************************
 
 	Copyright 2016 Greg Dennis
+	Modifications Copyright 2017 Michael D. Corbett
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -49,7 +50,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Downloads and registers a schema at the specified URI.
 		/// </summary>
-		public static IJsonSchema Get(string uri, string documentPath)
+		public static IJsonSchema Get(string uri)
 		{
 			IJsonSchema schema;
 			lock (_schemaLookup)
@@ -58,7 +59,7 @@ namespace Manatee.Json.Schema
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
 					schema = new JsonSchema();
-					schema.DocumentPath = documentPath;
+					schema.DocumentPath = new System.Uri(uri);
 					schema.FromJson(JsonValue.Parse(schemaJson), null);
 					_schemaLookup[uri] = schema;
 				}

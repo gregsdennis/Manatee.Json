@@ -541,7 +541,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonObject ExtraneousDetails { get; set; }
 
-		public string DocumentPath { get; set; }
+		public Uri DocumentPath { get; set; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
