@@ -221,9 +221,6 @@ namespace Manatee.Json.Tests
 		{
 			// replace with your full path to the schema file.
 			const string fileName = @"C:\Users\gregd\OneDrive\Projects\Manatee.Json\Manatee.Json.Tests\Files\baseSchema.json";
-			var directory = System.IO.Path.GetDirectoryName(fileName);
-			Directory.SetCurrentDirectory(directory);
-
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
 			var schema = JsonSchemaFactory.Load(fileName);
 			var json = JsonValue.Parse(jsonString);
