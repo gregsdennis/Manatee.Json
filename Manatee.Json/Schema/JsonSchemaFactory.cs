@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Manatee.Json.Internal;
-
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -70,7 +69,6 @@ namespace Manatee.Json.Schema
 		public static IJsonSchema Load(string path)
 		{
 			return Load(new Uri(System.IO.Path.GetFullPath(path)));
-
 		}
 
 		/// <summary>
