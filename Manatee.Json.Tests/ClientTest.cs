@@ -13,7 +13,7 @@ namespace Manatee.Json.Tests
 	[TestClass]
 	public class ClientTest
 	{
-		public static TestContext TestContext { get; set; }
+		public TestContext TestContext { get; set; }
 
 		[TestMethod]
 		public void Parse_StringFromSourceForge_kheimric()
