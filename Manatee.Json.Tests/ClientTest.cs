@@ -322,7 +322,8 @@ namespace Manatee.Json.Tests
 		[DeploymentItem(@"Files\Issue50C\Issue50F\Issue50G.json", @"Files\Issue50C\Issue50F\")]
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
-			string path = System.IO.Path.Combine(TestContext.TestRunDirectory, @"Files\Issue50A.json");
+			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
+
 			var schema = JsonSchemaFactory.Load(path);
 			var json = new JsonObject
 			{
