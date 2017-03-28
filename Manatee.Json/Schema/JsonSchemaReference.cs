@@ -157,10 +157,10 @@ namespace Manatee.Json.Schema
 
 				if (DocumentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
 				{
-					DocumentPath = new Uri(DocumentPath.GetParentUri(), absolute);
+					DocumentPath = new Uri(DocumentPath.GetParentUri(), address);
 				}
 
-				jValue = JsonSchemaRegistry.Get(DocumentPath?.AbsolutePath ?? address).ToJson(null);
+				jValue = JsonSchemaRegistry.Get(DocumentPath?.ToString() ?? address).ToJson(null);
 			}
 			if (jValue == null) return root;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
