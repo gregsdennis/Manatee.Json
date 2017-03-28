@@ -80,20 +80,21 @@ namespace Manatee.Json.Schema
 		/// <returns></returns>
 		public static IJsonSchema Load(Uri uri)
 		{
-			var schemaJson = JsonSchemaOptions.Download(uri.AbsolutePath);
-			var validation = JsonSchema.Draft04.Validate(schemaJson);
 
-			if (!validation.Valid)
-			{
-				var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
-				throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
-			}
+				var schemaJson = JsonSchemaOptions.Download(uri.ToString());
+				var schemaValue = JsonValue.Parse(schemaJson);
+				var validation = JsonSchema.Draft04.Validate(schemaValue);
 
-			var schema = new JsonSchema();
-			schema.DocumentPath = uri;
-			schema.FromJson(JsonValue.Parse(schemaJson), null);
-			return schema;
+				if (!validation.Valid)
+				{
+					var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
+					throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+				}
 
+				var schema = new JsonSchema();
+				schema.DocumentPath = uri;
+				schema.FromJson(schemaValue, null);
+				return schema;
 		}
 #endif
 		/// <summary>
