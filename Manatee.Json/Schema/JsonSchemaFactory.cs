@@ -102,6 +102,15 @@ namespace Manatee.Json.Schema
 		/// <returns>A schema object</returns>
 		public static IJsonSchema FromJson(JsonValue json)
 		{
+			return FromJson(json, null);
+		}
+		/// <summary>
+		/// Creates a schema object from its JSON representation.
+		/// </summary>
+		/// <param name="json">A JSON object.</param>
+		/// <returns>A schema object</returns>
+		public static IJsonSchema FromJson(JsonValue json, Uri documentPath)
+		{
 			if (json == null) return null;
 			IJsonSchema schema;
 			switch (json.Type)
@@ -117,6 +126,7 @@ namespace Manatee.Json.Schema
 				default:
 					throw new ArgumentOutOfRangeException("json.Type", "JSON Schema must be objects.");
 			}
+			schema.DocumentPath = documentPath;
 			schema.FromJson(json, null);
 			return schema;
 		}
