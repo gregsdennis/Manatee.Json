@@ -58,9 +58,8 @@ namespace Manatee.Json.Schema
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
-					schema = new JsonSchema();
-					schema.DocumentPath = new System.Uri(uri);
-					schema.FromJson(JsonValue.Parse(schemaJson), null);
+				    var  schemaValue = JsonValue.Parse(schemaJson);
+					schema = JsonSchemaFactory.FromJson(schemaValue, new System.Uri(uri));
 					_schemaLookup[uri] = schema;
 				}
 			}

@@ -89,10 +89,8 @@ namespace Manatee.Json.Schema
 					throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 				}
 
-				var schema = new JsonSchema();
-				schema.DocumentPath = uri;
-				schema.FromJson(schemaValue, null);
-				return schema;
+			return FromJson(schemaValue, uri);
+
 		}
 #endif
 		/// <summary>
