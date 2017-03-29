@@ -1,4 +1,7 @@
 ﻿/***************************************************************************************
+
+Sorce taken from: https://github.com/WebDAVSharp/WebDAVSharp.Server/blob/1d2086a502937936ebc6bfe19cfa15d855be1c31/WebDAVExtensions.cs
+
 The MIT License (MIT)
 
 Copyright (c) 2014 
