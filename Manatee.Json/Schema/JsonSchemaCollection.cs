@@ -62,11 +62,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			AddRange(json.Array.Select((j) => { var obj = JsonSchemaFactory.FromJson(j);
-				                                          obj.DocumentPath = DocumentPath;
-				                                          return obj;
-			                                   }
-			));
+			AddRange(json.Array.Select((j) => JsonSchemaFactory.FromJson(j, DocumentPath)));
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.

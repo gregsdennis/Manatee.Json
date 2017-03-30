@@ -166,19 +166,12 @@ namespace Manatee.Json.Schema
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
 			Resolved = ResolveLocalReference(jValue, path, DocumentPath);
-			Resolved.DocumentPath = documentPath;
 			return jValue;
 		}
 		private static IJsonSchema ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
 			var properties = path.Split('/').Skip(1).ToList();
-			IJsonSchema schema = null;
-			if (!properties.Any())
-			{
-				schema = JsonSchemaFactory.FromJson(root);
-				schema.DocumentPath = documentPath;
-				schema.FromJson(root, null);
-			}
+			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, documentPath);
 			var value = root;
 			foreach (var property in properties)
 			{
