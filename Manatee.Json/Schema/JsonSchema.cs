@@ -693,7 +693,7 @@ namespace Manatee.Json.Schema
 				AnyOf = json.Object["anyOf"].Array.Select((j) => JsonSchemaFactory.FromJson(j, DocumentPath));
 			if (obj.ContainsKey("oneOf"))
 				OneOf = obj["oneOf"].Array.Select((j) => JsonSchemaFactory.FromJson(j, DocumentPath));
-			if (obj.ContainsKey("not")
+			if (obj.ContainsKey("not"))
 				Not = JsonSchemaFactory.FromJson(obj["not"], DocumentPath);
 			var formatKey = obj.TryGetString("format");
 			Format = StringFormat.GetFormat(formatKey);
