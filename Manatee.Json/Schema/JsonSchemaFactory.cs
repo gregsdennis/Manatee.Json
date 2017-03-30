@@ -80,7 +80,7 @@ namespace Manatee.Json.Schema
 		{
 
 				var schemaJson = JsonSchemaOptions.Download(uri.ToString());
-				var schemaValue = JsonValue.Parse(schemaJson);
+			    var schemaValue = JsonValue.Parse(schemaJson);
 				var validation = JsonSchema.Draft04.Validate(schemaValue);
 
 				if (!validation.Valid)
@@ -149,7 +149,7 @@ namespace Manatee.Json.Schema
 			throw new NotImplementedException();
 		}
 
-		internal static IJsonSchema GetPrimitiveSchema(JsonValue typeEntry, Uri documentPath)
+		internal static IJsonSchema GetPrimitiveSchema(JsonValue typeEntry)
 		{
 			IJsonSchema schema = null;
 			switch (typeEntry.String)
@@ -176,7 +176,7 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.String};
 					break;
 			}
-			schema.DocumentPath = documentPath;
+
 			return schema;
 		}
 
