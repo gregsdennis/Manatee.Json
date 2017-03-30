@@ -195,10 +195,7 @@ namespace Manatee.Json.Schema
 					value = value.Array[index];
 				}
 			}
-			schema = JsonSchemaFactory.FromJson(value);
-			schema.DocumentPath = documentPath;
-			schema.FromJson(value, null);
-			return schema;
+			return JsonSchemaFactory.FromJson(value, documentPath);
 		}
 		private static string Unescape(string reference)
 		{
