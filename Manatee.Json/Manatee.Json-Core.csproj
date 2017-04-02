@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PackageId>Manatee.Json</PackageId>
+    <Authors>Manatee.Json</Authors>
+    <Company>Manatee.Json</Company>
+    <Product>Manatee.Json</Product>
+    <Description>Provides an intuitive approach to building JSON structures.</Description>
+    <Version>6.0.0</Version>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="xml rules.txt" />
+  </ItemGroup>
+
+</Project>
