@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Manatee.Json.Internal;
-
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -71,25 +70,29 @@ namespace Manatee.Json.Schema
 		/// <returns></returns>
 		public static IJsonSchema Load(string path)
 		{
-			lock (LoadLock)
-			{
-				var currentDirectory = Directory.GetCurrentDirectory();
-				var loadDirectory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(path));
-				var fileName = System.IO.Path.GetFileName(path);
-				Directory.SetCurrentDirectory(loadDirectory);
-				var text = File.ReadAllText(fileName);
-				var json = JsonValue.Parse(text);
-				var validation = JsonSchema.Draft04.Validate(json);
+			return Load(new Uri(System.IO.Path.GetFullPath(path)));
+		}
+
+		/// <summary>
+		/// Returns
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public static IJsonSchema Load(Uri uri)
+		{
+
+				var schemaJson = JsonSchemaOptions.Download(uri.ToString());
+			    var schemaValue = JsonValue.Parse(schemaJson);
+				var validation = JsonSchema.Draft04.Validate(schemaValue);
+
 				if (!validation.Valid)
 				{
 					var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
 					throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 				}
-				var schema = FromJson(json);
-				(schema as ICanReferenceSchema)?.ResolveReferences(null);
-				Directory.SetCurrentDirectory(currentDirectory);
-				return schema;
-			}
+
+			return FromJson(schemaValue, uri);
+
 		}
 #endif
 		/// <summary>
@@ -99,14 +102,23 @@ namespace Manatee.Json.Schema
 		/// <returns>A schema object</returns>
 		public static IJsonSchema FromJson(JsonValue json)
 		{
+			return FromJson(json, null);
+		}
+		/// <summary>
+		/// Creates a schema object from its JSON representation.
+		/// </summary>
+		/// <param name="json">A JSON object.</param>
+		/// <returns>A schema object</returns>
+		public static IJsonSchema FromJson(JsonValue json, Uri documentPath)
+		{
 			if (json == null) return null;
 			IJsonSchema schema;
 			switch (json.Type)
 			{
 				case JsonValueType.Object:
 					schema = json.Object.ContainsKey("$ref")
-						         ? new JsonSchemaReference()
-						         : new JsonSchema();
+								 ? new JsonSchemaReference()
+								 : new JsonSchema();
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();
@@ -114,6 +126,7 @@ namespace Manatee.Json.Schema
 				default:
 					throw new ArgumentOutOfRangeException("json.Type", "JSON Schema must be objects.");
 			}
+			schema.DocumentPath = documentPath;
 			schema.FromJson(json, null);
 			return schema;
 		}
@@ -165,6 +178,7 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.String};
 					break;
 			}
+
 			return schema;
 		}
 

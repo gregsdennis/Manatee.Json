@@ -13,6 +13,8 @@ namespace Manatee.Json.Tests
 	[TestClass]
 	public class ClientTest
 	{
+		public TestContext TestContext { get; set; }
+
 		[TestMethod]
 		public void Parse_StringFromSourceForge_kheimric()
 		{
@@ -219,9 +221,6 @@ namespace Manatee.Json.Tests
 		{
 			// replace with your full path to the schema file.
 			const string fileName = @"C:\Users\gregd\OneDrive\Projects\Manatee.Json\Manatee.Json.Tests\Files\baseSchema.json";
-			var directory = System.IO.Path.GetDirectoryName(fileName);
-			Directory.SetCurrentDirectory(directory);
-
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
 			var schema = JsonSchemaFactory.Load(fileName);
 			var json = JsonValue.Parse(jsonString);
@@ -311,17 +310,37 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expectedJson, schemaJson);
 		}
 
+
 		[TestMethod]
 		[DeploymentItem(@"Files\Issue50A.json", "Files")]
 		[DeploymentItem(@"Files\Issue50B.json", "Files")]
+		[DeploymentItem(@"Files\Issue50C\Issue50D.json", @"Files\Issue50C\")]
+		[DeploymentItem(@"Files\Issue50C\Issue50E.json", @"Files\Issue50C\")]
+		[DeploymentItem(@"Files\Issue50C\Issue50F\Issue50G.json", @"Files\Issue50C\Issue50F\")]
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
-			var schema = JsonSchemaFactory.Load(@"Files\Issue50A.json");
+			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
+
+			var schema = JsonSchemaFactory.Load(path);
 			var json = new JsonObject
+			{
+				["text"] = "something",
+				["refa"] = new JsonObject
 				{
-					["text"] = "something",
-					["ref"] = new JsonObject {["text"] = "something else"}
-				};
+					["text"] = "something else",
+					["refb"] = new JsonObject()
+					{
+						["refd"] = new JsonObject()
+						{
+							["refe"] = new JsonObject() {
+								["test"] = "test"
+							},
+							["text"] = "test"
+						}
+					}
+				}
+			}; 
+				
 
 			var results = schema.Validate(json);
 

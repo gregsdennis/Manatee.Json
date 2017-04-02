@@ -1,6 +1,7 @@
 ﻿/***************************************************************************************
 
 	Copyright 2016 Greg Dennis
+	Modifications Copyright 2017 Michael D. Corbett
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -57,8 +58,8 @@ namespace Manatee.Json.Schema
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
-					schema = JsonSchemaFactory.FromJson(JsonValue.Parse(schemaJson));
-
+				    var  schemaValue = JsonValue.Parse(schemaJson);
+					schema = JsonSchemaFactory.FromJson(schemaValue, new System.Uri(uri));
 					_schemaLookup[uri] = schema;
 				}
 			}
