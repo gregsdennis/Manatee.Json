@@ -76,8 +76,7 @@ namespace Manatee.Json.Schema
 					return definition;
 				}).ToList();
 
-			Definition = new JsonSchema {OneOf = _definitions.Select(d => d.Definition)};
-		}
+			Definition = new JsonSchema {OneOf = _definitions.Select(d => d.Definition)};		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>

@@ -1,6 +1,7 @@
 ﻿/***************************************************************************************
 
 	Copyright 2016 Greg Dennis
+	Modifications Copyright 2017 Michael D. Corbett
 
 	   Licensed under the Apache License, Version 2.0 (the "License");
 	   you may not use this file except in compliance with the License.
@@ -21,7 +22,9 @@
 					referenced by the system.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
@@ -57,7 +60,16 @@ namespace Manatee.Json.Schema
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
-					schema = JsonSchemaFactory.FromJson(JsonValue.Parse(schemaJson));
+				    var  schemaValue = JsonValue.Parse(schemaJson);
+					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
+
+					var validation = JsonSchema.Draft04.Validate(schemaValue);
+
+					if (!validation.Valid)
+					{
+						var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
+						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+					}
 
 					_schemaLookup[uri] = schema;
 				}

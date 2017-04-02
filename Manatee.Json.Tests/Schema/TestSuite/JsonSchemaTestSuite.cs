@@ -35,6 +35,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 	{
 		private const string TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
+		private static readonly Uri RemotesUri = new Uri(System.IO.Path.GetFullPath(RemotesFolder));
 		private static readonly JsonSerializer _serializer;
 		private int _failures;
 		private int _passes;
@@ -129,8 +130,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = uri =>
 				{
 					var localPath = uri.Replace(baseUri, string.Empty);
-					var newPath = System.IO.Path.Combine(RemotesFolder, localPath);
-					return File.ReadAllText(newPath);
+					Uri newPath = null;
+
+					if (!Uri.TryCreate(localPath, UriKind.Absolute, out newPath))
+					{
+						newPath = new Uri(RemotesUri, localPath);
+					}
+
+					return File.ReadAllText(newPath.LocalPath);
 				};
 		}
 	}

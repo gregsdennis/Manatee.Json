@@ -147,18 +147,26 @@ namespace Manatee.Json.Schema
 				{
 					address = allIds.Pop() + address;
 				}
-				jValue = JsonSchemaRegistry.Get(address).ToJson(null);
+
+				Uri absolute;
+
+				if (DocumentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
+				{
+					DocumentPath = new Uri(DocumentPath.GetParentUri(), address);
+				}
+
+				jValue = JsonSchemaRegistry.Get(DocumentPath?.ToString() ?? address).ToJson(null);
 			}
 			if (jValue == null) return root;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
-			Resolved = ResolveLocalReference(jValue, path);
+			Resolved = ResolveLocalReference(jValue, path, DocumentPath);
 			return jValue;
 		}
-		private static IJsonSchema ResolveLocalReference(JsonValue root, string path)
+		private static IJsonSchema ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
 			var properties = path.Split('/').Skip(1).ToList();
-			if (!properties.Any()) return JsonSchemaFactory.FromJson(root);
+			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, documentPath);
 			var value = root;
 			foreach (var property in properties)
 			{
@@ -175,7 +183,7 @@ namespace Manatee.Json.Schema
 					value = value.Array[index];
 				}
 			}
-			return JsonSchemaFactory.FromJson(value);
+			return JsonSchemaFactory.FromJson(value, documentPath);
 		}
 		private static string Unescape(string reference)
 		{

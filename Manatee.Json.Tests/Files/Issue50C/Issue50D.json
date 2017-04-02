@@ -1,0 +1,5 @@
+﻿{
+	"properties": {
+		"refd": { "$ref": "Issue50E.json#" }
+	}
+}

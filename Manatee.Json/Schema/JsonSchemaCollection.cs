@@ -20,6 +20,7 @@
 	Purpose:		Represents a collection of schemata.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Serialization;
@@ -31,6 +32,8 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class JsonSchemaCollection : List<IJsonSchema>, IJsonSchema
 	{
+		public Uri DocumentPath { get; set; }
+
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
 		/// </summary>
@@ -59,7 +62,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			AddRange(json.Array.Select(JsonSchemaFactory.FromJson));
+			AddRange(json.Array.Select(j => JsonSchemaFactory.FromJson(j, DocumentPath)));
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.

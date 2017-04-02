@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Manatee.Json.Internal;
-
 namespace Manatee.Json.Schema
 {
 	/// <summary>
@@ -67,17 +66,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
+		[Obsolete("This method is being depricated in favor of JsonSchemaRegistry.Get(string uri).  This method will be removed with the next major release.")]
 		public static IJsonSchema Load(string path)
 		{
-			var text = File.ReadAllText(path);
-			var json = JsonValue.Parse(text);
-			var validation = JsonSchema.Draft04.Validate(json);
-			if (!validation.Valid)
-			{
-				var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
-				throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
-			}
-			return FromJson(json);
+			return JsonSchemaRegistry.Get(System.IO.Path.GetFullPath(path));
 		}
 #endif
 		/// <summary>
@@ -87,14 +79,23 @@ namespace Manatee.Json.Schema
 		/// <returns>A schema object</returns>
 		public static IJsonSchema FromJson(JsonValue json)
 		{
+			return FromJson(json, null);
+		}
+		/// <summary>
+		/// Creates a schema object from its JSON representation.
+		/// </summary>
+		/// <param name="json">A JSON object.</param>
+		/// <returns>A schema object</returns>
+		public static IJsonSchema FromJson(JsonValue json, Uri documentPath)
+		{
 			if (json == null) return null;
 			IJsonSchema schema;
 			switch (json.Type)
 			{
 				case JsonValueType.Object:
 					schema = json.Object.ContainsKey("$ref")
-						         ? new JsonSchemaReference()
-						         : new JsonSchema();
+								 ? new JsonSchemaReference()
+								 : new JsonSchema();
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();
@@ -102,6 +103,7 @@ namespace Manatee.Json.Schema
 				default:
 					throw new ArgumentOutOfRangeException("json.Type", "JSON Schema must be objects.");
 			}
+			schema.DocumentPath = documentPath;
 			schema.FromJson(json, null);
 			return schema;
 		}
@@ -153,6 +155,7 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.String};
 					break;
 			}
+
 			return schema;
 		}
 
