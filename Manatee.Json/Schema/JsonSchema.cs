@@ -34,7 +34,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Provides base functionality for the basic <see cref="IJsonSchema"/> implementations.S
 	/// </summary>
-	public class JsonSchema : IJsonSchema, ICanReferenceSchema
+	public class JsonSchema : IJsonSchema
 	{
 		/// <summary>
 		/// Defines an empty Schema.  Useful for specifying that any schema is valid.
@@ -879,60 +879,6 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ (Format?.GetHashCode() ?? 0);
 				return hashCode;
 			}
-		}
-
-		void ICanReferenceSchema.ResolveReferences(JsonValue root)
-		{
-			if (ReferenceEquals(Type?.Definition, this)) return;
-
-			root = root ?? ToJson(null);
-			(AdditionalItems?.Definition as ICanReferenceSchema)?.ResolveReferences(root);
-			(Items as ICanReferenceSchema)?.ResolveReferences(root);
-			(AdditionalProperties?.Definition as ICanReferenceSchema)?.ResolveReferences(root);
-			if (Definitions != null)
-			{
-				foreach (var schema in Definitions.Select(d => d.Definition))
-				{
-					(schema as ICanReferenceSchema)?.ResolveReferences(root);
-				}
-			}
-			if (Properties != null)
-			{
-				foreach (var schema in Properties.Select(p => p.Type))
-				{
-					(schema as ICanReferenceSchema)?.ResolveReferences(root);
-				}
-			}
-			if (PatternProperties != null)
-			{
-				foreach (var schema in PatternProperties.Values)
-				{
-					(schema as ICanReferenceSchema)?.ResolveReferences(root);
-				}
-			}
-			(Type?.Definition as ICanReferenceSchema)?.ResolveReferences(root);
-			if (AllOf != null)
-			{
-				foreach (var schema in AllOf)
-				{
-					(schema as ICanReferenceSchema)?.ResolveReferences(root);
-				}
-			}
-			if (AnyOf != null)
-			{
-				foreach (var schema in AnyOf)
-				{
-					(schema as ICanReferenceSchema)?.ResolveReferences(root);
-				}
-			}
-			if (OneOf != null)
-			{
-				foreach (var schema in OneOf)
-				{
-					(schema as ICanReferenceSchema)?.ResolveReferences(root);
-				}
-			}
-			(Not as ICanReferenceSchema)?.ResolveReferences(root);
 		}
 
 		private static JsonSchemaTypeDefinition GetPrimitiveDefinition(string type)

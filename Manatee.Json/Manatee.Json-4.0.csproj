@@ -297,7 +297,6 @@
     <Compile Include="..\Manatee.Json\XmlExtensions.cs" />
     <Compile Include="Internal\CompatibilityExtensions.cs" />
     <Compile Include="UriExtensions.cs" />
-    <Compile Include="Schema\ICanReferenceSchema.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Manatee.Json.snk" />

@@ -61,38 +61,15 @@ namespace Manatee.Json.Schema
 			};
 
 #if !IOS
-		private static readonly object LoadLock = new object();
-
 		/// <summary>
 		/// Returns
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
+		[Obsolete("This method is being depricated in favor of JsonSchemaRegistry.Get(string uri).  This method will be removed with the next major release.")]
 		public static IJsonSchema Load(string path)
 		{
-			return Load(new Uri(System.IO.Path.GetFullPath(path)));
-		}
-
-		/// <summary>
-		/// Returns
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
-		public static IJsonSchema Load(Uri uri)
-		{
-
-				var schemaJson = JsonSchemaOptions.Download(uri.ToString());
-			    var schemaValue = JsonValue.Parse(schemaJson);
-				var validation = JsonSchema.Draft04.Validate(schemaValue);
-
-				if (!validation.Valid)
-				{
-					var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
-					throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
-				}
-
-			return FromJson(schemaValue, uri);
-
+			return JsonSchemaRegistry.Get(System.IO.Path.GetFullPath(path));
 		}
 #endif
 		/// <summary>

@@ -30,7 +30,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Represents a collection of schemata.
 	/// </summary>
-	public class JsonSchemaCollection : List<IJsonSchema>, IJsonSchema, ICanReferenceSchema
+	public class JsonSchemaCollection : List<IJsonSchema>, IJsonSchema
 	{
 		public Uri DocumentPath { get; set; }
 
@@ -62,7 +62,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			AddRange(json.Array.Select((j) => JsonSchemaFactory.FromJson(j, DocumentPath)));
+			AddRange(json.Array.Select(j => JsonSchemaFactory.FromJson(j, DocumentPath)));
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -73,14 +73,6 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return new JsonArray(this.Select(s => s.ToJson(serializer)));
-		}
-
-		void ICanReferenceSchema.ResolveReferences(JsonValue root)
-		{
-			foreach (var schema in this)
-			{
-				(schema as ICanReferenceSchema)?.ResolveReferences(root);
-			}
 		}
 	}
 }

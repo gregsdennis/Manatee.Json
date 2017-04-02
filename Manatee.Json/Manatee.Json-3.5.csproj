@@ -294,7 +294,6 @@
     <Compile Include="..\Manatee.Json\Transform\JsonTransformer.cs" />
     <Compile Include="..\Manatee.Json\XmlExtensions.cs" />
     <Compile Include="Internal\CompatibilityExtensions.cs" />
-    <Compile Include="Schema\ICanReferenceSchema.cs" />
     <Compile Include="UriExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

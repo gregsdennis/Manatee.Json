@@ -35,7 +35,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
-	public class JsonSchemaReference : JsonSchema, ICanReferenceSchema
+	public class JsonSchemaReference : JsonSchema
 	{
 		/// <summary>
 		/// Defines a reference to the root schema.
@@ -79,7 +79,7 @@ namespace Manatee.Json.Schema
 			var jValue = root ?? ToJson(null);
 			var results = base.Validate(json, jValue);
 			if (Resolved == null || root == null)
-				jValue = Resolve(jValue, DocumentPath);
+				jValue = Resolve(jValue);
 			var refResults = Resolved?.Validate(json, jValue) ??
 			                 new SchemaValidationResults(null, "Error finding referenced schema.");
 			return new SchemaValidationResults(new[] {results, refResults});
@@ -132,17 +132,7 @@ namespace Manatee.Json.Schema
 			return Reference?.GetHashCode() ?? 0;
 		}
 
-		void ICanReferenceSchema.ResolveReferences(JsonValue root)
-		{
-			Resolve(root);
-		}
-
 		private JsonValue Resolve(JsonValue root)
-		{
-			return Resolve(root, null);
-		}
-
-		private JsonValue Resolve(JsonValue root, Uri documentPath)
 		{
 			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
 			var address = referenceParts[0];
@@ -158,7 +148,7 @@ namespace Manatee.Json.Schema
 					address = allIds.Pop() + address;
 				}
 
-				Uri absolute = null;
+				Uri absolute;
 
 				if (DocumentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
 				{

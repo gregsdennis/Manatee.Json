@@ -22,7 +22,9 @@
 					referenced by the system.
 
 ***************************************************************************************/
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
@@ -59,7 +61,16 @@ namespace Manatee.Json.Schema
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
 				    var  schemaValue = JsonValue.Parse(schemaJson);
-					schema = JsonSchemaFactory.FromJson(schemaValue, new System.Uri(uri));
+					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
+
+					var validation = JsonSchema.Draft04.Validate(schemaValue);
+
+					if (!validation.Valid)
+					{
+						var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
+						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+					}
+
 					_schemaLookup[uri] = schema;
 				}
 			}
