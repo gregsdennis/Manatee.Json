@@ -7,7 +7,12 @@ if (!(Test-Path -path $nuspecfile)) {
   return 1
 }
 
-$nuget_exe = ".\nuget.exe"
+$nuget_exe = ".\.tools\nuget.exe"
+$release_dir = ".\.release"
+
+if (!(Test-Path -path ".\.tools")){
+  mkdir ".\.tools"
+}
 
 if (!(Test-Path -path $nuget_exe)) {
   Write-Output "Attempting to download nuget.exe"
@@ -17,6 +22,6 @@ if (!(Test-Path -path $nuget_exe)) {
 
 Write-Output "Building project file '$nuspecfile'"
 
-& $nuget_exe pack "$nuspecfile" -NonInteractive -properties Configuration=Release
+& $nuget_exe pack "$nuspecfile" -NonInteractive -properties Configuration=Release -outputdirectory $release_dir
 
 exit $LASTEXITCODE
