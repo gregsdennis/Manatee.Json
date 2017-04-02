@@ -10,3 +10,5 @@
 /TestResults
 **/*.lock.json
 **/*.nuget.targets
+
+msbuild.log
