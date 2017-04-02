@@ -540,7 +540,9 @@ namespace Manatee.Json.Schema
 		/// Gets other, non-schema-defined properties.
 		/// </summary>
 		public JsonObject ExtraneousDetails { get; set; }
-
+		/// <summary>
+		/// Identifies the physical path for the schema document (may be different than the ID).
+		/// </summary>
 		public Uri DocumentPath { get; set; }
 
 		/// <summary>

@@ -60,33 +60,13 @@ namespace Manatee.Json.Schema
 				typeof (decimal)
 			};
 
-#if !IOS
-		/// <summary>
-		/// Returns
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
-		[Obsolete("This method is being depricated in favor of JsonSchemaRegistry.Get(string uri).  This method will be removed with the next major release.")]
-		public static IJsonSchema Load(string path)
-		{
-			return JsonSchemaRegistry.Get(System.IO.Path.GetFullPath(path));
-		}
-#endif
 		/// <summary>
 		/// Creates a schema object from its JSON representation.
 		/// </summary>
 		/// <param name="json">A JSON object.</param>
+		/// <param name="documentPath">The path to the physical location to this document</param>
 		/// <returns>A schema object</returns>
-		public static IJsonSchema FromJson(JsonValue json)
-		{
-			return FromJson(json, null);
-		}
-		/// <summary>
-		/// Creates a schema object from its JSON representation.
-		/// </summary>
-		/// <param name="json">A JSON object.</param>
-		/// <returns>A schema object</returns>
-		public static IJsonSchema FromJson(JsonValue json, Uri documentPath)
+		public static IJsonSchema FromJson(JsonValue json, Uri documentPath = null)
 		{
 			if (json == null) return null;
 			IJsonSchema schema;

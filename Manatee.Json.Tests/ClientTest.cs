@@ -222,7 +222,7 @@ namespace Manatee.Json.Tests
 			// replace with your full path to the schema file.
 			const string fileName = @"C:\Users\gregd\OneDrive\Projects\Manatee.Json\Manatee.Json.Tests\Files\baseSchema.json";
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
-			var schema = JsonSchemaFactory.Load(fileName);
+			var schema = JsonSchemaRegistry.Get(fileName);
 			var json = JsonValue.Parse(jsonString);
 
 			var result = schema.Validate(json);
@@ -234,10 +234,10 @@ namespace Manatee.Json.Tests
 		[DeploymentItem(@"Files\refSchema.json")]
 		public void Issue45b_Utf8SupportInReferenceSchemaEnums()
 		{
-			const string fileName = @"baseSchema.json";
+			var fileName = System.IO.Path.GetFullPath(@"baseSchema.json");
 
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
-			var schema = JsonSchemaFactory.Load(fileName);
+			var schema = JsonSchemaRegistry.Get(fileName);
 			var json = JsonValue.Parse(jsonString);
 
 			var result = schema.Validate(json);
@@ -258,7 +258,7 @@ namespace Manatee.Json.Tests
 		[DeploymentItem(@"Files\issue49.json")]
 		public void Issue49_RequiredAndAllOfInSingleSchema()
 		{
-			const string fileName = "issue49.json";
+			var fileName = System.IO.Path.GetFullPath("issue49.json");
 			var expected = new JsonSchema
 				{
 					Title = "JSON schema for Something",
@@ -299,7 +299,7 @@ namespace Manatee.Json.Tests
 					Items = new JsonSchemaReference("#/definitions/something")
 				};
 
-			var schema = JsonSchemaFactory.Load(fileName);
+			var schema = JsonSchemaRegistry.Get(fileName);
 
 			Assert.AreEqual(expected, schema);
 
@@ -321,7 +321,7 @@ namespace Manatee.Json.Tests
 		{
 			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
 
-			var schema = JsonSchemaFactory.Load(path);
+			var schema = JsonSchemaRegistry.Get(path);
 			var json = new JsonObject
 			{
 				["text"] = "something",

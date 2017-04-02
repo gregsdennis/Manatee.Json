@@ -32,6 +32,9 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class JsonSchemaCollection : List<IJsonSchema>, IJsonSchema
 	{
+		/// <summary>
+		/// Identifies the physical path for the schema document (may be different than the ID).
+		/// </summary>
 		public Uri DocumentPath { get; set; }
 
 		/// <summary>
