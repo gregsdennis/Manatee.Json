@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>Manatee.Json</id>
-		<version>5.2.1</version>
+		<version>6.0.0</version>
 		<description>
 			A fully object-oriented approach to JSON manipulation, validation, and serialization that focuses on modeling the JSON structure rather than mere string parsing.
 		</description>
@@ -22,29 +22,13 @@
 		<tags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</tags>
 	</metadata>
 	<files>
-		<file src="bin\Release-3.5\Manatee.Json.dll" target="lib\net35-client"/>
-		<file src="bin\Release-3.5\Manatee.Json.pdb" target="lib\net35-client"/>
-		<file src="bin\Release-3.5\Manatee.Json.xml" target="lib\net35-client"/>
-		<file src="bin\Release-4.0\Manatee.Json.dll" target="lib\net40-client"/>
-		<file src="bin\Release-4.0\Manatee.Json.pdb" target="lib\net40-client"/>
-		<file src="bin\Release-4.0\Manatee.Json.xml" target="lib\net40-client"/>
-		<file src="bin\Release-4.5\Manatee.Json.dll" target="lib\net45"/>
-		<file src="bin\Release-4.5\Manatee.Json.pdb" target="lib\net45"/>
-		<file src="bin\Release-4.5\Manatee.Json.xml" target="lib\net45"/>
-		<file src="bin\Release\netstandard1.6\Manatee.Json.dll" target="lib\netstandard1.6"/>
-		<file src="bin\Release\netstandard1.6\Manatee.Json.pdb" target="lib\netstandard1.6"/>
-		<file src="bin\Release\netstandard1.6\Manatee.Json.xml" target="lib\netstandard1.6"/>
-		<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoAndroid"/>
-		<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoAndroid"/>
-		<file src="bin\Release-Portable\Manatee.Json.xml" target="lib\MonoAndroid"/>
-		<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoMac"/>
-		<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoMac"/>
-		<file src="bin\Release-Portable\Manatee.Json.xml" target="lib\MonoMac"/>
-		<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\MonoTouch"/>
-		<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\MonoTouch"/>
-		<file src="bin\Release-Portable\Manatee.Json.xml" target="lib\MonoTouch"/>
-		<file src="bin\Release-Portable\Manatee.Json.dll" target="lib\portable-net45+netcore45+wpa81"/>
-		<file src="bin\Release-Portable\Manatee.Json.pdb" target="lib\portable-net45+netcore45+wpa81"/>
-		<file src="bin\Release-Portable\Manatee.Json.xml" target="lib\portable-net45+netcore45+wpa81"/>
+		<file src="bin\Release-3.5\*" target="lib\net35-client"/>
+		<file src="bin\Release-4.0\*" target="lib\net40-client"/>
+		<file src="bin\Release-4.5\*" target="lib\net45"/>
+		<file src="bin\Release\netstandard1.6\*" target="lib\netstandard1.6"/>
+		<file src="bin\Release-Portable\*" target="lib\MonoAndroid"/>
+		<file src="bin\Release-Portable\*" target="lib\MonoMac"/>
+		<file src="bin\Release-Portable\*" target="lib\MonoTouch"/>
+		<file src="bin\Release-Portable\*" target="lib\portable-net45+netcore45+wpa81"/>
 	</files>
 </package>
