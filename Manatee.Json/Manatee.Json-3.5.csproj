@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Manatee.Json\Internal\GeneralExtensions.cs" />
-    <Compile Include="..\Manatee.Json\Internal\JsonPathExpressionInput.cs" />
     <Compile Include="..\Manatee.Json\Internal\JsonPathInput.cs" />
     <Compile Include="..\Manatee.Json\Internal\XmlNamespacePair.cs" />
     <Compile Include="..\Manatee.Json\Internal\XmlNamespaceRegistry.cs" />
