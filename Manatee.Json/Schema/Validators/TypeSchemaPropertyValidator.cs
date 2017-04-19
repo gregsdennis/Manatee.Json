@@ -35,19 +35,19 @@ namespace Manatee.Json.Schema.Validators
 				case JsonValueType.String:
 					if (JsonSchemaTypeDefinition.PrimitiveDefinitions.Any(d => d.Name == json.String)) break;
 					if (Equals(schema.Type, JsonSchemaTypeDefinition.String)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: String; Actual: {json.Type}.");
+					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 				case JsonValueType.Boolean:
 					if (Equals(schema.Type, JsonSchemaTypeDefinition.Boolean)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: Boolean; Actual: {json.Type}.");
+					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 				case JsonValueType.Object:
 					if (Equals(schema.Type, JsonSchemaTypeDefinition.Object)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: Object; Actual: {json.Type}.");
+					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 				case JsonValueType.Array:
 					if (Equals(schema.Type, JsonSchemaTypeDefinition.Array)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: Array; Actual: {json.Type}.");
+					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 				case JsonValueType.Null:
 					if (Equals(schema.Type, JsonSchemaTypeDefinition.Null)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: Null; Actual: {json.Type}.");
+					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 			}
 			return new SchemaValidationResults();
 		}

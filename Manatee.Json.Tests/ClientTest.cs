@@ -321,23 +321,21 @@ namespace Manatee.Json.Tests
 			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
 			var schema = JsonSchemaRegistry.Get(path);
 			var json = new JsonObject
-			{
-				["text"] = "something",
-				["refa"] = new JsonObject
 				{
-					["text"] = "something else",
-					["refb"] = new JsonObject()
-					{
-						["refd"] = new JsonObject()
+					["text"] = "something",
+					["refa"] = new JsonObject
 						{
-							["refe"] = new JsonObject() {
-								["test"] = "test"
-							},
-							["text"] = "test"
+							["text"] = "something else",
+							["refb"] = new JsonObject
+								{
+									["refd"] = new JsonObject
+										{
+											["refe"] = new JsonObject{["test"] = "test"},
+											["text"] = "test"
+										}
+								}
 						}
-					}
-				}
-			}; 
+				};
 			var results = schema.Validate(json);
 			Assert.IsTrue(results.Valid);
 		}
@@ -350,8 +348,12 @@ namespace Manatee.Json.Tests
 			var schema = JsonSchemaRegistry.Get(path);
 			var results = schema.Validate("{}");
 
+			Assert.IsFalse(results.Valid);
+			Assert.AreEqual(1, results.Errors.Count());
+
+			results = schema.Validate(new JsonObject());
+
 			Assert.IsTrue(results.Valid);
-			Assert.AreEqual(0, results.Errors.Count());
 		}
 	}
 }
