@@ -319,7 +319,6 @@ namespace Manatee.Json.Tests
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
 			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
-
 			var schema = JsonSchemaRegistry.Get(path);
 			var json = new JsonObject
 			{
@@ -339,11 +338,20 @@ namespace Manatee.Json.Tests
 					}
 				}
 			}; 
-				
-
 			var results = schema.Validate(json);
+			Assert.IsTrue(results.Valid);
+		}
+
+		[TestMethod]
+		[DeploymentItem(@"Files\Issue55.json")]
+		public void Issue55_EmptyJsonNotValidatedBySchema()
+		{
+			var path = System.IO.Path.Combine(TestContext.TestDeploymentDir, "issue55.json");
+			var schema = JsonSchemaRegistry.Get(path);
+			var results = schema.Validate("{}");
 
 			Assert.IsTrue(results.Valid);
+			Assert.AreEqual(0, results.Errors.Count());
 		}
 	}
 }
