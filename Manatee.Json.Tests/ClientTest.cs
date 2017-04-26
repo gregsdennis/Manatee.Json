@@ -341,19 +341,22 @@ namespace Manatee.Json.Tests
 		}
 
 		[TestMethod]
-		[DeploymentItem(@"Files\Issue55.json")]
-		public void Issue55_EmptyJsonNotValidatedBySchema()
+		public void Issue56_InconsistentNullAssignment()
 		{
-			var path = System.IO.Path.Combine(TestContext.TestDeploymentDir, "issue55.json");
-			var schema = JsonSchemaRegistry.Get(path);
-			var results = schema.Validate("{}");
+			JsonValue json1 = null;  // this is actually null
+			string myVar = null;
+			JsonValue json2 = myVar;  // this is JsonValue.Null
 
-			Assert.IsFalse(results.Valid);
-			Assert.AreEqual(1, results.Errors.Count());
+			Assert.IsNull(json1);
+			Assert.IsTrue(Equals(null, json1));
 
-			results = schema.Validate(new JsonObject());
-
-			Assert.IsTrue(results.Valid);
+			Assert.IsNotNull(json2);
+			Assert.IsTrue(null == json2);
+			// R# isn't considering my == overload
+			// ReSharper disable once HeuristicUnreachableCode
+			Assert.IsTrue(json2.Equals(null));
+			// This may seem inconsistent, but check out the notes in the issue.
+			Assert.IsFalse(Equals(null, json2));
 		}
 	}
 }

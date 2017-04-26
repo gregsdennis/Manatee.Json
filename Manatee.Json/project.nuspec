@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>Manatee.Json</id>
-		<version>6.0.0</version>
+		<version>6.0.1</version>
 		<description>
 			A fully object-oriented approach to JSON manipulation, validation, and serialization that focuses on modeling the JSON structure rather than mere string parsing.
 		</description>
@@ -12,6 +12,9 @@
 		<licenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</licenseUrl>
 		<iconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</iconUrl>
 		<releaseNotes>
+			v6.0.1
+			Updated equality logic to further unify .Net-null and JSON-null. Please read Equality Comparisons section of Usage wiki page.
+			
 			v6.0.0
 			Added DocumentPath to IJsonSchema.
 			BUG FIX: Schema now properly resolve referenced schema relative to document path instead of application's current directory. (#50)
