@@ -319,31 +319,44 @@ namespace Manatee.Json.Tests
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
 			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
-
 			var schema = JsonSchemaRegistry.Get(path);
 			var json = new JsonObject
-			{
-				["text"] = "something",
-				["refa"] = new JsonObject
 				{
-					["text"] = "something else",
-					["refb"] = new JsonObject()
-					{
-						["refd"] = new JsonObject()
+					["text"] = "something",
+					["refa"] = new JsonObject
 						{
-							["refe"] = new JsonObject() {
-								["test"] = "test"
-							},
-							["text"] = "test"
+							["text"] = "something else",
+							["refb"] = new JsonObject
+								{
+									["refd"] = new JsonObject
+										{
+											["refe"] = new JsonObject{["test"] = "test"},
+											["text"] = "test"
+										}
+								}
 						}
-					}
-				}
-			}; 
-				
-
+				};
 			var results = schema.Validate(json);
-
 			Assert.IsTrue(results.Valid);
+		}
+
+		[TestMethod]
+		public void Issue56_InconsistentNullAssignment()
+		{
+			JsonValue json1 = null;  // this is actually null
+			string myVar = null;
+			JsonValue json2 = myVar;  // this is JsonValue.Null
+
+			Assert.IsNull(json1);
+			Assert.IsTrue(Equals(null, json1));
+
+			Assert.IsNotNull(json2);
+			Assert.IsTrue(null == json2);
+			// R# isn't considering my == overload
+			// ReSharper disable once HeuristicUnreachableCode
+			Assert.IsTrue(json2.Equals(null));
+			// This may seem inconsistent, but check out the notes in the issue.
+			Assert.IsFalse(Equals(null, json2));
 		}
 	}
 }

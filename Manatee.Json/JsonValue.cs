@@ -14,7 +14,7 @@ namespace Manatee.Json
 	/// A value can consist of a string, a numerical value, a boolean (true or false), a null
 	/// placeholder, a JSON array of values, or a nested JSON object.
 	/// </remarks>
-	public class JsonValue
+	public class JsonValue : IEquatable<JsonValue>
 	{
 		private bool _boolValue;
 		private string _stringValue;
@@ -256,21 +256,32 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			var json = obj.AsJsonValue();
-			if (json == null) return false;
-			if (json.Type != Type) return false;
+			if (obj == null) return Type == JsonValueType.Null;
+
+			return Equals(obj.AsJsonValue());
+		}
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public bool Equals(JsonValue other)
+		{
+			// using a == here would result in recursion and death by stack overflow
+			if (ReferenceEquals(other, null)) return Type == JsonValueType.Null;
+			if (other.Type != Type) return false;
 			switch (Type)
 			{
 				case JsonValueType.Number:
-					return Number.Equals(json.Number);
+					return Number.Equals(other.Number);
 				case JsonValueType.String:
-					return String.Equals(json.String);
+					return String.Equals(other.String);
 				case JsonValueType.Boolean:
-					return Boolean.Equals(json.Boolean);
+					return Boolean.Equals(other.Boolean);
 				case JsonValueType.Object:
-					return Object.Equals(json.Object);
+					return Object.Equals(other.Object);
 				case JsonValueType.Array:
-					return Array.Equals(json.Array);
+					return Array.Equals(other.Array);
 				case JsonValueType.Null:
 					return true;
 			}
@@ -453,7 +464,7 @@ namespace Manatee.Json
 		///<returns></returns>
 		public static bool operator ==(JsonValue a, JsonValue b)
 		{
-			return ReferenceEquals(a,b) || ((a != null) && (a.Equals(b)));
+			return ReferenceEquals(a, b) || (a != null ? a.Equals(b) : b.Equals(a));
 		}
 		///<summary>
 		///</summary>

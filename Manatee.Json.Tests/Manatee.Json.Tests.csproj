@@ -112,6 +112,9 @@
     <None Include="Files\Issue50C\Issue50F\Issue50G.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Files\issue55.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\refSchema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
