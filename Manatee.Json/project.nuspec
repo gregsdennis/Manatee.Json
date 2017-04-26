@@ -14,6 +14,7 @@
 		<releaseNotes>
 			v6.0.1
 			Updated equality logic to further unify .Net-null and JSON-null. Please read Equality Comparisons section of Usage wiki page.
+			BUG FIX: Vague error messaging when validating schema. (#55)
 			
 			v6.0.0
 			Added DocumentPath to IJsonSchema.
