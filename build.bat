@@ -8,7 +8,7 @@ if "%config%" == "" (
 REM Build
 dotnet restore
 
-"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:d /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+"%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:m /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 
 REM Package
 
