@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Manatee.Json.Path;
 using Manatee.Json.Schema;
@@ -358,5 +359,59 @@ namespace Manatee.Json.Tests
 			// This may seem inconsistent, but check out the notes in the issue.
 			Assert.IsFalse(Equals(null, json2));
 		}
+
+		[TestMethod]
+		[DeploymentItem(@"Files\Issue58RefCore.json", "Files")]
+		[DeploymentItem(@"Files\Issue58RefChild.json", "Files")]
+		public void Issue58_UriReferenceSchemaTest()
+		{
+			const string coreSchemaUri = "http://example.org/IssueRefCore.json";
+			const string childSchemaUri = "http://example.org/IssueRefChild.json";
+
+			string coreSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefCore.json");
+			string childSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefChild.json");
+
+			var coreSchemaText = string.Empty;
+			var childSchemaText = string.Empty;
+
+			using (TextReader reader = File.OpenText(coreSchemaPath))
+			{
+				coreSchemaText = reader.ReadToEnd();
+			}
+
+			using (TextReader reader = File.OpenText(childSchemaPath))
+			{
+				childSchemaText = reader.ReadToEnd();
+			}
+
+			var requestedUris = new List<string>();
+			JsonSchemaOptions.Download = uri =>
+				{
+					requestedUris.Add(uri);
+					switch (uri)
+					{
+						case coreSchemaUri:
+							return coreSchemaText;
+
+						case childSchemaUri:
+							return childSchemaText;
+					}
+					return coreSchemaText;
+				};
+			var schema = JsonSchemaRegistry.Get(childSchemaUri);
+
+			var testJson = new JsonObject();
+			testJson["myProperty"] = "http://example.org/";
+
+			//Console.WriteLine(testJson);
+			//Console.WriteLine(schema.ToJson(null).GetIndentedString());
+
+			var result = schema.Validate(testJson);
+
+			Assert.IsTrue(result.Valid);
+			Assert.AreEqual(requestedUris[0], childSchemaUri);
+			Assert.AreEqual(requestedUris[1], coreSchemaUri);
+		}
+
 	}
 }
