@@ -219,8 +219,8 @@ namespace Manatee.Json.Tests
 		[DeploymentItem(@"Files\refSchema.json")]
 		public void Issue45a_Utf8SupportInReferenceSchemaEnums()
 		{
-			// replace with your full path to the schema file.
-			const string fileName = @"C:\Users\gregd\OneDrive\Projects\Manatee.Json\Manatee.Json.Tests\Files\baseSchema.json";
+			var fileName = System.IO.Path.GetFullPath(@"baseSchema.json");
+
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
 			var schema = JsonSchemaRegistry.Get(fileName);
 			var json = JsonValue.Parse(jsonString);
