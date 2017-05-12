@@ -117,19 +117,19 @@ namespace Manatee.Json.Schema
 			var jValue = root;
 			if (!address.IsNullOrWhiteSpace())
 			{
+
+				Uri absolute;
+				if (DocumentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
+				{
+					DocumentPath = new Uri(DocumentPath.GetParentUri(), address);
+				}
+
 				Uri uri;
 				var search = JsonPathWith.Search("id");
 				var allIds = new Stack<string>(search.Evaluate(root ?? new JsonObject()).Select(jv => jv.String));
 				while (allIds.Any() && !Uri.TryCreate(address, UriKind.Absolute, out uri))
 				{
 					address = allIds.Pop() + address;
-				}
-
-				Uri absolute;
-
-				if (DocumentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
-				{
-					DocumentPath = new Uri(DocumentPath.GetParentUri(), address);
 				}
 
 				jValue = JsonSchemaRegistry.Get(DocumentPath?.ToString() ?? address).ToJson(null);
