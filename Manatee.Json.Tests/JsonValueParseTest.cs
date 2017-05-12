@@ -239,7 +239,7 @@ namespace Manatee.Json.Tests
 			Console.WriteLine(json["string"].String);
 		}
 		[TestMethod]
-		[DeploymentItem("TrelloCard.json")]
+		[DeploymentItem(@"Files\TrelloCard.json")]
 		public void Parse_TrelloCard()
 		{
 			var str = File.ReadAllText("TrelloCard.json");
