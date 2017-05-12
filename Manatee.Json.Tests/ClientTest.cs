@@ -365,8 +365,8 @@ namespace Manatee.Json.Tests
 		[DeploymentItem(@"Files\Issue58RefChild.json", "Files")]
 		public void Issue58_UriReferenceSchemaTest()
 		{
-			const string coreSchemaUri = "http://example.org/IssueRefCore.json";
-			const string childSchemaUri = "http://example.org/IssueRefChild.json";
+			const string coreSchemaUri = "http://example.org/Issue58RefCore.json";
+			const string childSchemaUri = "http://example.org/Issue58RefChild.json";
 
 			string coreSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefCore.json");
 			string childSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefChild.json");

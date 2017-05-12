@@ -1,10 +1,10 @@
 ﻿{
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://example.org/IssueRefChild#",
+  "id": "http://example.org/Issue58RefChild#",
   "title": "Child Schema",
   "description": "",
   "properties": {
-    "myProperty": { "$ref": "IssueRefCore.json#/definitions/myProperty" }
+    "myProperty": { "$ref": "Issue58RefCore.json#/definitions/myProperty" }
   },
   "required": [ "myProperty" ]
 }

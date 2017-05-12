@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://example.org/IssueRefCore#",
+  "id": "http://example.org/Issue58RefCore#",
   "title": "Core Schema",
   "description": "",
   "definitions": {
