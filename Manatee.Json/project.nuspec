@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>Manatee.Json</id>
-		<version>6.0.1.1</version>
+		<version>6.0.2</version>
 		<description>
 			A fully object-oriented approach to JSON manipulation, validation, and serialization that focuses on modeling the JSON structure rather than mere string parsing.
 		</description>
@@ -12,6 +12,9 @@
 		<licenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</licenseUrl>
 		<iconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</iconUrl>
 		<releaseNotes>
+			v6.0.2
+			BUG FIX: Referenced schema not loaded. (#58)
+			
 			v6.0.1.1
 			Repackaged
 			
@@ -22,9 +25,7 @@
 			v6.0.0
 			Added DocumentPath to IJsonSchema.
 			BUG FIX: Schema now properly resolve referenced schema relative to document path instead of application's current directory. (#50)
-			Removed JsonSchemaFactory.Load(string filename) in favor of .
-
-			Note: As a consequence of removing JsonSchemaFactory.Load(string filename), you'll need to resolve the full file name (using System.IO.Path.GetFullPath()) before passing it into JsonSchemaRegistry.Get(string uri).
+			Removed JsonSchemaFactory.Load(string filename) in favor of JsonSchemaRegistry.Get(string uri).
 		</releaseNotes>
 		<tags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</tags>
 	</metadata>
