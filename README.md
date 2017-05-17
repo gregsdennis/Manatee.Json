@@ -1,4 +1,4 @@
-#Manatee.Json
+# Manatee.Json
 
 [![Join the chat at https://gitter.im/gregsdennis/Manatee.Json](https://badges.gitter.im/gregsdennis/Manatee.Json.svg)](https://gitter.im/gregsdennis/Manatee.Json?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![littlecrabsolutions MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)
 
@@ -6,14 +6,14 @@ The primary goal of Manatee.Json is to make working with JSON simple and intuiti
 
 Secondarily, Manatee.Json is *intended* to be strictly ECMA-404 compliant, which means that it purposefully does not support JSON variants, like single-quoted strings or BSON.
 
-##Read from a file
+## Read from a file
 
     var text = File.ReadAllText("content.json");
     var json = JsonValue.Parse(text);
 
 The `json` field now contains the content of the *.json* file.  The object structure is exactly what you'd expect by looking at the file.
 
-##Object model
+## Object model
 
 These JSON types map to primitive .Net types:
 
@@ -30,7 +30,7 @@ All of these types are encapsulated in a container type, `JsonValue`.  This type
 
 For the JSON `null` there is a readonly static `JsonValue.Null` field.
 
-##Building JSON manually
+## Building JSON manually
 
 Manatee.Json defines implicit conversions to `JsonValue` from `Boolean`, `Double`, `String`, `JsonObject`, and `JsonArray`.  This helps greatly in building complex objects manually.
 
@@ -47,7 +47,7 @@ Because the collection types are derived from core .Net types, you also get all 
         }
     var array = new JsonArray { "value", 9, obj };
 
-##Serialization
+## Serialization
 
 Converting .Net objects to and from JSON is also simple:
 
@@ -62,7 +62,7 @@ Converting .Net objects to and from JSON is also simple:
 
 There are many ways to customize serialization.  See the wiki page for more details!
 
-##But wait, there's more!
+## But wait, there's more!
 
 Manatee.Json also:
 
