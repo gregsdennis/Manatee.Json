@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://example.org/Issue58RefCore#",
+  "title": "Core Schema",
+  "description": "",
+  "definitions": {
+    "myProperty": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}
