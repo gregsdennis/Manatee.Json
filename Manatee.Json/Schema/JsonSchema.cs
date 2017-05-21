@@ -545,6 +545,12 @@ namespace Manatee.Json.Schema
 		{
 			var obj = json.Object;
 			Id = obj.TryGetString("id");
+			Uri uri;
+			if (!Id.IsNullOrWhiteSpace() && Uri.TryCreate(Id, UriKind.Absolute, out uri))
+			{
+				DocumentPath = uri;
+				JsonSchemaRegistry.Register(this);
+			}
 			Schema = obj.TryGetString("$schema");
 			Title = obj.TryGetString("title");
 			Description = obj.TryGetString("description");
@@ -561,10 +567,10 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("additionalItems"))
 			{
 				if (obj["additionalItems"].Type == JsonValueType.Boolean)
-				
+
 					AdditionalItems = obj["additionalItems"].Boolean ? AdditionalItems.True : AdditionalItems.False;
 				else
-					AdditionalItems = new AdditionalItems() { Definition = JsonSchemaFactory.FromJson(obj["additionalItems"], DocumentPath)};	
+					AdditionalItems = new AdditionalItems {Definition = JsonSchemaFactory.FromJson(obj["additionalItems"], DocumentPath)};
 			}
 			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			MinItems = (uint?) obj.TryGetNumber("minItems");

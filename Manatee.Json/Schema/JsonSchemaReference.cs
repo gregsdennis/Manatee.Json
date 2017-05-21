@@ -111,9 +111,9 @@ namespace Manatee.Json.Schema
 
 		private JsonValue Resolve(JsonValue root)
 		{
-			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
+			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
 			var address = referenceParts[0];
-			var path = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
+			var fragment = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
 			var jValue = root;
 			if (!address.IsNullOrWhiteSpace())
 			{
@@ -122,6 +122,7 @@ namespace Manatee.Json.Schema
 				if (DocumentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
 				{
 					DocumentPath = new Uri(DocumentPath.GetParentUri(), address);
+					address = DocumentPath.OriginalString;
 				}
 
 				Uri uri;
@@ -137,7 +138,7 @@ namespace Manatee.Json.Schema
 			if (jValue == null) return root;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
-			Resolved = ResolveLocalReference(jValue, path, DocumentPath);
+			Resolved = ResolveLocalReference(jValue, fragment, DocumentPath);
 			return jValue;
 		}
 		private static IJsonSchema ResolveLocalReference(JsonValue root, string path, Uri documentPath)

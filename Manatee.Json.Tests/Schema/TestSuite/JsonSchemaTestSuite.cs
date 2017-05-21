@@ -30,9 +30,9 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		public void RunSuite()
 		{
 			// uncomment and paste the filename of a test suite to debug it.
-			//_fileNameForDebugging = "";
+			//_fileNameForDebugging = "ref.json";
 			// uncomment and paste the description of a test to debug it.
-			//_testNameForDebugging = "ref within ref valid";
+			//_testNameForDebugging = "ref valid, maxItems ignored";
 
 			try
 			{
