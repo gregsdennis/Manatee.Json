@@ -54,12 +54,11 @@ namespace Manatee.Json.Schema
 		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			var jValue = root ?? ToJson(null);
-			var results = base.Validate(json, jValue);
 			if (Resolved == null || root == null)
 				jValue = Resolve(jValue);
 			var refResults = Resolved?.Validate(json, jValue) ??
 			                 new SchemaValidationResults(null, "Error finding referenced schema.");
-			return new SchemaValidationResults(new[] {results, refResults});
+			return new SchemaValidationResults(new[] {refResults});
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

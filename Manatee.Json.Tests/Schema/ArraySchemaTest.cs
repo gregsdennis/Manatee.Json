@@ -20,6 +20,17 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(false, results.Valid);
 		}
 		[TestMethod]
+		public void ValidateReturnsErrorOnString()
+		{
+			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array};
+			JsonValue json = "string";
+
+			var results = schema.Validate(json);
+
+			Assert.AreNotEqual(0, results.Errors.Count());
+			Assert.AreEqual(false, results.Valid);
+		}
+		[TestMethod]
 		public void ValidateReturnsErrorOnTooFewItems()
 		{
 			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MinItems = 5};

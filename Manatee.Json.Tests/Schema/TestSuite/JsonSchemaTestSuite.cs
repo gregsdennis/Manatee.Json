@@ -13,7 +13,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly Uri RemotesUri = new Uri(System.IO.Path.GetFullPath(RemotesFolder));
-		private static readonly JsonSerializer _serializer;
+		private static readonly JsonSerializer Serializer;
 		private int _failures;
 		private int _passes;
 #pragma warning disable 649
@@ -23,7 +23,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 		static JsonSchemaTestSuite()
 		{
-			_serializer = new JsonSerializer();
+			Serializer = new JsonSerializer();
 		}
 
 		[TestMethod]
@@ -32,7 +32,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			// uncomment and paste the filename of a test suite to debug it.
 			//_fileNameForDebugging = "ref.json";
 			// uncomment and paste the description of a test to debug it.
-			//_testNameForDebugging = "ref valid, maxItems ignored";
+			_testNameForDebugging = "ref invalid";
 
 			try
 			{
@@ -65,7 +65,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			var contents = File.ReadAllText(fileName);
 			var json = JsonValue.Parse(contents);
 
-			var testSets = _serializer.Deserialize<List<SchemaTestSet>>(json);
+			var testSets = Serializer.Deserialize<List<SchemaTestSet>>(json);
 
 			foreach (var testSet in testSets)
 			{
