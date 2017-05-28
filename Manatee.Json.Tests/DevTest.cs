@@ -1,16 +1,19 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
 {
 	[TestClass]
-	[Ignore]
+	//[Ignore]
 	public class DevTest
 	{
 		[TestMethod]
 		public void Test1()
 		{
-			var text = "{\"key\":4,int:\"no\"}";
-			var json = JsonValue.Parse(text);
+			var text = "http://www.google.com/file/";
+			var uri = new Uri(text);
+
+			Console.WriteLine(uri);
 		}
 	}
 }

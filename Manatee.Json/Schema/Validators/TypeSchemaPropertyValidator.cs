@@ -33,7 +33,7 @@ namespace Manatee.Json.Schema.Validators
 					if (json.Number.IsInt() && Equals(schema.Type, JsonSchemaTypeDefinition.Integer)) break;
 					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 				case JsonValueType.String:
-					if (JsonSchemaTypeDefinition.PrimitiveDefinitions.Any(d => d.Name == json.String)) break;
+					if (schema.Type.Name == json.String) break;
 					if (Equals(schema.Type, JsonSchemaTypeDefinition.String)) break;
 					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
 				case JsonValueType.Boolean:

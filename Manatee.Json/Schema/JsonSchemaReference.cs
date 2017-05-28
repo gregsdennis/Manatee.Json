@@ -30,7 +30,7 @@ namespace Manatee.Json.Schema
 		/// Exposes the schema at the references location.
 		/// </summary>
 		/// <remarks>
-		/// The <see cref="Resolve"/> method must first be called.
+		/// The <see cref="_Resolve"/> method must first be called.
 		/// </remarks>
 		public IJsonSchema Resolved { get; private set; }
 
@@ -55,7 +55,7 @@ namespace Manatee.Json.Schema
 		{
 			var jValue = root ?? ToJson(null);
 			if (Resolved == null || root == null)
-				jValue = Resolve(jValue);
+				jValue = _Resolve(jValue);
 			var refResults = Resolved?.Validate(json, jValue) ??
 			                 new SchemaValidationResults(null, "Error finding referenced schema.");
 			return new SchemaValidationResults(new[] {refResults});
@@ -108,7 +108,7 @@ namespace Manatee.Json.Schema
 			return Reference?.GetHashCode() ?? 0;
 		}
 
-		private JsonValue Resolve(JsonValue root)
+		private JsonValue _Resolve(JsonValue root)
 		{
 			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
 			var address = referenceParts[0];
@@ -116,41 +116,49 @@ namespace Manatee.Json.Schema
 			var jValue = root;
 			if (!address.IsNullOrWhiteSpace())
 			{
-
 				Uri absolute;
+				if (!Uri.TryCreate(address, UriKind.Absolute, out absolute))
+				{
+					address = Id + address;
+				}
 				if (DocumentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
 				{
-					DocumentPath = new Uri(DocumentPath.GetParentUri(), address);
-					address = DocumentPath.OriginalString;
+					var uriFolder = DocumentPath.OriginalString.EndsWith("/") ? DocumentPath : DocumentPath.GetParentUri();
+					absolute = new Uri(uriFolder, address);
+					address = absolute.OriginalString;
 				}
 
-				Uri uri;
-				var search = JsonPathWith.Search("id");
-				var allIds = new Stack<string>(search.Evaluate(root ?? new JsonObject()).Select(jv => jv.String));
-				while (allIds.Any() && !Uri.TryCreate(address, UriKind.Absolute, out uri))
-				{
-					address = allIds.Pop() + address;
-				}
-
-				jValue = JsonSchemaRegistry.Get(DocumentPath?.ToString() ?? address).ToJson(null);
+				jValue = JsonSchemaRegistry.Get(address).ToJson(null);
+			}
+			else
+			{
+				address = DocumentPath?.OriginalString;
 			}
 			if (jValue == null) return root;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
-			Resolved = ResolveLocalReference(jValue, fragment, DocumentPath);
+			Resolved = _ResolveLocalReference(jValue, fragment, address == null ? null : new Uri(address));
 			return jValue;
 		}
-		private static IJsonSchema ResolveLocalReference(JsonValue root, string path, Uri documentPath)
+		private static IJsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
 			var properties = path.Split('/').Skip(1).ToList();
 			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, documentPath);
 			var value = root;
 			foreach (var property in properties)
 			{
-				var unescaped = Unescape(property);
+				var unescaped = _Unescape(property);
 				if (value.Type == JsonValueType.Object)
 				{
 					if (!value.Object.ContainsKey(unescaped)) return null;
+					JsonValue id;
+					if (value.Object.TryGetValue("id", out id))
+					{
+						Uri uri;
+						documentPath = Uri.TryCreate(id.String, UriKind.Absolute, out uri)
+							               ? uri
+							               : new Uri(documentPath, id.String);
+					}
 					value = value.Object[unescaped];
 				}
 				else if (value.Type == JsonValueType.Array)
@@ -162,7 +170,7 @@ namespace Manatee.Json.Schema
 			}
 			return JsonSchemaFactory.FromJson(value, documentPath);
 		}
-		private static string Unescape(string reference)
+		private static string _Unescape(string reference)
 		{
 			var unescaped = reference.Replace("~1", "/")
 			                .Replace("~0", "~");

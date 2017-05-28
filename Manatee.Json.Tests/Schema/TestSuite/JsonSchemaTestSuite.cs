@@ -16,6 +16,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private static readonly JsonSerializer Serializer;
 		private int _failures;
 		private int _passes;
+		private string _currentFile;
+		private string _currentTest;
 #pragma warning disable 649
 		private string _fileNameForDebugging;
 		private string _testNameForDebugging;
@@ -32,7 +34,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			// uncomment and paste the filename of a test suite to debug it.
 			//_fileNameForDebugging = "ref.json";
 			// uncomment and paste the description of a test to debug it.
-			_testNameForDebugging = "ref invalid";
+			_testNameForDebugging = "number is valid";
 
 			try
 			{
@@ -47,6 +49,13 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 				Assert.AreEqual(0, _failures);
 			}
+			catch
+			{
+				_failures++;
+				Console.WriteLine();
+				Console.WriteLine($"Failed on '{_currentTest}' in {_currentFile}");
+				throw;
+			}
 			finally
 			{
 				Console.WriteLine();
@@ -57,6 +66,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 		private void _RunFile(string fileName)
 		{
+			_currentFile = fileName;
 			if (fileName == _fileNameForDebugging)
 			{
 				System.Diagnostics.Debugger.Break();
@@ -78,6 +88,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		{
 			foreach (var test in testSet.Tests)
 			{
+				_currentTest = test.Description;
 				if (test.Description == _testNameForDebugging)
 				{
 					System.Diagnostics.Debugger.Break();
