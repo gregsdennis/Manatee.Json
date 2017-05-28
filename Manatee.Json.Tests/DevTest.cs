@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Manatee.Json.Tests
 {
 	[TestClass]
-	//[Ignore]
+	[Ignore]
 	public class DevTest
 	{
 		[TestMethod]

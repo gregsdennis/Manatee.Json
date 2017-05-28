@@ -34,7 +34,9 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			// uncomment and paste the filename of a test suite to debug it.
 			//_fileNameForDebugging = "ref.json";
 			// uncomment and paste the description of a test to debug it.
-			_testNameForDebugging = "number is valid";
+			_testNameForDebugging = "object is invalid";
+
+			var ranAllTests = false;
 
 			try
 			{
@@ -47,13 +49,17 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					_RunFile(fileName);
 				}
 
+				ranAllTests = true;
 				Assert.AreEqual(0, _failures);
 			}
 			catch
 			{
-				_failures++;
-				Console.WriteLine();
-				Console.WriteLine($"Failed on '{_currentTest}' in {_currentFile}");
+				if (!ranAllTests)
+				{
+					_failures++;
+					Console.WriteLine();
+					Console.WriteLine($"Failed on '{_currentTest}' in {_currentFile}");
+				}
 				throw;
 			}
 			finally
