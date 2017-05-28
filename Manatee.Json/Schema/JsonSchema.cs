@@ -535,6 +535,7 @@ namespace Manatee.Json.Schema
 			var results = validators.Select(v => v.Validate(this, json, jValue)).ToList();
 			return new SchemaValidationResults(results);
 		}
+
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
@@ -545,6 +546,14 @@ namespace Manatee.Json.Schema
 		{
 			var obj = json.Object;
 			Id = obj.TryGetString("id");
+			Uri uri;
+			var uriFolder = DocumentPath?.OriginalString.EndsWith("/") ?? true ? DocumentPath : DocumentPath?.GetParentUri();
+			if (!Id.IsNullOrWhiteSpace() &&
+				(Uri.TryCreate(Id, UriKind.Absolute, out uri) || Uri.TryCreate(uriFolder + Id, UriKind.Absolute, out uri)))
+			{
+				DocumentPath = uri;
+				JsonSchemaRegistry.Register(this);
+			}
 			Schema = obj.TryGetString("$schema");
 			Title = obj.TryGetString("title");
 			Description = obj.TryGetString("description");
@@ -561,16 +570,14 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("additionalItems"))
 			{
 				if (obj["additionalItems"].Type == JsonValueType.Boolean)
-				
 					AdditionalItems = obj["additionalItems"].Boolean ? AdditionalItems.True : AdditionalItems.False;
 				else
-					AdditionalItems = new AdditionalItems() { Definition = JsonSchemaFactory.FromJson(obj["additionalItems"], DocumentPath)};	
+					AdditionalItems = new AdditionalItems {Definition = JsonSchemaFactory.FromJson(obj["additionalItems"], DocumentPath) };
 			}
 			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			MinItems = (uint?) obj.TryGetNumber("minItems");
 			if (obj.ContainsKey("items"))
 				Items = JsonSchemaFactory.FromJson(obj["items"], DocumentPath);
-			
 			UniqueItems = obj.TryGetBoolean("uniqueItems");
 			MaxProperties = (uint?) obj.TryGetNumber("maxProperties");
 			MinProperties = (uint?) obj.TryGetNumber("minProperties");
@@ -611,15 +618,14 @@ namespace Manatee.Json.Schema
 				if (obj["additionalProperties"].Type == JsonValueType.Boolean)
 					AdditionalProperties = obj["additionalProperties"].Boolean ? AdditionalProperties.True : AdditionalProperties.False;
 				else
-					AdditionalProperties = new AdditionalProperties() { Definition =  JsonSchemaFactory.FromJson(obj["additionalProperties"], DocumentPath)};
-				
+					AdditionalProperties = new AdditionalProperties {Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"], DocumentPath)};
 			}
 			if (obj.ContainsKey("definitions"))
 			{
 				Definitions = new JsonSchemaTypeDefinitionCollection();
 				foreach (var defn in obj["definitions"].Object)
 				{
-					var definition = new JsonSchemaTypeDefinition(defn.Key) { Definition = JsonSchemaFactory.FromJson(defn.Value, DocumentPath) };
+					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = JsonSchemaFactory.FromJson(defn.Value, DocumentPath) };
 
 					Definitions.Add(definition);
 				}
@@ -636,8 +642,7 @@ namespace Manatee.Json.Schema
 						switch (v.Value.Type)
 						{
 							case JsonValueType.Object:
-								 dependency = new SchemaDependency(v.Key, JsonSchemaFactory.FromJson(v.Value, DocumentPath));
-								
+								dependency = new SchemaDependency(v.Key, JsonSchemaFactory.FromJson(v.Value, DocumentPath));
 								break;
 							case JsonValueType.Array:
 								dependency = new PropertyDependency(v.Key, v.Value.Array.Select(jv => jv.String));

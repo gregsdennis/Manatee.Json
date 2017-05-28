@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -56,7 +57,7 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchemaCollection();
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("json.Type", "JSON Schema must be objects.");
+					throw new ArgumentOutOfRangeException(nameof(json.Type), "JSON Schema must be objects.");
 			}
 			schema.DocumentPath = documentPath;
 			schema.FromJson(json, null);

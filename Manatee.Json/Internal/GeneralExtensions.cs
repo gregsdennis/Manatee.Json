@@ -256,5 +256,17 @@ namespace Manatee.Json.Internal
 				   value is long ||
 				   value is ulong;
 		}
+		public static Uri GetBase(this Uri uri)
+		{
+			Uri previous = uri;
+			do
+			{
+				uri = previous;
+				previous = uri.GetParentUri();
+			} while (uri != previous);
+
+			return uri;
+		}
+
 	}
 }

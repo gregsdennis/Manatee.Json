@@ -62,7 +62,7 @@ namespace Manatee.Json.Schema
 			if (schema.Id.IsNullOrWhiteSpace()) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup[schema.Id] = schema;
+				_schemaLookup[schema.DocumentPath.ToString()] = schema;
 			}
 		}
 
