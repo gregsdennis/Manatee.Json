@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>Manatee.Json</id>
-		<version>6.0.2</version>
+		<version>6.0.3</version>
 		<description>
 			A fully object-oriented approach to JSON manipulation, validation, and serialization that focuses on modeling the JSON structure rather than mere string parsing.
 		</description>
@@ -12,6 +12,9 @@
 		<licenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</licenseUrl>
 		<iconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</iconUrl>
 		<releaseNotes>
+			v6.0.3
+			Schema passes latest version of JSON Schema Test Suite. (#63)
+
 			v6.0.2
 			BUG FIX: Referenced schema not loaded. (#58)
 			
