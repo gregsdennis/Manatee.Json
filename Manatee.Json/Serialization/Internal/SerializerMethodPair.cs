@@ -23,7 +23,6 @@
 
 using System;
 using System.Reflection;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -40,12 +39,12 @@ namespace Manatee.Json.Serialization.Internal
 
 		private static MethodInfo GetTypedSerializeMethod(Type type)
 		{
-			return typeof(JsonSerializer).GetMethod("Serialize")
+			return typeof(JsonSerializer).GetTypeInfo().GetDeclaredMethod("Serialize")
 										 .MakeGenericMethod(type);
 		}
 		private static MethodInfo GetTypedDeserializeMethod(Type type)
 		{
-			return typeof(JsonSerializer).GetMethod("Deserialize")
+			return typeof(JsonSerializer).GetTypeInfo().GetDeclaredMethod("Deserialize")
 										 .MakeGenericMethod(type);
 		}
 	}

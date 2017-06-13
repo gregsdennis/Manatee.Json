@@ -30,9 +30,6 @@ namespace Manatee.Json.Serialization
 	/// Thrown when <see cref="JsonSerializationTypeRegistry.RegisterType&lt;T&gt;(JsonSerializationTypeRegistry.ToJsonDelegate&lt;T&gt;, JsonSerializationTypeRegistry.FromJsonDelegate&lt;T&gt;)"/>
 	/// is passed one method and a null.
 	/// </summary>
-#if !IOS && !CORE
-	[Serializable]
-#endif
 	public class TypeRegistrationException : Exception
 	{
 		/// <summary>

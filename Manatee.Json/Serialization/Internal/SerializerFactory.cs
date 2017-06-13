@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Manatee.Json.Internal;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization.Internal.Serializers;
@@ -76,13 +77,14 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var type = typeof (T);
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
-			if (typeof (IJsonSchema).IsAssignableFrom(typeToSerialize))
+			// TODO: optimize
+			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeToSerialize.GetTypeInfo()))
 				return BuildSerializer(_schemaSerializer);
 			if (JsonSerializationTypeRegistry.IsRegistered(typeToSerialize))
 				return BuildSerializer(_registeredObjectSerializer);
-			if (typeof (IJsonSerializable).IsAssignableFrom(typeToSerialize))
+			if (typeof (IJsonSerializable).GetTypeInfo().IsAssignableFrom(typeToSerialize.GetTypeInfo()))
 				return BuildSerializer(_jsonSerializableSerializer);
-			if (typeof (Enum).IsAssignableFrom(typeToSerialize))
+			if (typeof (Enum).GetTypeInfo().IsAssignableFrom(typeToSerialize.GetTypeInfo()))
 			{
 				if (json != null)
 				{

@@ -32,9 +32,6 @@ namespace Manatee.Json
 	/// <summary>
 	/// Thrown when an input string contains a syntax error while parsing a <see cref="JsonObject"/>, <see cref="JsonArray"/>, or <see cref="JsonValue"/>.
 	/// </summary>
-#if !IOS && !CORE
-	[Serializable]
-#endif
 	public class JsonSyntaxException : Exception
 	{
 		private readonly string _path;

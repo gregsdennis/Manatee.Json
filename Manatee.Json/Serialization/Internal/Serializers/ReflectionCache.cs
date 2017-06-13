@@ -91,12 +91,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			ReflectionInfo info;
 			if (!_instanceCache.TryGetValue(type, out info))
 			{
-				var read = GetInstanceProperties(type).Where(p => p.GetSetMethod() == null)
-				                                      .Where(p => p.GetGetMethod() != null)
+				var read = GetInstanceProperties(type).Where(p => p.SetMethod == null)
+				                                      .Where(p => p.GetMethod != null)
 				                                      .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 				                                      .Select(BuildSerializationInfo);
-				var readWrite = GetInstanceProperties(type).Where(p => p.GetSetMethod() != null)
-				                                           .Where(p => p.GetGetMethod() != null)
+				var readWrite = GetInstanceProperties(type).Where(p => p.SetMethod != null)
+				                                           .Where(p => p.GetMethod != null)
 				                                           .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 				                                           .Select(BuildSerializationInfo);
 				var fields = GetInstanceFields(type).Where(p => !p.IsInitOnly)
@@ -111,12 +111,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			ReflectionInfo info;
 			if (!_staticCache.TryGetValue(type, out info))
 			{
-				var read = GetStaticProperties(type).Where(p => p.GetSetMethod() == null)
-				                                    .Where(p => p.GetGetMethod() != null)
+				var read = GetStaticProperties(type).Where(p => p.SetMethod == null)
+				                                    .Where(p => p.GetMethod != null)
 				                                    .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 				                                    .Select(BuildSerializationInfo);
-				var readWrite = GetStaticProperties(type).Where(p => p.GetSetMethod() != null)
-				                                         .Where(p => p.GetGetMethod() != null)
+				var readWrite = GetStaticProperties(type).Where(p => p.SetMethod != null)
+				                                         .Where(p => p.GetMethod != null)
 				                                         .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 				                                         .Select(BuildSerializationInfo);
 				var fields = GetStaticFields(type).Where(p => !p.IsInitOnly)
@@ -134,35 +134,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		private static IEnumerable<PropertyInfo> GetInstanceProperties(Type type)
 		{
-#if IOS
 			return type.TypeInfo().DeclaredProperties.Where(p => (!p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
-#else
-			return type.TypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-#endif
 		}
 		private static IEnumerable<PropertyInfo> GetStaticProperties(Type type)
 		{
-#if IOS
 			return type.TypeInfo().DeclaredProperties.Where(p => (p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
-#else
-			return type.TypeInfo().GetProperties(BindingFlags.Static | BindingFlags.Public);
-#endif
 		}
 		private static IEnumerable<FieldInfo> GetInstanceFields(Type type)
 		{
-#if IOS
 			return type.TypeInfo().DeclaredFields.Where(f => !f.IsStatic && f.IsPublic);
-#else
-			return type.TypeInfo().GetFields(BindingFlags.Instance | BindingFlags.Public);
-#endif
 		}
 		private static IEnumerable<FieldInfo> GetStaticFields(Type type)
 		{
-#if IOS
 			return type.TypeInfo().DeclaredFields.Where(f => f.IsStatic && f.IsPublic);
-#else
-			return type.TypeInfo().GetFields(BindingFlags.Static | BindingFlags.Public);
-#endif
 		}
 	}
 }

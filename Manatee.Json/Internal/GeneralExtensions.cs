@@ -210,7 +210,7 @@ namespace Manatee.Json.Internal
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived.IsSubtypeOf(tBase)) return true;
-			var interfaces = tDerived.TypeInfo().GetInterfaces().Select(i => i.TypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
+			var interfaces = tDerived.TypeInfo().ImplementedInterfaces.Select(i => i.TypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
 			return interfaces.Contains(tBase);
 		}
 		private static bool IsSubtypeOf(this Type tDerived, Type tBase)
@@ -231,11 +231,7 @@ namespace Manatee.Json.Internal
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
 		{
-#if IOS || CORE
 			return collection.OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
-#else
-			return collection.OrderBy(kvp => kvp.Key, StringComparer.InvariantCulture)
-#endif
 							 .Aggregate(0, (current, kvp) =>
 				                            {
 					                            unchecked

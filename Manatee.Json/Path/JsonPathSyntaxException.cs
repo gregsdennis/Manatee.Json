@@ -30,9 +30,6 @@ namespace Manatee.Json.Path
 	/// <summary>
 	/// Thrown when an input string contains a syntax error while parsing a <see cref="JsonPath"/>.
 	/// </summary>
-#if !IOS && !CORE
-	[Serializable]
-#endif
 	public class JsonPathSyntaxException : Exception
 	{
 		private readonly bool _isExpression;

@@ -192,7 +192,7 @@ namespace Manatee.Json.Path.Parsing
 		public static string GetInt(string source, ref int index, out int? number)
 		{
 			int value;
-			var text = new string(source.Substring(index).TakeWhile(c => char.IsDigit(c) || c == '-').ToArray());
+			var text = new string(source.Substring(index).Cast<char>().TakeWhile(c => char.IsDigit(c) || c == '-').ToArray());
 			if (text.Length == 0 && source[index].In(':', ',', ']'))
 			{
 				number = null;
@@ -218,7 +218,8 @@ namespace Manatee.Json.Path.Parsing
 		public static string GetNumber(this string source, ref int index, out double? number)
 		{
 			double value;
-			var text = new string(source.Substring(index).TakeWhile(c => NumberChars.Contains(c)).ToArray());
+			// TODO: optimize
+			var text = new string(source.Substring(index).Cast<char>().TakeWhile(c => NumberChars.Cast<char>().Contains(c)).ToArray());
 			if (text.Length == 0 && source[index].In(':', ',', ']'))
 			{
 				number = null;

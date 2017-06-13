@@ -199,7 +199,8 @@ namespace Manatee.Json.Path.Expressions.Translation
 		public static ExpressionTreeNode<T> TranslateNode<T>(Expression source)
 		{
 			var type = source.GetType();
-			var expressionKey = Translators.Keys.FirstOrDefault(t => t.IsAssignableFrom(type));
+			// TODO: optimize
+			var expressionKey = Translators.Keys.FirstOrDefault(t => t.GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()));
 			if (expressionKey != null)
 			{
 				var translator = Translators[expressionKey](source);

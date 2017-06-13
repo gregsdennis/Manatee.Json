@@ -35,9 +35,10 @@ namespace Manatee.Json.Parsing
 
 		static JsonParser()
 		{
-			Parsers = typeof(JsonParser).TypeInfo().Assembly.GetTypes()
-			                            .Where(t => typeof(IJsonParser).IsAssignableFrom(t) && t.TypeInfo().IsClass)
-			                            .Select(Activator.CreateInstance)
+			Parsers = typeof(JsonParser).TypeInfo().Assembly.DefinedTypes
+				// TODO: optimize
+			                            .Where(t => typeof(IJsonParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
+			                            .Select(ti => Activator.CreateInstance(ti.AsType()))
 			                            .Cast<IJsonParser>()
 			                            .ToList();
 		}

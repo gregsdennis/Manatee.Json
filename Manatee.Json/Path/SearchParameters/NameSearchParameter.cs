@@ -57,7 +57,7 @@ namespace Manatee.Json.Path.SearchParameters
 		}
 		public override string ToString()
 		{
-			return _name.Any(c => !char.IsLetterOrDigit(c)) || _name.IsNullOrWhiteSpace()
+			return _name.Cast<char>().Any(c => !char.IsLetterOrDigit(c)) || _name.IsNullOrWhiteSpace()
 					   ? $"'{_name}'"
 					   : _name;
 		}

@@ -21,7 +21,7 @@
 
 ***************************************************************************************/
 
-#if !IOS && !CORE
+#if !NETSTANDARD1_1
 
 using System;
 using System.Collections.Generic;
@@ -46,13 +46,8 @@ namespace Manatee.Json.Serialization.Internal
 			var assemblyName = new AssemblyName(AssemblyName);
 			// Note: To debug IL generation, please use the following line with your own test path.  Also need to uncomment the Save() call in the Generate<T>() method.
 			//_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave, @"E:\Projects\Manatee.Json\Manatee.Json.Tests\bin\Debug\");
-#if NET35
-			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName);
-#else
 			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
 			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName, AssemblyName + ".dll");
-#endif
 			_cache = new Dictionary<Type, Type>();
 		}
 

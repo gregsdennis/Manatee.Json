@@ -146,8 +146,8 @@ namespace Manatee.Json.Serialization
 					return (T) resolver.Resolve(tConcrete);
 				}
 
-#if !IOS && !CORE
-				if (type.IsInterface)
+#if !NETSTANDARD1_1
+				if (type.GetTypeInfo().IsInterface)
 					return TypeGenerator.Generate<T>();
 #endif
 			}
@@ -176,7 +176,7 @@ namespace Manatee.Json.Serialization
 				_registry[tBase] = tConcrete;
 			}
 			MapBaseTypes(tBase, tConcrete, overwrite);
-			foreach (var tInterface in tAbstract.TypeInfo().GetInterfaces())
+			foreach (var tInterface in tAbstract.TypeInfo().ImplementedInterfaces)
 			{
 				if (overwrite || !_registry.ContainsKey(tInterface))
 				{

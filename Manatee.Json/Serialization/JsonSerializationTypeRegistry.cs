@@ -63,20 +63,16 @@ namespace Manatee.Json.Serialization
 
 		static JsonSerializationTypeRegistry()
 		{
-			_delegateProviders = typeof(JsonSerializationTypeRegistry).TypeInfo().Assembly.GetTypes()
-																	  .Where(t => typeof(ISerializationDelegateProvider).IsAssignableFrom(t) &&
-																				  !t.TypeInfo().IsAbstract &&
-																				  t.TypeInfo().IsClass)
-																	  .Select(Activator.CreateInstance)
+			_delegateProviders = typeof(JsonSerializationTypeRegistry).TypeInfo().Assembly.DefinedTypes
+																	  .Where(t => typeof(ISerializationDelegateProvider).GetTypeInfo().IsAssignableFrom(t) &&
+																				  !t.IsAbstract &&
+																				  t.IsClass)
+																	  .Select(ti => Activator.CreateInstance(ti.AsType()))
 																	  .Cast<ISerializationDelegateProvider>()
 																	  .ToList();
 			_toJsonConverters = new Dictionary<Type, Delegate>();
 			_fromJsonConverters = new Dictionary<Type, Delegate>();
-#if IOS
-			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates");
-#else
-			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetMethod("RegisterProviderDelegates", BindingFlags.Static | BindingFlags.NonPublic);
-#endif
+			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetTypeInfo().GetDeclaredMethod("RegisterProviderDelegates");
 		}
 
 		/// <summary>

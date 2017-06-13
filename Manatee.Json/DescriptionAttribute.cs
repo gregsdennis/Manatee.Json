@@ -1,5 +1,4 @@
-﻿#if IOS || CORE
-using System;
+﻿using System;
 
 namespace Manatee.Json
 {
@@ -23,4 +22,3 @@ namespace Manatee.Json
 		}
 	}
 }
-#endif
