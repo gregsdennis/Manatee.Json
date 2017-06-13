@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj">
-      <Project>{b0a832b8-06b7-4494-8416-fabe755f621f}</Project>
+      <Project>{7548217b-8c18-4ca5-a248-59889ef93cf5}</Project>
       <Name>Manatee.Json</Name>
     </ProjectReference>
   </ItemGroup>
