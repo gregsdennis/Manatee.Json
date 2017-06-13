@@ -219,8 +219,8 @@ namespace Manatee.Json.Tests
 		[DeploymentItem(@"Files\refSchema.json")]
 		public void Issue45a_Utf8SupportInReferenceSchemaEnums()
 		{
-			// replace with your full path to the schema file.
-			const string fileName = @"C:\Users\gregd\OneDrive\Projects\Manatee.Json\Manatee.Json.Tests\Files\baseSchema.json";
+			var fileName = System.IO.Path.GetFullPath(@"baseSchema.json");
+
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
 			var schema = JsonSchemaRegistry.Get(fileName);
 			var json = JsonValue.Parse(jsonString);
@@ -320,31 +320,98 @@ namespace Manatee.Json.Tests
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
 			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
-
 			var schema = JsonSchemaRegistry.Get(path);
 			var json = new JsonObject
-			{
-				["text"] = "something",
-				["refa"] = new JsonObject
 				{
-					["text"] = "something else",
-					["refb"] = new JsonObject()
-					{
-						["refd"] = new JsonObject()
+					["text"] = "something",
+					["refa"] = new JsonObject
 						{
-							["refe"] = new JsonObject() {
-								["test"] = "test"
-							},
-							["text"] = "test"
+							["text"] = "something else",
+							["refb"] = new JsonObject
+								{
+									["refd"] = new JsonObject
+										{
+											["refe"] = new JsonObject{["test"] = "test"},
+											["text"] = "test"
+										}
+								}
 						}
-					}
-				}
-			}; 
-				
-
+				};
 			var results = schema.Validate(json);
-
 			Assert.IsTrue(results.Valid);
 		}
+
+		[TestMethod]
+		public void Issue56_InconsistentNullAssignment()
+		{
+			JsonValue json1 = null;  // this is actually null
+			string myVar = null;
+			JsonValue json2 = myVar;  // this is JsonValue.Null
+
+			Assert.IsNull(json1);
+			Assert.IsTrue(Equals(null, json1));
+
+			Assert.IsNotNull(json2);
+			Assert.IsTrue(null == json2);
+			// R# isn't considering my == overload
+			// ReSharper disable once HeuristicUnreachableCode
+			Assert.IsTrue(json2.Equals(null));
+			// This may seem inconsistent, but check out the notes in the issue.
+			Assert.IsFalse(Equals(null, json2));
+		}
+
+		[TestMethod]
+		[DeploymentItem(@"Files\Issue58RefCore.json", "Files")]
+		[DeploymentItem(@"Files\Issue58RefChild.json", "Files")]
+		public void Issue58_UriReferenceSchemaTest()
+		{
+			const string coreSchemaUri = "http://example.org/Issue58RefCore.json";
+			const string childSchemaUri = "http://example.org/Issue58RefChild.json";
+
+			string coreSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefCore.json");
+			string childSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefChild.json");
+
+			var coreSchemaText = string.Empty;
+			var childSchemaText = string.Empty;
+
+			using (TextReader reader = File.OpenText(coreSchemaPath))
+			{
+				coreSchemaText = reader.ReadToEnd();
+			}
+
+			using (TextReader reader = File.OpenText(childSchemaPath))
+			{
+				childSchemaText = reader.ReadToEnd();
+			}
+
+			var requestedUris = new List<string>();
+			JsonSchemaOptions.Download = uri =>
+				{
+					requestedUris.Add(uri);
+					switch (uri)
+					{
+						case coreSchemaUri:
+							return coreSchemaText;
+
+						case childSchemaUri:
+							return childSchemaText;
+					}
+					return coreSchemaText;
+				};
+			var schema = JsonSchemaRegistry.Get(childSchemaUri);
+
+			var testJson = new JsonObject();
+			testJson["myProperty"] = "http://example.org/";
+
+			//Console.WriteLine(testJson);
+			//Console.WriteLine(schema.ToJson(null).GetIndentedString());
+
+			var result = schema.Validate(testJson);
+
+			Assert.IsTrue(result.Valid);
+			Assert.AreEqual(requestedUris[0], childSchemaUri);
+			Assert.AreEqual(requestedUris[1], coreSchemaUri);
+		}
+
 	}
 }

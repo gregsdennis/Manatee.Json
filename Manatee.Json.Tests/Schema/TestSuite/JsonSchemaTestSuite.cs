@@ -1,27 +1,4 @@
-﻿/***************************************************************************************
-
-	Copyright 2016 Greg Dennis
-
-	   Licensed under the Apache License, Version 2.0 (the "License");
-	   you may not use this file except in compliance with the License.
-	   You may obtain a copy of the License at
-
-		 http://www.apache.org/licenses/LICENSE-2.0
-
-	   Unless required by applicable law or agreed to in writing, software
-	   distributed under the License is distributed on an "AS IS" BASIS,
-	   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	   See the License for the specific language governing permissions and
-	   limitations under the License.
- 
-	File Name:		JsonSchemaTestSuite.cs
-	Namespace:		Manatee.Json.Tests.Schema.TestSuite
-	Class Name:		JsonSchemaTestSuite
-	Purpose:		Runs the series of schema tests defined at
-					https://github.com/json-schema-org/JSON-Schema-Test-Suite.
-
-***************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
@@ -36,9 +13,11 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly Uri RemotesUri = new Uri(System.IO.Path.GetFullPath(RemotesFolder));
-		private static readonly JsonSerializer _serializer;
+		private static readonly JsonSerializer Serializer;
 		private int _failures;
 		private int _passes;
+		private string _currentFile;
+		private string _currentTest;
 #pragma warning disable 649
 		private string _fileNameForDebugging;
 		private string _testNameForDebugging;
@@ -46,16 +25,18 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 		static JsonSchemaTestSuite()
 		{
-			_serializer = new JsonSerializer();
+			Serializer = new JsonSerializer();
 		}
 
 		[TestMethod]
 		public void RunSuite()
 		{
 			// uncomment and paste the filename of a test suite to debug it.
-			//_fileNameForDebugging = "";
+			//_fileNameForDebugging = "ref.json";
 			// uncomment and paste the description of a test to debug it.
-			//_testNameForDebugging = "ref within ref valid";
+			_testNameForDebugging = "object is invalid";
+
+			var ranAllTests = false;
 
 			try
 			{
@@ -68,7 +49,18 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					_RunFile(fileName);
 				}
 
+				ranAllTests = true;
 				Assert.AreEqual(0, _failures);
+			}
+			catch
+			{
+				if (!ranAllTests)
+				{
+					_failures++;
+					Console.WriteLine();
+					Console.WriteLine($"Failed on '{_currentTest}' in {_currentFile}");
+				}
+				throw;
 			}
 			finally
 			{
@@ -80,6 +72,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 		private void _RunFile(string fileName)
 		{
+			_currentFile = fileName;
 			if (fileName == _fileNameForDebugging)
 			{
 				System.Diagnostics.Debugger.Break();
@@ -88,7 +81,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			var contents = File.ReadAllText(fileName);
 			var json = JsonValue.Parse(contents);
 
-			var testSets = _serializer.Deserialize<List<SchemaTestSet>>(json);
+			var testSets = Serializer.Deserialize<List<SchemaTestSet>>(json);
 
 			foreach (var testSet in testSets)
 			{
@@ -101,6 +94,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		{
 			foreach (var test in testSet.Tests)
 			{
+				_currentTest = test.Description;
 				if (test.Description == _testNameForDebugging)
 				{
 					System.Diagnostics.Debugger.Break();

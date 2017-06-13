@@ -1,27 +1,4 @@
-﻿/***************************************************************************************
-
-	Copyright 2016 Greg Dennis
-
-	   Licensed under the Apache License, Version 2.0 (the "License");
-	   you may not use this file except in compliance with the License.
-	   You may obtain a copy of the License at
-
-		 http://www.apache.org/licenses/LICENSE-2.0
-
-	   Unless required by applicable law or agreed to in writing, software
-	   distributed under the License is distributed on an "AS IS" BASIS,
-	   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	   See the License for the specific language governing permissions and
-	   limitations under the License.
- 
-	File Name:		JsonSchema.cs
-	Namespace:		Manatee.Json.Schema
-	Class Name:		JsonSchema
-	Purpose:		Provides base functionality for the basic ISchema implementations.
-
-***************************************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -558,6 +535,7 @@ namespace Manatee.Json.Schema
 			var results = validators.Select(v => v.Validate(this, json, jValue)).ToList();
 			return new SchemaValidationResults(results);
 		}
+
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
@@ -568,6 +546,14 @@ namespace Manatee.Json.Schema
 		{
 			var obj = json.Object;
 			Id = obj.TryGetString("id");
+			Uri uri;
+			var uriFolder = DocumentPath?.OriginalString.EndsWith("/") ?? true ? DocumentPath : DocumentPath?.GetParentUri();
+			if (!Id.IsNullOrWhiteSpace() &&
+				(Uri.TryCreate(Id, UriKind.Absolute, out uri) || Uri.TryCreate(uriFolder + Id, UriKind.Absolute, out uri)))
+			{
+				DocumentPath = uri;
+				JsonSchemaRegistry.Register(this);
+			}
 			Schema = obj.TryGetString("$schema");
 			Title = obj.TryGetString("title");
 			Description = obj.TryGetString("description");
@@ -584,16 +570,14 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("additionalItems"))
 			{
 				if (obj["additionalItems"].Type == JsonValueType.Boolean)
-				
 					AdditionalItems = obj["additionalItems"].Boolean ? AdditionalItems.True : AdditionalItems.False;
 				else
-					AdditionalItems = new AdditionalItems() { Definition = JsonSchemaFactory.FromJson(obj["additionalItems"], DocumentPath)};	
+					AdditionalItems = new AdditionalItems {Definition = JsonSchemaFactory.FromJson(obj["additionalItems"], DocumentPath) };
 			}
 			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			MinItems = (uint?) obj.TryGetNumber("minItems");
 			if (obj.ContainsKey("items"))
 				Items = JsonSchemaFactory.FromJson(obj["items"], DocumentPath);
-			
 			UniqueItems = obj.TryGetBoolean("uniqueItems");
 			MaxProperties = (uint?) obj.TryGetNumber("maxProperties");
 			MinProperties = (uint?) obj.TryGetNumber("minProperties");
@@ -634,15 +618,14 @@ namespace Manatee.Json.Schema
 				if (obj["additionalProperties"].Type == JsonValueType.Boolean)
 					AdditionalProperties = obj["additionalProperties"].Boolean ? AdditionalProperties.True : AdditionalProperties.False;
 				else
-					AdditionalProperties = new AdditionalProperties() { Definition =  JsonSchemaFactory.FromJson(obj["additionalProperties"], DocumentPath)};
-				
+					AdditionalProperties = new AdditionalProperties {Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"], DocumentPath)};
 			}
 			if (obj.ContainsKey("definitions"))
 			{
 				Definitions = new JsonSchemaTypeDefinitionCollection();
 				foreach (var defn in obj["definitions"].Object)
 				{
-					var definition = new JsonSchemaTypeDefinition(defn.Key) { Definition = JsonSchemaFactory.FromJson(defn.Value, DocumentPath) };
+					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = JsonSchemaFactory.FromJson(defn.Value, DocumentPath) };
 
 					Definitions.Add(definition);
 				}
@@ -659,8 +642,7 @@ namespace Manatee.Json.Schema
 						switch (v.Value.Type)
 						{
 							case JsonValueType.Object:
-								 dependency = new SchemaDependency(v.Key, JsonSchemaFactory.FromJson(v.Value, DocumentPath));
-								
+								dependency = new SchemaDependency(v.Key, JsonSchemaFactory.FromJson(v.Value, DocumentPath));
 								break;
 							case JsonValueType.Array:
 								dependency = new PropertyDependency(v.Key, v.Value.Array.Select(jv => jv.String));

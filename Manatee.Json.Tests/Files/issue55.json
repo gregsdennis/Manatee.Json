@@ -1,0 +1,12 @@
+﻿{
+    "$schema" : "http://json-schema.org/draft-04/schema",
+    "title" : "JSON Schema for Universally Unique Identifiers (UUIDs).",
+    "type" : "object",
+    "properties": {
+        "uuid":{
+            "description": "A universally unique identifier (UUID).",
+            "type":"string",
+            "pattern": "^([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})|[a-f0-9]{32}$"
+        }
+    }
+}
