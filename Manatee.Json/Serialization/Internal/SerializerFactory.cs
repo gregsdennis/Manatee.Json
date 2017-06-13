@@ -54,14 +54,14 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var type = typeof (T);
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
-			// TODO: optimize
-			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeToSerialize.GetTypeInfo()))
+			var typeInfo = typeToSerialize.GetTypeInfo();
+			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeInfo))
 				return BuildSerializer(_schemaSerializer);
 			if (JsonSerializationTypeRegistry.IsRegistered(typeToSerialize))
 				return BuildSerializer(_registeredObjectSerializer);
-			if (typeof (IJsonSerializable).GetTypeInfo().IsAssignableFrom(typeToSerialize.GetTypeInfo()))
+			if (typeof (IJsonSerializable).GetTypeInfo().IsAssignableFrom(typeInfo))
 				return BuildSerializer(_jsonSerializableSerializer);
-			if (typeof (Enum).GetTypeInfo().IsAssignableFrom(typeToSerialize.GetTypeInfo()))
+			if (typeof (Enum).GetTypeInfo().IsAssignableFrom(typeInfo))
 			{
 				if (json != null)
 				{

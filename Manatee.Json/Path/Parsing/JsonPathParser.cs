@@ -12,7 +12,7 @@ namespace Manatee.Json.Path.Parsing
 
 		static JsonPathParser()
 		{
-			Parsers = typeof(JsonPathParser).TypeInfo().Assembly.DefinedTypes
+			Parsers = typeof(JsonPathParser).GetTypeInfo().Assembly.DefinedTypes
 			                                .Where(t => typeof(IJsonPathParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
 			                                .Select(ti => Activator.CreateInstance(ti.AsType()))
 			                                .Cast<IJsonPathParser>()

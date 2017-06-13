@@ -21,7 +21,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override string ToString()
 		{
-			return Slices.Join(",");
+			return string.Join(",", Slices);
 		}
 		public bool Equals(SliceQuery other)
 		{

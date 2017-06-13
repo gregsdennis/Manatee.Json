@@ -360,7 +360,7 @@ namespace Manatee.Json.Schema
 			get { return _id; }
 			set
 			{
-				if (!value.IsNullOrWhiteSpace() && !StringFormat.Uri.Validate(value))
+				if (!string.IsNullOrWhiteSpace(value) && !StringFormat.Uri.Validate(value))
 					throw new ArgumentOutOfRangeException(nameof(Id), "'id' property must be a well-formed URI.");
 				_id = value;
 			}
@@ -376,7 +376,7 @@ namespace Manatee.Json.Schema
 			get { return _schema; }
 			set
 			{
-				if (!value.IsNullOrWhiteSpace() && !StringFormat.Uri.Validate(value))
+				if (!string.IsNullOrWhiteSpace(value) && !StringFormat.Uri.Validate(value))
 					throw new ArgumentOutOfRangeException(nameof(Schema), "'$schema' property must be a well-formed URI.");
 				_schema = value;
 			}
@@ -548,7 +548,7 @@ namespace Manatee.Json.Schema
 			Id = obj.TryGetString("id");
 			Uri uri;
 			var uriFolder = DocumentPath?.OriginalString.EndsWith("/") ?? true ? DocumentPath : DocumentPath?.GetParentUri();
-			if (!Id.IsNullOrWhiteSpace() &&
+			if (!string.IsNullOrWhiteSpace(Id) &&
 				(Uri.TryCreate(Id, UriKind.Absolute, out uri) || Uri.TryCreate(uriFolder + Id, UriKind.Absolute, out uri)))
 			{
 				DocumentPath = uri;
@@ -661,7 +661,7 @@ namespace Manatee.Json.Schema
 				{
 					case JsonValueType.String:
 						// string implies primitive type
-						Type = GetPrimitiveDefinition(typeEntry.String);
+						Type = _GetPrimitiveDefinition(typeEntry.String);
 						break;
 					case JsonValueType.Array:
 						// array implies "oneOf" several primitive types
@@ -699,9 +699,9 @@ namespace Manatee.Json.Schema
 				requiredProperties = Properties.Where(p => p.IsRequired).Select(p => p.Name).ToList();
 			var json = new JsonObject();
 			if (Id != null) json["id"] = Id;
-			if (!Schema.IsNullOrWhiteSpace()) json["$schema"] = Schema;
+			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
 			if (Title != null) json["title"] = Title;
-			if (!Description.IsNullOrWhiteSpace()) json["description"] = Description;
+			if (!string.IsNullOrWhiteSpace(Description)) json["description"] = Description;
 			if (Default != null) json["default"] = Default;
 			if (MultipleOf.HasValue) json["multipleOf"] = MultipleOf;
 			if (Maximum.HasValue) json["maximum"] = Maximum;
@@ -865,7 +865,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		private static JsonSchemaTypeDefinition GetPrimitiveDefinition(string type)
+		private static JsonSchemaTypeDefinition _GetPrimitiveDefinition(string type)
 		{
 			switch (type)
 			{

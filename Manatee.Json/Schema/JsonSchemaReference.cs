@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Manatee.Json.Internal;
-using Manatee.Json.Path;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -42,7 +39,7 @@ namespace Manatee.Json.Schema
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is nulll, empty, or whitespace.</exception>
 		public JsonSchemaReference(string reference)
 		{
-			if (reference.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(reference));
+			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentNullException(nameof(reference));
 			Reference = reference;
 		}
 		/// <summary>
@@ -111,10 +108,10 @@ namespace Manatee.Json.Schema
 		private JsonValue _Resolve(JsonValue root)
 		{
 			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
-			var address = referenceParts[0].IsNullOrWhiteSpace() ? DocumentPath?.OriginalString : referenceParts[0];
+			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? DocumentPath?.OriginalString : referenceParts[0];
 			var fragment = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
 			var jValue = root;
-			if (!address.IsNullOrWhiteSpace())
+			if (!string.IsNullOrWhiteSpace(address))
 			{
 				Uri absolute;
 				if (!Uri.TryCreate(address, UriKind.Absolute, out absolute))
@@ -132,7 +129,7 @@ namespace Manatee.Json.Schema
 			if (jValue == null) return root;
 			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
  
-			Resolved = _ResolveLocalReference(jValue, fragment, address.IsNullOrWhiteSpace() ? null : new Uri(address));
+			Resolved = _ResolveLocalReference(jValue, fragment, string.IsNullOrWhiteSpace(address) ? null : new Uri(address));
 			return jValue;
 		}
 		private static IJsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)

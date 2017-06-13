@@ -74,7 +74,7 @@ namespace Manatee.Json.Path
 
 		internal string GetRawString()
 		{
-			return Operators.Select(o => o.ToString()).Join(string.Empty);
+			return string.Join(string.Empty, Operators.Select(o => o.ToString()));
 		}
 	}
 }

@@ -32,9 +32,9 @@ namespace Manatee.Json
 		/// and <paramref name="json"/> is not a non-empty <see cref="JsonObject"/>.</exception>
 		public static XElement ToXElement(this JsonValue json, string key)
 		{
-			if (key.IsNullOrWhiteSpace() && (json.Type != JsonValueType.Object))
+			if (string.IsNullOrWhiteSpace(key) && json.Type != JsonValueType.Object)
 				throw new ArgumentException(EncodingWithoutKeyError);
-			var name = GetXName(key);
+			var name = _GetXName(key);
 			XElement xml;
 			switch (json.Type)
 			{
@@ -42,7 +42,7 @@ namespace Manatee.Json
 					return new XElement(name, json.Number);
 				case JsonValueType.String:
 					xml = new XElement(name, json.String);
-					if (RequiresTypeAttribute(json.String))
+					if (_RequiresTypeAttribute(json.String))
 						xml.SetAttributeValue(TypeAttribute, "String");
 					return xml;
 				case JsonValueType.Boolean:
@@ -59,20 +59,20 @@ namespace Manatee.Json
 					foreach (var kvp in json.Object)
 					{
 						var element = kvp.Value.ToXElement(kvp.Key);
-						if ((kvp.Value.Type == JsonValueType.Array) && !ContainsAttributeList(kvp.Value.Array))
+						if ((kvp.Value.Type == JsonValueType.Array) && !_ContainsAttributeList(kvp.Value.Array))
 							xml.Add(element.Elements());
 						else
 							xml.Add(element);
 					}
 					return xml;
 				case JsonValueType.Array:
-					if (ContainsAttributeList(json.Array))
+					if (_ContainsAttributeList(json.Array))
 					{
 						var attributeNames = json.Array[0].Object;
 						var attributes = new List<XAttribute>();
 						foreach(var attributeName in attributeNames)
 						{
-							var localName = GetXName(attributeName.Key.Substring(1));
+							var localName = _GetXName(attributeName.Key.Substring(1));
 							var attribute = new XAttribute(localName, attributeName.Value.ToXElement(key).Value);
 							if (attribute.IsNamespaceDeclaration)
 								XmlNamespaceRegistry.Instance.Register(attribute.Name.LocalName,attribute.Value);
@@ -129,7 +129,7 @@ namespace Manatee.Json
 		/// <returns>The <see cref="JsonValue"/> representation of the <see cref="XElement"/>.</returns>
 		public static JsonValue ToJson(this XElement xElement)
 		{
-			return new JsonObject {{GetNamespaceForElement(xElement) + xElement.Name.LocalName, GetValue(xElement)}};
+			return new JsonObject {{_GetNamespaceForElement(xElement) + xElement.Name.LocalName, _GetValue(xElement)}};
 		}
 		/// <summary>
 		/// Converts an <see cref="XElement"/> to a <see cref="JsonObject"/>.
@@ -143,15 +143,15 @@ namespace Manatee.Json
 			foreach (var xElement in xElements)
 			{
 				XmlNamespaceRegistry.Instance.RegisterElement(xElement);
-				var name = GetNamespaceForElement(xElement) + xElement.Name.LocalName;
-				var newValue = GetValue(xElement);
+				var name = _GetNamespaceForElement(xElement) + xElement.Name.LocalName;
+				var newValue = _GetValue(xElement);
 				if (json.ContainsKey(name))
 				{
 					var item = json[name];
 					var nestAttribute = xElement.Attribute(NestAttribute);
-					if ((nestAttribute != null) && (nestAttribute.Value.ToLower() == "true"))
+					if (nestAttribute != null && nestAttribute.Value.ToLower() == "true")
 					{
-						if ((newValue.Object.Count > 1) || ((newValue.Object.Count != 0) && (newValue.Object.Keys.ElementAt(0) != name)))
+						if (newValue.Object.Count > 1 || newValue.Object.Count != 0 && newValue.Object.Keys.ElementAt(0) != name)
 							throw new XmlException(DecodingNestedArrayWithMismatchedKeysError);
 						newValue = newValue.Object[name].Type == JsonValueType.Array
 						           	? newValue.Object[name]
@@ -171,40 +171,40 @@ namespace Manatee.Json
 			return json;
 		}
 
-		private static bool RequiresTypeAttribute(string value)
+		private static bool _RequiresTypeAttribute(string value)
 		{
 			double d;
 			var s = value.ToLower();
-			return (s == "true") || (s == "false") || (s == "null") || double.TryParse(s, out d);
+			return s == "true" || s == "false" || s == "null" || double.TryParse(s, out d);
 		}
-		private static JsonValue GetValue(XElement xElement)
+		private static JsonValue _GetValue(XElement xElement)
 		{
 			var typeAttribute = xElement.Attribute(TypeAttribute);
 			if (xElement.HasElements)
-				return AttachAttributes(xElement.Elements().ToJson(), xElement);
-			if (string.IsNullOrEmpty(xElement.Value) && (typeAttribute == null))
-				return AttachAttributes(JsonValue.Null, xElement);
+				return _AttachAttributes(xElement.Elements().ToJson(), xElement);
+			if (string.IsNullOrEmpty(xElement.Value) && typeAttribute == null)
+				return _AttachAttributes(JsonValue.Null, xElement);
 			var value = xElement.Value;
-			if ((typeAttribute != null) && (typeAttribute.Value.ToLower() == "string"))
-				return AttachAttributes(value, xElement);
-			return AttachAttributes(ParseValue(value), xElement);
+			if (typeAttribute != null && typeAttribute.Value.ToLower() == "string")
+				return _AttachAttributes(value, xElement);
+			return _AttachAttributes(_ParseValue(value), xElement);
 		}
-		private static JsonValue AttachAttributes(JsonValue json, XElement xElement)
+		private static JsonValue _AttachAttributes(JsonValue json, XElement xElement)
 		{
-			var attributes = xElement.Attributes().Where(a => (a.Name != NestAttribute) && (a.Name != TypeAttribute)).ToList();
+			var attributes = xElement.Attributes().Where(a => (a.Name != NestAttribute) && a.Name != TypeAttribute).ToList();
 			if (attributes.Count == 0)
 				return json;
 			var obj = new JsonObject();
 			foreach (var xAttribute in attributes)
 			{
-				var name = xAttribute.IsNamespaceDeclaration && (xAttribute.Name.LocalName != XmlNamespaceAttribute)
+				var name = xAttribute.IsNamespaceDeclaration && xAttribute.Name.LocalName != XmlNamespaceAttribute
 							? $"{XmlNamespaceAttribute}:{xAttribute.Name.LocalName}"
-					           : GetNamespaceForElement(xElement, xAttribute.Name.NamespaceName) + xAttribute.Name.LocalName;
-				obj.Add($"-{name}", ParseValue(xAttribute.Value));
+					           : _GetNamespaceForElement(xElement, xAttribute.Name.NamespaceName) + xAttribute.Name.LocalName;
+				obj.Add($"-{name}", _ParseValue(xAttribute.Value));
 			}
 			return new JsonArray { obj, json };
 		}
-		private static JsonValue ParseValue(string value)
+		private static JsonValue _ParseValue(string value)
 		{
 			bool b;
 			if (bool.TryParse(value, out b))
@@ -214,13 +214,13 @@ namespace Manatee.Json
 				return d;
 			return value;
 		}
-		private static bool ContainsAttributeList(JsonArray json)
+		private static bool _ContainsAttributeList(JsonArray json)
 		{
 			if (json.Count != 2) return false;
 			if (json[0].Type != JsonValueType.Object) return false;
 			return json[0].Object.Keys.All(key => key[0] == '-');
 		}
-		private static string GetNamespaceForElement(XElement xElement, string space = null)
+		private static string _GetNamespaceForElement(XElement xElement, string space = null)
 		{
 			var search = space ?? xElement.Name.NamespaceName;
 			if (string.IsNullOrEmpty(search)) return string.Empty;
@@ -238,7 +238,7 @@ namespace Manatee.Json
 			}
 			return string.Empty;
 		}
-		private static XName GetXName(string key)
+		private static XName _GetXName(string key)
 		{
 			if (key == null) return null;
 			if (!key.Contains(":") && (key != XmlNamespaceAttribute)) return key;

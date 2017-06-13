@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Manatee.Json.Internal;
+using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -14,7 +14,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			try
 			{
-				var constructors = type.TypeInfo().DeclaredConstructors.ToList();
+				var constructors = type.GetTypeInfo().DeclaredConstructors.ToList();
 				if (!constructors.Any())
 					return Activator.CreateInstance(type);
 				var parameterless = constructors.FirstOrDefault(c => !c.GetParameters().Any());

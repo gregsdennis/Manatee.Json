@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Manatee.Json.Internal
 {
@@ -185,18 +187,18 @@ namespace Manatee.Json.Internal
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived._IsSubtypeOf(tBase)) return true;
-			var interfaces = tDerived.TypeInfo().ImplementedInterfaces.Select(i => i.TypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
+			var interfaces = tDerived.GetTypeInfo().ImplementedInterfaces.Select(i => i.GetTypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
 			return interfaces.Contains(tBase);
 		}
 		private static bool _IsSubtypeOf(this Type tDerived, Type tBase)
 		{
-			var currentType = tDerived.TypeInfo().BaseType;
+			var currentType = tDerived.GetTypeInfo().BaseType;
 			while (currentType != null)
 			{
-				if (currentType.TypeInfo().IsGenericType)
+				if (currentType.GetTypeInfo().IsGenericType)
 					currentType = currentType.GetGenericTypeDefinition();
 				if (currentType == tBase) return true;
-				currentType = currentType.TypeInfo().BaseType;
+				currentType = currentType.GetTypeInfo().BaseType;
 			}
 			return false;
 		}
@@ -250,17 +252,10 @@ namespace Manatee.Json.Internal
 				   value is long ||
 				   value is ulong;
 		}
-		public static Uri GetBase(this Uri uri)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Type[] GetTypeArguments(this Type type)
 		{
-			Uri previous = uri;
-			do
-			{
-				uri = previous;
-				previous = uri.GetParentUri();
-			} while (uri != previous);
-
-			return uri;
+			return type.GetTypeInfo().GenericTypeArguments;
 		}
-
 	}
 }

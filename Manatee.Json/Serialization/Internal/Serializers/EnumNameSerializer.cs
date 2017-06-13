@@ -22,7 +22,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			EnsureDescriptions<T>();
-			var attributes = typeof (T).TypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
+			var attributes = typeof (T).GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
 			if (!attributes.Any())
 			{
 				var entry = _descriptions[typeof (T)].FirstOrDefault(d => Equals(d.Value, obj));
@@ -79,7 +79,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				}
 				index--;
 			}
-			return names.Join(separator);
+			return string.Join(separator, names);
 		}
 	}
 }

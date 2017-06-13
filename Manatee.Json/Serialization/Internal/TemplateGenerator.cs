@@ -55,7 +55,7 @@ namespace Manatee.Json.Serialization.Internal
 			_generatedTypes.Add(type);
 			T instance;
 
-			if (type.TypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+			if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
 			{
 				var valueType = type.GetTypeArguments().First();
 				var buildMethod = GetBuildMethod(valueType);
@@ -78,7 +78,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			var type = typeof (T);
 
-			var properties = type.TypeInfo().DeclaredProperties
+			var properties = type.GetTypeInfo().DeclaredProperties
 								 .Where(p => p.SetMethod != null)
 								 .Where(p => p.GetMethod != null)
 								 .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
@@ -93,7 +93,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		private static void FillFields<T>(T instance, JsonSerializerOptions options)
 		{
-			var fields = typeof (T).TypeInfo().DeclaredFields
+			var fields = typeof (T).GetTypeInfo().DeclaredFields
 								   .Where(p => !p.IsInitOnly)
 								   .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
 			foreach (var fieldInfo in fields)

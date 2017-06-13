@@ -12,7 +12,7 @@ namespace Manatee.Json.Schema.Validators
 
 		static JsonSchemaPropertyValidatorFactory()
 		{
-			AllValidators = typeof(IJsonSchemaPropertyValidator).TypeInfo().Assembly.DefinedTypes
+			AllValidators = typeof(IJsonSchemaPropertyValidator).GetTypeInfo().Assembly.DefinedTypes
 														.Where(t => typeof(IJsonSchemaPropertyValidator).GetTypeInfo().IsAssignableFrom(t) &&
 																	!t.IsAbstract &&
 																	t.IsClass)

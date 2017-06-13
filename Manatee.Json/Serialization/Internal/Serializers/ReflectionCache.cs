@@ -111,19 +111,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		private static IEnumerable<PropertyInfo> _GetInstanceProperties(this Type type)
 		{
-			return type.TypeInfo()._GetAllProperties().Where(p => (!p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
+			return type.GetTypeInfo()._GetAllProperties().Where(p => (!p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
 		}
 		private static IEnumerable<PropertyInfo> _GetStaticProperties(this Type type)
 		{
-			return type.TypeInfo()._GetAllProperties().Where(p => (p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
+			return type.GetTypeInfo()._GetAllProperties().Where(p => (p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
 		}
 		private static IEnumerable<FieldInfo> _GetInstanceFields(this Type type)
 		{
-			return type.TypeInfo()._GetAllFields().Where(f => !f.IsStatic && f.IsPublic);
+			return type.GetTypeInfo()._GetAllFields().Where(f => !f.IsStatic && f.IsPublic);
 		}
 		private static IEnumerable<FieldInfo> _GetStaticFields(this Type type)
 		{
-			return type.TypeInfo()._GetAllFields().Where(f => f.IsStatic && f.IsPublic);
+			return type.GetTypeInfo()._GetAllFields().Where(f => f.IsStatic && f.IsPublic);
 		}
 		private static IEnumerable<PropertyInfo> _GetAllProperties(this TypeInfo type)
 		{

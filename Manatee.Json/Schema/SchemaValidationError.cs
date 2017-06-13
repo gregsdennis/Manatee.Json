@@ -1,5 +1,4 @@
 ﻿using System;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -25,7 +24,7 @@ namespace Manatee.Json.Schema
 
 		internal SchemaValidationError PrependPropertyName(string parent)
 		{
-			if (PropertyName.IsNullOrWhiteSpace())
+			if (string.IsNullOrWhiteSpace(PropertyName))
 				PropertyName = parent;
 			else
 				PropertyName = parent + (PropertyName[0] == '[' ? string.Empty : ".") + PropertyName;
@@ -41,7 +40,7 @@ namespace Manatee.Json.Schema
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return PropertyName.IsNullOrWhiteSpace()
+			return string.IsNullOrWhiteSpace(PropertyName)
 				? Message
 				: $"Property: {PropertyName} - {Message}";
 		}

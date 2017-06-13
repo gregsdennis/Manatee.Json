@@ -98,8 +98,7 @@ namespace Manatee.Json.Schema
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is null, empty, or whitespace.</exception>
 		public JsonSchemaTypeDefinition(string name)
 		{
-			if (name.IsNullOrWhiteSpace())
-				throw new ArgumentNullException(nameof(name));
+			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
 			Name = name;
 		}
@@ -133,7 +132,7 @@ namespace Manatee.Json.Schema
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			if (!Name.IsNullOrWhiteSpace()) return Name;
+			if (!string.IsNullOrWhiteSpace(Name)) return Name;
 
 			return ToJson(null).ToString();
 		}
