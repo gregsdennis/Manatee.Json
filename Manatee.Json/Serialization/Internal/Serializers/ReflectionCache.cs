@@ -33,22 +33,22 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public static IEnumerable<SerializationInfo> GetMembers(Type type, PropertySelectionStrategy propertyTypes, bool includeFields)
 		{
-			var info = InitializeInstanceCache(type);
-			var members = GetProperties(info, propertyTypes);
+			var info = _InitializeInstanceCache(type);
+			var members = _GetProperties(info, propertyTypes);
 			if (includeFields)
-				members = members.Concat(GetFields(info));
+				members = members.Concat(_GetFields(info));
 			return members;
 		}
 		public static IEnumerable<SerializationInfo> GetTypeMembers(Type type, PropertySelectionStrategy propertyTypes, bool includeFields)
 		{
-			var info = InitializeStaticCache(type);
-			var members = GetProperties(info, propertyTypes);
+			var info = _InitializeStaticCache(type);
+			var members = _GetProperties(info, propertyTypes);
 			if (includeFields)
-				members = members.Concat(GetFields(info));
+				members = members.Concat(_GetFields(info));
 			return members;
 		}
 
-		private static IEnumerable<SerializationInfo> GetProperties(ReflectionInfo info, PropertySelectionStrategy propertyTypes)
+		private static IEnumerable<SerializationInfo> _GetProperties(ReflectionInfo info, PropertySelectionStrategy propertyTypes)
 		{
 			var properties = new List<SerializationInfo>();
 			if ((propertyTypes & PropertySelectionStrategy.ReadWriteOnly) != 0)
@@ -57,73 +57,93 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				properties.AddRange(info.ReadOnlyProperties);
 			return properties;
 		}
-		private static IEnumerable<SerializationInfo> GetFields(ReflectionInfo info)
+		private static IEnumerable<SerializationInfo> _GetFields(ReflectionInfo info)
 		{
 			var fields = new List<SerializationInfo>();
 			fields.AddRange(info.Fields);
 			return fields;
 		}
-		private static ReflectionInfo InitializeInstanceCache(Type type)
+		private static ReflectionInfo _InitializeInstanceCache(Type type)
 		{
 			ReflectionInfo info;
 			if (!_instanceCache.TryGetValue(type, out info))
 			{
-				var read = GetInstanceProperties(type).Where(p => !p.SetMethod.IsPublic)
+				var read = _GetInstanceProperties(type).Where(p => !p.SetMethod.IsPublic)
 				                                      .Where(p => p.GetMethod.IsPublic)
 				                                      .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                      .Select(BuildSerializationInfo);
-				var readWrite = GetInstanceProperties(type).Where(p => p.SetMethod.IsPublic)
+				                                      .Select(_BuildSerializationInfo);
+				var readWrite = _GetInstanceProperties(type).Where(p => p.SetMethod.IsPublic)
 				                                           .Where(p => p.GetMethod.IsPublic)
 				                                           .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                           .Select(BuildSerializationInfo);
-				var fields = GetInstanceFields(type).Where(p => !p.IsInitOnly)
+				                                           .Select(_BuildSerializationInfo);
+				var fields = _GetInstanceFields(type).Where(p => !p.IsInitOnly)
 				                                    .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                    .Select(BuildSerializationInfo);
+				                                    .Select(_BuildSerializationInfo);
 				_instanceCache[type] = info = new ReflectionInfo(read, readWrite, fields);
 			}
 			return info;
 		}
-		private static ReflectionInfo InitializeStaticCache(Type type)
+		private static ReflectionInfo _InitializeStaticCache(Type type)
 		{
 			ReflectionInfo info;
 			if (!_staticCache.TryGetValue(type, out info))
 			{
-				var read = GetStaticProperties(type).Where(p => !p.SetMethod.IsPublic)
+				var read = _GetStaticProperties(type).Where(p => !p.SetMethod.IsPublic)
 				                                    .Where(p => p.GetMethod.IsPublic)
 				                                    .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                    .Select(BuildSerializationInfo);
-				var readWrite = GetStaticProperties(type).Where(p => p.SetMethod.IsPublic)
+				                                    .Select(_BuildSerializationInfo);
+				var readWrite = _GetStaticProperties(type).Where(p => p.SetMethod.IsPublic)
 				                                         .Where(p => p.GetMethod.IsPublic)
 				                                         .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                         .Select(BuildSerializationInfo);
-				var fields = GetStaticFields(type).Where(p => !p.IsInitOnly)
+				                                         .Select(_BuildSerializationInfo);
+				var fields = _GetStaticFields(type).Where(p => !p.IsInitOnly)
 				                                  .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                  .Select(BuildSerializationInfo);
+				                                  .Select(_BuildSerializationInfo);
 				_staticCache[type] = info = new ReflectionInfo(read, readWrite, fields);
 			}
 			return info;
 		}
-		private static SerializationInfo BuildSerializationInfo(MemberInfo info)
+		private static SerializationInfo _BuildSerializationInfo(MemberInfo info)
 		{
 			var mapper = (JsonMapToAttribute) info.GetCustomAttributes(typeof(JsonMapToAttribute), false).FirstOrDefault();
 			var name = mapper == null ? info.Name : mapper.MapToKey;
 			return new SerializationInfo(info, name);
 		}
-		private static IEnumerable<PropertyInfo> GetInstanceProperties(Type type)
+		private static IEnumerable<PropertyInfo> _GetInstanceProperties(this Type type)
 		{
-			return type.TypeInfo().DeclaredProperties.Where(p => (!p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
+			return type.TypeInfo()._GetAllProperties().Where(p => (!p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
 		}
-		private static IEnumerable<PropertyInfo> GetStaticProperties(Type type)
+		private static IEnumerable<PropertyInfo> _GetStaticProperties(this Type type)
 		{
-			return type.TypeInfo().DeclaredProperties.Where(p => (p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
+			return type.TypeInfo()._GetAllProperties().Where(p => (p.GetMethod?.IsStatic ?? false) && (p.GetMethod?.IsPublic ?? false));
 		}
-		private static IEnumerable<FieldInfo> GetInstanceFields(Type type)
+		private static IEnumerable<FieldInfo> _GetInstanceFields(this Type type)
 		{
-			return type.TypeInfo().DeclaredFields.Where(f => !f.IsStatic && f.IsPublic);
+			return type.TypeInfo()._GetAllFields().Where(f => !f.IsStatic && f.IsPublic);
 		}
-		private static IEnumerable<FieldInfo> GetStaticFields(Type type)
+		private static IEnumerable<FieldInfo> _GetStaticFields(this Type type)
 		{
-			return type.TypeInfo().DeclaredFields.Where(f => f.IsStatic && f.IsPublic);
+			return type.TypeInfo()._GetAllFields().Where(f => f.IsStatic && f.IsPublic);
+		}
+		private static IEnumerable<PropertyInfo> _GetAllProperties(this TypeInfo type)
+		{
+			var properties = new List<PropertyInfo>();
+			while (type != null)
+			{
+				properties.AddRange(type.DeclaredProperties);
+				type = type.BaseType?.GetTypeInfo();
+			}
+			return properties;
+		}
+		private static IEnumerable<FieldInfo> _GetAllFields(this TypeInfo type)
+		{
+			var fields = new List<FieldInfo>();
+			while (type != null)
+			{
+				fields.AddRange(type.DeclaredFields);
+				type = type.BaseType?.GetTypeInfo();
+			}
+			return fields;
 		}
 	}
 }

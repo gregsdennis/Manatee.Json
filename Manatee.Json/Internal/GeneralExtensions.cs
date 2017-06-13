@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Internal
 {
@@ -122,14 +120,14 @@ namespace Manatee.Json.Internal
 				}
 				if (replace != null)
 				{
-					source = Replace(source, index, count, replace);
+					source = _Replace(source, index, count, replace);
 					index++;
 				}
 				index++;
 			}
 			return source;
 		}
-		private static string Replace(string source, int index, int count, string content)
+		private static string _Replace(string source, int index, int count, string content)
 		{
 			// I've checked both of these methods with ILSpy.  They occur in external methods, so
 			// we're not going to do much better than this.
@@ -186,11 +184,11 @@ namespace Manatee.Json.Internal
 		// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
-			if (tDerived.IsSubtypeOf(tBase)) return true;
+			if (tDerived._IsSubtypeOf(tBase)) return true;
 			var interfaces = tDerived.TypeInfo().ImplementedInterfaces.Select(i => i.TypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
 			return interfaces.Contains(tBase);
 		}
-		private static bool IsSubtypeOf(this Type tDerived, Type tBase)
+		private static bool _IsSubtypeOf(this Type tDerived, Type tBase)
 		{
 			var currentType = tDerived.TypeInfo().BaseType;
 			while (currentType != null)

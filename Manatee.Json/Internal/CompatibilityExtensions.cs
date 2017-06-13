@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Manatee.Json.Internal
 {
+	[Obsolete]
 	internal static class CompatibilityExtensions
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,22 +28,5 @@ namespace Manatee.Json.Internal
 		{
 			return type.GetTypeInfo().GenericTypeArguments;
 		}
-#if CORE
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsAssignableFrom(this Type derivedType, Type baseType)
-		{
-			return derivedType.TypeInfo().IsAssignableFrom(baseType);
-		}
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static MethodInfo GetMethod(this Type type, string name, BindingFlags flags = BindingFlags.Default)
-		{
-			return type.TypeInfo().GetMethod(name, flags);
-		}
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static MethodInfo GetMethod(this Type type, string name, Type[] typeParams)
-		{
-			return type.TypeInfo().GetMethod(name, typeParams);
-		}
-#endif
 	}
 }
