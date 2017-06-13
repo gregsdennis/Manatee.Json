@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to building JSON structures.</Description>
     <Version>6.0.3</Version>
@@ -37,15 +37,15 @@ Removed JsonSchemaFactory.Load(string filename) in favor of JsonSchemaRegistry.G
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <TargetFrameworkIdentifier>.NETStandard</TargetFrameworkIdentifier>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <PackageReference Include="System.Net.Http" Version="4.3.2" />
-  </ItemGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
     <PackageReference Include="System.Net.Http" Version="4.3.2" />
     <PackageReference Remove="NETStandard.Library" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
   </ItemGroup>
 </Project>

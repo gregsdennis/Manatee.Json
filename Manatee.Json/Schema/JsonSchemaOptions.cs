@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Net;
+using System.IO;
 using System.Net.Http;
-using System.Text;
 
 namespace Manatee.Json.Schema
 {
@@ -17,7 +16,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Func<string, string> Download
 		{
-			get { return _download ?? (_download = uri => new HttpClient().GetStringAsync(uri).Result); }
+			get { return _download ?? (_download = _BasicDownload); }
 			set { _download = value; }
 		}
 
@@ -32,6 +31,22 @@ namespace Manatee.Json.Schema
 		static JsonSchemaOptions()
 		{
 			ValidateFormat = true;
+		}
+
+		private static string _BasicDownload(string path)
+		{
+			var uri = new Uri(path);
+
+			switch (uri.Scheme)
+			{
+				case "http":
+				case "https:":
+					return new HttpClient().GetStringAsync(uri).Result;
+				case "file":
+					return File.ReadAllText(uri.AbsolutePath);
+				default:
+					throw new Exception();
+			}
 		}
 	}
 }

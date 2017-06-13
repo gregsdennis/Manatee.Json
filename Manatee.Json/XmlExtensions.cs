@@ -257,7 +257,7 @@ namespace Manatee.Json
 			return name;
 		}
 
-#if !NETSTANDARD1_1
+#if !NETSTANDARD1_3
 		/// <summary>
 		/// Converts an <see cref="XmlNode"/> to an <see cref="XElement"/>.
 		/// </summary>
