@@ -43,7 +43,8 @@ namespace Manatee.Json.Schema
 				case "https:":
 					return new HttpClient().GetStringAsync(uri).Result;
 				case "file":
-					return File.ReadAllText(uri.AbsolutePath);
+					var filename = Uri.UnescapeDataString(uri.AbsolutePath);
+					return File.ReadAllText(filename);
 				default:
 					throw new Exception();
 			}
