@@ -291,9 +291,6 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-#if IOS
-		[Ignore]
-#endif
 		public void Interface_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -338,7 +335,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void Array_Successfull()
+		public void Array_Successful()
 		{
 			var serializer = new JsonSerializer();
 			var list = new[] {4, 3, 5, 6};
@@ -347,7 +344,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void List_Successfull()
+		public void List_Successful()
 		{
 			var serializer = new JsonSerializer();
 			var list = new List<int> {4, 3, 5, 6};
@@ -356,7 +353,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void IEnumerable_Successfull()
+		public void IEnumerable_Successful()
 		{
 			var serializer = new JsonSerializer();
 			JsonSerializationAbstractionMap.MapGeneric(typeof (IEnumerable<>), typeof (List<>));
@@ -381,7 +378,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void Queue_Successfull()
+		public void Queue_Successful()
 		{
 			var serializer = new JsonSerializer();
 			var queue = new Queue<int>();
@@ -394,7 +391,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void Stack_Successfull()
+		public void Stack_Successful()
 		{
 			var serializer = new JsonSerializer();
 			var stack = new Stack<int>();
@@ -407,7 +404,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[TestMethod]
-		public void SerializeType_Successfull()
+		public void SerializeType_Successful()
 		{
 			var serializer = new JsonSerializer();
 			ObjectWithBasicProps.StaticStringProp = "staticStringValue";

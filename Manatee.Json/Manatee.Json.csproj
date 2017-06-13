@@ -36,6 +36,9 @@ Schema passes latest version of JSON Schema Test Suite. (#63)
     <PackageReference Remove="NETStandard.Library" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="xml rules.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
   </ItemGroup>
 </Project>
