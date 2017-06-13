@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Parsing
@@ -12,7 +13,6 @@ namespace Manatee.Json.Path.Parsing
 		static JsonPathParser()
 		{
 			Parsers = typeof(JsonPathParser).TypeInfo().Assembly.DefinedTypes
-			                                // TODO: optimize
 			                                .Where(t => typeof(IJsonPathParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
 			                                .Select(ti => Activator.CreateInstance(ti.AsType()))
 			                                .Cast<IJsonPathParser>()

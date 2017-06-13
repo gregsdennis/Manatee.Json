@@ -196,7 +196,6 @@ namespace Manatee.Json.Path.Parsing
 		public static string GetNumber(this string source, ref int index, out double? number)
 		{
 			double value;
-			// TODO: optimize
 			var text = new string(source.Substring(index).Cast<char>().TakeWhile(c => NumberChars.Cast<char>().Contains(c)).ToArray());
 			if (text.Length == 0 && source[index].In(':', ',', ']'))
 			{

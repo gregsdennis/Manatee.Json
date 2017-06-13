@@ -4,22 +4,34 @@
     <TargetFrameworks>netstandard1.1;net45</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to building JSON structures.</Description>
-    <Version>6.0.0</Version>
+    <Version>6.0.3</Version>
     <Copyright>Copyright © 2016 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
     <PackageIconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v6.0.0
+    <PackageReleaseNotes>v6.0.3
+Schema passes latest version of JSON Schema Test Suite. (#63)
+
+v6.0.2
+BUG FIX: Referenced schema not loaded. (#58)
+
+v6.0.1.1
+Repackaged
+
+v6.0.1
+Updated equality logic to further unify .Net-null and JSON-null. Please read Equality Comparisons section of Usage wiki page.
+BUG FIX: Vague error messaging when validating schema. (#55)
+
+v6.0.0
 Added DocumentPath to IJsonSchema.
 BUG FIX: Schema now properly resolve referenced schema relative to document path instead of application's current directory. (#50)
-Removed JsonSchemaFactory.Load(string filename) in favor of .
-
-Note: As a consequence of removing JsonSchemaFactory.Load(string filename), you'll need to resolve the full file name (using System.IO.Path.GetFullPath()) before passing it into JsonSchemaRegistry.Get(string uri).
-  </PackageReleaseNotes>
+Removed JsonSchemaFactory.Load(string filename) in favor of JsonSchemaRegistry.Get(string uri).
+</PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
+    <FileVersion>6.0.3.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
