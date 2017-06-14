@@ -123,10 +123,8 @@ namespace Manatee.Json.Serialization
 					return (T) resolver.Resolve(tConcrete);
 				}
 
-#if !NETSTANDARD1_3
 				if (type.GetTypeInfo().IsInterface)
 					return TypeGenerator.Generate<T>();
-#endif
 			}
 			return resolver.Resolve<T>();
 		}

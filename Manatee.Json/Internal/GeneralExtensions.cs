@@ -10,9 +10,9 @@ namespace Manatee.Json.Internal
 {
 	internal static class GeneralExtensions
 	{
-		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
+		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(UInt16.MinValue, UInt16.MaxValue)
 																			 .Select(n => (char)n)
-																			 .Where(c => !char.IsControl(c));
+																			 .Where(c => !Char.IsControl(c));
 
 		public static bool In<T>(this T value, params T[] collection)
 		{
@@ -58,14 +58,14 @@ namespace Manatee.Json.Internal
 							break;
 						case 'u':
 							length = 6;
-							var hex = int.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
+							var hex = Int32.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
 							if (source.Substring(i + 6, 2) == "\\u")
 							{
-								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
+								var hex2 = Int32.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
 								hex = (hex - 0xD800)*0x400 + (hex2 - 0xDC00)%0x400 + 0x10000;
 								length += 6;
 							}
-							source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
+							source = source.Substring(0, i) + Char.ConvertFromUtf32(hex) + source.Substring(i + length);
 							length = 2; // unicode pairs are 2 chars in .Net strings.
 							break;
 						default:
@@ -145,7 +145,7 @@ namespace Manatee.Json.Internal
 			var c = source[index];
 			while (index < length)
 			{
-				if (!char.IsWhiteSpace(c)) break;
+				if (!Char.IsWhiteSpace(c)) break;
 				index++;
 				if (index >= length)
 				{
@@ -172,7 +172,7 @@ namespace Manatee.Json.Internal
 			ch = (char) stream.Peek();
 			while (!stream.EndOfStream)
 			{
-				if (!char.IsWhiteSpace(ch)) break;
+				if (!Char.IsWhiteSpace(ch)) break;
 				stream.Read();
 				ch = (char) stream.Peek();
 			}
@@ -256,6 +256,16 @@ namespace Manatee.Json.Internal
 		public static Type[] GetTypeArguments(this Type type)
 		{
 			return type.GetTypeInfo().GenericTypeArguments;
+		}
+		public static IEnumerable<PropertyInfo> GetAllProperties(this TypeInfo type)
+		{
+			var properties = new List<PropertyInfo>();
+			while (type != null)
+			{
+				properties.AddRange(type.DeclaredProperties);
+				type = type.BaseType?.GetTypeInfo();
+			}
+			return properties;
 		}
 	}
 }

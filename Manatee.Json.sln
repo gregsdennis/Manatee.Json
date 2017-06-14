@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6E84846A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json", "Manatee.Json\Manatee.Json.csproj", "{7548217B-8C18-4CA5-A248-59889EF93CF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests.Console", "Manatee.Json.Tests.Console\Manatee.Json.Tests.Console.csproj", "{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,12 +31,17 @@ Global
 		{7548217B-8C18-4CA5-A248-59889EF93CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7548217B-8C18-4CA5-A248-59889EF93CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7548217B-8C18-4CA5-A248-59889EF93CF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E74B7538-5E17-43C7-925B-33784945312E} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Json.vsmdi
