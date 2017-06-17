@@ -10,8 +10,7 @@ namespace Manatee.Json.Path.Parsing
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
-			if (path == null)
-				return "Start token not found.";
+			if (path == null) return "Start token not found.";
 
 			index += 2;
 

@@ -20,7 +20,7 @@ namespace Manatee.Json.Path.Expressions
 			if (results.Count > 1)
 				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
-			var index = GetIndex();
+			var index = _GetIndex();
 			if (result != null && index >= 0)
 			{
 				if (result.Type == JsonValueType.Array && index < result.Array.Count)
@@ -33,7 +33,7 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
-			return string.Format(IsLocal ? "@{0}[{1}]" : "${0}[{1}]", path, GetIndex());
+			return string.Format(IsLocal ? "@{0}[{1}]" : "${0}[{1}]", path, _GetIndex());
 		}
 		public bool Equals(ArrayIndexExpression<T> other)
 		{
@@ -58,7 +58,7 @@ namespace Manatee.Json.Path.Expressions
 			}
 		}
 
-		private int GetIndex()
+		private int _GetIndex()
 		{
 			var value = IndexExpression?.Evaluate(default(T), null);
 			if (value != null) return (int) value;

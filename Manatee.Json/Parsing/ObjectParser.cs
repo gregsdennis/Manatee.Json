@@ -17,8 +17,7 @@ namespace Manatee.Json.Parsing
 			index++;
 			while (index < length)
 			{
-				char c;
-				var message = source.SkipWhiteSpace(ref index, length, out c);
+				var message = source.SkipWhiteSpace(ref index, length, out char c);
 				if (message != null) return message;
 				// check for empty object
 				if (c == '}')
@@ -32,8 +31,7 @@ namespace Manatee.Json.Parsing
 				message = source.SkipWhiteSpace(ref index, length, out c);
 				if (message != null) return message;
 				if (c != '\"') return "Expected key.";
-				JsonValue item;
-				message = JsonParser.Parse(source, ref index, out item);
+				message = JsonParser.Parse(source, ref index, out JsonValue item);
 				if (message != null) return message;
 				var key = item.String;
 				// check for colon
@@ -68,8 +66,7 @@ namespace Manatee.Json.Parsing
 			while (!stream.EndOfStream)
 			{
 				stream.Read(); // waste the '{' or ','
-				char c;
-				var message = stream.SkipWhiteSpace(out c);
+				var message = stream.SkipWhiteSpace(out char c);
 				if (message != null) return message;
 				// check for empty object
 				if (c == '}')
@@ -83,8 +80,7 @@ namespace Manatee.Json.Parsing
 				message = stream.SkipWhiteSpace(out c);
 				if (message != null) return message;
 				if (c != '\"') return "Expected key.";
-				JsonValue item;
-				message = JsonParser.Parse(stream, out item);
+				message = JsonParser.Parse(stream, out JsonValue item);
 				if (message != null) return message;
 				var key = item.String;
 				// check for colon

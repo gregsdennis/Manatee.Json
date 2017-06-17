@@ -10,7 +10,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
-		private static JsonValue Encode<T>(T? nullable, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(T? nullable, JsonSerializer serializer)
 			where T : struct
 		{
 			if (!nullable.HasValue) return JsonValue.Null;
@@ -20,7 +20,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			serializer.Options.EncodeDefaultValues = encodeDefaultValues;
 			return json;
 		}
-		private static T? Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static T? _Decode<T>(JsonValue json, JsonSerializer serializer)
 			where T : struct
 		{
 			if (json == JsonValue.Null)

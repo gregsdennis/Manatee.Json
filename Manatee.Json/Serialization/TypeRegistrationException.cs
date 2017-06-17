@@ -11,7 +11,7 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Gets the type.
 		/// </summary>
-		public Type Type { get; private set; }
+		public Type Type { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeRegistrationException"/> class.

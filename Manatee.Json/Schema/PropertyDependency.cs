@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {

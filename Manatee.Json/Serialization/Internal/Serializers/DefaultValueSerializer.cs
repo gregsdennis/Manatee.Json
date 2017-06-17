@@ -18,8 +18,9 @@
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			if (json.Type == JsonValueType.Null) return default(T);
-			return _innerSerializer.Deserialize<T>(json, serializer);
+			return json.Type == JsonValueType.Null
+				       ? default(T)
+				       : _innerSerializer.Deserialize<T>(json, serializer);
 		}
 	}
 }

@@ -48,7 +48,7 @@ namespace Manatee.Json.Serialization
 																	  .ToList();
 			_toJsonConverters = new Dictionary<Type, Delegate>();
 			_fromJsonConverters = new Dictionary<Type, Delegate>();
-			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetTypeInfo().GetDeclaredMethod("RegisterProviderDelegates");
+			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetTypeInfo().GetDeclaredMethod("_RegisterProviderDelegates");
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace Manatee.Json.Serialization
 
 		internal static void Encode<T>(this JsonSerializer serializer, T obj, out JsonValue json)
 		{
-			var converter = GetToJsonConverter<T>();
+			var converter = _GetToJsonConverter<T>();
 			if (converter == null)
 			{
 				json = null;
@@ -116,7 +116,7 @@ namespace Manatee.Json.Serialization
 		}
 		internal static void Decode<T>(this JsonSerializer serializer, JsonValue json, out T obj)
 		{
-			var converter = GetFromJsonConverter<T>();
+			var converter = _GetFromJsonConverter<T>();
 			if (converter == null)
 			{
 				obj = default(T);
@@ -128,18 +128,18 @@ namespace Manatee.Json.Serialization
 			}
 		}
 
-		private static Delegate GetToJsonConverter<T>()
+		private static Delegate _GetToJsonConverter<T>()
 		{
 			var type = JsonSerializationAbstractionMap.GetMap(typeof(T));
 			return _toJsonConverters.ContainsKey(type) ? _toJsonConverters[type] : null;
 		}
-		private static FromJsonDelegate<T> GetFromJsonConverter<T>()
+		private static FromJsonDelegate<T> _GetFromJsonConverter<T>()
 		{
 			var type = JsonSerializationAbstractionMap.GetMap(typeof (T));
 			return _fromJsonConverters.ContainsKey(type) ? (FromJsonDelegate<T>) _fromJsonConverters[type] : null;
 		}
 		// ReSharper disable once UnusedMember.Local
-		private static void RegisterProviderDelegates<T>(ISerializationDelegateProvider provider)
+		private static void _RegisterProviderDelegates<T>(ISerializationDelegateProvider provider)
 		{
 			var type = typeof (T);
 			_toJsonConverters[type] = provider.GetEncoder<T>();

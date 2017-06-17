@@ -8,9 +8,9 @@
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Object.Count > schema.MaxProperties)
-				return new SchemaValidationResults(string.Empty, $"Expected: <= {schema.MaxProperties} properties; Actual: {json.Object.Count} properties.");
-			return new SchemaValidationResults();
+			return json.Object.Count > schema.MaxProperties
+				       ? new SchemaValidationResults(string.Empty, $"Expected: <= {schema.MaxProperties} properties; Actual: {json.Object.Count} properties.")
+				       : new SchemaValidationResults();
 		}
 	}
 }

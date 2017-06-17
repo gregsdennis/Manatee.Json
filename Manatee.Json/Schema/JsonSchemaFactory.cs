@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -64,6 +63,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 
+#if !NETSTANDARD1_3
 		/// <summary>
 		/// Builds a <see cref="IJsonSchema"/> implementation which can validate JSON for a given type.
 		/// </summary>
@@ -131,5 +131,6 @@ namespace Manatee.Json.Schema
 				return new JsonSchema {Type = JsonSchemaTypeDefinition.Number};
 			return null;
 		}
+#endif
 	}
 }

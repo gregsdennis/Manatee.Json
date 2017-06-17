@@ -22,8 +22,7 @@ namespace Manatee.Json.Path.Parsing
 		public static JsonPath Parse(string source)
 		{
 			var index = 0;
-			JsonPath path;
-			var errorMessage = Parse(source, ref index, out path);
+			var errorMessage = Parse(source, ref index, out JsonPath path);
 			if (errorMessage != null)
 				throw new JsonPathSyntaxException(path, errorMessage);
 			return path;
@@ -34,8 +33,7 @@ namespace Manatee.Json.Path.Parsing
 			path = null;
 			while(index < length)
 			{
-				char c;
-				var errorMessage = source.SkipWhiteSpace(ref index, length, out c);
+				var errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
 				if (errorMessage != null) return errorMessage;
 				var substring = source.Substring(index);
 				var parser = Parsers.FirstOrDefault(p => p.Handles(substring));

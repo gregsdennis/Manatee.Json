@@ -12,7 +12,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Stack<>);
 		}
 
-		private static JsonValue Encode<T>(Stack<T> stack, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(Stack<T> stack, JsonSerializer serializer)
 		{
 			var array = new JsonArray();
 			for (int i = 0; i < stack.Count; i++)
@@ -21,7 +21,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			}
 			return array;
 		}
-		private static Stack<T> Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static Stack<T> _Decode<T>(JsonValue json, JsonSerializer serializer)
 		{
 			var stack = new Stack<T>();
 			for (int i = 0; i < json.Array.Count; i++)

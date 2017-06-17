@@ -23,16 +23,14 @@ namespace Manatee.Json.Parsing
 		public static JsonValue Parse(string source)
 		{
 			var index = 0;
-			JsonValue value;
-			var errorMessage = Parse(source, ref index, out value);
+			var errorMessage = Parse(source, ref index, out JsonValue value);
 			if (errorMessage != null)
 				throw new JsonSyntaxException(errorMessage, value);
 			return value;
 		}
 		public static JsonValue Parse(StreamReader stream)
 		{
-			JsonValue value;
-			var errorMessage = Parse(stream, out value);
+			var errorMessage = Parse(stream, out JsonValue value);
 			if (errorMessage != null)
 				throw new JsonSyntaxException(errorMessage, value);
 			return value;
@@ -40,8 +38,7 @@ namespace Manatee.Json.Parsing
 		public static string Parse(string source, ref int index, out JsonValue value, bool allowExtraChars = false)
 		{
 			var length = source.Length;
-			char c;
-			var errorMessage = source.SkipWhiteSpace(ref index, length, out  c);
+			var errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
 			if (errorMessage != null)
 			{
 				value = null;
@@ -58,8 +55,7 @@ namespace Manatee.Json.Parsing
 		}
 		public static string Parse(StreamReader stream, out JsonValue value)
 		{
-			char c;
-			var errorMessage = stream.SkipWhiteSpace(out  c);
+			var errorMessage = stream.SkipWhiteSpace(out char c);
 			if (errorMessage != null)
 			{
 				value = null;

@@ -17,7 +17,7 @@ namespace Manatee.Json.Path.Operators
 		{
 			return new JsonArray(json.Select(v => v.Type == JsonValueType.Object && v.Object.ContainsKey(Name)
 				                                      ? v.Object[Name]
-				                                      : null).NotNull());
+				                                      : null).WhereNotNull());
 		}
 		public override string ToString()
 		{

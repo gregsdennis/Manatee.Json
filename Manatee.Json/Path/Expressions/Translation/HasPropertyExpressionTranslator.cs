@@ -8,7 +8,6 @@ namespace Manatee.Json.Path.Expressions.Translation
 	{
 		public override ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
-			bool isLocal;
 			var method = body as MethodCallExpression;
 			if (method == null)
 				throw new InvalidOperationException();
@@ -17,7 +16,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 				throw new NotSupportedException("Only constant string arguments are supported in HasProperty()");
 			return new HasPropertyExpression<T>
 				{
-					Path = BuildPath(method, out isLocal),
+					Path = BuildPath(method, out bool isLocal),
 					IsLocal = isLocal,
 					Name = parameter.Value.ToString()
 				};

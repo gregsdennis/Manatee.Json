@@ -21,8 +21,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 
 		public static string Parse<T, TIn>(string source, ref int index, out Expression<T, TIn> expr)
 		{
-			ExpressionTreeNode<TIn> root;
-			var error = Parse(source, ref index, out root);
+			var error = Parse(source, ref index, out ExpressionTreeNode<TIn> root);
 			if (error != null)
 			{
 				expr = null;
@@ -45,8 +44,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			root = null;
 			do
 			{
-				char c;
-				var errorMessage = source.SkipWhiteSpace(ref index, length, out c);
+				var errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
 				if (errorMessage != null) return errorMessage;
 				var substring = source.Substring(index);
 				var parser = Parsers.FirstOrDefault(p => p.Handles(substring));
@@ -58,46 +56,43 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			} while (index < length && node != null);
 
 			root = nodes.Count == 1
-				       ? CheckNode(nodes[0], null)
-				       : BuildTree(nodes);
+				       ? _CheckNode(nodes[0], null)
+				       : _BuildTree(nodes);
 			return null;
 		}
 
-		private static ExpressionTreeNode<T> BuildTree<T>(List<ExpressionTreeNode<T>> nodes)
+		private static ExpressionTreeNode<T> _BuildTree<T>(List<ExpressionTreeNode<T>> nodes)
 		{
 			if (!nodes.Any()) return null;
 			var minPriority = nodes.Min(n => n.Priority);
 			var root = nodes.Last(n => n.Priority == minPriority);
-			var branch = root as ExpressionTreeBranch<T>;
-			if (branch != null && branch.Right == null && branch.Left == null)
+			if (root is ExpressionTreeBranch<T> branch && branch.Right == null && branch.Left == null)
 			{
 				var split = nodes.LastIndexOf(root);
 				var left = nodes.Take(split).ToList();
 				var right = nodes.Skip(split + 1).ToList();
-				branch.Left = CheckNode(BuildTree(left), branch);
-				branch.Right = CheckNode(BuildTree(right), branch);
+				branch.Left = _CheckNode(_BuildTree(left), branch);
+				branch.Right = _CheckNode(_BuildTree(right), branch);
 			}
-			var not = root as NotExpression<T>;
-			if (not != null)
+			if (root is NotExpression<T> not)
 			{
 				var split = nodes.IndexOf(root);
 				var right = nodes.Skip(split + 1).FirstOrDefault();
-				not.Root = CheckNode(right, null);
+				not.Root = _CheckNode(right, null);
 			}
 			return root;
 		}
 
-		private static ExpressionTreeNode<T> CheckNode<T>(ExpressionTreeNode<T> node, ExpressionTreeBranch<T> root)
+		private static ExpressionTreeNode<T> _CheckNode<T>(ExpressionTreeNode<T> node, ExpressionTreeBranch<T> root)
 		{
-			var named = node as NameExpression<T>;
-			if (named != null && (root == null || root.Priority == 0))
+			if (node is NameExpression<T> named && (root == null || root.Priority == 0))
 			{
 				return new HasPropertyExpression<T>
-					{
-						Path = named.Path,
-						IsLocal = named.IsLocal,
-						Name = named.Name
-					};
+				{
+					Path = named.Path,
+					IsLocal = named.IsLocal,
+					Name = named.Name
+				};
 			}
 			return node;
 		}

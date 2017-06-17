@@ -1,207 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Manatee.Json.Internal
 {
 	internal static class GeneralExtensions
 	{
-		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(UInt16.MinValue, UInt16.MaxValue)
-																			 .Select(n => (char)n)
-																			 .Where(c => !Char.IsControl(c));
-
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool In<T>(this T value, params T[] collection)
 		{
 			return collection.Contains(value);
 		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsInt(this double value)
 		{
 			return Math.Ceiling(value) == Math.Floor(value);
 		}
-		public static IEnumerable<T> NotNull<T>(this IEnumerable<T> items)
-			where T : class
-		{
-			return items.Where(i => i != null);
-		}
-		public static string EvaluateEscapeSequences(this string source, out string result)
-		{
-			var i = 0;
-			while (i < source.Length)
-			{
-				var length = 1;
-				if (source[i] == '\\')
-					switch (source[i + 1])
-					{
-						case '"':
-						case '/':
-						case '\\':
-							source = source.Remove(i, 1);
-							break;
-						case 'b':
-							source = source.Substring(0, i) + '\b' + source.Substring(i + length + 1);
-							break;
-						case 'f':
-							source = source.Substring(0, i) + '\f' + source.Substring(i + length + 1);
-							break;
-						case 'n':
-							source = source.Substring(0, i) + '\n' + source.Substring(i + length + 1);
-							break;
-						case 'r':
-							source = source.Substring(0, i) + '\r' + source.Substring(i + length + 1);
-							break;
-						case 't':
-							source = source.Substring(0, i) + '\t' + source.Substring(i + length + 1);
-							break;
-						case 'u':
-							length = 6;
-							var hex = Int32.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
-							if (source.Substring(i + 6, 2) == "\\u")
-							{
-								var hex2 = Int32.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
-								hex = (hex - 0xD800)*0x400 + (hex2 - 0xDC00)%0x400 + 0x10000;
-								length += 6;
-							}
-							source = source.Substring(0, i) + Char.ConvertFromUtf32(hex) + source.Substring(i + length);
-							length = 2; // unicode pairs are 2 chars in .Net strings.
-							break;
-						default:
-							result = source;
-							return $"Invalid escape sequence: '\\{source[i + 1]}'.";
-					}
-				i += length;
-			}
-			result = source;
-			return null;
-		}
-		public static string InsertEscapeSequences(this string source)
-		{
-			var index = 0;
-			while (index < source.Length)
-			{
-				var count = 0;
-				string replace = null;
-				switch (source[index])
-				{
-					case '"':
-					case '\\':
-						source = source.Insert(index, "\\");
-						index++;
-						break;
-					case '\b':
-						count = 1;
-						replace = "\\b";
-						break;
-					case '\f':
-						count = 1;
-						replace = "\\f";
-						break;
-					case '\n':
-						count = 1;
-						replace = "\\n";
-						break;
-					case '\r':
-						count = 1;
-						replace = "\\r";
-						break;
-					case '\t':
-						count = 1;
-						replace = "\\t";
-						break;
-					default:
-						if (!AvailableChars.Contains(source[index]))
-						{
-							var hex = Convert.ToInt16(source[index]).ToString("X4");
-							source = source.Substring(0, index) + "\\u" + hex + source.Substring(index + 1);
-							index += 5;
-						}
-						break;
-				}
-				if (replace != null)
-				{
-					source = _Replace(source, index, count, replace);
-					index++;
-				}
-				index++;
-			}
-			return source;
-		}
-		private static string _Replace(string source, int index, int count, string content)
-		{
-			// I've checked both of these methods with ILSpy.  They occur in external methods, so
-			// we're not going to do much better than this.
-			return source.Remove(index, count).Insert(index, content);
-		}
-		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
-		{
-			if (index >= length)
-			{
-				ch = default(char);
-				return "Unexpected end of input.";
-			}
-			var c = source[index];
-			while (index < length)
-			{
-				if (!Char.IsWhiteSpace(c)) break;
-				index++;
-				if (index >= length)
-				{
-					ch = default(char);
-					return "Unexpected end of input.";
-				}
-				c = source[index];
-			}
-			if (index >= length)
-			{
-				ch = default(char);
-				return "Unexpected end of input.";
-			}
-			ch = c;
-			return null;
-		}
-		public static string SkipWhiteSpace(this StreamReader stream, out char ch)
-		{
-			if (stream.EndOfStream)
-			{
-				ch = default(char);
-				return "Unexpected end of input.";
-			}
-			ch = (char) stream.Peek();
-			while (!stream.EndOfStream)
-			{
-				if (!Char.IsWhiteSpace(ch)) break;
-				stream.Read();
-				ch = (char) stream.Peek();
-			}
-			if (stream.EndOfStream)
-			{
-				ch = default(char);
-				return "Unexpected end of input.";
-			}
-			return null;
-		}
-		// Note: These methods assume that if a generic type is passed, the type is open.
-		public static bool InheritsFrom(this Type tDerived, Type tBase)
-		{
-			if (tDerived._IsSubtypeOf(tBase)) return true;
-			var interfaces = tDerived.GetTypeInfo().ImplementedInterfaces.Select(i => i.GetTypeInfo().IsGenericType ? i.GetGenericTypeDefinition() : i);
-			return interfaces.Contains(tBase);
-		}
-		private static bool _IsSubtypeOf(this Type tDerived, Type tBase)
-		{
-			var currentType = tDerived.GetTypeInfo().BaseType;
-			while (currentType != null)
-			{
-				if (currentType.GetTypeInfo().IsGenericType)
-					currentType = currentType.GetGenericTypeDefinition();
-				if (currentType == tBase) return true;
-				currentType = currentType.GetTypeInfo().BaseType;
-			}
-			return false;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
 		{
 			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ obj.GetHashCode());
@@ -219,27 +35,18 @@ namespace Manatee.Json.Internal
 					                            }
 				                            });
 		}
-		public static bool ContentsEqual<T>(this IEnumerable<T> a, IEnumerable<T> b)
-		{
-			if (a == null && b != null) return false;
-			if (a != null && b == null) return false;
-			if (a == null) return true;
-
-			var listA = a.ToList();
-			var listB = b.ToList();
-			return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
-		}
 		public static JsonValue AsJsonValue(this object value)
 		{
-			if (value is JsonValue) return (JsonValue) value;
-			if (value is JsonArray) return (JsonArray) value;
-			if (value is JsonObject) return (JsonObject) value;
-			if (value is string) return (string) value;
+			if (value is JsonValue jsonValue) return jsonValue;
+			if (value is JsonArray jsonArray) return jsonArray;
+			if (value is JsonObject jsonObject) return jsonObject;
+			if (value is string s) return s;
 			if (value is bool) return (bool) value;
 			if (value.IsNumber()) return Convert.ToDouble(value);
 
 			return null;
 		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNumber(this object value)
 		{
 			return value is double ||
@@ -251,21 +58,6 @@ namespace Manatee.Json.Internal
 				   value is byte ||
 				   value is long ||
 				   value is ulong;
-		}
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Type[] GetTypeArguments(this Type type)
-		{
-			return type.GetTypeInfo().GenericTypeArguments;
-		}
-		public static IEnumerable<PropertyInfo> GetAllProperties(this TypeInfo type)
-		{
-			var properties = new List<PropertyInfo>();
-			while (type != null)
-			{
-				properties.AddRange(type.DeclaredProperties);
-				type = type.BaseType?.GetTypeInfo();
-			}
-			return properties;
 		}
 	}
 }

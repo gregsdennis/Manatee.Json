@@ -173,9 +173,8 @@ namespace Manatee.Json
 
 		private static bool _RequiresTypeAttribute(string value)
 		{
-			double d;
 			var s = value.ToLower();
-			return s == "true" || s == "false" || s == "null" || double.TryParse(s, out d);
+			return s == "true" || s == "false" || s == "null" || double.TryParse(s, out double _);
 		}
 		private static JsonValue _GetValue(XElement xElement)
 		{
@@ -206,8 +205,7 @@ namespace Manatee.Json
 		}
 		private static JsonValue _ParseValue(string value)
 		{
-			bool b;
-			if (bool.TryParse(value, out b))
+			if (bool.TryParse(value, out bool b))
 				return b;
 			double d;
 			if (double.TryParse(value, out d))
@@ -256,37 +254,5 @@ namespace Manatee.Json
 			}
 			return name;
 		}
-
-#if !NETSTANDARD1_3
-		/// <summary>
-		/// Converts an <see cref="XmlNode"/> to an <see cref="XElement"/>.
-		/// </summary>
-		/// <param name="node">An <see cref="XmlNode"/>.</param>
-		/// <returns>The <see cref="XElement"/> construct of the <see cref="XmlNode"/>.</returns>
-		/// <remarks>Provided for convenience.</remarks>
-		public static XElement ToXElement(this XmlNode node)
-		{
-			var xDoc = new XDocument();
-			using (var xmlWriter = xDoc.CreateWriter())
-				node.WriteTo(xmlWriter);
-			return xDoc.Root;
-		}
-		/// <summary>
-		/// Converts an <see cref="XElement"/> to an <see cref="XmlNode"/>.
-		/// </summary>
-		/// <param name="element">An <see cref="XElement"/>.</param>
-		/// <returns>The <see cref="XmlNode"/> construct of the <see cref="XElement"/>.</returns>
-		/// <remarks>Provided for convenience.</remarks>
-		public static XmlNode ToXmlNode(this XElement element)
-		{
-			using (var xmlReader = element.CreateReader())
-			{
-				var xmlDoc = new XmlDocument();
-				xmlDoc.Load(xmlReader);
-				return xmlDoc;
-			}
-		}
-		
-#endif
-		}
+	}
 }

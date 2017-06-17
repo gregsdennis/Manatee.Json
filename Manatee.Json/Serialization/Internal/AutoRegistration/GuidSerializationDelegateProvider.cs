@@ -9,11 +9,11 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			return type == typeof(Guid);
 		}
 
-		private static JsonValue Encode(Guid guid, JsonSerializer serializer)
+		private static JsonValue _Encode(Guid guid, JsonSerializer serializer)
 		{
 			return guid.ToString();
 		}
-		private static Guid Decode(JsonValue json, JsonSerializer serializer)
+		private static Guid _Decode(JsonValue json, JsonSerializer serializer)
 		{
 			return json.Type == JsonValueType.String ? new Guid(json.String) : default(Guid);
 		}

@@ -19,7 +19,7 @@ namespace Manatee.Json.Path.Expressions
 				if (array == null)
 				{
 					var value = json as JsonValue;
-					if (value.Type == JsonValueType.Array)
+					if (value?.Type == JsonValueType.Array)
 						array = value.Array;
 				}
 				if (array == null) return null;

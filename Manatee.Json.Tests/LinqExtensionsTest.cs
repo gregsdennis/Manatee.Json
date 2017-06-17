@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Test_References;
@@ -172,13 +173,13 @@ namespace Manatee.Json.Tests
 			Assert.IsTrue(expected.SequenceEqual(actual));
 		}
 		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
 		public void FromJson_NullSerializableArray_ReturnsNull()
 		{
 			var serializer = new JsonSerializer();
 			var json = (JsonArray)null;
 			var expected = (IEnumerable<JsonSerializableClass>)null;
-			var actual = json.FromJson<JsonSerializableClass>(serializer);
-			Assert.AreEqual(expected, actual);
+			var actual = json.FromJson<JsonSerializableClass>(serializer).ToList();
 		}
 		[TestMethod]
 		public void FromJson_SerializableObject_ReturnsObject()

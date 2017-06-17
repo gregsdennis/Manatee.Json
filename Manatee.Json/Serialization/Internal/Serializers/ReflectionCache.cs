@@ -65,40 +65,38 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		private static ReflectionInfo _InitializeInstanceCache(Type type)
 		{
-			ReflectionInfo info;
-			if (!_instanceCache.TryGetValue(type, out info))
+			if (!_instanceCache.TryGetValue(type, out ReflectionInfo info))
 			{
 				var read = _GetInstanceProperties(type).Where(p => !p.SetMethod.IsPublic)
-				                                      .Where(p => p.GetMethod.IsPublic)
-				                                      .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                      .Select(_BuildSerializationInfo);
+													  .Where(p => p.GetMethod.IsPublic)
+													  .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
+													  .Select(_BuildSerializationInfo);
 				var readWrite = _GetInstanceProperties(type).Where(p => p.SetMethod.IsPublic)
-				                                           .Where(p => p.GetMethod.IsPublic)
-				                                           .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                           .Select(_BuildSerializationInfo);
+														   .Where(p => p.GetMethod.IsPublic)
+														   .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
+														   .Select(_BuildSerializationInfo);
 				var fields = _GetInstanceFields(type).Where(p => !p.IsInitOnly)
-				                                    .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                    .Select(_BuildSerializationInfo);
+													.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
+													.Select(_BuildSerializationInfo);
 				_instanceCache[type] = info = new ReflectionInfo(read, readWrite, fields);
 			}
 			return info;
 		}
 		private static ReflectionInfo _InitializeStaticCache(Type type)
 		{
-			ReflectionInfo info;
-			if (!_staticCache.TryGetValue(type, out info))
+			if (!_staticCache.TryGetValue(type, out ReflectionInfo info))
 			{
 				var read = _GetStaticProperties(type).Where(p => !p.SetMethod.IsPublic)
-				                                    .Where(p => p.GetMethod.IsPublic)
-				                                    .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                    .Select(_BuildSerializationInfo);
+													.Where(p => p.GetMethod.IsPublic)
+													.Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
+													.Select(_BuildSerializationInfo);
 				var readWrite = _GetStaticProperties(type).Where(p => p.SetMethod.IsPublic)
-				                                         .Where(p => p.GetMethod.IsPublic)
-				                                         .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                         .Select(_BuildSerializationInfo);
+														 .Where(p => p.GetMethod.IsPublic)
+														 .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
+														 .Select(_BuildSerializationInfo);
 				var fields = _GetStaticFields(type).Where(p => !p.IsInitOnly)
-				                                  .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
-				                                  .Select(_BuildSerializationInfo);
+												  .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
+												  .Select(_BuildSerializationInfo);
 				_staticCache[type] = info = new ReflectionInfo(read, readWrite, fields);
 			}
 			return info;

@@ -17,8 +17,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{
 			var isLocal = source[index] == '@';
-			JsonPath path;
-			var error = JsonPathParser.Parse(source, ref index, out path);
+			var error = JsonPathParser.Parse(source, ref index, out JsonPath path);
 			// Swallow this error from the path parser and assume the path just ended.
 			// If it's really a syntax error, the expression parser should catch it.
 			if (error != null && error != "Unrecognized JSON Path element.")
@@ -35,14 +34,13 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				path.Operators.Remove(name);
 				if (name.Name == "indexOf")
 				{
-					JsonValue parameter;
 					if (source[index] != '(')
 					{
 						node = null;
 						return "Expected '('.  'indexOf' operator requires a parameter.";
 					}
 					index++;
-					error = JsonParser.Parse(source, ref index, out parameter, true);
+					error = JsonParser.Parse(source, ref index, out JsonValue parameter, true);
 					// Swallow this error from the JSON parser and assume the value just ended.
 					// If it's really a syntax error, the expression parser should catch it.
 					if (error != null && error != "Expected \',\', \']\', or \'}\'.")

@@ -15,17 +15,17 @@ namespace Manatee.Json.Serialization.Internal
 
 		public static MethodInfo GetSerializeMethod(Type type)
 		{
-			var pair = EnsureMethodPair(type);
+			var pair = _EnsureMethodPair(type);
 			return pair.Serializer;
 		}
 
 		public static MethodInfo GetDeserializeMethod(Type type)
 		{
-			var pair = EnsureMethodPair(type);
+			var pair = _EnsureMethodPair(type);
 			return pair.Deserializer;
 		}
 
-		private static SerializerMethodPair EnsureMethodPair(Type type)
+		private static SerializerMethodPair _EnsureMethodPair(Type type)
 		{
 			SerializerMethodPair pair;
 			if (!_cache.TryGetValue(type, out pair))

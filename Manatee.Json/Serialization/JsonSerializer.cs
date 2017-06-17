@@ -20,7 +20,6 @@ namespace Manatee.Json.Serialization
 		}
 		internal SerializationPairCache SerializationMap { get; } = new SerializationPairCache();
 
-		#region Public Methods
 		/// <summary>
 		/// Serializes an object to a JSON structure.
 		/// </summary>
@@ -92,6 +91,5 @@ namespace Manatee.Json.Serialization
 			var serializer = SerializerFactory.GetTypeSerializer<T>(Options);
 			serializer.DeserializeType<T>(json, this);
 		}
-		#endregion
 	}
 }

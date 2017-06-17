@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Serialization;
 
-//using Manatee.Json.Serialization;
-
 namespace Manatee.Json
 {
 	/// <summary>
@@ -168,15 +166,14 @@ namespace Manatee.Json
 		public static IEnumerable<T> FromJson<T>(this IEnumerable<JsonValue> json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
 		{
-			if (json == null) return null;
-			var list = new List<T>();
+			if (json == null) throw new ArgumentNullException(nameof(json));
+
 			foreach (var value in json)
 			{
 				T item = new T();
 				item.FromJson(value, serializer);
-				list.Add(item);
+				yield return item;
 			}
-			return list;
 		}
 		/// <summary>
 		/// Deserializes a <see cref="JsonValue"/> to its equivalent object.
@@ -190,6 +187,7 @@ namespace Manatee.Json
 			where T : IJsonSerializable, new()
 		{
 			if (json == null) return default(T);
+
 			T obj = new T();
 			obj.FromJson(json, serializer);
 			return obj;

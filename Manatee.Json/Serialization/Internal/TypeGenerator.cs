@@ -10,7 +10,7 @@ namespace Manatee.Json.Serialization.Internal
 {
 	internal static class TypeGenerator
 	{
-		public const string AssemblyName = "Manatee.Json.DynamicTypes";
+		private const string AssemblyName = "Manatee.Json.DynamicTypes";
 
 		private static readonly AssemblyBuilder _assemblyBuilder;
 		private static readonly ModuleBuilder _moduleBuilder;
@@ -27,8 +27,7 @@ namespace Manatee.Json.Serialization.Internal
 		public static T Generate<T>()
 		{
 			var type = typeof (T);
-			TypeInfo concreteType;
-			if (!_cache.TryGetValue(type, out concreteType))
+			if (!_cache.TryGetValue(type, out TypeInfo concreteType))
 			{
 				var typeInfo = type.GetTypeInfo();
 				if (!typeInfo.IsInterface)
@@ -40,8 +39,8 @@ namespace Manatee.Json.Serialization.Internal
 												   .Any(a => a.AssemblyName == AssemblyName);
 					if (!internalsVisible)
 						throw new ArgumentException($"Type generation only works for accessible interface types. Type '{type}' is not accessible. " +
-						                            $"If possible, make the type public or add '[assembly:InternalsVisibleTo(\"{AssemblyName}\")] " +
-						                            $"to assembly '{assembly.FullName}'.");
+													$"If possible, make the type public or add '[assembly:InternalsVisibleTo(\"{AssemblyName}\")] " +
+													$"to assembly '{assembly.FullName}'.");
 				}
 				var typeBuilder = _CreateTypeBuilder(type);
 				_ImplementProperties<T>(typeBuilder);

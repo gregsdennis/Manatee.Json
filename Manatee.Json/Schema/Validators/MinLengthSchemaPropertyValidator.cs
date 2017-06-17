@@ -11,7 +11,7 @@ namespace Manatee.Json.Schema.Validators
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var length = new StringInfo(json.String).LengthInTextElements;
-			if (schema.MinLength.HasValue && (length < schema.MinLength))
+			if (schema.MinLength.HasValue && length < schema.MinLength)
 				return new SchemaValidationResults(string.Empty, $"Expected: length >= {schema.MinLength}; Actual: {length}.");
 			return new SchemaValidationResults();
 		}

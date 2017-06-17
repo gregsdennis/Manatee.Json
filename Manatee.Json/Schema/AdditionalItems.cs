@@ -65,8 +65,7 @@ namespace Manatee.Json.Schema
 		/// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			if (obj.GetType() != GetType()) return false;
-			return Equals(obj as AdditionalItems);
+			return obj.GetType() == GetType() && Equals(obj as AdditionalItems);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 

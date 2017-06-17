@@ -56,41 +56,41 @@ namespace Manatee.Json.Serialization.Internal
 			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
 			var typeInfo = typeToSerialize.GetTypeInfo();
 			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeInfo))
-				return BuildSerializer(_schemaSerializer);
+				return _BuildSerializer(_schemaSerializer);
 			if (JsonSerializationTypeRegistry.IsRegistered(typeToSerialize))
-				return BuildSerializer(_registeredObjectSerializer);
+				return _BuildSerializer(_registeredObjectSerializer);
 			if (typeof (IJsonSerializable).GetTypeInfo().IsAssignableFrom(typeInfo))
-				return BuildSerializer(_jsonSerializableSerializer);
+				return _BuildSerializer(_jsonSerializableSerializer);
 			if (typeof (Enum).GetTypeInfo().IsAssignableFrom(typeInfo))
 			{
 				if (json != null)
 				{
 					if (json.Type == JsonValueType.Number)
-						return BuildSerializer(_enumValueSerializer);
+						return _BuildSerializer(_enumValueSerializer);
 					if (json.Type == JsonValueType.String)
-						return BuildSerializer(_enumNameSerializer);
+						return _BuildSerializer(_enumNameSerializer);
 				}
 				switch (options.EnumSerializationFormat)
 				{
 					case EnumSerializationFormat.AsInteger:
-						return BuildSerializer(_enumValueSerializer);
+						return _BuildSerializer(_enumValueSerializer);
 					case EnumSerializationFormat.AsName:
-						return BuildSerializer(_enumNameSerializer);
+						return _BuildSerializer(_enumNameSerializer);
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
 			ISerializer serializer;
 			if (_library.TryGetValue(typeToSerialize, out serializer))
-				return BuildSerializer(serializer);
-			return BuildSerializer(_autoSerializer);
+				return _BuildSerializer(serializer);
+			return _BuildSerializer(_autoSerializer);
 		}
 		public static ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
 		{
 			return _autoSerializer;
 		}
 
-		private static ISerializer BuildSerializer(ISerializer innerSerializer)
+		private static ISerializer _BuildSerializer(ISerializer innerSerializer)
 		{
 			return new DefaultValueSerializer(new ReferencingSerializer(innerSerializer));
 		}

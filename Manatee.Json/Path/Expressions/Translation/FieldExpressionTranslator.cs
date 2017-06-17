@@ -7,12 +7,12 @@ namespace Manatee.Json.Path.Expressions.Translation
 	{
 		public ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
-			var member = (MemberExpression)body;
+			var member = (MemberExpression) body;
 			return new FieldExpression<T>
-			{
-				Field = (FieldInfo)member.Member,
-				Source = ((ConstantExpression)member.Expression).Value
-			};
+				{
+					Field = (FieldInfo) member.Member,
+					Source = ((ConstantExpression) member.Expression).Value
+				};
 		}
 	}
 }

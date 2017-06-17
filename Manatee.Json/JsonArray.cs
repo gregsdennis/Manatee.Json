@@ -24,10 +24,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="collection"></param>
 		public JsonArray(IEnumerable<JsonValue> collection)
-			: base(collection)
-		{
-			
-		}
+			: base(collection) { }
 
 		/// <summary>
 		/// Creates a string representation of the JSON data.

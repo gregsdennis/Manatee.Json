@@ -11,8 +11,8 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 
 		protected SerializationDelegateProviderBase()
 		{
-			_encodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("Encode");
-			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("Decode");
+			_encodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Encode");
+			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode");
 		}
 
 		public abstract bool CanHandle(Type type);

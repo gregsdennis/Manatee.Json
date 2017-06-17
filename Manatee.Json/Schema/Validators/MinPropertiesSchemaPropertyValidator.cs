@@ -8,9 +8,9 @@
 		}
 		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (json.Object.Count < schema.MinProperties)
-				return new SchemaValidationResults(string.Empty, $"Expected: >= {schema.MinProperties} items; Actual: {json.Object.Count} items.");
-			return new SchemaValidationResults();
+			return json.Object.Count < schema.MinProperties
+				       ? new SchemaValidationResults(string.Empty, $"Expected: >= {schema.MinProperties} items; Actual: {json.Object.Count} items.")
+				       : new SchemaValidationResults();
 		}
 	}
 }

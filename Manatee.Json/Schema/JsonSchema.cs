@@ -546,10 +546,9 @@ namespace Manatee.Json.Schema
 		{
 			var obj = json.Object;
 			Id = obj.TryGetString("id");
-			Uri uri;
 			var uriFolder = DocumentPath?.OriginalString.EndsWith("/") ?? true ? DocumentPath : DocumentPath?.GetParentUri();
 			if (!string.IsNullOrWhiteSpace(Id) &&
-				(Uri.TryCreate(Id, UriKind.Absolute, out uri) || Uri.TryCreate(uriFolder + Id, UriKind.Absolute, out uri)))
+				(Uri.TryCreate(Id, UriKind.Absolute, out Uri uri) || Uri.TryCreate(uriFolder + Id, UriKind.Absolute, out uri)))
 			{
 				DocumentPath = uri;
 				JsonSchemaRegistry.Register(this);
@@ -716,8 +715,7 @@ namespace Manatee.Json.Schema
 			if (Items != null)
 			{
 				var items = Items as JsonSchema;
-				var type = items?.Type as JsonSchemaMultiTypeDefinition;
-				if (type != null && !type.IsPrimitive)
+				if (items?.Type is JsonSchemaMultiTypeDefinition type && !type.IsPrimitive)
 					json["items"] = items.Type.ToJson(serializer);
 				else
 					json["items"] = Items.ToJson(serializer);

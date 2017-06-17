@@ -10,8 +10,6 @@ namespace Manatee.Json.Path.ArrayParameters
 		internal IEnumerable<Slice> Slices { get; }
 
 		public SliceQuery(params Slice[] slices)
-			: this((IEnumerable<Slice>) slices) {}
-		public SliceQuery(IEnumerable<Slice> slices)
 		{
 			Slices = slices.ToList();
 		}

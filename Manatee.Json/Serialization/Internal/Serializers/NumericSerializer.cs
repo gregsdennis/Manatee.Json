@@ -8,7 +8,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			double value = Convert.ToDouble(obj);
+			var value = Convert.ToDouble(obj);
 			return value;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)

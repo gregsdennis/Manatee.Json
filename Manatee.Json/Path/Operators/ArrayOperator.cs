@@ -20,7 +20,7 @@ namespace Manatee.Json.Path.Operators
 				                                          : v.Type == JsonValueType.Object
 					                                          ? Query.Find(v.Object.Values.ToJson(), root)
 					                                          : Enumerable.Empty<JsonValue>())
-			                         .NotNull());
+			                         .WhereNotNull());
 		}
 
 		public override string ToString()

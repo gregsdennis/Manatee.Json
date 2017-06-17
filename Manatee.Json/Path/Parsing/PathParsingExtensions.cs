@@ -14,11 +14,11 @@ namespace Manatee.Json.Path.Parsing
 		public static string GetKey(this string source, ref int index, out string key)
 		{
 			return source[index].In('"', '\'')
-				       ? GetQuotedKey(source, ref index, out key)
-				       : GetBasicKey(source, ref index, out key);
+				       ? _GetQuotedKey(source, ref index, out key)
+				       : _GetBasicKey(source, ref index, out key);
 		}
 
-		private static string GetBasicKey(string source, ref int index, out string key)
+		private static string _GetBasicKey(string source, ref int index, out string key)
 		{
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
@@ -59,7 +59,7 @@ namespace Manatee.Json.Path.Parsing
 			return null;
 		}
 
-		private static string GetQuotedKey(string source, ref int index, out string key)
+		private static string _GetQuotedKey(string source, ref int index, out string key)
 		{
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
@@ -98,8 +98,7 @@ namespace Manatee.Json.Path.Parsing
 				return "Could not find end of string value.";
 			}
 			var result = new string(buffer, 0, bufferIndex);
-			string escaped;
-			var errorMessage = result.EvaluateEscapeSequences(out escaped);
+			var errorMessage = result.EvaluateEscapeSequences(out string escaped);
 			key = escaped;
 			return errorMessage;
 		}
@@ -116,49 +115,43 @@ namespace Manatee.Json.Path.Parsing
 			do
 			{
 				index++;
-				error = source.GetSlice(ref index, out lastSlice);
+				error = source._GetSlice(ref index, out lastSlice);
 				if (lastSlice != null)
 					slices.Add(lastSlice);
 			} while (error == null && lastSlice != null);
 			if (error != null) return error;
 
-			if (!slices.Any())
-				return "Index required inside '[]'";
-			return null;
+			return !slices.Any() ? "Index required inside '[]'" : null;
 		}
 
-		private static string GetSlice(this string source, ref int index, out Slice slice)
+		private static string _GetSlice(this string source, ref int index, out Slice slice)
 		{
 			slice = null;
 			if (source[index - 1] == ']') return null;
 
-			int? n1, n2, n3;
 
-			var error = GetInt(source, ref index, out n1);
+			var error = _GetInt(source, ref index, out int? n1);
 			if (error != null) return error;
-			if (index >= source.Length)
-				return "Expected ':', ',', or ']'.";
+			if (index >= source.Length) return "Expected ':', ',', or ']'.";
 			if (n1.HasValue && source[index].In(',', ']'))
 			{
 				slice = new Slice(n1.Value);
 				return null;
 			}
-			if (source[index] != ':')
-				return "Expected ':', ',', or ']'.";
+			if (source[index] != ':') return "Expected ':', ',', or ']'.";
 
 			index++;
-			error = GetInt(source, ref index, out n2);
+			error = _GetInt(source, ref index, out int? n2);
 			if (error != null) return error;
 			if (source[index].In(',', ']'))
 			{
 				slice = new Slice(n1, n2);
 				return null;
 			}
-			if (source[index] != ':')
-				return "Expected ':', ',', or ']'.";
+			if (source[index] != ':') return "Expected ':', ',', or ']'.";
 
 			index++;
-			error = GetInt(source, ref index, out n3);
+			error = _GetInt(source, ref index, out int? n3);
 			if (error != null) return error;
 			if (source[index].In(',', ']'))
 			{
@@ -167,16 +160,15 @@ namespace Manatee.Json.Path.Parsing
 			}
 			return "Expected ',' or ']'.";
 		}
-		public static string GetInt(string source, ref int index, out int? number)
+		private static string _GetInt(string source, ref int index, out int? number)
 		{
-			int value;
-			var text = new string(source.Substring(index).Cast<char>().TakeWhile(c => char.IsDigit(c) || c == '-').ToArray());
+			var text = new string(source.Substring(index).TakeWhile(c => char.IsDigit(c) || c == '-').ToArray());
 			if (text.Length == 0 && source[index].In(':', ',', ']'))
 			{
 				number = null;
 				return null;
 			}
-			if (!int.TryParse(text, out value))
+			if (!int.TryParse(text, out int value))
 			{
 				number = null;
 				return "Expected number.";
@@ -195,14 +187,13 @@ namespace Manatee.Json.Path.Parsing
 
 		public static string GetNumber(this string source, ref int index, out double? number)
 		{
-			double value;
-			var text = new string(source.Substring(index).Cast<char>().TakeWhile(c => NumberChars.Cast<char>().Contains(c)).ToArray());
+			var text = new string(source.Substring(index).TakeWhile(c => NumberChars.Contains(c)).ToArray());
 			if (text.Length == 0 && source[index].In(':', ',', ']'))
 			{
 				number = null;
 				return null;
 			}
-			if (!double.TryParse(text, out value))
+			if (!double.TryParse(text, out double value))
 			{
 				number = null;
 				return "Expected number.";

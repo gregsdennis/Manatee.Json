@@ -34,7 +34,7 @@ namespace Manatee.Json.Serialization.Internal
 			serializer.Options.IncludeContentSample = true;
 			_generatedTypes = new List<Type>();
 
-			var instance = BuildInstance<T>(serializer.Options);
+			var instance = _BuildInstance<T>(serializer.Options);
 
 			var json = serializer.Serialize(instance);
 
@@ -43,7 +43,7 @@ namespace Manatee.Json.Serialization.Internal
 			return json;
 		}
 
-		private static T BuildInstance<T>(JsonSerializerOptions options)
+		private static T _BuildInstance<T>(JsonSerializerOptions options)
 		{
 			var type = typeof (T);
 
@@ -65,16 +65,16 @@ namespace Manatee.Json.Serialization.Internal
 			else
 			{
 				instance = JsonSerializationAbstractionMap.CreateInstance<T>(null, options.Resolver);
-				FillProperties(instance, options);
+				_FillProperties(instance, options);
 				if (options.AutoSerializeFields)
-					FillFields(instance, options);
+					_FillFields(instance, options);
 			}
 
 			_defaultInstances[type] = instance;
 
 			return instance;
 		}
-		private static void FillProperties<T>(T instance, JsonSerializerOptions options)
+		private static void _FillProperties<T>(T instance, JsonSerializerOptions options)
 		{
 			var type = typeof (T);
 
@@ -87,11 +87,11 @@ namespace Manatee.Json.Serialization.Internal
 				var propertyType = propertyInfo.PropertyType;
 				var indexParameters = propertyInfo.GetIndexParameters().ToList();
 				if (indexParameters.Any()) continue;
-				var value = GetValue(options, propertyType);
+				var value = _GetValue(options, propertyType);
 				propertyInfo.SetValue(instance, value, null);
 			}
 		}
-		private static void FillFields<T>(T instance, JsonSerializerOptions options)
+		private static void _FillFields<T>(T instance, JsonSerializerOptions options)
 		{
 			var fields = typeof (T).GetTypeInfo().DeclaredFields
 								   .Where(p => !p.IsInitOnly)
@@ -104,7 +104,7 @@ namespace Manatee.Json.Serialization.Internal
 				fieldInfo.SetValue(instance, value);
 			}
 		}
-		private static object GetValue(JsonSerializerOptions options, Type propertyType)
+		private static object _GetValue(JsonSerializerOptions options, Type propertyType)
 		{
 			var buildMethod = GetBuildMethod(propertyType);
 			var value = buildMethod.Invoke(null, new object[] {options});
@@ -112,8 +112,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		internal static MethodInfo GetBuildMethod(Type type)
 		{
-			MethodInfo methodInfo;
-			if (!_buildMethods.TryGetValue(type, out methodInfo))
+			if (!_buildMethods.TryGetValue(type, out MethodInfo methodInfo))
 			{
 				methodInfo = _buildMethod.MakeGenericMethod(type);
 				_buildMethods[type] = methodInfo;

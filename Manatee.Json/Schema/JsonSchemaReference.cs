@@ -113,8 +113,7 @@ namespace Manatee.Json.Schema
 			var jValue = root;
 			if (!string.IsNullOrWhiteSpace(address))
 			{
-				Uri absolute;
-				if (!Uri.TryCreate(address, UriKind.Absolute, out absolute))
+				if (!Uri.TryCreate(address, UriKind.Absolute, out Uri absolute))
 				{
 					address = Id + address;
 				}
@@ -143,11 +142,9 @@ namespace Manatee.Json.Schema
 				if (value.Type == JsonValueType.Object)
 				{
 					if (!value.Object.ContainsKey(unescaped)) return null;
-					JsonValue id;
-					if (value.Object.TryGetValue("id", out id))
+					if (value.Object.TryGetValue("id", out JsonValue id))
 					{
-						Uri uri;
-						documentPath = Uri.TryCreate(id.String, UriKind.Absolute, out uri)
+						documentPath = Uri.TryCreate(id.String, UriKind.Absolute, out Uri uri)
 							               ? uri
 							               : new Uri(documentPath, id.String);
 					}
@@ -155,8 +152,7 @@ namespace Manatee.Json.Schema
 				}
 				else if (value.Type == JsonValueType.Array)
 				{
-					int index;
-					if (!int.TryParse(unescaped, out index) || index >= value.Array.Count) return null;
+					if (!int.TryParse(unescaped, out int index) || index >= value.Array.Count) return null;
 					value = value.Array[index];
 				}
 			}
