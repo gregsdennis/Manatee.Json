@@ -10,7 +10,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			return type == typeof(DateTime);
 		}
 
-		private static JsonValue Encode(DateTime dt, JsonSerializer serializer)
+		private static JsonValue _Encode(DateTime dt, JsonSerializer serializer)
 		{
 			if (serializer.Options == null)
 				return dt.ToString();
@@ -28,7 +28,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		private static DateTime Decode(JsonValue json, JsonSerializer serializer)
+		private static DateTime _Decode(JsonValue json, JsonSerializer serializer)
 		{
 			if (serializer.Options == null)
 				return DateTime.Parse(json.String);

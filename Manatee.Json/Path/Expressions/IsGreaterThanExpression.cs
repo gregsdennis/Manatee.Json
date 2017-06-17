@@ -24,8 +24,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override bool Equals(object obj)
 		{
-			if (obj.GetType() != this.GetType()) return false;
-			return Equals((IsGreaterThanExpression<T>) obj);
+			return Equals(obj as IsGreaterThanExpression<T>);
 		}
 		public override int GetHashCode()
 		{

@@ -96,21 +96,6 @@ namespace Manatee.Json.Path
 			return path;
 		}
 		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies using array slice notation.
-		/// </summary>
-		/// <param name="start">The start index of the <see cref="JsonValue"/>s to include.</param>
-		/// <param name="end">The end index of the <see cref="JsonValue"/>s to include.</param>
-		/// <param name="step">The index interval of the <see cref="JsonValue"/>s to include.</param>
-		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		/// <remarks>The format for the array slice is [start:end:step].  All parameters are individually optional,
-		/// however either the start or end must be defines.  Negative values for start and end indicate that the
-		/// iterator should begin counting from the end of the array.</remarks>
-		[Obsolete("Use the SearchArray(params Slice[]) overload instead.")]
-		public static JsonPath SearchArraySlice(int? start, int? end, int? step = null)
-		{
-			return SearchArray(new Slice(start, end, step));
-		}
-		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an expression which evaluates to the index to include.
 		/// </summary>
 		/// <param name="expression">The expression.</param>
@@ -144,21 +129,6 @@ namespace Manatee.Json.Path
 				                   ? new ArrayOperator(WildCardQuery.Instance)
 				                   : new ArrayOperator(new SliceQuery(slices)));
 			return path;
-		}
-		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies using array slice notation.
-		/// </summary>
-		/// <param name="start">The start index of the <see cref="JsonValue"/>s to include.</param>
-		/// <param name="end">The end index of the <see cref="JsonValue"/>s to include.</param>
-		/// <param name="step">The index interval of the <see cref="JsonValue"/>s to include.</param>
-		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		/// <remarks>The format for the array slice is [start:end:step].  All parameters are individually optional,
-		/// however either the start or end must be defines.  Negative values for start and end indicate that the
-		/// iterator should begin counting from the end of the array.</remarks>
-		[Obsolete("Use the Array(params Slice[]) overload instead.")]
-		public static JsonPath ArraySlice(int? start, int? end, int? step = null)
-		{
-			return Array(new Slice(start, end, step));
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an expression which evaluates to the index to include.
@@ -331,22 +301,6 @@ namespace Manatee.Json.Path
 			newPath.Operators.AddRange(path.Operators);
 			newPath.Operators.Add(new ArrayOperator(new SliceQuery(slices)));
 			return newPath;
-		}
-		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies using array slice notation.
-		/// </summary>
-		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
-		/// <param name="start">The start index of the <see cref="JsonValue"/>s to include.</param>
-		/// <param name="end">The end index of the <see cref="JsonValue"/>s to include.</param>
-		/// <param name="step">The index interval of the <see cref="JsonValue"/>s to include.</param>
-		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		/// <remarks>The format for the array slice is [start:end:step].  All parameters are individually optional,
-		/// however either the start or end must be defines.  Negative values for start and end indicate that the
-		/// iterator should begin counting from the end of the array.</remarks>
-		[Obsolete("Use the Array(this JsonPath, params Slice[]) overload instead.")]
-		public static JsonPath ArraySlice(this JsonPath path, int? start, int? end, int? step = null)
-		{
-			return path.Array(new Slice(start, end, step));
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by specifying an expression which evaluates to the index to include.

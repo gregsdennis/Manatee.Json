@@ -11,10 +11,10 @@ namespace Manatee.Json.Path.Expressions.Translation
 			if (and == null)
 				throw new InvalidOperationException();
 			return new AndExpression<T>
-			{
-				Left = ExpressionTranslator.TranslateNode<T>(and.Left),
-				Right = ExpressionTranslator.TranslateNode<T>(and.Right)
-			};
+				{
+					Left = ExpressionTranslator.TranslateNode<T>(and.Left),
+					Right = ExpressionTranslator.TranslateNode<T>(and.Right)
+				};
 		}
 	}
 }

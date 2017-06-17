@@ -1,7 +1,4 @@
 ﻿using System;
-#if !IOS && !CORE
-using System.Data;
-#endif
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema

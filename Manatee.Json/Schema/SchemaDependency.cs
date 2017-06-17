@@ -1,5 +1,4 @@
 ﻿using System;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -24,7 +23,7 @@ namespace Manatee.Json.Schema
 		{
 			_schema = schema;
 			if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
-			if (propertyName.IsNullOrWhiteSpace()) throw new ArgumentException("Must provide a property name.");
+			if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Must provide a property name.");
 
 			PropertyName = propertyName;
 		}

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -25,7 +24,7 @@ namespace Manatee.Json.Schema
 		public PropertyDependency(string propertyName, IEnumerable<string> dependencies)
 		{
 			if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
-			if (propertyName.IsNullOrWhiteSpace()) throw new ArgumentException("Must provide a property name.");
+			if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Must provide a property name.");
 			if (dependencies == null) throw new ArgumentNullException(nameof(dependencies));
 			if (!dependencies.Any()) throw new ArgumentException("Cannot create property dependency on no properties.");
 

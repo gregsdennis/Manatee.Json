@@ -30,12 +30,12 @@ namespace Manatee.Json.Path.Expressions
 					return (T) (object) new JsonValue((double) result);
 				if (result is bool)
 					return (T) (object) new JsonValue((bool) result);
-				if (result is string)
-					return (T) (object) new JsonValue((string) result);
-				if (result is JsonArray)
-					return (T) (object) new JsonValue((JsonArray) result);
-				if (result is JsonObject)
-					return (T) (object) new JsonValue((JsonObject) result);
+				if (result is string s)
+					return (T)(object)new JsonValue(s);
+				if (result is JsonArray array)
+					return (T)(object)new JsonValue(array);
+				if (result is JsonObject o)
+					return (T)(object)new JsonValue(o);
 			}
 			return (T) Convert.ChangeType(result, typeof(T));
 		}

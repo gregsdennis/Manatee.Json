@@ -12,14 +12,14 @@ namespace Manatee.Json.Path.Expressions.Translation
 		private static readonly Dictionary<Type, Func<Expression, IExpressionTranslator>> Translators =
 			new Dictionary<Type, Func<Expression, IExpressionTranslator>>
 				{
-						{typeof(ConstantExpression), GetValueTranslator},
-						{typeof(BinaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
-						{typeof(UnaryExpression), e => GetNodeTypeBasedTranslator(e.NodeType)},
-						{typeof(MethodCallExpression), GetMethodCallTranslator},
-						{typeof(MemberExpression), GetMemberTranslator},
+						{typeof(ConstantExpression), _GetValueTranslator},
+						{typeof(BinaryExpression), e => _GetNodeTypeBasedTranslator(e.NodeType)},
+						{typeof(UnaryExpression), e => _GetNodeTypeBasedTranslator(e.NodeType)},
+						{typeof(MethodCallExpression), _GetMethodCallTranslator},
+						{typeof(MemberExpression), _GetMemberTranslator},
 				};
 
-		private static IExpressionTranslator GetValueTranslator(Expression e)
+		private static IExpressionTranslator _GetValueTranslator(Expression e)
 		{
 			var type = e.Type;
 			if (type == typeof(bool))
@@ -34,7 +34,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 				return new NullValueExpressionTranslator();
 			throw new NotSupportedException($"Values of type '{type}' are not supported.");
 		}
-		private static IExpressionTranslator GetNodeTypeBasedTranslator(ExpressionType type)
+		private static IExpressionTranslator _GetNodeTypeBasedTranslator(ExpressionType type)
 		{
 			switch (type)
 			{
@@ -102,7 +102,6 @@ namespace Manatee.Json.Path.Expressions.Translation
 				case ExpressionType.RightShift:
 				case ExpressionType.TypeAs:
 				case ExpressionType.TypeIs:
-#if NET4 || NET45
 				case ExpressionType.Assign:
 				case ExpressionType.Block:
 				case ExpressionType.DebugInfo:
@@ -142,12 +141,11 @@ namespace Manatee.Json.Path.Expressions.Translation
 				case ExpressionType.OnesComplement:
 				case ExpressionType.IsTrue:
 				case ExpressionType.IsFalse:
-#endif
 					break;
 			}
 			throw new NotSupportedException($"Expression type '{type}' is not supported.");
 		}
-		private static IExpressionTranslator GetMethodCallTranslator(Expression exp)
+		private static IExpressionTranslator _GetMethodCallTranslator(Expression exp)
 		{
 			var method = (MethodCallExpression) exp;
 			switch (method.Method.Name)
@@ -165,7 +163,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 			}
 			throw new NotSupportedException($"The method '{method.Method.Name}' is not supported.");
 		}
-		private static IExpressionTranslator GetMemberTranslator(Expression exp)
+		private static IExpressionTranslator _GetMemberTranslator(Expression exp)
 		{
 			var member = (MemberExpression) exp;
 			if (member.Member is FieldInfo && member.Expression is ConstantExpression)
@@ -176,7 +174,8 @@ namespace Manatee.Json.Path.Expressions.Translation
 		public static ExpressionTreeNode<T> TranslateNode<T>(Expression source)
 		{
 			var type = source.GetType();
-			var expressionKey = Translators.Keys.FirstOrDefault(t => t.IsAssignableFrom(type));
+			var typeInfo = type.GetTypeInfo();
+			var expressionKey = Translators.Keys.FirstOrDefault(t => t.GetTypeInfo().IsAssignableFrom(typeInfo));
 			if (expressionKey != null)
 			{
 				var translator = Translators[expressionKey](source);

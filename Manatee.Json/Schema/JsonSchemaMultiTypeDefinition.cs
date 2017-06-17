@@ -12,9 +12,8 @@ namespace Manatee.Json.Schema
 	public class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
 	{
 		private readonly bool _nonPrimitiveAllowed;
-		private IEnumerable<JsonSchemaTypeDefinition> _definitions;
 
-		internal IEnumerable<JsonSchemaTypeDefinition> Defintions => _definitions;
+		internal IEnumerable<JsonSchemaTypeDefinition> Defintions { get; private set; }
 		internal bool IsPrimitive => !_nonPrimitiveAllowed; 
 
 		/// <summary>
@@ -23,12 +22,12 @@ namespace Manatee.Json.Schema
 		public JsonSchemaMultiTypeDefinition(params JsonSchemaTypeDefinition[] definitions)
 			: this(false)
 		{
-			_definitions = definitions.ToList();
+			Defintions = definitions.ToList();
 
-			if (_definitions.Except(PrimitiveDefinitions).Any())
+			if (Defintions.Except(PrimitiveDefinitions).Any())
 				throw new InvalidOperationException("Only primitive types are allowed in type collections.");
 
-			Definition = new JsonSchema { OneOf = _definitions.Select(d => d.Definition) };
+			Definition = new JsonSchema { OneOf = Defintions.Select(d => d.Definition) };
 		}
 		internal JsonSchemaMultiTypeDefinition(bool nonPrimitiveAllowed)
 		{
@@ -44,7 +43,7 @@ namespace Manatee.Json.Schema
 		public override void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			var typeEntry = json.Array;
-			_definitions = typeEntry.Select(jv =>
+			Defintions = typeEntry.Select(jv =>
 				{
 					if (_nonPrimitiveAllowed) return new JsonSchemaTypeDefinition(JsonSchemaFactory.FromJson(jv));
 					var definition = PrimitiveDefinitions.FirstOrDefault(p => p.Name == jv.String);
@@ -53,7 +52,7 @@ namespace Manatee.Json.Schema
 					return definition;
 				}).ToList();
 
-			Definition = new JsonSchema {OneOf = _definitions.Select(d => d.Definition)};		}
+			Definition = new JsonSchema {OneOf = Defintions.Select(d => d.Definition)};		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
@@ -62,7 +61,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public override JsonValue ToJson(JsonSerializer serializer)
 		{
-			return _definitions.ToJson(serializer);
+			return Defintions.ToJson(serializer);
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
@@ -89,13 +88,13 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				return (base.GetHashCode()*397) ^ (_definitions?.GetCollectionHashCode() ?? 0);
+				return (base.GetHashCode()*397) ^ (Defintions?.GetCollectionHashCode() ?? 0);
 			}
 		}
 
 		private bool Equals(JsonSchemaMultiTypeDefinition other)
 		{
-			return base.Equals(other) && _definitions.ContentsEqual(other._definitions);
+			return base.Equals(other) && Defintions.ContentsEqual(other.Defintions);
 		}
 	}
 }

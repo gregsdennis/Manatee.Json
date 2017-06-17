@@ -7,9 +7,6 @@ namespace Manatee.Json
 	/// <summary>
 	/// Thrown when an input string contains a syntax error while parsing a <see cref="JsonObject"/>, <see cref="JsonArray"/>, or <see cref="JsonValue"/>.
 	/// </summary>
-#if !IOS && !CORE
-	[Serializable]
-#endif
 	public class JsonSyntaxException : Exception
 	{
 		private readonly string _path;
@@ -32,10 +29,10 @@ namespace Manatee.Json
 		internal JsonSyntaxException(string message, JsonValue value)
 			: base(message)
 		{
-			_path = BuildPath(value);
+			_path = _BuildPath(value);
 		}
 
-		private static string BuildPath(JsonValue value)
+		private static string _BuildPath(JsonValue value)
 		{
 			if (value == null) return string.Empty;
 			switch (value.Type)
@@ -44,12 +41,12 @@ namespace Manatee.Json
 					if (!value.Object.Any()) return string.Empty;
 					var pair = value.Object.Last();
 					var key = pair.Key;
-					return $".{key}{BuildPath(pair.Value)}";
+					return $".{key}{_BuildPath(pair.Value)}";
 				case JsonValueType.Array:
 					if (!value.Array.Any()) return string.Empty;
 					var item = value.Array.Last();
 					var index = value.Array.Count - 1;
-					return $"[{index}]{BuildPath(item)}";
+					return $"[{index}]{_BuildPath(item)}";
 				default:
 					return string.Empty;
 			}

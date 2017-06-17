@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Tests.Test_References
@@ -90,7 +90,7 @@ namespace Manatee.Json.Tests.Test_References
 	{
 		None,
 		BasicEnumValue,
-		[Description("enum_value_with_description")]
+		[Display(Description = "enum_value_with_description")]
 		EnumValueWithDescription
 	}
 
@@ -99,7 +99,7 @@ namespace Manatee.Json.Tests.Test_References
 	{
 		None = 0,
 		BasicEnumValue = 1,
-		[Description("enum_value_with_description")]
+		[Display(Description = "enum_value_with_description")]
 		EnumValueWithDescription = 2
 	}
 // ReSharper restore UnusedAutoPropertyAccessor.Local

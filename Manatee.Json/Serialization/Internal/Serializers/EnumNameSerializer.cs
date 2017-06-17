@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -21,26 +20,21 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			EnsureDescriptions<T>();
-			var attributes = typeof (T).TypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
+			_EnsureDescriptions<T>();
+			var attributes = typeof (T).GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
 			if (!attributes.Any())
 			{
 				var entry = _descriptions[typeof (T)].FirstOrDefault(d => Equals(d.Value, obj));
 				return entry == null ? obj.ToString() : entry.String;
 			}
-			return BuildFlagsValues(obj, serializer.Options.FlagsEnumSeparator);
+			return _BuildFlagsValues(obj, serializer.Options.FlagsEnumSeparator);
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			EnsureDescriptions<T>();
+			_EnsureDescriptions<T>();
 			var options = serializer.Options.CaseSensitiveDeserialization
-#if IOS || CORE
 							  ? StringComparison.OrdinalIgnoreCase
 							  : StringComparison.Ordinal;
-#else
-							  ? StringComparison.InvariantCultureIgnoreCase
-							  : StringComparison.InvariantCulture;
-#endif
 			var entry = _descriptions[typeof (T)].FirstOrDefault(d => string.Equals(d.String, json.String, options));
 			if (entry == null)
 			{
@@ -49,7 +43,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return (T) entry.Value;
 		}
 
-		private static void EnsureDescriptions<T>()
+		private static void _EnsureDescriptions<T>()
 		{
 			lock (_descriptions)
 			{
@@ -57,18 +51,18 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (_descriptions.ContainsKey(type)) return;
 
 				var names = Enum.GetValues(type).Cast<T>();
-				var descriptions = names.Select(n => new Description { Value = n, String = GetDescription<T>(n.ToString()) }).ToList();
+				var descriptions = names.Select(n => new Description { Value = n, String = _GetDescription<T>(n.ToString()) }).ToList();
 				_descriptions.Add(type, descriptions);
 			}
 		}
-		private static string GetDescription<T>(string name)
+		private static string _GetDescription<T>(string name)
 		{
-			var type = typeof (T);
-			var memInfo = type.TypeInfo().GetMember(name);
-			var attributes = memInfo[0].GetCustomAttributes(typeof (DescriptionAttribute), false);
-			return attributes.Any() ? ((DescriptionAttribute)attributes.First()).Description : name;
+			var type = typeof(T);
+			var memInfo = type.GetTypeInfo().GetDeclaredField(name);
+			var attributes = memInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
+			return attributes.Any() ? ((DisplayAttribute) attributes.First()).Description : name;
 		}
-		private static string BuildFlagsValues<T>(T obj, string separator)
+		private static string _BuildFlagsValues<T>(T obj, string separator)
 		{
 			var descriptions = _descriptions[typeof (T)];
 			var value = Convert.ToInt64(obj);
@@ -84,7 +78,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				}
 				index--;
 			}
-			return names.Join(separator);
+			return string.Join(separator, names);
 		}
 	}
 }

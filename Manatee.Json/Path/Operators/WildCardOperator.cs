@@ -27,7 +27,7 @@ namespace Manatee.Json.Path.Operators
 						default:
 							return Enumerable.Empty<JsonValue>();
 					}
-				}).NotNull());
+				}).WhereNotNull());
 		}
 		public override string ToString()
 		{

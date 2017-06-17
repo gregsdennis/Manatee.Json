@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Manatee.Json.Internal;
@@ -326,7 +325,7 @@ namespace Manatee.Json
 		{
 			if (source == null)
 				throw new ArgumentNullException(nameof(source));
-			if (source.IsNullOrWhiteSpace())
+			if (string.IsNullOrWhiteSpace(source))
 				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.Parse(source);
 		}

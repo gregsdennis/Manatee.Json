@@ -13,7 +13,7 @@ namespace Manatee.Json.Path.Expressions
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var value = Root.Evaluate(json, root);
-			var result = CastValue(value);
+			var result = _CastValue(value);
 			return result;
 		}
 		public override string ToString()
@@ -35,13 +35,13 @@ namespace Manatee.Json.Path.Expressions
 			unchecked { return ((Root?.GetHashCode() ?? 0)*397) ^ (TargetType?.GetHashCode() ?? 0); }
 		}
 
-		private object CastValue(object value)
+		private object _CastValue(object value)
 		{
 			if (TargetType != typeof (JsonValue)) return value;
 			if (value is bool)
 				return new JsonValue((bool)value);
-			if (value is string)
-				return new JsonValue((string)value);
+			if (value is string s)
+				return new JsonValue(s);
 			if (value.IsNumber())
 				return new JsonValue(Convert.ToDouble(value));
 			return value;

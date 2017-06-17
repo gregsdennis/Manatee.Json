@@ -20,7 +20,7 @@ namespace Manatee.Json.Path.Expressions
 			if (results.Count > 1)
 				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
-			var parameter = GetParameter();
+			var parameter = _GetParameter();
 			return result != null && result.Type == JsonValueType.Array && parameter != null
 					   ? result.Array.IndexOf(parameter)
 					   : (object)null;
@@ -52,7 +52,7 @@ namespace Manatee.Json.Path.Expressions
 			}
 		}
 
-		private JsonValue GetParameter()
+		private JsonValue _GetParameter()
 		{
 			var value = ParameterExpression?.Evaluate(null, null);
 			if (value != null)

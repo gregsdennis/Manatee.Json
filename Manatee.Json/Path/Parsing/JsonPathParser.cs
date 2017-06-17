@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Parsing
@@ -11,9 +12,9 @@ namespace Manatee.Json.Path.Parsing
 
 		static JsonPathParser()
 		{
-			Parsers = typeof(JsonPathParser).TypeInfo().Assembly.GetTypes()
-			                                .Where(t => typeof(IJsonPathParser).IsAssignableFrom(t) && t.TypeInfo().IsClass)
-			                                .Select(Activator.CreateInstance)
+			Parsers = typeof(JsonPathParser).GetTypeInfo().Assembly.DefinedTypes
+			                                .Where(t => typeof(IJsonPathParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
+			                                .Select(ti => Activator.CreateInstance(ti.AsType()))
 			                                .Cast<IJsonPathParser>()
 			                                .ToList();
 		}
@@ -21,8 +22,7 @@ namespace Manatee.Json.Path.Parsing
 		public static JsonPath Parse(string source)
 		{
 			var index = 0;
-			JsonPath path;
-			var errorMessage = Parse(source, ref index, out path);
+			var errorMessage = Parse(source, ref index, out JsonPath path);
 			if (errorMessage != null)
 				throw new JsonPathSyntaxException(path, errorMessage);
 			return path;
@@ -33,8 +33,7 @@ namespace Manatee.Json.Path.Parsing
 			path = null;
 			while(index < length)
 			{
-				char c;
-				var errorMessage = source.SkipWhiteSpace(ref index, length, out c);
+				var errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
 				if (errorMessage != null) return errorMessage;
 				var substring = source.Substring(index);
 				var parser = Parsers.FirstOrDefault(p => p.Handles(substring));

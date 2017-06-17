@@ -11,13 +11,8 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 
 		protected SerializationDelegateProviderBase()
 		{
-#if !IOS
-			_encodeMethod = GetType().GetMethod("Encode", BindingFlags.NonPublic | BindingFlags.Static);
-			_decodeMethod = GetType().GetMethod("Decode", BindingFlags.NonPublic | BindingFlags.Static);
-#else
-			_encodeMethod = GetType().TypeInfo().GetDeclaredMethod("Encode");
-			_decodeMethod = GetType().TypeInfo().GetDeclaredMethod("Decode");
-#endif
+			_encodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Encode");
+			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode");
 		}
 
 		public abstract bool CanHandle(Type type);
@@ -27,11 +22,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
-#if IOS || CORE
-			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) toJson.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), toJson);
-#else
-			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), toJson);
-#endif
+			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) toJson.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), null);
 		}
 		public JsonSerializationTypeRegistry.FromJsonDelegate<T> GetDecoder<T>()
 		{
@@ -39,11 +30,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var fromJson = _decodeMethod;
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
-#if IOS || CORE
-			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) fromJson.CreateDelegate(typeof(JsonSerializationTypeRegistry.FromJsonDelegate<T>), fromJson);
-#else
-			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) Delegate.CreateDelegate(typeof (JsonSerializationTypeRegistry.FromJsonDelegate<T>), fromJson);
-#endif
+			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) fromJson.CreateDelegate(typeof(JsonSerializationTypeRegistry.FromJsonDelegate<T>), null);
 		}
 
 		protected virtual Type[] GetTypeArguments(Type type)

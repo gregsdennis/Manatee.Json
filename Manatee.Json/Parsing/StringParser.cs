@@ -50,8 +50,7 @@ namespace Manatee.Json.Parsing
 				return "Could not find end of string value.";
 			}
 			var result = new string(buffer, 0, bufferIndex);
-			string escaped;
-			var errorMessage = result.EvaluateEscapeSequences(out escaped);
+			var errorMessage = result.EvaluateEscapeSequences(out string escaped);
 			value = escaped;
 			return errorMessage;
 		}
@@ -91,8 +90,7 @@ namespace Manatee.Json.Parsing
 				return "Could not find end of string value.";
 			}
 			var result = new string(buffer, 0, bufferIndex);
-			string escaped;
-			var errorMessage = result.EvaluateEscapeSequences(out escaped);
+			var errorMessage = result.EvaluateEscapeSequences(out string escaped);
 			value = escaped;
 			return errorMessage;
 		}

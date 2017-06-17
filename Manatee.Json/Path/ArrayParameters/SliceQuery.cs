@@ -10,8 +10,6 @@ namespace Manatee.Json.Path.ArrayParameters
 		internal IEnumerable<Slice> Slices { get; }
 
 		public SliceQuery(params Slice[] slices)
-			: this((IEnumerable<Slice>) slices) {}
-		public SliceQuery(IEnumerable<Slice> slices)
 		{
 			Slices = slices.ToList();
 		}
@@ -21,7 +19,7 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public override string ToString()
 		{
-			return Slices.Join(",");
+			return string.Join(",", Slices);
 		}
 		public bool Equals(SliceQuery other)
 		{

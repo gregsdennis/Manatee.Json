@@ -25,14 +25,6 @@ namespace Manatee.Json
 			var path = uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length);
 
 			return new Uri(path);
-
-			string url = uri.ToString();
-			int index = url.Length - 1;
-			if (url[index] == '/')
-				index--;
-			while (url[index] != '/')
-				index--;
-			return new Uri(url.Substring(0, index + 1));
 		}
 	}
 }

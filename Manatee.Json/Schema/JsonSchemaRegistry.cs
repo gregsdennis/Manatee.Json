@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -43,7 +42,7 @@ namespace Manatee.Json.Schema
 
 					if (!validation.Valid)
 					{
-						var errors = validation.Errors.Select(e => e.Message).Join(Environment.NewLine);
+						var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
 						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 					}
 
@@ -59,7 +58,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Register(JsonSchema schema)
 		{
-			if (schema.Id.IsNullOrWhiteSpace()) return;
+			if (string.IsNullOrWhiteSpace(schema.Id)) return;
 			lock (_schemaLookup)
 			{
 				_schemaLookup[schema.DocumentPath.ToString()] = schema;
@@ -71,7 +70,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Unregister(JsonSchema schema)
 		{
-			if (schema.Id.IsNullOrWhiteSpace()) return;
+			if (string.IsNullOrWhiteSpace(schema.Id)) return;
 			lock (_schemaLookup)
 			{
 				_schemaLookup.Remove(schema.Id);
@@ -83,7 +82,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Unregister(string uri)
 		{
-			if (uri.IsNullOrWhiteSpace()) return;
+			if (string.IsNullOrWhiteSpace(uri)) return;
 			lock (_schemaLookup)
 			{
 				_schemaLookup.Remove(uri);

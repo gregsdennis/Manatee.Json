@@ -12,7 +12,7 @@ namespace Manatee.Json.Parsing
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
 			var buffer = new char[4];
-			for (int i = 0; i < 4 && index + i < source.Length; i++)
+			for (var i = 0; i < 4 && index + i < source.Length; i++)
 			{
 				buffer[i] = source[index + i];
 			}
@@ -29,7 +29,7 @@ namespace Manatee.Json.Parsing
 		public string TryParse(StreamReader stream, out JsonValue value)
 		{
 			var buffer = new char[4];
-			for (int i = 0; i < 4 && !stream.EndOfStream; i++)
+			for (var i = 0; i < 4 && !stream.EndOfStream; i++)
 			{
 				buffer[i] = (char) stream.Read();
 			}

@@ -9,11 +9,11 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			return type == typeof(TimeSpan);
 		}
 
-		private static JsonValue Encode(TimeSpan ts, JsonSerializer serializer)
+		private static JsonValue _Encode(TimeSpan ts, JsonSerializer serializer)
 		{
 			return ts.ToString();
 		}
-		private static TimeSpan Decode(JsonValue json, JsonSerializer serializer)
+		private static TimeSpan _Decode(JsonValue json, JsonSerializer serializer)
 		{
 			return json.Type == JsonValueType.String ? TimeSpan.Parse(json.String) : default(TimeSpan);
 		}

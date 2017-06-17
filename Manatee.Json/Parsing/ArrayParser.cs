@@ -17,8 +17,7 @@ namespace Manatee.Json.Parsing
 			index++;
 			while (index < length)
 			{
-				char c;
-				var message = source.SkipWhiteSpace(ref index, length, out c);
+				var message = source.SkipWhiteSpace(ref index, length, out char c);
 				if (message != null) return message;
 				// check for empty array
 				if (c == ']')
@@ -29,8 +28,7 @@ namespace Manatee.Json.Parsing
 					}
 					else return "Expected value.";
 				// get value
-				JsonValue item;
-				message = JsonParser.Parse(source, ref index, out item);
+				message = JsonParser.Parse(source, ref index, out JsonValue item);
 				array.Add(item);
 				if (message != null) return message;
 				message = source.SkipWhiteSpace(ref index, length, out c);
@@ -52,8 +50,7 @@ namespace Manatee.Json.Parsing
 			while (!stream.EndOfStream)
 			{
 				stream.Read(); // waste the '[' or ','
-				char c;
-				var message = stream.SkipWhiteSpace(out c);
+				var message = stream.SkipWhiteSpace(out char c);
 				if (message != null) return message;
 				// check for empty array
 				if (c == ']')
@@ -64,8 +61,7 @@ namespace Manatee.Json.Parsing
 					}
 					else return "Expected value.";
 				// get value
-				JsonValue item;
-				message = JsonParser.Parse(stream, out item);
+				message = JsonParser.Parse(stream, out JsonValue item);
 				array.Add(item);
 				if (message != null) return message;
 				message = stream.SkipWhiteSpace(out c);

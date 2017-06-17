@@ -12,11 +12,9 @@ namespace Manatee.Json.Path.Parsing
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
-			if (path == null)
-				return "Start token not found.";
+			if (path == null) return "Start token not found.";
 
-			IList<Slice> slices;
-			var error = source.GetSlices(ref index, out slices);
+			var error = source.GetSlices(ref index, out IList<Slice> slices);
 			if (error != null) return error;
 
 			path = path.Array(slices.ToArray());

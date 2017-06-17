@@ -20,7 +20,7 @@ namespace Manatee.Json.Parsing
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
 			var buffer = new char[bufferLength];
-			int bufferIndex = 0;
+			var bufferIndex = 0;
 			var sourceLength = source.Length;
 			while (index < sourceLength)
 			{
@@ -46,9 +46,8 @@ namespace Manatee.Json.Parsing
 				index++;
 				bufferIndex++;
 			}
-			double dbl;
 			var result = new string(buffer, 0, bufferIndex);
-			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out dbl))
+			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
 			{
 				value = null;
 				return $"Value not recognized: '{result}'";
@@ -61,7 +60,7 @@ namespace Manatee.Json.Parsing
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
 			var buffer = new char[bufferLength];
-			int bufferIndex = 0;
+			var bufferIndex = 0;
 			while (!stream.EndOfStream)
 			{
 				if (bufferIndex == bufferLength)
@@ -84,9 +83,8 @@ namespace Manatee.Json.Parsing
 				buffer[bufferIndex] = c;
 				bufferIndex++;
 			}
-			double dbl;
 			var result = new string(buffer, 0, bufferIndex);
-			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out dbl))
+			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
 			{
 				value = null;
 				return $"Value not recognized: '{result}'";

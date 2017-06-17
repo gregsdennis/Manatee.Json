@@ -99,8 +99,8 @@ namespace Manatee.Json.Path
 						   : new[] { json[Index.Value] };
 			}
 
-			var start = ResolveIndex(_start ?? 0, json.Count);
-			var end = ResolveIndex(_end ?? json.Count, json.Count);
+			var start = _ResolveIndex(_start ?? 0, json.Count);
+			var end = _ResolveIndex(_end ?? json.Count, json.Count);
 			var step = Math.Max(_step ?? 1, 1);
 
 			var index = start;
@@ -113,7 +113,7 @@ namespace Manatee.Json.Path
 			return list;
 		}
 
-		private static int ResolveIndex(int index, int count)
+		private static int _ResolveIndex(int index, int count)
 		{
 			return index < 0 ? count + index : index;
 		}

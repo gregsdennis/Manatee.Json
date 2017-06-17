@@ -18,11 +18,7 @@ namespace Manatee.Json.Serialization.Internal
 
 		static TemplateGenerator()
 		{
-#if IOS
-			_buildMethod = typeof(TemplateGenerator).GetMethod("BuildInstance");
-#else
-			_buildMethod = typeof(TemplateGenerator).TypeInfo().GetMethod("BuildInstance", BindingFlags.Static | BindingFlags.NonPublic);
-#endif
+			_buildMethod = typeof(TemplateGenerator).GetTypeInfo().GetDeclaredMethod("BuildInstance");
 			_buildMethods = new Dictionary<Type, MethodInfo>();
 			_defaultInstances = new Dictionary<Type, object>
 				{
@@ -38,7 +34,7 @@ namespace Manatee.Json.Serialization.Internal
 			serializer.Options.IncludeContentSample = true;
 			_generatedTypes = new List<Type>();
 
-			var instance = BuildInstance<T>(serializer.Options);
+			var instance = _BuildInstance<T>(serializer.Options);
 
 			var json = serializer.Serialize(instance);
 
@@ -47,7 +43,7 @@ namespace Manatee.Json.Serialization.Internal
 			return json;
 		}
 
-		private static T BuildInstance<T>(JsonSerializerOptions options)
+		private static T _BuildInstance<T>(JsonSerializerOptions options)
 		{
 			var type = typeof (T);
 
@@ -59,7 +55,7 @@ namespace Manatee.Json.Serialization.Internal
 			_generatedTypes.Add(type);
 			T instance;
 
-			if (type.TypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+			if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
 			{
 				var valueType = type.GetTypeArguments().First();
 				var buildMethod = GetBuildMethod(valueType);
@@ -69,43 +65,35 @@ namespace Manatee.Json.Serialization.Internal
 			else
 			{
 				instance = JsonSerializationAbstractionMap.CreateInstance<T>(null, options.Resolver);
-				FillProperties(instance, options);
+				_FillProperties(instance, options);
 				if (options.AutoSerializeFields)
-					FillFields(instance, options);
+					_FillFields(instance, options);
 			}
 
 			_defaultInstances[type] = instance;
 
 			return instance;
 		}
-		private static void FillProperties<T>(T instance, JsonSerializerOptions options)
+		private static void _FillProperties<T>(T instance, JsonSerializerOptions options)
 		{
 			var type = typeof (T);
 
-#if IOS
-			var properties = type.TypeInfo().DeclaredProperties
-#else
-			var properties = type.TypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-#endif
-								 .Where(p => p.GetSetMethod() != null)
-								 .Where(p => p.GetGetMethod() != null)
+			var properties = type.GetTypeInfo().DeclaredProperties
+								 .Where(p => p.SetMethod != null)
+								 .Where(p => p.GetMethod != null)
 								 .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
 			foreach (var propertyInfo in properties)
 			{
 				var propertyType = propertyInfo.PropertyType;
 				var indexParameters = propertyInfo.GetIndexParameters().ToList();
 				if (indexParameters.Any()) continue;
-				var value = GetValue(options, propertyType);
+				var value = _GetValue(options, propertyType);
 				propertyInfo.SetValue(instance, value, null);
 			}
 		}
-		private static void FillFields<T>(T instance, JsonSerializerOptions options)
+		private static void _FillFields<T>(T instance, JsonSerializerOptions options)
 		{
-#if IOS
-			var fields = typeof (T).TypeInfo().DeclaredFields
-#else
-			var fields = typeof (T).TypeInfo().GetFields(BindingFlags.Instance | BindingFlags.Public)
-#endif
+			var fields = typeof (T).GetTypeInfo().DeclaredFields
 								   .Where(p => !p.IsInitOnly)
 								   .Where(p => !p.GetCustomAttributes(typeof (JsonIgnoreAttribute), true).Any());
 			foreach (var fieldInfo in fields)
@@ -116,7 +104,7 @@ namespace Manatee.Json.Serialization.Internal
 				fieldInfo.SetValue(instance, value);
 			}
 		}
-		private static object GetValue(JsonSerializerOptions options, Type propertyType)
+		private static object _GetValue(JsonSerializerOptions options, Type propertyType)
 		{
 			var buildMethod = GetBuildMethod(propertyType);
 			var value = buildMethod.Invoke(null, new object[] {options});
@@ -124,8 +112,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		internal static MethodInfo GetBuildMethod(Type type)
 		{
-			MethodInfo methodInfo;
-			if (!_buildMethods.TryGetValue(type, out methodInfo))
+			if (!_buildMethods.TryGetValue(type, out MethodInfo methodInfo))
 			{
 				methodInfo = _buildMethod.MakeGenericMethod(type);
 				_buildMethods[type] = methodInfo;

@@ -20,7 +20,7 @@ namespace Manatee.Json.Path.Expressions
 			if (results.Count > 1)
 				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
-			var name = GetName();
+			var name = _GetName();
 			return result != null && result.Type == JsonValueType.Object && result.Object.ContainsKey(name)
 				       ? result.Object[name].GetValue()
 				       : null;
@@ -28,10 +28,10 @@ namespace Manatee.Json.Path.Expressions
 		public override string ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
-			return string.Format(IsLocal ? "@{0}.{1}" : "${0}.{1}", path, GetName());
+			return string.Format(IsLocal ? "@{0}.{1}" : "${0}.{1}", path, _GetName());
 		}
 
-		private string GetName()
+		private string _GetName()
 		{
 			var value = NameExp?.Evaluate(default(T), null);
 			if (value != null)

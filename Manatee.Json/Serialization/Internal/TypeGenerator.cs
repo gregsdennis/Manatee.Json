@@ -1,12 +1,10 @@
-﻿#if !IOS && !CORE
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {
@@ -16,66 +14,67 @@ namespace Manatee.Json.Serialization.Internal
 
 		private static readonly AssemblyBuilder _assemblyBuilder;
 		private static readonly ModuleBuilder _moduleBuilder;
-		private static readonly Dictionary<Type, Type> _cache;
+		private static readonly Dictionary<Type, TypeInfo> _cache;
 
 		static TypeGenerator()
 		{
 			var assemblyName = new AssemblyName(AssemblyName);
-			// Note: To debug IL generation, please use the following line with your own test path.  Also need to uncomment the Save() call in the Generate<T>() method.
-			//_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave, @"E:\Projects\Manatee.Json\Manatee.Json.Tests\bin\Debug\");
-#if NET35
-			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName);
-#else
-			_assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
-			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName, AssemblyName + ".dll");
-#endif
-			_cache = new Dictionary<Type, Type>();
+			_assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
+			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(AssemblyName + ".dll");
+			_cache = new Dictionary<Type, TypeInfo>();
 		}
 
 		public static T Generate<T>()
 		{
 			var type = typeof (T);
-			Type concreteType;
-			if (!_cache.TryGetValue(type, out concreteType))
+			if (!_cache.TryGetValue(type, out TypeInfo concreteType))
 			{
-				if (!type.IsInterface)
-					throw new ArgumentException($"Type generation only works for interface types. Type '{type}' is not valid.");
-				var typeBuilder = CreateType(type);
-				ImplementProperties<T>(typeBuilder);
-				ImplementMethods<T>(typeBuilder);
-				ImplementEvents<T>(typeBuilder);
-				concreteType = typeBuilder.CreateType();
+				var typeInfo = type.GetTypeInfo();
+				if (!typeInfo.IsInterface)
+					throw new ArgumentException($"Type generation only works for interface types. Type '{type}' is not an interface.");
+				if (!typeInfo.IsPublic)
+				{
+					var assembly = typeInfo.Assembly;
+					var internalsVisible = assembly.GetCustomAttributes<InternalsVisibleToAttribute>()
+												   .Any(a => a.AssemblyName == AssemblyName);
+					if (!internalsVisible)
+						throw new ArgumentException($"Type generation only works for accessible interface types. Type '{type}' is not accessible. " +
+													$"If possible, make the type public or add '[assembly:InternalsVisibleTo(\"{AssemblyName}\")] " +
+													$"to assembly '{assembly.FullName}'.");
+				}
+				var typeBuilder = _CreateTypeBuilder(type);
+				_ImplementProperties<T>(typeBuilder);
+				_ImplementMethods<T>(typeBuilder);
+				_ImplementEvents<T>(typeBuilder);
+				concreteType = typeBuilder.CreateTypeInfo();
 				_cache.Add(type, concreteType);
-				// Note: To debug IL generation, please uncomment the following line.  Also need to use the first _assemblyBuilder assignment in the static constructor.
-				//_assemblyBuilder.Save(@"Manatee.Json.DynamicTypes.dll");
 			}
-			return (T) ConstructInstance(concreteType);
+			return (T) _ConstructInstance(concreteType.AsType());
 		}
 
-		private static TypeBuilder CreateType(Type type)
+		private static TypeBuilder _CreateTypeBuilder(Type type)
 		{
 			var typeBuilder = _moduleBuilder.DefineType("Concrete" + type.Name, TypeAttributes.Public);
 			typeBuilder.AddInterfaceImplementation(type);
 			return typeBuilder;
 		}
-		private static void ImplementProperties<T>(TypeBuilder builder)
+		private static void _ImplementProperties<T>(TypeBuilder builder)
 		{
 			var interfaceType = typeof (T);
-			var properties = GetAllProperties(interfaceType);
+			var properties = _GetAllProperties(interfaceType);
 			foreach (var propertyInfo in properties)
 			{
-				ImplementSingleProperty(builder, propertyInfo);
+				_ImplementSingleProperty(builder, propertyInfo);
 			}
 		}
-		private static IEnumerable<PropertyInfo> GetAllProperties(Type type)
+		private static IEnumerable<PropertyInfo> _GetAllProperties(Type type)
 		{
-			var methods = new List<PropertyInfo>(type.GetProperties().Where(m => !m.IsSpecialName));
-			var interfaceTypes = type.GetInterfaces();
-			methods.AddRange(interfaceTypes.SelectMany(GetAllProperties));
+			var methods = new List<PropertyInfo>(type.GetTypeInfo().DeclaredProperties.Where(m => !m.IsSpecialName));
+			var interfaceTypes = type.GetTypeInfo().ImplementedInterfaces;
+			methods.AddRange(interfaceTypes.SelectMany(_GetAllProperties));
 			return methods;
 		}
-		private static void ImplementSingleProperty(TypeBuilder builder, PropertyInfo propertyInfo)
+		private static void _ImplementSingleProperty(TypeBuilder builder, PropertyInfo propertyInfo)
 		{
 			const MethodAttributes methodAttr = MethodAttributes.Public | MethodAttributes.SpecialName |
 			                                    MethodAttributes.HideBySig | MethodAttributes.Virtual;
@@ -85,17 +84,17 @@ namespace Manatee.Json.Serialization.Internal
 			MethodBuilder methodBuilder;
 			if (propertyInfo.CanRead)
 			{
-				methodBuilder = builder.DefineMethod(propertyInfo.GetGetMethod().Name, methodAttr, propertyInfo.PropertyType, indexers);
+				methodBuilder = builder.DefineMethod(propertyInfo.GetMethod.Name, methodAttr, propertyInfo.PropertyType, indexers);
 				var il = methodBuilder.GetILGenerator();
 				il.Emit(OpCodes.Ldarg_0);
 				il.Emit(OpCodes.Ldfld, fieldBuilder);
 				il.Emit(OpCodes.Ret);
 				propertyBuilder.SetGetMethod(methodBuilder);
-				builder.DefineMethodOverride(methodBuilder, propertyInfo.GetGetMethod());
+				builder.DefineMethodOverride(methodBuilder, propertyInfo.GetMethod);
 			}
 			if (propertyInfo.CanWrite)
 			{
-				methodBuilder = builder.DefineMethod(propertyInfo.GetGetMethod().Name, methodAttr, null,
+				methodBuilder = builder.DefineMethod(propertyInfo.GetMethod.Name, methodAttr, null,
 				                                     indexers.Union(new[] {propertyInfo.PropertyType}).ToArray());
 				var il = methodBuilder.GetILGenerator();
 				il.Emit(OpCodes.Ldarg_0);
@@ -103,26 +102,26 @@ namespace Manatee.Json.Serialization.Internal
 				il.Emit(OpCodes.Stfld, fieldBuilder);
 				il.Emit(OpCodes.Ret);
 				propertyBuilder.SetSetMethod(methodBuilder);
-				builder.DefineMethodOverride(methodBuilder, propertyInfo.GetSetMethod());
+				builder.DefineMethodOverride(methodBuilder, propertyInfo.SetMethod);
 			}
 		}
-		private static void ImplementMethods<T>(TypeBuilder builder)
+		private static void _ImplementMethods<T>(TypeBuilder builder)
 		{
 			var interfaceType = typeof(T);
-			var methods = GetAllMethods(interfaceType);
+			var methods = _GetAllMethods(interfaceType);
 			foreach (var methodInfo in methods)
 			{
-				ImplementSingleMethod(builder, methodInfo);
+				_ImplementSingleMethod(builder, methodInfo);
 			}
 		}
-		private static IEnumerable<MethodInfo> GetAllMethods(Type type)
+		private static IEnumerable<MethodInfo> _GetAllMethods(Type type)
 		{
-			var methods = new List<MethodInfo>(type.GetMethods().Where(m => !m.IsSpecialName));
-			var interfaceTypes = type.GetInterfaces();
-			methods.AddRange(interfaceTypes.SelectMany(GetAllMethods));
+			var methods = new List<MethodInfo>(type.GetTypeInfo().DeclaredMethods.Where(m => !m.IsSpecialName));
+			var interfaceTypes = type.GetTypeInfo().ImplementedInterfaces;
+			methods.AddRange(interfaceTypes.SelectMany(_GetAllMethods));
 			return methods;
 		}
-		private static void ImplementSingleMethod(TypeBuilder builder, MethodInfo methodInfo)
+		private static void _ImplementSingleMethod(TypeBuilder builder, MethodInfo methodInfo)
 		{
 			const MethodAttributes methodAttr = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Final;
 			var types = methodInfo.GetParameters().Select(p => p.ParameterType).ToArray();
@@ -135,10 +134,10 @@ namespace Manatee.Json.Serialization.Internal
 				foreach (var typeParameter in typeParameters)
 				{
 					var genericParameter = genericParameters.Single(p => p.Name == typeParameter.Name);
-					var constraints = genericParameter.GetGenericParameterConstraints();
+					var constraints = genericParameter.GetTypeInfo().GetGenericParameterConstraints();
 					foreach (var constraint in constraints)
 					{
-						if (constraint.IsInterface) typeParameter.SetInterfaceConstraints(constraint);
+						if (constraint.GetTypeInfo().IsInterface) typeParameter.SetInterfaceConstraints(constraint);
 						else typeParameter.SetBaseTypeConstraint(constraint);
 					}
 				}
@@ -152,36 +151,36 @@ namespace Manatee.Json.Serialization.Internal
 			il.Emit(OpCodes.Ldloc_0);
 			il.Emit(OpCodes.Ret);
 		}
-		private static void ImplementEvents<T>(TypeBuilder builder)
+		private static void _ImplementEvents<T>(TypeBuilder builder)
 		{
 			var interfaceType = typeof(T);
-			var events = GetAllEvents(interfaceType);
+			var events = _GetAllEvents(interfaceType);
 			foreach (var eventInfo in events)
 			{
-				ImplementSingleEvent(builder, eventInfo);
+				_ImplementSingleEvent(builder, eventInfo);
 			}
 		}
-		private static IEnumerable<EventInfo> GetAllEvents(Type type)
+		private static IEnumerable<EventInfo> _GetAllEvents(Type type)
 		{
-			var events = new List<EventInfo>(type.GetEvents());
-			var interfaceTypes = type.GetInterfaces();
-			events.AddRange(interfaceTypes.SelectMany(GetAllEvents));
+			var events = new List<EventInfo>(type.GetTypeInfo().DeclaredEvents);
+			var interfaceTypes = type.GetTypeInfo().ImplementedInterfaces;
+			events.AddRange(interfaceTypes.SelectMany(_GetAllEvents));
 			return events;
 		}
-		private static void ImplementSingleEvent(TypeBuilder builder, EventInfo eventInfo)
+		private static void _ImplementSingleEvent(TypeBuilder builder, EventInfo eventInfo)
 		{
 			const MethodAttributes methodAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.NewSlot |
 												MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Final;
 			var fieldBuilder = builder.DefineField("_" + eventInfo.Name, eventInfo.EventHandlerType, FieldAttributes.Private);
 			var eventBuilder = builder.DefineEvent(eventInfo.Name, EventAttributes.None, eventInfo.EventHandlerType);
 
-			var methodBuilder = builder.DefineMethod(eventInfo.GetAddMethod().Name, methodAttr, null,
+			var methodBuilder = builder.DefineMethod(eventInfo.AddMethod.Name, methodAttr, null,
 			                                         new[] {eventInfo.EventHandlerType});
-			var combineMethod = typeof (Delegate).GetMethod("Combine", new[] {typeof (Delegate), typeof (Delegate)});
-			var removeMethod = typeof (Delegate).GetMethod("Remove", new[] {typeof (Delegate), typeof (Delegate)});
-			var compareExchangeMethod = typeof (Interlocked).GetMethods()
-			                                                .Single(m => (m.Name == "CompareExchange") && m.IsGenericMethod)
-			                                                .MakeGenericMethod(eventInfo.EventHandlerType);
+			var combineMethod = typeof (Delegate).GetRuntimeMethod("Combine", new[] {typeof (Delegate), typeof (Delegate)});
+			var removeMethod = typeof (Delegate).GetRuntimeMethod("Remove", new[] {typeof (Delegate), typeof (Delegate)});
+			var compareExchangeMethod = typeof(Interlocked).GetTypeInfo().DeclaredMethods
+			                                               .Single(m => m.Name == "CompareExchange" && m.IsGenericMethod)
+			                                               .MakeGenericMethod(eventInfo.EventHandlerType);
 			var il = methodBuilder.GetILGenerator();
 			il.DeclareLocal(eventInfo.EventHandlerType);
 			il.DeclareLocal(eventInfo.EventHandlerType);
@@ -215,9 +214,9 @@ namespace Manatee.Json.Serialization.Internal
 			il.Emit(OpCodes.Brtrue_S, label);
 			il.Emit(OpCodes.Ret);
 			eventBuilder.SetAddOnMethod(methodBuilder);
-			builder.DefineMethodOverride(methodBuilder, eventInfo.GetAddMethod());
+			builder.DefineMethodOverride(methodBuilder, eventInfo.AddMethod);
 
-			methodBuilder = builder.DefineMethod(eventInfo.GetRemoveMethod().Name, methodAttr, null, new[] {eventInfo.EventHandlerType});
+			methodBuilder = builder.DefineMethod(eventInfo.RemoveMethod.Name, methodAttr, null, new[] {eventInfo.EventHandlerType});
 			il = methodBuilder.GetILGenerator();
 			il.DeclareLocal(eventInfo.EventHandlerType);
 			il.DeclareLocal(eventInfo.EventHandlerType);
@@ -251,13 +250,11 @@ namespace Manatee.Json.Serialization.Internal
 			il.Emit(OpCodes.Brtrue_S, label);
 			il.Emit(OpCodes.Ret);
 			eventBuilder.SetRemoveOnMethod(methodBuilder);
-			builder.DefineMethodOverride(methodBuilder, eventInfo.GetRemoveMethod());
+			builder.DefineMethodOverride(methodBuilder, eventInfo.RemoveMethod);
 		}
-		private static object ConstructInstance(Type type)
+		private static object _ConstructInstance(Type type)
 		{
 			return Activator.CreateInstance(type, null);
 		}
 	}
 }
-
-#endif

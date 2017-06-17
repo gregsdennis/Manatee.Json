@@ -3,8 +3,6 @@ using Manatee.Json.Serialization.Internal;
 using Manatee.Json.Tests.Test_References;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-#if !IOS
-
 namespace Manatee.Json.Tests.Serialization.Internal
 {
 	[TestClass]
@@ -58,5 +56,3 @@ namespace Manatee.Json.Tests.Serialization.Internal
 		}
 	}
 }
-
-#endif
