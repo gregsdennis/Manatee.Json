@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json", "Manatee.Jso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests.Console", "Manatee.Json.Tests.Console\Manatee.Json.Tests.Console.csproj", "{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests.Performance", "Manatee.Json.Tests.Performance\Manatee.Json.Tests.Performance.csproj", "{36A1A51A-B8AF-4492-828A-73390286D2F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A1A51A-B8AF-4492-828A-73390286D2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A1A51A-B8AF-4492-828A-73390286D2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A1A51A-B8AF-4492-828A-73390286D2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A1A51A-B8AF-4492-828A-73390286D2F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E74B7538-5E17-43C7-925B-33784945312E} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 		{861C40FB-5D2E-4051-A1F0-D9B9C5D74794} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+		{36A1A51A-B8AF-4492-828A-73390286D2F4} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Json.vsmdi
