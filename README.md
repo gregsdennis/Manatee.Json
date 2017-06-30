@@ -69,14 +69,13 @@ Manatee.Json also:
 - Conforms to ECMA-404: The JSON specification
 - Supports .Net 3.5+
 - Outputs compact and prettified JSON text
-- Supports JsonSchema **INCLUDED AND FREE!** (with similar object model)
-- Supports JSONPath (with object model and compile-time checking)
+- Supports [JSON Schema](http://json-schema.org/) **INCLUDED AND FREE!** (with similar object model)
+- Supports [JSONPath](http://goessner.net/articles/JsonPath/) (with object model and compile-time checking)
 - Is fully LINQ-compatible
 - Converts between JSON and XML
 - Reports parsing errors using JSONPath to identify location
 - Supports streamed parsing
-- Is fully open-source
-- Uses the Apache 2.0 license
+- Is fully open-source under the MIT license
 
 Serialization features:
 
