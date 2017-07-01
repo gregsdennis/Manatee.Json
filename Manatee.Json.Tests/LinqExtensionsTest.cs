@@ -178,7 +178,6 @@ namespace Manatee.Json.Tests
 		{
 			var serializer = new JsonSerializer();
 			var json = (JsonArray)null;
-			var expected = (IEnumerable<JsonSerializableClass>)null;
 			var actual = json.FromJson<JsonSerializableClass>(serializer).ToList();
 		}
 		[TestMethod]
