@@ -22,9 +22,9 @@ if exist "%programfiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15
 REM *** NOTE *** When running this locally, use the version without the quotes.
 REM              MyGet requires the quotes, but the command line doesn't like them.  Don't ask me...
 
-call %msbuild% Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:m /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
-REM call "%msbuild%" Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:m /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+REM call %msbuild% Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:m /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+call "%msbuild%" Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:m /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 
 REM Package
-call %msbuild% Manatee.Json\Manatee.Json.csproj /t:pack /p:Configuration=Release
-REM call "%msbuild%" Manatee.Json.sln /t:pack /p:Configuration=Release
+REM call %msbuild% Manatee.Json\Manatee.Json.csproj /t:pack /p:Configuration=Release
+call "%msbuild%"" Manatee.Json\Manatee.Json.csproj /t:pack /p:Configuration=Release
