@@ -14,3 +14,4 @@
 **/*.nuget.targets
 
 msbuild.log
+.localbuild
