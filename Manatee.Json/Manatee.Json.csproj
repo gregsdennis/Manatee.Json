@@ -22,6 +22,8 @@ Schema passes latest version of JSON Schema Test Suite. (#63)
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
     <FileVersion>7.0.0.0</FileVersion>
     <AssemblyVersion>7.0.0.0</AssemblyVersion>
+    <Authors>gregsdennis</Authors>
+    <Company>Little Crab Solutions</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
