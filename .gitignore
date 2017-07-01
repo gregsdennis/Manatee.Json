@@ -12,6 +12,5 @@
 /TestResults
 **/*.lock.json
 **/*.nuget.targets
-
+**/*.nupkg
 msbuild.log
-.localbuild
