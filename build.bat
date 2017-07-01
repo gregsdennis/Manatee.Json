@@ -27,4 +27,4 @@ call "%msbuild%" Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:m /fl /flp
 
 REM Package
 REM call %msbuild% Manatee.Json\Manatee.Json.csproj /t:pack /p:Configuration=Release
-call "%msbuild%"" Manatee.Json\Manatee.Json.csproj /t:pack /p:Configuration=Release
+call "%msbuild%" Manatee.Json\Manatee.Json.csproj /t:pack /p:Configuration=Release
