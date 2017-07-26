@@ -19,8 +19,8 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void CannotRecreatePrimitiveDefinitions()
 		{
-			var constructed = new JsonSchema {Type = new JsonSchemaTypeDefinition("integer")};
-			var predefined = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
+			var constructed = new JsonSchema04 {Type = new JsonSchemaTypeDefinition("integer")};
+			var predefined = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer};
 
 			Assert.AreNotEqual(predefined, constructed);
 		}

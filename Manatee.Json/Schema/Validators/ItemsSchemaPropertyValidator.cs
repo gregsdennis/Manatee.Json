@@ -5,13 +5,13 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class ItemsSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema04 schema, JsonValue json)
 		{
 			return (schema.Items != null || schema.AdditionalItems != null) &&
 			       json.Type == JsonValueType.Array;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
 		{
 			var errors = new List<SchemaValidationError>();
 			var array = json.Array;

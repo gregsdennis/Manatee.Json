@@ -39,7 +39,7 @@ namespace Manatee.Json.Schema
 
 		static AdditionalProperties()
 		{
-			True = new AdditionalProperties {Definition = JsonSchema.Empty, _isReadOnly = true};
+			True = new AdditionalProperties {Definition = JsonSchema04.Empty, _isReadOnly = true};
 			False = new AdditionalProperties {_isReadOnly = true};
 		}
 
@@ -105,7 +105,7 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type == JsonValueType.Boolean)
 			{
-				if (json.Boolean) Definition = JsonSchema.Empty;
+				if (json.Boolean) Definition = JsonSchema04.Empty;
 			}
 			else
 			{
@@ -123,6 +123,16 @@ namespace Manatee.Json.Schema
 			if (Equals(True)) return true;
 			if (Equals(False)) return false;
 			return Definition.ToJson(serializer);
+		}
+
+
+		public static implicit operator AdditionalProperties(JsonSchema04 schema)
+		{
+			return new AdditionalProperties {Definition = schema};
+		}
+		public static implicit operator AdditionalProperties(JsonSchema06 schema)
+		{
+			return new AdditionalProperties {Definition = schema};
 		}
 	}
 }

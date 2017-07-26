@@ -48,6 +48,10 @@ namespace Manatee.Json.Schema
 		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
 		/// </summary>
 		public static readonly StringFormat Uri = new StringFormat("uri", s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
+		/// <summary>
+		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
+		/// </summary>
+		public static readonly StringFormat UriReference = new StringFormat("uri-reference", s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
 
 		private static readonly Dictionary<string, StringFormat> _lookup = new Dictionary<string, StringFormat>
 				{

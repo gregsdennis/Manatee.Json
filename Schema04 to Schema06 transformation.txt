@@ -1,0 +1,44 @@
+In defined sequence
+
+rename		@.description -> @.title
+rename		@.definitions.positiveInteger -> @.definitions.nonNegativeInteger
+rename		@.definitions.positiveIntegerDefault0 -> @.definitions.nonNegativeIntegerDefault0
+delete		@.definitions.stringArray.minItems
+add			@.definitions.stringArray.default -> []
+alter		@.type -> ["object", "boolean"]
+alter		@.properties.id.format -> "uri-reference"
+add			@.properties.$ref -> { "type": "string", "format": "uri-reference" }
+delete		@.properties.multipleOf.minimum
+alter		@.properties.multipleOf.exclusiveMinimum -> 0
+alter		@.properties.exclusiveMinimum -> { "type": "number" }
+alter		@.properties.additionalItems -> { "$ref": "#" }
+add			@.properties.contains -> { "$ref": "#" }
+alter		@.properties.additionalProperties -> { "$ref": "#" }
+add			@.properties.propertyNames -> { "$ref": "#" }
+add			@.properties.const -> {}
+add			@.properties.format -> { "type": "string" }
+delete		@.dependencies
+
+
+
+
+By action
+
+rename		@.description -> @.title
+rename		@.definitions.positiveInteger -> @.definitions.nonNegativeInteger
+rename		@.definitions.positiveIntegerDefault0 -> @.definitions.nonNegativeIntegerDefault0
+alter		@.type -> ["object", "boolean"]
+alter		@.properties.id.format -> "uri-reference"
+alter		@.properties.multipleOf.exclusiveMinimum -> 0
+alter		@.properties.exclusiveMinimum -> { "type": "number" }
+alter		@.properties.additionalItems -> { "$ref": "#" }
+alter		@.properties.additionalProperties -> { "$ref": "#" }
+add			@.definitions.stringArray.default -> []
+add			@.properties.$ref -> { "type": "string", "format": "uri-reference" }
+add			@.properties.contains -> { "$ref": "#" }
+add			@.properties.propertyNames -> { "$ref": "#" }
+add			@.properties.const -> {}
+add			@.properties.format -> { "type": "string" }
+delete		@.definitions.stringArray.minItems
+delete		@.properties.multipleOf.minimum
+delete		@.dependencies

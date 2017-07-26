@@ -2,15 +2,21 @@
 {
 	internal class MaxPropertySchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return schema.MaxProperties.HasValue && json.Type == JsonValueType.Object;
+			return _GetMaxProperties(schema).HasValue && json.Type == JsonValueType.Object;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			return json.Object.Count > schema.MaxProperties
-				       ? new SchemaValidationResults(string.Empty, $"Expected: <= {schema.MaxProperties} properties; Actual: {json.Object.Count} properties.")
+			var maxProperties = _GetMaxProperties(schema);
+			return json.Object.Count > maxProperties
+					   ? new SchemaValidationResults(string.Empty, $"Expected: <= {maxProperties} properties; Actual: {json.Object.Count} properties.")
 				       : new SchemaValidationResults();
+		}
+
+		private static uint? _GetMaxProperties(IJsonSchema schema)
+		{
+			return (schema as JsonSchema04)?.MaxProperties ?? (schema as JsonSchema06)?.MaxProperties;
 		}
 	}
 }

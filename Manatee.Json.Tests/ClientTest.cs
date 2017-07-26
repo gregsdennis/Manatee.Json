@@ -122,21 +122,21 @@ namespace Manatee.Json.Tests
 		{
 			var text = "{\"type\":\"object\",\"properties\":{\"home\":{\"type\":[\"object\",\"null\"],\"properties\":{\"street\":{\"type\":\"string\"}}}}}";
 			var json = JsonValue.Parse(text);
-			var expected = new JsonSchema
+			var expected = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("home")
 								{
-									Type = new JsonSchema
+									Type = new JsonSchema04
 										{
 											Type = new JsonSchemaMultiTypeDefinition(JsonSchemaTypeDefinition.Object, JsonSchemaTypeDefinition.Null),
 											Properties = new JsonSchemaPropertyDefinitionCollection
 												{
 													new JsonSchemaPropertyDefinition("street")
 														{
-															Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+															Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 														}
 												}
 										}
@@ -154,7 +154,7 @@ namespace Manatee.Json.Tests
 		{
 			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
 			var json = JsonValue.Parse(text);
-			var expected = new JsonSchema
+			var expected = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.String,
 					Enum = new List<EnumSchemaValue>
@@ -184,7 +184,7 @@ namespace Manatee.Json.Tests
 			var text = "{\"id\": \"http://localhost/json-schemas/address.json\"}";
 			var json = JsonValue.Parse(text);
 
-			var results = JsonSchema.Draft04.Validate(json);
+			var results = JsonSchema04.MetaSchema.Validate(json);
 
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
@@ -243,7 +243,7 @@ namespace Manatee.Json.Tests
 			var result = schema.Validate(json);
 
 			Console.WriteLine(schema.ToJson(null));
-			var refSchema = ((JsonSchemaReference)((JsonSchema)schema).Properties["prop2"].Type).Resolved;
+			var refSchema = ((JsonSchemaReference)((JsonSchema04)schema).Properties["prop2"].Type).Resolved;
 			Console.WriteLine(refSchema.ToJson(null));
 			Console.WriteLine(json);
 			foreach (var error in result.Errors)
@@ -259,7 +259,7 @@ namespace Manatee.Json.Tests
 		public void Issue49_RequiredAndAllOfInSingleSchema()
 		{
 			var fileName = System.IO.Path.GetFullPath("issue49.json");
-			var expected = new JsonSchema
+			var expected = new JsonSchema04
 				{
 					Title = "JSON schema for Something",
 					Schema = "http://json-schema.org/draft-04/schema#",
@@ -267,7 +267,7 @@ namespace Manatee.Json.Tests
 						{
 							new JsonSchemaTypeDefinition("something")
 								{
-									Definition = new JsonSchema
+									Definition = new JsonSchema04
 										{
 											Type = JsonSchemaTypeDefinition.Object,
 											Properties = new JsonSchemaPropertyDefinitionCollection
@@ -280,13 +280,13 @@ namespace Manatee.Json.Tests
 												},
 											AllOf = new[]
 												{
-													new JsonSchema
+													new JsonSchema04
 														{
 															Properties = new JsonSchemaPropertyDefinitionCollection
 																{
 																	new JsonSchemaPropertyDefinition("name")
 																		{
-																			Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+																			Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 																		}
 																}
 														}

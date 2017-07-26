@@ -10,7 +10,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNonBoolean()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Boolean};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean};
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
@@ -21,7 +21,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnBoolean()
 		{
-			var schema = new JsonSchema { Type = JsonSchemaTypeDefinition.Boolean };
+			var schema = new JsonSchema04 { Type = JsonSchemaTypeDefinition.Boolean };
 			var json = (JsonValue) false;
 
 			var results = schema.Validate(json);

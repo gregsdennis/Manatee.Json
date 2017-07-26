@@ -2,12 +2,12 @@
 {
 	internal class MaximumSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema04 schema, JsonValue json)
 		{
 			return (schema.Maximum.HasValue || (schema.ExclusiveMaximum ?? false)) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
 		{
 			if (schema.ExclusiveMaximum ?? false)
 			{

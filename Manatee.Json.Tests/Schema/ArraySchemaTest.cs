@@ -11,7 +11,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNonArray()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array};
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
@@ -22,7 +22,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnString()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array};
 			JsonValue json = "string";
 
 			var results = schema.Validate(json);
@@ -33,7 +33,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnTooFewItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MinItems = 5};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MinItems = 5};
 			var json = new JsonArray {1, "string"};
 
 			var results = schema.Validate(json);
@@ -44,7 +44,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnCountEqualsMinItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MinItems = 2};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MinItems = 2};
 			var json = new JsonArray {1, "string"};
 
 			var results = schema.Validate(json);
@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnCountGreaterThanMinItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MinItems = 2};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MinItems = 2};
 			var json = new JsonArray {1, "string", false};
 
 			var results = schema.Validate(json);
@@ -66,7 +66,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnTooManyItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null, 2};
 
 			var results = schema.Validate(json);
@@ -77,7 +77,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnCountEqualsMaxItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null};
 
 			var results = schema.Validate(json);
@@ -88,7 +88,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnCountLessThanMaxItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
 			var json = new JsonArray {1, "string", false};
 
 			var results = schema.Validate(json);
@@ -99,7 +99,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnDuplicateItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true};
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null, 1};
 
 			var results = schema.Validate(json);
@@ -110,7 +110,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnUniqueItems()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true};
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null};
 
 			var results = schema.Validate(json);
@@ -121,10 +121,10 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnInvalidItems()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Array,
-					Items = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+					Items = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 				};
 			var json = new JsonArray {1, "string"};
 
@@ -136,10 +136,10 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnValidItems()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Array,
-					Items = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+					Items = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 				};
 			var json = new JsonArray {"start", "string"};
 

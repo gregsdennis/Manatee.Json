@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines the name of the type.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; internal set; }
 		/// <summary>
 		/// Defines a schema used to define the type.
 		/// </summary>
@@ -75,19 +75,19 @@ namespace Manatee.Json.Schema
 
 		static JsonSchemaTypeDefinition()
 		{
-			Array.Definition = new JsonSchema {Type = Array};
+			Array.Definition = new JsonSchema04 {Type = Array};
 			Array._isReadOnly = true;
-			Boolean.Definition = new JsonSchema {Type = Boolean};
+			Boolean.Definition = new JsonSchema04 {Type = Boolean};
 			Boolean._isReadOnly = true;
-			Integer.Definition = new JsonSchema {Type = Integer};
+			Integer.Definition = new JsonSchema04 {Type = Integer};
 			Integer._isReadOnly = true;
-			Null.Definition = new JsonSchema {Type = Null};
+			Null.Definition = new JsonSchema04 {Type = Null};
 			Null._isReadOnly = true;
-			Number.Definition = new JsonSchema {Type = Number};
+			Number.Definition = new JsonSchema04 {Type = Number};
 			Number._isReadOnly = true;
-			Object.Definition = new JsonSchema {Type = Object};
+			Object.Definition = new JsonSchema04 {Type = Object};
 			Object._isReadOnly = true;
-			String.Definition = new JsonSchema {Type = String};
+			String.Definition = new JsonSchema04 {Type = String};
 			String._isReadOnly = true;
 		}
 		/// <summary>
@@ -117,12 +117,12 @@ namespace Manatee.Json.Schema
 			if (json.Type == JsonValueType.String)
 			{
 				Name = json.String;
-				Definition = new JsonSchema {Type = String, Pattern = json.String};
+				Definition = new JsonSchema04 {Type = String, Pattern = json.String};
 				return;
 			}
 			var details = json.Object.First();
 			Name = details.Key;
-			Definition = new JsonSchema();
+			Definition = new JsonSchema04();
 			Definition.FromJson(details.Value, null);
 		}
 
@@ -184,6 +184,15 @@ namespace Manatee.Json.Schema
 		{
 			if (_isReadOnly) return Name?.GetHashCode() ?? 0;
 			return _definition?.GetHashCode() ?? 0;
+		}
+
+		public static implicit operator JsonSchemaTypeDefinition(JsonSchema04 schema)
+		{
+			return new JsonSchemaTypeDefinition(schema);
+		}
+		public static implicit operator JsonSchemaTypeDefinition(JsonSchema06 schema)
+		{
+			return new JsonSchemaTypeDefinition(schema);
 		}
 	}
 }

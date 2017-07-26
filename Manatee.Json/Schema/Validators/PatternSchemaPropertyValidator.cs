@@ -4,11 +4,11 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class PatternSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema04 schema, JsonValue json)
 		{
 			return schema.Pattern != null && json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
 		{
 			return Regex.IsMatch(json.String, schema.Pattern)
 				       ? new SchemaValidationResults()

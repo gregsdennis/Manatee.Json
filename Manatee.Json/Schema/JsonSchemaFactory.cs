@@ -50,7 +50,7 @@ namespace Manatee.Json.Schema
 				case JsonValueType.Object:
 					schema = json.Object.ContainsKey("$ref")
 								 ? new JsonSchemaReference()
-								 : new JsonSchema();
+								 : new JsonSchema04(); // TODO: this needs to determine if 04 or 06s
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();
@@ -90,25 +90,25 @@ namespace Manatee.Json.Schema
 			switch (typeEntry.String)
 			{
 				case "array":
-					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array};
+					schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array};
 					break;
 				case "boolean":
-					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Boolean};
+					schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean};
 					break;
 				case "integer":
-					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
+					schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer};
 					break;
 				case "null":
-					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
+					schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};
 					break;
 				case "number":
-					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Number};
+					schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number};
 					break;
 				case "object":
-					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Object};
+					schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Object};
 					break;
 				case "string":
-					schema = new JsonSchema {Type = JsonSchemaTypeDefinition.String};
+					schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String};
 					break;
 			}
 
@@ -122,13 +122,13 @@ namespace Manatee.Json.Schema
 		private static IJsonSchema GetBasicSchema(Type type)
 		{
 			if (type == typeof(string))
-				return new JsonSchema {Type = JsonSchemaTypeDefinition.String};
+				return new JsonSchema04 {Type = JsonSchemaTypeDefinition.String};
 			if (type == typeof(bool))
-				return new JsonSchema {Type = JsonSchemaTypeDefinition.Boolean};
+				return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean};
 			if (_integerTypes.Contains(type))
-				return new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
+				return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer};
 			if (_numberTypes.Contains(type))
-				return new JsonSchema {Type = JsonSchemaTypeDefinition.Number};
+				return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number};
 			return null;
 		}
 #endif

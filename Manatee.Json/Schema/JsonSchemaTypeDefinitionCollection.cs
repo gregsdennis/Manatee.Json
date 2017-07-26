@@ -16,6 +16,14 @@ namespace Manatee.Json.Schema
 		public JsonSchemaTypeDefinition this[string name]
 		{
 			get { return this.FirstOrDefault(p => p.Name == name); }
+			set
+			{
+				var definition = this.FirstOrDefault(p => p.Name == name);
+				if (definition != null)
+					Remove(definition);
+				value.Name = name;
+				Add(value);
+			}
 		}
 	}
 }

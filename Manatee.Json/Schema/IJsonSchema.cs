@@ -19,5 +19,16 @@ namespace Manatee.Json.Schema
 		/// Identifies the physical path for the schema document (may be different than the ID).
 		/// </summary>
 		Uri DocumentPath { get; set; }
+		/// <summary>
+		/// Used to specify which this schema defines.
+		/// </summary>
+		string Id { get; set; }
+		/// <summary>
+		/// Used to specify a schema which contains the definitions used by this schema.
+		/// </summary>
+		/// <remarks>
+		/// if left null, the default of http://json-schema.org/draft-04/schema# is used.
+		/// </remarks>
+		string Schema { get; set; }
 	}
 }

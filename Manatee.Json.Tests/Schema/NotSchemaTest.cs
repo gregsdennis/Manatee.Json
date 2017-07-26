@@ -10,9 +10,9 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnInvalid()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
-					Not = new JsonSchema {Type = JsonSchemaTypeDefinition.Array}
+					Not = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array}
 				};
 			var json = new JsonArray();
 
@@ -24,9 +24,9 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValid()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 			{
-					Not = new JsonSchema { Type = JsonSchemaTypeDefinition.Number,Maximum = 10}
+					Not = new JsonSchema04 { Type = JsonSchemaTypeDefinition.Number,Maximum = 10}
 				};
 			var json = (JsonValue) 15;
 

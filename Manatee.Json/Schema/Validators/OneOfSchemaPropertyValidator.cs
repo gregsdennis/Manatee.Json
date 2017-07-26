@@ -4,11 +4,11 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class OneOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema04 schema, JsonValue json)
 		{
 			return schema.OneOf != null;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
 		{
 			var errors = schema.OneOf.Select(s => s.Validate(json, root)).ToList();
 			var validCount = errors.Count(r => r.Valid);

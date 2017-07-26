@@ -12,7 +12,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnNonObject()
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Object};
+			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Object};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -23,14 +23,14 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnRequiredPropertyMissing()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String},
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
 									IsRequired = true
 								}
 						}
@@ -45,14 +45,14 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnOptionalPropertyMissing()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						}
 				};
@@ -66,14 +66,14 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnInvalidProperty()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						}
 				};
@@ -87,14 +87,14 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnAllValidProperties()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						}
 				};
@@ -108,20 +108,20 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnInvalidPatternProperty()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						},
 					AdditionalProperties = AdditionalProperties.False,
 					PatternProperties = new Dictionary<Regex, IJsonSchema>
 						{
-							{new Regex("[0-9]"), new JsonSchema {Type = JsonSchemaTypeDefinition.String}}
+							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
 						}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
@@ -134,20 +134,20 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnUnmatchedPatternProperty()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						},
 					AdditionalProperties = AdditionalProperties.False,
 					PatternProperties = new Dictionary<Regex, IJsonSchema>
 						{
-							{new Regex("[0-9]"), new JsonSchema {Type = JsonSchemaTypeDefinition.String}}
+							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
 						}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test", "value"}};
@@ -160,18 +160,18 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsErrorOnInvalidAdditionalProperty()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						},
 					AdditionalProperties =
-						new AdditionalProperties {Definition = new JsonSchema {Type = JsonSchemaTypeDefinition.String}}
+						new AdditionalProperties {Definition = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test", 1}};
 
@@ -183,18 +183,18 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnValidAdditionalProperty()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						},
 					AdditionalProperties =
-						new AdditionalProperties {Definition = new JsonSchema {Type = JsonSchemaTypeDefinition.String}}
+						new AdditionalProperties {Definition = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test", "value"}};
 
@@ -206,20 +206,20 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnValidPatternProperty()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
 							new JsonSchemaPropertyDefinition("test1")
 								{
-									Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 								}
 						},
 					AdditionalProperties = AdditionalProperties.False,
 					PatternProperties = new Dictionary<Regex, IJsonSchema>
 						{
-							{new Regex("[0-9]"), new JsonSchema {Type = JsonSchemaTypeDefinition.Integer}}
+							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer}}
 						}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
@@ -232,7 +232,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnNotTooManyProperties()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 			{
 				Type = JsonSchemaTypeDefinition.Object,
 				MaxProperties = 5
@@ -247,7 +247,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsInvalidOnTooManyProperties()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 			{
 				Type = JsonSchemaTypeDefinition.Object,
 				MaxProperties = 1
@@ -262,7 +262,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsValidOnNotTooFewProperties()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 			{
 				Type = JsonSchemaTypeDefinition.Object,
 				MinProperties = 1
@@ -277,7 +277,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void ValidateReturnsInvalidOnTooFewProperties()
 		{
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 			{
 				Type = JsonSchemaTypeDefinition.Object,
 				MinProperties = 5

@@ -9,7 +9,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
-	public class JsonSchemaReference : JsonSchema
+	public class JsonSchemaReference : JsonSchema04
 	{
 		/// <summary>
 		/// Defines a reference to the root schema.

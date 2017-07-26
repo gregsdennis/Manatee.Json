@@ -4,11 +4,11 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class MinLengthSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema04 schema, JsonValue json)
 		{
 			return schema.MinLength.HasValue && json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
 		{
 			var length = new StringInfo(json.String).LengthInTextElements;
 			if (schema.MinLength.HasValue && length < schema.MinLength)

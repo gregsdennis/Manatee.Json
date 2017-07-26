@@ -11,7 +11,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var json = new JsonObject {{"type", "integer"}};
 
-			var results = JsonSchema.Draft04.Validate(json);
+			var results = JsonSchema04.MetaSchema.Validate(json);
 
 			Assert.IsTrue(results.Valid);
 		}
@@ -20,7 +20,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var json = new JsonObject {{"type", "other"}};
 
-			var results = JsonSchema.Draft04.Validate(json);
+			var results = JsonSchema04.MetaSchema.Validate(json);
 
 			Assert.IsFalse(results.Valid);
 		}
@@ -30,11 +30,11 @@ namespace Manatee.Json.Tests.Schema
 			// This test is intended to demontrate that it's not possible to create
 			// a primitive definition; you must use the built-in definitions.
 			// The type definition equality logic relies on this fact.
-			var schema = new JsonSchema
+			var schema = new JsonSchema04
 				{
 					Type = new JsonSchemaTypeDefinition("number")
 						{
-							Definition = new JsonSchema
+							Definition = new JsonSchema04
 								{
 									Type = JsonSchemaTypeDefinition.Number
 								}

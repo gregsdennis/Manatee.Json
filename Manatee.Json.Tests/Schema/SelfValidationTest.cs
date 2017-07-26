@@ -9,8 +9,8 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void Draft04()
 		{
-			var json = JsonSchema.Draft04.ToJson(null);
-			var validation = JsonSchema.Draft04.Validate(json);
+			var json = JsonSchema04.MetaSchema.ToJson(null);
+			var validation = JsonSchema04.MetaSchema.Validate(json);
 
 			Assert.IsTrue(validation.Valid);
 		}
@@ -18,11 +18,11 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void OnlineDraft04()
 		{
-			var reference = new JsonSchemaReference(JsonSchema.Draft04.Id);
+			var reference = new JsonSchemaReference(JsonSchema04.MetaSchema.Id);
 			reference.Validate(new JsonObject());
 
-			var onlineValidation = reference.Validate(JsonSchema.Draft04.ToJson(null));
-			var localValidation = JsonSchema.Draft04.Validate(reference.Resolved.ToJson(null));
+			var onlineValidation = reference.Validate(JsonSchema04.MetaSchema.ToJson(null));
+			var localValidation = JsonSchema04.MetaSchema.Validate(reference.Resolved.ToJson(null));
 
 			Assert.IsTrue(onlineValidation.Valid);
 			Assert.IsTrue(localValidation.Valid);

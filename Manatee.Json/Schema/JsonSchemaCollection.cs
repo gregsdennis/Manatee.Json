@@ -14,6 +14,8 @@ namespace Manatee.Json.Schema
 		/// Identifies the physical path for the schema document (may be different than the ID).
 		/// </summary>
 		public Uri DocumentPath { get; set; }
+		public string Id { get; set; }
+		public string Schema { get; set; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.

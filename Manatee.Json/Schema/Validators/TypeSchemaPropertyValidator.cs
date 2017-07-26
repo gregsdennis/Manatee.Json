@@ -6,11 +6,11 @@ namespace Manatee.Json.Schema.Validators
 {
 	internal class TypeSchemaPropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema04 schema, JsonValue json)
 		{
 			return schema.Type != null;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
 		{
 			var multitype = schema.Type as JsonSchemaMultiTypeDefinition;
 			if (multitype != null)
