@@ -14,7 +14,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the property with the dependency.
 		/// </summary>
-		public string PropertyName { get; }
+		public string PropertyName { get; internal set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="PropertyDependency"/> class.
@@ -39,6 +39,10 @@ namespace Manatee.Json.Schema
 		/// <param name="otherDependencies">Additional property dependencies.</param>
 		public PropertyDependency(string propertyName, string firstDependency, params string[] otherDependencies)
 			: this(propertyName, new[] {firstDependency}.Concat(otherDependencies)) {}
+		private PropertyDependency(IEnumerable<string> dependencies)
+		{
+			_dependencies = dependencies;
+		}
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.

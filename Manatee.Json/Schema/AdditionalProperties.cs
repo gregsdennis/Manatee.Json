@@ -124,5 +124,10 @@ namespace Manatee.Json.Schema
 			if (Equals(False)) return false;
 			return Definition.ToJson(serializer);
 		}
+
+		public static implicit operator AdditionalProperties(JsonSchema schema)
+		{
+			return new AdditionalProperties {Definition = schema};
+		}
 	}
 }

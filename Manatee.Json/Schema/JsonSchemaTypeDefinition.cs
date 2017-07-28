@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines the name of the type.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; internal set; }
 		/// <summary>
 		/// Defines a schema used to define the type.
 		/// </summary>
@@ -184,6 +184,11 @@ namespace Manatee.Json.Schema
 		{
 			if (_isReadOnly) return Name?.GetHashCode() ?? 0;
 			return _definition?.GetHashCode() ?? 0;
+		}
+
+		public static implicit operator JsonSchemaTypeDefinition(JsonSchema schema)
+		{
+			return new JsonSchemaTypeDefinition(schema);
 		}
 	}
 }

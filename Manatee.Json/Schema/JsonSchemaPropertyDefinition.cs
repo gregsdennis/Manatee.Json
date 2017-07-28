@@ -12,7 +12,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines the name of the property.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; internal set; }
 		/// <summary>
 		/// Defines a schema used to represent the type of this property.
 		/// </summary>
@@ -38,6 +38,10 @@ namespace Manatee.Json.Schema
 				throw new ArgumentNullException(nameof(name));
 
 			Name = name;
+			Type = JsonSchema.Empty;
+		}
+		internal JsonSchemaPropertyDefinition()
+		{
 			Type = JsonSchema.Empty;
 		}
 
@@ -103,6 +107,11 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ IsRequired.GetHashCode();
 				return hashCode;
 			}
+		}
+
+		public static implicit operator JsonSchemaPropertyDefinition(JsonSchema schema)
+		{
+			return new JsonSchemaPropertyDefinition {Type = schema};
 		}
 	}
 }

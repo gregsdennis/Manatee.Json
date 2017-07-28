@@ -22,315 +22,183 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static readonly JsonSchema Draft04 = new JsonSchema
 			{
-				Type = JsonSchemaTypeDefinition.Object,
 				Id = "http://json-schema.org/draft-04/schema#",
 				Schema = "http://json-schema.org/draft-04/schema#",
 				Description = "Core schema meta-schema",
 				Definitions = new JsonSchemaTypeDefinitionCollection
 					{
-						new JsonSchemaTypeDefinition("schemaArray")
+						["schemaArray"] = new JsonSchema
 							{
-								Definition = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Array,
-										MinItems = 1,
-										Items = JsonSchemaReference.Root
-									},
+								Type = JsonSchemaTypeDefinition.Array,
+								MinItems = 1,
+								Items = JsonSchemaReference.Root
 							},
-						new JsonSchemaTypeDefinition("positiveInteger")
+						["positiveInteger"] = new JsonSchema
 							{
-								Definition = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Integer,
-										Minimum = 0
-									},
+								Type = JsonSchemaTypeDefinition.Integer,
+								Minimum = 0
 							},
-						new JsonSchemaTypeDefinition("positiveIntegerDefault0")
+						["positiveIntegerDefault0"] = new JsonSchema
 							{
-								Definition = new JsonSchema
+								AllOf = new List<IJsonSchema>
 									{
-										AllOf = new List<IJsonSchema>
-											{
-												new JsonSchemaReference("#/definitions/positiveInteger"),
-												new JsonSchema
-													{
-														Default = 0
-													}
-											}
-									},
-							},
-						new JsonSchemaTypeDefinition("simpleTypes")
-							{
-								Definition = new JsonSchema
-									{
-										Enum = new List<EnumSchemaValue>
-											{
-												new EnumSchemaValue("array"),
-												new EnumSchemaValue("boolean"),
-												new EnumSchemaValue("integer"),
-												new EnumSchemaValue("null"),
-												new EnumSchemaValue("number"),
-												new EnumSchemaValue("object"),
-												new EnumSchemaValue("string")
-											}
+										new JsonSchemaReference("#/definitions/positiveInteger"),
+										new JsonSchema {Default = 0}
 									}
 							},
-						new JsonSchemaTypeDefinition("stringArray")
+						["simpleTypes"] = new JsonSchema
 							{
-								Definition = new JsonSchema
+								Enum = new List<EnumSchemaValue>
 									{
-										Type = JsonSchemaTypeDefinition.Array,
-										Items = new JsonSchema {Type = JsonSchemaTypeDefinition.String},
-										MinItems = 1,
-										UniqueItems = true
+										new EnumSchemaValue("array"),
+										new EnumSchemaValue("boolean"),
+										new EnumSchemaValue("integer"),
+										new EnumSchemaValue("null"),
+										new EnumSchemaValue("number"),
+										new EnumSchemaValue("object"),
+										new EnumSchemaValue("string")
 									}
+							},
+						["stringArray"] = new JsonSchema
+							{
+								Type = JsonSchemaTypeDefinition.Array,
+								Items = new JsonSchema {Type = JsonSchemaTypeDefinition.String},
+								MinItems = 1,
+								UniqueItems = true
 							}
 					},
+				Type = JsonSchemaTypeDefinition.Object,
 				Properties = new JsonSchemaPropertyDefinitionCollection
 					{
-						new JsonSchemaPropertyDefinition("id")
+						["id"] = new JsonSchema
 							{
-								Type = new JsonSchema
+								Type = JsonSchemaTypeDefinition.String,
+								Format = StringFormat.Uri
+							},
+						["$schema"] = new JsonSchema
+							{
+								Type = JsonSchemaTypeDefinition.String,
+								Format = StringFormat.Uri
+							},
+						["title"] = new JsonSchema {Type = JsonSchemaTypeDefinition.String},
+						["description"] = new JsonSchema {Type = JsonSchemaTypeDefinition.String},
+						["default"] = Empty,
+						["multipleOf"] = new JsonSchema
+							{
+								Type = JsonSchemaTypeDefinition.Number,
+								Minimum = 0,
+								ExclusiveMinimum = true
+							},
+						["maximum"] = new JsonSchema {Type = JsonSchemaTypeDefinition.Number},
+						["exclusiveMaximum"] = new JsonSchema
+							{
+								Type = JsonSchemaTypeDefinition.Boolean,
+								Default = false
+							},
+						["minimum"] = new JsonSchema {Type = JsonSchemaTypeDefinition.Number},
+						["exclusiveMinimum"] = new JsonSchema
+							{
+								Type = JsonSchemaTypeDefinition.Boolean,
+								Default = false
+							},
+						["maxLength"] = new JsonSchemaReference("#/definitions/positiveInteger"),
+						["minLength"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
+						["pattern"] = new JsonSchema
+							{
+								Type = JsonSchemaTypeDefinition.String,
+								Format = StringFormat.Regex
+							},
+						["additionalItems"] = new JsonSchema
+							{
+								AnyOf = new List<IJsonSchema>
 									{
-										Type = JsonSchemaTypeDefinition.String,
-										Format = StringFormat.Uri
-									}
+										new JsonSchema {Type = JsonSchemaTypeDefinition.Boolean},
+										JsonSchemaReference.Root
+									},
+								Default = new JsonObject()
 							},
-						new JsonSchemaPropertyDefinition("$schema")
+						["items"] = new JsonSchema
 							{
-								Type = new JsonSchema
+								AnyOf = new List<IJsonSchema>
 									{
-										Type = JsonSchemaTypeDefinition.String,
-										Format = StringFormat.Uri
-									}
+										JsonSchemaReference.Root,
+										new JsonSchemaReference("#/definitions/schemaArray")
+									},
+								Default = new JsonObject()
 							},
-						new JsonSchemaPropertyDefinition("title")
+						["maxItems"] = new JsonSchemaReference("#/definitions/positiveInteger"),
+						["minItems"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
+						["uniqueItems"] = new JsonSchema
 							{
-								Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
+								Type = JsonSchemaTypeDefinition.Boolean,
+								Default = false
 							},
-						new JsonSchemaPropertyDefinition("description")
+						["maxProperties"] = new JsonSchemaReference("#/definitions/positiveInteger"),
+						["minProperties"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
+						["required"] = new JsonSchemaReference("#/definitions/stringArray"),
+						["additionalProperties"] = new JsonSchema
 							{
-								Type = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
-							},
-						new JsonSchemaPropertyDefinition("default")
-							{
-								Type = Empty
-							},
-						new JsonSchemaPropertyDefinition("multipleOf")
-							{
-								Type = new JsonSchema
+								AnyOf = new List<IJsonSchema>
 									{
-										Type = JsonSchemaTypeDefinition.Number,
-										Minimum = 0,
-										ExclusiveMinimum = true
-									}
+										new JsonSchema {Type = JsonSchemaTypeDefinition.Boolean},
+										JsonSchemaReference.Root
+									},
+								Default = new JsonObject()
 							},
-						new JsonSchemaPropertyDefinition("maximum")
+						["definitions"] = new JsonSchema
 							{
-								Type = new JsonSchema {Type = JsonSchemaTypeDefinition.Number}
+								Type = JsonSchemaTypeDefinition.Object,
+								AdditionalProperties = JsonSchemaReference.Root,
+								Default = new JsonObject()
 							},
-						new JsonSchemaPropertyDefinition("exclusiveMaximum")
+						["properties"] = new JsonSchema
 							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Boolean,
-										Default = false
-									}
+								Type = JsonSchemaTypeDefinition.Object,
+								AdditionalProperties = JsonSchemaReference.Root,
+								Default = new JsonObject()
 							},
-						new JsonSchemaPropertyDefinition("minimum")
+						["patternProperties"] = new JsonSchema
 							{
-								Type = new JsonSchema {Type = JsonSchemaTypeDefinition.Number}
+								Type = JsonSchemaTypeDefinition.Object,
+								AdditionalProperties = JsonSchemaReference.Root,
+								Default = new JsonObject()
 							},
-						new JsonSchemaPropertyDefinition("exclusiveMinimum")
+						["dependencies"] = new JsonSchema
 							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Boolean,
-										Default = false
-									}
-							},
-						new JsonSchemaPropertyDefinition("maxLength")
-							{
-								Type = new JsonSchemaReference("#/definitions/positiveInteger")
-							},
-						new JsonSchemaPropertyDefinition("minLength")
-							{
-								Type = new JsonSchemaReference("#/definitions/positiveIntegerDefault0")
-							},
-						new JsonSchemaPropertyDefinition("pattern")
-							{
-								Type = new JsonSchema()
-									{
-										Type = JsonSchemaTypeDefinition.String,
-										Format = StringFormat.Regex
-									}
-							},
-						new JsonSchemaPropertyDefinition("additionalItems")
-							{
-								Type = new JsonSchema
-									{
-										AnyOf = new List<IJsonSchema>
-											{
-												new JsonSchema
-													{
-														Type = JsonSchemaTypeDefinition.Boolean
-													},
-												JsonSchemaReference.Root
-											},
-										Default = new JsonObject()
-									}
-							},
-						new JsonSchemaPropertyDefinition("items")
-							{
-								Type = new JsonSchema
+								Type = JsonSchemaTypeDefinition.Object,
+								AdditionalProperties = new JsonSchema
 									{
 										AnyOf = new List<IJsonSchema>
 											{
 												JsonSchemaReference.Root,
-												new JsonSchemaReference("#/definitions/schemaArray")
-											},
-										Default = new JsonObject()
-									}
-							},
-						new JsonSchemaPropertyDefinition("maxItems")
-							{
-								Type = new JsonSchemaReference("#/definitions/positiveInteger")
-							},
-						new JsonSchemaPropertyDefinition("minItems")
-							{
-								Type = new JsonSchemaReference("#/definitions/positiveIntegerDefault0")
-							},
-						new JsonSchemaPropertyDefinition("uniqueItems")
-							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Boolean,
-										Default = false
-									}
-							},
-						new JsonSchemaPropertyDefinition("maxProperties")
-							{
-								Type = new JsonSchemaReference("#/definitions/positiveInteger")
-							},
-						new JsonSchemaPropertyDefinition("minProperties")
-							{
-								Type = new JsonSchemaReference("#/definitions/positiveIntegerDefault0")
-							},
-						new JsonSchemaPropertyDefinition("required")
-							{
-								Type = new JsonSchemaReference("#/definitions/stringArray")
-							},
-						new JsonSchemaPropertyDefinition("additionalProperties")
-							{
-								Type = new JsonSchema
-									{
-										AnyOf = new List<IJsonSchema>
-											{
-												new JsonSchema
-													{
-														Type = JsonSchemaTypeDefinition.Boolean
-													},
-												JsonSchemaReference.Root
-											},
-										Default = new JsonObject()
-									}
-							},
-						new JsonSchemaPropertyDefinition("definitions")
-							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Object,
-										AdditionalProperties = new AdditionalProperties
-											{
-												Definition = JsonSchemaReference.Root
-											},
-										Default = new JsonObject()
-									}
-							},
-						new JsonSchemaPropertyDefinition("properties")
-							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Object,
-										AdditionalProperties = new AdditionalProperties
-											{
-												Definition = JsonSchemaReference.Root
-											},
-										Default = new JsonObject()
-									}
-							},
-						new JsonSchemaPropertyDefinition("patternProperties")
-							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Object,
-										AdditionalProperties = new AdditionalProperties
-											{
-												Definition = JsonSchemaReference.Root
-											},
-										Default = new JsonObject()
-									}
-							},
-						new JsonSchemaPropertyDefinition("dependencies")
-							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Object,
-										AdditionalProperties = new AdditionalProperties
-											{
-												Definition = new JsonSchema
-													{
-														AnyOf = new List<IJsonSchema>
-															{
-																JsonSchemaReference.Root,
-																new JsonSchemaReference("#/definitions/stringArray")
-															}
-													}
+												new JsonSchemaReference("#/definitions/stringArray")
 											}
 									}
 							},
-						new JsonSchemaPropertyDefinition("enum")
+						["enum"] = new JsonSchema
 							{
-								Type = new JsonSchema
-									{
-										Type = JsonSchemaTypeDefinition.Array,
-										MinItems = 1,
-										UniqueItems = true
-									}
+								Type = JsonSchemaTypeDefinition.Array,
+								MinItems = 1,
+								UniqueItems = true
 							},
-						new JsonSchemaPropertyDefinition("type")
+						["type"] = new JsonSchema
 							{
-								Type = new JsonSchema
+								AnyOf = new List<IJsonSchema>
 									{
-										AnyOf = new List<IJsonSchema>
+										new JsonSchemaReference("#/definitions/simpleTypes"),
+										new JsonSchema
 											{
-												new JsonSchemaReference("#/definitions/simpleTypes"),
-												new JsonSchema
-													{
-														Type = JsonSchemaTypeDefinition.Array,
-														Items = new JsonSchemaReference("#/definitions/simpleTypes"),
-														MinItems = 1,
-														UniqueItems = true
-													}
+												Type = JsonSchemaTypeDefinition.Array,
+												Items = new JsonSchemaReference("#/definitions/simpleTypes"),
+												MinItems = 1,
+												UniqueItems = true
 											}
 									}
 							},
-						new JsonSchemaPropertyDefinition("allOf")
-							{
-								Type = new JsonSchemaReference("#/definitions/schemaArray")
-							},
-						new JsonSchemaPropertyDefinition("anyOf")
-							{
-								Type = new JsonSchemaReference("#/definitions/schemaArray")
-							},
-						new JsonSchemaPropertyDefinition("oneOf")
-							{
-								Type = new JsonSchemaReference("#/definitions/schemaArray")
-							},
-						new JsonSchemaPropertyDefinition("not")
-							{
-								Type = JsonSchemaReference.Root
-							},
+						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
+						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
+						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
+						["not"] = JsonSchemaReference.Root
 					},
 				Dependencies = new List<IJsonSchemaDependency>
 					{

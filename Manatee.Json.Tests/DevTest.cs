@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using Manatee.Json.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Manatee.Json.Tests
 {
 	[TestClass]
-	[Ignore]
 	public class DevTest
 	{
 		[TestMethod]
+		[Ignore]
 		public void Test1()
 		{
 			var text = "http://www.google.com/file/";
