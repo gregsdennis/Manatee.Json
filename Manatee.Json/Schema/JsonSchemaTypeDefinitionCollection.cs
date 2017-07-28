@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Manatee.Json.Schema
@@ -16,6 +17,20 @@ namespace Manatee.Json.Schema
 		public JsonSchemaTypeDefinition this[string name]
 		{
 			get { return this.FirstOrDefault(p => p.Name == name); }
+			set
+			{
+				if (name == null) throw new ArgumentNullException(nameof(name));
+				if (string.IsNullOrWhiteSpace(name))
+					throw new ArgumentException($"Parameter '{nameof(name)}' must not be null or empty.");
+				if (!string.IsNullOrWhiteSpace(value.Name))
+					throw new InvalidOperationException("Cannot add a named definition using the indexer.");
+
+				var definition = this[name];
+				Remove(definition);
+
+				value.Name = name;
+				Add(value);
+			}
 		}
 	}
 }

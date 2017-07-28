@@ -18,14 +18,19 @@ namespace Manatee.Json.Tests.Schema
 		[TestMethod]
 		public void OnlineDraft04()
 		{
-			var reference = new JsonSchemaReference(JsonSchema.Draft04.Id);
-			reference.Validate(new JsonObject());
+			var localSchemaJson = JsonSchema.Draft04.ToJson(null);
 
-			var onlineValidation = reference.Validate(JsonSchema.Draft04.ToJson(null));
-			var localValidation = JsonSchema.Draft04.Validate(reference.Resolved.ToJson(null));
+			var onlineSchemaText = JsonSchemaOptions.Download(JsonSchema.Draft04.Id);
+			var onlineSchemaJson = JsonValue.Parse(onlineSchemaText);
+			var onlineSchema = JsonSchemaFactory.FromJson(onlineSchemaJson);
+
+			var localValidation = JsonSchema.Draft04.Validate(onlineSchemaJson);
+			var onlineValidation = onlineSchema.Validate(localSchemaJson);
 
 			Assert.IsTrue(onlineValidation.Valid);
 			Assert.IsTrue(localValidation.Valid);
+
+			Assert.AreEqual(onlineSchemaJson, localSchemaJson);
 		}
 	}
 }
