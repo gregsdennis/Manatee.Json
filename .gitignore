@@ -5,6 +5,7 @@
 /.tools
 /.release
 /.vs
+/.idea
 [Bb]in
 [Oo]bj
 /packages
@@ -15,3 +16,5 @@
 **/*.nupkg
 msbuild.log
 nuget.exe
+
+**/.DS_Store

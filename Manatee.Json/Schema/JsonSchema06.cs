@@ -721,9 +721,8 @@ namespace Manatee.Json.Schema
 				json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
 			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
 			if (Properties != null && Properties.Any(p => !p.IsHidden))
-			{
+				// TODO: Type can be null if the schema was created in code.
 				json["properties"] = Properties.Where(p => !p.IsHidden).ToDictionary(p => p.Name, p => p.Type).ToJson(serializer);
-			}
 			if (PatternProperties != null && PatternProperties.Any())
 				json["patternProperties"] = PatternProperties.ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value).ToJson(serializer);
 			if ((Dependencies != null) && Dependencies.Any())

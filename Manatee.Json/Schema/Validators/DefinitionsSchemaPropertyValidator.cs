@@ -2,14 +2,16 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class DefinitionsSchemaPropertyValidator : IJsonSchemaPropertyValidator<JsonSchema04>,
-	                                                    IJsonSchemaPropertyValidator<JsonSchema06>
+	internal abstract class DefinitionsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema04 schema, JsonValue json)
+		protected abstract IJsonSchema GetMetaSchema();
+		
+		public bool Applies(T schema, JsonValue json)
 		{
 			return json.Type == JsonValueType.Object && json.Object.ContainsKey("definitions");
 		}
-		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
 			var errors = new List<SchemaValidationError>();
 			var definitions = json.Object["definitions"];
@@ -21,22 +23,21 @@ namespace Manatee.Json.Schema.Validators
 			}
 			return new SchemaValidationResults(errors);
 		}
-
-		public bool Applies(JsonSchema06 schema, JsonValue json)
+	}
+	
+	internal class DefinitionsSchema04PropertyValidator : DefinitionsSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override IJsonSchema GetMetaSchema()
 		{
-			return json.Type == JsonValueType.Object && json.Object.ContainsKey("definitions");
+			return JsonSchema04.MetaSchema;
 		}
-		public SchemaValidationResults Validate(JsonSchema06 schema, JsonValue json, JsonValue root)
+	}
+	
+	internal class DefinitionsSchema06PropertyValidator : DefinitionsSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override IJsonSchema GetMetaSchema()
 		{
-			var errors = new List<SchemaValidationError>();
-			var definitions = json.Object["definitions"];
-			if (definitions.Type != JsonValueType.Object)
-				errors.Add(new SchemaValidationError("definitions", "Property 'definitions' must contain an object."));
-			foreach (var value in definitions.Object.Values)
-			{
-				errors.AddRange(JsonSchema06.MetaSchema.Validate(value).Errors);
-			}
-			return new SchemaValidationResults(errors);
+			return JsonSchema06.MetaSchema;
 		}
 	}
 }

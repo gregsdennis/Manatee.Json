@@ -38,13 +38,8 @@ namespace Manatee.Json.Schema
 				throw new ArgumentNullException(nameof(name));
 
 			Name = name;
-			Type = JsonSchema04.Empty;
 		}
-
-		internal JsonSchemaPropertyDefinition()
-		{
-			Type = JsonSchema04.Empty;
-		}
+		private JsonSchemaPropertyDefinition() { }
 
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
@@ -66,7 +61,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonObject {{Name, Type.ToJson(serializer)}};
+			return new JsonObject {{Name, Type?.ToJson(serializer) ?? new JsonObject()}};
 		}
 
 		/// <summary>Returns a string that represents the current object.</summary>

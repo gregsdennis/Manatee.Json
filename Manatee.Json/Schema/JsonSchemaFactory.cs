@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Manatee.Json.Schema
 {
@@ -48,12 +49,26 @@ namespace Manatee.Json.Schema
 			switch (json.Type)
 			{
 				case JsonValueType.Object:
-					schema = json.Object.ContainsKey("$ref")
-								 ? new JsonSchemaReference()
-								 : new JsonSchema04(); // TODO: this needs to determine if 04 or 06s
+					if (json.Object.ContainsKey("$ref"))
+						schema = new JsonSchemaReference();
+					else
+					{
+						if (JsonSchema04.MetaSchema.Validate(json).Valid)
+							schema = new JsonSchema04();
+						else if (JsonSchema06.MetaSchema.Validate(json).Valid)
+							schema = new JsonSchema06();
+						else
+							throw new NotImplementedException("Cannot determine JSON Schema version.  Only Drafts 04 and 06 are supported.");
+					}
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();
+					break;
+				case JsonValueType.Boolean:
+					if (JsonSchema06.MetaSchema.Validate(json).Valid)
+						schema = new JsonSchema06();
+					else
+						throw new NotImplementedException("Only Draft 06 supports boolean schemata.");
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(json.Type), "JSON Schema must be objects.");

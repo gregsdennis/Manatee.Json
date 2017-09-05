@@ -1,20 +1,40 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class EnumSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class EnumSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema04 schema, JsonValue json)
+		protected abstract IEnumerable<EnumSchemaValue> GetEnum(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.Enum != null;
+			return GetEnum(schema) != null;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.Enum.Select(d => d.Validate(json)).ToList();
+			var errors = GetEnum(schema).Select(d => d.Validate(json)).ToList();
 			return errors.Any(r => r.Valid)
 				? new SchemaValidationResults()
 				: new SchemaValidationResults(errors);
+		}
+	}
+	
+	internal class Enumchema04PropertyValidator : EnumSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override IEnumerable<EnumSchemaValue> GetEnum(JsonSchema04 schema)
+		{
+			return schema.Enum;
+		}
+	}
+	
+	internal class Enumchema06PropertyValidator : EnumSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override IEnumerable<EnumSchemaValue> GetEnum(JsonSchema06 schema)
+		{
+			return schema.Enum;
 		}
 	}
 }
