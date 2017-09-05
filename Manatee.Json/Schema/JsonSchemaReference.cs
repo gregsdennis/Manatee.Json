@@ -9,6 +9,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
+	// TODO: Resolve how references can inherit functionality from both Draft04 and Draft06
 	public class JsonSchemaReference : JsonSchema04
 	{
 		/// <summary>

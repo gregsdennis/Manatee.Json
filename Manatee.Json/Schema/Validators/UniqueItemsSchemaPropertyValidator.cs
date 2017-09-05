@@ -2,13 +2,16 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class UniqueItemsSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class UniqueItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema04 schema, JsonValue json)
+		protected abstract bool? GetUniqueItems(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return (schema.UniqueItems ?? false) && json.Type == JsonValueType.Array;
+			return (GetUniqueItems(schema) ?? false) && json.Type == JsonValueType.Array;
 		}
-		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
 			return json.Array.Count != json.Array.Distinct().Count()
 				       ? new SchemaValidationResults(string.Empty, "Expected unique items; Duplicates were found.")

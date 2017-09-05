@@ -2,24 +2,38 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class MaxLengthSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class MaxLengthSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		protected abstract uint? GetMaxLength(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return _GetMaxLength(schema).HasValue && json.Type == JsonValueType.String;
+			return GetMaxLength(schema).HasValue && json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			var maxLength = _GetMaxLength(schema);
+			var maxLength = GetMaxLength(schema);
 			var length = new StringInfo(json.String).LengthInTextElements;
 			if (maxLength.HasValue && length > maxLength)
 				return new SchemaValidationResults(string.Empty, $"Expected: length <= {maxLength}; Actual: {length}.");
 			return new SchemaValidationResults();
 		}
-
-		private static uint? _GetMaxLength(IJsonSchema schema)
+	}
+	
+	internal class MaxLengthSchema04PropertyValidator : MaxLengthSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override uint? GetMaxLength(JsonSchema04 schema)
 		{
-			return (schema as JsonSchema04)?.MaxLength ?? (schema as JsonSchema06)?.MaxLength;
+			return schema.MaxLength;
+		}
+	}
+	
+	internal class MaxLengthSchema06PropertyValidator : MaxLengthSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override uint? GetMaxLength(JsonSchema06 schema)
+		{
+			return schema.MaxLength;
 		}
 	}
 }

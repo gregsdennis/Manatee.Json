@@ -1,7 +1,6 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal class MinimumSchemaPropertyValidator : IJsonSchemaPropertyValidator<JsonSchema04>,
-	                                                IJsonSchemaPropertyValidator<JsonSchema06>
+	internal class MinimumSchema04PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema04>
 	{
 		public bool Applies(JsonSchema04 schema, JsonValue json)
 		{
@@ -22,7 +21,9 @@
 			}
 			return new SchemaValidationResults();
 		}
-
+	}
+	internal class MinimumSchema06PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema06>
+	{
 		public bool Applies(JsonSchema06 schema, JsonValue json)
 		{
 			return (schema.Minimum.HasValue || schema.ExclusiveMinimum.HasValue) &&
@@ -30,10 +31,12 @@
 		}
 		public SchemaValidationResults Validate(JsonSchema06 schema, JsonValue json, JsonValue root)
 		{
-			if (json.Number <= schema.ExclusiveMinimum)
-				return new SchemaValidationResults(string.Empty, $"Expected: > {schema.ExclusiveMinimum}; Actual: {json.Number}.");
-			if (json.Number < schema.Minimum)
-				return new SchemaValidationResults(string.Empty, $"Expected: >= {schema.Minimum}; Actual: {json.Number}.");
+			var min = schema.ExclusiveMinimum ?? schema.Minimum;
+			var operation = schema.ExclusiveMaximum.HasValue ? ">" : ">=";
+			
+			if (json.Number <= min)
+				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {min}; Actual: {json.Number}.");
+
 			return new SchemaValidationResults();
 		}
 	}

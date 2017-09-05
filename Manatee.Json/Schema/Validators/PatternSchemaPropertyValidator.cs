@@ -2,17 +2,36 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class PatternSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class PatternSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema04 schema, JsonValue json)
+		protected abstract string GetPattern(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.Pattern != null && json.Type == JsonValueType.String;
+			return GetPattern(schema) != null && json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			return Regex.IsMatch(json.String, schema.Pattern)
+			return Regex.IsMatch(json.String, GetPattern(schema))
 				       ? new SchemaValidationResults()
-				       : new SchemaValidationResults(string.Empty, $"Value [{json.String}] does not match required Regex pattern [{schema.Pattern}].");
+				       : new SchemaValidationResults(string.Empty, $"Value [{json.String}] does not match required Regex pattern [{GetPattern(schema)}].");
+		}
+	}
+	
+	internal class PatternSchema04PropertyValidator : PatternSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override string GetPattern(JsonSchema04 schema)
+		{
+			return schema.Pattern;
+		}
+	}
+	
+	internal class PatternSchema06PropertyValidator : PatternSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override string GetPattern(JsonSchema06 schema)
+		{
+			return schema.Pattern;
 		}
 	}
 }

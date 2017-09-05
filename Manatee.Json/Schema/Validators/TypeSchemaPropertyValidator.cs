@@ -4,15 +4,18 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class TypeSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class TypeSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema04 schema, JsonValue json)
+		protected abstract JsonSchemaTypeDefinition GetType(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.Type != null;
+			return GetType(schema) != null;
 		}
-		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			var multitype = schema.Type as JsonSchemaMultiTypeDefinition;
+			var multitype = GetType(schema) as JsonSchemaMultiTypeDefinition;
 			if (multitype != null)
 			{
 				var schemata = multitype.Defintions.Select(d => d.Definition);
@@ -29,27 +32,43 @@ namespace Manatee.Json.Schema.Validators
 			switch (json.Type)
 			{
 				case JsonValueType.Number:
-					if (Equals(schema.Type, JsonSchemaTypeDefinition.Number)) break;
-					if (json.Number.IsInt() && Equals(schema.Type, JsonSchemaTypeDefinition.Integer)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
+					if (Equals(GetType(schema), JsonSchemaTypeDefinition.Number)) break;
+					if (json.Number.IsInt() && Equals(GetType(schema), JsonSchemaTypeDefinition.Integer)) break;
+					return new SchemaValidationResults(string.Empty, $"Expected: {GetType(schema).Name}; Actual: {json.Type}.");
 				case JsonValueType.String:
-					if (schema.Type.Name == json.String) break;
-					if (Equals(schema.Type, JsonSchemaTypeDefinition.String)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
+					if (GetType(schema).Name == json.String) break;
+					if (Equals(GetType(schema), JsonSchemaTypeDefinition.String)) break;
+					return new SchemaValidationResults(string.Empty, $"Expected: {GetType(schema).Name}; Actual: {json.Type}.");
 				case JsonValueType.Boolean:
-					if (Equals(schema.Type, JsonSchemaTypeDefinition.Boolean)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
+					if (Equals(GetType(schema), JsonSchemaTypeDefinition.Boolean)) break;
+					return new SchemaValidationResults(string.Empty, $"Expected: {GetType(schema).Name}; Actual: {json.Type}.");
 				case JsonValueType.Object:
-					if (Equals(schema.Type, JsonSchemaTypeDefinition.Object)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
+					if (Equals(GetType(schema), JsonSchemaTypeDefinition.Object)) break;
+					return new SchemaValidationResults(string.Empty, $"Expected: {GetType(schema).Name}; Actual: {json.Type}.");
 				case JsonValueType.Array:
-					if (Equals(schema.Type, JsonSchemaTypeDefinition.Array)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
+					if (Equals(GetType(schema), JsonSchemaTypeDefinition.Array)) break;
+					return new SchemaValidationResults(string.Empty, $"Expected: {GetType(schema).Name}; Actual: {json.Type}.");
 				case JsonValueType.Null:
-					if (Equals(schema.Type, JsonSchemaTypeDefinition.Null)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {schema.Type.Name}; Actual: {json.Type}.");
+					if (Equals(GetType(schema), JsonSchemaTypeDefinition.Null)) break;
+					return new SchemaValidationResults(string.Empty, $"Expected: {GetType(schema).Name}; Actual: {json.Type}.");
 			}
 			return new SchemaValidationResults();
+		}
+	}
+
+	internal class TypeSchema04PropertyValidator : TypeSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override JsonSchemaTypeDefinition GetType(JsonSchema04 schema)
+		{
+			return schema.Type;
+		}
+	}
+
+	internal class TypeSchema06PropertyValidator : TypeSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override JsonSchemaTypeDefinition GetType(JsonSchema06 schema)
+		{
+			return schema.Type;
 		}
 	}
 }

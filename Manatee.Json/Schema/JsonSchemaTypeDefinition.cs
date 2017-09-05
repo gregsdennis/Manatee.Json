@@ -73,6 +73,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 
+		// TODO: Need to dissociate these from Draft04.
 		static JsonSchemaTypeDefinition()
 		{
 			Array.Definition = new JsonSchema04 {Type = Array};

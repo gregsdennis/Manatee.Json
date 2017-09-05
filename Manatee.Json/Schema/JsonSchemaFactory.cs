@@ -45,7 +45,10 @@ namespace Manatee.Json.Schema
 		public static IJsonSchema FromJson(JsonValue json, Uri documentPath = null)
 		{
 			if (json == null) return null;
-			IJsonSchema schema;
+			// NOTE: I wonder if there's an issue with the compiler.  I have to assign null here
+			//		 because it thinks that schema is not initialized, but I can't find the path
+			//		 where it's not.
+			IJsonSchema schema = null;
 			switch (json.Type)
 			{
 				case JsonValueType.Object:
@@ -53,7 +56,25 @@ namespace Manatee.Json.Schema
 						schema = new JsonSchemaReference();
 					else
 					{
-						if (JsonSchema04.MetaSchema.Validate(json).Valid)
+						var schemaDeclaration = json.Object.TryGetString("$schema");
+						IJsonSchema validator = null;
+						if (schemaDeclaration == JsonSchema04.MetaSchema.Schema)
+						{
+							validator = JsonSchema04.MetaSchema;
+							schema = new JsonSchema04();
+						}
+						else if (schemaDeclaration == JsonSchema06.MetaSchema.Schema)
+						{
+							validator = JsonSchema06.MetaSchema;
+							schema = new JsonSchema06();
+						}
+						if (validator != null)
+						{
+							var results = validator.Validate(json);
+							if (!results.Valid) throw new ArgumentException($"Schema specifies '{schemaDeclaration}' but does not validate.");
+						}
+						// not specified; auto detect, default to 04
+						else if (JsonSchema04.MetaSchema.Validate(json).Valid)
 							schema = new JsonSchema04();
 						else if (JsonSchema06.MetaSchema.Validate(json).Valid)
 							schema = new JsonSchema06();
@@ -65,10 +86,9 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchemaCollection();
 					break;
 				case JsonValueType.Boolean:
-					if (JsonSchema06.MetaSchema.Validate(json).Valid)
-						schema = new JsonSchema06();
-					else
+					if (!JsonSchema06.MetaSchema.Validate(json).Valid)
 						throw new NotImplementedException("Only Draft 06 supports boolean schemata.");
+					schema = new JsonSchema06();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(json.Type), "JSON Schema must be objects.");
