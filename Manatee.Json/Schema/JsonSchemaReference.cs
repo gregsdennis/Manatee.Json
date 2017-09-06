@@ -51,11 +51,21 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class.
 		/// </summary>
+		/// <param name="baseSchema">An instance of the base schema to use (either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>).</param>
 		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is nulll, empty, or whitespace.</exception>
-		public JsonSchemaReference(string reference)
+		public JsonSchemaReference(IJsonSchema baseSchema, string reference)
 		{
-			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentNullException(nameof(reference));
+			Base = baseSchema ?? throw new ArgumentNullException(nameof(baseSchema));
+			Reference = reference ?? throw new ArgumentNullException(nameof(reference));
+
+			if (!(baseSchema is JsonSchema04) && !(baseSchema is JsonSchema06))
+				throw new ArgumentException("Only instances of JsonSchema04 and JsonSchema06 can be used for base schemata for references.", nameof(baseSchema));
+			// TODO: Can a reference be empty or whitespace?  They're valid JSON keys.
+			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentException($"{nameof(reference)} non-empty and non-whitespace");
+		}
+		private JsonSchemaReference(string reference)
+		{
 			Reference = reference;
 		}
 		/// <summary>
