@@ -134,5 +134,9 @@ namespace Manatee.Json.Schema
 		{
 			return new AdditionalProperties {Definition = schema};
 		}
+		public static implicit operator AdditionalProperties(JsonSchemaReference schema)
+		{
+			return new AdditionalProperties {Definition = schema};
+		}
 	}
 }

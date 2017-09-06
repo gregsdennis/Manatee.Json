@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Schema.Validators;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -73,7 +74,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		// TODO: Need to dissociate these from Draft04.
+		// TODO: Need to dissociate these from Draft04.  (This might actually be okay.)
 		static JsonSchemaTypeDefinition()
 		{
 			Array.Definition = new JsonSchema04 {Type = Array};
@@ -127,16 +128,6 @@ namespace Manatee.Json.Schema
 			Definition.FromJson(details.Value, null);
 		}
 
-		/// <summary>Returns a string that represents the current object.</summary>
-		/// <returns>A string that represents the current object.</returns>
-		/// <filterpriority>2</filterpriority>
-		public override string ToString()
-		{
-			if (!string.IsNullOrWhiteSpace(Name)) return Name;
-
-			return ToJson(null).ToString();
-		}
-
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
@@ -149,6 +140,17 @@ namespace Manatee.Json.Schema
 			if (Name == null) return Definition.ToJson(null);
 			return new JsonObject {{Name, Definition.ToJson(null)}};
 		}
+
+		/// <summary>Returns a string that represents the current object.</summary>
+		/// <returns>A string that represents the current object.</returns>
+		/// <filterpriority>2</filterpriority>
+		public override string ToString()
+		{
+			if (!string.IsNullOrWhiteSpace(Name)) return Name;
+
+			return ToJson(null).ToString();
+		}
+		
 		/// <summary>
 		/// Determines whether the specified <see cref="JsonSchemaTypeDefinition"/> is equal to the current <see cref="JsonSchemaTypeDefinition"/>.
 		/// </summary>

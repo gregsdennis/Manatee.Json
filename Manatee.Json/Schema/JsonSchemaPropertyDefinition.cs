@@ -113,5 +113,9 @@ namespace Manatee.Json.Schema
 		{
 			return new JsonSchemaPropertyDefinition {Type = schema};
 		}
+		public static implicit operator JsonSchemaPropertyDefinition(JsonSchemaReference schema)
+		{
+			return new JsonSchemaPropertyDefinition {Type = schema};
+		}
 	}
 }

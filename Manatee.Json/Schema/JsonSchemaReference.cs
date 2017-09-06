@@ -9,8 +9,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
-	// TODO: Resolve how references can inherit functionality from both Draft04 and Draft06
-	public class JsonSchemaReference : JsonSchema04
+	public class JsonSchemaReference : IJsonSchema
 	{
 		/// <summary>
 		/// Defines a reference to the root schema.
@@ -31,6 +30,22 @@ namespace Manatee.Json.Schema
 		/// The <see cref="_Resolve"/> method must first be called.
 		/// </remarks>
 		public IJsonSchema Resolved { get; private set; }
+		public IJsonSchema Base { get; set; }
+		public string Id
+		{
+			get { return Base.Id; }
+			set { Base.Id = value; }
+		}
+		public string Schema
+		{
+			get { return Base.Schema; }
+			set { Base.Schema = value; }
+		}
+		public Uri DocumentPath
+		{
+			get { return Base.DocumentPath; }
+			set { Base.DocumentPath = value; }
+		}
 
 		internal JsonSchemaReference() {}
 		/// <summary>
@@ -49,7 +64,7 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			var jValue = root ?? ToJson(null);
 			if (Resolved == null || root == null)
@@ -64,9 +79,9 @@ namespace Manatee.Json.Schema
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
-		public override void FromJson(JsonValue json, JsonSerializer serializer)
+		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			base.FromJson(json, serializer);
+			Base.FromJson(json, serializer);
 			Reference = json.Object["$ref"].String;
 		}
 		/// <summary>
@@ -75,9 +90,9 @@ namespace Manatee.Json.Schema
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson(JsonSerializer serializer)
+		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			var json = base.ToJson(serializer);
+			var json = Base.ToJson(serializer);
 			json.Object["$ref"] = Reference;
 			return json;
 		}
@@ -88,7 +103,7 @@ namespace Manatee.Json.Schema
 		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
 		/// </returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public override bool Equals(IJsonSchema other)
+		public bool Equals(IJsonSchema other)
 		{
 			var schema = other as JsonSchemaReference;
 			return schema != null && schema.Reference == Reference;

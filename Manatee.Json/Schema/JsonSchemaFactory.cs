@@ -71,7 +71,7 @@ namespace Manatee.Json.Schema
 						if (validator != null)
 						{
 							var results = validator.Validate(json);
-							if (!results.Valid) throw new ArgumentException($"Schema specifies '{schemaDeclaration}' but does not validate.");
+							if (!results.Valid) throw new SchemaLoadException($"Schema specifies '{schemaDeclaration}' but does not validate.");
 						}
 						// not specified; auto detect, default to 04
 						else if (JsonSchema04.MetaSchema.Validate(json).Valid)
@@ -79,7 +79,7 @@ namespace Manatee.Json.Schema
 						else if (JsonSchema06.MetaSchema.Validate(json).Valid)
 							schema = new JsonSchema06();
 						else
-							throw new NotImplementedException("Cannot determine JSON Schema version.  Only Drafts 04 and 06 are supported.");
+							throw new SchemaLoadException("Cannot determine JSON Schema version.  Only Drafts 04 and 06 are supported.");
 					}
 					break;
 				case JsonValueType.Array:
@@ -87,11 +87,11 @@ namespace Manatee.Json.Schema
 					break;
 				case JsonValueType.Boolean:
 					if (!JsonSchema06.MetaSchema.Validate(json).Valid)
-						throw new NotImplementedException("Only Draft 06 supports boolean schemata.");
+						throw new SchemaLoadException("Only Draft 06 supports boolean schemata.");
 					schema = new JsonSchema06();
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(json.Type), "JSON Schema must be objects.");
+					throw new SchemaLoadException($"JSON Schema must be objects; actual type: {json.Type}");
 			}
 			schema.DocumentPath = documentPath;
 			schema.FromJson(json, null);
