@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Serialization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Path.TestSuite
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonPathTestSuite
 	{
 		private const string TestFolder = @"..\..\..\Json-Path-Test-Suite\tests\";
@@ -24,7 +24,7 @@ namespace Manatee.Json.Tests.Path.TestSuite
 			JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
 		}
 
-		[TestMethod]
+		[Test]
 		public void RunSuite()
 		{
 			// uncomment and paste the filename of a test suite to debug it.
@@ -34,7 +34,8 @@ namespace Manatee.Json.Tests.Path.TestSuite
 
 			try
 			{
-				var fileNames = Directory.GetFiles(TestFolder);
+				var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, TestFolder).AdjustForOS();
+				var fileNames = Directory.GetFiles(testsPath);
 
 				foreach (var fileName in fileNames)
 				{

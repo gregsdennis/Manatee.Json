@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class EnumSchemaTest
 	{
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnValueOutOfRange()
 		{
 			var schema = new JsonSchema04
@@ -26,7 +26,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValueInRange()
 		{
 			var schema = new JsonSchema04

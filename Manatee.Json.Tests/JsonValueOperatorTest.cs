@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonValueOperatorTest
 	{
-		[TestMethod]
+		[Test]
 		public void CastOperator_Bool_AssignsCorrectValue()
 		{
 			var json = new JsonValue();
@@ -15,7 +16,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(JsonValueType.Boolean, json.Type);
 			Assert.AreEqual(expected, json.Boolean);
 		}
-		[TestMethod]
+		[Test]
 		public void CastOperator_Number_AssignsCorrectValue()
 		{
 			var json = new JsonValue();
@@ -25,7 +26,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(JsonValueType.Number, json.Type);
 			Assert.AreEqual(expected, json.Number);
 		}
-		[TestMethod]
+		[Test]
 		public void CastOperator_String_AssignsCorrectValue()
 		{
 			var json = new JsonValue();
@@ -35,7 +36,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(JsonValueType.String, json.Type);
 			Assert.AreEqual(expected, json.String);
 		}
-		[TestMethod]
+		[Test]
 		public void CastOperator_Array_AssignsCorrectValue()
 		{
 			var json = new JsonValue();
@@ -45,7 +46,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(JsonValueType.Array, json.Type);
 			Assert.AreEqual(expected, json.Array);
 		}
-		[TestMethod]
+		[Test]
 		public void CastOperator_Object_AssignsCorrectValue()
 		{
 			var json = new JsonValue();

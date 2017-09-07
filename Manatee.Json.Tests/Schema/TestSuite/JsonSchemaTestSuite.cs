@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema.TestSuite
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonSchemaTestSuite
 	{
 		private const string TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
@@ -28,7 +28,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			Serializer = new JsonSerializer();
 		}
 
-		[TestMethod]
+		[Test]
 		public void RunSuite()
 		{
 			// uncomment and paste the filename of a test suite to debug it.
@@ -42,7 +42,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			{
 				_StartServer();
 
-				var fileNames = Directory.GetFiles(TestFolder);
+				var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, TestFolder).AdjustForOS();
+				var fileNames = Directory.GetFiles(testsPath);
 
 				foreach (var fileName in fileNames)
 				{

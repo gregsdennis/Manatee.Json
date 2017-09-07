@@ -6,16 +6,16 @@ using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Path;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+// ReSharper disable EqualExpressionComparison
+// ReSharper disable ExpressionIsAlwaysNull
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class ClientTest
 	{
-		public TestContext TestContext { get; set; }
-
-		[TestMethod]
+		[Test]
 		public void Parse_StringFromSourceForge_kheimric()
 		{
 			var s = @"{
@@ -75,7 +75,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Parse_InternationalCharacters_DaVincious_TrelloIssue19()
 		{
 			var s = @"""ÅÄÖ""";
@@ -94,18 +94,18 @@ namespace Manatee.Json.Tests
 			Three = 3
 		}
 
-		[TestMethod]
+		[Test]
 		public void SerializerTemplateGeneration_EnumWithoutNamedZero_Danoceline_Issue13()
 		{
 			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
-			var expected = "0";
+			JsonValue expected = "0";
 
 			var actual = serializer.GenerateTemplate<NoNamedZero>();
 
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void DeserializeUnnamedEnumEtry_InspiredBy_Danoceline_Issue13()
 		{
 			var serializer = new JsonSerializer { Options = { EnumSerializationFormat = EnumSerializationFormat.AsName } };
@@ -117,7 +117,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void DeserializeSchema_TypePropertyIsArray_Issue14()
 		{
 			var text = "{\"type\":\"object\",\"properties\":{\"home\":{\"type\":[\"object\",\"null\"],\"properties\":{\"street\":{\"type\":\"string\"}}}}}";
@@ -149,7 +149,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void DeclaredTypeWithDeclaredEnum_Issue15()
 		{
 			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
@@ -168,7 +168,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void PathIntolerantOfUndscoresInPropertyNames_Issue16()
 		{
 			var expected = JsonPathWith.Name("properties").Name("id_person");
@@ -178,7 +178,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected.ToString(), actual.ToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void UriValidationIntolerantOfLocalHost_Issue17()
 		{
 			var text = "{\"id\": \"http://localhost/json-schemas/address.json\"}";
@@ -190,7 +190,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(true, results.Valid);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Issue31_JsonPathArrayOperatorShouldWorkOnObjects_Parsed()
 		{
 			var json = GoessnerExamplesTest.GoessnerData;
@@ -201,7 +201,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(new JsonArray { "red", 19.95 }, results);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Issue31_JsonPathArrayOperatorShouldWorkOnObjects_Constructed()
 		{
 			var json = GoessnerExamplesTest.GoessnerData;
@@ -214,12 +214,10 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(new JsonArray { "red", 19.95 }, results);
 		}
 
-		[TestMethod]
-		[DeploymentItem(@"Files\baseSchema.json")]
-		[DeploymentItem(@"Files\refSchema.json")]
+		[Test]
 		public void Issue45a_Utf8SupportInReferenceSchemaEnums()
 		{
-			var fileName = System.IO.Path.GetFullPath(@"baseSchema.json");
+			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\baseSchema.json").AdjustForOS();
 
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
 			var schema = JsonSchemaRegistry.Get(fileName);
@@ -229,12 +227,10 @@ namespace Manatee.Json.Tests
 			Assert.IsTrue(result.Valid);
 		}
 
-		[TestMethod]
-		[DeploymentItem(@"Files\baseSchema.json")]
-		[DeploymentItem(@"Files\refSchema.json")]
+		[Test]
 		public void Issue45b_Utf8SupportInReferenceSchemaEnums()
 		{
-			var fileName = System.IO.Path.GetFullPath(@"baseSchema.json");
+			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\baseSchema.json").AdjustForOS();
 
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
 			var schema = JsonSchemaRegistry.Get(fileName);
@@ -254,11 +250,10 @@ namespace Manatee.Json.Tests
 			Assert.IsTrue(result.Valid);
 		}
 
-		[TestMethod]
-		[DeploymentItem(@"Files\issue49.json")]
+		[Test]
 		public void Issue49_RequiredAndAllOfInSingleSchema()
 		{
-			var fileName = System.IO.Path.GetFullPath("issue49.json");
+			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\issue49.json").AdjustForOS();
 			var expected = new JsonSchema04
 				{
 					Title = "JSON schema for Something",
@@ -296,7 +291,7 @@ namespace Manatee.Json.Tests
 						},
 					Type = JsonSchemaTypeDefinition.Array,
 					Description = "An array of somethings.",
-					Items = new JsonSchemaReference("#/definitions/something")
+					Items = new JsonSchemaReference(new JsonSchema04(), "#/definitions/something")
 				};
 
 			var schema = JsonSchemaRegistry.Get(fileName);
@@ -311,15 +306,10 @@ namespace Manatee.Json.Tests
 		}
 
 
-		[TestMethod]
-		[DeploymentItem(@"Files\Issue50A.json", "Files")]
-		[DeploymentItem(@"Files\Issue50B.json", "Files")]
-		[DeploymentItem(@"Files\Issue50C\Issue50D.json", @"Files\Issue50C\")]
-		[DeploymentItem(@"Files\Issue50C\Issue50E.json", @"Files\Issue50C\")]
-		[DeploymentItem(@"Files\Issue50C\Issue50F\Issue50G.json", @"Files\Issue50C\Issue50F\")]
+		[Test]
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
 		{
-			string path = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue50A.json");
+			string path = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue50A.json").AdjustForOS();
 			var schema = JsonSchemaRegistry.Get(path);
 			var json = new JsonObject
 				{
@@ -341,7 +331,7 @@ namespace Manatee.Json.Tests
 			Assert.IsTrue(results.Valid);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Issue56_InconsistentNullAssignment()
 		{
 			JsonValue json1 = null;  // this is actually null
@@ -360,19 +350,17 @@ namespace Manatee.Json.Tests
 			Assert.IsFalse(Equals(null, json2));
 		}
 
-		[TestMethod]
-		[DeploymentItem(@"Files\Issue58RefCore.json", "Files")]
-		[DeploymentItem(@"Files\Issue58RefChild.json", "Files")]
+		[Test]
 		public void Issue58_UriReferenceSchemaTest()
 		{
 			const string coreSchemaUri = "http://example.org/Issue58RefCore.json";
 			const string childSchemaUri = "http://example.org/Issue58RefChild.json";
 
-			string coreSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefCore.json");
-			string childSchemaPath = System.IO.Path.Combine(TestContext.TestDeploymentDir, @"Files\Issue58RefChild.json");
+			var coreSchemaPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue58RefCore.json").AdjustForOS();
+			var childSchemaPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue58RefChild.json").AdjustForOS();
 
-			var coreSchemaText = string.Empty;
-			var childSchemaText = string.Empty;
+			string coreSchemaText;
+			string childSchemaText;
 
 			using (TextReader reader = File.OpenText(coreSchemaPath))
 			{

@@ -2,14 +2,14 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class ObjectSchemaTest
 	{
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnNonObject()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Object};
@@ -20,7 +20,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnRequiredPropertyMissing()
 		{
 			var schema = new JsonSchema04
@@ -42,7 +42,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnOptionalPropertyMissing()
 		{
 			var schema = new JsonSchema04
@@ -63,7 +63,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidProperty()
 		{
 			var schema = new JsonSchema04
@@ -84,7 +84,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnAllValidProperties()
 		{
 			var schema = new JsonSchema04
@@ -105,7 +105,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidPatternProperty()
 		{
 			var schema = new JsonSchema04
@@ -131,7 +131,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnUnmatchedPatternProperty()
 		{
 			var schema = new JsonSchema04
@@ -157,7 +157,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidAdditionalProperty()
 		{
 			var schema = new JsonSchema04
@@ -180,7 +180,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidAdditionalProperty()
 		{
 			var schema = new JsonSchema04
@@ -203,7 +203,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidPatternProperty()
 		{
 			var schema = new JsonSchema04
@@ -229,7 +229,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnNotTooManyProperties()
 		{
 			var schema = new JsonSchema04
@@ -244,7 +244,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsInvalidOnTooManyProperties()
 		{
 			var schema = new JsonSchema04
@@ -259,7 +259,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(1, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnNotTooFewProperties()
 		{
 			var schema = new JsonSchema04
@@ -274,7 +274,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsInvalidOnTooFewProperties()
 		{
 			var schema = new JsonSchema04

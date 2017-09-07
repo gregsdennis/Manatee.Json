@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class DevTest
 	{
-		[TestMethod]
-		[Ignore]
+		[Test]
+		// TOOD: Add categories to exclude this test.
+		[Ignore("This test for development purposes only.")]
 		public void Test1()
 		{
 			var text = "http://www.google.com/file/";
@@ -18,7 +19,7 @@ namespace Manatee.Json.Tests
 			Console.WriteLine(uri);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SchemaLayoutTest()
 		{
 			var schema = new JsonSchema06
@@ -43,7 +44,7 @@ namespace Manatee.Json.Tests
 								{
 									AllOf = new List<IJsonSchema>
 										{
-											new JsonSchemaReference("#/definitions/positiveInteger"),
+											new JsonSchemaReference(new JsonSchema06(), "#/definitions/positiveInteger"),
 											new JsonSchema06 {Default = 0}
 										}
 								},
@@ -98,8 +99,8 @@ namespace Manatee.Json.Tests
 							["exclusiveMaximum"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number},
 							["minimum"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number},
 							["exclusiveMinimum"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number},
-							["maxLength"] = new JsonSchemaReference("#/definitions/nonNegativeInteger"),
-							["minLength"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0"),
+							["maxLength"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/nonNegativeInteger"),
+							["minLength"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/nonNegativeIntegerDefault0"),
 							["pattern"] = new JsonSchema06
 								{
 									Type = JsonSchemaTypeDefinition.String,
@@ -111,21 +112,21 @@ namespace Manatee.Json.Tests
 									AnyOf = new List<IJsonSchema>
 										{
 											JsonSchemaReference.Root,
-											new JsonSchemaReference("#/definitions/schemaArray")
+											new JsonSchemaReference(new JsonSchema06(), "#/definitions/schemaArray")
 										},
 									Default = new JsonObject()
 								},
-							["maxItems"] = new JsonSchemaReference("#/definitions/nonNegativeInteger"),
-							["minItems"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0"),
+							["maxItems"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/nonNegativeInteger"),
+							["minItems"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/nonNegativeIntegerDefault0"),
 							["uniqueItems"] = new JsonSchema06
 								{
 									Type = JsonSchemaTypeDefinition.Boolean,
 									Default = false
 								},
 							["contains"] = JsonSchemaReference.Root,
-							["maxProperties"] = new JsonSchemaReference("#/definitions/nonNegativeInteger"),
-							["minProperties"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0"),
-							["required"] = new JsonSchemaReference("#/definitions/stringArray"),
+							["maxProperties"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/nonNegativeInteger"),
+							["minProperties"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/nonNegativeIntegerDefault0"),
+							["required"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/stringArray"),
 							["additionalProperties"] = JsonSchemaReference.Root,
 							["definitions"] = new JsonSchema06
 								{
@@ -153,7 +154,7 @@ namespace Manatee.Json.Tests
 											AnyOf = new List<IJsonSchema>
 												{
 													JsonSchemaReference.Root,
-													new JsonSchemaReference("#/definitions/stringArray")
+													new JsonSchemaReference(new JsonSchema06(), "#/definitions/stringArray")
 												}
 										}
 								},
@@ -169,20 +170,20 @@ namespace Manatee.Json.Tests
 								{
 									AnyOf = new List<IJsonSchema>
 										{
-											new JsonSchemaReference("#/definitions/simpleTypes"),
+											new JsonSchemaReference(new JsonSchema06(), "#/definitions/simpleTypes"),
 											new JsonSchema06
 												{
 													Type = JsonSchemaTypeDefinition.Array,
-													Items = new JsonSchemaReference("#/definitions/simpleTypes"),
+													Items = new JsonSchemaReference(new JsonSchema06(), "#/definitions/simpleTypes"),
 													MinItems = 1,
 													UniqueItems = true
 												}
 										}
 								},
 							["format"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
-							["allOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-							["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-							["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
+							["allOf"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/schemaArray"),
+							["anyOf"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/schemaArray"),
+							["oneOf"] = new JsonSchemaReference(new JsonSchema06(), "#/definitions/schemaArray"),
 							["not"] = JsonSchemaReference.Root
 						},
 					Default = new JsonObject()

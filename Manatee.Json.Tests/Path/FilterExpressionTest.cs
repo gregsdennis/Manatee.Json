@@ -1,9 +1,9 @@
 ﻿using Manatee.Json.Path;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Path
 {
-	[TestClass]
+	[TestFixture]
 	public class FilterExpressionParseTest
 	{
 		private static void Run(JsonPath expected, string text)
@@ -37,67 +37,67 @@ namespace Manatee.Json.Tests.Path
 			Assert.AreEqual(expectedResult, actualResult);
 		}
 
-		[TestMethod]
+		[Test]
 		public void PropertyEqualsValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.Name("test") == 5), "$[?(@.test == 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void PropertyNotEqualToValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.Name("test") != 5), "$[?(@.test != 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void PropertyGreaterThanValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.Name("test") > 5), "$[?(@.test > 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void PropertyGreaterThanEqualToValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.Name("test") >= 5), "$[?(@.test >= 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void PropertyLessThanValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.Name("test") < 5), "$[?(@.test < 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void PropertyLessThanEqualToValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.Name("test") <= 5), "$[?(@.test <= 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void ArrayIndexEqualsValue()
 		{
 			Run(JsonPathWith.Array(jv => jv.ArrayIndex(1) == 5), "$[?(@[1] == 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void HasProperty()
 		{
 			Run(JsonPathWith.Array(jv => jv.HasProperty("test")), "$[?(@.test)]");
 		}
-		[TestMethod]
+		[Test]
 		public void DoesNotHaveProperty()
 		{
 			Run(JsonPathWith.Array(jv => !jv.HasProperty("test")), "$[?(!@.test)]");
 		}
-		[TestMethod]
+		[Test]
 		public void GroupedNot()
 		{
 			Run(JsonPathWith.Array(jv => !(jv.HasProperty("test") && jv.Name("name") == 5)), "$[?(!(@.test && @.name == 5))]");
 		}
-		[TestMethod]
+		[Test]
 		public void And()
 		{
 			Run(JsonPathWith.Array(jv => jv.HasProperty("test") && jv.Name("name") == 5), "$[?(@.test && @.name == 5)]");
 		}
-		[TestMethod]
+		[Test]
 		public void Or()
 		{
 			Run(JsonPathWith.Array(jv => jv.HasProperty("test") || jv.Name("name") == 5),"$[?(@.test || @.name == 5)]");
 		}
-		[TestMethod]
+		[Test]
 		// This won't work the same.  Parsing generates an IndexOfExpression with a distinct parameter,
 		// but when constructing the path, the parameter goes through several castings generating a
 		// parameter expression. The parsed path would be different in structure but should still
@@ -106,7 +106,7 @@ namespace Manatee.Json.Tests.Path
 		{
 			CompareEval(JsonPathWith.Array(jv => jv.IndexOf(5) == 4), "$[?(@.indexOf(5) == 4)]");
 		}
-		[TestMethod]
+		[Test]
 		// This won't work the same.  Parsing generates an IndexOfExpression with a distinct parameter,
 		// but when constructing the path, the parameter goes through several castings generating a
 		// parameter expression. The parsed path would be different in structure but should still
@@ -115,7 +115,7 @@ namespace Manatee.Json.Tests.Path
 		{
 			CompareEval(JsonPathWith.Array(jv => jv.IndexOf(true) == 3), "$[?(@.indexOf(true) == 3)]");
 		}
-		[TestMethod]
+		[Test]
 		// This won't work the same.  Parsing generates an IndexOfExpression with a distinct parameter,
 		// but when constructing the path, the parameter goes through several castings generating a
 		// parameter expression. The parsed path would be different in structure but should still
@@ -124,7 +124,7 @@ namespace Manatee.Json.Tests.Path
 		{
 			CompareEval(JsonPathWith.Array(jv => jv.IndexOf("string") == 2), "$[?(@.indexOf(\"hello\") == 2)]");
 		}
-		[TestMethod]
+		[Test]
 		// This won't work the same.  Parsing generates a ValueExpression, but the only way to
 		// construct the path is to pass the field, which generates a FieldExpression. The parsed
 		// path would be different in structure but should still represent the same thing.
@@ -134,7 +134,7 @@ namespace Manatee.Json.Tests.Path
 			var arr = new JsonArray {1, 2, 3};
 			CompareEval(JsonPathWith.Array(jv => jv.IndexOf(arr) == 6), "$[?(@.indexOf([1,2,3]) == 6)]");
 		}
-		[TestMethod]
+		[Test]
 		// This won't work the same.  Parsing generates a ValueExpression, but the only way to
 		// construct the path is to pass the field, which generates a FieldExpression. The parsed
 		// path would be different in structure but should still represent the same thing.

@@ -1,13 +1,13 @@
 using System;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonValueParseTest
 	{
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithBoolFalse_ReturnsCorrectJsonValue()
 		{
 			var s = "false";
@@ -15,7 +15,7 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithBoolTrue_ReturnsCorrectJsonValue()
 		{
 			var s = "true";
@@ -23,7 +23,7 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithNumber_ReturnsCorrectJsonValue()
 		{
 			var s = "42";
@@ -31,7 +31,7 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithString_ReturnsCorrectJsonValue()
 		{
 			var s = "\"a string\"";
@@ -39,7 +39,7 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithArray_ReturnsCorrectJsonValue()
 		{
 			var s = "[false,42,\"a string\"]";
@@ -47,7 +47,7 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithObject_ReturnsCorrectJsonValue()
 		{
 			var s = "{\"bool\":false,\"int\":42,\"string\":\"a string\"}";
@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithNull_ReturnsCorrectJsonValue()
 		{
 			var s = "null";
@@ -63,7 +63,7 @@ namespace Manatee.Json.Tests
 			var actual = JsonValue.Parse(s);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithNulf_ReturnsCorrectJsonValue()
 		{
 			var s = "nulf";
@@ -76,7 +76,7 @@ namespace Manatee.Json.Tests
 				Assert.AreEqual("Value not recognized: 'nulf'. Path: '$'", e.Message);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithBadToken_ThrowsJsonValueParseException()
 		{
 			var s = "invalid data";
@@ -89,7 +89,7 @@ namespace Manatee.Json.Tests
 				Assert.AreEqual("Cannot determine type. Path: '$'", e.Message);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedQuote_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\\"escaped quote with\\\" spaces\"";
@@ -98,7 +98,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedSolidus_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\\\escaped\\\\ solidus\"";
@@ -107,7 +107,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedReverseSolidus_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\/escaped/ reverse solidus\"";
@@ -116,7 +116,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedBackspace_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\bescaped\\b backspace\"";
@@ -125,7 +125,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedFormFeed_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\fescaped\\f form feed\"";
@@ -134,7 +134,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedNewLine_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\nescaped\\n new line\"";
@@ -143,7 +143,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedCarriageReturn_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\rescaped\\r carriage return\"";
@@ -152,7 +152,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedHorizontalTab_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\tescaped\\t horizontal tab\"";
@@ -161,7 +161,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithEscapedHexadecimalValue_ReturnsCorrectJsonValue()
 		{
 			var json = "\"An \\u25A0escaped\\u25A0 hex value\"";
@@ -170,7 +170,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithSurrogateUnicodePair_ReturnsCorrectJsonValue()
 		{
 			var json = "\"\\uD83D\\uDCA9\"";
@@ -179,7 +179,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWith2SurrogateUnicodePairs_ReturnsCorrectJsonValue()
 		{
 			var json = "\"\\uD83D\\uDCA9\\uD83D\\uDCA9\"";
@@ -188,7 +188,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.String, actual.String);
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringValueWithInvalidEscapeSequence_ThrowsException()
 		{
 			var json = "\"An \\rescaped\\a carriage return\"";
@@ -201,7 +201,7 @@ namespace Manatee.Json.Tests
 				Assert.AreEqual("Invalid escape sequence: '\\a'. Path: '$'", e.Message);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_StringWithEscapedBackslashAtEnd_ReturnsCorrectJsonValue()
 		{
 			var json = "\"some text\\\\\"";
@@ -210,39 +210,45 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void Parse_NullString_ThrowsException()
 		{
-			string json = null;
-			var actual = JsonValue.Parse(json);
+			Assert.Throws<ArgumentNullException>(() =>
+				{
+					string json = null;
+					var actual = JsonValue.Parse(json);
+				});
 		}
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void Parse_EmptyString_ThrowsException()
 		{
-			string json = string.Empty;
-			var actual = JsonValue.Parse(json);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					string json = string.Empty;
+					var actual = JsonValue.Parse(json);
+				});
 		}
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void Parse_WhitespaceString_ThrowsException()
 		{
-			string json = "  \t\n";
-			var actual = JsonValue.Parse(json);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					string json = "  \t\n";
+					var actual = JsonValue.Parse(json);
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void Parse_Escaping()
 		{
 			var str = "{\"string\":\"double\\n\\nspaced\"}";
 			var json = JsonValue.Parse(str).Object;
 			Console.WriteLine(json["string"].String);
 		}
-		[TestMethod]
-		[DeploymentItem(@"Files\TrelloCard.json")]
+		[Test]
 		public void Parse_TrelloCard()
 		{
-			var str = File.ReadAllText("TrelloCard.json");
+			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\TrelloCard.json").AdjustForOS();
+			var str = File.ReadAllText(fileName);
 			var json = JsonValue.Parse(str);
 			Console.WriteLine(json);
 		}

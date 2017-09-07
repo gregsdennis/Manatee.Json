@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonArrayExtensionsTest
 	{
-		[TestMethod]
+		[Test]
 		public void OfType_ReturnsOnlyRequestType()
 		{
 			var json = new JsonArray { 6, "string", false, 42, JsonValue.Null, true };
@@ -14,7 +15,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, values);
 		}
-		[TestMethod]
+		[Test]
 		public void OfType_NullSourceReturnsNull()
 		{
 			var json = (JsonArray)null;

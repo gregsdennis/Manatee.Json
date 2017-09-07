@@ -1,21 +1,21 @@
 ﻿using System;
 using Manatee.Json.Serialization.Internal;
 using Manatee.Json.Tests.Test_References;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Serialization.Internal
 {
-	[TestClass]
+	[TestFixture]
 	public class TypeGeneratorTest
 	{
-		[TestMethod]
+		[Test]
 		public void TypeCreation_Success()
 		{
 			var instance = TypeGenerator.Generate<IInterface>();
 
 			Assert.IsNotNull(instance);
 		}
-		[TestMethod]
+		[Test]
 		public void PropertyReadAndWrite_Success()
 		{
 			string stringProp = "test";
@@ -25,7 +25,7 @@ namespace Manatee.Json.Tests.Serialization.Internal
 
 			Assert.AreEqual(stringProp, instance.RequiredProp);
 		}
-		[TestMethod]
+		[Test]
 		public void MethodCall_Success()
 		{
 			var instance = TypeGenerator.Generate<IInterface>();
@@ -34,7 +34,7 @@ namespace Manatee.Json.Tests.Serialization.Internal
 
 			Assert.AreEqual(default(int), actual);
 		}
-		[TestMethod]
+		[Test]
 		public void EventSubscription_Success()
 		{
 			var instance = TypeGenerator.Generate<IInterface>();
@@ -44,7 +44,7 @@ namespace Manatee.Json.Tests.Serialization.Internal
 			instance.RequiredEvent += handler;
 			instance.RequiredEvent -= handler;
 		}
-		[TestMethod]
+		[Test]
 		public void CacheTypes_Success()
 		{
 			var instance = TypeGenerator.Generate<IInterface>();

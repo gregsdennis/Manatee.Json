@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class NullSchemaTest
 	{
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnNonNull()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};
@@ -18,7 +18,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnNull()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};

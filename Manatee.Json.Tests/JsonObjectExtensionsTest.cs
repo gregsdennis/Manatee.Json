@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonObjectExtensionsTest
 	{
-		[TestMethod]
+		[Test]
 		public void TryGetString_ReturnsRequested()
 		{
 			var json = new JsonObject
@@ -19,7 +19,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual("test", value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetString_NullObjectReturnsNull()
 		{
 			JsonObject json = null;
@@ -28,7 +28,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetString_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
@@ -40,7 +40,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetString_ValueNotStringReturnsNull()
 		{
 			var json = new JsonObject
@@ -53,7 +53,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetNumber_ReturnsRequested()
 		{
 			var json = new JsonObject
@@ -67,7 +67,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(6.0, value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetNumber_NullObjectReturnsNull()
 		{
 			JsonObject json = null;
@@ -76,7 +76,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetNumber_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
@@ -88,7 +88,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetNumber_ValueNotNumberReturnsNull()
 		{
 			var json = new JsonObject
@@ -101,7 +101,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetBoolean_ReturnsRequested()
 		{
 			var json = new JsonObject
@@ -115,7 +115,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(true, value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetBoolean_NullObjectReturnsNull()
 		{
 			JsonObject json = null;
@@ -124,7 +124,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetBoolean_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
@@ -136,7 +136,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetBoolean_ValueNotBooleanReturnsNull()
 		{
 			var json = new JsonObject
@@ -149,7 +149,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetArray_ReturnsRequested()
 		{
 			var json = new JsonObject
@@ -163,7 +163,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(new JsonArray(), value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetArray_NullObjectReturnsNull()
 		{
 			JsonObject json = null;
@@ -172,7 +172,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetArray_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
@@ -184,7 +184,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetArray_ValueNotBooleanReturnsNull()
 		{
 			var json = new JsonObject
@@ -197,7 +197,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetObject_ReturnsRequested()
 		{
 			var json = new JsonObject
@@ -211,7 +211,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(new JsonObject(), value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetObject_NullObjectReturnsNull()
 		{
 			JsonObject json = null;
@@ -220,7 +220,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetObject_ValueNotFoundReturnsNull()
 		{
 			var json = new JsonObject
@@ -232,7 +232,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsNull(value);
 		}
-		[TestMethod]
+		[Test]
 		public void TryGetObject_ValueNotBooleanReturnsNull()
 		{
 			var json = new JsonObject

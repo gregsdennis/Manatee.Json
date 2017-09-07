@@ -1,12 +1,12 @@
 ﻿using Manatee.Json.Path;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Path
 {
-	[TestClass]
+	[TestFixture]
 	public class EvaluationTest
 	{
-		[TestMethod]
+		[Test]
 		public void ArrayLengthExpression_LastItem()
 		{
 			var json = new JsonArray {1, 2, 3};
@@ -17,7 +17,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ObjectNameLengthExpression_LastItem()
 		{
 			var json = new JsonObject

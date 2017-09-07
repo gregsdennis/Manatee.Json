@@ -33,18 +33,30 @@ namespace Manatee.Json.Schema
 		public IJsonSchema Base { get; set; }
 		public string Id
 		{
-			get { return Base.Id; }
-			set { Base.Id = value; }
+			get { return Base?.Id; }
+			set
+			{
+				if (Base != null)
+					Base.Id = value;
+			}
 		}
 		public string Schema
 		{
-			get { return Base.Schema; }
-			set { Base.Schema = value; }
+			get { return Base?.Schema; }
+			set
+			{
+				if (Base != null)
+					Base.Schema = value;
+			}
 		}
 		public Uri DocumentPath
 		{
-			get { return Base.DocumentPath; }
-			set { Base.DocumentPath = value; }
+			get { return Base?.DocumentPath; }
+			set
+			{
+				if (Base != null)
+					Base.DocumentPath = value;
+			}
 		}
 
 		internal JsonSchemaReference() {}
@@ -102,7 +114,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			var json = Base.ToJson(serializer);
+			var json = Base?.ToJson(serializer) ?? new JsonObject();
 			json.Object["$ref"] = Reference;
 			return json;
 		}

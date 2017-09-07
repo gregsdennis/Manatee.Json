@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class StringSchemaTest
 	{
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnNonString()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String};
@@ -18,7 +18,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnTooShort()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, MinLength = 5};
@@ -29,7 +29,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnLengthEqualsMinLength()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, MinLength = 5};
@@ -40,7 +40,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnLengthGreaterThanMinLength()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, MinLength = 5};
@@ -51,7 +51,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnTooLong()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, MaxLength = 5};
@@ -62,7 +62,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnLengthEqualsMaxLength()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, MaxLength = 5};
@@ -73,7 +73,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnLengthLessThanMaxLength()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, MaxLength = 5};
@@ -84,7 +84,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidDateTimeFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.DateTime};
@@ -95,7 +95,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidDateTimeFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.DateTime};
@@ -106,7 +106,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidEmailFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Email};
@@ -117,7 +117,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidEmailFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Email};
@@ -128,7 +128,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidEmailFormat2()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Email};
@@ -139,7 +139,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidHostNameFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.HostName};
@@ -150,7 +150,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidHostNameFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.HostName};
@@ -161,7 +161,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidIpv4Format()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Ipv4};
@@ -172,7 +172,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidIpv4Format()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Ipv4};
@@ -183,7 +183,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidIpv6Format()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Ipv6};
@@ -194,7 +194,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidIpv6Format()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Ipv6};
@@ -205,7 +205,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnInvalidUriFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Uri};
@@ -216,7 +216,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnValidUriFormat()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Format = StringFormat.Uri};
@@ -227,7 +227,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnPatternNonMatch()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Pattern = "^[0-9_]+$"};
@@ -238,7 +238,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnPatternMatch()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String, Pattern = "^[0-9_]+$"};

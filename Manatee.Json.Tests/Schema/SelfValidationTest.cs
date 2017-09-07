@@ -1,12 +1,12 @@
 ﻿using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class SelfValidationTest
 	{
-		[TestMethod]
+		[Test]
 		public void Draft04()
 		{
 			var json = JsonSchema04.MetaSchema.ToJson(null);
@@ -15,7 +15,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.IsTrue(validation.Valid);
 		}
 
-		[TestMethod]
+		[Test]
 		public void OnlineDraft04()
 		{
 			var localSchemaJson = JsonSchema04.MetaSchema.ToJson(null);

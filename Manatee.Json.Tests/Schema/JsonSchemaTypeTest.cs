@@ -1,12 +1,12 @@
 ﻿using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonSchemaTypeTest
 	{
-		[TestMethod]
+		[Test]
 		public void PrimitiveSchemaSucceeds()
 		{
 			var json = new JsonObject {{"type", "integer"}};
@@ -15,7 +15,7 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.IsTrue(results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void NonPrimitiveStringSchemaFails()
 		{
 			var json = new JsonObject {{"type", "other"}};
@@ -24,7 +24,7 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.IsFalse(results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ConcoctedExampleFails()
 		{
 			// This test is intended to demontrate that it's not possible to create

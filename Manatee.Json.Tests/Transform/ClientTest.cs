@@ -1,14 +1,14 @@
 ﻿using System;
 using Manatee.Json.Transform;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Transform
 {
-	[TestClass]
+	[TestFixture]
 	public class ClientTest
 	{
 		// http://stackoverflow.com/q/25307714/878701
-		[TestMethod]
+		[Test]
 		public void StackOverflow_25307714()
 		{
 			JsonValue source = JsonValue.Parse("[{\"Key1\":87,\"Key2\":99,\"Key3\":11},{\"Key1\":42,\"Key2\":-8,\"Key3\":12}]");

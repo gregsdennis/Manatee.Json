@@ -18,4 +18,20 @@ namespace Manatee.Json.Schema.Validators
 				       : new SchemaValidationResults();
 		}
 	}
+
+	internal class UniqueItemsSchema04PropertyValidator : UniqueItemsSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override bool? GetUniqueItems(JsonSchema04 schema)
+		{
+			return schema.UniqueItems;
+		}
+	}
+
+	internal class UniqueItemsSchema06PropertyValidator : UniqueItemsSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override bool? GetUniqueItems(JsonSchema06 schema)
+		{
+			return schema.UniqueItems;
+		}
+	}
 }

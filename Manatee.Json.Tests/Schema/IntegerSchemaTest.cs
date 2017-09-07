@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class IntegerSchemaTest
 	{
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnNonNumber()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer};
@@ -18,7 +18,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnNonInteger()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer};
@@ -29,7 +29,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnLessThanMinimum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5};
@@ -40,7 +40,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnMoreThanMinimum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5};
@@ -51,7 +51,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnEqualsExclusiveMinimum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5, ExclusiveMinimum = true};
@@ -62,7 +62,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnMoreThanExclusiveMinimum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Minimum = 5, ExclusiveMinimum = true};
@@ -73,7 +73,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnMoreThanMaximum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5};
@@ -84,7 +84,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnLessThanMaximum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5};
@@ -95,7 +95,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsErrorOnEqualsExclusiveMaximum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5, ExclusiveMaximum = true};
@@ -106,7 +106,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnLessThanExclusiveMaximum()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, Maximum = 5, ExclusiveMaximum = true};
@@ -117,7 +117,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnMultipleOf_Positive()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
@@ -128,7 +128,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnMultipleOf_Negative()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
@@ -139,7 +139,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsValidOnMultipleOf_Zero()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
@@ -150,7 +150,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(0, results.Errors.Count());
 			Assert.AreEqual(true, results.Valid);
 		}
-		[TestMethod]
+		[Test]
 		public void ValidateReturnsInvalicOnMultipleOf()
 		{
 			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer, MultipleOf = 5};
