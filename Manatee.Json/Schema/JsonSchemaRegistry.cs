@@ -18,9 +18,11 @@ namespace Manatee.Json.Schema
 		static JsonSchemaRegistry()
 		{
 			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
+			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
 			_schemaLookup = new Dictionary<string, IJsonSchema>
 				{
-					[draft04Uri] = JsonSchema04.MetaSchema
+					[draft04Uri] = JsonSchema04.MetaSchema,
+					[draft06Uri] = JsonSchema06.MetaSchema
 				};
 		}
 

@@ -36,6 +36,19 @@ namespace Manatee.Json.Schema
 				typeof (decimal)
 			};
 
+		private static Func<IJsonSchema> _schemaFactory = () => new JsonSchema04();
+		
+		public static void SetDefaultSchemaVersion<T>()
+			where T : IJsonSchema
+		{
+			if (typeof(T) == typeof(JsonSchema04))
+				_schemaFactory = () => new JsonSchema04();
+			else if (typeof(T) == typeof(JsonSchema06))
+				_schemaFactory = () => new JsonSchema06();
+			else
+				throw new ArgumentException($"Only {nameof(JsonSchema04)} and {nameof(JsonSchema06)} are supported.");
+		}
+		
 		/// <summary>
 		/// Creates a schema object from its JSON representation.
 		/// </summary>
@@ -45,42 +58,28 @@ namespace Manatee.Json.Schema
 		public static IJsonSchema FromJson(JsonValue json, Uri documentPath = null)
 		{
 			if (json == null) return null;
-			// NOTE: I wonder if there's an issue with the compiler.  I have to assign null here
-			//		 because it thinks that schema is not initialized, but I can't find the path
-			//		 where it's not.
 			IJsonSchema schema = null;
 			switch (json.Type)
 			{
 				case JsonValueType.Object:
-					if (json.Object.ContainsKey("$ref"))
-						schema = new JsonSchemaReference();
-					else
+					var schemaDeclaration = json.Object.TryGetString("$schema");
+					if (schemaDeclaration == JsonSchema04.MetaSchema.Id)
 					{
-						var schemaDeclaration = json.Object.TryGetString("$schema");
-						IJsonSchema validator = null;
-						if (schemaDeclaration == JsonSchema04.MetaSchema.Schema)
-						{
-							validator = JsonSchema04.MetaSchema;
-							schema = new JsonSchema04();
-						}
-						else if (schemaDeclaration == JsonSchema06.MetaSchema.Schema)
-						{
-							validator = JsonSchema06.MetaSchema;
-							schema = new JsonSchema06();
-						}
-						if (validator != null)
-						{
-							var results = validator.Validate(json);
-							if (!results.Valid) throw new SchemaLoadException($"Schema specifies '{schemaDeclaration}' but does not validate.");
-						}
-						// not specified; auto detect, default to 04
-						else if (JsonSchema04.MetaSchema.Validate(json).Valid)
-							schema = new JsonSchema04();
-						else if (JsonSchema06.MetaSchema.Validate(json).Valid)
-							schema = new JsonSchema06();
-						else
-							throw new SchemaLoadException("Cannot determine JSON Schema version.  Only Drafts 04 and 06 are supported.");
+						var id = json.Object.TryGetString("id");
+						if (id == JsonSchema04.MetaSchema.Id) return JsonSchema04.MetaSchema;
+						schema = new JsonSchema04();
 					}
+					else if (schemaDeclaration == JsonSchema06.MetaSchema.Id)
+					{
+						var id = json.Object.TryGetString("id");
+						if (id == JsonSchema06.MetaSchema.Id) return JsonSchema06.MetaSchema;
+						schema = new JsonSchema06();
+					}
+					if (json.Object.ContainsKey("$ref"))
+						schema = json.Object.Count > 1
+							         ? new JsonSchemaReference {Base = schema ?? _schemaFactory()}
+							         : new JsonSchemaReference();
+					schema = schema ?? _schemaFactory();
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();

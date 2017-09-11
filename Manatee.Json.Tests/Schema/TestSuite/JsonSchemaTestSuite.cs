@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
@@ -12,110 +13,53 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 	{
 		private const string TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
-		private static readonly Uri RemotesUri = new Uri(System.IO.Path.GetFullPath(RemotesFolder));
-		private static readonly JsonSerializer Serializer;
-		private int _failures;
-		private int _passes;
-		private string _currentFile;
-		private string _currentTest;
-#pragma warning disable 649
-		private string _fileNameForDebugging;
-		private string _testNameForDebugging;
-#pragma warning restore 649
+		private static readonly JsonSerializer _serializer;
 
-		static JsonSchemaTestSuite()
+		public static IEnumerable TestData
 		{
-			Serializer = new JsonSerializer();
-		}
-
-		[Test]
-		public void RunSuite()
-		{
-			// uncomment and paste the filename of a test suite to debug it.
-			//_fileNameForDebugging = "ref.json";
-			// uncomment and paste the description of a test to debug it.
-			_testNameForDebugging = "object is invalid";
-
-			var ranAllTests = false;
-
-			try
+			get
 			{
-				_StartServer();
-
 				var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, TestFolder).AdjustForOS();
 				var fileNames = Directory.GetFiles(testsPath);
 
 				foreach (var fileName in fileNames)
 				{
-					_RunFile(fileName);
-				}
+					var contents = File.ReadAllText(fileName);
+					var json = JsonValue.Parse(contents);
 
-				ranAllTests = true;
-				Assert.AreEqual(0, _failures);
-			}
-			catch
-			{
-				if (!ranAllTests)
-				{
-					_failures++;
-					Console.WriteLine();
-					Console.WriteLine($"Failed on '{_currentTest}' in {_currentFile}");
+					var testSets = _serializer.Deserialize<List<SchemaTestSet>>(json);
+
+					foreach (var testSet in testSets)
+					{
+						foreach (var test in testSet.Tests)
+						{
+							yield return new TestCaseData(testSet.Schema, test, fileName)
+								{
+									TestName = $"{testSet.Description} / {test.Description}"
+								};
+						}
+					}
 				}
-				throw;
-			}
-			finally
-			{
-				Console.WriteLine();
-				Console.WriteLine($"Passes: {_passes}");
-				Console.WriteLine($"Failures: {_failures}");
 			}
 		}
-
-		private void _RunFile(string fileName)
+		
+		static JsonSchemaTestSuite()
 		{
-			_currentFile = fileName;
-			if (fileName == _fileNameForDebugging)
-			{
-				System.Diagnostics.Debugger.Break();
-			}
-
-			var contents = File.ReadAllText(fileName);
-			var json = JsonValue.Parse(contents);
-
-			var testSets = Serializer.Deserialize<List<SchemaTestSet>>(json);
-
-			foreach (var testSet in testSets)
-			{
-				Console.WriteLine($"{testSet.Description} ({fileName})");
-				_RunTestSet(testSet);
-			}
+			_serializer = new JsonSerializer();
+			_StartServer();
 		}
 
-		private void _RunTestSet(SchemaTestSet testSet)
+		[TestCaseSource(nameof(TestData))]
+		public void Run(IJsonSchema schema, SchemaTest test, string fileName)
 		{
-			foreach (var test in testSet.Tests)
+			var results = schema.Validate(test.Data);
+
+			if (!results.Valid)
 			{
-				_currentTest = test.Description;
-				if (test.Description == _testNameForDebugging)
-				{
-					System.Diagnostics.Debugger.Break();
-				}
-
-				var results = testSet.Schema.Validate(test.Data);
-
-				if (results.Valid == test.Valid)
-				{
-					// It's difficult to see the failures when everything shows.
-					// The Stack Trace Explorer needs to show color output. :/
-					//Console.WriteLine($"  {test.Description} - Passed");
-					_passes++;
-				}
-				else
-				{
-					Console.WriteLine($"  {test.Description} - Failed");
-					_failures++;
-				}
+				Console.WriteLine(fileName);
+				Console.WriteLine(string.Join("\n", results.Errors));
 			}
+			Assert.AreEqual(test.Valid, results.Valid);
 		}
 
 		private static void _StartServer()
@@ -129,7 +73,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 					if (!Uri.TryCreate(localPath, UriKind.Absolute, out newPath))
 					{
-						newPath = new Uri(RemotesUri, localPath);
+						var remotesPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, RemotesFolder).AdjustForOS();
+						newPath = new Uri(new Uri(remotesPath), localPath);
 					}
 
 					return File.ReadAllText(newPath.LocalPath);

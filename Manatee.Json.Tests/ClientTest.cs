@@ -291,7 +291,7 @@ namespace Manatee.Json.Tests
 						},
 					Type = JsonSchemaTypeDefinition.Array,
 					Description = "An array of somethings.",
-					Items = new JsonSchemaReference(new JsonSchema04(), "#/definitions/something")
+					Items = new JsonSchemaReference("#/definitions/something")
 				};
 
 			var schema = JsonSchemaRegistry.Get(fileName);

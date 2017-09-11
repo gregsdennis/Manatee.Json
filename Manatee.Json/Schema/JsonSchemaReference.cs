@@ -61,14 +61,14 @@ namespace Manatee.Json.Schema
 
 		internal JsonSchemaReference() {}
 		/// <summary>
-		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class.
+		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class that supports additional schema properties.
 		/// </summary>
-		/// <param name="baseSchema">An instance of the base schema to use (either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>).</param>
 		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
-		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is nulll, empty, or whitespace.</exception>
-		public JsonSchemaReference(IJsonSchema baseSchema, string reference)
+		/// <param name="baseSchema">An instance of the base schema to use (either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>).</param>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> or <paramref name="baseSchema"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace.</exception>
+		public JsonSchemaReference(string reference, IJsonSchema baseSchema)
 		{
-			Base = baseSchema ?? throw new ArgumentNullException(nameof(baseSchema));
 			Reference = reference ?? throw new ArgumentNullException(nameof(reference));
 
 			if (!(baseSchema is JsonSchema04) && !(baseSchema is JsonSchema06))
@@ -76,9 +76,17 @@ namespace Manatee.Json.Schema
 			// TODO: Can a reference be empty or whitespace?  They're valid JSON keys.
 			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentException($"{nameof(reference)} non-empty and non-whitespace");
 		}
-		private JsonSchemaReference(string reference)
+		/// <summary>
+		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class.
+		/// </summary>
+		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace.</exception>
+		public JsonSchemaReference(string reference)
 		{
-			Reference = reference;
+			Reference = reference ?? throw new ArgumentNullException(nameof(reference));
+			
+			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentException($"{nameof(reference)} non-empty and non-whitespace");
 		}
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -103,7 +111,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Base.FromJson(json, serializer);
+			Base?.FromJson(json, serializer);
 			Reference = json.Object["$ref"].String;
 		}
 		/// <summary>
@@ -128,7 +136,7 @@ namespace Manatee.Json.Schema
 		public bool Equals(IJsonSchema other)
 		{
 			var schema = other as JsonSchemaReference;
-			return schema != null && schema.Reference == Reference;
+			return schema != null && schema.Reference == Reference && Base.Equals(schema.Base);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
