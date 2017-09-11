@@ -19,6 +19,8 @@ namespace Manatee.Json.Schema
 		private static readonly JsonValue _rootJson = Root.ToJson(null);
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
+		private Uri _documentPath;
+
 		/// <summary>
 		/// Defines the reference in respect to the root schema.
 		/// </summary>
@@ -51,9 +53,10 @@ namespace Manatee.Json.Schema
 		}
 		public Uri DocumentPath
 		{
-			get { return Base?.DocumentPath; }
+			get { return _documentPath ?? (_documentPath = Base?.DocumentPath); }
 			set
 			{
+				_documentPath = value;
 				if (Base != null)
 					Base.DocumentPath = value;
 			}
