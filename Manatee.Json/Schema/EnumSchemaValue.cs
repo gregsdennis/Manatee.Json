@@ -60,5 +60,15 @@ namespace Manatee.Json.Schema
 		{
 			return _value;
 		}
+
+		/// <summary>
+		/// Implicitly converts a <see cref="String"/> to a <see cref="EnumSchemaValue"/>.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static implicit operator EnumSchemaValue(string value)
+		{
+			return new EnumSchemaValue(value);
+		}
 	}
 }

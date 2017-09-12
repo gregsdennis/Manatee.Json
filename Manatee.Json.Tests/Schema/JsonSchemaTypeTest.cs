@@ -40,7 +40,7 @@ namespace Manatee.Json.Tests.Schema
 								}
 						}
 				};
-			var json = new JsonObject { { "type", "number" } };
+			var json = new JsonObject {{"type", "number"}};
 
 			var results = schema.Validate(json);
 

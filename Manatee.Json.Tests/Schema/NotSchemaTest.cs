@@ -25,8 +25,8 @@ namespace Manatee.Json.Tests.Schema
 		public void ValidateReturnsValid()
 		{
 			var schema = new JsonSchema04
-			{
-					Not = new JsonSchema04 { Type = JsonSchemaTypeDefinition.Number,Maximum = 10}
+				{
+					Not = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Maximum = 10}
 				};
 			var json = (JsonValue) 15;
 

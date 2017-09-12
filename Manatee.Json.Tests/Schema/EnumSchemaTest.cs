@@ -15,8 +15,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Enum = new List<EnumSchemaValue>
 						{
-							new EnumSchemaValue("test1"),
-							new EnumSchemaValue("test2")
+							"test1",
+							"test2"
 						}
 				};
 			var json = (JsonValue) "string";
@@ -30,11 +30,11 @@ namespace Manatee.Json.Tests.Schema
 		public void ValidateReturnsValidOnValueInRange()
 		{
 			var schema = new JsonSchema04
-			{
+				{
 					Enum = new List<EnumSchemaValue>
 						{
-							new EnumSchemaValue("test1"),
-							new EnumSchemaValue("test2")
+							"test1",
+							"test2"
 						}
 				};
 			var json = (JsonValue) "test1";

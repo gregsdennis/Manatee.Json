@@ -127,18 +127,12 @@ namespace Manatee.Json.Tests
 					Type = JsonSchemaTypeDefinition.Object,
 					Properties = new JsonSchemaPropertyDefinitionCollection
 						{
-							new JsonSchemaPropertyDefinition("home")
+							["home"] = new JsonSchema04
 								{
-									Type = new JsonSchema04
+									Type = new JsonSchemaMultiTypeDefinition(JsonSchemaTypeDefinition.Object, JsonSchemaTypeDefinition.Null),
+									Properties = new JsonSchemaPropertyDefinitionCollection
 										{
-											Type = new JsonSchemaMultiTypeDefinition(JsonSchemaTypeDefinition.Object, JsonSchemaTypeDefinition.Null),
-											Properties = new JsonSchemaPropertyDefinitionCollection
-												{
-													new JsonSchemaPropertyDefinition("street")
-														{
-															Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
-														}
-												}
+											["street"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 										}
 								}
 						}
@@ -260,30 +254,24 @@ namespace Manatee.Json.Tests
 					Schema = "http://json-schema.org/draft-04/schema#",
 					Definitions = new JsonSchemaTypeDefinitionCollection
 						{
-							new JsonSchemaTypeDefinition("something")
+							["something"] = new JsonSchema04
 								{
-									Definition = new JsonSchema04
+									Type = JsonSchemaTypeDefinition.Object,
+									Properties = new JsonSchemaPropertyDefinitionCollection
 										{
-											Type = JsonSchemaTypeDefinition.Object,
-											Properties = new JsonSchemaPropertyDefinitionCollection
+											new JsonSchemaPropertyDefinition("name")
 												{
-													new JsonSchemaPropertyDefinition("name")
-														{
-															IsHidden = true,
-															IsRequired = true
-														}
-												},
-											AllOf = new[]
+													IsHidden = true,
+													IsRequired = true
+												}
+										},
+									AllOf = new[]
+										{
+											new JsonSchema04
 												{
-													new JsonSchema04
+													Properties = new JsonSchemaPropertyDefinitionCollection
 														{
-															Properties = new JsonSchemaPropertyDefinitionCollection
-																{
-																	new JsonSchemaPropertyDefinition("name")
-																		{
-																			Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
-																		}
-																}
+															["name"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 														}
 												}
 										}
@@ -304,7 +292,6 @@ namespace Manatee.Json.Tests
 			Console.WriteLine(schemaJson);
 			Assert.AreEqual(expectedJson, schemaJson);
 		}
-
 
 		[Test]
 		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
@@ -373,33 +360,39 @@ namespace Manatee.Json.Tests
 			}
 
 			var requestedUris = new List<string>();
-			JsonSchemaOptions.Download = uri =>
-				{
-					requestedUris.Add(uri);
-					switch (uri)
+			try
+			{
+				JsonSchemaOptions.Download = uri =>
 					{
-						case coreSchemaUri:
-							return coreSchemaText;
+						requestedUris.Add(uri);
+						switch (uri)
+						{
+							case coreSchemaUri:
+								return coreSchemaText;
 
-						case childSchemaUri:
-							return childSchemaText;
-					}
-					return coreSchemaText;
-				};
-			var schema = JsonSchemaRegistry.Get(childSchemaUri);
+							case childSchemaUri:
+								return childSchemaText;
+						}
+						return coreSchemaText;
+					};
+				var schema = JsonSchemaRegistry.Get(childSchemaUri);
 
-			var testJson = new JsonObject();
-			testJson["myProperty"] = "http://example.org/";
+				var testJson = new JsonObject();
+				testJson["myProperty"] = "http://example.org/";
 
-			//Console.WriteLine(testJson);
-			//Console.WriteLine(schema.ToJson(null).GetIndentedString());
+				//Console.WriteLine(testJson);
+				//Console.WriteLine(schema.ToJson(null).GetIndentedString());
 
-			var result = schema.Validate(testJson);
+				var result = schema.Validate(testJson);
 
-			Assert.IsTrue(result.Valid);
-			Assert.AreEqual(requestedUris[0], childSchemaUri);
-			Assert.AreEqual(requestedUris[1], coreSchemaUri);
+				Assert.IsTrue(result.Valid);
+				Assert.AreEqual(requestedUris[0], childSchemaUri);
+				Assert.AreEqual(requestedUris[1], coreSchemaUri);
+			}
+			finally
+			{
+				JsonSchemaOptions.Download = null;
+			}
 		}
-
 	}
 }

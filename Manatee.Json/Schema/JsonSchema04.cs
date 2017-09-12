@@ -50,13 +50,13 @@ namespace Manatee.Json.Schema
 							{
 								Enum = new List<EnumSchemaValue>
 									{
-										new EnumSchemaValue("array"),
-										new EnumSchemaValue("boolean"),
-										new EnumSchemaValue("integer"),
-										new EnumSchemaValue("null"),
-										new EnumSchemaValue("number"),
-										new EnumSchemaValue("object"),
-										new EnumSchemaValue("string")
+										"array",
+										"boolean",
+										"integer",
+										"null",
+										"number",
+										"object",
+										"string"
 									}
 							},
 						["stringArray"] = new JsonSchema04
@@ -210,11 +210,11 @@ namespace Manatee.Json.Schema
 
 		private static readonly IEnumerable<string> _definedProperties =
 			MetaSchema.Properties.Select(p => p.Name)
-			       .Union(new[]
-				              {
-					              "format",
-								  "$ref"
-				              }).ToList();
+			          .Union(new[]
+				          {
+					          "format",
+					          "$ref"
+				          }).ToList();
 
 		private string _id;
 		private string _schema;
@@ -273,7 +273,8 @@ namespace Manatee.Json.Schema
 			get { return _multipleOf; }
 			set
 			{
-				if (value <=0) throw new ArgumentOutOfRangeException(nameof(MultipleOf), "'multipleOf' property must be a positive value.");
+				if (value <=0)
+					throw new ArgumentOutOfRangeException(nameof(MultipleOf), "'multipleOf' property must be a positive value.");
 				_multipleOf = value;
 			}
 		}

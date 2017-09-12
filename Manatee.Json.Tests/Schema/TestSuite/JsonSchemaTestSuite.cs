@@ -46,23 +46,10 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		static JsonSchemaTestSuite()
 		{
 			_serializer = new JsonSerializer();
-			_StartServer();
 		}
 
-		[TestCaseSource(nameof(TestData))]
-		public void Run(IJsonSchema schema, SchemaTest test, string fileName)
-		{
-			var results = schema.Validate(test.Data);
-
-			if (!results.Valid)
-			{
-				Console.WriteLine(fileName);
-				Console.WriteLine(string.Join("\n", results.Errors));
-			}
-			Assert.AreEqual(test.Valid, results.Valid);
-		}
-
-		private static void _StartServer()
+		[OneTimeSetUp]
+		public void Setup()
 		{
 			const string baseUri = "http://localhost:1234/";
 
@@ -79,6 +66,25 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 					return File.ReadAllText(newPath.LocalPath);
 				};
+		}
+
+		[OneTimeTearDown]
+		public void TearDown()
+		{
+			JsonSchemaOptions.Download = null;
+		}
+
+		[TestCaseSource(nameof(TestData))]
+		public void Run(IJsonSchema schema, SchemaTest test, string fileName)
+		{
+			var results = schema.Validate(test.Data);
+
+			if (!results.Valid)
+			{
+				Console.WriteLine(fileName);
+				Console.WriteLine(string.Join("\n", results.Errors));
+			}
+			Assert.AreEqual(test.Valid, results.Valid);
 		}
 	}
 }

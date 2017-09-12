@@ -34,6 +34,7 @@ namespace Manatee.Json.Schema
 			IJsonSchema schema;
 			lock (_schemaLookup)
 			{
+				uri = uri.TrimEnd('#');
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
