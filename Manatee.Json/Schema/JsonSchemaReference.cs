@@ -139,7 +139,20 @@ namespace Manatee.Json.Schema
 		public bool Equals(IJsonSchema other)
 		{
 			var schema = other as JsonSchemaReference;
-			return schema != null && schema.Reference == Reference && Base.Equals(schema.Base);
+			return schema != null && schema.Reference == Reference &&
+			       Equals(Base, schema.Base);
+		}
+		/// <summary>
+		/// Determines whether the specified object is equal to the current object.
+		/// </summary>
+		/// <returns>
+		/// true if the specified object  is equal to the current object; otherwise, false.
+		/// </returns>
+		/// <param name="obj">The object to compare with the current object. </param>
+		/// <filterpriority>2</filterpriority>
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as IJsonSchema);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 

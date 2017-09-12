@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Manatee.Json.Serialization;
@@ -11,6 +12,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Provides base functionality for the basic <see cref="IJsonSchema"/> implementations.
 	/// </summary>
+	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + "}")]
 	public class JsonSchema06 : IJsonSchema
 	{
 		/// <summary>
@@ -401,6 +403,8 @@ namespace Manatee.Json.Schema
 		/// Identifies the physical path for the schema document (may be different than the ID).
 		/// </summary>
 		public Uri DocumentPath { get; set; }
+
+		private string DebuggerDisplay => ToJson(null).ToString();
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
