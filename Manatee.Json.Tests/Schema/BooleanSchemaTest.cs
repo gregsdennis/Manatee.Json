@@ -24,8 +24,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 
 		[TestCaseSource(nameof(TestData))]
@@ -35,8 +34,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

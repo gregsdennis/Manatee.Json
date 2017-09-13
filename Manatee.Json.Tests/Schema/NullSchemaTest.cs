@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -7,27 +8,32 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class NullSchemaTest
 	{
-		[Test]
-		public void ValidateReturnsErrorOnNonNull()
+		public static IEnumerable TestData
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};
+			get
+			{
+				yield return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};
+				yield return new JsonSchema06 {Type = JsonSchemaTypeDefinition.Null};
+			}
+		}
+		
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsErrorOnNonNull(IJsonSchema schema)
+		{
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[Test]
-		public void ValidateReturnsValidOnNull()
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsValidOnNull(IJsonSchema schema)
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};
 			var json = JsonValue.Null;
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

@@ -15,8 +15,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnTooShort()
@@ -26,8 +25,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnLengthEqualsMinLength()
@@ -37,8 +35,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnLengthGreaterThanMinLength()
@@ -48,8 +45,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnTooLong()
@@ -59,8 +55,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnLengthEqualsMaxLength()
@@ -70,8 +65,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnLengthLessThanMaxLength()
@@ -81,8 +75,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnInvalidDateTimeFormat()
@@ -92,8 +85,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnValidDateTimeFormat()
@@ -103,8 +95,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnInvalidEmailFormat()
@@ -114,8 +105,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnValidEmailFormat()
@@ -125,8 +115,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnValidEmailFormat2()
@@ -136,8 +125,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnInvalidHostNameFormat()
@@ -147,8 +135,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnValidHostNameFormat()
@@ -158,8 +145,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnInvalidIpv4Format()
@@ -169,8 +155,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnValidIpv4Format()
@@ -180,8 +165,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnInvalidIpv6Format()
@@ -191,8 +175,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnValidIpv6Format()
@@ -202,8 +185,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnInvalidUriFormat()
@@ -213,8 +195,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnValidUriFormat()
@@ -224,8 +205,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnPatternNonMatch()
@@ -235,8 +215,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnPatternMatch()
@@ -246,8 +225,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

@@ -25,8 +25,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(TypeData))]
 		public void ValidateReturnsErrorOnString(IJsonSchema schema)
@@ -35,8 +34,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 
 		public static IEnumerable MinItemsData
@@ -54,8 +52,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MinItemsData))]
 		public void ValidateReturnsValidOnCountEqualsMinItems(IJsonSchema schema)
@@ -64,8 +61,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MinItemsData))]
 		public void ValidateReturnsValidOnCountGreaterThanMinItems(IJsonSchema schema)
@@ -74,8 +70,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 
 		public static IEnumerable MaxItemsData
@@ -93,8 +88,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MaxItemsData))]
 		public void ValidateReturnsValidOnCountEqualsMaxItems(IJsonSchema schema)
@@ -103,8 +97,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MaxItemsData))]
 		public void ValidateReturnsValidOnCountLessThanMaxItems(IJsonSchema schema)
@@ -113,8 +106,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 
 		public static IEnumerable UniqueItemsData
@@ -132,8 +124,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(UniqueItemsData))]
 		public void ValidateReturnsValidOnUniqueItems(IJsonSchema schema)
@@ -142,8 +133,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 
 		public static IEnumerable ItemsData
@@ -169,8 +159,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(ItemsData))]
 		public void ValidateReturnsValidOnValidItems(IJsonSchema schema)
@@ -179,8 +168,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

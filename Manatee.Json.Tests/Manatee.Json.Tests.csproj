@@ -91,6 +91,7 @@
     <Compile Include="Path\ToStringTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
+    <Compile Include="Schema\SchemaValidationResultsExtensions.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
     <Compile Include="Schema\TestSuite\JsonSchemaTestSuite.cs" />
     <Compile Include="Schema\TestSuite\SchemaTest.cs" />

@@ -15,8 +15,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnLessThanMinimum()
@@ -26,8 +25,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnMoreThanMinimum()
@@ -37,8 +35,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnEqualsExclusiveMinimum()
@@ -48,8 +45,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnMoreThanExclusiveMinimum()
@@ -59,8 +55,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnMoreThanMaximum()
@@ -70,8 +65,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnLessThanMaximum()
@@ -81,8 +75,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsErrorOnEqualsExclusiveMaximum()
@@ -92,8 +85,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnLessThanExclusiveMaximum()
@@ -103,8 +95,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnMultipleOf_Positive()
@@ -114,8 +105,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnMultipleOf_Negative()
@@ -125,8 +115,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsValidOnMultipleOf_Zero()
@@ -136,8 +125,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 		[Test]
 		public void ValidateReturnsInvalicOnMultipleOf()

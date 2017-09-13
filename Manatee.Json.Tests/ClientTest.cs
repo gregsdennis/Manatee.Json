@@ -6,6 +6,7 @@ using Manatee.Json.Path;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Path;
+using Manatee.Json.Tests.Schema;
 using NUnit.Framework;
 // ReSharper disable EqualExpressionComparison
 // ReSharper disable ExpressionIsAlwaysNull
@@ -180,8 +181,7 @@ namespace Manatee.Json.Tests
 
 			var results = JsonSchema04.MetaSchema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 
 		[Test]
@@ -218,7 +218,8 @@ namespace Manatee.Json.Tests
 			var json = JsonValue.Parse(jsonString);
 
 			var result = schema.Validate(json);
-			Assert.IsTrue(result.Valid);
+			
+			result.AssertValid();
 		}
 
 		[Test]
@@ -241,7 +242,7 @@ namespace Manatee.Json.Tests
 				Console.WriteLine(error);
 			}
 
-			Assert.IsTrue(result.Valid);
+			result.AssertValid();
 		}
 
 		[Test]
@@ -315,7 +316,8 @@ namespace Manatee.Json.Tests
 						}
 				};
 			var results = schema.Validate(json);
-			Assert.IsTrue(results.Valid);
+
+			results.AssertValid();
 		}
 
 		[Test]
@@ -385,7 +387,7 @@ namespace Manatee.Json.Tests
 
 				var result = schema.Validate(testJson);
 
-				Assert.IsTrue(result.Valid);
+				result.AssertValid();
 				Assert.AreEqual(requestedUris[0], childSchemaUri);
 				Assert.AreEqual(requestedUris[1], coreSchemaUri);
 			}
