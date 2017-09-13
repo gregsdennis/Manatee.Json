@@ -64,6 +64,10 @@ namespace Manatee.Json.Schema
 		/// <returns>A schema object</returns>
 		public static IJsonSchema FromJson(JsonValue json, Uri documentPath = null)
 		{
+			return FromJson(json, _schemaFactory, documentPath);
+		}
+		internal static IJsonSchema FromJson(JsonValue json, Func<IJsonSchema> schemaFactory, Uri documentPath = null)
+		{
 			if (json == null) return null;
 			IJsonSchema schema = null;
 			switch (json.Type)
@@ -84,9 +88,9 @@ namespace Manatee.Json.Schema
 					}
 					if (json.Object.ContainsKey("$ref"))
 						schema = json.Object.Count > 1
-							         ? new JsonSchemaReference {Base = schema ?? _schemaFactory()}
+							         ? new JsonSchemaReference {Base = schema ?? schemaFactory()}
 							         : new JsonSchemaReference();
-					schema = schema ?? _schemaFactory();
+					schema = schema ?? schemaFactory();
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();

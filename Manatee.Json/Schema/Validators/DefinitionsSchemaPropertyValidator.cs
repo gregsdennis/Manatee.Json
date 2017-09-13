@@ -17,9 +17,10 @@ namespace Manatee.Json.Schema.Validators
 			var definitions = json.Object["definitions"];
 			if (definitions.Type != JsonValueType.Object)
 				errors.Add(new SchemaValidationError("definitions", "Property 'definitions' must contain an object."));
+			var metaSchema = GetMetaSchema();
 			foreach (var value in definitions.Object.Values)
 			{
-				errors.AddRange(JsonSchema04.MetaSchema.Validate(value).Errors);
+				errors.AddRange(metaSchema.Validate(value).Errors);
 			}
 			return new SchemaValidationResults(errors);
 		}

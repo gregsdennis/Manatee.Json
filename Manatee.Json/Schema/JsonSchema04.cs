@@ -453,7 +453,7 @@ namespace Manatee.Json.Schema
 				if (obj["additionalItems"].Type == JsonValueType.Boolean)
 					AdditionalItems = obj["additionalItems"].Boolean ? AdditionalItems.True : AdditionalItems.False;
 				else
-					AdditionalItems = new AdditionalItems {Definition = JsonSchemaFactory.FromJson(obj["additionalItems"], DocumentPath) };
+					AdditionalItems = new AdditionalItems {Definition = _ReadSchema(obj["additionalItems"]) };
 			}
 			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			MinItems = (uint?) obj.TryGetNumber("minItems");
@@ -468,7 +468,7 @@ namespace Manatee.Json.Schema
 				Properties = new JsonSchemaPropertyDefinitionCollection();
 				foreach (var prop in obj["properties"].Object)
 				{
-					var property = new JsonSchemaPropertyDefinition(prop.Key) { Type = JsonSchemaFactory.FromJson(prop.Value, DocumentPath) };
+					var property = new JsonSchemaPropertyDefinition(prop.Key) { Type = _ReadSchema(prop.Value) };
 					Properties.Add(property);
 				}
 			}
@@ -499,14 +499,14 @@ namespace Manatee.Json.Schema
 				if (obj["additionalProperties"].Type == JsonValueType.Boolean)
 					AdditionalProperties = obj["additionalProperties"].Boolean ? AdditionalProperties.True : AdditionalProperties.False;
 				else
-					AdditionalProperties = new AdditionalProperties {Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"], DocumentPath)};
+					AdditionalProperties = new AdditionalProperties {Definition = _ReadSchema(obj["additionalProperties"])};
 			}
 			if (obj.ContainsKey("definitions"))
 			{
 				Definitions = new JsonSchemaTypeDefinitionCollection();
 				foreach (var defn in obj["definitions"].Object)
 				{
-					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = JsonSchemaFactory.FromJson(defn.Value, DocumentPath) };
+					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = _ReadSchema(defn.Value) };
 
 					Definitions.Add(definition);
 				}
@@ -514,7 +514,7 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("patternProperties"))
 			{
 				var patterns = obj["patternProperties"].Object;
-				PatternProperties = patterns.ToDictionary(kvp => new Regex(kvp.Key), kvp => JsonSchemaFactory.FromJson(kvp.Value, DocumentPath));
+				PatternProperties = patterns.ToDictionary(kvp => new Regex(kvp.Key), kvp => _ReadSchema(kvp.Value));
 			}
 			if (obj.ContainsKey("dependencies"))
 				Dependencies = obj["dependencies"].Object.Select(v =>
@@ -523,7 +523,7 @@ namespace Manatee.Json.Schema
 						switch (v.Value.Type)
 						{
 							case JsonValueType.Object:
-								dependency = new SchemaDependency(v.Key, JsonSchemaFactory.FromJson(v.Value, DocumentPath));
+								dependency = new SchemaDependency(v.Key, _ReadSchema(v.Value));
 								break;
 							case JsonValueType.Array:
 								dependency = new PropertyDependency(v.Key, v.Value.Array.Select(jv => jv.String));
@@ -553,13 +553,13 @@ namespace Manatee.Json.Schema
 				}
 			}
 			if (obj.ContainsKey("allOf"))
-				AllOf = obj["allOf"].Array.Select((j) => JsonSchemaFactory.FromJson(j, DocumentPath));
+				AllOf = obj["allOf"].Array.Select(_ReadSchema);
 			if (obj.ContainsKey("anyOf"))
-				AnyOf = json.Object["anyOf"].Array.Select((j) => JsonSchemaFactory.FromJson(j, DocumentPath));
+				AnyOf = json.Object["anyOf"].Array.Select(_ReadSchema);
 			if (obj.ContainsKey("oneOf"))
-				OneOf = obj["oneOf"].Array.Select((j) => JsonSchemaFactory.FromJson(j, DocumentPath));
+				OneOf = obj["oneOf"].Array.Select(_ReadSchema);
 			if (obj.ContainsKey("not"))
-				Not = JsonSchemaFactory.FromJson(obj["not"], DocumentPath);
+				Not = _ReadSchema(obj["not"]);
 			var formatKey = obj.TryGetString("format");
 			Format = StringFormat.GetFormat(formatKey);
 			var details = obj.Where(kvp => !_definedProperties.Contains(kvp.Key)).ToJson();
@@ -765,6 +765,11 @@ namespace Manatee.Json.Schema
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		private IJsonSchema _ReadSchema(JsonValue json)
+		{
+			return JsonSchemaFactory.FromJson(json, () => new JsonSchema06(), DocumentPath);
 		}
 	}
 }

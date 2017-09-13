@@ -34,7 +34,7 @@
 			var min = schema.ExclusiveMinimum ?? schema.Minimum;
 			var operation = schema.ExclusiveMaximum.HasValue ? ">" : ">=";
 			
-			if (json.Number <= min)
+			if (json.Number < min || (schema.ExclusiveMinimum.HasValue && json.Number <= min))
 				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {min}; Actual: {json.Number}.");
 
 			return new SchemaValidationResults();

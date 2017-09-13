@@ -105,6 +105,7 @@ namespace Manatee.Json.Schema.Validators
 		}
 		protected override AdditionalProperties GetAdditionalProperties(JsonSchema06 schema)
 		{
+			if (schema.AdditionalProperties == null) return null;
 			return new AdditionalProperties {Definition = schema.AdditionalProperties};
 		}
 		protected override Dictionary<Regex, IJsonSchema> GetPatternProperties(JsonSchema06 schema)

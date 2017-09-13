@@ -17,13 +17,16 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 
-		public static IEnumerable TestData => _LoadSchema(Draft04TestFolder).Concat(_LoadSchema(Draft06TestFolder));
+		public static IEnumerable TestData => _LoadSchema<JsonSchema04>(Draft04TestFolder).Concat(_LoadSchema<JsonSchema06>(Draft06TestFolder));
 
-		private static IEnumerable<TestCaseData> _LoadSchema(string testFolder)
+		private static IEnumerable<TestCaseData> _LoadSchema<T>(string testFolder)
+			where T : IJsonSchema
 		{
 			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, testFolder).AdjustForOS();
 			var fileNames = Directory.GetFiles(testsPath, "*.json");
-			
+
+			JsonSchemaFactory.SetDefaultSchemaVersion<T>();
+			var schemata = new List<TestCaseData>();
 			foreach (var fileName in fileNames)
 			{
 				var contents = File.ReadAllText(fileName);
@@ -35,13 +38,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				{
 					foreach (var test in testSet.Tests)
 					{
-						yield return new TestCaseData(testSet.Schema, test, fileName)
+						schemata.Add(new TestCaseData(testSet.Schema, test, fileName)
 							{
 								TestName = $"{testSet.Description}.{test.Description}".Replace(' ', '_')
-							};
+							});
 					}
 				}
 			}
+			return schemata;
 		}
 
 		static JsonSchemaTestSuite()
@@ -57,9 +61,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = uri =>
 				{
 					var localPath = uri.Replace(baseUri, string.Empty);
-					Uri newPath = null;
 
-					if (!Uri.TryCreate(localPath, UriKind.Absolute, out newPath))
+					if (!Uri.TryCreate(localPath, UriKind.Absolute, out Uri newPath))
 					{
 						var remotesPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, RemotesFolder).AdjustForOS();
 						newPath = new Uri(new Uri(remotesPath), localPath);
@@ -78,18 +81,12 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestCaseSource(nameof(TestData))]
 		public void Run(IJsonSchema schema, SchemaTest test, string fileName)
 		{
-			if (schema is JsonSchema04)
-				JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
-			else if (schema is JsonSchema06)
-				JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema06>();
+			Console.WriteLine(fileName);
 			
 			var results = schema.Validate(test.Data);
-			
+
 			if (test.Valid != results.Valid)
-			{
-				Console.WriteLine(fileName);
 				Console.WriteLine(string.Join("\n", results.Errors));
-			}
 			Assert.AreEqual(test.Valid, results.Valid);
 		}
 	}

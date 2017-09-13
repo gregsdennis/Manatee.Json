@@ -16,7 +16,7 @@ namespace Manatee.Json.Schema.Validators
 			var maxLength = GetMaxLength(schema);
 			var length = new StringInfo(json.String).LengthInTextElements;
 			if (maxLength.HasValue && length > maxLength)
-				return new SchemaValidationResults(string.Empty, $"Expected: length <= {maxLength}; Actual: {length}.");
+				return new SchemaValidationResults(string.Empty, $"Expected: {maxLength}; Actual: {length}.");
 			return new SchemaValidationResults();
 		}
 	}

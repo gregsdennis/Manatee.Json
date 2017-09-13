@@ -35,7 +35,7 @@
 			var max = schema.ExclusiveMaximum ?? schema.Maximum;
 			var operation = schema.ExclusiveMaximum.HasValue ? "<" : "<=";
 			
-			if (json.Number >= max)
+			if (json.Number > max || (schema.ExclusiveMaximum.HasValue && json.Number >= max))
 				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {max}; Actual: {json.Number}.");
 			
 			return new SchemaValidationResults();

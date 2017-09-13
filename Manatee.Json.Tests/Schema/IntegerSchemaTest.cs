@@ -102,8 +102,7 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid();
 		}
-		
-		
+			
 		public static IEnumerable MaximumData
 		{
 			get
