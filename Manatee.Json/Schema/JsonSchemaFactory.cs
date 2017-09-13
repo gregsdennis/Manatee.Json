@@ -37,14 +37,21 @@ namespace Manatee.Json.Schema
 			};
 
 		private static Func<IJsonSchema> _schemaFactory = () => new JsonSchema04();
+		private static Type _defaultSchemaType = typeof(JsonSchema04);
 		
 		public static void SetDefaultSchemaVersion<T>()
 			where T : IJsonSchema
 		{
 			if (typeof(T) == typeof(JsonSchema04))
+			{
 				_schemaFactory = () => new JsonSchema04();
+				_defaultSchemaType = typeof(JsonSchema04);
+			}
 			else if (typeof(T) == typeof(JsonSchema06))
+			{
 				_schemaFactory = () => new JsonSchema06();
+				_defaultSchemaType = typeof(JsonSchema06);
+			}
 			else
 				throw new ArgumentException($"Only {nameof(JsonSchema04)} and {nameof(JsonSchema06)} are supported.");
 		}
@@ -85,8 +92,6 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchemaCollection();
 					break;
 				case JsonValueType.Boolean:
-					if (!JsonSchema06.MetaSchema.Validate(json).Valid)
-						throw new SchemaLoadException("Only Draft 06 supports boolean schemata.");
 					schema = new JsonSchema06();
 					break;
 				default:

@@ -428,6 +428,13 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public virtual void FromJson(JsonValue json, JsonSerializer serializer)
 		{
+			if (json.Type == JsonValueType.Boolean)
+			{
+				if (!json.Boolean)
+					Not = Empty;
+				return;
+			}
+			
 			var obj = json.Object;
 			Id = obj.TryGetString("id");
 			var uriFolder = DocumentPath?.OriginalString.EndsWith("/") ?? true ? DocumentPath : DocumentPath?.GetParentUri();
