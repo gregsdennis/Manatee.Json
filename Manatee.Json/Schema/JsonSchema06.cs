@@ -19,6 +19,8 @@ namespace Manatee.Json.Schema
 		/// Defines an empty Schema.  Useful for specifying that any schema is valid.
 		/// </summary>
 		public static readonly JsonSchema06 Empty = new JsonSchema06();
+		public static readonly JsonSchema06 True = new JsonSchema06();
+		public static readonly JsonSchema06 False = new JsonSchema06();
 		/// <summary>
 		/// Defines the Draft-04 Schema as presented at http://json-schema.org/draft-06/schema#
 		/// </summary>
@@ -75,7 +77,7 @@ namespace Manatee.Json.Schema
 					},
 				Properties = new JsonSchemaPropertyDefinitionCollection
 					{
-						["id"] = new JsonSchema06
+						["$id"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.String,
 								Format = StringFormat.Uri
@@ -150,42 +152,30 @@ namespace Manatee.Json.Schema
 						["definitions"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = new AdditionalProperties
-									{
-										Definition = JsonSchemaReference.Root
-									},
+								AdditionalProperties = JsonSchemaReference.Root,
 								Default = new JsonObject()
 							},
 						["properties"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = new AdditionalProperties
-									{
-										Definition = JsonSchemaReference.Root
-									},
+								AdditionalProperties = JsonSchemaReference.Root,
 								Default = new JsonObject()
 							},
 						["patternProperties"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = new AdditionalProperties
-									{
-										Definition = JsonSchemaReference.Root
-									},
+								AdditionalProperties = JsonSchemaReference.Root,
 								Default = new JsonObject()
 							},
 						["dependencies"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = new AdditionalProperties
+								AdditionalProperties = new JsonSchema06
 									{
-										Definition = new JsonSchema06
+										AnyOf = new List<IJsonSchema>
 											{
-												AnyOf = new List<IJsonSchema>
-													{
-														JsonSchemaReference.Root,
-														new JsonSchemaReference("#/definitions/stringArray")
-													}
+												JsonSchemaReference.Root,
+												new JsonSchemaReference("#/definitions/stringArray")
 											}
 									}
 							},
@@ -233,6 +223,8 @@ namespace Manatee.Json.Schema
 		private string _id;
 		private string _schema;
 		private double? _multipleOf;
+		private bool? _booleanSchemaDefinition;
+		private StringFormat _format;
 
 		/// <summary>
 		/// Used to specify which this schema defines.
@@ -350,7 +342,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines any additional properties to be expected by this schema.
 		/// </summary>
-		public AdditionalProperties AdditionalProperties { get; set; }
+		public IJsonSchema AdditionalProperties { get; set; }
 		/// <summary>
 		/// Defines a collection of schema type definitions.
 		/// </summary>
@@ -394,7 +386,15 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a required format for the string.
 		/// </summary>
-		public StringFormat Format { get; set; }
+		public StringFormat Format
+		{
+			get { return _format; }
+			set
+			{
+				value?.ValidateForDraft<JsonSchema04>();
+				_format = value;
+			}
+		}
 		/// <summary>
 		/// Gets other, non-schema-defined properties.
 		/// </summary>
@@ -414,6 +414,11 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public virtual SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
+			if (_booleanSchemaDefinition == true)
+				return new SchemaValidationResults();
+			if (_booleanSchemaDefinition == false)
+				return new SchemaValidationResults(new[] {new SchemaValidationError(string.Empty, "All schemata are invalid")});
+
 			var jValue = root ?? ToJson(null);
 			var validators = JsonSchemaPropertyValidatorFactory.Get(this, json);
 			var results = validators.Select(v => v.Validate(this, json, jValue)).ToList();
@@ -430,13 +435,12 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type == JsonValueType.Boolean)
 			{
-				if (!json.Boolean)
-					Not = Empty;
+				_booleanSchemaDefinition = json.Boolean;
 				return;
 			}
 			
 			var obj = json.Object;
-			Id = obj.TryGetString("id");
+			Id = obj.TryGetString("$id");
 			var uriFolder = DocumentPath?.OriginalString.EndsWith("/") ?? true ? DocumentPath : DocumentPath?.GetParentUri();
 			if (!string.IsNullOrWhiteSpace(Id) &&
 				(Uri.TryCreate(Id, UriKind.Absolute, out Uri uri) || Uri.TryCreate(uriFolder + Id, UriKind.Absolute, out uri)))
@@ -504,12 +508,7 @@ namespace Manatee.Json.Schema
 				Properties = properties;
 			}
 			if (obj.ContainsKey("additionalProperties"))
-			{
-				if (obj["additionalProperties"].Type == JsonValueType.Boolean)
-					AdditionalProperties = obj["additionalProperties"].Boolean ? AdditionalProperties.True : AdditionalProperties.False;
-				else
-					AdditionalProperties = new AdditionalProperties {Definition = JsonSchemaFactory.FromJson(obj["additionalProperties"], DocumentPath)};
-			}
+				AdditionalProperties = JsonSchemaFactory.FromJson(obj["additionalProperties"], DocumentPath);
 			if (obj.ContainsKey("definitions"))
 			{
 				Definitions = new JsonSchemaTypeDefinitionCollection();
@@ -584,11 +583,13 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
+			if (_booleanSchemaDefinition.HasValue) return _booleanSchemaDefinition;
+
 			var requiredProperties = new List<string>();
 			if (Properties != null)
 				requiredProperties = Properties.Where(p => p.IsRequired).Select(p => p.Name).ToList();
 			var json = new JsonObject();
-			if (Id != null) json["id"] = Id;
+			if (Id != null) json["$id"] = Id;
 			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
 			if (Title != null) json["title"] = Title;
 			if (!string.IsNullOrWhiteSpace(Description)) json["description"] = Description;

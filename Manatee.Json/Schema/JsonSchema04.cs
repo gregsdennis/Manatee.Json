@@ -221,6 +221,7 @@ namespace Manatee.Json.Schema
 		private string _id;
 		private string _schema;
 		private double? _multipleOf;
+		private StringFormat _format;
 
 		/// <summary>
 		/// Used to specify which this schema defines.
@@ -383,7 +384,15 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a required format for the string.
 		/// </summary>
-		public StringFormat Format { get; set; }
+		public StringFormat Format
+		{
+			get { return _format; }
+			set
+			{
+				value?.ValidateForDraft<JsonSchema04>();
+				_format = value;
+			}
+		}
 		/// <summary>
 		/// Gets other, non-schema-defined properties.
 		/// </summary>

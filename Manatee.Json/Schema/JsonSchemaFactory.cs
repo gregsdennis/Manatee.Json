@@ -78,7 +78,7 @@ namespace Manatee.Json.Schema
 					}
 					else if (schemaDeclaration == JsonSchema06.MetaSchema.Id)
 					{
-						var id = json.Object.TryGetString("id");
+						var id = json.Object.TryGetString("$id");
 						if (id == JsonSchema06.MetaSchema.Id) return JsonSchema06.MetaSchema;
 						schema = new JsonSchema06();
 					}

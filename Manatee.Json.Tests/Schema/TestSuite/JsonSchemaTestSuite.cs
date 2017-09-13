@@ -17,15 +17,12 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 
-		public static IEnumerable TestData => _LoadSchema<JsonSchema04>(Draft04TestFolder).Concat(_LoadSchema<JsonSchema06>(Draft06TestFolder));
+		public static IEnumerable TestData => _LoadSchema(Draft04TestFolder).Concat(_LoadSchema(Draft06TestFolder));
 
-		private static IEnumerable<TestCaseData> _LoadSchema<T>(string testFolder)
-			where T : IJsonSchema
+		private static IEnumerable<TestCaseData> _LoadSchema(string testFolder)
 		{
 			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, testFolder).AdjustForOS();
 			var fileNames = Directory.GetFiles(testsPath, "*.json");
-
-			JsonSchemaFactory.SetDefaultSchemaVersion<T>();
 			
 			foreach (var fileName in fileNames)
 			{
@@ -81,7 +78,18 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestCaseSource(nameof(TestData))]
 		public void Run(IJsonSchema schema, SchemaTest test, string fileName)
 		{
+			if (schema is JsonSchema04)
+				JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
+			else if (schema is JsonSchema06)
+				JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema06>();
+			
 			var results = schema.Validate(test.Data);
+			
+			if (test.Valid != results.Valid)
+			{
+				Console.WriteLine(fileName);
+				Console.WriteLine(string.Join("\n", results.Errors));
+			}
 			Assert.AreEqual(test.Valid, results.Valid);
 		}
 	}
