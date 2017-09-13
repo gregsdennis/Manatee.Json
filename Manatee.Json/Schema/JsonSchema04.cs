@@ -44,7 +44,7 @@ namespace Manatee.Json.Schema
 							{
 								AllOf = new List<IJsonSchema>
 									{
-										new JsonSchemaReference("#/definitions/positiveInteger", Empty),
+										new JsonSchemaReference("#/definitions/positiveInteger"),
 										new JsonSchema04 {Default = 0}
 									}
 							},
@@ -103,8 +103,8 @@ namespace Manatee.Json.Schema
 								Type = JsonSchemaTypeDefinition.Boolean,
 								Default = false
 							},
-						["maxLength"] = new JsonSchemaReference("#/definitions/positiveInteger", Empty),
-						["minLength"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", Empty),
+						["maxLength"] = new JsonSchemaReference("#/definitions/positiveInteger"),
+						["minLength"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
 						["pattern"] = new JsonSchema04
 							{
 								Type = JsonSchemaTypeDefinition.String,
@@ -124,20 +124,20 @@ namespace Manatee.Json.Schema
 								AnyOf = new List<IJsonSchema>
 									{
 										JsonSchemaReference.Root,
-										new JsonSchemaReference("#/definitions/schemaArray", Empty)
+										new JsonSchemaReference("#/definitions/schemaArray")
 									},
 								Default = new JsonObject()
 							},
-						["maxItems"] = new JsonSchemaReference("#/definitions/positiveInteger", Empty),
-						["minItems"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", Empty),
+						["maxItems"] = new JsonSchemaReference("#/definitions/positiveInteger"),
+						["minItems"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
 						["uniqueItems"] = new JsonSchema04
 							{
 								Type = JsonSchemaTypeDefinition.Boolean,
 								Default = false
 							},
-						["maxProperties"] = new JsonSchemaReference("#/definitions/positiveInteger", Empty),
-						["minProperties"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", Empty),
-						["required"] = new JsonSchemaReference("#/definitions/stringArray", Empty),
+						["maxProperties"] = new JsonSchemaReference("#/definitions/positiveInteger"),
+						["minProperties"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
+						["required"] = new JsonSchemaReference("#/definitions/stringArray"),
 						["additionalProperties"] = new JsonSchema04
 							{
 								AnyOf = new List<IJsonSchema>
@@ -173,7 +173,7 @@ namespace Manatee.Json.Schema
 										AnyOf = new List<IJsonSchema>
 											{
 												JsonSchemaReference.Root,
-												new JsonSchemaReference("#/definitions/stringArray", Empty)
+												new JsonSchemaReference("#/definitions/stringArray")
 											}
 									}
 							},
@@ -187,19 +187,19 @@ namespace Manatee.Json.Schema
 							{
 								AnyOf = new List<IJsonSchema>
 									{
-										new JsonSchemaReference("#/definitions/simpleTypes", Empty),
+										new JsonSchemaReference("#/definitions/simpleTypes"),
 										new JsonSchema04
 											{
 												Type = JsonSchemaTypeDefinition.Array,
-												Items = new JsonSchemaReference("#/definitions/simpleTypes", Empty),
+												Items = new JsonSchemaReference("#/definitions/simpleTypes"),
 												MinItems = 1,
 												UniqueItems = true
 											}
 									}
 							},
-						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray", Empty),
-						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray", Empty),
-						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray", Empty),
+						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
+						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
+						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
 						["not"] = JsonSchemaReference.Root
 					},
 				Dependencies = new List<IJsonSchemaDependency>

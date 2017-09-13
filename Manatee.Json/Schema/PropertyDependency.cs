@@ -26,11 +26,11 @@ namespace Manatee.Json.Schema
 			if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
 			if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Must provide a property name.");
 			if (dependencies == null) throw new ArgumentNullException(nameof(dependencies));
-			var dependecyList = dependencies as IList<string> ?? dependencies.ToList();
-			if (!dependecyList.Any()) throw new ArgumentException("Cannot create property dependency on no properties.");
+			var dependencyList = dependencies as IList<string> ?? dependencies.ToList();
+			if (!dependencyList.Any()) throw new ArgumentException("Cannot create property dependency on no properties.");
 
 			PropertyName = propertyName;
-			_dependencies = dependecyList;
+			_dependencies = dependencyList;
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="PropertyDependency"/> class.

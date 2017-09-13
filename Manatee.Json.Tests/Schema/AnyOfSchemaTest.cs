@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
@@ -8,17 +9,31 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class AnyOfSchemaTest
 	{
-		[Test]
-		public void ValidateReturnsErrorOnNoneValid()
+		public static IEnumerable ValidateReturnsErrorOnNoneValidData
 		{
-			var schema = new JsonSchema04
-				{
-					AnyOf = new List<IJsonSchema>
-						{
-							new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array},
-							new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number}
-						}
-				};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04
+					{
+						AnyOf = new List<IJsonSchema>
+							{
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array},
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number}
+							}
+					});
+				yield return new TestCaseData(new JsonSchema06
+					{
+						AnyOf = new List<IJsonSchema>
+							{
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array},
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number}
+							}
+					});
+			}
+		}
+		[TestCaseSource(nameof(ValidateReturnsErrorOnNoneValidData))]
+		public void ValidateReturnsErrorOnNoneValid(IJsonSchema schema)
+		{
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
@@ -26,17 +41,32 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[Test]
-		public void ValidateReturnsValidOnSingleValid()
+		
+		public static IEnumerable ValidateReturnsValidOnSingleValidData
 		{
-			var schema = new JsonSchema04
-				{
-					AnyOf = new List<IJsonSchema>
-						{
-							new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
-							new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
-						}
-				};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04
+					{
+						AnyOf = new List<IJsonSchema>
+							{
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+							}
+					});
+				yield return new TestCaseData(new JsonSchema06
+					{
+						AnyOf = new List<IJsonSchema>
+							{
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+							}
+					});
+			}
+		}
+		[TestCaseSource(nameof(ValidateReturnsValidOnSingleValidData))]
+		public void ValidateReturnsValidOnSingleValid(IJsonSchema schema)
+		{
 			var json = (JsonValue) 25;
 
 			var results = schema.Validate(json);

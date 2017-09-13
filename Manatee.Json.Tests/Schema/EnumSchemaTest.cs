@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
@@ -8,17 +9,32 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class EnumSchemaTest
 	{
-		[Test]
-		public void ValidateReturnsErrorOnValueOutOfRange()
+		public static IEnumerable TestData
 		{
-			var schema = new JsonSchema04
-				{
-					Enum = new List<EnumSchemaValue>
-						{
-							"test1",
-							"test2"
-						}
-				};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema06
+					{
+						Enum = new List<EnumSchemaValue>
+							{
+								"test1",
+								"test2"
+							}
+					});
+				yield return new TestCaseData(new JsonSchema06
+					{
+						Enum = new List<EnumSchemaValue>
+							{
+								"test1",
+								"test2"
+							}
+					});
+			}
+		}
+
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsErrorOnValueOutOfRange(IJsonSchema schema)
+		{
 			var json = (JsonValue) "string";
 
 			var results = schema.Validate(json);
@@ -26,17 +42,9 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreNotEqual(0, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[Test]
-		public void ValidateReturnsValidOnValueInRange()
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsValidOnValueInRange(IJsonSchema schema)
 		{
-			var schema = new JsonSchema04
-				{
-					Enum = new List<EnumSchemaValue>
-						{
-							"test1",
-							"test2"
-						}
-				};
 			var json = (JsonValue) "test1";
 
 			var results = schema.Validate(json);
