@@ -301,6 +301,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public bool? UniqueItems { get; set; }
 		/// <summary>
+		/// Defines a schema that must be contained within an array.
+		/// </summary>
+		public IJsonSchema Contains { get; set; }
+		/// <summary>
 		/// Defines a maximum acceptable length.
 		/// </summary>
 		public uint? MaxProperties { get; set; }
@@ -446,6 +450,8 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("items"))
 				Items = _ReadSchema(obj["items"]);
 			UniqueItems = obj.TryGetBoolean("uniqueItems");
+			if (obj.ContainsKey("contains"))
+				Contains = _ReadSchema(obj["contains"]);
 			MaxProperties = (uint?) obj.TryGetNumber("maxProperties");
 			MinProperties = (uint?) obj.TryGetNumber("minProperties");
 			// Must deserialize "properties" before "required".
@@ -590,6 +596,7 @@ namespace Manatee.Json.Schema
 			if (MaxItems.HasValue) json["maxItems"] = MinItems;
 			if (MinItems.HasValue) json["minItems"] = MinItems;
 			if (UniqueItems ?? false) json["uniqueItems"] = UniqueItems;
+			if (Contains != null) json["contains"] = Contains.ToJson(serializer);
 			if (MaxProperties.HasValue) json["maxProperties"] = MaxProperties;
 			if (MinProperties.HasValue) json["minProperties"] = MinProperties;
 			if (requiredProperties.Any()) json["required"] = requiredProperties.ToJson();
@@ -660,6 +667,7 @@ namespace Manatee.Json.Schema
 			if (MaxItems != schema.MaxItems) return false;
 			if (MinItems != schema.MinItems) return false;
 			if (UniqueItems != schema.UniqueItems) return false;
+			if (!Equals(Contains, schema.Contains)) return false;
 			if (!Equals(AdditionalProperties, schema.AdditionalProperties)) return false;
 			if (!Definitions.ContentsEqual(schema.Definitions)) return false;
 			if (!Properties.ContentsEqual(schema.Properties)) return false;
@@ -716,6 +724,7 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ (MaxItems?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (MinItems?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (UniqueItems?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Contains?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (AdditionalProperties?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Definitions?.GetCollectionHashCode().GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Properties?.GetCollectionHashCode() ?? 0);
