@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class XmlExtensionsTest
 	{
 		#region Number
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ToXElement_NumberNullKey_ThrowsArgumentException()
 		{
-			JsonValue json = 42;
-			var actual = json.ToXElement(null);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					JsonValue json = 42;
+					json.ToXElement(null);
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_NumberWithKey_MapsCorrectly()
 		{
 			var value = 42;
@@ -28,7 +31,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_ElementWithNumberValue_MapsCorrectly()
 		{
 			var value = 42;
@@ -42,14 +45,16 @@ namespace Manatee.Json.Tests
 		}
 		#endregion
 		#region String
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ToXElement_StringNullKey_ThrowsArgumentException()
 		{
-			JsonValue json = "a string";
-			var actual = json.ToXElement(null);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					JsonValue json = "a string";
+					json.ToXElement(null);
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_StringWithKey_MapsCorrectly()
 		{
 			var value = "a string";
@@ -61,7 +66,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_NumericStringWithKey_MapsCorrectly()
 		{
 			var value = "42";
@@ -74,7 +79,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.ToString(), actual.ToString());
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_BooleanStringWithKey_MapsCorrectly()
 		{
 			var value = "true";
@@ -87,7 +92,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.ToString(), actual.ToString());
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_ElementWithStringValue_MapsCorrectly()
 		{
 			var value = "a string";
@@ -99,7 +104,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_ElementWithNumericStringValue_MapsCorrectly()
 		{
 			var value = "42";
@@ -112,7 +117,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_ElementWithBooleanStringValue_MapsCorrectly()
 		{
 			var value = "true";
@@ -127,14 +132,16 @@ namespace Manatee.Json.Tests
 		}
 		#endregion
 		#region Boolean
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ToXElement_BooleanNullKey_ThrowsArgumentException()
 		{
-			JsonValue json = true;
-			var actual = json.ToXElement(null);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					JsonValue json = true;
+					json.ToXElement(null);
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_BooleanWithKey_MapsCorrectly()
 		{
 			var value = true;
@@ -146,7 +153,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_ElementWithBooleanValue_MapsCorrectly()
 		{
 			var value = true;
@@ -160,14 +167,16 @@ namespace Manatee.Json.Tests
 		}
 		#endregion
 		#region Object
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ToXElement_ObjectNullKeyMultiplePairs_ThrowsArgumentException()
 		{
-			JsonValue json = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
-			var actual = json.ToXElement(null);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					JsonValue json = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
+					json.ToXElement(null);
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_ObjectNullKeySinglePair_MapsCorrectly()
 		{
 			JsonValue json = new JsonObject {{"root", new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}}}};
@@ -184,7 +193,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_ObjectWithKey_MapsCorrectly()
 		{
 			JsonValue json = new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}};
@@ -201,7 +210,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_SingleRootElementSimpleContents_MapsCorrectly()
 		{
 			var key = "aKey";
@@ -218,7 +227,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_MultipleRootElementsSimpleContents_MapsCorrectly()
 		{
 			var list = new List<XElement>();
@@ -234,7 +243,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_SingleRootElementComplexContents_MapsCorrectly()
 		{
 			var key = "aKey";
@@ -266,14 +275,16 @@ namespace Manatee.Json.Tests
 		}
 		#endregion
 		#region Array
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ToXElement_ArrayNullKey_ThrowsArgumentException()
 		{
-			JsonValue json = new JsonArray {false, 42, "a string"};
-			var actual = json.ToXElement(null);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					JsonValue json = new JsonArray {false, 42, "a string"};
+					json.ToXElement(null);
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_ArrayWithKey_MapsCorrectly()
 		{
 			var key = "aKey";
@@ -290,7 +301,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_ArrayWithNestedArray_MapsCorrectly()
 		{
 			var key = "aKey";
@@ -310,7 +321,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_ArrayWithNestedArrayWithNestedObjectContainingSameKey_MapsCorrectly()
 		{
 			var key = "aKey";
@@ -336,14 +347,16 @@ namespace Manatee.Json.Tests
 		}
 		#endregion
 		#region Null
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ToXElement_NullNullKey_ThrowsArgumentException()
 		{
-			JsonValue json = true;
-			var actual = json.ToXElement(null);
+			Assert.Throws<ArgumentException>(() =>
+				{
+					JsonValue json = true;
+					json.ToXElement(null);
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void ToXElement_NullWithKey_MapsCorrectly()
 		{
 			var key = "aKey";
@@ -354,7 +367,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_ElementWithNullValue_MapsCorrectly()
 		{
 			var key = "aKey";
@@ -367,7 +380,7 @@ namespace Manatee.Json.Tests
 		}
 		#endregion
 		#region Complex
-		[TestMethod]
+		[Test]
 		public void ToXElement_ComplexObject_MapsCorrectly()
 		{
 			JsonValue json = new JsonObject
@@ -422,7 +435,7 @@ namespace Manatee.Json.Tests
 
 			Assert.IsTrue(XNode.DeepEquals(expected, actual));
 		}
-		[TestMethod]
+		[Test]
 		public void ToJson_ComplexElement_MapsCorrectly()
 		{
 			var list = new List<XElement>();
@@ -477,7 +490,7 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void RoundTrip_StartingWithJson()
 		{
 			JsonValue json = new JsonObject
@@ -491,14 +504,14 @@ namespace Manatee.Json.Tests
 													{"object", new JsonObject{{"number", 263.5},{"array",new JsonArray{1,2,new JsonObject{{"single",1}}}}}}
 							           			}}
 			           			};
-			var expected = new JsonObject {{"root", json}};
+			JsonValue expected = new JsonObject {{"root", json}};
 
 			var toXElement = json.ToXElement("root");
 			var actual = toXElement.ToJson();
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void RoundTrip_StartingWithXml()
 		{
 			var expected = XElement.Parse(@"<Requests><Request><SearchCustomerRequest xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.manatee.com/services/""><MachineName xmlns=""http://www.manatee.com/services/sub/"">USA02415-2</MachineName><SearchContext xmlns:d2p1=""http://www.manatee.com/services/""><d2p1:CustomerId i:nil=""true"" /><d2p1:EdgeId /><d2p1:EmailAddress /><d2p1:LastName /><d2p1:LoyaltyCardNumber>1234567890123</d2p1:LoyaltyCardNumber><d2p1:MaxRows i:nil=""true"" /><d2p1:PhoneNumber /><d2p1:ZipCode /></SearchContext></SearchCustomerRequest></Request></Requests>");

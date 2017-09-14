@@ -1,48 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class EnumSchemaTest
 	{
-		[TestMethod]
-		public void ValidateReturnsErrorOnValueOutOfRange()
+		public static IEnumerable TestData
 		{
-			var schema = new JsonSchema
-				{
-					Enum = new List<EnumSchemaValue>
-						{
-							new EnumSchemaValue("test1"),
-							new EnumSchemaValue("test2")
-						}
-				};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema06
+					{
+						Enum = new List<EnumSchemaValue>
+							{
+								"test1",
+								"test2"
+							}
+					});
+				yield return new TestCaseData(new JsonSchema06
+					{
+						Enum = new List<EnumSchemaValue>
+							{
+								"test1",
+								"test2"
+							}
+					});
+			}
+		}
+
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsErrorOnValueOutOfRange(IJsonSchema schema)
+		{
 			var json = (JsonValue) "string";
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnValueInRange()
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsValidOnValueInRange(IJsonSchema schema)
 		{
-			var schema = new JsonSchema
-			{
-					Enum = new List<EnumSchemaValue>
-						{
-							new EnumSchemaValue("test1"),
-							new EnumSchemaValue("test2")
-						}
-				};
 			var json = (JsonValue) "test1";
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

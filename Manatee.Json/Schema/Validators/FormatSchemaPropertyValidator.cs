@@ -1,17 +1,36 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal class FormatSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class FormatSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		protected abstract StringFormat GetFormat(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.Format != null && JsonSchemaOptions.ValidateFormat &&
+			return GetFormat(schema) != null && JsonSchemaOptions.ValidateFormat &&
 			       json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			if (!schema.Format.Validate(json.String))
-				return new SchemaValidationResults(string.Empty, $"Value [{json.String}] is not in an acceptable {schema.Format.Key} format.");
+			if (!GetFormat(schema).Validate(json.String))
+				return new SchemaValidationResults(string.Empty, $"Value [{json.String}] is not in an acceptable {GetFormat(schema).Key} format.");
 			return new SchemaValidationResults();
+		}
+	}
+	
+	internal class FormatSchema04PropertyValidator : FormatSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override StringFormat GetFormat(JsonSchema04 schema)
+		{
+			return schema.Format;
+		}
+	}
+	
+	internal class FormatSchema06PropertyValidator : FormatSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override StringFormat GetFormat(JsonSchema06 schema)
+		{
+			return schema.Format;
 		}
 	}
 }

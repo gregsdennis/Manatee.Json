@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Test_References;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Serialization
 {
-	[TestClass]
-	[DeploymentItem("SchemaValidatedClass.json")]
-	[DeploymentItem("InvalidSchemaValidatedClass.json")]
+	[TestFixture]
+	//[DeploymentItem("SchemaValidatedClass.json")]
+	//[DeploymentItem("InvalidSchemaValidatedClass.json")]
 	public class JsonDeserializerTest
 	{
-		[TestMethod]
+		[Test]
 		public void RegisteredType_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -21,7 +21,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<TimeSpan>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void DateTimeDefaultOptions_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -30,7 +30,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<DateTime>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void DateTimeJavaFormat_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -44,7 +44,7 @@ namespace Manatee.Json.Tests.Serialization
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void DateTimeMilliseconds_Successful()
 		{
 			var serializer = new JsonSerializer
@@ -60,7 +60,7 @@ namespace Manatee.Json.Tests.Serialization
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void DateTimeCustom_Successful()
 		{
 			var serializer = new JsonSerializer
@@ -77,7 +77,7 @@ namespace Manatee.Json.Tests.Serialization
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Basic_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -102,7 +102,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void BasicWithNamedEnum_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -128,7 +128,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void BasicWithNamedEnumWithDescription_Successful()
 		{
 			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
@@ -153,7 +153,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void AbstractAndInterfacePropsWithoutMap_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -182,7 +182,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithAbstractAndInterfaceProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void AbstractAndInterfacePropsWithMap_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -201,7 +201,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithAbstractAndInterfaceProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void AbstractClass_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -220,7 +220,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<AbstractClass>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void AbstractClassWithMap_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -240,7 +240,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<AbstractClass>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Interface_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -254,8 +254,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<IInterface>(json);
 			Assert.AreEqual(expected, actual);
 		}
-#if !IOS
-		[TestMethod]
+		[Test]
 		public void InterfaceWithoutMap_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -270,8 +269,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected.RequiredProp, actual.RequiredProp);
 			Assert.AreNotEqual(typeof (ImplementationClass), actual.GetType());
 		}
-#endif
-		[TestMethod]
+		[Test]
 		public void InterfaceWithMap_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -285,7 +283,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<IInterface>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void InterfaceWithMapToIJsonSerializableImplementation_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -299,16 +297,15 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<IInterface>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Nullable_Null_Successful()
 		{
 			var serializer = new JsonSerializer();
-			int? expected = null;
 			var json = JsonValue.Null;
 			var actual = serializer.Deserialize<int?>(json);
-			Assert.AreEqual(expected, actual);
+			Assert.AreEqual((int?) null, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Nullable_NonNull_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -317,7 +314,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<int?>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void Array_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -330,7 +327,7 @@ namespace Manatee.Json.Tests.Serialization
 				Assert.AreEqual(expected[i], actual[i]);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void List_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -343,7 +340,7 @@ namespace Manatee.Json.Tests.Serialization
 				Assert.AreEqual(expected[i], actual[i]);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void IEnumerable_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -357,7 +354,7 @@ namespace Manatee.Json.Tests.Serialization
 				Assert.AreEqual(expected[i], actual.ElementAt(i));
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void Dictionary_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -377,7 +374,7 @@ namespace Manatee.Json.Tests.Serialization
 				Assert.AreEqual(expected[key], actual[key]);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void Queue_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -394,7 +391,7 @@ namespace Manatee.Json.Tests.Serialization
 				Assert.AreEqual(expected.ToArray()[i], actual.ToArray()[i]);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void Stack_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -411,7 +408,7 @@ namespace Manatee.Json.Tests.Serialization
 				Assert.AreEqual(expected.ToArray()[i], actual.ToArray()[i]);
 			}
 		}
-		[TestMethod]
+		[Test]
 		public void DeserializeType_Successfull()
 		{
 			var serializer = new JsonSerializer();
@@ -432,7 +429,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(ObjectWithBasicProps.StaticDoubleProp, doubleProp);
 			Assert.AreEqual(ObjectWithBasicProps.StaticBoolProp, boolProp);
 		}
-		[TestMethod]
+		[Test]
 		public void DefaultOptions_IgnoresExtraProperties()
 		{
 			var serializer = new JsonSerializer();
@@ -455,42 +452,44 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
-		[ExpectedException(typeof(TypeDoesNotContainPropertyException))]
+		[Test]
 		public void CustomOptions_ThrowsTypeDoesNotContainPropertyException()
 		{
-			var serializer = new JsonSerializer();
-			try
-			{
-				serializer.Options = new JsonSerializerOptions
+			Assert.Throws<TypeDoesNotContainPropertyException>(() =>
+				{
+					var serializer = new JsonSerializer();
+					try
 					{
-						InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.ThrowException
-					};
-				var json = new JsonObject
+						serializer.Options = new JsonSerializerOptions
+							{
+								InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.ThrowException
+							};
+						var json = new JsonObject
+							{
+								{"StringProp", "stringValue"},
+								{"IntProp", 42},
+								{"UnknownProp", "string"},
+								{"DoubleProp", 6},
+								{"BoolProp", true},
+								{"OtherProp", Math.PI}
+							};
+						var expected = new ObjectWithBasicProps
+							{
+								StringProp = "stringValue",
+								IntProp = 42,
+								DoubleProp = 6.0,
+								BoolProp = true
+							};
+						var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
+						Assert.Fail("Did not throw exception.");
+					}
+					finally
 					{
-						{"StringProp", "stringValue"},
-						{"IntProp", 42},
-						{"UnknownProp", "string"},
-						{"DoubleProp", 6},
-						{"BoolProp", true},
-						{"OtherProp", Math.PI}
-					};
-				var expected = new ObjectWithBasicProps
-					{
-						StringProp = "stringValue",
-						IntProp = 42,
-						DoubleProp = 6.0,
-						BoolProp = true
-					};
-				var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
-				Assert.Fail("Did not throw exception.");
-			}
-			finally
-			{
-				serializer.Options = null;
-			}
+						serializer.Options = null;
+					}
+				});
 		}
-		[TestMethod]
+		[Test]
 		public void CircularStructure_MaintainsReferences()
 		{
 			var serializer = new JsonSerializer();
@@ -534,7 +533,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(0, serializer.SerializationMap.Count);
 		}
 #if !IOS
-		[TestMethod]
+		[Test]
 		public void UnimplementedInterface_ReturnsRunTimeImplementation()
 		{
 			var serializer = new JsonSerializer();
@@ -549,7 +548,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected.RequiredProp, actual.RequiredProp);
 		}
 #endif
-		[TestMethod]
+		[Test]
 		public void Fields()
 		{
 			var serializer = new JsonSerializer {Options = {AutoSerializeFields = true}};
@@ -576,7 +575,7 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void MapGenericAbstraction_Interface_Success()
 		{
 			JsonSerializationAbstractionMap.MapGeneric(typeof (IFace<>), typeof (Impl<>));
@@ -587,7 +586,7 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(typeof (Impl<int>), value.GetType());
 		}
-		[TestMethod]
+		[Test]
 		public void MapGenericAbstraction_BaseClass_Success()
 		{
 			JsonSerializationAbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));
@@ -598,7 +597,7 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(typeof (Derived<int>), value.GetType());
 		}
-		[TestMethod]
+		[Test]
 		public void MapGenericAbstraction_WithOverride_Success()
 		{
 			JsonSerializationAbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));

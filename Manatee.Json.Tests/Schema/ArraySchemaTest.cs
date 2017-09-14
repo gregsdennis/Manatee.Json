@@ -1,152 +1,174 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class ArraySchemaTest
 	{
-		[TestMethod]
-		public void ValidateReturnsErrorOnNonArray()
+		public static IEnumerable TypeData
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array});
+			}
+		}
+		[TestCaseSource(nameof(TypeData))]
+		public void ValidateReturnsErrorOnNonArray(IJsonSchema schema)
+		{
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsErrorOnString()
+		[TestCaseSource(nameof(TypeData))]
+		public void ValidateReturnsErrorOnString(IJsonSchema schema)
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array};
 			JsonValue json = "string";
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsErrorOnTooFewItems()
+
+		public static IEnumerable MinItemsData
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MinItems = 5};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MinItems = 5});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array, MinItems = 5});
+			}
+		}
+		[TestCaseSource(nameof(MinItemsData))]
+		public void ValidateReturnsErrorOnTooFewItems(IJsonSchema schema)
+		{
 			var json = new JsonArray {1, "string"};
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnCountEqualsMinItems()
+		[TestCaseSource(nameof(MinItemsData))]
+		public void ValidateReturnsValidOnCountEqualsMinItems(IJsonSchema schema)
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MinItems = 2};
-			var json = new JsonArray {1, "string"};
+			var json = new JsonArray {1, "string", null, 4.0, "test"};
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnCountGreaterThanMinItems()
+		[TestCaseSource(nameof(MinItemsData))]
+		public void ValidateReturnsValidOnCountGreaterThanMinItems(IJsonSchema schema)
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MinItems = 2};
-			var json = new JsonArray {1, "string", false};
+			var json = new JsonArray {1, "string", null, 4.0, "test", false};
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
-		[TestMethod]
-		public void ValidateReturnsErrorOnTooManyItems()
+
+		public static IEnumerable MaxItemsData
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5});
+			}
+		}
+		[TestCaseSource(nameof(MaxItemsData))]
+		public void ValidateReturnsErrorOnTooManyItems(IJsonSchema schema)
+		{
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null, 2};
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnCountEqualsMaxItems()
+		[TestCaseSource(nameof(MaxItemsData))]
+		public void ValidateReturnsValidOnCountEqualsMaxItems(IJsonSchema schema)
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null};
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnCountLessThanMaxItems()
+		[TestCaseSource(nameof(MaxItemsData))]
+		public void ValidateReturnsValidOnCountLessThanMaxItems(IJsonSchema schema)
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5};
 			var json = new JsonArray {1, "string", false};
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
-		[TestMethod]
-		public void ValidateReturnsErrorOnDuplicateItems()
+
+		public static IEnumerable UniqueItemsData
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true});
+			}
+		}
+		[TestCaseSource(nameof(UniqueItemsData))]
+		public void ValidateReturnsErrorOnDuplicateItems(IJsonSchema schema)
+		{
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null, 1};
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnUniqueItems()
+		[TestCaseSource(nameof(UniqueItemsData))]
+		public void ValidateReturnsValidOnUniqueItems(IJsonSchema schema)
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true};
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null};
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
-		[TestMethod]
-		public void ValidateReturnsErrorOnInvalidItems()
+
+		public static IEnumerable ItemsData
 		{
-			var schema = new JsonSchema
-				{
-					Type = JsonSchemaTypeDefinition.Array,
-					Items = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
-				};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04
+					{
+						Type = JsonSchemaTypeDefinition.Array,
+						Items = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+					});
+				yield return new TestCaseData(new JsonSchema06
+					{
+						Type = JsonSchemaTypeDefinition.Array,
+						Items = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String}
+					});
+			}
+		}
+		[TestCaseSource(nameof(ItemsData))]
+		public void ValidateReturnsErrorOnInvalidItems(IJsonSchema schema)
+		{
 			var json = new JsonArray {1, "string"};
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnValidItems()
+		[TestCaseSource(nameof(ItemsData))]
+		public void ValidateReturnsValidOnValidItems(IJsonSchema schema)
 		{
-			var schema = new JsonSchema
-				{
-					Type = JsonSchemaTypeDefinition.Array,
-					Items = new JsonSchema {Type = JsonSchemaTypeDefinition.String}
-				};
 			var json = new JsonArray {"start", "string"};
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

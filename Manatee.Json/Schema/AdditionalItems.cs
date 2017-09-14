@@ -39,7 +39,7 @@ namespace Manatee.Json.Schema
 
 		static AdditionalItems()
 		{
-			True = new AdditionalItems { Definition = JsonSchema.Empty, _isReadOnly = true};
+			True = new AdditionalItems { Definition = JsonSchema04.Empty, _isReadOnly = true};
 			False = new AdditionalItems { _isReadOnly = true};
 		}
 
@@ -104,7 +104,7 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type == JsonValueType.Boolean)
 			{
-				if (json.Boolean) Definition = JsonSchema.Empty;
+				if (json.Boolean) Definition = JsonSchema04.Empty;
 			}
 			else
 			{

@@ -27,7 +27,7 @@ namespace Manatee.Json.Schema
 			if (Defintions.Except(PrimitiveDefinitions).Any())
 				throw new InvalidOperationException("Only primitive types are allowed in type collections.");
 
-			Definition = new JsonSchema { OneOf = Defintions.Select(d => d.Definition) };
+			Definition = new JsonSchema04 { OneOf = Defintions.Select(d => d.Definition) };
 		}
 		internal JsonSchemaMultiTypeDefinition(bool nonPrimitiveAllowed)
 		{
@@ -52,7 +52,7 @@ namespace Manatee.Json.Schema
 					return definition;
 				}).ToList();
 
-			Definition = new JsonSchema {OneOf = Defintions.Select(d => d.Definition)};		}
+			Definition = new JsonSchema04 {OneOf = Defintions.Select(d => d.Definition)};		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>

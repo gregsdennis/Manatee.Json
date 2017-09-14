@@ -1,20 +1,39 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class AnyOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class AnyOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		protected abstract IEnumerable<IJsonSchema> GetAnyOf(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.AnyOf != null;
+			return GetAnyOf(schema) != null;
 		}
-
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.AnyOf.Select(s => s.Validate(json, root)).ToList();
+			var errors = GetAnyOf(schema).Select(s => s.Validate(json, root)).ToList();
 			return errors.Any(r => r.Valid)
-					   ? new SchemaValidationResults()
-					   : new SchemaValidationResults(errors);
+				       ? new SchemaValidationResults()
+				       : new SchemaValidationResults(errors);
+		}
+	}
+	
+	internal class AnyOfSchema04PropertyValidator : AnyOfSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override IEnumerable<IJsonSchema> GetAnyOf(JsonSchema04 schema)
+		{
+			return schema.AnyOf;
+		}
+	}
+	
+	internal class AnyOfSchema06PropertyValidator : AnyOfSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override IEnumerable<IJsonSchema> GetAnyOf(JsonSchema06 schema)
+		{
+			return schema.AnyOf;
 		}
 	}
 }

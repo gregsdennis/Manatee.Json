@@ -12,7 +12,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the property with the dependency.
 		/// </summary>
-		public string PropertyName { get; internal set; }
+		public string PropertyName { get; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="SchemaDependency"/> class.
@@ -21,15 +21,11 @@ namespace Manatee.Json.Schema
 		/// <param name="schema">The schema which must be validated.</param>
 		public SchemaDependency(string propertyName, IJsonSchema schema)
 		{
-			_schema = schema;
 			if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
 			if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Must provide a property name.");
 
-			PropertyName = propertyName;
-		}
-		private SchemaDependency(IJsonSchema schema)
-		{
 			_schema = schema;
+			PropertyName = propertyName;
 		}
 
 		/// <summary>

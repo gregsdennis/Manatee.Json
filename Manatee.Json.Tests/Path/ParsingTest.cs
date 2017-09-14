@@ -1,9 +1,9 @@
 ﻿using Manatee.Json.Path;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Path
 {
-	[TestClass]
+	[TestFixture]
 	public class ParsingTest
 	{
 		private static void Run(JsonPath expected, string text)
@@ -13,27 +13,27 @@ namespace Manatee.Json.Tests.Path
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void SingleNamedObject()
 		{
 			Run(JsonPathWith.Name("name"), "$.name");
 		}
-		[TestMethod]
+		[Test]
 		public void SingleQuotedNamedObject()
 		{
 			Run(JsonPathWith.Name("quoted name"), "$.'quoted name'");
 		}
-		[TestMethod]
+		[Test]
 		public void DoubleQuotedNamedObject()
 		{
 			Run(JsonPathWith.Name("quoted name"), "$.\"quoted name\"");
 		}
-		[TestMethod]
+		[Test]
 		public void SingleWildcardObject()
 		{
 			Run(JsonPathWith.Wildcard(), "$.*");
 		}
-		[TestMethod]
+		[Test]
 		public void NamedObjectWithWildcardObject()
 		{
 			var text = "$.name.*";
@@ -43,7 +43,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void WildcardObjectWithNamedObject()
 		{
 			var text = "$.*.name";
@@ -53,7 +53,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SingleNamedSearch()
 		{
 			var text = "$..name";
@@ -63,7 +63,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SingleQuotedNamedSearch()
 		{
 			var text = "$..'quoted name'";
@@ -73,7 +73,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void DoubleQuotedNamedSearch()
 		{
 			var text = "$..\"quoted name\"";
@@ -83,7 +83,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SingleWildcardSearch()
 		{
 			var text = "$..*";
@@ -93,7 +93,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void NamedObjectWithWildcardSearch()
 		{
 			var text = "$.name..*";
@@ -103,7 +103,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void WildcardObjectWithNamedSearch()
 		{
 			var text = "$.*..name";
@@ -113,7 +113,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SingleIndexedArray()
 		{
 			var text = "$[1]";
@@ -123,7 +123,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SingleSlicedArray()
 		{
 			var text = "$[1:5]";
@@ -133,7 +133,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SteppedSlicedArray()
 		{
 			var text = "$[1:5:2]";
@@ -143,7 +143,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void IndexedSlicedArray()
 		{
 			var text = "$[1,5:7]";
@@ -153,7 +153,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SlicedIndexedArray()
 		{
 			var text = "$[1:5,7]";
@@ -163,7 +163,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void MultiSlicedArray()
 		{
 			var text = "$[1:5,7:11:2]";
@@ -173,7 +173,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void MultiIndexedArray()
 		{
 			var text = "$[1,3]";
@@ -183,7 +183,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void WildcardArray()
 		{
 			var text = "$[*]";
@@ -193,7 +193,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void SearchIndexedArray()
 		{
 			var text = "$..[1]";
@@ -203,59 +203,59 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ChainedNameIndexedArray()
 		{
 			Run(JsonPathWith.Name("name").Array(4), "$.name[4]");
 		}
-		[TestMethod]
+		[Test]
 		public void ChainedIndexedArrayName()
 		{
 			Run(JsonPathWith.Array(4).Name("name"), "$[4].name");
 		}
-		[TestMethod]
+		[Test]
 		public void ChainedNameName()
 		{
 			Run(JsonPathWith.Name("name").Name("test"), "$.name.test");
 		}
-		[TestMethod]
+		[Test]
 		public void ChainedIndexedArrayIndexedArray()
 		{
 			Run(JsonPathWith.Array(2).Array(4), "$[2][4]");
 		}
-		[TestMethod]
+		[Test]
 		public void MultipleConditionsAdd()
 		{
 			Run(JsonPathWith.Array(jv => jv.Length() == 3 && jv.ArrayIndex(1) == false), "$[?(@.length == 3 && @[1] == false)]");
 		}
-		[TestMethod]
+		[Test]
 		public void MultipleConditionsOr()
 		{
 			Run(JsonPathWith.Array(jv => jv.Length() == 3 || jv.ArrayIndex(1) == false), "$[?(@.length == 3 || @[1] == false)]");
 		}
-		[TestMethod]
+		[Test]
 		public void Group()
 		{
 			Run(JsonPathWith.Array(jv => (jv.Length()+1)*2 == 6), "$[?((@.length+1)*2 == 6)]");
 		}
-		[TestMethod]
+		[Test]
 		public void NotGroup()
 		{
 			// ReSharper disable once NegativeEqualityExpression
 			// Don't simplify this.  It's a parsing test.
 			Run(JsonPathWith.Array(jv => !(jv.Length() == 3) && jv.ArrayIndex(1) == false), "$[?(!(@.length == 3) && @[1] == false)]");
 		}
-		[TestMethod]
+		[Test]
 		public void WeirdPropertyNameQuoted()
 		{
 			Run(JsonPathWith.Name("tes* \"t"), "$.\"tes* \\\"t\"");
 		}
-		[TestMethod]
+		[Test]
 		public void EmptyKey()
 		{
 			Run(JsonPathWith.Name(""), "$.''");
 		}
-		[TestMethod]
+		[Test]
 		public void EmptySearch()
 		{
 			Run(JsonPathWith.Search(""), "$..''");

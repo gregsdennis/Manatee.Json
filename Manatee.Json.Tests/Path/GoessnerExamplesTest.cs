@@ -1,10 +1,10 @@
 ﻿using System;
 using Manatee.Json.Path;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Path
 {
-	[TestClass]
+	[TestFixture]
 	public class GoessnerExamplesTest
 	{
 		public static readonly JsonValue GoessnerData =
@@ -59,7 +59,7 @@ namespace Manatee.Json.Tests.Path
 					}
 				};
 
-		[TestMethod]
+		[Test]
 		public void GoessnerExample1Parsed()
 		{
 			var path = JsonPath.Parse("$.store.book[*].author");
@@ -68,7 +68,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample1Constructed()
 		{
 			var path = JsonPathWith.Name("store").Name("book").Array().Name("author");
@@ -77,7 +77,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample2Parsed()
 		{
 			var path = JsonPath.Parse("$..author");
@@ -86,7 +86,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample2Constructed()
 		{
 			var path = JsonPathWith.Search("author");
@@ -95,7 +95,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample3Parsed()
 		{
 			var path = JsonPath.Parse("$.store.*");
@@ -144,7 +144,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample3Constructed()
 		{
 			var path = JsonPathWith.Name("store").Wildcard();
@@ -193,7 +193,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample4Parsed()
 		{
 			var path = JsonPath.Parse("$.store..price");
@@ -202,7 +202,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample4Constructed()
 		{
 			var path = JsonPathWith.Name("store").Search("price");
@@ -211,7 +211,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample5Parsed()
 		{
 			var path = JsonPath.Parse("$..book[2]");
@@ -230,7 +230,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample5Constructed()
 		{
 			var path = JsonPathWith.Search("book").Array(2);
@@ -249,7 +249,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample6AParsed()
 		{
 			var path = JsonPath.Parse("$..book[(@.length-1)]");
@@ -268,7 +268,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample6AConstructed()
 		{
 			var path = JsonPathWith.Search("book").Array(ja => ja.Length() - 1);
@@ -287,7 +287,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample6BParsed()
 		{
 			var path = JsonPath.Parse("$..book[-1:]");
@@ -306,7 +306,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample6BConstructed()
 		{
 			var path = JsonPathWith.Search("book").Array(new Slice(-1, null));
@@ -325,7 +325,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample7AParsed()
 		{
 			var path = JsonPath.Parse("$..book[0,1]");
@@ -350,7 +350,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample7AConstructed()
 		{
 			var path = JsonPathWith.Search("book").Array(0, 1);
@@ -375,7 +375,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample7BParsed()
 		{
 			var path = JsonPath.Parse("$..book[:2]");
@@ -400,7 +400,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample7BConstructed()
 		{
 			var path = JsonPathWith.Search("book").Array(new Slice(null, 2));
@@ -425,7 +425,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample8Parsed()
 		{
 			var path = JsonPath.Parse("$..book[?(@.isbn)]");
@@ -452,7 +452,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample8Constructed()
 		{
 			var path = JsonPathWith.Search("book").Array(jv => jv.HasProperty("isbn"));
@@ -479,7 +479,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample9Parsed()
 		{
 			var path = JsonPath.Parse("$..book[?(@.price<10)]");
@@ -505,7 +505,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample9Constructed()
 		{
 			var path = JsonPathWith.Search("book").Array(jv => jv.Name("price") < 10);
@@ -532,7 +532,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample10Parsed()
 		{
 			var path = JsonPath.Parse("$..*");
@@ -726,7 +726,7 @@ namespace Manatee.Json.Tests.Path
 
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GoessnerExample10Constructed()
 		{
 			var path = JsonPathWith.Search();

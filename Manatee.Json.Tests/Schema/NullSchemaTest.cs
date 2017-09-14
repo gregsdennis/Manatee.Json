@@ -1,33 +1,39 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class NullSchemaTest
 	{
-		[TestMethod]
-		public void ValidateReturnsErrorOnNonNull()
+		public static IEnumerable TestData
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
+			get
+			{
+				yield return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};
+				yield return new JsonSchema06 {Type = JsonSchemaTypeDefinition.Null};
+			}
+		}
+		
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsErrorOnNonNull(IJsonSchema schema)
+		{
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnNull()
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsValidOnNull(IJsonSchema schema)
 		{
-			var schema = new JsonSchema {Type = JsonSchemaTypeDefinition.Null};
 			var json = JsonValue.Null;
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

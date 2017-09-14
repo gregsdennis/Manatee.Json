@@ -1,38 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to building JSON structures.</Description>
-    <Version>7.1.0</Version>
+    <Version>8.0.0</Version>
     <Copyright>Copyright © 2017 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
     <PackageIconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</PackageIconUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>
+    </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v7.1.0
+    <PackageReleaseNotes>v8.0.0
+JSON Schema draft-06 now supported
+Additional implicit casts which result in terser code.
+BREAKING CHANGES:
+- JsonSchema renamed to JsonSchema04.
+- JsonSchema.Draft04 renamed to JsonSchema04.MetaSchema (mirrors JsonSchema06.MetaSchema).
+- IJsonSchema exposes new properties Id:string and Schema:string.
+- JsonSchemaFactory now throws SchemaLoadException instead of ArgumentOutOfRangeException.
+- JsonSchemaReference no longer inherits from JsonSchema.  Instead a Base:IJsonSchema property has been created to fulfill coincident properties.
+
+v7.1.0
 Added implicit casts to aid in schema creation in code.
-
-v7.0.0
-BREAKING CHANGE: Frameworks below 4.6 are no longer supported.
-Updated to multi-targeted NetStandard1.3 &amp; NetFramework4.6.
-
-v6.0.3
-Schema passes latest version of JSON Schema Test Suite. (#63)
-</PackageReleaseNotes>
+    </PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>7.1.0.0</FileVersion>
-    <AssemblyVersion>7.0.0.0</AssemblyVersion>
+    <FileVersion>8.0.0.0</FileVersion>
+    <AssemblyVersion>8.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <TargetFrameworkIdentifier>.NETStandard</TargetFrameworkIdentifier>
   </PropertyGroup>
-  
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
   </PropertyGroup>

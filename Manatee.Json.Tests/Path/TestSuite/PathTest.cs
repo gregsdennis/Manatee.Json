@@ -4,7 +4,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Tests.Path.TestSuite
 {
-	internal class PathTest : IJsonSerializable
+	public class PathTest : IJsonSerializable
 	{
 		public JsonPath Path { get; private set; }
 		public JsonArray Result { get; private set; }

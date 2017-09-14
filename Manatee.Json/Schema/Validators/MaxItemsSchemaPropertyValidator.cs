@@ -1,16 +1,36 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal class MaxItemsSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class MaxItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		protected abstract uint? GetMaxItems(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.MaxItems.HasValue && json.Type == JsonValueType.Array;
+			return GetMaxItems(schema).HasValue && json.Type == JsonValueType.Array;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			if (json.Array.Count > schema.MaxItems)
-				return new SchemaValidationResults(string.Empty, $"Expected: <= {schema.MaxItems} items; Actual: {json.Array.Count} items.");
+			var maxItems = GetMaxItems(schema);
+			if (json.Array.Count > maxItems)
+				return new SchemaValidationResults(string.Empty, $"Expected: <= {maxItems} items; Actual: {json.Array.Count} items.");
 			return new SchemaValidationResults();
+		}
+	}
+	
+	internal class MaxItemsSchema04PropertyValidator : MaxItemsSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override uint? GetMaxItems(JsonSchema04 schema)
+		{
+			return schema.MaxItems;
+		}
+	}
+	
+	internal class MaxItemsSchema06PropertyValidator : MaxItemsSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override uint? GetMaxItems(JsonSchema06 schema)
+		{
+			return schema.MaxItems;
 		}
 	}
 }

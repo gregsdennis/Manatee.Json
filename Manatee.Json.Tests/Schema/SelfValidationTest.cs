@@ -1,34 +1,44 @@
-﻿using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections;
+using Manatee.Json.Schema;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class SelfValidationTest
 	{
-		[TestMethod]
-		public void Draft04()
+		public static IEnumerable TestData
 		{
-			var json = JsonSchema.Draft04.ToJson(null);
-			var validation = JsonSchema.Draft04.Validate(json);
+			get
+			{
+				yield return new TestCaseData(JsonSchema04.MetaSchema);
+				yield return new TestCaseData(JsonSchema06.MetaSchema);
+			}
+		}
+		
+		[TestCaseSource(nameof(TestData))]
+		public void Hardcoded(IJsonSchema schema)
+		{
+			var json = schema.ToJson(null);
+			var validation = schema.Validate(json);
 
-			Assert.IsTrue(validation.Valid);
+			validation.AssertValid();
 		}
 
-		[TestMethod]
-		public void OnlineDraft04()
+		[TestCaseSource(nameof(TestData))]
+		public void Online(IJsonSchema schema)
 		{
-			var localSchemaJson = JsonSchema.Draft04.ToJson(null);
+			var localSchemaJson = schema.ToJson(null);
 
-			var onlineSchemaText = JsonSchemaOptions.Download(JsonSchema.Draft04.Id);
+			var onlineSchemaText = JsonSchemaOptions.Download(schema.Id);
 			var onlineSchemaJson = JsonValue.Parse(onlineSchemaText);
 			var onlineSchema = JsonSchemaFactory.FromJson(onlineSchemaJson);
 
-			var localValidation = JsonSchema.Draft04.Validate(onlineSchemaJson);
+			var localValidation = schema.Validate(onlineSchemaJson);
 			var onlineValidation = onlineSchema.Validate(localSchemaJson);
 
-			Assert.IsTrue(onlineValidation.Valid);
-			Assert.IsTrue(localValidation.Valid);
+			onlineValidation.AssertValid();
+			localValidation.AssertValid();
 
 			Assert.AreEqual(onlineSchemaJson, localSchemaJson);
 		}

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 
-//[assembly:InternalsVisibleTo("Manatee.Json.DynamicTypes")]
+[assembly:InternalsVisibleTo("Manatee.Json.DynamicTypes")]
 
 namespace Manatee.Json.Tests.Console
 {
@@ -20,6 +21,9 @@ namespace Manatee.Json.Tests.Console
 
 			System.Console.WriteLine(obj.Test1);
 			System.Console.WriteLine(obj.Test2);
+			
+			var schema04json = JsonSchema04.MetaSchema.ToJson(null);
+			var schema04 = JsonSchemaFactory.FromJson(schema04json);
 
 			System.Console.ReadLine();
 		}

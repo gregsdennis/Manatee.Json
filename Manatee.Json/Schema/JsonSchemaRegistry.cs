@@ -17,10 +17,12 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		static JsonSchemaRegistry()
 		{
-			var draft04Uri = JsonSchema.Draft04.Id.Split('#')[0];
+			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
+			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
 			_schemaLookup = new Dictionary<string, IJsonSchema>
 				{
-					[draft04Uri] = JsonSchema.Draft04
+					[draft04Uri] = JsonSchema04.MetaSchema,
+					[draft06Uri] = JsonSchema06.MetaSchema
 				};
 		}
 
@@ -32,16 +34,18 @@ namespace Manatee.Json.Schema
 			IJsonSchema schema;
 			lock (_schemaLookup)
 			{
+				uri = uri.TrimEnd('#');
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
 				    var  schemaValue = JsonValue.Parse(schemaJson);
 					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
 
-					var validation = JsonSchema.Draft04.Validate(schemaValue);
+					var validation = JsonSchema04.MetaSchema.Validate(schemaValue);
 
 					if (!validation.Valid)
 					{
+						validation = JsonSchema06.MetaSchema.Validate(schemaValue);
 						var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
 						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 					}
@@ -56,7 +60,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Explicitly registers an existing schema.
 		/// </summary>
-		public static void Register(JsonSchema schema)
+		public static void Register(IJsonSchema schema)
 		{
 			if (string.IsNullOrWhiteSpace(schema.Id)) return;
 			lock (_schemaLookup)
@@ -68,7 +72,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Removes a schema from the registry.
 		/// </summary>
-		public static void Unregister(JsonSchema schema)
+		public static void Unregister(IJsonSchema schema)
 		{
 			if (string.IsNullOrWhiteSpace(schema.Id)) return;
 			lock (_schemaLookup)

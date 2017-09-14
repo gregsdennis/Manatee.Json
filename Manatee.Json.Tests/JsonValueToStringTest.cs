@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonValueToStringTest
 	{
-		[TestMethod]
+		[Test]
 		public void ToString_BoolFalse_ReturnsCorrectString()
 		{
 			var json = new JsonValue(false);
@@ -13,7 +14,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_BoolTrue_ReturnsCorrectString()
 		{
 			var json = new JsonValue(true);
@@ -21,7 +22,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_Number_ReturnsCorrectString()
 		{
 			var json = new JsonValue(42);
@@ -29,7 +30,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_String_ReturnsCorrectString()
 		{
 			var json = new JsonValue("a string");
@@ -37,7 +38,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_Array_ReturnsCorrectString()
 		{
 			var json = new JsonValue(new JsonArray { false, 42, "a string" });
@@ -45,7 +46,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_EmptyArray_ReturnsCorrectString()
 		{
 			var json = new JsonValue(new JsonArray());
@@ -53,7 +54,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_Object_ReturnsCorrectString()
 		{
 			var json = new JsonValue(new JsonObject { { "bool", false }, { "int", 42 }, { "string", "a string" } });
@@ -61,7 +62,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_EmptyObject_ReturnsCorrectString()
 		{
 			var json = new JsonValue(new JsonObject());
@@ -69,7 +70,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_Null_ReturnsCorrectString()
 		{
 			var json = new JsonValue();
@@ -77,7 +78,7 @@ namespace Manatee.Json.Tests
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void ToString_EscapableCharacters_ReturnsCorrectString()
 		{
 			JsonValue json1 = new JsonValue("These\" are/ some\\ of\b the\f escapable\n characters."),
@@ -90,7 +91,7 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected1, actual1);
 			Assert.AreEqual(expected2, actual2);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_Boolean_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue(false);
@@ -98,7 +99,7 @@ namespace Manatee.Json.Tests
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_Number_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue(42);
@@ -106,7 +107,7 @@ namespace Manatee.Json.Tests
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_String_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue("a string");
@@ -114,7 +115,7 @@ namespace Manatee.Json.Tests
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_Null_ReturnsCorrectIndention()
 		{
 			var json = JsonValue.Null;
@@ -122,7 +123,7 @@ namespace Manatee.Json.Tests
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_Array_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue(new JsonArray { false, 42, "a string" });
@@ -130,7 +131,7 @@ namespace Manatee.Json.Tests
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_EmptyArray_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue(new JsonArray());
@@ -138,7 +139,7 @@ namespace Manatee.Json.Tests
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_Object_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue(new JsonObject { { "bool", false }, { "int", 42 }, { "string", "a string" } });
@@ -146,7 +147,7 @@ namespace Manatee.Json.Tests
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
-		[TestMethod]
+		[Test]
 		public void GetIndentedString_EmptyObject_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue(new JsonObject());

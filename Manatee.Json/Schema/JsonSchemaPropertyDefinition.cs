@@ -38,12 +38,8 @@ namespace Manatee.Json.Schema
 				throw new ArgumentNullException(nameof(name));
 
 			Name = name;
-			Type = JsonSchema.Empty;
 		}
-		internal JsonSchemaPropertyDefinition()
-		{
-			Type = JsonSchema.Empty;
-		}
+		private JsonSchemaPropertyDefinition() { }
 
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
@@ -65,7 +61,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonObject {{Name, Type.ToJson(serializer)}};
+			return new JsonObject {{Name, Type?.ToJson(serializer) ?? new JsonObject()}};
 		}
 
 		/// <summary>Returns a string that represents the current object.</summary>
@@ -109,7 +105,15 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		public static implicit operator JsonSchemaPropertyDefinition(JsonSchema schema)
+		public static implicit operator JsonSchemaPropertyDefinition(JsonSchema04 schema)
+		{
+			return new JsonSchemaPropertyDefinition {Type = schema};
+		}
+		public static implicit operator JsonSchemaPropertyDefinition(JsonSchema06 schema)
+		{
+			return new JsonSchemaPropertyDefinition {Type = schema};
+		}
+		public static implicit operator JsonSchemaPropertyDefinition(JsonSchemaReference schema)
 		{
 			return new JsonSchemaPropertyDefinition {Type = schema};
 		}

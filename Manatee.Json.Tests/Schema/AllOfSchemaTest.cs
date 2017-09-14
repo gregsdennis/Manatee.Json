@@ -1,48 +1,76 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class AllOfSchemaTest
 	{
-		[TestMethod]
-		public void ValidateReturnsErrorOnAnyInvalid()
+		public static IEnumerable ValidateReturnsErrorOnAnyInvalidData
 		{
-			var schema = new JsonSchema
-				{
-					AllOf = new List<IJsonSchema>
-						{
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Array},
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number}
-						}
-				};
+			get
+			{
+				yield return new TestCaseData(new JsonSchema04
+					{
+						AllOf = new List<IJsonSchema>
+							{
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array},
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number}
+							}
+					});
+				yield return new TestCaseData(new JsonSchema06
+					{
+						AllOf = new List<IJsonSchema>
+							{
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array},
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number}
+							}
+					});
+			}
+		}
+		[TestCaseSource(nameof(ValidateReturnsErrorOnAnyInvalidData))]
+		public void ValidateReturnsErrorOnAnyInvalid(IJsonSchema schema)
+		{
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnAllValid()
+
+		public static IEnumerable ValidateReturnsValidOnAllValidData
 		{
-			var schema = new JsonSchema
+			get
 			{
-					AllOf = new List<IJsonSchema>
-						{
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
-						}
-				};
+				yield return new TestCaseData(new JsonSchema04
+					{
+						AllOf = new List<IJsonSchema>
+							{
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+							}
+					});
+				yield return new TestCaseData(new JsonSchema06
+					{
+						AllOf = new List<IJsonSchema>
+							{
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+							}
+					});
+			}
+		}
+		[TestCaseSource(nameof(ValidateReturnsValidOnAllValidData))]
+		public void ValidateReturnsValidOnAllValid(IJsonSchema schema)
+		{
 			var json = (JsonValue) 15;
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

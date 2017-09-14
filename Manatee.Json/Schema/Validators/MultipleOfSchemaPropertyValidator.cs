@@ -1,16 +1,35 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal class MultipleOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class MultipleOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		protected abstract double? GetMultipleOf(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.MultipleOf.HasValue && json.Type == JsonValueType.Number;
+			return GetMultipleOf(schema).HasValue && json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			return (decimal) json.Number % (decimal?) schema.MultipleOf != 0
-				       ? new SchemaValidationResults(string.Empty, $"Expected: {json.Number}%{schema.MultipleOf}=0; Actual: {json.Number % schema.MultipleOf}.")
+			return (decimal) json.Number % (decimal?) GetMultipleOf(schema) != 0
+				       ? new SchemaValidationResults(string.Empty, $"Expected: {json.Number}%{GetMultipleOf(schema)}=0; Actual: {json.Number % GetMultipleOf(schema)}.")
 				       : new SchemaValidationResults();
+		}
+	}
+	
+	internal class MultipleOfSchema04PropertyValidator : MultipleOfSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override double? GetMultipleOf(JsonSchema04 schema)
+		{
+			return schema.MultipleOf;
+		}
+	}
+	
+	internal class MultipleOfSchema06PropertyValidator : MultipleOfSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override double? GetMultipleOf(JsonSchema06 schema)
+		{
+			return schema.MultipleOf;
 		}
 	}
 }

@@ -1,66 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class OneOfSchemaTest
 	{
-		[TestMethod]
-		public void ValidateReturnsErrorOnNoneValid()
+		public static IEnumerable TestData
 		{
-			var schema = new JsonSchema
-				{
-					OneOf = new List<IJsonSchema>
-						{
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
-						}
-				};
+			get
+			{
+				yield return new JsonSchema04
+					{
+						OneOf = new List<IJsonSchema>
+							{
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
+								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
+							}
+					};
+				yield return new JsonSchema06
+					{
+						OneOf = new List<IJsonSchema>
+							{
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
+								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
+							}
+					};
+			}
+		}
+		
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsErrorOnNoneValid(IJsonSchema schema)
+		{
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsErrorOnMoreThanOneValid()
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsErrorOnMoreThanOneValid(IJsonSchema schema)
 		{
-			var schema = new JsonSchema
-				{
-					OneOf = new List<IJsonSchema>
-						{
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
-						}
-				};
 			var json = (JsonValue) 20;
 
 			var results = schema.Validate(json);
 
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			results.AssertInvalid();
 		}
-		[TestMethod]
-		public void ValidateReturnsValidOnSingleValid()
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsValidOnSingleValid(IJsonSchema schema)
 		{
-			var schema = new JsonSchema
-				{
-					OneOf = new List<IJsonSchema>
-						{
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
-							new JsonSchema {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
-						}
-				};
 			var json = (JsonValue) 7;
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

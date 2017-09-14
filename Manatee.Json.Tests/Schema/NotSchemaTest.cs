@@ -1,19 +1,25 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class NotSchemaTest
 	{
-		[TestMethod]
-		public void ValidateReturnsErrorOnInvalid()
+		public static IEnumerable TestData
 		{
-			var schema = new JsonSchema
-				{
-					Not = new JsonSchema {Type = JsonSchemaTypeDefinition.Array}
-				};
+			get
+			{
+				yield return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Maximum = 10};
+				yield return new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, Maximum = 10};
+			}
+		} 
+		
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsErrorOnInvalid(IJsonSchema schema)
+		{
 			var json = new JsonArray();
 
 			var results = schema.Validate(json);
@@ -21,19 +27,14 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(1, results.Errors.Count());
 			Assert.AreEqual(false, results.Valid);
 		}
-		[TestMethod]
-		public void ValidateReturnsValid()
+		[TestCaseSource(nameof(TestData))]
+		public void ValidateReturnsValid(IJsonSchema schema)
 		{
-			var schema = new JsonSchema
-			{
-					Not = new JsonSchema { Type = JsonSchemaTypeDefinition.Number,Maximum = 10}
-				};
-			var json = (JsonValue) 15;
+			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			results.AssertValid();
 		}
 	}
 }

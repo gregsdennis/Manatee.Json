@@ -9,7 +9,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
-	public class JsonSchemaReference : JsonSchema
+	public class JsonSchemaReference : IJsonSchema
 	{
 		/// <summary>
 		/// Defines a reference to the root schema.
@@ -18,6 +18,8 @@ namespace Manatee.Json.Schema
 
 		private static readonly JsonValue _rootJson = Root.ToJson(null);
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
+
+		private Uri _documentPath;
 
 		/// <summary>
 		/// Defines the reference in respect to the root schema.
@@ -30,17 +32,64 @@ namespace Manatee.Json.Schema
 		/// The <see cref="_Resolve"/> method must first be called.
 		/// </remarks>
 		public IJsonSchema Resolved { get; private set; }
+		public IJsonSchema Base { get; set; }
+		public string Id
+		{
+			get { return Base?.Id; }
+			set
+			{
+				if (Base != null)
+					Base.Id = value;
+			}
+		}
+		public string Schema
+		{
+			get { return Base?.Schema; }
+			set
+			{
+				if (Base != null)
+					Base.Schema = value;
+			}
+		}
+		public Uri DocumentPath
+		{
+			get { return _documentPath ?? (_documentPath = Base?.DocumentPath); }
+			set
+			{
+				_documentPath = value;
+				if (Base != null)
+					Base.DocumentPath = value;
+			}
+		}
 
 		internal JsonSchemaReference() {}
+		/// <summary>
+		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class that supports additional schema properties.
+		/// </summary>
+		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
+		/// <param name="baseSchema">An instance of the base schema to use (either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>).</param>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> or <paramref name="baseSchema"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace.</exception>
+		public JsonSchemaReference(string reference, IJsonSchema baseSchema)
+		{
+			Reference = reference ?? throw new ArgumentNullException(nameof(reference));
+
+			if (!(baseSchema is JsonSchema04) && !(baseSchema is JsonSchema06))
+				throw new ArgumentException("Only instances of JsonSchema04 and JsonSchema06 can be used for base schemata for references.", nameof(baseSchema));
+			// TODO: Can a reference be empty or whitespace?  They're valid JSON keys.
+			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentException($"{nameof(reference)} non-empty and non-whitespace");
+		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class.
 		/// </summary>
 		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
-		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is nulll, empty, or whitespace.</exception>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is null.</exception>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace.</exception>
 		public JsonSchemaReference(string reference)
 		{
-			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentNullException(nameof(reference));
-			Reference = reference;
+			Reference = reference ?? throw new ArgumentNullException(nameof(reference));
+			
+			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentException($"{nameof(reference)} non-empty and non-whitespace");
 		}
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
@@ -48,7 +97,7 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public override SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
 			var jValue = root ?? ToJson(null);
 			if (Resolved == null || root == null)
@@ -63,9 +112,9 @@ namespace Manatee.Json.Schema
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
-		public override void FromJson(JsonValue json, JsonSerializer serializer)
+		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			base.FromJson(json, serializer);
+			Base?.FromJson(json, serializer);
 			Reference = json.Object["$ref"].String;
 		}
 		/// <summary>
@@ -74,9 +123,9 @@ namespace Manatee.Json.Schema
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
 		/// serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
-		public override JsonValue ToJson(JsonSerializer serializer)
+		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			var json = base.ToJson(serializer);
+			var json = Base?.ToJson(serializer) ?? new JsonObject();
 			json.Object["$ref"] = Reference;
 			return json;
 		}
@@ -87,10 +136,23 @@ namespace Manatee.Json.Schema
 		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
 		/// </returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public override bool Equals(IJsonSchema other)
+		public bool Equals(IJsonSchema other)
 		{
 			var schema = other as JsonSchemaReference;
-			return schema != null && schema.Reference == Reference;
+			return schema != null && schema.Reference == Reference &&
+			       Equals(Base, schema.Base);
+		}
+		/// <summary>
+		/// Determines whether the specified object is equal to the current object.
+		/// </summary>
+		/// <returns>
+		/// true if the specified object  is equal to the current object; otherwise, false.
+		/// </returns>
+		/// <param name="obj">The object to compare with the current object. </param>
+		/// <filterpriority>2</filterpriority>
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as IJsonSchema);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 

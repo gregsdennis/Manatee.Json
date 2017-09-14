@@ -1,16 +1,20 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class OneOfSchemaPropertyValidator : IJsonSchemaPropertyValidator
+	internal abstract class OneOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+		where T : IJsonSchema
 	{
-		public bool Applies(JsonSchema schema, JsonValue json)
+		protected abstract IEnumerable<IJsonSchema> GetOneOf(T schema);
+		
+		public bool Applies(T schema, JsonValue json)
 		{
-			return schema.OneOf != null;
+			return GetOneOf(schema) != null;
 		}
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			var errors = schema.OneOf.Select(s => s.Validate(json, root)).ToList();
+			var errors = GetOneOf(schema).Select(s => s.Validate(json, root)).ToList();
 			var validCount = errors.Count(r => r.Valid);
 			switch (validCount)
 			{
@@ -21,6 +25,22 @@ namespace Manatee.Json.Schema.Validators
 				default:
 					return new SchemaValidationResults(string.Empty, "More than one option was valid.");
 			}
+		}
+	}
+	
+	internal class OneOfSchema04PropertyValidator : OneOfSchemaPropertyValidatorBase<JsonSchema04>
+	{
+		protected override IEnumerable<IJsonSchema> GetOneOf(JsonSchema04 schema)
+		{
+			return schema.OneOf;
+		}
+	}
+	
+	internal class OneOfSchema06PropertyValidator : OneOfSchemaPropertyValidatorBase<JsonSchema06>
+	{
+		protected override IEnumerable<IJsonSchema> GetOneOf(JsonSchema06 schema)
+		{
+			return schema.OneOf;
 		}
 	}
 }

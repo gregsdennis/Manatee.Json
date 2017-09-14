@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Schema.Validators;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -73,21 +74,22 @@ namespace Manatee.Json.Schema
 			}
 		}
 
+		// TODO: Need to dissociate these from Draft04.  (This might actually be okay.)
 		static JsonSchemaTypeDefinition()
 		{
-			Array.Definition = new JsonSchema {Type = Array};
+			Array.Definition = new JsonSchema04 {Type = Array};
 			Array._isReadOnly = true;
-			Boolean.Definition = new JsonSchema {Type = Boolean};
+			Boolean.Definition = new JsonSchema04 {Type = Boolean};
 			Boolean._isReadOnly = true;
-			Integer.Definition = new JsonSchema {Type = Integer};
+			Integer.Definition = new JsonSchema04 {Type = Integer};
 			Integer._isReadOnly = true;
-			Null.Definition = new JsonSchema {Type = Null};
+			Null.Definition = new JsonSchema04 {Type = Null};
 			Null._isReadOnly = true;
-			Number.Definition = new JsonSchema {Type = Number};
+			Number.Definition = new JsonSchema04 {Type = Number};
 			Number._isReadOnly = true;
-			Object.Definition = new JsonSchema {Type = Object};
+			Object.Definition = new JsonSchema04 {Type = Object};
 			Object._isReadOnly = true;
-			String.Definition = new JsonSchema {Type = String};
+			String.Definition = new JsonSchema04 {Type = String};
 			String._isReadOnly = true;
 		}
 		/// <summary>
@@ -117,23 +119,13 @@ namespace Manatee.Json.Schema
 			if (json.Type == JsonValueType.String)
 			{
 				Name = json.String;
-				Definition = new JsonSchema {Type = String, Pattern = json.String};
+				Definition = new JsonSchema04 {Type = String, Pattern = json.String};
 				return;
 			}
 			var details = json.Object.First();
 			Name = details.Key;
-			Definition = new JsonSchema();
+			Definition = new JsonSchema04();
 			Definition.FromJson(details.Value, null);
-		}
-
-		/// <summary>Returns a string that represents the current object.</summary>
-		/// <returns>A string that represents the current object.</returns>
-		/// <filterpriority>2</filterpriority>
-		public override string ToString()
-		{
-			if (!string.IsNullOrWhiteSpace(Name)) return Name;
-
-			return ToJson(null).ToString();
 		}
 
 		/// <summary>
@@ -148,6 +140,17 @@ namespace Manatee.Json.Schema
 			if (Name == null) return Definition.ToJson(null);
 			return new JsonObject {{Name, Definition.ToJson(null)}};
 		}
+
+		/// <summary>Returns a string that represents the current object.</summary>
+		/// <returns>A string that represents the current object.</returns>
+		/// <filterpriority>2</filterpriority>
+		public override string ToString()
+		{
+			if (!string.IsNullOrWhiteSpace(Name)) return Name;
+
+			return ToJson(null).ToString();
+		}
+		
 		/// <summary>
 		/// Determines whether the specified <see cref="JsonSchemaTypeDefinition"/> is equal to the current <see cref="JsonSchemaTypeDefinition"/>.
 		/// </summary>
@@ -186,7 +189,11 @@ namespace Manatee.Json.Schema
 			return _definition?.GetHashCode() ?? 0;
 		}
 
-		public static implicit operator JsonSchemaTypeDefinition(JsonSchema schema)
+		public static implicit operator JsonSchemaTypeDefinition(JsonSchema04 schema)
+		{
+			return new JsonSchemaTypeDefinition(schema);
+		}
+		public static implicit operator JsonSchemaTypeDefinition(JsonSchema06 schema)
 		{
 			return new JsonSchemaTypeDefinition(schema);
 		}

@@ -1,26 +1,26 @@
 ﻿using Manatee.Json.Schema;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	[TestClass]
+	[TestFixture]
 	public class JsonSchemaTypeDefinitionTest
 	{
-		[TestMethod]
+		[Test]
 		public void StandardDefinitionEqualsItself()
 		{
 			Assert.AreEqual(JsonSchemaTypeDefinition.Integer, JsonSchemaTypeDefinition.Integer);
 		}
-		[TestMethod]
+		[Test]
 		public void DifferentStandardDefinitionsNotEqual()
 		{
 			Assert.AreNotEqual(JsonSchemaTypeDefinition.Integer, JsonSchemaTypeDefinition.String);
 		}
-		[TestMethod]
+		[Test]
 		public void CannotRecreatePrimitiveDefinitions()
 		{
-			var constructed = new JsonSchema {Type = new JsonSchemaTypeDefinition("integer")};
-			var predefined = new JsonSchema {Type = JsonSchemaTypeDefinition.Integer};
+			var constructed = new JsonSchema04 {Type = new JsonSchemaTypeDefinition("integer")};
+			var predefined = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer};
 
 			Assert.AreNotEqual(predefined, constructed);
 		}
