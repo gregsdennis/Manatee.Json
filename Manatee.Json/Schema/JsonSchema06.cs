@@ -84,6 +84,11 @@ namespace Manatee.Json.Schema
 								Type = JsonSchemaTypeDefinition.String,
 								Format = StringFormat.Uri
 							},
+						["$ref"] = new JsonSchema06
+							{
+								Type = JsonSchemaTypeDefinition.String,
+								Format = StringFormat.UriReference
+							},
 						["title"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
 						["description"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
 						["default"] = Empty,

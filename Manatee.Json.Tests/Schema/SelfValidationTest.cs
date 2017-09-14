@@ -37,6 +37,8 @@ namespace Manatee.Json.Tests.Schema
 			var localValidation = schema.Validate(onlineSchemaJson);
 			var onlineValidation = onlineSchema.Validate(localSchemaJson);
 
+			Assert.AreEqual(onlineSchema, schema);
+			
 			onlineValidation.AssertValid();
 			localValidation.AssertValid();
 
