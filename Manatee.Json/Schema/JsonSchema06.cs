@@ -509,6 +509,7 @@ namespace Manatee.Json.Schema
 						IJsonSchemaDependency dependency;
 						switch (v.Value.Type)
 						{
+							case JsonValueType.Boolean:
 							case JsonValueType.Object:
 								dependency = new SchemaDependency(v.Key, _ReadSchema(v.Value));
 								break;

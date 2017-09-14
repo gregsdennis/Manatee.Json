@@ -526,6 +526,8 @@ namespace Manatee.Json.Schema
 								dependency = new SchemaDependency(v.Key, _ReadSchema(v.Value));
 								break;
 							case JsonValueType.Array:
+								if (!v.Value.Array.Any())
+									throw new ArgumentException("Property dependency must declare at least one property.");
 								dependency = new PropertyDependency(v.Key, v.Value.Array.Select(jv => jv.String));
 								break;
 							default:
@@ -769,7 +771,7 @@ namespace Manatee.Json.Schema
 
 		private IJsonSchema _ReadSchema(JsonValue json)
 		{
-			return JsonSchemaFactory.FromJson(json, () => new JsonSchema06(), DocumentPath);
+			return JsonSchemaFactory.FromJson(json, () => new JsonSchema04(), DocumentPath);
 		}
 	}
 }

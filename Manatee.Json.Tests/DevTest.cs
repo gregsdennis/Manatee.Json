@@ -10,13 +10,18 @@ namespace Manatee.Json.Tests
 	{
 		[Test]
 		// TOOD: Add categories to exclude this test.
-		[Ignore("This test for development purposes only.")]
+		//[Ignore("This test for development purposes only.")]
 		public void Test1()
 		{
-			var text = "http://www.google.com/file/";
-			var uri = new Uri(text);
+			var text = "{\"$id\":\"http://localhost:1234/\",\"items\":{\"$id\":\"folder/\",\"items\":{\"$ref\":\"folderInteger.json\"}}}";
+			var json = JsonValue.Parse(text);
+			var schema = JsonSchemaFactory.FromJson(json);
 
-			Console.WriteLine(uri);
+			var array = new JsonArray {new JsonArray {1}};
+
+			var results = schema.Validate(array);
+
+			Console.WriteLine(schema.ToJson(null));
 		}
 	}
 }

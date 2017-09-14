@@ -121,6 +121,8 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void DeserializeSchema_TypePropertyIsArray_Issue14()
 		{
+			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
+
 			var text = "{\"type\":\"object\",\"properties\":{\"home\":{\"type\":[\"object\",\"null\"],\"properties\":{\"street\":{\"type\":\"string\"}}}}}";
 			var json = JsonValue.Parse(text);
 			var expected = new JsonSchema04
@@ -147,6 +149,8 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void DeclaredTypeWithDeclaredEnum_Issue15()
 		{
+			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
+			
 			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
 			var json = JsonValue.Parse(text);
 			var expected = new JsonSchema04
@@ -225,6 +229,8 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Issue45b_Utf8SupportInReferenceSchemaEnums()
 		{
+			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
+
 			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\baseSchema.json").AdjustForOS();
 
 			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
@@ -248,6 +254,8 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Issue49_RequiredAndAllOfInSingleSchema()
 		{
+			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
+
 			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\issue49.json").AdjustForOS();
 			var expected = new JsonSchema04
 				{

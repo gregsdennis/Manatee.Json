@@ -27,7 +27,6 @@ namespace Manatee.Json.Schema
 			if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Must provide a property name.");
 			if (dependencies == null) throw new ArgumentNullException(nameof(dependencies));
 			var dependencyList = dependencies as IList<string> ?? dependencies.ToList();
-			if (!dependencyList.Any()) throw new ArgumentException("Cannot create property dependency on no properties.");
 
 			PropertyName = propertyName;
 			_dependencies = dependencyList;
@@ -40,10 +39,6 @@ namespace Manatee.Json.Schema
 		/// <param name="otherDependencies">Additional property dependencies.</param>
 		public PropertyDependency(string propertyName, string firstDependency, params string[] otherDependencies)
 			: this(propertyName, new[] {firstDependency}.Concat(otherDependencies)) {}
-		private PropertyDependency(IEnumerable<string> dependencies)
-		{
-			_dependencies = dependencies;
-		}
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.
