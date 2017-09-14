@@ -333,6 +333,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public IEnumerable<IJsonSchemaDependency> Dependencies { get; set; }
 		/// <summary>
+		/// Defines conditions for valid property names.
+		/// </summary>
+		public IJsonSchema PropertyNames { get; set; }
+		/// <summary>
 		/// Defines an expected constant value.
 		/// </summary>
 		public JsonValue Const { get; set; }
@@ -521,6 +525,8 @@ namespace Manatee.Json.Schema
 						}
 						return dependency;
 					});
+			if (obj.ContainsKey("propertyNames"))
+				PropertyNames = _ReadSchema(obj["propertyNames"]);
 			if (obj.ContainsKey("const"))
 				Const = obj["const"];
 			if (obj.ContainsKey("enum"))
@@ -618,6 +624,8 @@ namespace Manatee.Json.Schema
 				}
 				json["dependencies"] = jsonDependencies;
 			}
+			if (PropertyNames != null)
+				json["propertyNames"] = PropertyNames.ToJson(serializer);
 			if (Const != null)
 				json["const"] = Const;
 			if (Enum != null)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Manatee.Json.Schema;
@@ -38,10 +39,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				{
 					foreach (var test in testSet.Tests)
 					{
-						schemata.Add(new TestCaseData(testSet.Schema, test, fileName)
-							{
-								TestName = $"{testSet.Description}.{test.Description}".Replace(' ', '_')
-							});
+						var testName = $"{testSet.Description}.{test.Description}".Replace(' ', '_');
+						schemata.Add(new TestCaseData(testSet.Schema, test, fileName, testName) {TestName = testName});
 					}
 				}
 			}
@@ -54,7 +53,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		[OneTimeSetUp]
-		public void Setup()
+		public static void Setup()
 		{
 			const string baseUri = "http://localhost:1234/";
 
@@ -73,21 +72,38 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		[OneTimeTearDown]
-		public void TearDown()
+		public static void TearDown()
 		{
 			JsonSchemaOptions.Download = null;
 		}
 
 		[TestCaseSource(nameof(TestData))]
-		public void Run(IJsonSchema schema, SchemaTest test, string fileName)
+		public void Run(IJsonSchema schema, SchemaTest test, string fileName, string testName)
 		{
 			Console.WriteLine(fileName);
-			
+
 			var results = schema.Validate(test.Data);
 
 			if (test.Valid != results.Valid)
 				Console.WriteLine(string.Join("\n", results.Errors));
 			Assert.AreEqual(test.Valid, results.Valid);
+		}
+
+		[Test]
+		[Ignore("Test for debugging purposes only")]
+		public void RunOne()
+		{
+			var testName = "propertyNames_validation.some_property_names_invalid";
+			var schemaVersion = typeof(JsonSchema06);
+
+			var selectedTest = TestData.Cast<TestCaseData>()
+			                           .First(d => Equals(d.Arguments[3], testName) &&
+			                                       d.Arguments[0].GetType() == schemaVersion);
+
+			Run((IJsonSchema) selectedTest.Arguments[0],
+			    (SchemaTest) selectedTest.Arguments[1],
+			    (string) selectedTest.Arguments[2],
+			    (string) selectedTest.Arguments[3]);
 		}
 	}
 }
