@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
@@ -18,7 +19,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 
-		public static IEnumerable TestData => _LoadSchema<JsonSchema04>(Draft04TestFolder).Concat(_LoadSchema<JsonSchema06>(Draft06TestFolder));
+		public static IEnumerable TestData04 => _LoadSchema<JsonSchema04>(Draft04TestFolder);
+		public static IEnumerable TestData06 => _LoadSchema<JsonSchema04>(Draft04TestFolder);
 
 		private static IEnumerable<TestCaseData> _LoadSchema<T>(string testFolder)
 			where T : IJsonSchema
@@ -40,7 +42,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					foreach (var test in testSet.Tests)
 					{
 						var testName = $"{testSet.Description}.{test.Description}".Replace(' ', '_');
-						schemata.Add(new TestCaseData(testSet.Schema, test, fileName, testName) {TestName = testName});
+						schemata.Add(new TestCaseData(testSet.Schema, test, fileName, testName, typeof(T)) {TestName = testName});
 					}
 				}
 			}
@@ -77,11 +79,57 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = null;
 		}
 
-		[TestCaseSource(nameof(TestData))]
-		public void Run(IJsonSchema schema, SchemaTest test, string fileName, string testName)
+		[Test]
+		public void Run04()
+		{
+			JsonSchemaRegistry.Clear();
+			var testData = _LoadSchema<JsonSchema04>(Draft04TestFolder);
+
+			foreach (var test in testData)
+			{
+				Run((IJsonSchema) test.Arguments[0],
+				    (SchemaTest) test.Arguments[1],
+				    (string) test.Arguments[2],
+				    (string) test.Arguments[3],
+				    (Type) test.Arguments[4]);
+			}
+		}
+
+		[Test]
+		public void Run06()
+		{
+			JsonSchemaRegistry.Clear();
+			var testData = _LoadSchema<JsonSchema06>(Draft06TestFolder);
+
+			foreach (var test in testData)
+			{
+				Run((IJsonSchema) test.Arguments[0],
+				    (SchemaTest) test.Arguments[1],
+				    (string) test.Arguments[2],
+				    (string) test.Arguments[3],
+				    (Type) test.Arguments[4]);
+			}
+		}
+		
+		//[TestCaseSource(nameof(TestData))]
+		public void Run(IJsonSchema schema, SchemaTest test, string fileName, string testName, Type schemaType)
 		{
 			Console.WriteLine(fileName);
 
+			JsonSchemaFactory.SetDefaultSchemaVersion(schemaType);
+			var results = schema.Validate(test.Data);
+
+			if (test.Valid != results.Valid)
+				Console.WriteLine(string.Join("\n", results.Errors));
+			Assert.AreEqual(test.Valid, results.Valid);
+		}
+
+		//[TestCaseSource(nameof(TestData))]
+		public void Run06(IJsonSchema schema, SchemaTest test, string fileName, string testName, Type schemaType)
+		{
+			Console.WriteLine(fileName);
+
+			JsonSchemaFactory.SetDefaultSchemaVersion(schemaType);
 			var results = schema.Validate(test.Data);
 
 			if (test.Valid != results.Valid)
@@ -96,14 +144,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			var testName = "propertyNames_validation.some_property_names_invalid";
 			var schemaVersion = typeof(JsonSchema06);
 
-			var selectedTest = TestData.Cast<TestCaseData>()
-			                           .First(d => Equals(d.Arguments[3], testName) &&
-			                                       d.Arguments[0].GetType() == schemaVersion);
+			var selectedTest = TestData04.Cast<TestCaseData>()
+			                             .First(d => Equals(d.Arguments[3], testName));
 
 			Run((IJsonSchema) selectedTest.Arguments[0],
 			    (SchemaTest) selectedTest.Arguments[1],
 			    (string) selectedTest.Arguments[2],
-			    (string) selectedTest.Arguments[3]);
+			    (string) selectedTest.Arguments[3],
+			    schemaVersion);
 		}
 	}
 }

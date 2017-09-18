@@ -11,6 +11,47 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class JsonSchemaMultiTypeDefinition : JsonSchemaTypeDefinition
 	{
+		private class OneOfSchema : IJsonSchema
+		{
+			private readonly IEnumerable<IJsonSchema> _definitions;
+
+			public Uri DocumentPath { get; set; }
+			public string Id { get; set; }
+			public string Schema { get; set; }
+		
+			public OneOfSchema(IEnumerable<IJsonSchema> definitions)
+			{
+				_definitions = definitions.ToList();
+			}
+
+			public void FromJson(JsonValue json, JsonSerializer serializer)
+			{
+				throw new NotImplementedException();
+			}
+			public JsonValue ToJson(JsonSerializer serializer)
+			{
+				throw new NotImplementedException();
+			}
+			public bool Equals(IJsonSchema other)
+			{
+				throw new NotImplementedException();
+			}
+			public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+			{
+				var errors = _definitions.Select(s => s.Validate(json, root)).ToList();
+				var validCount = errors.Count(r => r.Valid);
+				switch (validCount)
+				{
+					case 0:
+						return new SchemaValidationResults(errors);
+					case 1:
+						return new SchemaValidationResults();
+					default:
+						return new SchemaValidationResults(string.Empty, "More than one option was valid.");
+				}
+			}
+		}
+		
 		private readonly bool _nonPrimitiveAllowed;
 
 		internal IEnumerable<JsonSchemaTypeDefinition> Defintions { get; private set; }
@@ -27,7 +68,7 @@ namespace Manatee.Json.Schema
 			if (Defintions.Except(PrimitiveDefinitions).Any())
 				throw new InvalidOperationException("Only primitive types are allowed in type collections.");
 
-			Definition = new JsonSchema04 { OneOf = Defintions.Select(d => d.Definition) };
+			Definition = new OneOfSchema(Defintions.Select(d => d.Definition));
 		}
 		internal JsonSchemaMultiTypeDefinition(bool nonPrimitiveAllowed)
 		{
@@ -52,7 +93,8 @@ namespace Manatee.Json.Schema
 					return definition;
 				}).ToList();
 
-			Definition = new JsonSchema04 {OneOf = Defintions.Select(d => d.Definition)};		}
+			Definition = new OneOfSchema(Defintions.Select(d => d.Definition));
+		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
@@ -94,7 +136,7 @@ namespace Manatee.Json.Schema
 
 		private bool Equals(JsonSchemaMultiTypeDefinition other)
 		{
-			return base.Equals(other) && Defintions.ContentsEqual(other.Defintions);
+			return Defintions.ContentsEqual(other.Defintions);
 		}
 	}
 }

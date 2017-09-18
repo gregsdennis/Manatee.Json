@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Manatee.Json.Internal;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -28,6 +29,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestCaseSource(nameof(TestData))]
 		public void Online(IJsonSchema schema)
 		{
+			// TODO: Catch web exceptions and assert inconclusive.
 			var localSchemaJson = schema.ToJson(null);
 
 			var onlineSchemaText = JsonSchemaOptions.Download(schema.Id);

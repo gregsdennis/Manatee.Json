@@ -14,12 +14,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a reference to the root schema.
 		/// </summary>
-		public static readonly JsonSchemaReference Root = new JsonSchemaReference("#");
-
-		private static readonly JsonValue _rootJson = Root.ToJson(null);
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
+		private readonly Func<IJsonSchema> _schemaFactory;
 		private Uri _documentPath;
+		private string _id;
+		private string _schema;
 
 		/// <summary>
 		/// Defines the reference in respect to the root schema.
@@ -35,18 +35,20 @@ namespace Manatee.Json.Schema
 		public IJsonSchema Base { get; set; }
 		public string Id
 		{
-			get { return Base?.Id; }
+			get { return _id ?? (_id = Base?.Id); }
 			set
 			{
+				_id = value;
 				if (Base != null)
 					Base.Id = value;
 			}
 		}
 		public string Schema
 		{
-			get { return Base?.Schema; }
+			get { return _schema ?? (_schema = Base?.Schema); }
 			set
 			{
+				_schema = value;
 				if (Base != null)
 					Base.Schema = value;
 			}
@@ -62,30 +64,35 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		internal JsonSchemaReference() {}
+		internal JsonSchemaReference(Type baseSchemaType)
+		{
+			_schemaFactory = _GetSchemaFactory(baseSchemaType ?? throw new ArgumentNullException(nameof(baseSchemaType))) ??
+			                 throw new ArgumentException($"{nameof(baseSchemaType)} must be either {nameof(JsonSchema04)} or {nameof(JsonSchema06)}.");
+		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class that supports additional schema properties.
 		/// </summary>
 		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
 		/// <param name="baseSchema">An instance of the base schema to use (either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>).</param>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> or <paramref name="baseSchema"/> is null.</exception>
-		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace.</exception>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace or
+		/// if <paramref name="baseSchema"/> is not of type <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</exception>
 		public JsonSchemaReference(string reference, IJsonSchema baseSchema)
+			: this(reference, baseSchema.GetType())
 		{
-			Reference = reference ?? throw new ArgumentNullException(nameof(reference));
-
-			if (!(baseSchema is JsonSchema04) && !(baseSchema is JsonSchema06))
-				throw new ArgumentException("Only instances of JsonSchema04 and JsonSchema06 can be used for base schemata for references.", nameof(baseSchema));
-			// TODO: Can a reference be empty or whitespace?  They're valid JSON keys.
-			if (string.IsNullOrWhiteSpace(reference)) throw new ArgumentException($"{nameof(reference)} non-empty and non-whitespace");
+			Base = baseSchema;
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class.
 		/// </summary>
 		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
+		/// <param name="baseSchemaType">The draft version of schema to use as a base when resolving if not defined in the resolved schema.
+		/// Must be either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</param>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is null.</exception>
-		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace.</exception>
-		public JsonSchemaReference(string reference)
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace or
+		/// when <paramref name="baseSchemaType"/> is not <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</exception>
+		public JsonSchemaReference(string reference, Type baseSchemaType)
+			: this(baseSchemaType)
 		{
 			Reference = reference ?? throw new ArgumentNullException(nameof(reference));
 			
@@ -188,15 +195,15 @@ namespace Manatee.Json.Schema
 				jValue = JsonSchemaRegistry.Get(address).ToJson(null);
 			}
 			if (jValue == null) return root;
-			if (jValue == _rootJson) throw new ArgumentException("Cannot use a root reference as the base schema.");
+			if (jValue == "#") throw new ArgumentException("Cannot use a root reference as the base schema.");
  
 			Resolved = _ResolveLocalReference(jValue, fragment, string.IsNullOrWhiteSpace(address) ? null : new Uri(address));
 			return jValue;
 		}
-		private static IJsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
+		private IJsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
 			var properties = path.Split('/').Skip(1).ToList();
-			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, documentPath);
+			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, _schemaFactory, documentPath);
 			var value = root;
 			foreach (var property in properties)
 			{
@@ -207,7 +214,8 @@ namespace Manatee.Json.Schema
 					JsonValue id;
 					// There's not really another way to do this well without the reference knowing what
 					// version schema it should be using at each step in the path, so we test for both.
-					// Since draft-06's '$id' is less common, we check it first.
+					// Since draft-06's '$id' is less likely to be used as a regular JSON property, we
+					// check it first.
 					if (value.Object.TryGetValue("$id", out id) || value.Object.TryGetValue("id", out id))
 					{
 						documentPath = Uri.TryCreate(id.String, UriKind.Absolute, out Uri uri)
@@ -222,7 +230,7 @@ namespace Manatee.Json.Schema
 					value = value.Array[index];
 				}
 			}
-			return JsonSchemaFactory.FromJson(value, documentPath);
+			return JsonSchemaFactory.FromJson(value, _schemaFactory, documentPath);
 		}
 		private static string _Unescape(string reference)
 		{
@@ -236,6 +244,14 @@ namespace Manatee.Json.Schema
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}
 			return unescaped;
+		}
+		private static Func<IJsonSchema> _GetSchemaFactory(Type type)
+		{
+			if (type == typeof(JsonSchema04))
+				return () => new JsonSchema04();
+			if (type == typeof(JsonSchema06))
+				return () => new JsonSchema06();
+			return null;
 		}
 	}
 }

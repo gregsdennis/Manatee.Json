@@ -37,20 +37,24 @@ namespace Manatee.Json.Schema
 			};
 
 		private static Func<IJsonSchema> _schemaFactory = () => new JsonSchema04();
-		private static Type _defaultSchemaType = typeof(JsonSchema04);
-		
+		private static Type _defaultSchemaSelection = typeof(JsonSchema04);
+
 		public static void SetDefaultSchemaVersion<T>()
 			where T : IJsonSchema
 		{
-			if (typeof(T) == typeof(JsonSchema04))
+			SetDefaultSchemaVersion(typeof(T));
+		}
+		internal static void SetDefaultSchemaVersion(Type type)
+		{
+			if (type == typeof(JsonSchema04))
 			{
 				_schemaFactory = () => new JsonSchema04();
-				_defaultSchemaType = typeof(JsonSchema04);
+				_defaultSchemaSelection = typeof(JsonSchema04);
 			}
-			else if (typeof(T) == typeof(JsonSchema06))
+			else if (type == typeof(JsonSchema06))
 			{
 				_schemaFactory = () => new JsonSchema06();
-				_defaultSchemaType = typeof(JsonSchema06);
+				_defaultSchemaSelection = typeof(JsonSchema06);
 			}
 			else
 				throw new ArgumentException($"Only {nameof(JsonSchema04)} and {nameof(JsonSchema06)} are supported.");
@@ -86,11 +90,11 @@ namespace Manatee.Json.Schema
 						if (id == JsonSchema06.MetaSchema.Id) return JsonSchema06.MetaSchema;
 						schema = new JsonSchema06();
 					}
+					schema = schema ?? schemaFactory();
 					if (json.Object.ContainsKey("$ref"))
 						schema = json.Object.Count > 1
-							         ? new JsonSchemaReference {Base = schema ?? schemaFactory()}
-							         : new JsonSchemaReference();
-					schema = schema ?? schemaFactory();
+							         ? new JsonSchemaReference(schema.GetType()) {Base = schema}
+							         : new JsonSchemaReference(schema.GetType());
 					break;
 				case JsonValueType.Array:
 					schema = new JsonSchemaCollection();

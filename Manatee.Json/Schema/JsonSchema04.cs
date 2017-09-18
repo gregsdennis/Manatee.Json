@@ -15,6 +15,7 @@ namespace Manatee.Json.Schema
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + "}")]
 	public class JsonSchema04 : IJsonSchema
 	{
+		public static readonly JsonSchemaReference Root = new JsonSchemaReference("#", typeof(JsonSchema04));
 		/// <summary>
 		/// Defines an empty Schema.  Useful for specifying that any schema is valid.
 		/// </summary>
@@ -33,7 +34,7 @@ namespace Manatee.Json.Schema
 							{
 								Type = JsonSchemaTypeDefinition.Array,
 								MinItems = 1,
-								Items = JsonSchemaReference.Root
+								Items = Root
 							},
 						["positiveInteger"] = new JsonSchema04
 							{
@@ -44,7 +45,7 @@ namespace Manatee.Json.Schema
 							{
 								AllOf = new List<IJsonSchema>
 									{
-										new JsonSchemaReference("#/definitions/positiveInteger"),
+										new JsonSchemaReference("#/definitions/positiveInteger", typeof(JsonSchema04)),
 										new JsonSchema04 {Default = 0}
 									}
 							},
@@ -103,8 +104,8 @@ namespace Manatee.Json.Schema
 								Type = JsonSchemaTypeDefinition.Boolean,
 								Default = false
 							},
-						["maxLength"] = new JsonSchemaReference("#/definitions/positiveInteger"),
-						["minLength"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
+						["maxLength"] = new JsonSchemaReference("#/definitions/positiveInteger", typeof(JsonSchema04)),
+						["minLength"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", typeof(JsonSchema04)),
 						["pattern"] = new JsonSchema04
 							{
 								Type = JsonSchemaTypeDefinition.String,
@@ -115,7 +116,7 @@ namespace Manatee.Json.Schema
 								AnyOf = new List<IJsonSchema>
 									{
 										new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean},
-										JsonSchemaReference.Root
+										Root
 									},
 								Default = new JsonObject()
 							},
@@ -123,46 +124,46 @@ namespace Manatee.Json.Schema
 							{
 								AnyOf = new List<IJsonSchema>
 									{
-										JsonSchemaReference.Root,
-										new JsonSchemaReference("#/definitions/schemaArray")
+										Root,
+										new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema04))
 									},
 								Default = new JsonObject()
 							},
-						["maxItems"] = new JsonSchemaReference("#/definitions/positiveInteger"),
-						["minItems"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
+						["maxItems"] = new JsonSchemaReference("#/definitions/positiveInteger", typeof(JsonSchema04)),
+						["minItems"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", typeof(JsonSchema04)),
 						["uniqueItems"] = new JsonSchema04
 							{
 								Type = JsonSchemaTypeDefinition.Boolean,
 								Default = false
 							},
-						["maxProperties"] = new JsonSchemaReference("#/definitions/positiveInteger"),
-						["minProperties"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0"),
-						["required"] = new JsonSchemaReference("#/definitions/stringArray"),
+						["maxProperties"] = new JsonSchemaReference("#/definitions/positiveInteger", typeof(JsonSchema04)),
+						["minProperties"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", typeof(JsonSchema04)),
+						["required"] = new JsonSchemaReference("#/definitions/stringArray", typeof(JsonSchema04)),
 						["additionalProperties"] = new JsonSchema04
 							{
 								AnyOf = new List<IJsonSchema>
 									{
 										new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean},
-										JsonSchemaReference.Root
+										Root
 									},
 								Default = new JsonObject()
 							},
 						["definitions"] = new JsonSchema04
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = JsonSchemaReference.Root,
+								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["properties"] = new JsonSchema04
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = JsonSchemaReference.Root,
+								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["patternProperties"] = new JsonSchema04
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = JsonSchemaReference.Root,
+								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["dependencies"] = new JsonSchema04
@@ -172,8 +173,8 @@ namespace Manatee.Json.Schema
 									{
 										AnyOf = new List<IJsonSchema>
 											{
-												JsonSchemaReference.Root,
-												new JsonSchemaReference("#/definitions/stringArray")
+												Root,
+												new JsonSchemaReference("#/definitions/stringArray", typeof(JsonSchema04))
 											}
 									}
 							},
@@ -187,20 +188,20 @@ namespace Manatee.Json.Schema
 							{
 								AnyOf = new List<IJsonSchema>
 									{
-										new JsonSchemaReference("#/definitions/simpleTypes"),
+										new JsonSchemaReference("#/definitions/simpleTypes", typeof(JsonSchema04)),
 										new JsonSchema04
 											{
 												Type = JsonSchemaTypeDefinition.Array,
-												Items = new JsonSchemaReference("#/definitions/simpleTypes"),
+												Items = new JsonSchemaReference("#/definitions/simpleTypes", typeof(JsonSchema04)),
 												MinItems = 1,
 												UniqueItems = true
 											}
 									}
 							},
-						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-						["not"] = JsonSchemaReference.Root
+						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema04)),
+						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema04)),
+						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema04)),
+						["not"] = Root
 					},
 				Dependencies = new List<IJsonSchemaDependency>
 					{

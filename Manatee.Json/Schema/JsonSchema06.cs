@@ -15,12 +15,13 @@ namespace Manatee.Json.Schema
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + "}")]
 	public class JsonSchema06 : IJsonSchema
 	{
+		public static readonly JsonSchemaReference Root = new JsonSchemaReference("#", typeof(JsonSchema06));
 		/// <summary>
 		/// Defines an empty Schema.  Useful for specifying that any schema is valid.
 		/// </summary>
 		public static readonly JsonSchema06 Empty = new JsonSchema06();
-		public static readonly JsonSchema06 True = new JsonSchema06();
-		public static readonly JsonSchema06 False = new JsonSchema06();
+		public static readonly JsonSchema06 True = new JsonSchema06 {BooleanSchemaDefinition = true};
+		public static readonly JsonSchema06 False = new JsonSchema06 {BooleanSchemaDefinition = false};
 		/// <summary>
 		/// Defines the Draft-04 Schema as presented at http://json-schema.org/draft-06/schema#
 		/// </summary>
@@ -35,7 +36,7 @@ namespace Manatee.Json.Schema
 							{
 								Type = JsonSchemaTypeDefinition.Array,
 								MinItems = 1,
-								Items = JsonSchemaReference.Root
+								Items = Root
 							},
 						["nonNegativeInteger"] = new JsonSchema06
 							{
@@ -46,7 +47,7 @@ namespace Manatee.Json.Schema
 							{
 								AllOf = new List<IJsonSchema>
 									{
-										new JsonSchemaReference("#/definitions/nonNegativeInteger"),
+										new JsonSchemaReference("#/definitions/nonNegativeInteger", typeof(JsonSchema06)),
 										new JsonSchema06 {Default = 0}
 									}
 							},
@@ -101,51 +102,51 @@ namespace Manatee.Json.Schema
 						["exclusiveMaximum"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number},
 						["minimum"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number},
 						["exclusiveMinimum"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number},
-						["maxLength"] = new JsonSchemaReference("#/definitions/nonNegativeInteger"),
-						["minLength"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0"),
+						["maxLength"] = new JsonSchemaReference("#/definitions/nonNegativeInteger", typeof(JsonSchema06)),
+						["minLength"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0", typeof(JsonSchema06)),
 						["pattern"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.String,
 								Format = StringFormat.Regex
 							},
-						["additionalItems"] = JsonSchemaReference.Root,
+						["additionalItems"] = Root,
 						["items"] = new JsonSchema06
 							{
 								AnyOf = new List<IJsonSchema>
 									{
-										JsonSchemaReference.Root,
-										new JsonSchemaReference("#/definitions/schemaArray")
+										Root,
+										new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema06))
 									},
 								Default = new JsonObject()
 							},
-						["maxItems"] = new JsonSchemaReference("#/definitions/nonNegativeInteger"),
-						["minItems"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0"),
+						["maxItems"] = new JsonSchemaReference("#/definitions/nonNegativeInteger", typeof(JsonSchema06)),
+						["minItems"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0", typeof(JsonSchema06)),
 						["uniqueItems"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Boolean,
 								Default = false
 							},
-						["contains"] = JsonSchemaReference.Root,
-						["maxProperties"] = new JsonSchemaReference("#/definitions/nonNegativeInteger"),
-						["minProperties"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0"),
-						["required"] = new JsonSchemaReference("#/definitions/stringArray"),
-						["additionalProperties"] = JsonSchemaReference.Root,
+						["contains"] = Root,
+						["maxProperties"] = new JsonSchemaReference("#/definitions/nonNegativeInteger", typeof(JsonSchema06)),
+						["minProperties"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0", typeof(JsonSchema06)),
+						["required"] = new JsonSchemaReference("#/definitions/stringArray", typeof(JsonSchema06)),
+						["additionalProperties"] = Root,
 						["definitions"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = JsonSchemaReference.Root,
+								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["properties"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = JsonSchemaReference.Root,
+								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["patternProperties"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Object,
-								AdditionalProperties = JsonSchemaReference.Root,
+								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["dependencies"] = new JsonSchema06
@@ -155,12 +156,12 @@ namespace Manatee.Json.Schema
 									{
 										AnyOf = new List<IJsonSchema>
 											{
-												JsonSchemaReference.Root,
-												new JsonSchemaReference("#/definitions/stringArray")
+												Root,
+												new JsonSchemaReference("#/definitions/stringArray", typeof(JsonSchema06))
 											}
 									}
 							},
-						["propertyNames"] = JsonSchemaReference.Root,
+						["propertyNames"] = Root,
 						["const"] = Empty,
 						["enum"] = new JsonSchema06
 							{
@@ -172,21 +173,21 @@ namespace Manatee.Json.Schema
 							{
 								AnyOf = new List<IJsonSchema>
 									{
-										new JsonSchemaReference("#/definitions/simpleTypes"),
+										new JsonSchemaReference("#/definitions/simpleTypes", typeof(JsonSchema06)),
 										new JsonSchema06
 											{
 												Type = JsonSchemaTypeDefinition.Array,
-												Items = new JsonSchemaReference("#/definitions/simpleTypes"),
+												Items = new JsonSchemaReference("#/definitions/simpleTypes", typeof(JsonSchema06)),
 												MinItems = 1,
 												UniqueItems = true
 											}
 									}
 							},
 						["format"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
-						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray"),
-						["not"] = JsonSchemaReference.Root,
+						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema06)),
+						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema06)),
+						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema06)),
+						["not"] = Root,
 					},
 				Default = new JsonObject()
 			};
@@ -197,7 +198,6 @@ namespace Manatee.Json.Schema
 		private string _id;
 		private string _schema;
 		private double? _multipleOf;
-		private bool? _booleanSchemaDefinition;
 		private StringFormat _format;
 
 		/// <summary>
@@ -390,6 +390,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public Uri DocumentPath { get; set; }
 
+		private bool? BooleanSchemaDefinition { get; set; }
 		private string DebuggerDisplay => ToJson(null).ToString();
 
 		/// <summary>
@@ -400,9 +401,9 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
 		public virtual SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
 		{
-			if (_booleanSchemaDefinition == true)
+			if (BooleanSchemaDefinition == true)
 				return new SchemaValidationResults();
-			if (_booleanSchemaDefinition == false)
+			if (BooleanSchemaDefinition == false)
 				return new SchemaValidationResults(new[] {new SchemaValidationError(string.Empty, "All schemata are invalid")});
 
 			var jValue = root ?? ToJson(null);
@@ -421,7 +422,7 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type == JsonValueType.Boolean)
 			{
-				_booleanSchemaDefinition = json.Boolean;
+				BooleanSchemaDefinition = json.Boolean;
 				return;
 			}
 			
@@ -576,7 +577,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
-			if (_booleanSchemaDefinition.HasValue) return _booleanSchemaDefinition;
+			if (BooleanSchemaDefinition.HasValue) return BooleanSchemaDefinition;
 
 			var requiredProperties = new List<string>();
 			if (Properties != null)
@@ -782,6 +783,16 @@ namespace Manatee.Json.Schema
 		private IJsonSchema _ReadSchema(JsonValue json)
 		{
 			return JsonSchemaFactory.FromJson(json, () => new JsonSchema06(), DocumentPath);
+		}
+
+		/// <summary>
+		/// Implicitly converts boolean values to draft-06 <see cref="True"/> and <see cref="False"/> schema values.
+		/// </summary>
+		/// <param name="value">The value</param>
+		/// <returns>A <see cref="JsonSchema06"/> value that represents the boolean.</returns>
+		public static implicit operator JsonSchema06(bool value)
+		{
+			return value ? True : False;
 		}
 	}
 }
