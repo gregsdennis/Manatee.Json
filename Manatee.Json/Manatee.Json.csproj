@@ -12,14 +12,16 @@
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
     <PackageReleaseNotes>v8.0.0
-JSON Schema draft-06 now supported
+JSON Schema draft-06 now supported as JsonSchema06.
 Additional implicit casts which result in terser code.
 BREAKING CHANGES:
 - JsonSchema renamed to JsonSchema04.
 - JsonSchema.Draft04 renamed to JsonSchema04.MetaSchema (mirrors JsonSchema06.MetaSchema).
 - IJsonSchema exposes new properties Id:string and Schema:string.
 - JsonSchemaFactory now throws SchemaLoadException instead of ArgumentOutOfRangeException.
-- JsonSchemaReference no longer inherits from JsonSchema.  Instead a Base:IJsonSchema property has been created to fulfill coincident properties.
+- JsonSchemaReference no longer inherits from JsonSchema.  Instead a Base:IJsonSchema property has been created to fulfill coincident properties and support multiple schema versions.
+- Code marked obsolete deleted.
+- JsonSchemaReference.Root moved to JsonSchema04 and duplicated in JsonSchema06 to support multiple versions of the root reference.
 
 v7.1.0
 Added implicit casts to aid in schema creation in code.
