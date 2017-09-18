@@ -28,8 +28,8 @@ if not "%errorlevel%"=="0" goto failure
 
 REM Run Tests
 
-set nunit="tools\nunit\nunit-console.exe"
-"%nunit%" /testcontainer:Manatee.Json.Tests\bin\%config%\Manatee.Json.Tests.dll
+set nunit="packages\NUnit.ConsoleRunner.3.7.0\tools\nunit3-console.exe"
+"%nunit%" Manatee.Json.Tests\bin\%config%\Manatee.Json.Tests.dll
 if not "%errorlevel%"=="0" goto failure
 
 REM Package
