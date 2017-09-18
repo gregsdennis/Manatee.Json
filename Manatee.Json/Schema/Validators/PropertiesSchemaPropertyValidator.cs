@@ -10,8 +10,12 @@ namespace Manatee.Json.Schema.Validators
 		protected abstract JsonSchemaPropertyDefinitionCollection GetProperties(T schema);
 		protected abstract AdditionalProperties GetAdditionalProperties(T schema);
 		protected abstract Dictionary<Regex, IJsonSchema> GetPatternProperties(T schema);
+		protected virtual IEnumerable<SchemaValidationError> AdditionValidation(T schema, JsonValue json, JsonValue root)
+		{
+			return new SchemaValidationError[] { };
+		}
 		
-		public bool Applies(T schema, JsonValue json)
+		public virtual bool Applies(T schema, JsonValue json)
 		{
 			return (GetProperties(schema) != null ||
 			        GetAdditionalProperties(schema) != null ||
@@ -77,7 +81,8 @@ namespace Manatee.Json.Schema.Validators
 					}
 				}
 			}
-			return new SchemaValidationResults(errors);
+			var additionalValidation = AdditionValidation(schema, json, root);
+			return new SchemaValidationResults(errors.Concat(additionalValidation));
 		}
 	}
 
@@ -99,6 +104,11 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class PropertiesSchema06PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema06>
 	{
+		public override bool Applies(JsonSchema06 schema, JsonValue json)
+		{
+			return base.Applies(schema, json) || (json.Type == JsonValueType.Object && schema.PropertyNames != null);
+		}
+
 		protected override JsonSchemaPropertyDefinitionCollection GetProperties(JsonSchema06 schema)
 		{
 			return schema.Properties;
@@ -111,6 +121,12 @@ namespace Manatee.Json.Schema.Validators
 		protected override Dictionary<Regex, IJsonSchema> GetPatternProperties(JsonSchema06 schema)
 		{
 			return schema.PatternProperties;
+		}
+		protected override IEnumerable<SchemaValidationError> AdditionValidation(JsonSchema06 schema, JsonValue json, JsonValue root)
+		{
+			return schema.PropertyNames == null
+				       ? new SchemaValidationError[] { }
+				       : json.Object.Keys.SelectMany(k => schema.PropertyNames.Validate(k).Errors);
 		}
 	}
 }

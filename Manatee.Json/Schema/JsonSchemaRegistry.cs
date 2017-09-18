@@ -17,13 +17,8 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		static JsonSchemaRegistry()
 		{
-			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
-			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
-			_schemaLookup = new Dictionary<string, IJsonSchema>
-				{
-					[draft04Uri] = JsonSchema04.MetaSchema,
-					[draft06Uri] = JsonSchema06.MetaSchema
-				};
+			_schemaLookup = new Dictionary<string, IJsonSchema>();
+			Clear();
 		}
 
 		/// <summary>
@@ -90,6 +85,20 @@ namespace Manatee.Json.Schema
 			lock (_schemaLookup)
 			{
 				_schemaLookup.Remove(uri);
+			}
+		}
+
+		/// <summary>
+		/// Clears the registry of all types.
+		/// </summary>
+		public static void Clear()
+		{
+			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
+			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
+			lock (_schemaLookup)
+			{
+				_schemaLookup[draft04Uri] = JsonSchema04.MetaSchema;
+				_schemaLookup[draft06Uri] = JsonSchema06.MetaSchema;
 			}
 		}
 	}

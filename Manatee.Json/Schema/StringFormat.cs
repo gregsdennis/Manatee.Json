@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
 {
@@ -73,7 +74,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
 		/// </summary>
-		public static readonly StringFormat UriReference = new StringFormat("uri-reference", s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute))
+		public static readonly StringFormat UriReference = new StringFormat("uri-reference", Uri3986.IsValid)
 			{
 				SupportedBy = new[]{typeof(JsonSchema06)}
 			};
