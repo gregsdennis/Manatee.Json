@@ -19,9 +19,6 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 
-		public static IEnumerable TestData04 => _LoadSchema<JsonSchema04>(Draft04TestFolder);
-		public static IEnumerable TestData06 => _LoadSchema<JsonSchema04>(Draft04TestFolder);
-
 		private static IEnumerable<TestCaseData> _LoadSchema<T>(string testFolder)
 			where T : IJsonSchema
 		{
@@ -79,6 +76,13 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = null;
 		}
 
+		// This should really be run using a TestCaseSource that supplies all of the tests
+		// as cases so that NUnit can run each one independently.  However there's an issue
+		// in the registry in that deserialization auto-registers any schema with an ID and
+		// when the $ref tests for draft-06 deserialize, they overwrite the registrations
+		// for the draft-04 tests.  This causes two of the draft-04 tests to fail.  To get
+		// around this for now, I've reverted back to running them in one go so that I can
+		// properly separate the drafts.
 		[Test]
 		public void Run04()
 		{
@@ -87,14 +91,21 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 			foreach (var test in testData)
 			{
-				Run((IJsonSchema) test.Arguments[0],
-				    (SchemaTest) test.Arguments[1],
-				    (string) test.Arguments[2],
-				    (string) test.Arguments[3],
-				    (Type) test.Arguments[4]);
+				_Run((IJsonSchema) test.Arguments[0],
+				     (SchemaTest) test.Arguments[1],
+				     (string) test.Arguments[2],
+				     (string) test.Arguments[3],
+				     (Type) test.Arguments[4]);
 			}
 		}
 
+		// This should really be run using a TestCaseSource that supplies all of the tests
+		// as cases so that NUnit can run each one independently.  However there's an issue
+		// in the registry in that deserialization auto-registers any schema with an ID and
+		// when the $ref tests for draft-06 deserialize, they overwrite the registrations
+		// for the draft-04 tests.  This causes two of the draft-04 tests to fail.  To get
+		// around this for now, I've reverted back to running them in one go so that I can
+		// properly separate the drafts.
 		[Test]
 		public void Run06()
 		{
@@ -103,29 +114,15 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 			foreach (var test in testData)
 			{
-				Run((IJsonSchema) test.Arguments[0],
-				    (SchemaTest) test.Arguments[1],
-				    (string) test.Arguments[2],
-				    (string) test.Arguments[3],
-				    (Type) test.Arguments[4]);
+				_Run((IJsonSchema) test.Arguments[0],
+				     (SchemaTest) test.Arguments[1],
+				     (string) test.Arguments[2],
+				     (string) test.Arguments[3],
+				     (Type) test.Arguments[4]);
 			}
 		}
-		
-		//[TestCaseSource(nameof(TestData))]
-		public void Run(IJsonSchema schema, SchemaTest test, string fileName, string testName, Type schemaType)
-		{
-			Console.WriteLine(fileName);
 
-			JsonSchemaFactory.SetDefaultSchemaVersion(schemaType);
-			var results = schema.Validate(test.Data);
-
-			if (test.Valid != results.Valid)
-				Console.WriteLine(string.Join("\n", results.Errors));
-			Assert.AreEqual(test.Valid, results.Valid);
-		}
-
-		//[TestCaseSource(nameof(TestData))]
-		public void Run06(IJsonSchema schema, SchemaTest test, string fileName, string testName, Type schemaType)
+		private static void _Run(IJsonSchema schema, SchemaTest test, string fileName, string testName, Type schemaType)
 		{
 			Console.WriteLine(fileName);
 
@@ -144,14 +141,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			var testName = "propertyNames_validation.some_property_names_invalid";
 			var schemaVersion = typeof(JsonSchema06);
 
-			var selectedTest = TestData04.Cast<TestCaseData>()
-			                             .First(d => Equals(d.Arguments[3], testName));
+			var selectedTest = _LoadSchema<JsonSchema06>(Draft06TestFolder)
+				.First(d => Equals(d.Arguments[3], testName));
 
-			Run((IJsonSchema) selectedTest.Arguments[0],
-			    (SchemaTest) selectedTest.Arguments[1],
-			    (string) selectedTest.Arguments[2],
-			    (string) selectedTest.Arguments[3],
-			    schemaVersion);
+			_Run((IJsonSchema) selectedTest.Arguments[0],
+			     (SchemaTest) selectedTest.Arguments[1],
+			     (string) selectedTest.Arguments[2],
+			     (string) selectedTest.Arguments[3],
+			     schemaVersion);
 		}
 	}
 }
