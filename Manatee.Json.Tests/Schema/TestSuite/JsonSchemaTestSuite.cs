@@ -83,6 +83,9 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		// for the draft-04 tests.  This causes two of the draft-04 tests to fail.  To get
 		// around this for now, I've reverted back to running them in one go so that I can
 		// properly separate the drafts.
+		// TODO: I think if I abandon deserializing the entire file
+		//       and only deserialize each test as needed,
+		//       it may work with the test collection.
 		[Test]
 		public void Run04()
 		{
@@ -106,6 +109,9 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		// for the draft-04 tests.  This causes two of the draft-04 tests to fail.  To get
 		// around this for now, I've reverted back to running them in one go so that I can
 		// properly separate the drafts.
+		// TODO: I think if I abandon deserializing the entire file
+		//       and only deserialize each test as needed,
+		//       it may work with the test collection.
 		[Test]
 		public void Run06()
 		{
