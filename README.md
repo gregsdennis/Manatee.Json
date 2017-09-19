@@ -104,7 +104,7 @@ If you'd like to contribute to Manatee.Json, please feel free to fork and create
 
 ### The Project
 
-This code uses C# 7 features, so Visual Studio 2017 is required.
+This code uses C# 7 features, so a compiler/IDE that supports these features is required.
 
 The project is a single project that targets both .Net Framework 4.6 and .Net Standard 1.3.
 
@@ -114,4 +114,4 @@ During development, building within Visual Studio should be fine.  There is a bu
 
 ### Code style and maintenance
 
-I use [Jetbrains Resharper](https://www.jetbrains.com/resharper/) to maintain the code style (and for many of the other things that it does).  The solution is set up with team style settings, so if you're using Resharper the settings should automatically load.  Please follow the suggestions.
+I use [Jetbrains Resharper](https://www.jetbrains.com/resharper/) in Visual Studio [JetBrains Rider](https://www.jetbrains.com/rider/) to maintain the code style (and for many of the other things that it does).  The solution is set up with team style settings, so if you're using Resharper the settings should automatically load.  Please follow the suggestions.
