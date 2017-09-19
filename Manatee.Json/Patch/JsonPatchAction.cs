@@ -60,22 +60,42 @@ namespace Manatee.Json.Patch
 
         private JsonPatchResult _Add(JsonValue json)
         {
-            throw new NotImplementedException();
+            return _Add(json, Value);
         }
 
         private JsonPatchResult _Remove(JsonValue json)
         {
-            throw new NotImplementedException();
+            var (target, key, index, value) = JsonPointerFunctions.ResolvePointer(json, Path);
+            if (target == null || key == null || index == -1)
+                // TODO: What should happen if I can't create the path?
+                throw new NotImplementedException();
+            
+            switch (target.Type)
+            {
+                case JsonValueType.Object:
+                    target.Object.Remove(key);
+                    break;
+                case JsonValueType.Array:
+                    target.Array.RemoveAt(index);
+                    break;
+                default:
+                    return new JsonPatchResult(json, $"Cannot add a value to a '{target.Type}'");
+            }
+
+            return new JsonPatchResult(json);
         }
 
         private JsonPatchResult _Replace(JsonValue json)
         {
-            throw new NotImplementedException();
+            var remove = _Remove(json);
+            return remove.Success ? remove : _Add(json);
         }
 
         private JsonPatchResult _Move(JsonValue json)
         {
-            throw new NotImplementedException();
+            // TODO: This isn't the most efficient way to do this, but it'll get the job done.
+            var copy = _Copy(json);
+            return !copy.Success ? copy : _Remove(json);
         }
 
         private JsonPatchResult _Copy(JsonValue json)
@@ -83,9 +103,15 @@ namespace Manatee.Json.Patch
             var (_, _, _, value) = JsonPointerFunctions.ResolvePointer(json, From);
             if (value == null) return new JsonPatchResult(json, $"The path '{From}' does not exist.");
 
+            return _Add(json, value);
+        }
+        
+        private JsonPatchResult _Add(JsonValue json, JsonValue value)
+        {
             var (target, key, index, _) = JsonPointerFunctions.ResolvePointer(json, Path);
             if (target == null || key == null || index == -1)
-                throw new NotImplementedException("What should happen if I can't create the path?");
+                // TODO: What should happen if I can't create the path?
+                throw new NotImplementedException();
 
             switch (target.Type)
             {

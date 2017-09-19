@@ -22,6 +22,14 @@ namespace Manatee.Json.Tests.Patch
                                      "/a/0/c",
                                      (JsonValue) new JsonObject {["c"] = 1},
                                      (JsonValue) 1),
+                    new TestCaseData((JsonValue) new JsonObject {["a"] = new JsonArray {new JsonObject {["c"] = 1}}},
+                                     "/a/0",
+                                     (JsonValue) new JsonArray {new JsonObject {["c"] = 1}},
+                                     (JsonValue) new JsonObject {["c"] = 1}),
+                    new TestCaseData((JsonValue) new JsonObject {["a"] = new JsonArray {new JsonObject {["c"] = 1}}},
+                                     "/a/1/c",
+                                     (JsonValue) null,
+                                     (JsonValue) null),
                 };
         
         [TestCaseSource(nameof(TestData))]
