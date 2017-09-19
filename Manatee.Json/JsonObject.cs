@@ -66,7 +66,9 @@ namespace Manatee.Json
 		/// it will be replaced by <see cref="JsonValue.Null"/>.</param>
 		public new void Add(string key, JsonValue value)
 		{
-			base.Add(key, value ?? JsonValue.Null);
+			// TODO: Should this use the indexer to prevent duplicate key exceptions?
+			this[key] = value ?? JsonValue.Null;
+			//base.Add(key, value ?? JsonValue.Null);
 		}
 
 		/// <summary>

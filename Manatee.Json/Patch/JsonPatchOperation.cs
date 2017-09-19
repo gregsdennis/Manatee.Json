@@ -4,17 +4,17 @@ namespace Manatee.Json.Patch
 {
     public enum JsonPatchOperation
     {
-        [Display(Name = "add")]
+        [Display(Description = "add")]
         Add,
-        [Display(Name = "remove")]
+        [Display(Description = "remove")]
         Remove,
-        [Display(Name = "replace")]
+        [Display(Description = "replace")]
         Replace,
-        [Display(Name = "move")]
+        [Display(Description = "move")]
         Move,
-        [Display(Name = "copy")]
+        [Display(Description = "copy")]
         Copy,
-        [Display(Name = "test")]
+        [Display(Description = "test")]
         Test
     }
 }

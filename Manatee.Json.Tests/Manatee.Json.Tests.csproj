@@ -71,6 +71,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Patch\TestSuite\JsonPatchTest.cs" />
     <Compile Include="Patch\JsonPointerResolutionTests.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="ClientTest.cs" />
