@@ -93,7 +93,6 @@ Serialization features:
 - Supports multiple date/time formats (ISO 8601, JavaScript, custom)
 - Supports using DI containers for object creation
 - Supports non-default constructors
-- JSON template generation from .Net types (beta)
 - Property name customization via attribute
 - Opt-out property inclusion via attribute
 
