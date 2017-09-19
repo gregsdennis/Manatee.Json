@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Patch\TestSuite\JsonPatchTest.cs" />
     <Compile Include="Patch\JsonPointerResolutionTests.cs" />
+    <Compile Include="Patch\TestSuite\JsonPatchTestSuite.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="ClientTest.cs" />
     <Compile Include="DevTest.cs" />
