@@ -211,6 +211,7 @@ namespace Manatee.Json
 			_numberValue = other._numberValue;
 			_stringValue = other._stringValue;
 			_boolValue = other._boolValue;
+			Type = other.Type;
 		}
 
 		/// <summary>

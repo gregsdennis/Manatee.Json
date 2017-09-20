@@ -21,7 +21,8 @@ namespace Manatee.Json.Tests.Patch.TestSuite
             };
         
         public JsonValue Doc { get; set; }
-        public JsonValue Expected { get; set; }
+        public JsonValue ExpectedValue { get; set; }
+        public bool HasExpectedValue { get; set; }
         public bool ExpectsError { get; set; }
         public string Comment { get; set; }
         public JsonPatch Patch { get; set; }
@@ -32,7 +33,9 @@ namespace Manatee.Json.Tests.Patch.TestSuite
             Comment = obj.TryGetString("comment");
             Doc = obj["doc"];
             if (obj.ContainsKey("expected"))
-                Expected = obj["expected"];
+                ExpectedValue = obj["expected"];
+            else
+                HasExpectedValue = false;
             ExpectsError = !string.IsNullOrWhiteSpace(obj.TryGetString("error"));
             Patch = serializer.Deserialize<JsonPatch>(obj["patch"]);
         }

@@ -112,14 +112,14 @@ namespace Manatee.Json.Patch
             }
             return result;
         }
-        
-        public void FromJson(JsonValue json, JsonSerializer serializer)
+
+        void IJsonSerializable.FromJson(JsonValue json, JsonSerializer serializer)
         {
             AddRange(json.Array.Select(serializer.Deserialize<JsonPatchAction>));
         }
-        public JsonValue ToJson(JsonSerializer serializer)
+        JsonValue IJsonSerializable.ToJson(JsonSerializer serializer)
         {
-            return new JsonArray(this.Select(pa => pa.ToJson(serializer)));
+            return new JsonArray(this.Select(pa => ((IJsonSerializable) pa).ToJson(serializer)));
         }
     }
 }

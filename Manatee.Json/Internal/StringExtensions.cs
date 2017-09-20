@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Internal
 {
@@ -11,6 +12,7 @@ namespace Manatee.Json.Internal
 		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(UInt16.MinValue, UInt16.MaxValue)
 		                                                                     .Select(n => (char) n)
 		                                                                     .Where(c => !Char.IsControl(c));
+		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
 		public static string EvaluateEscapeSequences(this string source, out string result)
 		{
@@ -167,6 +169,19 @@ namespace Manatee.Json.Internal
 				return "Unexpected end of input.";
 			}
 			return null;
+		}
+		public static string UnescapePointer(this string reference)
+		{
+			var unescaped = reference.Replace("~1", "/")
+			                         .Replace("~0", "~");
+			var matches = _generalEscapePattern.Matches(unescaped);
+			foreach (Match match in matches)
+			{
+				var value = int.Parse(match.Groups["Value"].Value, NumberStyles.HexNumber);
+				var ch = (char) value;
+				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
+			}
+			return unescaped;
 		}
 	}
 }

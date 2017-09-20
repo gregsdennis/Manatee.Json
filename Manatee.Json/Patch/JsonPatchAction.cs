@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Patch
 {
@@ -9,7 +12,7 @@ namespace Manatee.Json.Patch
         public string Path { get; set; }
         public string From { get; set; }
         public JsonValue Value { get; set; }
-
+        
         internal JsonPatchResult TryApply(JsonValue json)
         {
             switch (Operation)
@@ -31,7 +34,7 @@ namespace Manatee.Json.Patch
             }
         }
 
-        public void FromJson(JsonValue json, JsonSerializer serializer)
+        void IJsonSerializable.FromJson(JsonValue json, JsonSerializer serializer)
         {
             var obj = json.Object;
             Operation = serializer.Deserialize<JsonPatchOperation>(obj["op"]);
@@ -43,7 +46,7 @@ namespace Manatee.Json.Patch
 
             this.Validate();
         }
-        public JsonValue ToJson(JsonSerializer serializer)
+        JsonValue IJsonSerializable.ToJson(JsonSerializer serializer)
         {
             var json = new JsonObject
                 {
@@ -60,15 +63,16 @@ namespace Manatee.Json.Patch
 
         private JsonPatchResult _Add(JsonValue json)
         {
-            return _Add(json, Value);
+            var success = JsonPointerFunctions.InsertValue(json, Path, Value);
+            
+            if (success) return new JsonPatchResult(json);
+            return new JsonPatchResult(json, "Could not add the value");
         }
 
         private JsonPatchResult _Remove(JsonValue json)
         {
-            var (target, key, index, value) = JsonPointerFunctions.ResolvePointer(json, Path);
-            if (target == null || key == null || index == -1)
-                // TODO: What should happen if I can't create the path?
-                throw new NotImplementedException();
+            var (target, key, index, value, found) = JsonPointerFunctions.ResolvePointer(json, Path);
+            if (!found) return new JsonPatchResult(json, $"Path '{Path}' not found.");
             
             switch (target.Type)
             {
@@ -79,7 +83,7 @@ namespace Manatee.Json.Patch
                     target.Array.RemoveAt(index);
                     break;
                 default:
-                    return new JsonPatchResult(json, $"Cannot add a value to a '{target.Type}'");
+                    return new JsonPatchResult(json, $"Cannot remove a value from a '{target.Type}'");
             }
 
             return new JsonPatchResult(json);
@@ -87,6 +91,7 @@ namespace Manatee.Json.Patch
 
         private JsonPatchResult _Replace(JsonValue json)
         {
+            // TODO: This isn't the most efficient way to do this, but it'll get the job done.
             var remove = _Remove(json);
             return remove.Success ? remove : _Add(json);
         }
@@ -100,41 +105,22 @@ namespace Manatee.Json.Patch
 
         private JsonPatchResult _Copy(JsonValue json)
         {
-            var (_, _, _, value) = JsonPointerFunctions.ResolvePointer(json, From);
-            if (value == null) return new JsonPatchResult(json, $"The path '{From}' does not exist.");
-
-            return _Add(json, value);
-        }
-        
-        private JsonPatchResult _Add(JsonValue json, JsonValue value)
-        {
-            var (target, key, index, _) = JsonPointerFunctions.ResolvePointer(json, Path);
-            if (target == null || key == null || index == -1)
-                // TODO: What should happen if I can't create the path?
-                throw new NotImplementedException();
-
-            switch (target.Type)
-            {
-                case JsonValueType.Object:
-                    target.Object[key] = value;
-                    break;
-                case JsonValueType.Array:
-                    index = Math.Min(target.Array.Count, index);
-                    target.Array.Insert(index, value);
-                    break;
-                default:
-                    return new JsonPatchResult(json, $"Cannot add a value to a '{target.Type}'");
-            }
-
+            var value = JsonPointerFunctions.RetrieveValue(json, From);
+            if (ReferenceEquals(value, null)) return new JsonPatchResult(json, $"The path '{Path}' does not exist.");
+            
+            var success = JsonPointerFunctions.InsertValue(json, Path, value);
+            if (!success) return new JsonPatchResult(json, "Could not add the value");
+            
             return new JsonPatchResult(json);
         }
 
         private JsonPatchResult _Test(JsonValue json)
         {
-            var (_, _, _, value) = JsonPointerFunctions.ResolvePointer(json, Path);
+            var value = JsonPointerFunctions.RetrieveValue(json, Path);
+            if (ReferenceEquals(value, null)) return new JsonPatchResult(json, $"The path '{Path}' does not exist.");
             
-            if (value == null) return new JsonPatchResult(json, $"The path '{Path}' does not exist.");
             if (value != Value) return new JsonPatchResult(json, $"The value at '{Path}' is not the expected value.");
+            
             return new JsonPatchResult(json);
         }
     }

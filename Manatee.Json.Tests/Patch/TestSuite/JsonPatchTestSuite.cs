@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Manatee.Json.Patch;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
 
@@ -28,7 +29,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
                 foreach (var test in json.Array)
                 {
                     var testDescription = test.Object.TryGetString("comment") ?? "UNNAMED TEST";
-                    var testName = testDescription.Replace(' ', '-');
+                    var testName = testDescription.Replace(' ', '_');
                     yield return new TestCaseData(fileName, test) {TestName = testName};
                 }
             }
@@ -42,6 +43,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
         [TestCaseSource(nameof(TestData))]
         public void Run(string fileName, JsonValue testJson)
         {
+            JsonPatchResult result = null;
             try
             {
                 Console.WriteLine(fileName);
@@ -58,15 +60,16 @@ namespace Manatee.Json.Tests.Patch.TestSuite
                 }
                 var test = _serializer.Deserialize<JsonPatchTest>(testJson);
 
-                var result = test.Patch.TryApply(test.Doc);
+                result = test.Patch.TryApply(test.Doc);
 
-                if (test.ExpectsError)
-                    Assert.IsFalse(result.Success);
-                else
-                    Assert.AreEqual(test.Expected, result.Patched);
+                Assert.AreNotEqual(test.ExpectsError, result.Success);
+                if (test.HasExpectedValue)
+                    Assert.AreEqual(test.ExpectedValue, result.Patched);
             }
             catch (Exception e)
             {
+                if (result != null)
+                    Console.WriteLine(result.Error);
                 if (testJson.Object.TryGetBoolean("disabled") ?? false)
                     Assert.Inconclusive();
                 throw;
