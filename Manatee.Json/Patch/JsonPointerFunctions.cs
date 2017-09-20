@@ -81,12 +81,12 @@ namespace Manatee.Json.Patch
             return current;
         }
 
-        public static bool InsertValue(JsonValue json, string path, JsonValue value)
+        public static (JsonValue result, bool success) InsertValue(JsonValue json, string path, JsonValue value)
         {
-            if (path == string.Empty) return false;
+            if (path == string.Empty) return (value, true);
             var parts = path.Split('/').Skip(1);
             var current = json;
-            Action<JsonValue> addValue = null;
+            Func<JsonValue, bool> addValue = null;
             foreach (var part in parts)
             {
                 var key = part.UnescapePointer();
@@ -95,57 +95,45 @@ namespace Manatee.Json.Patch
                     index = -1;
                 else if (!int.TryParse(part, out index))
                     index = key == "-" ? int.MaxValue : -1;
-                if (ReferenceEquals(current, null))
-                {
-                    if (index != -1 && index != int.MaxValue)
-                    {
-                        current = new JsonArray();
-                        addValue?.Invoke(current);
-                        var array = current.Array;
-                        var tempIndex = index;
-                        addValue = v => array.Insert(tempIndex, v);
-                    }
-                    else
-                    {
-                        current = new JsonObject();
-                        addValue?.Invoke(current);
-                        var obj = current.Object;
-                        addValue = v => obj[key] = v;
-                    }
-                    current = null; // from here on out we need to stay in this clause
-                }
-                else if (current.Type == JsonValueType.Object)
-                {
-                    if (current.Object.TryGetValue(key, out JsonValue found))
-                    {
-                        current = found;
-                        continue;
-                    }
 
+                if (ReferenceEquals(current, null)) return (null, false);
+                
+                if (current.Type == JsonValueType.Object)
+                {
                     var obj = current.Object;
-                    addValue = v => obj[key] = v;
+                    addValue = v =>
+                        {
+                            obj[key] = v;
+                            return true;
+                        };
+
+                    current.Object.TryGetValue(key, out current);
                 }
                 else if (current.Type == JsonValueType.Array)
                 {
-                    if (index == -1) return false;
+                    if (index == -1) return (null, false);
                     if (index == int.MaxValue)
-                        index = current.Array.Count - 1;
-                    else if (index < current.Array.Count)
-                    {
-                        current = current.Array[index];
-                        continue;
-                    }
-                    
+                        index = Math.Max(0, current.Array.Count - 1);
+
                     var array = current.Array;
                     var tempIndex = index;
-                    addValue = v => array.Insert(tempIndex, v);
+                    addValue = v =>
+                        {
+                            if (tempIndex > array.Count) return false;
+                            array.Insert(tempIndex, v);
+                            return true;
+                        };
+
+                    current = index < current.Array.Count
+                                  ? current.Array[index]
+                                  : null;
                 }
-                else return false;
+                else return (null, false);
             }
 
-            if (addValue == null) return false;
-            addValue(value);
-            return true;
+            if (addValue == null) return (null, false);
+            var success = addValue(value);
+            return (success ? json : null, success);
         }
     }
 }

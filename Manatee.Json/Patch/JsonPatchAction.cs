@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
-using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
-using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Patch
 {
@@ -63,10 +60,11 @@ namespace Manatee.Json.Patch
 
         private JsonPatchResult _Add(JsonValue json)
         {
-            var success = JsonPointerFunctions.InsertValue(json, Path, Value);
+            var (result, success) = JsonPointerFunctions.InsertValue(json, Path, Value);
+
+            if (!success) return new JsonPatchResult(json, "Could not add the value");
             
-            if (success) return new JsonPatchResult(json);
-            return new JsonPatchResult(json, "Could not add the value");
+            return new JsonPatchResult(result);
         }
 
         private JsonPatchResult _Remove(JsonValue json)
@@ -108,10 +106,10 @@ namespace Manatee.Json.Patch
             var value = JsonPointerFunctions.RetrieveValue(json, From);
             if (ReferenceEquals(value, null)) return new JsonPatchResult(json, $"The path '{Path}' does not exist.");
             
-            var success = JsonPointerFunctions.InsertValue(json, Path, value);
+            var (result, success) = JsonPointerFunctions.InsertValue(json, Path, value);
             if (!success) return new JsonPatchResult(json, "Could not add the value");
             
-            return new JsonPatchResult(json);
+            return new JsonPatchResult(result);
         }
 
         private JsonPatchResult _Test(JsonValue json)
