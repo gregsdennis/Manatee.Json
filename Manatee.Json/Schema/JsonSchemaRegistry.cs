@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Patch;
 
 namespace Manatee.Json.Schema
 {
@@ -95,10 +96,12 @@ namespace Manatee.Json.Schema
 		{
 			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
 			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
+			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
 				_schemaLookup[draft04Uri] = JsonSchema04.MetaSchema;
 				_schemaLookup[draft06Uri] = JsonSchema06.MetaSchema;
+				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}
 	}

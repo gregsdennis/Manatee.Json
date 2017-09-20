@@ -201,6 +201,18 @@ namespace Manatee.Json
 			if (a != null) Array = a;
 			else Type = JsonValueType.Null;
 		}
+		/// <summary>
+		/// Creates a copy of a <see cref="JsonValue"/>.
+		/// </summary>
+		public JsonValue(JsonValue other)
+		{
+			_arrayValue = other._arrayValue;
+			_objectValue = other._objectValue;
+			_numberValue = other._numberValue;
+			_stringValue = other._stringValue;
+			_boolValue = other._boolValue;
+			Type = other.Type;
+		}
 
 		/// <summary>
 		/// Creates a string representation of the JSON data.

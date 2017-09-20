@@ -200,6 +200,7 @@ namespace Manatee.Json.Schema
 			Resolved = _ResolveLocalReference(jValue, fragment, string.IsNullOrWhiteSpace(address) ? null : new Uri(address));
 			return jValue;
 		}
+		// TODO: This is a JSON pointer.  Since JsonPatch uses it, it might be beneficial to implement as an object or at least reuse this.
 		private IJsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
 			var properties = path.Split('/').Skip(1).ToList();

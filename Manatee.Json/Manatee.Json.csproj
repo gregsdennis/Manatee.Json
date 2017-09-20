@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to building JSON structures.</Description>
-    <Version>8.0.0</Version>
+    <Version>8.1.0</Version>
     <Copyright>Copyright © 2017 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
@@ -11,24 +11,27 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v8.0.0
-JSON Schema draft-06 now supported as JsonSchema06.
-Additional implicit casts which result in terser code.
-BREAKING CHANGES:
-- JsonSchema renamed to JsonSchema04.
-- JsonSchema.Draft04 renamed to JsonSchema04.MetaSchema (mirrors JsonSchema06.MetaSchema).
-- IJsonSchema exposes new properties Id:string and Schema:string.
-- JsonSchemaFactory now throws SchemaLoadException instead of ArgumentOutOfRangeException.
-- JsonSchemaReference no longer inherits from JsonSchema.  Instead a Base:IJsonSchema property has been created to fulfill coincident properties and support multiple schema versions.
-- Code marked obsolete deleted.
-- JsonSchemaReference.Root moved to JsonSchema04 and duplicated in JsonSchema06 to support multiple versions of the root reference.
+    <PackageReleaseNotes>v8.1.0
+      Added JsonPatch support.
 
-v7.1.0
-Added implicit casts to aid in schema creation in code.
+      v8.0.0
+      JSON Schema draft-06 now supported as JsonSchema06.
+      Additional implicit casts which result in terser code.
+      BREAKING CHANGES:
+      - JsonSchema renamed to JsonSchema04.
+      - JsonSchema.Draft04 renamed to JsonSchema04.MetaSchema (mirrors JsonSchema06.MetaSchema).
+      - IJsonSchema exposes new properties Id:string and Schema:string.
+      - JsonSchemaFactory now throws SchemaLoadException instead of ArgumentOutOfRangeException.
+      - JsonSchemaReference no longer inherits from JsonSchema.  Instead a Base:IJsonSchema property has been created to fulfill coincident properties and support multiple schema versions.
+      - Code marked obsolete deleted.
+      - JsonSchemaReference.Root moved to JsonSchema04 and duplicated in JsonSchema06 to support multiple versions of the root reference.
+
+      v7.1.0
+      Added implicit casts to aid in schema creation in code.
     </PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>8.0.0.0</FileVersion>
+    <FileVersion>8.1.0.0</FileVersion>
     <AssemblyVersion>8.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
@@ -54,5 +57,6 @@ Added implicit casts to aid in schema creation in code.
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
   </ItemGroup>
 </Project>
