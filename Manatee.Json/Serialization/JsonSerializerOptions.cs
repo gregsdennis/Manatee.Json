@@ -108,6 +108,7 @@ namespace Manatee.Json.Serialization
 		public JsonSerializerOptions(JsonSerializerOptions options)
 			: this()
 		{
+			// TODO: This is not a proper copy constructor.
 			EncodeDefaultValues = options.EncodeDefaultValues;
 			InvalidPropertyKeyBehavior = options.InvalidPropertyKeyBehavior;
 			DateTimeSerializationFormat = options.DateTimeSerializationFormat;
