@@ -7,7 +7,6 @@ namespace Manatee.Json.Patch
     internal static class JsonPointerFunctions
     {
         private static readonly ValueTuple<JsonValue, string, int, JsonValue, bool> _empty = (null, null, -1, null, false);
-        private static readonly ValueTuple<JsonValue, bool> _empty2 = (null, false);
         
         public static (JsonValue parent, string key, int index, JsonValue target, bool success) ResolvePointer(JsonValue json, string path)
         {

@@ -68,6 +68,8 @@ namespace Manatee.Json.Tests.Patch.TestSuite
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
                 if (result != null)
                     Console.WriteLine(result.Error);
                 if (testJson.Object.TryGetBoolean("disabled") ?? false)
