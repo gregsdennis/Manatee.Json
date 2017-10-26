@@ -1,5 +1,15 @@
 REM build script for MyGet builds
 
+REM Get latest for test suites
+cd json-patch-tests
+%GitPath% pull
+cd ../Json-Path-Test-Suite
+%GitPath% pull
+cd ../Json-Schema-Test-Suite
+%GitPath% pull
+cd ..
+
+REM Start build
 set config=%1
 if "%config%" == "" (
    set config=Release
