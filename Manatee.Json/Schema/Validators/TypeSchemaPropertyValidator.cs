@@ -15,8 +15,7 @@ namespace Manatee.Json.Schema.Validators
 		}
 		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
 		{
-			var multitype = GetType(schema) as JsonSchemaMultiTypeDefinition;
-			if (multitype != null)
+			if (GetType(schema) is JsonSchemaMultiTypeDefinition multitype)
 			{
 				var schemata = multitype.Defintions.Select(d => d.Definition);
 				var validations = schemata.Select(s => s.Validate(json)).ToList();

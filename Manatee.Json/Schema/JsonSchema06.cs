@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 							}
 					},
 				Type = new JsonSchemaMultiTypeDefinition(JsonSchemaTypeDefinition.Object, JsonSchemaTypeDefinition.Boolean),
-				Properties = new JsonSchemaPropertyDefinitionCollection
+				Properties = new Dictionary<string, IJsonSchema>
 					{
 						["$id"] = new JsonSchema06
 							{
@@ -192,8 +192,7 @@ namespace Manatee.Json.Schema
 				Default = new JsonObject()
 			};
 
-		private static readonly IEnumerable<string> _definedProperties =
-			MetaSchema.Properties.Select(p => p.Name).ToList();
+		private static readonly IEnumerable<string> _definedProperties = MetaSchema.Properties.Keys.ToList();
 
 		private string _id;
 		private string _schema;
@@ -328,7 +327,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a collection of properties expected by this schema.
 		/// </summary>
-		public JsonSchemaPropertyDefinitionCollection Properties { get; set; }
+		public Dictionary<string, IJsonSchema> Properties { get; set; }
 		/// <summary>
 		/// Defines additional properties based on regular expression matching of the property name.
 		/// </summary>
@@ -369,6 +368,10 @@ namespace Manatee.Json.Schema
 		/// A collection of schema which must not be satisfied.
 		/// </summary>
 		public IJsonSchema Not { get; set; }
+		/// <summary>
+		/// A collection of property names that are required.
+		/// </summary>
+		public IEnumerable<string> Required { get; set; }
 		/// <summary>
 		/// Defines a required format for the string.
 		/// </summary>
@@ -464,38 +467,9 @@ namespace Manatee.Json.Schema
 				Contains = _ReadSchema(obj["contains"]);
 			MaxProperties = (uint?) obj.TryGetNumber("maxProperties");
 			MinProperties = (uint?) obj.TryGetNumber("minProperties");
-			// Must deserialize "properties" before "required".
 			if (obj.ContainsKey("properties"))
-			{
-				Properties = new JsonSchemaPropertyDefinitionCollection();
-				foreach (var prop in obj["properties"].Object)
-				{
-					var property = new JsonSchemaPropertyDefinition(prop.Key) {Type = _ReadSchema(prop.Value)};
-					Properties.Add(property);
-				}
-			}
-			if (obj.ContainsKey("required"))
-			{
-				var properties = Properties ?? new JsonSchemaPropertyDefinitionCollection();
-				var newProperties = new List<JsonSchemaPropertyDefinition>();
-				var requiredProperties = obj["required"].Array.Select(v => v.String);
-				foreach (var propertyName in requiredProperties)
-				{
-					var property = properties.FirstOrDefault(p => p.Name == propertyName);
-					if (property != null)
-						property.IsRequired = true;
-					else
-					{
-						newProperties.Add(new JsonSchemaPropertyDefinition(propertyName)
-							{
-								IsHidden = true,
-								IsRequired = true
-							});
-					}
-				}
-				properties.AddRange(newProperties);
-				Properties = properties;
-			}
+				Properties = obj["properties"].Object.ToDictionary(kvp => kvp.Key, kvp => _ReadSchema(kvp.Value));
+			Required = obj.TryGetArray("required")?.Select(jv => jv.String).ToList();
 			if (obj.ContainsKey("additionalProperties"))
 				AdditionalProperties = _ReadSchema(obj["additionalProperties"]);
 			if (obj.ContainsKey("definitions"))
@@ -577,11 +551,8 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
-			if (BooleanSchemaDefinition.HasValue) return BooleanSchemaDefinition;
+			if (BooleanSchemaDefinition != null) return BooleanSchemaDefinition;
 
-			var requiredProperties = new List<string>();
-			if (Properties != null)
-				requiredProperties = Properties.Where(p => p.IsRequired).Select(p => p.Name).ToList();
 			var json = new JsonObject();
 			if (Id != null) json["$id"] = Id;
 			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
@@ -612,13 +583,12 @@ namespace Manatee.Json.Schema
 			if (Contains != null) json["contains"] = Contains.ToJson(serializer);
 			if (MaxProperties.HasValue) json["maxProperties"] = MaxProperties;
 			if (MinProperties.HasValue) json["minProperties"] = MinProperties;
-			if (requiredProperties.Any()) json["required"] = requiredProperties.ToJson();
+			if (Required != null) json["required"] = Required.ToJson();
 			if (AdditionalProperties != null)
 				json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
 			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
-			if (Properties != null && Properties.Any(p => !p.IsHidden))
-				// TODO: Type can be null if the schema was created in code.
-				json["properties"] = Properties.Where(p => !p.IsHidden).ToDictionary(p => p.Name, p => p.Type).ToJson(serializer);
+			if (Properties != null)
+				json["properties"] = Properties.ToJson(serializer);
 			if (PatternProperties != null && PatternProperties.Any())
 				json["patternProperties"] = PatternProperties.ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value).ToJson(serializer);
 			if ((Dependencies != null) && Dependencies.Any())

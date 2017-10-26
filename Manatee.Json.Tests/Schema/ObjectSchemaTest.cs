@@ -25,14 +25,11 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							new JsonSchemaPropertyDefinition("test1")
-								{
-									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
-									IsRequired = true
-								}
-						}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+						},
+					Required = new List<string> {"test1"}
 				};
 			var json = new JsonObject();
 
@@ -46,7 +43,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						}
@@ -63,7 +60,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						}
@@ -80,7 +77,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						}
@@ -97,7 +94,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						},
@@ -119,7 +116,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						},
@@ -141,7 +138,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						},
@@ -160,7 +157,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						},
@@ -179,7 +176,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
 						},

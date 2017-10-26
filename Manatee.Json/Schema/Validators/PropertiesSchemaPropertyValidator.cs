@@ -7,7 +7,8 @@ namespace Manatee.Json.Schema.Validators
 	internal abstract class PropertiesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
 		where T : IJsonSchema
 	{
-		protected abstract JsonSchemaPropertyDefinitionCollection GetProperties(T schema);
+		protected abstract IDictionary<string, IJsonSchema> GetProperties(T schema);
+		protected abstract IEnumerable<string> GetRequiredProperties(T schema);
 		protected abstract AdditionalProperties GetAdditionalProperties(T schema);
 		protected abstract Dictionary<Regex, IJsonSchema> GetPatternProperties(T schema);
 		protected virtual IEnumerable<SchemaValidationError> AdditionValidation(T schema, JsonValue json, JsonValue root)
@@ -26,23 +27,24 @@ namespace Manatee.Json.Schema.Validators
 		{
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
-			var properties = GetProperties(schema) ?? new JsonSchemaPropertyDefinitionCollection();
+			var properties = GetProperties(schema) ?? new Dictionary<string, IJsonSchema>();
 			foreach (var property in properties)
 			{
-				if (!obj.ContainsKey(property.Name))
-				{
-					if (property.IsRequired)
-						errors.Add(new SchemaValidationError(property.Name, "Required property not found."));
-					continue;
-				}
-				var result = property.Type?.Validate(obj[property.Name], root);
+				if (!obj.ContainsKey(property.Key)) continue;
+				var result = property.Value?.Validate(obj[property.Key], root);
 				if (result != null && !result.Valid)
-					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Name)));
+					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Key)));
+			}
+			var requiredProperties = GetRequiredProperties(schema) ?? new List<string>();
+			foreach (var property in requiredProperties)
+			{
+				if (!obj.ContainsKey(property))
+					errors.Add(new SchemaValidationError(property, "Required property not found."));
 			}
 			// if additionalProperties is false, we perform the property elimination,
 			// otherwise properties and patternProperties applies to all properties.
 			var extraData = Equals(GetAdditionalProperties(schema), AdditionalProperties.False)
-				                ? obj.Where(kvp => properties.All(p => p.Name != kvp.Key))
+				                ? obj.Where(kvp => properties.All(p => p.Key != kvp.Key))
 				                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
 				                : obj;
 			if (GetPatternProperties(schema) != null)
@@ -65,7 +67,7 @@ namespace Manatee.Json.Schema.Validators
 			}
 			// additionalProperties never applies to properties checked by
 			// properties or patternProperties.
-			extraData = extraData.Where(kvp => properties.All(p => p.Name != kvp.Key))
+			extraData = extraData.Where(kvp => properties.All(p => p.Key != kvp.Key))
 			                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 			if (GetAdditionalProperties(schema) != null)
 			{
@@ -88,9 +90,13 @@ namespace Manatee.Json.Schema.Validators
 
 	internal class PropertiesSchema04PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema04>
 	{
-		protected override JsonSchemaPropertyDefinitionCollection GetProperties(JsonSchema04 schema)
+		protected override IDictionary<string, IJsonSchema> GetProperties(JsonSchema04 schema)
 		{
 			return schema.Properties;
+		}
+		protected override IEnumerable<string> GetRequiredProperties(JsonSchema04 schema)
+		{
+			return schema.Required;
 		}
 		protected override AdditionalProperties GetAdditionalProperties(JsonSchema04 schema)
 		{
@@ -109,9 +115,13 @@ namespace Manatee.Json.Schema.Validators
 			return base.Applies(schema, json) || (json.Type == JsonValueType.Object && schema.PropertyNames != null);
 		}
 
-		protected override JsonSchemaPropertyDefinitionCollection GetProperties(JsonSchema06 schema)
+		protected override IDictionary<string, IJsonSchema> GetProperties(JsonSchema06 schema)
 		{
 			return schema.Properties;
+		}
+		protected override IEnumerable<string> GetRequiredProperties(JsonSchema06 schema)
+		{
+			return schema.Required;
 		}
 		protected override AdditionalProperties GetAdditionalProperties(JsonSchema06 schema)
 		{
@@ -126,7 +136,7 @@ namespace Manatee.Json.Schema.Validators
 		{
 			return schema.PropertyNames == null
 				       ? new SchemaValidationError[] { }
-				       : json.Object.Keys.SelectMany(k => schema.PropertyNames.Validate(k).Errors);
+				       : json.Object.Keys.SelectMany(k => schema.PropertyNames.Validate(k, root).Errors);
 		}
 	}
 }
