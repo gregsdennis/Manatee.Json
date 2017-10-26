@@ -5,11 +5,11 @@ REM              MyGet requires the quotes, but the command line doesn't like th
 
 REM Get latest for test suites
 cd json-patch-tests
-"%GitPath%" pull
+"%GitPath%" pull https://github.com/json-patch/json-patch-tests.git master
 cd ../Json-Path-Test-Suite
-"%GitPath%" pull
+"%GitPath%" pull https://github.com/gregsdennis/JSON-Path-Test-Suite.git master
 cd ../Json-Schema-Test-Suite
-"%GitPath%" pull
+"%GitPath%" pull https://github.com/json-schema-org/JSON-Schema-Test-Suite.git master
 cd ..
 
 REM Start build
