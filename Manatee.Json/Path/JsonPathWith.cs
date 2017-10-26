@@ -31,33 +31,33 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to follow.</param>
 		/// <returns>A new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="Length()"/></remarks>
-		public static JsonPath Name(string name)
+		public static JsonPath Name(string name = null)
 		{
 			var path = new JsonPath();
-			if (name == "length")
-				path.Operators.Add(LengthOperator.Instance);
-			else
-				path.Operators.Add(new NameOperator(name));
+
+			switch (name)
+			{
+				case null:
+					path.Operators.Add(WildCardOperator.Instance);
+					break;
+				case "length":
+					path.Operators.Add(LengthOperator.Instance);
+					break;
+				default:
+					path.Operators.Add(new NameOperator(name));
+					break;
+			}
 			return path;
 		}
 		/// <summary>
 		/// Creates a new <see cref="JsonPath"/> object which starts by including all object properties.
 		/// </summary>
 		/// <returns>A new <see cref="JsonPath"/>.</returns>
+		[Obsolete("Please use 'Name()' without a parameter to insert a property name wildcard.")]
 		public static JsonPath Wildcard()
 		{
 			var path = new JsonPath();
 			path.Operators.Add(WildCardOperator.Instance);
-			return path;
-		}
-		/// <summary>
-		/// Creates a new <see cref="JsonPath"/> object which starts by searching for all values.
-		/// </summary>
-		/// <returns>A new <see cref="JsonPath"/>.</returns>
-		public static JsonPath Search()
-		{
-			var path = new JsonPath();
-			path.Operators.Add(new SearchOperator(WildCardSearchParameter.Instance));
 			return path;
 		}
 		/// <summary>
@@ -66,10 +66,12 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to search for.</param>
 		/// <returns>A new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="SearchLength()"/></remarks>
-		public static JsonPath Search(string name)
+		public static JsonPath Search(string name = null)
 		{
 			var path = new JsonPath();
-			path.Operators.Add(new SearchOperator(new NameSearchParameter(name)));
+			path.Operators.Add(new SearchOperator(name == null
+													  ? (IJsonPathSearchParameter) WildCardSearchParameter.Instance
+													  : new NameSearchParameter(name)));
 			return path;
 		}
 		/// <summary>
@@ -91,8 +93,8 @@ namespace Manatee.Json.Path
 		{
 			var path = new JsonPath();
 			path.Operators.Add(new SearchOperator(slices.Any()
-				                                      ? new ArraySearchParameter(new SliceQuery(slices))
-				                                      : new ArraySearchParameter(WildCardQuery.Instance)));
+													  ? new ArraySearchParameter(new SliceQuery(slices))
+													  : new ArraySearchParameter(WildCardQuery.Instance)));
 			return path;
 		}
 		/// <summary>
@@ -126,8 +128,8 @@ namespace Manatee.Json.Path
 		{
 			var path = new JsonPath();
 			path.Operators.Add(!slices.Any()
-				                   ? new ArrayOperator(WildCardQuery.Instance)
-				                   : new ArrayOperator(new SliceQuery(slices)));
+								   ? new ArrayOperator(WildCardQuery.Instance)
+								   : new ArrayOperator(new SliceQuery(slices)));
 			return path;
 		}
 		/// <summary>
@@ -176,14 +178,22 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to follow.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="Length(JsonPath)"/></remarks>
-		public static JsonPath Name(this JsonPath path, string name)
+		public static JsonPath Name(this JsonPath path, string name = null)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
-			if (name == "length")
-				newPath.Operators.Add(LengthOperator.Instance);
-			else
-				newPath.Operators.Add(new NameOperator(name));
+			switch (name)
+			{
+				case null:
+					newPath.Operators.Add(WildCardOperator.Instance);
+					break;
+				case "length":
+					newPath.Operators.Add(LengthOperator.Instance);
+					break;
+				default:
+					newPath.Operators.Add(new NameOperator(name));
+					break;
+			}
 			return newPath;
 		}
 		/// <summary>
@@ -191,23 +201,12 @@ namespace Manatee.Json.Path
 		/// </summary>
 		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
+		[Obsolete("Please use 'Name()' without a parameter to insert a property name wildcard.")]
 		public static JsonPath Wildcard(this JsonPath path)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
 			newPath.Operators.Add(WildCardOperator.Instance);
-			return newPath;
-		}
-		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by searching for all values.
-		/// </summary>
-		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
-		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		public static JsonPath Search(this JsonPath path)
-		{
-			var newPath = new JsonPath();
-			newPath.Operators.AddRange(path.Operators);
-			newPath.Operators.Add(new SearchOperator(WildCardSearchParameter.Instance));
 			return newPath;
 		}
 		/// <summary>
@@ -217,11 +216,13 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to follow.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="SearchLength(JsonPath)"/></remarks>
-		public static JsonPath Search(this JsonPath path, string name)
+		public static JsonPath Search(this JsonPath path, string name = null)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
-			newPath.Operators.Add(new SearchOperator(new NameSearchParameter(name)));
+		    newPath.Operators.Add(new SearchOperator(name == null
+		                                                 ? (IJsonPathSearchParameter) WildCardSearchParameter.Instance
+		                                                 : new NameSearchParameter(name)));
 			return newPath;
 		}
 		/// <summary>
@@ -247,8 +248,8 @@ namespace Manatee.Json.Path
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
 			newPath.Operators.Add(new SearchOperator(slices.Any()
-				                                         ? new ArraySearchParameter(new SliceQuery(slices))
-				                                         : new ArraySearchParameter(WildCardQuery.Instance)));
+														 ? new ArraySearchParameter(new SliceQuery(slices))
+														 : new ArraySearchParameter(WildCardQuery.Instance)));
 			return newPath;
 		}
 		/// <summary>
