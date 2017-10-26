@@ -14,7 +14,7 @@ namespace Manatee.Json.Patch
 				Schema = JsonSchema04.MetaSchema.Id,
 				Type = JsonSchemaTypeDefinition.Array,
 				Items = new JsonSchemaReference("#/definitions/operation", typeof(JsonSchema04)),
-				Definitions = new JsonSchemaTypeDefinitionCollection
+				Definitions = new Dictionary<string, IJsonSchema>
 					{
 						["operation"] = new JsonSchema04
 							{

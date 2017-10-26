@@ -257,7 +257,7 @@ namespace Manatee.Json.Tests
 				{
 					Title = "JSON schema for Something",
 					Schema = "http://json-schema.org/draft-04/schema#",
-					Definitions = new JsonSchemaTypeDefinitionCollection
+					Definitions = new Dictionary<string, IJsonSchema>
 						{
 							["something"] = new JsonSchema04
 								{

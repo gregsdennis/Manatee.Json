@@ -30,8 +30,8 @@ namespace Manatee.Json.Schema
 				Id = "http://json-schema.org/draft-06/schema#",
 				Schema = "http://json-schema.org/draft-06/schema#",
 				Title = "Core schema meta-schema",
-				Definitions = new JsonSchemaTypeDefinitionCollection
-					{
+				Definitions = new Dictionary<string, IJsonSchema>
+				{
 						["schemaArray"] = new JsonSchema06
 							{
 								Type = JsonSchemaTypeDefinition.Array,
@@ -323,7 +323,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a collection of schema type definitions.
 		/// </summary>
-		public JsonSchemaTypeDefinitionCollection Definitions { get; set; }
+		public Dictionary<string, IJsonSchema> Definitions { get; set; }
 		/// <summary>
 		/// Defines a collection of properties expected by this schema.
 		/// </summary>
@@ -473,15 +473,7 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("additionalProperties"))
 				AdditionalProperties = _ReadSchema(obj["additionalProperties"]);
 			if (obj.ContainsKey("definitions"))
-			{
-				Definitions = new JsonSchemaTypeDefinitionCollection();
-				foreach (var defn in obj["definitions"].Object)
-				{
-					var definition = new JsonSchemaTypeDefinition(defn.Key) {Definition = _ReadSchema(defn.Value)};
-
-					Definitions.Add(definition);
-				}
-			}
+				Definitions = obj["definitions"].Object.ToDictionary(kvp => kvp.Key, kvp => _ReadSchema(kvp.Value));
 			if (obj.ContainsKey("patternProperties"))
 			{
 				var patterns = obj["patternProperties"].Object;
@@ -586,7 +578,8 @@ namespace Manatee.Json.Schema
 			if (Required != null) json["required"] = Required.ToJson();
 			if (AdditionalProperties != null)
 				json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
-			if (Definitions != null) json["definitions"] = Definitions.ToDictionary(d => d.Name, d => d.Definition).ToJson(serializer);
+			if (Definitions != null)
+				json["definitions"] = Definitions.ToJson(serializer);
 			if (Properties != null)
 				json["properties"] = Properties.ToJson(serializer);
 			if (PatternProperties != null && PatternProperties.Any())
