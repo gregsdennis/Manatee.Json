@@ -147,7 +147,7 @@ namespace Manatee.Json.Tests.Path
 		[Test]
 		public void GoessnerExample3Constructed()
 		{
-			var path = JsonPathWith.Name("store").Wildcard();
+			var path = JsonPathWith.Name("store").Name();
 			var expected = new JsonArray
 				{
 					new JsonArray

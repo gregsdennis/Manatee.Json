@@ -17,13 +17,12 @@ namespace Manatee.Json.Path.Parsing
 
 			if (source[index] == '*')
 			{
-				path = path.Wildcard();
+				path = path.Name();
 				index++;
 				return null;
 			}
 
-			string key;
-			var error = source.GetKey(ref index, out key);
+		    var error = source.GetKey(ref index, out var key);
 			if (error != null) return error;
 
 			path = path.Name(key);

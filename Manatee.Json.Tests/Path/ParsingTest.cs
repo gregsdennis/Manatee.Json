@@ -31,13 +31,13 @@ namespace Manatee.Json.Tests.Path
 		[Test]
 		public void SingleWildcardObject()
 		{
-			Run(JsonPathWith.Wildcard(), "$.*");
+			Run(JsonPathWith.Name(), "$.*");
 		}
 		[Test]
 		public void NamedObjectWithWildcardObject()
 		{
 			var text = "$.name.*";
-			var expected = JsonPathWith.Name("name").Wildcard();
+			var expected = JsonPathWith.Name("name").Name();
 
 			var actual = JsonPath.Parse(text);
 
@@ -47,7 +47,7 @@ namespace Manatee.Json.Tests.Path
 		public void WildcardObjectWithNamedObject()
 		{
 			var text = "$.*.name";
-			var expected = JsonPathWith.Wildcard().Name("name");
+			var expected = JsonPathWith.Name().Name("name");
 
 			var actual = JsonPath.Parse(text);
 
@@ -107,7 +107,7 @@ namespace Manatee.Json.Tests.Path
 		public void WildcardObjectWithNamedSearch()
 		{
 			var text = "$.*..name";
-			var expected = JsonPathWith.Wildcard().Search("name");
+			var expected = JsonPathWith.Name().Search("name");
 
 			var actual = JsonPath.Parse(text);
 
