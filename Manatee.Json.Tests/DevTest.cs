@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Manatee.Json.Internal;
 using Manatee.Json.Patch;
 using Manatee.Json.Schema;
+using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Schema.TestSuite;
 using NUnit.Framework;
 
