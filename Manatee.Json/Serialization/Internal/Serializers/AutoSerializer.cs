@@ -14,12 +14,15 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			var json = new JsonObject();
 			var type = typeof (T);
-			if ((serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never) &&
-				(type.GetTypeInfo().IsAbstract || type.GetTypeInfo().IsInterface || (serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always)))
+			var objectType = obj.GetType();
+			if (serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never &&
+				(serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always ||
+				 type.GetTypeInfo().IsAbstract || type.GetTypeInfo().IsInterface ||
+				 (type != objectType && serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.OnlyForAbstractions)))
 			{
-				type = obj.GetType();
-				json.Add(Constants.TypeKey, type.AssemblyQualifiedName);
+				json.Add(Constants.TypeKey, objectType.AssemblyQualifiedName);
 			}
+			type = obj.GetType();
 			var propertyList = ReflectionCache.GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _SerializeValues(obj, serializer, propertyList);
 			_ConstructJsonObject(json, map);
@@ -133,8 +136,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				var name = memberInfo.SerializationName;
 				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
-					                                                                            ? StringComparison.CurrentCultureIgnoreCase
-					                                                                            : StringComparison.CurrentCulture) == 0);
+																								? StringComparison.CurrentCultureIgnoreCase
+																								: StringComparison.CurrentCulture) == 0);
 				if (kvp.Key != null)
 				{
 					var value = kvp.Value;

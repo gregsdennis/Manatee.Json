@@ -50,10 +50,9 @@ namespace Manatee.Json.Serialization.Internal
 				};
 		}
 
-		public static ISerializer GetSerializer<T>(JsonSerializerOptions options, JsonValue json = null)
+		public static ISerializer GetSerializer(Type typeToSerialize, JsonSerializerOptions options, JsonValue json = null)
 		{
-			var type = typeof (T);
-			var typeToSerialize = JsonSerializationAbstractionMap.GetMap(type);
+			typeToSerialize = JsonSerializationAbstractionMap.GetMap(typeToSerialize);
 			var typeInfo = typeToSerialize.GetTypeInfo();
 			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeInfo))
 				return _BuildSerializer(_schemaSerializer);

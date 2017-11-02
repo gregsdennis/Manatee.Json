@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Manatee.Json.Tests
 {
 	[TestFixture]
-	//[Ignore("This test fixture for development purposes only.")]
+	[Ignore("This test fixture for development purposes only.")]
 	public class DevTest
 	{
 		[Test]

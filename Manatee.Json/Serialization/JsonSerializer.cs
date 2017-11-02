@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Serialization.Internal;
+﻿using System;
+using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
@@ -29,7 +30,7 @@ namespace Manatee.Json.Serialization
 		public JsonValue Serialize<T>(T obj)
 		{
 			_callCount++;
-			var serializer = SerializerFactory.GetSerializer<T>(Options);
+			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), Options);
 			var json = serializer.Serialize(obj, this);
 			if (--_callCount == 0)
 			{
@@ -70,7 +71,7 @@ namespace Manatee.Json.Serialization
 		public T Deserialize<T>(JsonValue json)
 		{
 			_callCount++;
-			var serializer = SerializerFactory.GetSerializer<T>(Options, json);
+			var serializer = SerializerFactory.GetSerializer(typeof(T), Options, json);
 			var obj = serializer.Deserialize<T>(json, this);
 			if (--_callCount == 0)
 			{

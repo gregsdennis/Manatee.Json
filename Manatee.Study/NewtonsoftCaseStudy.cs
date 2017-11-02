@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Manatee.Study
 {
     [TestFixture]
+    [Ignore("This test suite is for development purposes only.")]
     public class NewtonsoftCaseStudy
     {
         private class MyClass
