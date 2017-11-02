@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Test_References;
 using NUnit.Framework;
@@ -542,6 +543,33 @@ namespace Manatee.Json.Tests.Serialization
 			JsonValue expected = false;
 			var serializer = new JsonSerializer();
 			var actual = serializer.Serialize((bool?) false);
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void NameTransformation()
+		{
+		    var serializer = new JsonSerializer
+		        {
+		            Options =
+		                {
+		                    SerializationNameTransform = s => new string(s.Reverse().ToArray())
+		                }
+		        };
+			// DoubleProp remains default
+			var obj = new ObjectWithBasicProps
+				{
+					StringProp = "stringValue",
+					IntProp = 42,
+					BoolProp = true
+				};
+			JsonValue expected = new JsonObject
+				{
+					{"porPgnirtS", "stringValue"},
+					{"porPtnI", 42},
+					{"porPlooB", true}
+				};
+			var actual = serializer.Serialize(obj);
+			serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
 	}

@@ -22,7 +22,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			var propertyList = ReflectionCache.GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _SerializeValues(obj, serializer, propertyList);
-			_ConstructJsonObject(json, map);
+			_ConstructJsonObject(json, map, serializer.Options);
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
 		public JsonValue SerializeType<T>(JsonSerializer serializer)
@@ -31,7 +31,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var type = typeof (T);
 			var propertyList = ReflectionCache.GetTypeMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _SerializeTypeValues(serializer, propertyList);
-			_ConstructJsonObject(json, map);
+			_ConstructJsonObject(json, map, serializer.Options);
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
@@ -119,11 +119,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return dict;
 		}
-		private static void _ConstructJsonObject(JsonObject json, Dictionary<SerializationInfo, JsonValue> memberMap)
+		private static void _ConstructJsonObject(JsonObject json, Dictionary<SerializationInfo, JsonValue> memberMap, JsonSerializerOptions options)
 		{
 			foreach (var memberInfo in memberMap.Keys)
 			{
-				json.Add(memberInfo.SerializationName, memberMap[memberInfo]);
+			    var name = options.SerializationNameTransform(memberInfo.SerializationName);
+				json.Add(name, memberMap[memberInfo]);
 			}
 		}
 		private static Dictionary<SerializationInfo, object> _DeserializeValues<T>(T obj, JsonValue json, JsonSerializer serializer, IEnumerable<SerializationInfo> members, bool ignoreCase)
