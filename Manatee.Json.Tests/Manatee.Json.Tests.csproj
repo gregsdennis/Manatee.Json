@@ -164,6 +164,9 @@
     <None Include="Files\Issue50A.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Files\SchemaAttribute.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Test References\InvalidSchemaValidatedClass.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -171,6 +174,7 @@
     <None Include="Test References\SchemaValidatedClass.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Serialization\SchemaAttributeTests.cs" />
     <Compile Include="Transform\ClientTest.cs" />
     <Compile Include="Path\GoessnerExamplesTest.cs" />
     <Compile Include="Schema\AllOfSchemaTest.cs" />
