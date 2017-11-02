@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Manatee.Json.Internal;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization.Internal.Serializers;
 
@@ -79,10 +78,9 @@ namespace Manatee.Json.Serialization.Internal
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			ISerializer serializer;
-			if (_library.TryGetValue(typeToSerialize, out serializer))
-				return _BuildSerializer(serializer);
-			return _BuildSerializer(_autoSerializer);
+			return _BuildSerializer(_library.TryGetValue(typeToSerialize, out var serializer)
+				                        ? serializer
+				                        : _autoSerializer);
 		}
 		public static ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
 		{
@@ -91,7 +89,9 @@ namespace Manatee.Json.Serialization.Internal
 
 		private static ISerializer _BuildSerializer(ISerializer innerSerializer)
 		{
-			return new DefaultValueSerializer(new ReferencingSerializer(innerSerializer));
+			return new SchemaValidator(
+				new DefaultValueSerializer(
+					new ReferencingSerializer(innerSerializer)));
 		}
 	}
 }

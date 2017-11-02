@@ -6,11 +6,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	{
 		public MemberInfo MemberInfo { get; }
 		public string SerializationName { get; }
+		public bool ShouldTransform { get; }
 
-		public SerializationInfo(MemberInfo memberInfo, string serializationName)
+	    public SerializationInfo(MemberInfo memberInfo, string serializationName, bool shouldTransform)
 		{
 			MemberInfo = memberInfo;
 			SerializationName = serializationName;
+		    ShouldTransform = shouldTransform;
 		}
 
 		public override bool Equals(object obj)
