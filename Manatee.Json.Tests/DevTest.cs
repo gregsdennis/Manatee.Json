@@ -17,7 +17,12 @@ namespace Manatee.Json.Tests
 		// TODO: Add categories to exclude this test.
 		public void Test1()
 		{
-			Console.WriteLine(JsonPatch.Schema.ToJson(null).GetIndentedString());
+			var list = new List<object> {1, false, "hello"};
+
+			var serializer = new JsonSerializer();
+			var json = serializer.Serialize(list);
+
+			Console.WriteLine(json);
 		}
 	}
 }

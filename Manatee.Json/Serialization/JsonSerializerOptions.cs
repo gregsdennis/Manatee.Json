@@ -99,6 +99,11 @@ namespace Manatee.Json.Serialization
 	        get { return _deserializationNameTransform ?? (_deserializationNameTransform = s => s); }
 	        set { _deserializationNameTransform = value; }
 	    }
+		/// <summary>
+		/// Gets and sets whether the serializer will serialize only the properties defined by the
+		/// type given as the generic parameter.
+		/// </summary>
+		public bool OnlyExplicitProperties { get; set; }
 
 	    internal bool IncludeContentSample { get; set; }
 
