@@ -81,6 +81,11 @@ namespace Manatee.Json.Serialization
 		/// Gets and sets whether public fields should be serialized during autoserialization.
 		/// </summary>
 		public bool AutoSerializeFields { get; set; }
+		/// <summary>
+		/// Gets and sets whether the serializer will serialize only the properties defined by the
+		/// type given as the generic parameter.
+		/// </summary>
+		public bool OnlyExplicitProperties { get; set; }
 
 		internal bool IncludeContentSample { get; set; }
 

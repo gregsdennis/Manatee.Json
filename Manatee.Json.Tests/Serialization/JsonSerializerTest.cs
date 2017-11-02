@@ -547,27 +547,27 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void GreedySerialization()
 		{
-		    JsonValue expected = new JsonObject
-		        {
-		            {"#Type", typeof(ObjectWithBasicProps).AssemblyQualifiedName},
-		            {"StringProp", "string"},
-		            {"IntProp", 5},
-		            {"DoubleProp", 10},
-		            {"BoolProp", true},
-		            {"EnumProp", 2},
-		            {"MapToMe", 1}
-		        };
-		    var obj = new ObjectWithBasicProps
-		        {
-		            BoolProp = true,
-		            DoubleProp = 10,
-		            EnumProp = TestEnum.EnumValueWithDescription,
-		            IgnoreProp = "ignore",
-		            IntProp = 5,
-		            MappedProp = 1,
-		            StringProp = "string"
-		        };
-		    var serializer = new JsonSerializer();
+			JsonValue expected = new JsonObject
+				{
+					{"#Type", typeof(ObjectWithBasicProps).AssemblyQualifiedName},
+					{"StringProp", "string"},
+					{"IntProp", 5},
+					{"DoubleProp", 10},
+					{"BoolProp", true},
+					{"EnumProp", 2},
+					{"MapToMe", 1}
+				};
+			var obj = new ObjectWithBasicProps
+				{
+					BoolProp = true,
+					DoubleProp = 10,
+					EnumProp = TestEnum.EnumValueWithDescription,
+					IgnoreProp = "ignore",
+					IntProp = 5,
+					MappedProp = 1,
+					StringProp = "string"
+				};
+			var serializer = new JsonSerializer();
 			var actual = serializer.Serialize<object>(obj);
 			Assert.AreEqual(expected, actual);
 		}
@@ -583,23 +583,48 @@ namespace Manatee.Json.Tests.Serialization
 					{"EnumProp", 2},
 					{"MapToMe", 1}
 				};
-		    var obj = new ObjectWithBasicProps
-		        {
-		            BoolProp = true,
-		            DoubleProp = 10,
-		            EnumProp = TestEnum.EnumValueWithDescription,
-		            IgnoreProp = "ignore",
-		            IntProp = 5,
-		            MappedProp = 1,
-		            StringProp = "string"
-		        };
-		    var serializer = new JsonSerializer
-		        {
-		            Options =
-		                {
-		                    TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
-		                }
-		        };
+			var obj = new ObjectWithBasicProps
+				{
+					BoolProp = true,
+					DoubleProp = 10,
+					EnumProp = TestEnum.EnumValueWithDescription,
+					IgnoreProp = "ignore",
+					IntProp = 5,
+					MappedProp = 1,
+					StringProp = "string"
+				};
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
+						}
+				};
+			var actual = serializer.Serialize<object>(obj);
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void GreedySerializationDisabled()
+		{
+			var expected = JsonValue.Null;
+			var obj = new ObjectWithBasicProps
+				{
+					BoolProp = true,
+					DoubleProp = 10,
+					EnumProp = TestEnum.EnumValueWithDescription,
+					IgnoreProp = "ignore",
+					IntProp = 5,
+					MappedProp = 1,
+					StringProp = "string"
+				};
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions,
+							OnlyExplicitProperties = true
+						}
+				};
 			var actual = serializer.Serialize<object>(obj);
 			Assert.AreEqual(expected, actual);
 		}

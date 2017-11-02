@@ -15,14 +15,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var json = new JsonObject();
 			var type = typeof (T);
 			var objectType = obj.GetType();
+			bool typeKeyAdded = false;
 			if (serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never &&
 				(serializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always ||
 				 type.GetTypeInfo().IsAbstract || type.GetTypeInfo().IsInterface ||
 				 (type != objectType && serializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.OnlyForAbstractions)))
 			{
+				typeKeyAdded = true;
 				json.Add(Constants.TypeKey, objectType.AssemblyQualifiedName);
 			}
-			type = obj.GetType();
+			if (typeKeyAdded || !serializer.Options.OnlyExplicitProperties)
+				type = obj.GetType();
 			var propertyList = ReflectionCache.GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _SerializeValues(obj, serializer, propertyList);
 			_ConstructJsonObject(json, map);
