@@ -80,10 +80,9 @@ namespace Manatee.Json.Serialization.Internal
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			ISerializer serializer;
-			if (_library.TryGetValue(typeToSerialize, out serializer))
-				return _BuildSerializer(serializer);
-			return _BuildSerializer(_autoSerializer);
+			return _BuildSerializer(_library.TryGetValue(typeToSerialize, out var serializer)
+				                        ? serializer
+				                        : _autoSerializer);
 		}
 		public static ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
 		{
