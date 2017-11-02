@@ -548,25 +548,26 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void NameTransformation()
 		{
-		    var serializer = new JsonSerializer
-		        {
-		            Options =
-		                {
-		                    SerializationNameTransform = s => new string(s.Reverse().ToArray())
-		                }
-		        };
-			// DoubleProp remains default
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							SerializationNameTransform = s => new string(s.Reverse().ToArray())
+						}
+				};
 			var obj = new ObjectWithBasicProps
 				{
 					StringProp = "stringValue",
 					IntProp = 42,
-					BoolProp = true
+					BoolProp = true,
+					MappedProp = 4
 				};
 			JsonValue expected = new JsonObject
 				{
 					{"porPgnirtS", "stringValue"},
 					{"porPtnI", 42},
-					{"porPlooB", true}
+					{"porPlooB", true},
+					{"MapToMe", 4}
 				};
 			var actual = serializer.Serialize(obj);
 			serializer.Options = null;

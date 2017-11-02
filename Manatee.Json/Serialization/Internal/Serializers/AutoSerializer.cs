@@ -119,20 +119,24 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return dict;
 		}
-		private static void _ConstructJsonObject(JsonObject json, Dictionary<SerializationInfo, JsonValue> memberMap, JsonSerializerOptions options)
-		{
-			foreach (var memberInfo in memberMap.Keys)
-			{
-			    var name = options.SerializationNameTransform(memberInfo.SerializationName);
-				json.Add(name, memberMap[memberInfo]);
-			}
-		}
-		private static Dictionary<SerializationInfo, object> _DeserializeValues<T>(T obj, JsonValue json, JsonSerializer serializer, IEnumerable<SerializationInfo> members, bool ignoreCase)
+	    private static void _ConstructJsonObject(JsonObject json, Dictionary<SerializationInfo, JsonValue> memberMap, JsonSerializerOptions options)
+	    {
+	        foreach (var memberInfo in memberMap.Keys)
+	        {
+	            var name = memberInfo.SerializationName;
+	            if (memberInfo.ShouldTransform)
+	                name = options.SerializationNameTransform(name);
+	            json.Add(name, memberMap[memberInfo]);
+	        }
+	    }
+	    private static Dictionary<SerializationInfo, object> _DeserializeValues<T>(T obj, JsonValue json, JsonSerializer serializer, IEnumerable<SerializationInfo> members, bool ignoreCase)
 		{
 			var dict = new Dictionary<SerializationInfo, object>();
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
+			    if (memberInfo.ShouldTransform)
+			        name = serializer.Options.DeserializationNameTransform(name);
 				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
 					                                                                            ? StringComparison.CurrentCultureIgnoreCase
 					                                                                            : StringComparison.CurrentCulture) == 0);

@@ -609,5 +609,32 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(typeof (Derived<int>), value.GetType());
 		}
+		[Test]
+		public void NameTransformation()
+		{
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DeserializationNameTransform = s => new string(s.Reverse().ToArray())
+						}
+				};
+			var json = new JsonObject
+				{
+					{"porPgnirtS", "stringValue"},
+					{"porPtnI", 42},
+					{"porPlooB", true},
+						{"MapToMe", 4}
+				};
+			var expected = new ObjectWithBasicProps
+				{
+					StringProp = "stringValue",
+					IntProp = 42,
+					BoolProp = true,
+					MappedProp = 4
+				};
+			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }
