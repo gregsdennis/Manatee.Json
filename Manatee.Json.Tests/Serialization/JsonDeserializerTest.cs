@@ -8,8 +8,6 @@ using NUnit.Framework;
 namespace Manatee.Json.Tests.Serialization
 {
 	[TestFixture]
-	//[DeploymentItem("SchemaValidatedClass.json")]
-	//[DeploymentItem("InvalidSchemaValidatedClass.json")]
 	public class JsonDeserializerTest
 	{
 		[Test]
@@ -635,6 +633,26 @@ namespace Manatee.Json.Tests.Serialization
 				};
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void DeserializeDynamic()
+		{
+			var json = new JsonObject
+				{
+					["StringProp"] = "string",
+					["IntProp"] = 5,
+					["NestProp"] = new JsonObject
+						{
+							["Value"] = false
+						}
+				};
+			var serializer = new JsonSerializer();
+
+			var dyn = serializer.Deserialize<dynamic>(json);
+
+			Assert.AreEqual("string", dyn.StringProp);
+			Assert.AreEqual(5, dyn.IntProp);
+			Assert.AreEqual(false, dyn.NestProp.Value);
 		}
 	}
 }

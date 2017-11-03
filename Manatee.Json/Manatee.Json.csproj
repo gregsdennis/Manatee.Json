@@ -54,4 +54,9 @@ Added implicit casts to aid in schema creation in code.
     <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Dynamic.Runtime">
+      <HintPath>C:\Users\gregorydennis\.nuget\packages\system.dynamic.runtime\4.3.0\ref\netstandard1.3\System.Dynamic.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

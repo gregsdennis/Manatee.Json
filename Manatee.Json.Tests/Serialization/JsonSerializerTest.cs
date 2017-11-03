@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Test_References;
@@ -656,6 +657,42 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Serialize(obj);
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void SerializeDynamic()
+		{
+			dynamic dyn = new ExpandoObject();
+			dyn.StringProp = "string";
+			dyn.IntProp = 5;
+			dyn.NestProp = new ExpandoObject();
+			dyn.NestProp.Value = new ObjectWithBasicProps
+				{
+					BoolProp = true
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["StringProp"] = "string",
+					["IntProp"] = 5,
+					["NestProp"] = new JsonObject
+						{
+							["Value"] = new JsonObject
+								{
+									["BoolProp"] = true
+								}
+						}
+				};
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
+						}
+				};
+			var json = serializer.Serialize<dynamic>(dyn);
+
+			Assert.AreEqual(expected, json);
 		}
 	}
 }

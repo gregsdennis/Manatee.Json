@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Runtime.CompilerServices;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
@@ -11,19 +12,31 @@ namespace Manatee.Json.Tests.Console
 	{
 		static void Main(string[] args)
 		{
-			var json = new JsonObject
-				{
-					["test1"] = 1,
-					["test2"] = "hello"
-				};
-			var serializer = new JsonSerializer();
-			var obj = serializer.Deserialize<ITest>(json);
+			dynamic dyn = new ExpandoObject();
+			dyn.StringProp = "string";
+			dyn.IntProp = 5;
+			dyn.NestProp = new ExpandoObject();
+			dyn.NestProp.Value = false;
 
-			System.Console.WriteLine(obj.Test1);
-			System.Console.WriteLine(obj.Test2);
-			
-			var schema04json = JsonSchema04.MetaSchema.ToJson(null);
-			var schema04 = JsonSchemaFactory.FromJson(schema04json);
+			JsonValue expected = new JsonObject
+				{
+					["StringProp"] = "string",
+					["IntProp"] = 5,
+					["NestProp"] = new JsonObject
+						{
+							["Value"] = false
+						}
+				};
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
+						}
+				};
+			var json = serializer.Serialize<dynamic>(dyn);
+			System.Console.WriteLine(json);
 
 			System.Console.ReadLine();
 		}
