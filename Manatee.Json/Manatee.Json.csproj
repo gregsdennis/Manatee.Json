@@ -15,6 +15,7 @@
 Added option to serialize only properties defined by type parameter or all properties of target object.
 Added property name transformation.
 Added Schema attribute for validation during deserialization.
+Added support for serializing dynamics.
 Depricated JsonPathWith.Wildcard() in favor of .Name().
 
 v8.2.0

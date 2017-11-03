@@ -569,7 +569,7 @@ namespace Manatee.Json.Tests.Serialization
 					MappedProp = 1,
 					StringProp = "string"
 				};
-			var serializer = new JsonSerializer();
+			var serializer = new JsonSerializer {Options = {TypeNameSerializationBehavior = TypeNameSerializationBehavior.Auto}};
 			var actual = serializer.Serialize<object>(obj);
 			Assert.AreEqual(expected, actual);
 		}
@@ -595,13 +595,7 @@ namespace Manatee.Json.Tests.Serialization
 					MappedProp = 1,
 					StringProp = "string"
 				};
-			var serializer = new JsonSerializer
-				{
-					Options =
-						{
-							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
-						}
-				};
+			var serializer = new JsonSerializer();
 			var actual = serializer.Serialize<object>(obj);
 			Assert.AreEqual(expected, actual);
 		}
@@ -619,14 +613,7 @@ namespace Manatee.Json.Tests.Serialization
 					MappedProp = 1,
 					StringProp = "string"
 				};
-			var serializer = new JsonSerializer
-				{
-					Options =
-						{
-							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions,
-							OnlyExplicitProperties = true
-						}
-				};
+			var serializer = new JsonSerializer {Options = {OnlyExplicitProperties = true}};
 			var actual = serializer.Serialize<object>(obj);
 			Assert.AreEqual(expected, actual);
 		}

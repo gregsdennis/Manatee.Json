@@ -122,6 +122,7 @@ namespace Manatee.Json.Serialization
 		public JsonSerializerOptions()
 		{
 			PropertySelectionStrategy = PropertySelectionStrategy.ReadWriteOnly;
+			TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions;
 		}
 		/// <summary>
 		/// Creates a new instance of <see cref="JsonSerializerOptions"/> by copying an existing

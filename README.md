@@ -81,6 +81,7 @@ Manatee.Json also:
 Serialization features:
 
 - De/Serialize abstraction types (abstract classes and interfaces) by type registration
+- De/Serialize dynamic types
 - JIT type creation for unregistered abstraction types
 - De/Serialize anonymous types
 - Fully customizable serialization of both 1st- and 3rd-party types
