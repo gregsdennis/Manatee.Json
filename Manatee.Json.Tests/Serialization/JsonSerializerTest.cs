@@ -694,5 +694,23 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, json);
 		}
+		[Test]
+		public void SerializeListOfRandomStuff()
+		{
+			var list = new List<object> { 1, false, "string", new ObjectWithBasicProps { DoubleProp = 5.5 } };
+
+			JsonValue expected = new JsonArray { 1, false, "string", new JsonObject { ["DoubleProp"] = 5.5 } };
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
+						}
+				};
+			var json = serializer.Serialize<dynamic>(list);
+
+			Assert.AreEqual(expected, json);
+		}
 	}
 }

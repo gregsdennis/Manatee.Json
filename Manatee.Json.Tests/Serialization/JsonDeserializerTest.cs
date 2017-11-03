@@ -654,5 +654,24 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(5, dyn.IntProp);
 			Assert.AreEqual(false, dyn.NestProp.Value);
 		}
+		[Test]
+		public void DeserializeListOfRandomStuff()
+		{
+			JsonValue json = new JsonArray { 1, false, "string", new JsonObject { ["DoubleProp"] = 5.5 } };
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
+						}
+				};
+			var actual = serializer.Deserialize<dynamic>(json);
+
+			Assert.AreEqual(1, actual[0]);
+			Assert.AreEqual(false, actual[1]);
+			Assert.AreEqual("string", actual[2]);
+			Assert.AreEqual(5.5, actual[3].DoubleProp);
+		}
 	}
 }

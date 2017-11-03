@@ -22,27 +22,9 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test1()
 		{
-			dynamic dyn = new ExpandoObject();
-			dyn.StringProp = "string";
-			dyn.IntProp = 5;
-			dyn.NestProp = new ExpandoObject();
-			dyn.NestProp.Value = new ObjectWithBasicProps
-				{
-					BoolProp = true
-				};
+			var list = new List<object> {1, false, "string", new ObjectWithBasicProps {DoubleProp = 5.5}};
 
-			JsonValue expected = new JsonObject
-				{
-					["StringProp"] = "string",
-					["IntProp"] = 5,
-					["NestProp"] = new JsonObject
-						{
-							["Value"] = new JsonObject
-								{
-									["BoolProp"] = true
-								}
-						}
-				};
+			JsonValue expected = new JsonArray {1, false, "string", new JsonObject {["DoubleProp"] = 5.5}};
 
 			var serializer = new JsonSerializer
 				{
@@ -51,7 +33,7 @@ namespace Manatee.Json.Tests
 							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
 						}
 				};
-			var json = serializer.Serialize<dynamic>(dyn);
+			var json = serializer.Serialize<dynamic>(list);
 
 			Assert.AreEqual(expected, json);
 		}
