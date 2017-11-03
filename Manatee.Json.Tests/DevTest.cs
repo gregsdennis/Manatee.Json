@@ -22,6 +22,7 @@ namespace Manatee.Json.Tests
 		public void Test1()
 		{
 			JsonSerializationTypeRegistry.RegisterType(_SerializeDynamic, _DeserializeDynamic);
+			JsonSerializationTypeRegistry.RegisterType(_SerializeExpando, _DeserializeExpando);
 
 			dynamic dyn = new ExpandoObject();
 			dyn.StringProp = "string";
@@ -112,6 +113,35 @@ namespace Manatee.Json.Tests
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		private static JsonValue _SerializeExpando(ExpandoObject input, JsonSerializer serializer)
+		{
+			if (input is ExpandoObject expando)
+			{
+				var dict = (IDictionary<string, object>) expando;
+				return dict.ToDictionary(kvp => kvp.Key, kvp => serializer.Serialize<dynamic>(kvp.Value))
+				           .ToJson();
+			}
+			var type = (Type) input.GetType();
+			var serializerCopy = new JsonSerializer {Options = serializer.Options};
+			serializerCopy.Options.EncodeDefaultValues = true;
+			var serializeMethod = typeof(JsonSerializer).GetTypeInfo()
+			                                            .DeclaredMethods
+			                                            .Single(m => m.Name == nameof(JsonSerializer.Serialize) &&
+			                                                         !m.IsStatic)
+			                                            .MakeGenericMethod(type);
+			return (JsonValue) serializeMethod.Invoke(serializerCopy, new object[] {input});
+		}
+
+		private static ExpandoObject _DeserializeExpando(JsonValue json, JsonSerializer serializer)
+		{
+			var result = new ExpandoObject() as IDictionary<string, object>;
+			foreach (var kvp in json.Object)
+			{
+				result[kvp.Key] = _DeserializeDynamic(kvp.Value, serializer);
+			}
+			return (ExpandoObject) result;
 		}
 	}
 }
