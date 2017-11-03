@@ -11,7 +11,9 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>V8.3.0
+    <PackageReleaseNotes>v8.3.0
+Added option to serialize only properties defined by type parameter or all properties of target object.
+Added property name transformation.
 
 v8.2.0
 Depricated JsonPathWith.Wildcard() in favor of parameterless .Name().
