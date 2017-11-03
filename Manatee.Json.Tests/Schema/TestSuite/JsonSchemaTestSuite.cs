@@ -75,8 +75,6 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestCaseSource(nameof(TestData04))]
 		public void Run04(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
 		{
-			Console.WriteLine(fileName);
-
 			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
 			_Run<JsonSchema04>(fileName, testJson, schemaJson);
 		}
@@ -84,8 +82,6 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestCaseSource(nameof(TestData06))]
 		public void Run06(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
 		{
-			Console.WriteLine(fileName);
-
 			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema06>();
 			_Run<JsonSchema06>(fileName, testJson, schemaJson);
 		}
@@ -93,16 +89,23 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private static void _Run<T>(string fileName, JsonValue testJson, JsonValue schemaJson)
 			where T : IJsonSchema
 		{
-			Console.WriteLine(fileName);
+			try
+			{
+				JsonSchemaFactory.SetDefaultSchemaVersion<T>();
+				var test = _serializer.Deserialize<SchemaTest>(testJson);
+				var schema = _serializer.Deserialize<IJsonSchema>(schemaJson);
+				var results = schema.Validate(test.Data);
 
-			JsonSchemaFactory.SetDefaultSchemaVersion<T>();
-			var test = _serializer.Deserialize<SchemaTest>(testJson);
-			var schema = _serializer.Deserialize<IJsonSchema>(schemaJson);
-			var results = schema.Validate(test.Data);
+				if (test.Valid != results.Valid)
+					Console.WriteLine(string.Join("\n", results.Errors));
+				Assert.AreEqual(test.Valid, results.Valid);
 
-			if (test.Valid != results.Valid)
-				Console.WriteLine(string.Join("\n", results.Errors));
-			Assert.AreEqual(test.Valid, results.Valid);
+			}
+			catch (Exception)
+			{
+				Console.WriteLine(fileName);
+				throw;
+			}
 		}
 
 		[Test]
