@@ -10,7 +10,7 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSerializationException"/> class.
 		/// </summary>
-		public JsonSerializationException(string message)
-			: base(message){}
+		public JsonSerializationException(string message, Exception innerException = null)
+			: base(message, innerException) { }
 	}
 }

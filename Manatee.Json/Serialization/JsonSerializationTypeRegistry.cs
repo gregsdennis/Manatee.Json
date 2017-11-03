@@ -103,7 +103,7 @@ namespace Manatee.Json.Serialization
 
 		internal static void Encode<T>(this JsonSerializer serializer, T obj, out JsonValue json)
 		{
-			var converter = _GetToJsonConverter<T>();
+			var converter = _GetToJsonConverter(obj?.GetType() ?? typeof(T));
 			if (converter == null)
 			{
 				json = null;
@@ -128,9 +128,9 @@ namespace Manatee.Json.Serialization
 			}
 		}
 
-		private static Delegate _GetToJsonConverter<T>()
+		private static Delegate _GetToJsonConverter(Type requestedType)
 		{
-			var type = JsonSerializationAbstractionMap.GetMap(typeof(T));
+			var type = JsonSerializationAbstractionMap.GetMap(requestedType);
 			return _toJsonConverters.ContainsKey(type) ? _toJsonConverters[type] : null;
 		}
 		private static FromJsonDelegate<T> _GetFromJsonConverter<T>()

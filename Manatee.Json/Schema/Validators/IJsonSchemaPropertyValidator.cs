@@ -2,7 +2,7 @@
 {
 	internal interface IJsonSchemaPropertyValidator { }
 
-	internal interface IJsonSchemaPropertyValidator<T> : IJsonSchemaPropertyValidator
+	internal interface IJsonSchemaPropertyValidator<in T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		bool Applies(T schema, JsonValue json);

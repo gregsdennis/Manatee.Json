@@ -67,7 +67,7 @@ There are many ways to customize serialization.  See the wiki page for more deta
 Manatee.Json also:
 
 - Conforms to ECMA-404: The JSON specification
-- Supports .Net 3.5+
+- Supports .Net Standard 1.3
 - Outputs compact and prettified JSON text
 - Supports [JSON Schema](http://json-schema.org/) (both draft-04 and draft-06) **INCLUDED AND FREE!** (with object model)
 - Supports [JSONPath](http://goessner.net/articles/JsonPath/) (with object model and compile-time checking)
@@ -81,6 +81,7 @@ Manatee.Json also:
 Serialization features:
 
 - De/Serialize abstraction types (abstract classes and interfaces) by type registration
+- De/Serialize dynamic types
 - JIT type creation for unregistered abstraction types
 - De/Serialize anonymous types
 - Fully customizable serialization of both 1st- and 3rd-party types
@@ -95,7 +96,9 @@ Serialization features:
 - Supports using DI containers for object creation
 - Supports non-default constructors
 - Property name customization via attribute
+- Global property name transformations
 - Opt-out property inclusion via attribute
+- Optionally serialize only properties for requested type or all properties defined by object
 
 See the wiki pages for more information on how to use this wonderful library!
 

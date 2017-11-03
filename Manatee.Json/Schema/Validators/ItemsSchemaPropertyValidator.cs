@@ -19,8 +19,7 @@ namespace Manatee.Json.Schema.Validators
 		{
 			var errors = new List<SchemaValidationError>();
 			var array = json.Array;
-			var items = GetItems(schema) as JsonSchemaCollection;
-			if (items != null)
+		    if (GetItems(schema) is JsonSchemaCollection items)
 			{
 				// have array of schemata: validate in sequence
 				var i = 0;

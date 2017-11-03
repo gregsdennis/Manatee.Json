@@ -8,8 +8,6 @@ using NUnit.Framework;
 namespace Manatee.Json.Tests.Serialization
 {
 	[TestFixture]
-	//[DeploymentItem("SchemaValidatedClass.json")]
-	//[DeploymentItem("InvalidSchemaValidatedClass.json")]
 	public class JsonDeserializerTest
 	{
 		[Test]
@@ -608,6 +606,72 @@ namespace Manatee.Json.Tests.Serialization
 			var value = serializer.Deserialize<Impl<int>>(json);
 
 			Assert.AreEqual(typeof (Derived<int>), value.GetType());
+		}
+		[Test]
+		public void NameTransformation()
+		{
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DeserializationNameTransform = s => new string(s.Reverse().ToArray())
+						}
+				};
+			var json = new JsonObject
+				{
+					{"porPgnirtS", "stringValue"},
+					{"porPtnI", 42},
+					{"porPlooB", true},
+						{"MapToMe", 4}
+				};
+			var expected = new ObjectWithBasicProps
+				{
+					StringProp = "stringValue",
+					IntProp = 42,
+					BoolProp = true,
+					MappedProp = 4
+				};
+			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void DeserializeDynamic()
+		{
+			var json = new JsonObject
+				{
+					["StringProp"] = "string",
+					["IntProp"] = 5,
+					["NestProp"] = new JsonObject
+						{
+							["Value"] = false
+						}
+				};
+			var serializer = new JsonSerializer();
+
+			var dyn = serializer.Deserialize<dynamic>(json);
+
+			Assert.AreEqual("string", dyn.StringProp);
+			Assert.AreEqual(5, dyn.IntProp);
+			Assert.AreEqual(false, dyn.NestProp.Value);
+		}
+		[Test]
+		public void DeserializeListOfRandomStuff()
+		{
+			JsonValue json = new JsonArray { 1, false, "string", new JsonObject { ["DoubleProp"] = 5.5 } };
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
+						}
+				};
+			var actual = serializer.Deserialize<dynamic>(json);
+
+			Assert.AreEqual(1, actual[0]);
+			Assert.AreEqual(false, actual[1]);
+			Assert.AreEqual("string", actual[2]);
+			Assert.AreEqual(5.5, actual[3].DoubleProp);
 		}
 	}
 }
