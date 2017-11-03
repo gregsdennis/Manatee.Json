@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.3</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to building JSON structures.</Description>
-    <Version>8.3.0</Version>
+    <Version>9.0.0</Version>
     <Copyright>Copyright © 2017 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
@@ -11,12 +11,14 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v8.3.0
+    <PackageReleaseNotes>v9.0.0
+RELEASE NOTES
+
+v8.3.0
 Added option to serialize only properties defined by type parameter or all properties of target object.
 Added property name transformation.
 Added Schema attribute for validation during deserialization.
 Added support for serializing dynamics.
-Depricated JsonPathWith.Wildcard() in favor of .Name().
 
 v8.2.0
 Depricated JsonPathWith.Wildcard() in favor of parameterless .Name().
@@ -41,8 +43,8 @@ Added implicit casts to aid in schema creation in code.
 </PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>8.3.0.0</FileVersion>
-    <AssemblyVersion>8.0.0.0</AssemblyVersion>
+    <FileVersion>9.0.0.0</FileVersion>
+    <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
   </PropertyGroup>
