@@ -10,8 +10,10 @@ namespace Manatee.Json.Serialization
 	{
 		private static readonly IResolver _defaultResolver = new ConstructorResolver();
 		private IResolver _resolver;
+	    private Func<string, string> _serializationNameTransform;
+	    private Func<string, string> _deserializationNameTransform;
 
-		/// <summary>
+	    /// <summary>
 		/// Default options used by the serializer.
 		/// </summary>
 		public static readonly JsonSerializerOptions Default;
@@ -81,8 +83,29 @@ namespace Manatee.Json.Serialization
 		/// Gets and sets whether public fields should be serialized during autoserialization.
 		/// </summary>
 		public bool AutoSerializeFields { get; set; }
+	    /// <summary>
+	    /// Gets and sets a transformation function for property names during serialization.  Default is no transformation.
+	    /// </summary>
+	    public Func<string, string> SerializationNameTransform
+	    {
+	        get { return _serializationNameTransform ?? (_serializationNameTransform = s => s); }
+	        set { _serializationNameTransform = value; }
+	    }
+	    /// <summary>
+	    /// Gets and sets a transformation function for property names during deserialization.  Default is no transformation.
+	    /// </summary>
+	    public Func<string, string> DeserializationNameTransform
+	    {
+	        get { return _deserializationNameTransform ?? (_deserializationNameTransform = s => s); }
+	        set { _deserializationNameTransform = value; }
+	    }
+		/// <summary>
+		/// Gets and sets whether the serializer will serialize only the properties defined by the
+		/// type given as the generic parameter.
+		/// </summary>
+		public bool OnlyExplicitProperties { get; set; }
 
-		internal bool IncludeContentSample { get; set; }
+	    internal bool IncludeContentSample { get; set; }
 
 		static JsonSerializerOptions()
 		{

@@ -56,9 +56,7 @@ namespace Manatee.Json.Path
 		[Obsolete("Please use 'Name()' without a parameter to insert a property name wildcard.")]
 		public static JsonPath Wildcard()
 		{
-			var path = new JsonPath();
-			path.Operators.Add(WildCardOperator.Instance);
-			return path;
+			return Name();
 		}
 		/// <summary>
 		/// Creates a new <see cref="JsonPath"/> object which starts by searching for an object property.
@@ -204,10 +202,7 @@ namespace Manatee.Json.Path
 		[Obsolete("Please use 'Name()' without a parameter to insert a property name wildcard.")]
 		public static JsonPath Wildcard(this JsonPath path)
 		{
-			var newPath = new JsonPath();
-			newPath.Operators.AddRange(path.Operators);
-			newPath.Operators.Add(WildCardOperator.Instance);
-			return newPath;
+			return path.Name();
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by searching for an object property.

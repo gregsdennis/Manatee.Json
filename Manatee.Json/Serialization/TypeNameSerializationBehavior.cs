@@ -10,6 +10,10 @@
 		/// </summary>
 		Auto,
 		/// <summary>
+		/// Serializes the type name only for abstract and interface types.
+		/// </summary>
+		OnlyForAbstractions,
+		/// <summary>
 		/// Always serializes the type name.
 		/// </summary>
 		Always,

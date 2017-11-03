@@ -34,7 +34,7 @@ namespace Manatee.Json.Schema
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
-				    var  schemaValue = JsonValue.Parse(schemaJson);
+				    var schemaValue = JsonValue.Parse(schemaJson);
 					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
 
 					var validation = JsonSchema04.MetaSchema.Validate(schemaValue);

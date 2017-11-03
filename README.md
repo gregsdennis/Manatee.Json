@@ -95,7 +95,9 @@ Serialization features:
 - Supports using DI containers for object creation
 - Supports non-default constructors
 - Property name customization via attribute
+- Global property name transformations
 - Opt-out property inclusion via attribute
+- Optionally serialize only properties for requested type or all properties defined by object
 
 See the wiki pages for more information on how to use this wonderful library!
 
