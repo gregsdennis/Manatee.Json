@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Patch;
+﻿using System.Collections.Generic;
+using Manatee.Json.Patch;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 
@@ -8,15 +9,15 @@ namespace Manatee.Json.Tests.Patch.TestSuite
     {
         public static readonly IJsonSchema Schema = new JsonSchema04
             {
-                Type = JsonSchemaTypeDefinition.Object,
-                Properties = new JsonSchemaPropertyDefinitionCollection
+                Type = JsonSchemaType.Object,
+                Properties = new Dictionary<string, IJsonSchema>
                     {
                         ["doc"] = JsonSchema04.Empty,
                         ["expected"] = JsonSchema04.Empty,
                         ["patch"] = new JsonSchemaReference(JsonPatch.Schema.Id, typeof(JsonSchema04)),
-                        ["comment"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
-                        ["error"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
-                        ["disabled"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean}
+                        ["comment"] = new JsonSchema04 {Type = JsonSchemaType.String},
+                        ["error"] = new JsonSchema04 {Type = JsonSchemaType.String},
+                        ["disabled"] = new JsonSchema04 {Type = JsonSchemaType.Boolean}
                     }
             };
         

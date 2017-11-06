@@ -20,7 +20,8 @@ namespace Manatee.Json.Schema.Validators
 			var errors = new List<SchemaValidationError>();
 			var array = json.Array;
 		    if (GetItems(schema) is JsonSchemaCollection items)
-			{
+		    {
+			    var additionalItems = GetAdditionalItems(schema);
 				// have array of schemata: validate in sequence
 				var i = 0;
 				while (i < array.Count && i < items.Count)
@@ -28,11 +29,11 @@ namespace Manatee.Json.Schema.Validators
 					errors.AddRange(items[i].Validate(array[i], root).Errors);
 					i++;
 				}
-				if (i < array.Count && GetAdditionalItems(schema) != null)
-					if (Equals(GetAdditionalItems(schema), AdditionalItems.False))
+				if (i < array.Count && additionalItems != null)
+					if (Equals(additionalItems, AdditionalItems.False))
 						errors.Add(new SchemaValidationError(string.Empty, "Schema indicates no additional items are allowed."));
-					else if (!Equals(GetAdditionalItems(schema), AdditionalItems.True))
-						errors.AddRange(array.Skip(i).SelectMany(j => GetAdditionalItems(schema).Definition.Validate(j, root).Errors));
+					else if (!Equals(additionalItems, AdditionalItems.True))
+						errors.AddRange(array.Skip(i).SelectMany(j => additionalItems.Definition.Validate(j, root).Errors));
 			}
 			else if (GetItems(schema) != null)
 			{
@@ -64,7 +65,10 @@ namespace Manatee.Json.Schema.Validators
 		}
 		protected override AdditionalItems GetAdditionalItems(JsonSchema06 schema)
 		{
-			return schema.AdditionalItems;
+			if (schema.AdditionalItems == null) return null;
+			if (Equals(schema.AdditionalItems, JsonSchema06.True)) return AdditionalItems.True;
+			if (Equals(schema.AdditionalItems, JsonSchema06.False)) return AdditionalItems.False;
+			return new AdditionalItems {Definition = schema.AdditionalItems};
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnNonObject()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Object};
+			var schema = new JsonSchema04 {Type = JsonSchemaType.Object};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -24,15 +24,12 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							new JsonSchemaPropertyDefinition("test1")
-								{
-									Type = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
-									IsRequired = true
-								}
-						}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
+						},
+					Required = new List<string> {"test1"}
 				};
 			var json = new JsonObject();
 
@@ -45,10 +42,10 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						}
 				};
 			var json = new JsonObject();
@@ -62,10 +59,10 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						}
 				};
 			var json = new JsonObject {{"test1", 1}};
@@ -79,10 +76,10 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						}
 				};
 			var json = new JsonObject {{"test1", "value"}};
@@ -96,15 +93,15 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties = AdditionalProperties.False,
 					PatternProperties = new Dictionary<Regex, IJsonSchema>
 						{
-							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
+							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaType.String}}
 						}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
@@ -118,15 +115,15 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties = AdditionalProperties.False,
 					PatternProperties = new Dictionary<Regex, IJsonSchema>
 						{
-							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
+							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaType.String}}
 						}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test", "value"}};
@@ -140,13 +137,13 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties =
-						new AdditionalProperties {Definition = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
+						new AdditionalProperties {Definition = new JsonSchema04 {Type = JsonSchemaType.String}}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test", 1}};
 
@@ -159,13 +156,13 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties =
-						new AdditionalProperties {Definition = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}}
+						new AdditionalProperties {Definition = new JsonSchema04 {Type = JsonSchemaType.String}}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test", "value"}};
 
@@ -178,15 +175,15 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
-							["test1"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties = AdditionalProperties.False,
 					PatternProperties = new Dictionary<Regex, IJsonSchema>
 						{
-							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaTypeDefinition.Integer}}
+							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaType.Integer}}
 						}
 				};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
@@ -200,7 +197,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 			{
-				Type = JsonSchemaTypeDefinition.Object,
+				Type = JsonSchemaType.Object,
 				MaxProperties = 5
 			};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
@@ -214,7 +211,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 			{
-				Type = JsonSchemaTypeDefinition.Object,
+				Type = JsonSchemaType.Object,
 				MaxProperties = 1
 			};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
@@ -229,7 +226,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 			{
-				Type = JsonSchemaTypeDefinition.Object,
+				Type = JsonSchemaType.Object,
 				MinProperties = 1
 			};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
@@ -243,7 +240,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema04
 			{
-				Type = JsonSchemaTypeDefinition.Object,
+				Type = JsonSchemaType.Object,
 				MinProperties = 5
 			};
 			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};

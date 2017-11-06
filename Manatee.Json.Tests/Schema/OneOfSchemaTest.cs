@@ -17,16 +17,16 @@ namespace Manatee.Json.Tests.Schema
 					{
 						OneOf = new List<IJsonSchema>
 							{
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
+								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5},
+								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 10}
 							}
 					};
 				yield return new JsonSchema06
 					{
 						OneOf = new List<IJsonSchema>
 							{
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5},
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, Minimum = 10}
+								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 5},
+								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10}
 							}
 					};
 			}

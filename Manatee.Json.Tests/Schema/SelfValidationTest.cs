@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Manatee.Json.Internal;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 

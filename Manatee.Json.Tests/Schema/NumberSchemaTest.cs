@@ -12,8 +12,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number};
-				yield return new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number};
+				yield return new JsonSchema04 {Type = JsonSchemaType.Number};
+				yield return new JsonSchema06 {Type = JsonSchemaType.Number};
 			}
 		}
 		[TestCaseSource(nameof(TypeData))]
@@ -30,8 +30,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 5});
 			}
 		}
 		[TestCaseSource(nameof(MinimumData))]
@@ -56,7 +56,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsErrorOnEqualsExclusiveMinimum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5, ExclusiveMinimum = true};
+			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5, ExclusiveMinimum = true};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -66,7 +66,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsValidOnMoreThanExclusiveMinimum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Minimum = 5, ExclusiveMinimum = true};
+			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5, ExclusiveMinimum = true};
 			var json = (JsonValue) 10;
 
 			var results = schema.Validate(json);
@@ -76,7 +76,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft06_ValidateReturnsErrorOnEqualsExclusiveMinimum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, ExclusiveMinimum = 5};
+			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -86,7 +86,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft06_ValidateReturnsValidOnMoreThanExclusiveMinimum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, ExclusiveMinimum = 5};
+			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
 			var json = (JsonValue) 10;
 
 			var results = schema.Validate(json);
@@ -98,8 +98,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Maximum = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, Maximum = 5});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 5});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 5});
 			}
 		}
 		[TestCaseSource(nameof(MaximumData))]
@@ -124,7 +124,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsErrorOnEqualsExclusiveMaximum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Maximum = 5, ExclusiveMaximum = true};
+			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 5, ExclusiveMaximum = true};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -134,7 +134,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsValidOnLessThanExclusiveMaximum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, Maximum = 5, ExclusiveMaximum = true};
+			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 5, ExclusiveMaximum = true};
 			var json = (JsonValue) 3;
 
 			var results = schema.Validate(json);
@@ -144,7 +144,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft06_ValidateReturnsErrorOnEqualsExclusiveMaximum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, ExclusiveMaximum = 5};
+			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -154,7 +154,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft06_ValidateReturnsValidOnLessThanExclusiveMaximum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, ExclusiveMaximum = 5};
+			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
 			var json = (JsonValue) 3;
 
 			var results = schema.Validate(json);
@@ -166,8 +166,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number, MultipleOf = 7.5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number, MultipleOf = 7.5});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, MultipleOf = 7.5});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, MultipleOf = 7.5});
 			}
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
