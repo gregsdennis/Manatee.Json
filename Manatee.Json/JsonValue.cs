@@ -267,8 +267,6 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			if (obj == null) return Type == JsonValueType.Null;
-
 			return Equals(obj.AsJsonValue());
 		}
 		/// <summary>
@@ -279,7 +277,8 @@ namespace Manatee.Json
 		public bool Equals(JsonValue other)
 		{
 			// using a == here would result in recursion and death by stack overflow
-			if (ReferenceEquals(other, null)) return Type == JsonValueType.Null;
+			if (ReferenceEquals(other, null))
+				return JsonOptions.NullEqualityBehavior == NullEqualityBehavior.UseJsonNull && Type == JsonValueType.Null;
 			if (other.Type != Type) return false;
 			switch (Type)
 			{

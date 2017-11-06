@@ -14,6 +14,8 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonArray : List<JsonValue>
 	{
+		public ArrayEquality Equality { get; set; } = JsonOptions.DefaultArrayEquality;
+
 		/// <summary>
 		/// Creates an empty instance of a JSON array.
 		/// </summary>
@@ -34,8 +36,8 @@ namespace Manatee.Json
 		public string GetIndentedString(int indentLevel = 0)
 		{
 			if (Count == 0) return "[]";
-			string tab0 = string.Empty.PadLeft(indentLevel, '\t'),
-				   tab1 = string.Empty.PadLeft(indentLevel + 1, '\t'),
+			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
+				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar),
 				   s = "[\n";
 			int i;
 			for (i = 0; i < Count - 1; i++)
@@ -89,9 +91,11 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			var json = obj as JsonArray;
-			if (json == null) return false;
-			return this.SequenceEqual(json);
+			if (!(obj is JsonArray json)) return false;
+
+			return Equality == ArrayEquality.SequenceEqual
+				       ? this.SequenceEqual(json)
+				       : this.ContentsEqual(json);
 		}
 
 		/// <summary>

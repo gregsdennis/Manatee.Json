@@ -22,20 +22,12 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test1()
 		{
-			var list = new List<object> {1, false, "string", new ObjectWithBasicProps {DoubleProp = 5.5}};
+			JsonOptions.NullEqualityBehavior = NullEqualityBehavior.UseDotNetNull;
 
-			JsonValue expected = new JsonArray {1, false, "string", new JsonObject {["DoubleProp"] = 5.5}};
+			JsonValue isNull = null;
+			JsonValue hasValue = 5;
 
-			var serializer = new JsonSerializer
-				{
-					Options =
-						{
-							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
-						}
-				};
-			var json = serializer.Serialize<dynamic>(list);
-
-			Assert.AreEqual(expected, json);
+			Assert.IsTrue(isNull == hasValue);
 		}
 	}
 }

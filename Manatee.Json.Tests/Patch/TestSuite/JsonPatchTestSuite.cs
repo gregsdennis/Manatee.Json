@@ -11,14 +11,17 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 	[TestFixture]
 	public class JsonPatchTestSuite
 	{
-		private const string TestFolder = @"..\..\..\json-patch-tests";
+		private const string _testFolder = @"..\..\..\json-patch-tests";
 		private static readonly JsonSerializer _serializer;
 
+		// ReSharper disable once MemberCanBePrivate.Global
 		public static IEnumerable TestData => _LoadTests();
 
 		private static IEnumerable<TestCaseData> _LoadTests()
 		{
-			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, TestFolder).AdjustForOS();
+			JsonOptions.DuplicateKeyBehavior = DuplicateKeyBehavior.Overwrite;
+
+			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, _testFolder).AdjustForOS();
 			var fileNames = Directory.GetFiles(testsPath, "*tests*.json");
 
 			foreach (var fileName in fileNames)
@@ -33,6 +36,8 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 					yield return new TestCaseData(fileName, test) {TestName = testName};
 				}
 			}
+
+			JsonOptions.DuplicateKeyBehavior = DuplicateKeyBehavior.Throw;
 		}
 
 		static JsonPatchTestSuite()
