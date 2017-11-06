@@ -287,7 +287,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines any additional items to be expected by this schema.
 		/// </summary>
-		public AdditionalItems AdditionalItems { get; set; }
+		public IJsonSchema AdditionalItems { get; set; }
 		/// <summary>
 		/// Defines the schema for the items contained in the array.
 		/// </summary>
@@ -452,12 +452,7 @@ namespace Manatee.Json.Schema
 			MinLength = (uint?) obj.TryGetNumber("minLength");
 			Pattern = obj.TryGetString("pattern");
 			if (obj.ContainsKey("additionalItems"))
-			{
-				if (obj["additionalItems"].Type == JsonValueType.Boolean)
-					AdditionalItems = obj["additionalItems"].Boolean ? AdditionalItems.True : AdditionalItems.False;
-				else
-					AdditionalItems = new AdditionalItems {Definition = _ReadSchema(obj["additionalItems"]) };
-			}
+				AdditionalItems = _ReadSchema(obj["additionalItems"]);
 			MaxItems = (uint?) obj.TryGetNumber("maxItems");
 			MinItems = (uint?) obj.TryGetNumber("minItems");
 			if (obj.ContainsKey("items"))
@@ -630,6 +625,7 @@ namespace Manatee.Json.Schema
 			var schema = other as JsonSchema06;
 			if (ReferenceEquals(null, schema)) return false;
 			if (ReferenceEquals(this, schema)) return true;
+			if (BooleanSchemaDefinition != schema.BooleanSchemaDefinition) return false;
 			if (Id != schema.Id) return false;
 			if (Schema != schema.Schema) return false;
 			if (Title != schema.Title) return false;
@@ -662,6 +658,7 @@ namespace Manatee.Json.Schema
 			if (!OneOf.ContentsEqual(schema.OneOf)) return false;
 			if (!Equals(Not, schema.Not)) return false;
 			if (!Equals(Format, schema.Format)) return false;
+			if (!Required.ContentsEqual(schema.Required)) return false;
 			return Dependencies.ContentsEqual(schema.Dependencies);
 		}
 		/// <summary>
@@ -718,30 +715,8 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ (OneOf?.GetCollectionHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Not?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Format?.GetHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Required?.GetCollectionHashCode() ?? 0);
 				return hashCode;
-			}
-		}
-
-		private static JsonSchemaType _GetPrimitiveDefinition(string type)
-		{
-			switch (type)
-			{
-				case "array":
-					return JsonSchemaType.Array;
-				case "boolean":
-					return JsonSchemaType.Boolean;
-				case "integer":
-					return JsonSchemaType.Integer;
-				case "null":
-					return JsonSchemaType.Null;
-				case "number":
-					return JsonSchemaType.Number;
-				case "object":
-					return JsonSchemaType.Object;
-				case "string":
-					return JsonSchemaType.String;
-				default:
-					throw new ArgumentOutOfRangeException();
 			}
 		}
 
