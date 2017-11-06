@@ -552,7 +552,12 @@ namespace Manatee.Json.Schema
 			if (UniqueItems ?? false) json["uniqueItems"] = UniqueItems;
 			if (MaxProperties.HasValue) json["maxProperties"] = MaxProperties;
 			if (MinProperties.HasValue) json["minProperties"] = MinProperties;
-			if (Required != null) json["required"] = Required.ToJson();
+			if (Required != null)
+			{
+				var array = Required.ToJson();
+				array.Array.RequireSequenceEquality = false;
+				json["required"] = array;
+			}
 			if (AdditionalProperties != null)
 				json["additionalProperties"] = AdditionalProperties.ToJson(serializer);
 			if (Definitions != null)
@@ -571,12 +576,36 @@ namespace Manatee.Json.Schema
 				json["dependencies"] = jsonDependencies;
 			}
 			if (Enum != null)
+			{
+				var array = Enum.ToJson(serializer);
+				array.Array.RequireSequenceEquality = false;
 				json["enum"] = Enum.ToJson(serializer);
+			}
 			if (Type != JsonSchemaType.NotDefined)
-				json["type"] = Type.ToJson();
-			if (AllOf != null) json["allOf"] = AllOf.ToJson(serializer);
-			if (AnyOf != null) json["anyOf"] = AnyOf.ToJson(serializer);
-			if (OneOf != null) json["oneOf"] = OneOf.ToJson(serializer);
+			{
+				var array = Type.ToJson();
+				if (array.Type == JsonValueType.Array)
+					array.Array.RequireSequenceEquality = false;
+				json["type"] = array;
+			}
+			if (AllOf != null)
+			{
+				var array = AllOf.Select(s => s.ToJson(serializer)).ToJson();
+				array.RequireSequenceEquality = false;
+				json["allOf"] = array;
+			}
+			if (AnyOf != null)
+			{
+				var array = AnyOf.Select(s => s.ToJson(serializer)).ToJson();
+				array.RequireSequenceEquality = false;
+				json["anyOf"] = array;
+			}
+			if (OneOf != null)
+			{
+				var array = OneOf.Select(s => s.ToJson(serializer)).ToJson();
+				array.RequireSequenceEquality = false;
+				json["oneOf"] = array;
+			}
 			if (Not != null) json["not"] = Not.ToJson(serializer);
 			if (Format != null) json["format"] = Format.Key;
 			if (ExtraneousDetails != null)
