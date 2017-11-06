@@ -43,10 +43,10 @@ namespace Manatee.Json.Tests.Serialization
 						Schema = JsonSchema06.MetaSchema.Schema,
 						Properties = new Dictionary<string, IJsonSchema>
 							{
-								["MyString"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
+								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
 								["MyInt"] = new JsonSchema06
 									{
-										Type = JsonSchemaTypeDefinition.Integer,
+										Type = JsonSchemaType.Integer,
 										Minimum = 10
 									}
 							}
@@ -82,10 +82,10 @@ namespace Manatee.Json.Tests.Serialization
 						Schema = JsonSchema06.MetaSchema.Schema,
 						Properties = new Dictionary<string, IJsonSchema>
 							{
-								["MyString"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
+								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
 								["MyInt"] = new JsonSchema06
 									{
-										Type = JsonSchemaTypeDefinition.Integer,
+										Type = JsonSchemaType.Integer,
 										Minimum = 10
 									}
 							}

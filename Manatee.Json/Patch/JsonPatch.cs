@@ -12,13 +12,13 @@ namespace Manatee.Json.Patch
 				Title = "JSON schema for JSONPatch files",
 				Id = "http://json.schemastore.org/json-patch#",
 				Schema = JsonSchema04.MetaSchema.Id,
-				Type = JsonSchemaTypeDefinition.Array,
+				Type = JsonSchemaType.Array,
 				Items = new JsonSchemaReference("#/definitions/operation", typeof(JsonSchema04)),
 				Definitions = new Dictionary<string, IJsonSchema>
 					{
 						["operation"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Object,
+								Type = JsonSchemaType.Object,
 								Required = new List<string> {"op", "path"},
 								AllOf = new[] {new JsonSchemaReference("#/definitions/path", typeof(JsonSchema04))},
 								OneOf = new[]
@@ -30,7 +30,7 @@ namespace Manatee.Json.Patch
 														["op"] = new JsonSchema04
 															{
 																Description = "The operation to perform.",
-																Type = JsonSchemaTypeDefinition.String,
+																Type = JsonSchemaType.String,
 																Enum = new List<EnumSchemaValue> {"add", "replace", "test"}
 															},
 														["value"] = new JsonSchema04 {Description = "The value to add, replace or test."}
@@ -44,7 +44,7 @@ namespace Manatee.Json.Patch
 														["op"] = new JsonSchema04
 															{
 																Description = "The operation to perform.",
-																Type = JsonSchemaTypeDefinition.String,
+																Type = JsonSchemaType.String,
 																Enum = new List<EnumSchemaValue> {"remove"}
 															}
 													}
@@ -56,13 +56,13 @@ namespace Manatee.Json.Patch
 														["op"] = new JsonSchema04
 															{
 																Description = "The operation to perform.",
-																Type = JsonSchemaTypeDefinition.String,
+																Type = JsonSchemaType.String,
 																Enum = new List<EnumSchemaValue> {"move", "copy"}
 															},
 														["from"] = new JsonSchema04
 															{
 																Description = "A JSON Pointer path pointing to the location to move/copy from.",
-																Type = JsonSchemaTypeDefinition.String
+																Type = JsonSchemaType.String
 															},
 													},
 												Required = new[] {"from"}
@@ -76,7 +76,7 @@ namespace Manatee.Json.Patch
 										["path"] = new JsonSchema04
 											{
 												Description = "A JSON Pointer path.",
-												Type = JsonSchemaTypeDefinition.String
+												Type = JsonSchemaType.String
 											}
 									}
 							}

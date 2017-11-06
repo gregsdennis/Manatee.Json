@@ -32,13 +32,13 @@ namespace Manatee.Json.Schema
 				{
 						["schemaArray"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Array,
+								Type = JsonSchemaType.Array,
 								MinItems = 1,
 								Items = Root
 							},
 						["positiveInteger"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Integer,
+								Type = JsonSchemaType.Integer,
 								Minimum = 0
 							},
 						["positiveIntegerDefault0"] = new JsonSchema04
@@ -64,58 +64,58 @@ namespace Manatee.Json.Schema
 							},
 						["stringArray"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Array,
-								Items = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
+								Type = JsonSchemaType.Array,
+								Items = new JsonSchema04 {Type = JsonSchemaType.String},
 								MinItems = 1,
 								UniqueItems = true
 							}
 					},
-				Type = JsonSchemaTypeDefinition.Object,
+				Type = JsonSchemaType.Object,
 				Properties = new Dictionary<string, IJsonSchema>
 					{
 						["id"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.String,
+								Type = JsonSchemaType.String,
 								Format = StringFormat.Uri
 							},
 						["$schema"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.String,
+								Type = JsonSchemaType.String,
 								Format = StringFormat.Uri
 							},
-						["title"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
-						["description"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String},
+						["title"] = new JsonSchema04 {Type = JsonSchemaType.String},
+						["description"] = new JsonSchema04 {Type = JsonSchemaType.String},
 						["default"] = Empty,
 						["multipleOf"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Number,
+								Type = JsonSchemaType.Number,
 								Minimum = 0,
 								ExclusiveMinimum = true
 							},
-						["maximum"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number},
+						["maximum"] = new JsonSchema04 {Type = JsonSchemaType.Number},
 						["exclusiveMaximum"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Boolean,
+								Type = JsonSchemaType.Boolean,
 								Default = false
 							},
-						["minimum"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number},
+						["minimum"] = new JsonSchema04 {Type = JsonSchemaType.Number},
 						["exclusiveMinimum"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Boolean,
+								Type = JsonSchemaType.Boolean,
 								Default = false
 							},
 						["maxLength"] = new JsonSchemaReference("#/definitions/positiveInteger", typeof(JsonSchema04)),
 						["minLength"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", typeof(JsonSchema04)),
 						["pattern"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.String,
+								Type = JsonSchemaType.String,
 								Format = StringFormat.Regex
 							},
 						["additionalItems"] = new JsonSchema04
 							{
 								AnyOf = new List<IJsonSchema>
 									{
-										new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean},
+										new JsonSchema04 {Type = JsonSchemaType.Boolean},
 										Root
 									},
 								Default = new JsonObject()
@@ -133,7 +133,7 @@ namespace Manatee.Json.Schema
 						["minItems"] = new JsonSchemaReference("#/definitions/positiveIntegerDefault0", typeof(JsonSchema04)),
 						["uniqueItems"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Boolean,
+								Type = JsonSchemaType.Boolean,
 								Default = false
 							},
 						["maxProperties"] = new JsonSchemaReference("#/definitions/positiveInteger", typeof(JsonSchema04)),
@@ -143,32 +143,32 @@ namespace Manatee.Json.Schema
 							{
 								AnyOf = new List<IJsonSchema>
 									{
-										new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean},
+										new JsonSchema04 {Type = JsonSchemaType.Boolean},
 										Root
 									},
 								Default = new JsonObject()
 							},
 						["definitions"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Object,
+								Type = JsonSchemaType.Object,
 								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["properties"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Object,
+								Type = JsonSchemaType.Object,
 								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["patternProperties"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Object,
+								Type = JsonSchemaType.Object,
 								AdditionalProperties = Root,
 								Default = new JsonObject()
 							},
 						["dependencies"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Object,
+								Type = JsonSchemaType.Object,
 								AdditionalProperties = new JsonSchema04
 									{
 										AnyOf = new List<IJsonSchema>
@@ -180,7 +180,7 @@ namespace Manatee.Json.Schema
 							},
 						["enum"] = new JsonSchema04
 							{
-								Type = JsonSchemaTypeDefinition.Array,
+								Type = JsonSchemaType.Array,
 								MinItems = 1,
 								UniqueItems = true
 							},
@@ -191,7 +191,7 @@ namespace Manatee.Json.Schema
 										new JsonSchemaReference("#/definitions/simpleTypes", typeof(JsonSchema04)),
 										new JsonSchema04
 											{
-												Type = JsonSchemaTypeDefinition.Array,
+												Type = JsonSchemaType.Array,
 												Items = new JsonSchemaReference("#/definitions/simpleTypes", typeof(JsonSchema04)),
 												MinItems = 1,
 												UniqueItems = true
@@ -364,7 +364,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// The JSON Schema type which defines this schema.
 		/// </summary>
-		public JsonSchemaTypeDefinition Type { get; set; }
+		public JsonSchemaType Type { get; set; }
 		/// <summary>
 		/// A collection of required schema which must be satisfied.
 		/// </summary>
@@ -505,22 +505,7 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("enum"))
 				Enum = json.Object["enum"].Array.Select(jv => new EnumSchemaValue(jv));
 			if (obj.ContainsKey("type"))
-			{
-				var typeEntry = obj["type"];
-				switch (typeEntry.Type)
-				{
-					case JsonValueType.String:
-						// string implies primitive type
-						Type = _GetPrimitiveDefinition(typeEntry.String);
-						break;
-					case JsonValueType.Array:
-						// array implies "oneOf" several primitive types
-						Type = new JsonSchemaMultiTypeDefinition(false);
-						Type.FromJson(typeEntry, serializer);
-						Type.Definition.DocumentPath = DocumentPath;
-						break;
-				}
-			}
+				Type = obj["type"].FromJson();
 			if (obj.ContainsKey("allOf"))
 				AllOf = obj["allOf"].Array.Select(_ReadSchema);
 			if (obj.ContainsKey("anyOf"))
@@ -561,13 +546,7 @@ namespace Manatee.Json.Schema
 			if (AdditionalItems != null)
 				json["additionalItems"] = AdditionalItems.ToJson(serializer);
 			if (Items != null)
-			{
-				var items = Items as JsonSchema04;
-				if (items?.Type is JsonSchemaMultiTypeDefinition type && !type.IsPrimitive)
-					json["items"] = items.Type.ToJson(serializer);
-				else
-					json["items"] = Items.ToJson(serializer);
-			}
+				json["items"] = Items.ToJson(serializer);
 			if (MaxItems.HasValue) json["maxItems"] = MinItems;
 			if (MinItems.HasValue) json["minItems"] = MinItems;
 			if (UniqueItems ?? false) json["uniqueItems"] = UniqueItems;
@@ -582,7 +561,7 @@ namespace Manatee.Json.Schema
 				json["properties"] = Properties.ToJson(serializer);
 			if (PatternProperties != null && PatternProperties.Any())
 				json["patternProperties"] = PatternProperties.ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value).ToJson(serializer);
-			if ((Dependencies != null) && Dependencies.Any())
+			if (Dependencies != null && Dependencies.Any())
 			{
 				var jsonDependencies = new JsonObject();
 				foreach (var dependency in Dependencies)
@@ -593,8 +572,8 @@ namespace Manatee.Json.Schema
 			}
 			if (Enum != null)
 				json["enum"] = Enum.ToJson(serializer);
-			if (Type != null)
-				json["type"] = Type.ToJson(serializer);
+			if (Type != JsonSchemaType.NotDefined)
+				json["type"] = Type.ToJson();
 			if (AllOf != null) json["allOf"] = AllOf.ToJson(serializer);
 			if (AnyOf != null) json["anyOf"] = AnyOf.ToJson(serializer);
 			if (OneOf != null) json["oneOf"] = OneOf.ToJson(serializer);
@@ -676,7 +655,7 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				var hashCode = Type?.GetHashCode() ?? 0;
+				var hashCode = Type.GetHashCode();
 				hashCode = (hashCode*397) ^ (Id?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Schema?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Title?.GetHashCode() ?? 0);
@@ -701,7 +680,6 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ (PatternProperties?.GetCollectionHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Dependencies?.GetCollectionHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Enum?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Type?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (AllOf?.GetCollectionHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (AnyOf?.GetCollectionHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (OneOf?.GetCollectionHashCode() ?? 0);
@@ -709,29 +687,6 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ (Format?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Required?.GetCollectionHashCode() ?? 0);
 				return hashCode;
-			}
-		}
-
-		private static JsonSchemaTypeDefinition _GetPrimitiveDefinition(string type)
-		{
-			switch (type)
-			{
-				case "array":
-					return JsonSchemaTypeDefinition.Array;
-				case "boolean":
-					return JsonSchemaTypeDefinition.Boolean;
-				case "integer":
-					return JsonSchemaTypeDefinition.Integer;
-				case "null":
-					return JsonSchemaTypeDefinition.Null;
-				case "number":
-					return JsonSchemaTypeDefinition.Number;
-				case "object":
-					return JsonSchemaTypeDefinition.Object;
-				case "string":
-					return JsonSchemaTypeDefinition.String;
-				default:
-					throw new ArgumentOutOfRangeException();
 			}
 		}
 

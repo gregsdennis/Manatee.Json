@@ -14,8 +14,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array});
 			}
 		}
 		[TestCaseSource(nameof(TypeData))]
@@ -41,8 +41,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MinItems = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array, MinItems = 5});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array, MinItems = 5});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array, MinItems = 5});
 			}
 		}
 		[TestCaseSource(nameof(MinItemsData))]
@@ -77,8 +77,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array, MaxItems = 5});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array, MaxItems = 5});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array, MaxItems = 5});
 			}
 		}
 		[TestCaseSource(nameof(MaxItemsData))]
@@ -113,8 +113,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array, UniqueItems = true});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array, UniqueItems = true});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array, UniqueItems = true});
 			}
 		}
 		[TestCaseSource(nameof(UniqueItemsData))]
@@ -142,13 +142,13 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new TestCaseData(new JsonSchema04
 					{
-						Type = JsonSchemaTypeDefinition.Array,
-						Items = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+						Type = JsonSchemaType.Array,
+						Items = new JsonSchema04 {Type = JsonSchemaType.String}
 					});
 				yield return new TestCaseData(new JsonSchema06
 					{
-						Type = JsonSchemaTypeDefinition.Array,
-						Items = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String}
+						Type = JsonSchemaType.Array,
+						Items = new JsonSchema06 {Type = JsonSchemaType.String}
 					});
 			}
 		}
