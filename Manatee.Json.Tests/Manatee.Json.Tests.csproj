@@ -123,7 +123,7 @@
     <Compile Include="Path\TestSuite\PathTest.cs" />
     <Compile Include="Path\TestSuite\PathTestSet.cs" />
     <Compile Include="Path\ToStringTest.cs" />
-    <Compile Include="Schema\JsonOptionsTests.cs" />
+    <Compile Include="JsonOptionsTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SchemaValidationResultsExtensions.cs" />
@@ -197,7 +197,6 @@
     <Compile Include="Test References\JsonSerializableClass.cs" />
     <Compile Include="Test References\JsonSerializableImplementationClass.cs" />
     <Compile Include="XmlExtensionsTest.cs" />
-    <Compile Include="JsonObjectTest.cs" />
     <Compile Include="JsonArrayTest.cs" />
     <Compile Include="JsonValueToStringTest.cs" />
     <Compile Include="LinqExtensionsTest.cs" />
