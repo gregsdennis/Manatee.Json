@@ -20,14 +20,9 @@ namespace Manatee.Json.Tests
 	public class DevTest
 	{
 		[Test]
-		public void Test1()
+		public void Test()
 		{
-			JsonOptions.NullEqualityBehavior = NullEqualityBehavior.UseDotNetNull;
-
-			JsonValue isNull = null;
-			JsonValue hasValue = 5;
-
-			Assert.IsTrue(isNull == hasValue);
+			
 		}
 	}
 }

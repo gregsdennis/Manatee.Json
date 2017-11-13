@@ -277,8 +277,7 @@ namespace Manatee.Json
 		public bool Equals(JsonValue other)
 		{
 			// using a == here would result in recursion and death by stack overflow
-			if (ReferenceEquals(other, null))
-				return JsonOptions.NullEqualityBehavior == NullEqualityBehavior.UseJsonNull && Type == JsonValueType.Null;
+			if (ReferenceEquals(other, null)) return false;
 			if (other.Type != Type) return false;
 			switch (Type)
 			{
@@ -377,7 +376,7 @@ namespace Manatee.Json
 		/// </code></example>
 		public static implicit operator JsonValue(bool? b)
 		{
-			return new JsonValue(b);
+			return b == null ? null : new JsonValue(b);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="string"/> into a <see cref="JsonValue"/>.
@@ -399,7 +398,7 @@ namespace Manatee.Json
 		/// </code></example>
 		public static implicit operator JsonValue(string s)
 		{
-			return new JsonValue(s);
+			return s == null ? null : new JsonValue(s);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="double"/> into a <see cref="JsonValue"/>.
@@ -421,7 +420,7 @@ namespace Manatee.Json
 		/// </code></example>
 		public static implicit operator JsonValue(double? n)
 		{
-			return new JsonValue(n);
+			return n == null ? null : new JsonValue(n);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="JsonObject"/> into a <see cref="JsonValue"/>.
@@ -443,7 +442,7 @@ namespace Manatee.Json
 		/// </code></example>
 		public static implicit operator JsonValue(JsonObject o)
 		{
-			return new JsonValue(o);
+			return o == null ? null : new JsonValue(o);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="JsonArray"/> into a <see cref="JsonValue"/>.
@@ -465,7 +464,7 @@ namespace Manatee.Json
 		/// </code></example>
 		public static implicit operator JsonValue(JsonArray a)
 		{
-			return new JsonValue(a);
+			return a == null ? null : new JsonValue(a);
 		}
 		///<summary>
 		///</summary>
@@ -474,7 +473,7 @@ namespace Manatee.Json
 		///<returns></returns>
 		public static bool operator ==(JsonValue a, JsonValue b)
 		{
-			return ReferenceEquals(a, b) || (a != null ? a.Equals(b) : b.Equals(a));
+			return ReferenceEquals(a, b) || (a != null && a.Equals(b));
 		}
 		///<summary>
 		///</summary>
