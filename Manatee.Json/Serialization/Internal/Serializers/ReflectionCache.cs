@@ -51,9 +51,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static IEnumerable<SerializationInfo> _GetProperties(ReflectionInfo info, PropertySelectionStrategy propertyTypes)
 		{
 			var properties = new List<SerializationInfo>();
-			if ((propertyTypes & PropertySelectionStrategy.ReadWriteOnly) != 0)
+			if (propertyTypes.HasFlag(PropertySelectionStrategy.ReadWriteOnly))
 				properties.AddRange(info.ReadWriteProperties);
-			if ((propertyTypes & PropertySelectionStrategy.ReadOnly) != 0)
+			if (propertyTypes.HasFlag(PropertySelectionStrategy.ReadOnly))
 				properties.AddRange(info.ReadOnlyProperties);
 			return properties;
 		}
@@ -90,7 +90,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				                                     .Where(p => p.GetMethod?.IsPublic ?? false)
 				                                     .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 				                                     .Select(_BuildSerializationInfo);
-				var readWrite = _GetStaticProperties(type).Where(p => !p.SetMethod?.IsPublic ?? false)
+				var readWrite = _GetStaticProperties(type).Where(p => p.SetMethod?.IsPublic ?? false)
 				                                          .Where(p => p.GetMethod?.IsPublic ?? false)
 				                                          .Where(p => !p.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Any())
 				                                          .Select(_BuildSerializationInfo);
