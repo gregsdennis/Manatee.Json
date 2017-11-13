@@ -14,7 +14,7 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonArray : List<JsonValue>
 	{
-		public ArrayEquality Equality { get; set; } = JsonOptions.DefaultArrayEquality;
+		public ArrayEquality EqualityStandard { get; set; } = JsonOptions.DefaultArrayEquality;
 
 		/// <summary>
 		/// Creates an empty instance of a JSON array.
@@ -93,7 +93,7 @@ namespace Manatee.Json
 		{
 			if (!(obj is JsonArray json)) return false;
 
-			return Equality == ArrayEquality.SequenceEqual
+			return EqualityStandard == ArrayEquality.SequenceEqual
 				       ? this.SequenceEqual(json)
 				       : this.ContentsEqual(json);
 		}
