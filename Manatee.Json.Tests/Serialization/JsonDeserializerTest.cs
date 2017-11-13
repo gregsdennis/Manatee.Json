@@ -224,7 +224,6 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
-					//{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
 					{"SomeProp", 42},
 					{"NewProp", "test"}
 				};

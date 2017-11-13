@@ -43,6 +43,7 @@ namespace Manatee.Json
 		{
 			get
 			{
+				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(bool);
 				if (Type != JsonValueType.Boolean)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
 				return _boolValue;
@@ -67,6 +68,7 @@ namespace Manatee.Json
 		{
 			get
 			{
+				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(string);
 				if (Type != JsonValueType.String)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
 				return _stringValue;
@@ -91,6 +93,7 @@ namespace Manatee.Json
 		{
 			get
 			{
+				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(double);
 				if (Type != JsonValueType.Number)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
 				return _numberValue;
@@ -115,6 +118,7 @@ namespace Manatee.Json
 		{
 			get
 			{
+				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(JsonObject);
 				if (Type != JsonValueType.Object)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
 				return _objectValue;
@@ -139,6 +143,7 @@ namespace Manatee.Json
 		{
 			get
 			{
+				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(JsonArray);
 				if (Type != JsonValueType.Array)
 					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
 				return _arrayValue;
