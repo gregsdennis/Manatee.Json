@@ -50,15 +50,6 @@ namespace Manatee.Json.Path
 			return path;
 		}
 		/// <summary>
-		/// Creates a new <see cref="JsonPath"/> object which starts by including all object properties.
-		/// </summary>
-		/// <returns>A new <see cref="JsonPath"/>.</returns>
-		[Obsolete("Please use 'Name()' without a parameter to insert a property name wildcard.")]
-		public static JsonPath Wildcard()
-		{
-			return Name();
-		}
-		/// <summary>
 		/// Creates a new <see cref="JsonPath"/> object which starts by searching for an object property.
 		/// </summary>
 		/// <param name="name">The name to search for.</param>
@@ -193,16 +184,6 @@ namespace Manatee.Json.Path
 					break;
 			}
 			return newPath;
-		}
-		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by including all object properties.
-		/// </summary>
-		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
-		/// <returns>The new <see cref="JsonPath"/>.</returns>
-		[Obsolete("Please use 'Name()' without a parameter to insert a property name wildcard.")]
-		public static JsonPath Wildcard(this JsonPath path)
-		{
-			return path.Name();
 		}
 		/// <summary>
 		/// Appends a <see cref="JsonPath"/> by searching for an object property.

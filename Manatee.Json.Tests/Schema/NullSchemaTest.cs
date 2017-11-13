@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -12,8 +11,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new JsonSchema04 {Type = JsonSchemaTypeDefinition.Null};
-				yield return new JsonSchema06 {Type = JsonSchemaTypeDefinition.Null};
+				yield return new JsonSchema04 {Type = JsonSchemaType.Null};
+				yield return new JsonSchema06 {Type = JsonSchemaType.Null};
 			}
 		}
 		

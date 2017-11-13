@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
@@ -40,12 +41,12 @@ namespace Manatee.Json.Tests.Serialization
 				new JsonSchema06
 					{
 						Schema = JsonSchema06.MetaSchema.Schema,
-						Properties = new JsonSchemaPropertyDefinitionCollection
+						Properties = new Dictionary<string, IJsonSchema>
 							{
-								["MyString"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
+								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
 								["MyInt"] = new JsonSchema06
 									{
-										Type = JsonSchemaTypeDefinition.Integer,
+										Type = JsonSchemaType.Integer,
 										Minimum = 10
 									}
 							}
@@ -79,12 +80,12 @@ namespace Manatee.Json.Tests.Serialization
 				new JsonSchema06
 					{
 						Schema = JsonSchema06.MetaSchema.Schema,
-						Properties = new JsonSchemaPropertyDefinitionCollection
+						Properties = new Dictionary<string, IJsonSchema>
 							{
-								["MyString"] = new JsonSchema06 {Type = JsonSchemaTypeDefinition.String},
+								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
 								["MyInt"] = new JsonSchema06
 									{
-										Type = JsonSchemaTypeDefinition.Integer,
+										Type = JsonSchemaType.Integer,
 										Minimum = 10
 									}
 							}

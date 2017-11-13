@@ -17,16 +17,16 @@ namespace Manatee.Json.Tests.Schema
 					{
 						AllOf = new List<IJsonSchema>
 							{
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array},
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number}
+								new JsonSchema04 {Type = JsonSchemaType.Array},
+								new JsonSchema04 {Type = JsonSchemaType.Number}
 							}
 					});
 				yield return new TestCaseData(new JsonSchema06
 					{
 						AllOf = new List<IJsonSchema>
 							{
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array},
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number}
+								new JsonSchema06 {Type = JsonSchemaType.Array},
+								new JsonSchema06 {Type = JsonSchemaType.Number}
 							}
 					});
 			}
@@ -49,16 +49,16 @@ namespace Manatee.Json.Tests.Schema
 					{
 						AllOf = new List<IJsonSchema>
 							{
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 10},
+								new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 20}
 							}
 					});
 				yield return new TestCaseData(new JsonSchema06
 					{
 						AllOf = new List<IJsonSchema>
 							{
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10},
+								new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 20}
 							}
 					});
 			}

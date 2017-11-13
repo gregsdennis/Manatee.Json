@@ -17,16 +17,16 @@ namespace Manatee.Json.Tests.Schema
 					{
 						AnyOf = new List<IJsonSchema>
 							{
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Array},
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number}
+								new JsonSchema04 {Type = JsonSchemaType.Array},
+								new JsonSchema04 {Type = JsonSchemaType.Number}
 							}
 					});
 				yield return new TestCaseData(new JsonSchema06
 					{
 						AnyOf = new List<IJsonSchema>
 							{
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Array},
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number}
+								new JsonSchema06 {Type = JsonSchemaType.Array},
+								new JsonSchema06 {Type = JsonSchemaType.Number}
 							}
 					});
 			}
@@ -40,7 +40,7 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertInvalid();
 		}
-		
+
 		public static IEnumerable ValidateReturnsValidOnSingleValidData
 		{
 			get
@@ -49,16 +49,16 @@ namespace Manatee.Json.Tests.Schema
 					{
 						AnyOf = new List<IJsonSchema>
 							{
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
-								new JsonSchema04 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 10},
+								new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 20}
 							}
 					});
 				yield return new TestCaseData(new JsonSchema06
 					{
 						AnyOf = new List<IJsonSchema>
 							{
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Minimum = 10},
-								new JsonSchema06 {Type = JsonSchemaTypeDefinition.Number,Maximum = 20}
+								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10},
+								new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 20}
 							}
 					});
 			}

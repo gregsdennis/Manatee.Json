@@ -12,8 +12,8 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaTypeDefinition.Boolean});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaTypeDefinition.Boolean});
+				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Boolean});
+				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Boolean});
 			}
 		} 
 		

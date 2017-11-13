@@ -118,4 +118,4 @@ During development, building within Visual Studio should be fine.  There is a bu
 
 ### Code style and maintenance
 
-I use [Jetbrains Resharper](https://www.jetbrains.com/resharper/) in Visual Studio [JetBrains Rider](https://www.jetbrains.com/rider/) to maintain the code style (and for many of the other things that it does).  The solution is set up with team style settings, so if you're using Resharper the settings should automatically load.  Please follow the suggestions.
+I use [Jetbrains Resharper](https://www.jetbrains.com/resharper/) in Visual Studio to maintain the code style (and for many of the other things that it does).  The solution is set up with team style settings, so if you're using Resharper the settings should automatically load.  Please follow the suggestions.

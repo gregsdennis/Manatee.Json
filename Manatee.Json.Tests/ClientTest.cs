@@ -127,15 +127,15 @@ namespace Manatee.Json.Tests
 			var json = JsonValue.Parse(text);
 			var expected = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.Object,
-					Properties = new JsonSchemaPropertyDefinitionCollection
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
 						{
 							["home"] = new JsonSchema04
 								{
-									Type = new JsonSchemaMultiTypeDefinition(JsonSchemaTypeDefinition.Object, JsonSchemaTypeDefinition.Null),
-									Properties = new JsonSchemaPropertyDefinitionCollection
+									Type = JsonSchemaType.Object | JsonSchemaType.Null,
+									Properties = new Dictionary<string, IJsonSchema>
 										{
-											["street"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+											["street"] = new JsonSchema04 {Type = JsonSchemaType.String}
 										}
 								}
 						}
@@ -155,7 +155,7 @@ namespace Manatee.Json.Tests
 			var json = JsonValue.Parse(text);
 			var expected = new JsonSchema04
 				{
-					Type = JsonSchemaTypeDefinition.String,
+					Type = JsonSchemaType.String,
 					Enum = new List<EnumSchemaValue>
 						{
 							new EnumSchemaValue("FeatureCollection")
@@ -238,7 +238,7 @@ namespace Manatee.Json.Tests
 			var result = schema.Validate(json);
 
 			Console.WriteLine(schema.ToJson(null));
-			var refSchema = ((JsonSchemaReference)((JsonSchema04)schema).Properties["prop2"].Type).Resolved;
+			var refSchema = ((JsonSchemaReference) ((JsonSchema04) schema).Properties["prop2"]).Resolved;
 			Console.WriteLine(refSchema.ToJson(null));
 			Console.WriteLine(json);
 			foreach (var error in result.Errors)
@@ -257,32 +257,25 @@ namespace Manatee.Json.Tests
 				{
 					Title = "JSON schema for Something",
 					Schema = "http://json-schema.org/draft-04/schema#",
-					Definitions = new JsonSchemaTypeDefinitionCollection
+					Definitions = new Dictionary<string, IJsonSchema>
 						{
 							["something"] = new JsonSchema04
 								{
-									Type = JsonSchemaTypeDefinition.Object,
-									Properties = new JsonSchemaPropertyDefinitionCollection
-										{
-											new JsonSchemaPropertyDefinition("name")
-												{
-													IsHidden = true,
-													IsRequired = true
-												}
-										},
+									Type = JsonSchemaType.Object,
 									AllOf = new[]
 										{
 											new JsonSchema04
 												{
-													Properties = new JsonSchemaPropertyDefinitionCollection
+													Properties = new Dictionary<string, IJsonSchema>
 														{
-															["name"] = new JsonSchema04 {Type = JsonSchemaTypeDefinition.String}
+															["name"] = new JsonSchema04 {Type = JsonSchemaType.String}
 														}
 												}
-										}
+										},
+									Required = new List<string>{"name"}
 								}
 						},
-					Type = JsonSchemaTypeDefinition.Array,
+					Type = JsonSchemaType.Array,
 					Description = "An array of somethings.",
 					Items = new JsonSchemaReference("#/definitions/something", typeof(JsonSchema04))
 				};
