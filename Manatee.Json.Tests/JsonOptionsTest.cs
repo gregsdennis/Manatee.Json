@@ -100,6 +100,23 @@ namespace Manatee.Json.Tests
 			}
 		}
 		[Test]
+		public void CorrectAccessReturns_Object()
+		{
+			JsonOptions.ThrowOnIncorrectTypeAccess = false;
+
+			try
+			{
+				JsonValue json = new JsonObject();
+				var test = json.Object;
+
+				Assert.IsNotNull(test);
+			}
+			finally
+			{
+				JsonOptions.ThrowOnIncorrectTypeAccess = true;
+			}
+		}
+		[Test]
 		public void IncorrectAccessIgnores_Array()
 		{
 			JsonOptions.ThrowOnIncorrectTypeAccess = false;
@@ -110,6 +127,23 @@ namespace Manatee.Json.Tests
 				var test = json.Array;
 
 				Assert.IsNull(test);
+			}
+			finally
+			{
+				JsonOptions.ThrowOnIncorrectTypeAccess = true;
+			}
+		}
+		[Test]
+		public void CorrectAccessReturns_Array()
+		{
+			JsonOptions.ThrowOnIncorrectTypeAccess = false;
+
+			try
+			{
+				JsonValue json = new JsonArray();
+				var test = json.Array;
+
+				Assert.IsNotNull(test);
 			}
 			finally
 			{
@@ -135,6 +169,23 @@ namespace Manatee.Json.Tests
 			}
 		}
 		[Test]
+		public void CorrectAccessReturns_Number()
+		{
+			JsonOptions.ThrowOnIncorrectTypeAccess = false;
+
+			try
+			{
+				JsonValue json = 5;
+				var test = json.Number;
+
+				Assert.IsNotNull(test);
+			}
+			finally
+			{
+				JsonOptions.ThrowOnIncorrectTypeAccess = true;
+			}
+		}
+		[Test]
 		public void IncorrectAccessIgnores_String()
 		{
 			JsonOptions.ThrowOnIncorrectTypeAccess = false;
@@ -145,6 +196,23 @@ namespace Manatee.Json.Tests
 				var test = json.String;
 
 				Assert.IsNull(test);
+			}
+			finally
+			{
+				JsonOptions.ThrowOnIncorrectTypeAccess = true;
+			}
+		}
+		[Test]
+		public void CorrectAccessReturns_String()
+		{
+			JsonOptions.ThrowOnIncorrectTypeAccess = false;
+
+			try
+			{
+				JsonValue json = "test";
+				var test = json.String;
+
+				Assert.IsNotNull(test);
 			}
 			finally
 			{
@@ -163,6 +231,23 @@ namespace Manatee.Json.Tests
 
 				Assert.AreEqual(default(bool), test);
 
+			}
+			finally
+			{
+				JsonOptions.ThrowOnIncorrectTypeAccess = true;
+			}
+		}
+		[Test]
+		public void CorrectAccessReturns_Boolean()
+		{
+			JsonOptions.ThrowOnIncorrectTypeAccess = false;
+
+			try
+			{
+				JsonValue json = true;
+				var test = json.Boolean;
+
+				Assert.IsNotNull(test);
 			}
 			finally
 			{

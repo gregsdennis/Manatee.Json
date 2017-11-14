@@ -43,9 +43,10 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(bool);
 				if (Type != JsonValueType.Boolean)
-					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
+					return !JsonOptions.ThrowOnIncorrectTypeAccess
+						       ? default(bool)
+						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
 				return _boolValue;
 			}
 			private set
@@ -68,9 +69,10 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(string);
 				if (Type != JsonValueType.String)
-					throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
+					return !JsonOptions.ThrowOnIncorrectTypeAccess
+						       ? default(string)
+						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
 				return _stringValue;
 			}
 			private set
@@ -93,9 +95,10 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(double);
 				if (Type != JsonValueType.Number)
-					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
+					return !JsonOptions.ThrowOnIncorrectTypeAccess
+						       ? default(double)
+						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
 				return _numberValue;
 			}
 			private set
@@ -118,9 +121,10 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(JsonObject);
 				if (Type != JsonValueType.Object)
-					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
+					return !JsonOptions.ThrowOnIncorrectTypeAccess
+						       ? default(JsonObject)
+						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
 				return _objectValue;
 			}
 			private set
@@ -143,9 +147,10 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (!JsonOptions.ThrowOnIncorrectTypeAccess) return default(JsonArray);
 				if (Type != JsonValueType.Array)
-					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
+					return !JsonOptions.ThrowOnIncorrectTypeAccess
+						       ? default(JsonArray)
+						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
 				return _arrayValue;
 			}
 			private set
