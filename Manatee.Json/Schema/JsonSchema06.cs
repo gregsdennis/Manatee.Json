@@ -545,7 +545,7 @@ namespace Manatee.Json.Schema
 			{
 				var array = Type.ToJson();
 				if (array.Type == JsonValueType.Array)
-					array.Array.RequireSequenceEquality = false;
+					array.Array.EqualityStandard = ArrayEquality.ContentsEqual;
 				json["type"] = array;
 			}
 			if (Properties != null)
@@ -589,25 +589,25 @@ namespace Manatee.Json.Schema
 			if (Enum != null)
 			{
 				var array = Enum.ToJson(serializer);
-				array.Array.RequireSequenceEquality = false;
+				array.Array.EqualityStandard = ArrayEquality.ContentsEqual;
 				json["enum"] = Enum.ToJson(serializer);
 			}
 			if (AllOf != null)
 			{
 				var array = AllOf.Select(s => s.ToJson(serializer)).ToJson();
-				array.RequireSequenceEquality = false;
+				array.EqualityStandard = ArrayEquality.ContentsEqual;
 				json["allOf"] = array;
 			}
 			if (AnyOf != null)
 			{
 				var array = AnyOf.Select(s => s.ToJson(serializer)).ToJson();
-				array.RequireSequenceEquality = false;
+				array.EqualityStandard = ArrayEquality.ContentsEqual;
 				json["anyOf"] = array;
 			}
 			if (OneOf != null)
 			{
 				var array = OneOf.Select(s => s.ToJson(serializer)).ToJson();
-				array.RequireSequenceEquality = false;
+				array.EqualityStandard = ArrayEquality.ContentsEqual;
 				json["oneOf"] = array;
 			}
 			if (Not != null) json["not"] = Not.ToJson(serializer);

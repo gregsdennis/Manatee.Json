@@ -20,22 +20,9 @@ namespace Manatee.Json.Tests
 	public class DevTest
 	{
 		[Test]
-		public void Test1()
+		public void Test()
 		{
-			var list = new List<object> {1, false, "string", new ObjectWithBasicProps {DoubleProp = 5.5}};
-
-			JsonValue expected = new JsonArray {1, false, "string", new JsonObject {["DoubleProp"] = 5.5}};
-
-			var serializer = new JsonSerializer
-				{
-					Options =
-						{
-							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
-						}
-				};
-			var json = serializer.Serialize<dynamic>(list);
-
-			Assert.AreEqual(expected, json);
+			
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -44,8 +45,8 @@ namespace Manatee.Json
 		public string GetIndentedString(int indentLevel = 0)
 		{
 			if (Count == 0) return "{}";
-			string key, tab0 = string.Empty.PadLeft(indentLevel, '\t'),
-				   tab1 = string.Empty.PadLeft(indentLevel + 1, '\t'),
+			string key, tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
+				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar),
 				   s = "{\n";
 			int i;
 			for (i = 0; i < Count - 1; i++)
@@ -66,9 +67,17 @@ namespace Manatee.Json
 		/// it will be replaced by <see cref="JsonValue.Null"/>.</param>
 		public new void Add(string key, JsonValue value)
 		{
-			// TODO: Should this use the indexer to prevent duplicate key exceptions?
-			this[key] = value ?? JsonValue.Null;
-			//base.Add(key, value ?? JsonValue.Null);
+			switch (JsonOptions.DuplicateKeyBehavior)
+			{
+				case DuplicateKeyBehavior.Overwrite:
+					this[key] = value ?? JsonValue.Null;
+					break;
+				case DuplicateKeyBehavior.Throw:
+					base.Add(key, value ?? JsonValue.Null);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 
 		/// <summary>
@@ -93,9 +102,7 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>. </param><filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
-			var json = obj as JsonObject;
-			if (json == null) return false;
-
+			if (!(obj is JsonObject json)) return false;
 			if (!Keys.ContentsEqual(json.Keys)) return false;
 
 			return this.All(pair => json[pair.Key].Equals(pair.Value));

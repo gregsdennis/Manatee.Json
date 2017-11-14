@@ -318,6 +318,7 @@ namespace Manatee.Json.Tests
 		}
 
 		[Test]
+		[Ignore("This test no longer applies as of v9.1.0")]
 		public void Issue56_InconsistentNullAssignment()
 		{
 			JsonValue json1 = null;  // this is actually null

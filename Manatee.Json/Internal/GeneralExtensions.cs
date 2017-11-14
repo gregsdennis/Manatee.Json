@@ -37,6 +37,7 @@ namespace Manatee.Json.Internal
 		}
 		public static JsonValue AsJsonValue(this object value)
 		{
+			if (ReferenceEquals(value, null)) return null;
 			if (value is JsonValue jsonValue) return jsonValue;
 			if (value is JsonArray jsonArray) return jsonArray;
 			if (value is JsonObject jsonObject) return jsonObject;
