@@ -616,7 +616,7 @@ namespace Manatee.Json.Schema
 			if (Examples != null)
 			{
 				var array = Examples.Select(s => s.ToJson(serializer)).ToJson();
-				array.RequireSequenceEquality = false;
+				array.EqualityStandard = ArrayEquality.ContentsEqual;
 				json["examples"] = array;
 			}
 			if (ExtraneousDetails != null)
