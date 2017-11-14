@@ -123,6 +123,7 @@
     <Compile Include="Path\TestSuite\PathTest.cs" />
     <Compile Include="Path\TestSuite\PathTestSet.cs" />
     <Compile Include="Path\ToStringTest.cs" />
+    <Compile Include="Schema\ExamplesSchemaTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeDefinitionTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SchemaValidationResultsExtensions.cs" />

@@ -93,6 +93,12 @@ namespace Manatee.Json.Schema
 						["title"] = new JsonSchema06 {Type = JsonSchemaType.String},
 						["description"] = new JsonSchema06 {Type = JsonSchemaType.String},
 						["default"] = Empty,
+						["examples"] = new JsonSchema06
+							{
+
+								Type = JsonSchemaType.Array,
+								Items = Empty
+							},
 						["multipleOf"] = new JsonSchema06
 							{
 								Type = JsonSchemaType.Number,
@@ -384,6 +390,7 @@ namespace Manatee.Json.Schema
 				_format = value;
 			}
 		}
+		public IEnumerable<IJsonSchema> Examples { get; set; }
 		/// <summary>
 		/// Gets other, non-schema-defined properties.
 		/// </summary>
@@ -443,6 +450,8 @@ namespace Manatee.Json.Schema
 			Description = obj.TryGetString("description");
 			if (obj.ContainsKey("default"))
 				Default = obj["default"];
+			if (obj.ContainsKey("examples"))
+				Examples = json.Object["examples"].Array.Select(_ReadSchema);
 			MultipleOf = obj.TryGetNumber("multipleOf");
 			Maximum = obj.TryGetNumber("maximum");
 			ExclusiveMaximum = obj.TryGetNumber("exclusiveMaximum");
@@ -604,6 +613,12 @@ namespace Manatee.Json.Schema
 			if (Not != null) json["not"] = Not.ToJson(serializer);
 			if (Format != null) json["format"] = Format.Key;
 			if (Default != null) json["default"] = Default;
+			if (Examples != null)
+			{
+				var array = Examples.Select(s => s.ToJson(serializer)).ToJson();
+				array.RequireSequenceEquality = false;
+				json["examples"] = array;
+			}
 			if (ExtraneousDetails != null)
 			{
 				foreach (var kvp in ExtraneousDetails.Where(kvp => !_definedProperties.Contains(kvp.Key)))
@@ -659,6 +674,7 @@ namespace Manatee.Json.Schema
 			if (!Equals(Not, schema.Not)) return false;
 			if (!Equals(Format, schema.Format)) return false;
 			if (!Required.ContentsEqual(schema.Required)) return false;
+			if (!Examples.ContentsEqual(schema.Examples)) return false;
 			return Dependencies.ContentsEqual(schema.Dependencies);
 		}
 		/// <summary>
@@ -716,6 +732,7 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode*397) ^ (Not?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Format?.GetHashCode() ?? 0);
 				hashCode = (hashCode*397) ^ (Required?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode*397) ^ (Examples?.GetCollectionHashCode() ?? 0);
 				return hashCode;
 			}
 		}
