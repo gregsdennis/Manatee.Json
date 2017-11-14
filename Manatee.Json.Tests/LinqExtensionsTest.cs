@@ -45,7 +45,7 @@ namespace Manatee.Json.Tests
 		public void ToJson_NullStringArray_ReturnsNull()
 		{
 			var json = (IEnumerable<string>) null;
-			JsonValue expected = (JsonArray) null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson();
 			Assert.AreEqual(expected, actual);
 		}
@@ -61,7 +61,7 @@ namespace Manatee.Json.Tests
 		public void ToJson_NullBooleanArray_ReturnsNull()
 		{
 			var json = (IEnumerable<bool>) null;
-			JsonValue expected = (JsonArray) null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson();
 			Assert.AreEqual(expected, actual);
 		}
@@ -77,7 +77,7 @@ namespace Manatee.Json.Tests
 		public void ToJson_NullNullableBooleanArray_ReturnsNull()
 		{
 			var json = (IEnumerable<bool?>) null;
-			JsonValue expected = (JsonArray) null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson();
 			Assert.AreEqual(expected, actual);
 		}
@@ -93,7 +93,7 @@ namespace Manatee.Json.Tests
 		public void ToJson_NullNumberArray_ReturnsNull()
 		{
 			var json = (IEnumerable<double>) null;
-			JsonValue expected = (JsonArray) null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson();
 			Assert.AreEqual(expected, actual);
 		}
@@ -109,7 +109,7 @@ namespace Manatee.Json.Tests
 		public void ToJson_NullNullableNumberArray_ReturnsNull()
 		{
 			var json = (IEnumerable<double?>) null;
-			JsonValue expected = (JsonArray) null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson();
 			Assert.AreEqual(expected, actual);
 		}
@@ -125,7 +125,7 @@ namespace Manatee.Json.Tests
 		public void ToJson_NullJsonArrayArray_ReturnsNull()
 		{
 			var json = (IEnumerable<JsonArray>) null;
-			JsonValue expected = (JsonArray) null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson();
 			Assert.AreEqual(expected, actual);
 		}
@@ -141,7 +141,7 @@ namespace Manatee.Json.Tests
 		public void ToJson_NullJsonObjectArray_ReturnsNull()
 		{
 			var json = (IEnumerable<JsonObject>) null;
-			JsonValue expected = (JsonArray) null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson();
 			Assert.AreEqual(expected, actual);
 		}
@@ -159,7 +159,7 @@ namespace Manatee.Json.Tests
 		{
 			var serializer = new JsonSerializer();
 			var json = (IEnumerable<JsonSerializableClass>)null;
-			JsonValue expected = (JsonArray)null;
+			var expected = JsonValue.Null;
 			var actual = json.ToJson(serializer);
 			Assert.AreEqual(expected, actual);
 		}
