@@ -35,7 +35,7 @@ namespace Manatee.Json.Tests
 
 		#endregion
 
-		#region Incorrect Type Access
+		#region IncorrectTypeAccess
 
 		[Test]
 		public void IncorrectAccessThrows_Object()
@@ -167,6 +167,86 @@ namespace Manatee.Json.Tests
 			finally
 			{
 				JsonOptions.ThrowOnIncorrectTypeAccess = true;
+			}
+		}
+
+		#endregion
+
+		#region DefaultArrayEquality
+
+		[Test]
+		public void SequenceEqual()
+		{
+			JsonValue array1 = new JsonArray {1, false};
+			JsonValue array2 = new JsonArray {1, false};
+
+			Assert.IsTrue(array1.Equals(array2));
+		}
+
+		[Test]
+		public void SequenceEqualOverride()
+		{
+			JsonValue array1 = new JsonArray {1, false};
+			array1.Array.EqualityStandard = ArrayEquality.ContentsEqual;
+			JsonValue array2 = new JsonArray {false, 1};
+
+			Assert.IsTrue(array1.Equals(array2));
+		}
+
+		[Test]
+		public void SequenceNotEqual()
+		{
+			JsonValue array1 = new JsonArray {1, false};
+			JsonValue array2 = new JsonArray {false, 1};
+
+			Assert.IsFalse(array1.Equals(array2));
+		}
+
+		[Test]
+		public void ContentsEqual()
+		{
+			JsonValue array1 = new JsonArray {1, false};
+			JsonValue array2 = new JsonArray {1, false};
+
+			Assert.IsTrue(array1.Equals(array2));
+		}
+
+		[Test]
+		public void ContentsNotEqual()
+		{
+			JsonOptions.DefaultArrayEquality = ArrayEquality.ContentsEqual;
+
+			JsonValue array1 = new JsonArray {1, false};
+			JsonValue array2 = new JsonArray {false, 1};
+
+			try
+			{
+				Assert.IsTrue(array1.Equals(array2));
+
+			}
+			finally
+			{
+				JsonOptions.DefaultArrayEquality = ArrayEquality.SequenceEqual;
+			}
+		}
+
+		[Test]
+		public void ContentsNotEqualOverride()
+		{
+			JsonOptions.DefaultArrayEquality = ArrayEquality.ContentsEqual;
+
+			JsonValue array1 = new JsonArray {1, false};
+			array1.Array.EqualityStandard = ArrayEquality.SequenceEqual;
+			JsonValue array2 = new JsonArray {false, 1};
+
+			try
+			{
+				Assert.IsFalse(array1.Equals(array2));
+
+			}
+			finally
+			{
+				JsonOptions.DefaultArrayEquality = ArrayEquality.SequenceEqual;
 			}
 		}
 
