@@ -1,15 +1,15 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal class ConstSchemaPropertyValidator : IJsonSchemaPropertyValidator<JsonSchema06>
+	internal class ExamplesSchemaPropertyValidator : IJsonSchemaPropertyValidator<JsonSchema06>
 	{
 		public bool Applies(JsonSchema06 schema, JsonValue json)
 		{
-			return schema.Const != null;
+			return schema.Examples != null;
 		}
 		public SchemaValidationResults Validate(JsonSchema06 schema, JsonValue json, JsonValue root)
 		{
-			if (schema.Const != json)
-				return new SchemaValidationResults(string.Empty, $"Expected: {schema.Const}; Actual: {json}.");
+			if (json.Type != JsonValueType.Array)
+				return new SchemaValidationResults(string.Empty, $"Expected: Array; Actual: {json.Type}");
 			return new SchemaValidationResults();
 		}
 	}
