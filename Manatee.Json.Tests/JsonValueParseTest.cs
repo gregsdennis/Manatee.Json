@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
@@ -11,12 +12,39 @@ namespace Manatee.Json.Tests
 	[TestFixture]
 	public class JsonValueParseTest
 	{
-		#region String Tests
+		private static IEnumerable<(string test, JsonValue expected, string message)> _GetData()
+		{
+			yield return ("false", new JsonValue(false), null);
+			yield return ("true", new JsonValue(true), null);
+			yield return ("42", new JsonValue(42), null);
+			yield return ("\"a string\"", new JsonValue("a string"), null);
+			yield return ("[false,42,\"a string\"]", new JsonValue(new JsonArray { false, 42, "a string" }), null);
+			yield return ("{\"bool\":false,\"int\":42,\"string\":\"a string\"}", new JsonValue(new JsonObject { { "bool", false }, { "int", 42 }, { "string", "a string" } }), null);
+			yield return ("null", JsonValue.Null, null);
+			yield return ("nulf", null, "Value not recognized: 'nulf'. Path: '$'");
+			yield return ("invalid data", null, "Cannot determine type. Path: '$'");
+			yield return ("\"An \\\"escaped quote with\\\" spaces\"", new JsonValue("An \"escaped quote with\" spaces"), null);
+			yield return ("\"An \\\\escaped\\\\ solidus\"", new JsonValue("An \\escaped\\ solidus"), null);
+			yield return ("\"An \\/escaped/ reverse solidus\"", new JsonValue("An /escaped/ reverse solidus"), null);
+			yield return ("\"An \\bescaped\\b backspace\"", new JsonValue("An \bescaped\b backspace"), null);
+			yield return ("\"An \\fescaped\\f form feed\"", new JsonValue("An \fescaped\f form feed"), null);
+			yield return ("\"An \\nescaped\\n new line\"", new JsonValue("An \nescaped\n new line"), null);
+			yield return ("\"An \\rescaped\\r carriage return\"", new JsonValue("An \rescaped\r carriage return"), null);
+			yield return ("\"An \\tescaped\\t horizontal tab\"", new JsonValue("An \tescaped\t horizontal tab"), null);
+			yield return ("\"An \\u25A0escaped\\u25A0 hex value\"", new JsonValue("An " + (char)0x25A0 + "escaped" + (char)0x25A0 + " hex value"), null);
+			yield return ("\"\\uD83D\\uDCA9\"", new JsonValue(char.ConvertFromUtf32(0x1F4A9)), null);
+			yield return ("\"\\uD83D\\uDCA9\\uD83D\\uDCA9\"", new JsonValue(char.ConvertFromUtf32(0x1F4A9) + char.ConvertFromUtf32(0x1F4A9)), null);
+			yield return ("\"An \\rescaped\\a carriage return\"", null, "Invalid escape sequence: '\\a'. Path: '$'");
+			yield return ("\"some text\\\\\"", new JsonValue("some text\\"), null);
+		}
 
-		public static IEnumerable StringTests => _GetData()
+		public static IEnumerable TestData => _GetData()
 			.Select(d => new TestCaseData(d.test, d.expected, d.message));
 
-		[TestCaseSource(nameof(StringTests))]
+
+		#region String Tests
+
+		[TestCaseSource(nameof(TestData))]
 		public void Parse_Strings(string test, JsonValue expected, string message)
 		{
 			if (message == null)
@@ -47,20 +75,14 @@ namespace Manatee.Json.Tests
 
 		#region Stream Tests
 
-		public static IEnumerable StreamTests => _GetData()
-			.Select(d =>
-				{
-					var stream = new MemoryStream(Encoding.UTF8.GetBytes(d.test), false);
-					return new TestCaseData(stream, d.expected, d.message);
-				});
-
-		[TestCaseSource(nameof(StreamTests))]
-		public void Parse_Streams(Stream test, JsonValue expected, string message)
+		[TestCaseSource(nameof(TestData))]
+		public void Parse_Streams(string test, JsonValue expected, string message)
 		{
+			var stream = new MemoryStream(Encoding.UTF8.GetBytes(test), false);
 			if (message == null)
-				_RunTest(test, expected);
+				_RunTest(stream, expected);
 			else
-				_RunFail(test, message);
+				_RunFail(stream, message);
 		}
 
 		private static void _RunTest(Stream test, JsonValue expected)
@@ -87,38 +109,41 @@ namespace Manatee.Json.Tests
 			}
 		}
 
-		#endregion
-
-		private static IEnumerable<(string test, JsonValue expected, string message)> _GetData()
+		[TestCaseSource(nameof(TestData))]
+		public async Task Parse_StreamsAsync(string test, JsonValue expected, string message)
 		{
-			yield return ("false", new JsonValue(false), null);
-			yield return ("true", new JsonValue(true), null);
-			yield return ("42", new JsonValue(42), null);
-			yield return ("\"a string\"", new JsonValue("a string"), null);
-			yield return ("[false,42,\"a string\"]", new JsonValue(new JsonArray {false, 42, "a string"}), null);
-			yield return ("{\"bool\":false,\"int\":42,\"string\":\"a string\"}", new JsonValue(new JsonObject {{"bool", false}, {"int", 42}, {"string", "a string"}}), null);
-			yield return ("null", JsonValue.Null, null);
-			yield return ("nulf", null, "Value not recognized: 'nulf'. Path: '$'");
-			yield return ("invalid data", null, "Cannot determine type. Path: '$'");
-			yield return ("\"An \\\"escaped quote with\\\" spaces\"", new JsonValue("An \"escaped quote with\" spaces"), null);
-			yield return ("\"An \\\\escaped\\\\ solidus\"", new JsonValue("An \\escaped\\ solidus"), null);
-			yield return ("\"An \\/escaped/ reverse solidus\"", new JsonValue("An /escaped/ reverse solidus"), null);
-			yield return ("\"An \\bescaped\\b backspace\"", new JsonValue("An \bescaped\b backspace"), null);
-			yield return ("\"An \\fescaped\\f form feed\"", new JsonValue("An \fescaped\f form feed"), null);
-			yield return ("\"An \\nescaped\\n new line\"", new JsonValue("An \nescaped\n new line"), null);
-			yield return ("\"An \\rescaped\\r carriage return\"", new JsonValue("An \rescaped\r carriage return"), null);
-			yield return ("\"An \\tescaped\\t horizontal tab\"", new JsonValue("An \tescaped\t horizontal tab"), null);
-			yield return ("\"An \\u25A0escaped\\u25A0 hex value\"", new JsonValue("An " + (char)0x25A0 + "escaped" + (char)0x25A0 + " hex value"), null);
-			yield return ("\"\\uD83D\\uDCA9\"", new JsonValue(char.ConvertFromUtf32(0x1F4A9)), null);
-			yield return ("\"\\uD83D\\uDCA9\\uD83D\\uDCA9\"", new JsonValue(char.ConvertFromUtf32(0x1F4A9) + char.ConvertFromUtf32(0x1F4A9)), null);
-			yield return ("\"An \\rescaped\\a carriage return\"", null, "Invalid escape sequence: '\\a'. Path: '$'");
-			yield return ("\"some text\\\\\"", new JsonValue("some text\\"), null);
-			yield return ("false", new JsonValue(false), null);
-			yield return ("false", new JsonValue(false), null);
-			yield return ("false", new JsonValue(false), null);
-			yield return ("false", new JsonValue(false), null);
-			yield return ("false", new JsonValue(false), null);
+			var stream = new MemoryStream(Encoding.UTF8.GetBytes(test), false);
+			if (message == null)
+				await _RunTestAsync(stream, expected);
+			else
+				await _RunFailAsync(stream, message);
 		}
+
+		private static async Task _RunTestAsync(Stream test, JsonValue expected)
+		{
+			using (var reader = new StreamReader(test))
+			{
+				var actual = await JsonValue.ParseAsync(reader);
+				Assert.AreEqual(expected, actual);
+			}
+		}
+
+		private static async Task _RunFailAsync(Stream test, string message)
+		{
+			try
+			{
+				using (var reader = new StreamReader(test))
+				{
+					await JsonValue.ParseAsync(reader);
+				}
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual(message, e.Message);
+			}
+		}
+
+		#endregion
 
 		[Test]
 		public void Parse_NullString_ThrowsException()

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -46,6 +47,17 @@ namespace Manatee.Json.Parsing
 			}
 			value = JsonValue.Null;
 			return null;
+		}
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		{
+			var buffer = new char[4];
+			var count = await stream.ReadAsync(buffer, 0, 4);
+			if (count < 4)
+				return ("Unexpected end of input.", null);
+			var result = new string(buffer).ToLower();
+			if (result != "null")
+				return ($"Value not recognized: '{result}'.", null);
+			return (null, JsonValue.Null);
 		}
 	}
 }

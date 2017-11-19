@@ -171,6 +171,28 @@ namespace Manatee.Json.Internal
 			}
 			return null;
 		}
+		public static async Task<(string, char)> SkipWhiteSpaceAsync(this StreamReader stream)
+		{
+			char ch;
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return ("Unexpected end of input.", ch);
+			}
+			ch = (char) stream.Peek();
+			while (!stream.EndOfStream)
+			{
+				if (!char.IsWhiteSpace(ch)) break;
+				await stream.TryRead();
+				ch = (char) stream.Peek();
+			}
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return ("Unexpected end of input.", ch);
+			}
+			return (null, ch);
+		}
 		public static string UnescapePointer(this string reference)
 		{
 			var unescaped = reference.Replace("~1", "/")

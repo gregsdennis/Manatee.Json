@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting;
+using System.Text;
+using System.Threading.Tasks;
 using Manatee.Json.Internal;
 using Manatee.Json.Patch;
 using Manatee.Json.Schema;
@@ -22,7 +25,6 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			
 		}
 	}
 }

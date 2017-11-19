@@ -16,5 +16,9 @@ namespace Manatee.Json.Serialization
 		/// Indicates that read-only properties will be serialized.
 		/// </summary>
 		ReadOnly = 0x02,
+		/// <summary>
+		/// Indicates that both read-only and read/write properties will be serialized.
+		/// </summary>
+		ReadAndWrite = 0x03
 	}
 }

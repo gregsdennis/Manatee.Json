@@ -240,9 +240,7 @@ namespace Manatee.Json.Parsing
 					builder.Append(append);
 			}
 			if (!complete)
-			{
 				return ("Could not find end of string value.", null);
-			}
 			var value = builder.ToString();
 			return (errorMessage, value);
 		}
