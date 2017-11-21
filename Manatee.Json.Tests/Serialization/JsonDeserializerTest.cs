@@ -31,12 +31,14 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void DateTimeJavaFormat_Successful()
 		{
-			var serializer = new JsonSerializer();
-			serializer.Options = new JsonSerializerOptions
+			var serializer = new JsonSerializer
 				{
-					DateTimeSerializationFormat = DateTimeSerializationFormat.JavaConstructor
+					Options = new JsonSerializerOptions
+						{
+							DateTimeSerializationFormat = DateTimeSerializationFormat.JavaConstructor
+						}
 				};
-			JsonValue json = string.Format("/Date({0})/", DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond);
+			JsonValue json = $"/Date({DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond})/";
 			var expected = DateTime.Today;
 			var actual = serializer.Deserialize<DateTime>(json);
 			serializer.Options = null;
@@ -103,8 +105,7 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void BasicWithNamedEnum_Successful()
 		{
-			var serializer = new JsonSerializer();
-			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -300,7 +301,7 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			var json = JsonValue.Null;
 			var actual = serializer.Deserialize<int?>(json);
-			Assert.AreEqual((int?) null, actual);
+			Assert.AreEqual(null, actual);
 		}
 		[Test]
 		public void Nullable_NonNull_Successful()

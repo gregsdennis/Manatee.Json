@@ -16,21 +16,21 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 		}
 
 		public abstract bool CanHandle(Type type);
-		public JsonSerializationTypeRegistry.ToJsonDelegate<T> GetEncoder<T>()
+		public CustomSerializations.ToJsonDelegate<T> GetEncoder<T>()
 		{
 			var typeArguments = GetTypeArguments(typeof (T));
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
-			return (JsonSerializationTypeRegistry.ToJsonDelegate<T>) toJson.CreateDelegate(typeof (JsonSerializationTypeRegistry.ToJsonDelegate<T>), null);
+			return (CustomSerializations.ToJsonDelegate<T>) toJson.CreateDelegate(typeof (CustomSerializations.ToJsonDelegate<T>), null);
 		}
-		public JsonSerializationTypeRegistry.FromJsonDelegate<T> GetDecoder<T>()
+		public CustomSerializations.FromJsonDelegate<T> GetDecoder<T>()
 		{
 			var typeArguments = GetTypeArguments(typeof (T));
 			var fromJson = _decodeMethod;
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
-			return (JsonSerializationTypeRegistry.FromJsonDelegate<T>) fromJson.CreateDelegate(typeof(JsonSerializationTypeRegistry.FromJsonDelegate<T>), null);
+			return (CustomSerializations.FromJsonDelegate<T>) fromJson.CreateDelegate(typeof(CustomSerializations.FromJsonDelegate<T>), null);
 		}
 
 		protected virtual Type[] GetTypeArguments(Type type)

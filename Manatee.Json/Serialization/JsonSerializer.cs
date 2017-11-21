@@ -10,6 +10,7 @@ namespace Manatee.Json.Serialization
 	{
 		private int _callCount;
 		private JsonSerializerOptions _options;
+		private CustomSerializations _customSerializations;
 
 		/// <summary>
 		/// Gets or sets a set of options for the serializer.
@@ -17,7 +18,12 @@ namespace Manatee.Json.Serialization
 		public JsonSerializerOptions Options
 		{
 			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
-			set { _options = value ?? new JsonSerializerOptions(JsonSerializerOptions.Default); }
+			set { _options = value; }
+		}
+		public CustomSerializations CustomSerializations
+		{
+			get { return _customSerializations ?? (_customSerializations = new CustomSerializations(CustomSerializations.Default)); }
+			set { _customSerializations = value; }
 		}
 		internal SerializationPairCache SerializationMap { get; } = new SerializationPairCache();
 
@@ -30,7 +36,7 @@ namespace Manatee.Json.Serialization
 		public JsonValue Serialize<T>(T obj)
 		{
 			_callCount++;
-			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), Options);
+			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), this);
 			var json = serializer.Serialize(obj, this);
 			if (--_callCount == 0)
 			{
@@ -71,7 +77,7 @@ namespace Manatee.Json.Serialization
 		public T Deserialize<T>(JsonValue json)
 		{
 			_callCount++;
-			var serializer = SerializerFactory.GetSerializer(typeof(T), Options, json);
+			var serializer = SerializerFactory.GetSerializer(typeof(T), this, json);
 			var obj = serializer.Deserialize<T>(json, this);
 			if (--_callCount == 0)
 			{
