@@ -49,13 +49,13 @@ namespace Manatee.Json.Serialization.Internal
 				};
 		}
 
-		public static ISerializer GetSerializer(Type typeToSerialize, JsonSerializerOptions options, JsonValue json = null)
+		public static ISerializer GetSerializer(Type typeToSerialize, JsonSerializer serializer, JsonValue json = null)
 		{
-			typeToSerialize = JsonSerializationAbstractionMap.GetMap(typeToSerialize);
+			typeToSerialize = serializer.AbstractionMap.GetMap(typeToSerialize);
 			var typeInfo = typeToSerialize.GetTypeInfo();
 			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeInfo))
 				return _BuildSerializer(_schemaSerializer);
-			if (JsonSerializationTypeRegistry.IsRegistered(typeToSerialize))
+			if (serializer.CustomSerializations.IsRegistered(typeToSerialize))
 				return _BuildSerializer(_registeredObjectSerializer);
 			if (typeof (IJsonSerializable).GetTypeInfo().IsAssignableFrom(typeInfo))
 				return _BuildSerializer(_jsonSerializableSerializer);
@@ -68,7 +68,7 @@ namespace Manatee.Json.Serialization.Internal
 					if (json.Type == JsonValueType.String)
 						return _BuildSerializer(_enumNameSerializer);
 				}
-				switch (options.EnumSerializationFormat)
+				switch (serializer.Options.EnumSerializationFormat)
 				{
 					case EnumSerializationFormat.AsInteger:
 						return _BuildSerializer(_enumValueSerializer);
@@ -78,9 +78,9 @@ namespace Manatee.Json.Serialization.Internal
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			return _BuildSerializer(_library.TryGetValue(typeToSerialize, out var serializer)
-				                        ? serializer
-				                        : _autoSerializer);
+			return _BuildSerializer(_library.TryGetValue(typeToSerialize, out var internalSerializer)
+				                        ? internalSerializer
+										: _autoSerializer);
 		}
 		public static ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
 		{

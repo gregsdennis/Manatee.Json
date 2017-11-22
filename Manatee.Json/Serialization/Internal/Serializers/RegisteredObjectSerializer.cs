@@ -6,14 +6,12 @@
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			JsonValue json;
-			serializer.Encode(obj, out json);
+			serializer.CustomSerializations.Encode(serializer, obj, out var json);
 			return json;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			T value;
-			serializer.Decode(json, out value);
+			serializer.CustomSerializations.Decode(serializer, json, out T value);
 			return value;
 		}
 	}

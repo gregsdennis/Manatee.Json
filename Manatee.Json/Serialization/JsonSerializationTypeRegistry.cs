@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Manatee.Json.Internal;
-using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
@@ -11,6 +6,7 @@ namespace Manatee.Json.Serialization
 	/// Manages methods for serializing object types which do not implement <see cref="IJsonSerializable"/> and
 	/// cannot be automatically serialized.
 	/// </summary>
+	[Obsolete("Please use the CustomSerializations class instead.")]
 	public static class JsonSerializationTypeRegistry
 	{
 		/// <summary>
@@ -31,26 +27,6 @@ namespace Manatee.Json.Serialization
 		/// <returns>The deserialized object.</returns>
 		public delegate T FromJsonDelegate<out T>(JsonValue json, JsonSerializer serializer);
 
-		private static readonly List<ISerializationDelegateProvider> _delegateProviders;
-		private static readonly Dictionary<Type, Delegate> _toJsonConverters;
-		private static readonly Dictionary<Type, Delegate> _fromJsonConverters;
-		private static readonly object _lockHolder = new object();
-		private static readonly MethodInfo _autoregistrationMethod;
-
-		static JsonSerializationTypeRegistry()
-		{
-			_delegateProviders = typeof(JsonSerializationTypeRegistry).GetTypeInfo().Assembly.DefinedTypes
-																	  .Where(t => typeof(ISerializationDelegateProvider).GetTypeInfo().IsAssignableFrom(t) &&
-																				  !t.IsAbstract &&
-																				  t.IsClass)
-																	  .Select(ti => Activator.CreateInstance(ti.AsType()))
-																	  .Cast<ISerializationDelegateProvider>()
-																	  .ToList();
-			_toJsonConverters = new Dictionary<Type, Delegate>();
-			_fromJsonConverters = new Dictionary<Type, Delegate>();
-			_autoregistrationMethod = typeof (JsonSerializationTypeRegistry).GetTypeInfo().GetDeclaredMethod("_RegisterProviderDelegates");
-		}
-
 		/// <summary>
 		/// Registers an encode/decode method pair for a specific type.
 		/// </summary>
@@ -61,18 +37,7 @@ namespace Manatee.Json.Serialization
 		/// or <paramref name="fromJson"/> is null.</exception>
 		public static void RegisterType<T>(ToJsonDelegate<T> toJson, FromJsonDelegate<T> fromJson)
 		{
-			if (((toJson == null) && (fromJson != null)) ||
-				((toJson != null) && (fromJson == null)))
-				throw new TypeRegistrationException(typeof(T));
-			var type = typeof(T);
-			if (toJson == null)
-			{
-				_toJsonConverters.Remove(type);
-				_fromJsonConverters.Remove(type);
-				return;
-			}
-			_toJsonConverters[type] = toJson;
-			_fromJsonConverters[type] = fromJson;
+			CustomSerializations.Default.RegisterType<T>((o, s) => toJson(o, s), (j, s) => fromJson(j, s));
 		}
 		/// <summary>
 		/// Gets whether a given type has been entered into the registry.
@@ -81,7 +46,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>True if an entry exists for the type; otherwise false.</returns>
 		public static bool IsRegistered<T>()
 		{
-			return IsRegistered(typeof (T));
+			return CustomSerializations.Default.IsRegistered<T>();
 		}
 		/// <summary>
 		/// Gets whether a given type has been entered into the registry.
@@ -90,60 +55,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>True if an entry exists for the type; otherwise false.</returns>
 		public static bool IsRegistered(Type type)
 		{
-			if (_toJsonConverters.ContainsKey(type)) return true;
-			if (type.GetTypeInfo().IsGenericTypeDefinition) return false;
-
-			var delegateProvider = _delegateProviders.FirstOrDefault(p => p.CanHandle(type));
-			if (delegateProvider == null) return false;
-
-			var registerMethod = _autoregistrationMethod.MakeGenericMethod(type);
-			registerMethod.Invoke(null, new object[] { delegateProvider });
-			return true;
-		}
-
-		internal static void Encode<T>(this JsonSerializer serializer, T obj, out JsonValue json)
-		{
-			var converter = _GetToJsonConverter(obj?.GetType() ?? typeof(T));
-			if (converter == null)
-			{
-				json = null;
-				return;
-			}
-			lock (_lockHolder)
-			{
-				json = (JsonValue) converter.DynamicInvoke(obj, serializer);
-			}
-		}
-		internal static void Decode<T>(this JsonSerializer serializer, JsonValue json, out T obj)
-		{
-			var converter = _GetFromJsonConverter<T>();
-			if (converter == null)
-			{
-				obj = default(T);
-				return;
-			}
-			lock (_lockHolder)
-			{
-				obj = converter(json, serializer);
-			}
-		}
-
-		private static Delegate _GetToJsonConverter(Type requestedType)
-		{
-			var type = JsonSerializationAbstractionMap.GetMap(requestedType);
-			return _toJsonConverters.ContainsKey(type) ? _toJsonConverters[type] : null;
-		}
-		private static FromJsonDelegate<T> _GetFromJsonConverter<T>()
-		{
-			var type = JsonSerializationAbstractionMap.GetMap(typeof (T));
-			return _fromJsonConverters.ContainsKey(type) ? (FromJsonDelegate<T>) _fromJsonConverters[type] : null;
-		}
-		// ReSharper disable once UnusedMember.Local
-		private static void _RegisterProviderDelegates<T>(ISerializationDelegateProvider provider)
-		{
-			var type = typeof (T);
-			_toJsonConverters[type] = provider.GetEncoder<T>();
-			_fromJsonConverters[type] = provider.GetDecoder<T>();
+			return CustomSerializations.Default.IsRegistered(type);
 		}
 	}
 }
