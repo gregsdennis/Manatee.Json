@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.3</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to building JSON structures.</Description>
-    <Version>9.1.1</Version>
+    <Version>9.2.0</Version>
     <Copyright>Copyright © 2017 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
@@ -11,7 +11,12 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v9.1.1
+    <PackageReleaseNotes>v9.2.0
+Added instance versions of JsonSerializationAbstractionMap (AbstractionMap) and JsonSerializationTypeRegistry (CustomSerializations) to further customize different serializer instances.  Old types now marked obsolete.
+Added properties to JsonSerializer to support new customizations.
+Added async stream parsing support.
+
+v9.1.1
 BUG FIX: Incorrect access off -&gt; props always null
 
 v9.1.0
@@ -45,7 +50,7 @@ Added support for serializing dynamics.
 </PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>9.1.1.0</FileVersion>
+    <FileVersion>9.2.0.0</FileVersion>
     <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
