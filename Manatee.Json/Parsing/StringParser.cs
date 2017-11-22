@@ -181,7 +181,7 @@ namespace Manatee.Json.Parsing
 				else
 				{
 					var result = await stream.TryRead();
-					if (result.success) break;
+					if (!result.success) break;
 					c = result.c;
 				}
 				var append = new string(c, 1);
