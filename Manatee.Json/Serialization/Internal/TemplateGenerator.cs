@@ -34,7 +34,7 @@ namespace Manatee.Json.Serialization.Internal
 			serializer.Options.IncludeContentSample = true;
 			_generatedTypes = new List<Type>();
 
-			var instance = _BuildInstance<T>(serializer.Options);
+			var instance = _BuildInstance<T>(serializer);
 
 			var json = serializer.Serialize(instance);
 
@@ -43,9 +43,10 @@ namespace Manatee.Json.Serialization.Internal
 			return json;
 		}
 
-		private static T _BuildInstance<T>(JsonSerializerOptions options)
+		private static T _BuildInstance<T>(JsonSerializer serializer)
 		{
 			var type = typeof (T);
+			var options = serializer.Options;
 
 			if (_defaultInstances.ContainsKey(type))
 				return (T) _defaultInstances[type];
@@ -64,7 +65,7 @@ namespace Manatee.Json.Serialization.Internal
 			}
 			else
 			{
-				instance = JsonSerializationAbstractionMap.CreateInstance<T>(null, options.Resolver);
+				instance = serializer.AbstractionMap.CreateInstance<T>(null, options.Resolver);
 				_FillProperties(instance, options);
 				if (options.AutoSerializeFields)
 					_FillFields(instance, options);

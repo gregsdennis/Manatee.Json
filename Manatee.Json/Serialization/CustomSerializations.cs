@@ -112,7 +112,7 @@ namespace Manatee.Json.Serialization
 
 		internal void Encode<T>(JsonSerializer serializer, T obj, out JsonValue json)
 		{
-			var converter = _GetToJsonConverter(obj?.GetType() ?? typeof(T));
+			var converter = _GetToJsonConverter(serializer, obj?.GetType() ?? typeof(T));
 			if (converter == null)
 			{
 				json = null;
@@ -125,7 +125,7 @@ namespace Manatee.Json.Serialization
 		}
 		internal void Decode<T>(JsonSerializer serializer, JsonValue json, out T obj)
 		{
-			var converter = _GetFromJsonConverter<T>();
+			var converter = _GetFromJsonConverter<T>(serializer);
 			if (converter == null)
 			{
 				obj = default(T);
@@ -137,14 +137,14 @@ namespace Manatee.Json.Serialization
 			}
 		}
 
-		private Delegate _GetToJsonConverter(Type requestedType)
+		private Delegate _GetToJsonConverter(JsonSerializer serializer, Type requestedType)
 		{
-			var type = JsonSerializationAbstractionMap.GetMap(requestedType);
+			var type = serializer.AbstractionMap.GetMap(requestedType);
 			return _toJsonConverters.ContainsKey(type) ? _toJsonConverters[type] : null;
 		}
-		private FromJsonDelegate<T> _GetFromJsonConverter<T>()
+		private FromJsonDelegate<T> _GetFromJsonConverter<T>(JsonSerializer serializer)
 		{
-			var type = JsonSerializationAbstractionMap.GetMap(typeof (T));
+			var type = serializer.AbstractionMap.GetMap(typeof (T));
 			return _fromJsonConverters.ContainsKey(type) ? (FromJsonDelegate<T>) _fromJsonConverters[type] : null;
 		}
 		// ReSharper disable once UnusedMember.Local

@@ -51,7 +51,7 @@ namespace Manatee.Json.Serialization.Internal
 
 		public static ISerializer GetSerializer(Type typeToSerialize, JsonSerializer serializer, JsonValue json = null)
 		{
-			typeToSerialize = JsonSerializationAbstractionMap.GetMap(typeToSerialize);
+			typeToSerialize = serializer.AbstractionMap.GetMap(typeToSerialize);
 			var typeInfo = typeToSerialize.GetTypeInfo();
 			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeInfo))
 				return _BuildSerializer(_schemaSerializer);

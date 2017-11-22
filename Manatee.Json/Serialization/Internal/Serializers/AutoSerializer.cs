@@ -42,7 +42,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var obj = JsonSerializationAbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
+			var obj = serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			var type = obj.GetType();
 			var propertyList = ReflectionCache.GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _DeserializeValues(obj, json, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);

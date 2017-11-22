@@ -195,8 +195,8 @@ namespace Manatee.Json.Tests.Serialization
 					AbstractProp = new DerivedClass {SomeProp = 42},
 					InterfaceProp = new ImplementationClass {RequiredProp = "test"}
 				};
-			JsonSerializationAbstractionMap.Map<AbstractClass, DerivedClass>();
-			JsonSerializationAbstractionMap.Map<IInterface, ImplementationClass>();
+			serializer.AbstractionMap.Map<AbstractClass, DerivedClass>();
+			serializer.AbstractionMap.Map<IInterface, ImplementationClass>();
 			var actual = serializer.Deserialize<ObjectWithAbstractAndInterfaceProps>(json);
 			Assert.AreEqual(expected, actual);
 		}
@@ -233,7 +233,7 @@ namespace Manatee.Json.Tests.Serialization
 					SomeProp = 42,
 					NewProp = "test"
 				};
-			JsonSerializationAbstractionMap.Map<AbstractClass, DerivedClass>();
+			serializer.AbstractionMap.Map<AbstractClass, DerivedClass>();
 
 			var actual = serializer.Deserialize<AbstractClass>(json);
 			Assert.AreEqual(expected, actual);
@@ -260,7 +260,6 @@ namespace Manatee.Json.Tests.Serialization
 				{
 					{"RequiredProp", "test"}
 				};
-			JsonSerializationAbstractionMap.RemoveMap<IInterface>();
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
 
 			var actual = serializer.Deserialize<IInterface>(json);
@@ -276,7 +275,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"RequiredProp", "test"}
 				};
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
-			JsonSerializationAbstractionMap.Map<IInterface, ImplementationClass>();
+			serializer.AbstractionMap.Map<IInterface, ImplementationClass>();
 
 			var actual = serializer.Deserialize<IInterface>(json);
 			Assert.AreEqual(expected, actual);
@@ -290,7 +289,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"requiredProp", "test"}
 				};
 			IInterface expected = new JsonSerializableImplementationClass {RequiredProp = "test"};
-			JsonSerializationAbstractionMap.Map<IInterface, JsonSerializableImplementationClass>();
+			serializer.AbstractionMap.Map<IInterface, JsonSerializableImplementationClass>();
 
 			var actual = serializer.Deserialize<IInterface>(json);
 			Assert.AreEqual(expected, actual);
@@ -342,7 +341,7 @@ namespace Manatee.Json.Tests.Serialization
 		public void IEnumerable_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationAbstractionMap.MapGeneric(typeof (IEnumerable<>), typeof (List<>));
+			serializer.AbstractionMap.MapGeneric(typeof (IEnumerable<>), typeof (List<>));
 			JsonValue json = new JsonArray {4, 3, 5, 6};
 			var expected = new List<int> {4, 3, 5, 6};
 			var actual = serializer.Deserialize<IEnumerable<int>>(json);
@@ -536,7 +535,7 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var serializer = new JsonSerializer();
 			var json = new JsonObject {{"RequiredProp", "test"}};
-			JsonSerializationAbstractionMap.RemoveMap<IInterface>();
+			serializer.AbstractionMap.RemoveMap<IInterface>();
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
 
 			var actual = serializer.Deserialize<IInterface>(json);
@@ -576,9 +575,9 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void MapGenericAbstraction_Interface_Success()
 		{
-			JsonSerializationAbstractionMap.MapGeneric(typeof (IFace<>), typeof (Impl<>));
-
 			var serializer = new JsonSerializer();
+			serializer.AbstractionMap.MapGeneric(typeof (IFace<>), typeof (Impl<>));
+
 			var json = new JsonObject {{"Value", 1}};
 			var value = serializer.Deserialize<IFace<int>>(json);
 
@@ -587,9 +586,9 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void MapGenericAbstraction_BaseClass_Success()
 		{
-			JsonSerializationAbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));
-
 			var serializer = new JsonSerializer();
+			serializer.AbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));
+
 			var json = new JsonObject {{"Value", 1}};
 			var value = serializer.Deserialize<Impl<int>>(json);
 
@@ -598,10 +597,10 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void MapGenericAbstraction_WithOverride_Success()
 		{
-			JsonSerializationAbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));
-			JsonSerializationAbstractionMap.Map<Impl<string>, Derived<string>>();
-
 			var serializer = new JsonSerializer();
+			serializer.AbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));
+			serializer.AbstractionMap.Map<Impl<string>, Derived<string>>();
+
 			var json = new JsonObject {{"Value", 1}};
 			var value = serializer.Deserialize<Impl<int>>(json);
 

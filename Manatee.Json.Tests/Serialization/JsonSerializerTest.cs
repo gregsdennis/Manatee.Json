@@ -358,7 +358,7 @@ namespace Manatee.Json.Tests.Serialization
 		public void IEnumerable_Successful()
 		{
 			var serializer = new JsonSerializer();
-			JsonSerializationAbstractionMap.MapGeneric(typeof (IEnumerable<>), typeof (List<>));
+			serializer.AbstractionMap.MapGeneric(typeof (IEnumerable<>), typeof (List<>));
 			var list = (IEnumerable<int>) new List<int> {4, 3, 5, 6};
 			JsonValue expected = new JsonArray {4, 3, 5, 6};
 			var actual = serializer.Serialize(list);

@@ -11,6 +11,7 @@ namespace Manatee.Json.Serialization
 		private int _callCount;
 		private JsonSerializerOptions _options;
 		private CustomSerializations _customSerializations;
+		private AbstractionMap _abstractionMap;
 
 		/// <summary>
 		/// Gets or sets a set of options for the serializer.
@@ -24,6 +25,11 @@ namespace Manatee.Json.Serialization
 		{
 			get { return _customSerializations ?? (_customSerializations = new CustomSerializations(CustomSerializations.Default)); }
 			set { _customSerializations = value; }
+		}
+		public AbstractionMap AbstractionMap
+		{
+			get { return _abstractionMap ?? (_abstractionMap = new AbstractionMap(AbstractionMap.Default)); }
+			set { _abstractionMap = value; }
 		}
 		internal SerializationPairCache SerializationMap { get; } = new SerializationPairCache();
 

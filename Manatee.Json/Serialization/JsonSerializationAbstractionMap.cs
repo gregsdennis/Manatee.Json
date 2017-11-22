@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using Manatee.Json.Internal;
-using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
@@ -13,15 +6,9 @@ namespace Manatee.Json.Serialization
 	/// Provides an interface to map abstract and interface types to
 	/// concrete types for object instantiation during deserialization.
 	/// </summary>
+	[Obsolete("Please use the AbstrationMap class instead.")]
 	public static class JsonSerializationAbstractionMap
 	{
-		private static readonly Dictionary<Type, Type> _registry;
-
-		static JsonSerializationAbstractionMap()
-		{
-			_registry = new Dictionary<Type, Type>();
-		}
-
 		/// <summary>
 		/// Applies a mapping from an abstraction to a concrete type.
 		/// </summary>
@@ -33,11 +20,7 @@ namespace Manatee.Json.Serialization
 		public static void Map<TAbstract, TConcrete>(MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
 			where TConcrete : TAbstract, new()
 		{
-			if (typeof(TConcrete).GetTypeInfo().IsAbstract || typeof(TConcrete).GetTypeInfo().IsInterface)
-				throw new JsonTypeMapException<TAbstract, TConcrete>();
-			var tAbstract = typeof (TAbstract);
-			var tConcrete = typeof (TConcrete);
-			_MapTypes(tAbstract, tConcrete, mappingBehavior);
+			AbstractionMap.Default.Map<TAbstract, TConcrete>(mappingBehavior);
 		}
 		/// <summary>
 		/// Applies a mapping from an open generic abstraction to an open generic concrete type.
@@ -50,11 +33,7 @@ namespace Manatee.Json.Serialization
 		/// from <paramref name="tAbstract"/>.</exception>
 		public static void MapGeneric(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
 		{
-			if (tConcrete.GetTypeInfo().IsAbstract || tConcrete.GetTypeInfo().IsInterface)
-				throw new JsonTypeMapException(tAbstract, tConcrete);
-			if (!tConcrete.InheritsFrom(tAbstract))
-				throw new JsonTypeMapException(tAbstract, tConcrete);
-			_MapTypes(tAbstract, tConcrete, mappingBehavior);
+			AbstractionMap.Default.MapGeneric(tAbstract,  tConcrete, mappingBehavior);
 		}
 		/// <summary>
 		/// Removes a previously-assigned mapping.
@@ -63,17 +42,7 @@ namespace Manatee.Json.Serialization
 		/// <param name="removeRelated">Optionally removes mappings of base and related interface types.</param>
 		public static void RemoveMap<TAbstract>(bool removeRelated = true)
 		{
-			var tAbstract = typeof (TAbstract);
-			if (!_registry.TryGetValue(tAbstract, out Type tConcrete)) return;
-
-			_registry.Remove(tAbstract);
-			if (!removeRelated) return;
-
-			var removeTypes = _registry.Where(kvp => kvp.Value == tConcrete).Select(kvp => kvp.Key).ToList();
-			foreach (var type in removeTypes)
-			{
-				_registry.Remove(type);
-			}
+			AbstractionMap.Default.RemoveMap<TAbstract>(removeRelated);
 		}
 		/// <summary>
 		/// Retrieves the map setting for an abstraction type.
@@ -82,80 +51,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The mapped type if a mapping exists; otherwise the abstraction type.</returns>
 		public static Type GetMap(Type type)
 		{
-			if (!type.GetTypeInfo().IsAbstract && !type.GetTypeInfo().IsInterface) return type;
-			if (_registry.TryGetValue(type, out Type tConcrete)) return tConcrete;
-
-			if (type.GetTypeInfo().IsGenericType)
-			{
-				var genericDefinition = type.GetGenericTypeDefinition();
-				var genericMatches = _registry.Where(t => t.Key.GetTypeInfo().IsGenericTypeDefinition && t.Key.GetGenericTypeDefinition() == genericDefinition).ToList();
-				if (genericMatches.Any())
-				{
-					var typeArguments = type.GetTypeArguments();
-					return genericMatches.First().Value.MakeGenericType(typeArguments);
-				}
-			}
-			return type;
-		}
-
-		internal static T CreateInstance<T>(JsonValue json, IResolver resolver)
-		{
-			var type = typeof (T);
-			if (type.GetTypeInfo().IsAbstract || type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsGenericType)
-			{
-				if ((json != null) && (json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
-				{
-					var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
-					return (T) resolver.Resolve(concrete);
-				}
-				if (!_registry.TryGetValue(type, out Type tConcrete))
-				{
-					if (type.GetTypeInfo().IsGenericType)
-						type = type.GetGenericTypeDefinition();
-					_registry.TryGetValue(type, out tConcrete);
-				}
-
-				if (tConcrete != null)
-				{
-					if (tConcrete.GetTypeInfo().IsGenericTypeDefinition)
-						tConcrete = tConcrete.MakeGenericType(typeof(T).GetTypeArguments());
-					return (T) resolver.Resolve(tConcrete);
-				}
-
-				if (type.GetTypeInfo().IsInterface)
-					return TypeGenerator.Generate<T>();
-			}
-			return resolver.Resolve<T>();
-		}
-
-		private static void _MapTypes(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior)
-		{
-			_registry[tAbstract] = tConcrete;
-			switch (mappingBehavior)
-			{
-				case MapBaseAbstractionBehavior.Unmapped:
-					_MapBaseTypes(tAbstract, tConcrete, false);
-					break;
-				case MapBaseAbstractionBehavior.Override:
-					_MapBaseTypes(tAbstract, tConcrete, true);
-					break;
-			}
-		}
-		private static void _MapBaseTypes(Type tAbstract, Type tConcrete, bool overwrite)
-		{
-			if (tAbstract == null) return;
-			var tBase = tAbstract.GetTypeInfo().BaseType;
-			if (tBase != null && (overwrite || !_registry.ContainsKey(tBase)))
-				_registry[tBase] = tConcrete;
-			_MapBaseTypes(tBase, tConcrete, overwrite);
-			foreach (var tInterface in tAbstract.GetTypeInfo().ImplementedInterfaces)
-			{
-				if (overwrite || !_registry.ContainsKey(tInterface))
-				{
-					_registry[tInterface] = tConcrete;
-				}
-				_MapBaseTypes(tInterface, tConcrete, overwrite);
-			}
+			return AbstractionMap.Default.GetMap(type);
 		}
 	}
 }
