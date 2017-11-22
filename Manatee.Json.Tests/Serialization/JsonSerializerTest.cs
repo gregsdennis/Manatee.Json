@@ -699,5 +699,39 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, json);
 		}
+		[Test]
+		public void SerializeAnonymous()
+		{
+			var target = new
+				{
+					test = 1,
+					fail = "no",
+					nested = new
+						{
+							value = true
+						}
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["test"] = 1,
+					["fail"] = "no",
+					["nested"] = new JsonObject
+						{
+							["value"] = true
+						}
+				};
+
+			var seralizer = new JsonSerializer
+				{
+					Options =
+						{
+							PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite
+						}
+				};
+			var json = seralizer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
 	}
 }

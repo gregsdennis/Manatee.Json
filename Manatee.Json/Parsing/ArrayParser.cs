@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -75,6 +76,39 @@ namespace Manatee.Json.Parsing
 				if (c != ',') return "Expected ','.";
 			}
 			return null;
+		}
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		{
+			var array = new JsonArray();
+			while (!stream.EndOfStream)
+			{
+				await stream.TryRead(); // waste the '[' or ','
+				var (message, c) = await stream.SkipWhiteSpaceAsync();
+				if (message != null) return (message, array);
+				// check for empty array
+				if (c == ']')
+					if (array.Count == 0)
+					{
+						await stream.TryRead(); // waste the ']'
+						break;
+					}
+					else return ("Expected value.", null);
+				// get value
+				JsonValue item;
+				(message, item) = await JsonParser.TryParseAsync(stream);
+				array.Add(item);
+				if (message != null) return (message, null);
+				(message, c) = await stream.SkipWhiteSpaceAsync();
+				if (message != null) return (message, null);
+				// check for end or separator
+				if (c == ']')
+				{
+					await stream.TryRead(); // waste the ']'
+					break;
+				}
+				if (c != ',') return ("Expected ','.", null);
+			}
+			return (null, array);
 		}
 	}
 }

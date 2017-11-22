@@ -1,98 +1,248 @@
-﻿using System;
+﻿using System.Globalization;
 using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
 {
 	internal class StringParser : IJsonParser
 	{
-		private static readonly int[] FibSequence = {8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657};
-
 		public bool Handles(char c)
 		{
 			return c == '\"';
 		}
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
-			var bufferSize = 0;
-			var bufferLength = FibSequence[bufferSize];
-			var buffer = new char[bufferLength];
-			var bufferIndex = 0;
+			string errorMessage = null;
+			var builder = new StringBuilder();
 			var sourceLength = source.Length;
 			var foundEscape = false;
 			var complete = false;
 			index++;
 			while (index < sourceLength)
 			{
-				if (bufferIndex == bufferLength)
-				{
-					var currentLength = bufferLength;
-					bufferSize++;
-					bufferLength = FibSequence[bufferSize];
-					var newBuffer = new char[bufferLength];
-					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength*2);
-					buffer = newBuffer;
-				}
 				var c = source[index];
+				var append = new string(c, 1);
 				index++;
-				if (c == '"' && !foundEscape)
+				if (foundEscape)
+				{
+					switch (c)
+					{
+						case '"':
+						case '/':
+						case '\\':
+							break;
+						case 'b':
+							append = "\b";
+							break;
+						case 'f':
+							append = "\f";
+							break;
+						case 'n':
+							append = "\n";
+							break;
+						case 'r':
+							append = "\r";
+							break;
+						case 't':
+							append = "\t";
+							break;
+						case 'u':
+							var length = 4;
+							var hex = int.Parse(source.Substring(index, 4), NumberStyles.HexNumber);
+							if (source.Substring(index + 4, 2) == "\\u")
+							{
+								var hex2 = int.Parse(source.Substring(index + 6, 4), NumberStyles.HexNumber);
+								hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
+								length += 6;
+							}
+							append = char.ConvertFromUtf32(hex);
+							index += length;
+							break;
+						default:
+							errorMessage = $"Invalid escape sequence: '\\{c}'.";
+							break;
+					}
+				}
+				else if (c == '"')
 				{
 					complete = true;
 					break;
 				}
 				foundEscape = !foundEscape && c == '\\';
-				buffer[bufferIndex] = c;
-				bufferIndex++;
+				if (!foundEscape)
+					builder.Append(append);
 			}
 			if (!complete)
 			{
 				value = null;
 				return "Could not find end of string value.";
 			}
-			var result = new string(buffer, 0, bufferIndex);
-			var errorMessage = result.EvaluateEscapeSequences(out string escaped);
-			value = escaped;
+			value = builder.ToString();
 			return errorMessage;
 		}
 		public string TryParse(StreamReader stream, out JsonValue value)
 		{
+			string errorMessage = null;
+			var builder = new StringBuilder();
 			stream.Read(); // waste the '"'
-			var bufferSize = 0;
-			var bufferLength = FibSequence[bufferSize];
-			var buffer = new char[bufferLength];
-			var bufferIndex = 0;
 			var foundEscape = false;
 			var complete = false;
+			string backup = null;
 			while (!stream.EndOfStream)
 			{
-				if (bufferIndex == bufferLength)
+				char c;
+				if (!string.IsNullOrEmpty(backup))
 				{
-					var currentLength = bufferLength;
-					bufferSize++;
-					bufferLength = FibSequence[bufferSize];
-					var newBuffer = new char[bufferLength];
-					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength * 2);
-					buffer = newBuffer;
+					c = backup[0];
+					backup = backup.Substring(1);
 				}
-				var c = (char) stream.Read();
-				if (c == '"' && !foundEscape)
+				else c = (char) stream.Read();
+				var append = new string(c, 1);
+				if (foundEscape)
+				{
+					switch (c)
+					{
+						case '"':
+						case '/':
+						case '\\':
+							break;
+						case 'b':
+							append = "\b";
+							break;
+						case 'f':
+							append = "\f";
+							break;
+						case 'n':
+							append = "\n";
+							break;
+						case 'r':
+							append = "\r";
+							break;
+						case 't':
+							append = "\t";
+							break;
+						case 'u':
+							var buffer = new char[4];
+							stream.Read(buffer, 0, 4);
+							var hexString = new string(buffer);
+							var hex = int.Parse(hexString, NumberStyles.HexNumber);
+							stream.Read(buffer, 0, 2);
+							backup = new string(buffer, 0, 2);
+							if (backup == "\\u")
+							{
+								stream.Read(buffer, 0, 4);
+								hexString = new string(buffer);
+								backup = null;
+								var hex2 = int.Parse(hexString, NumberStyles.HexNumber);
+								hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
+							}
+							append = char.ConvertFromUtf32(hex);
+							break;
+						default:
+							errorMessage = $"Invalid escape sequence: '\\{c}'.";
+							break;
+					}
+				}
+				else if (c == '"')
 				{
 					complete = true;
 					break;
 				}
-				foundEscape = c == '\\';
-				buffer[bufferIndex] = c;
-				bufferIndex++;
+				foundEscape = !foundEscape && c == '\\';
+				if (!foundEscape)
+					builder.Append(append);
 			}
 			if (!complete)
 			{
 				value = null;
 				return "Could not find end of string value.";
 			}
-			var result = new string(buffer, 0, bufferIndex);
-			var errorMessage = result.EvaluateEscapeSequences(out string escaped);
-			value = escaped;
+			value = builder.ToString();
 			return errorMessage;
+		}
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		{
+			string errorMessage = null;
+			var builder = new StringBuilder();
+			stream.Read(); // waste the '"'
+			var foundEscape = false;
+			var complete = false;
+			string backup = null;
+			while (!stream.EndOfStream)
+			{
+				char c;
+				if (!string.IsNullOrEmpty(backup))
+				{
+					c = backup[0];
+					backup = backup.Substring(1);
+				}
+				else
+				{
+					var result = await stream.TryRead();
+					if (!result.success) break;
+					c = result.c;
+				}
+				var append = new string(c, 1);
+				if (foundEscape)
+				{
+					switch (c)
+					{
+						case '"':
+						case '/':
+						case '\\':
+							break;
+						case 'b':
+							append = "\b";
+							break;
+						case 'f':
+							append = "\f";
+							break;
+						case 'n':
+							append = "\n";
+							break;
+						case 'r':
+							append = "\r";
+							break;
+						case 't':
+							append = "\t";
+							break;
+						case 'u':
+							var buffer = new char[4];
+							stream.Read(buffer, 0, 4);
+							var hexString = new string(buffer);
+							var hex = int.Parse(hexString, NumberStyles.HexNumber);
+							stream.Read(buffer, 0, 2);
+							backup = new string(buffer, 0, 2);
+							if (backup == "\\u")
+							{
+								stream.Read(buffer, 0, 4);
+								hexString = new string(buffer);
+								backup = null;
+								var hex2 = int.Parse(hexString, NumberStyles.HexNumber);
+								hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
+							}
+							append = char.ConvertFromUtf32(hex);
+							break;
+						default:
+							errorMessage = $"Invalid escape sequence: '\\{c}'.";
+							break;
+					}
+				}
+				else if (c == '"')
+				{
+					complete = true;
+					break;
+				}
+				foundEscape = !foundEscape && c == '\\';
+				if (!foundEscape)
+					builder.Append(append);
+			}
+			if (!complete)
+				return ("Could not find end of string value.", null);
+			var value = builder.ToString();
+			return (errorMessage, value);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -107,6 +108,56 @@ namespace Manatee.Json.Parsing
 				if (c != ',') return "Expected ','.";
 			}
 			return null;
+		}
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		{
+			var obj = new JsonObject();
+			var value = obj;
+			while (!stream.EndOfStream)
+			{
+				await stream.TryRead(); // waste the '{' or ','
+				var (message, c) = await stream.SkipWhiteSpaceAsync();
+				if (message != null) return (message, value);
+				// check for empty object
+				if (c == '}')
+					if (obj.Count == 0)
+					{
+						await stream.TryRead(); // waste the '}'
+						break;
+					}
+					else return ("Expected key.", value);
+				// get key
+				(message, c) = await stream.SkipWhiteSpaceAsync();
+				if (message != null) return (message, value);
+				if (c != '\"') return ("Expected key.", value);
+				JsonValue item;
+				(message, item) = await JsonParser.TryParseAsync(stream);
+				if (message != null) return (message, value);
+				var key = item.String;
+				// check for colon
+				(message, c) = await stream.SkipWhiteSpaceAsync();
+				if (message != null) return (message, value);
+				if (c != ':')
+				{
+					obj.Add(key, null);
+					return ("Expected ':'.", value);
+				}
+				await stream.TryRead(); // waste the ':'
+				// get value (whitespace is removed in Parse)
+				message = JsonParser.Parse(stream, out item);
+				obj.Add(key, item);
+				if (message != null) return (message, value);
+				(message, c) = await stream.SkipWhiteSpaceAsync();
+				if (message != null) return (message, value);
+				// check for end or separator
+				if (c == '}')
+				{
+					await stream.TryRead(); // waste the '}'
+					break;
+				}
+				if (c != ',') return ("Expected ','.", value);
+			}
+			return (null, value);
 		}
 	}
 }

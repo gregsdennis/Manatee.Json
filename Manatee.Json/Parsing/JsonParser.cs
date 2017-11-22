@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -31,6 +32,13 @@ namespace Manatee.Json.Parsing
 		public static JsonValue Parse(StreamReader stream)
 		{
 			var errorMessage = Parse(stream, out JsonValue value);
+			if (errorMessage != null)
+				throw new JsonSyntaxException(errorMessage, value);
+			return value;
+		}
+		public static async Task<JsonValue> ParseAsync(StreamReader stream)
+		{
+			var (errorMessage, value) = await TryParseAsync(stream);
 			if (errorMessage != null)
 				throw new JsonSyntaxException(errorMessage, value);
 			return value;
@@ -69,6 +77,20 @@ namespace Manatee.Json.Parsing
 			}
 			errorMessage = parser.TryParse(stream, out value);
 			return errorMessage;
+		}
+		public static async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		{
+			var errorMessage = stream.SkipWhiteSpace(out char c);
+			if (errorMessage != null)
+			{
+				return (errorMessage, null);
+			}
+			var parser = Parsers.FirstOrDefault(p => p.Handles(c));
+			if (parser == null)
+			{
+				return ("Cannot determine type.", null);
+			}
+			return await parser.TryParseAsync(stream);
 		}
 	}
 }

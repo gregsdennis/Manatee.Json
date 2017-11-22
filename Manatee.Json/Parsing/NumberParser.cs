@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Parsing
@@ -91,6 +92,36 @@ namespace Manatee.Json.Parsing
 			}
 			value = dbl;
 			return null;
+		}
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		{
+			var bufferSize = 0;
+			var bufferLength = FibSequence[bufferSize];
+			var buffer = new char[bufferLength];
+			var bufferIndex = 0;
+			while (!stream.EndOfStream)
+			{
+				if (bufferIndex == bufferLength)
+				{
+					var currentLength = bufferLength;
+					bufferSize++;
+					bufferLength = FibSequence[bufferSize];
+					var newBuffer = new char[bufferLength];
+					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength * 2);
+					buffer = newBuffer;
+				}
+				var c = (char)stream.Peek();
+				if (char.IsWhiteSpace(c) || c.In(',', ']', '}')) break;
+				await stream.TryRead();
+				if (!NumberChars.Contains(c))
+					return ("Expected \',\', \']\', or \'}\'.", null);
+				buffer[bufferIndex] = c;
+				bufferIndex++;
+			}
+			var result = new string(buffer, 0, bufferIndex);
+			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
+				return ($"Value not recognized: '{result}'", null);
+			return (null, dbl);
 		}
 	}
 }

@@ -4,14 +4,15 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Manatee.Json.Internal
 {
 	internal static class StringExtensions
 	{
-		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(UInt16.MinValue, UInt16.MaxValue)
+		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
 		                                                                     .Select(n => (char) n)
-		                                                                     .Where(c => !Char.IsControl(c));
+		                                                                     .Where(c => !char.IsControl(c));
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
 		public static string EvaluateEscapeSequences(this string source, out string result)
@@ -45,14 +46,14 @@ namespace Manatee.Json.Internal
 							break;
 						case 'u':
 							length = 6;
-							var hex = Int32.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
+							var hex = int.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
 							if (source.Substring(i + 6, 2) == "\\u")
 							{
-								var hex2 = Int32.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
+								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
 								hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
 								length += 6;
 							}
-							source = source.Substring(0, i) + Char.ConvertFromUtf32(hex) + source.Substring(i + length);
+							source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
 							length = 2; // unicode pairs are 2 chars in .Net strings.
 							break;
 						default:
@@ -99,7 +100,7 @@ namespace Manatee.Json.Internal
 						replace = "\\t";
 						break;
 					default:
-						if (!Enumerable.Contains(AvailableChars, source[index]))
+						if (!AvailableChars.Contains(source[index]))
 						{
 							var hex = Convert.ToInt16(source[index]).ToString("X4");
 							source = source.Substring(0, index) + "\\u" + hex + source.Substring(index + 1);
@@ -132,7 +133,7 @@ namespace Manatee.Json.Internal
 			var c = source[index];
 			while (index < length)
 			{
-				if (!Char.IsWhiteSpace(c)) break;
+				if (!char.IsWhiteSpace(c)) break;
 				index++;
 				if (index >= length)
 				{
@@ -159,7 +160,7 @@ namespace Manatee.Json.Internal
 			ch = (char) stream.Peek();
 			while (!stream.EndOfStream)
 			{
-				if (!Char.IsWhiteSpace(ch)) break;
+				if (!char.IsWhiteSpace(ch)) break;
 				stream.Read();
 				ch = (char) stream.Peek();
 			}
@@ -169,6 +170,28 @@ namespace Manatee.Json.Internal
 				return "Unexpected end of input.";
 			}
 			return null;
+		}
+		public static async Task<(string, char)> SkipWhiteSpaceAsync(this StreamReader stream)
+		{
+			char ch;
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return ("Unexpected end of input.", ch);
+			}
+			ch = (char) stream.Peek();
+			while (!stream.EndOfStream)
+			{
+				if (!char.IsWhiteSpace(ch)) break;
+				await stream.TryRead();
+				ch = (char) stream.Peek();
+			}
+			if (stream.EndOfStream)
+			{
+				ch = default(char);
+				return ("Unexpected end of input.", ch);
+			}
+			return (null, ch);
 		}
 		public static string UnescapePointer(this string reference)
 		{
@@ -182,6 +205,13 @@ namespace Manatee.Json.Internal
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}
 			return unescaped;
+		}
+
+		public static async Task<(bool success, char c)> TryRead(this StreamReader stream)
+		{
+			var buffer = new char[1];
+			var count = await stream.ReadAsync(buffer, 0, 1);
+			return (count != 0, buffer[0]);
 		}
 	}
 }
