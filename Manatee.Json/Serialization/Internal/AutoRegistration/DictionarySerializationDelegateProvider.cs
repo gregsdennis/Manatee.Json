@@ -14,18 +14,51 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 
 		private static JsonValue _Encode<TKey, TValue>(Dictionary<TKey, TValue> dict, JsonSerializer serializer)
 		{
+			if (typeof(Enum).GetTypeInfo().IsAssignableFrom(typeof(TKey).GetTypeInfo()))
+				return dict.ToDictionary(kvp =>
+					                         {
+						                         var encodeDefaults = serializer.Options.EncodeDefaultValues;
+						                         serializer.Options.EncodeDefaultValues = true;
+						                         var enumFormat = serializer.Options.EnumSerializationFormat;
+						                         serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+
+						                         var key = serializer.Options.SerializationNameTransform(serializer.Serialize(kvp.Key).String);
+
+						                         serializer.Options.EnumSerializationFormat = enumFormat;
+						                         serializer.Options.EncodeDefaultValues = encodeDefaults;
+
+						                         return key;
+					                         },
+				                         kvp => serializer.Serialize(kvp.Value)).ToJson();
+
 			var array = new JsonArray();
-			array.AddRange(dict.Select(item => (JsonValue)(new JsonObject
+			array.AddRange(dict.Select(item => (JsonValue) new JsonObject
 				{
 					{"Key", serializer.Serialize(item.Key)},
 					{"Value", serializer.Serialize(item.Value)}
-				})));
+				}));
 			return array;
 		}
 		private static Dictionary<TKey, TValue> _Decode<TKey, TValue>(JsonValue json, JsonSerializer serializer)
 		{
+			if (typeof(Enum).GetTypeInfo().IsAssignableFrom(typeof(TKey).GetTypeInfo()))
+				return json.Object.ToDictionary(kvp =>
+					                                {
+						                                var encodeDefaults = serializer.Options.EncodeDefaultValues;
+						                                serializer.Options.EncodeDefaultValues = true;
+						                                var enumFormat = serializer.Options.EnumSerializationFormat;
+						                                serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
+
+						                                var key = serializer.Deserialize<TKey>(serializer.Options.DeserializationNameTransform(kvp.Key));
+
+						                                serializer.Options.EnumSerializationFormat = enumFormat;
+						                                serializer.Options.EncodeDefaultValues = encodeDefaults;
+						                                return key;
+					                                },
+				                                kvp => serializer.Deserialize<TValue>(kvp.Value));
+
 			return json.Array.ToDictionary(jv => serializer.Deserialize<TKey>(jv.Object["Key"]),
-										   jv => serializer.Deserialize<TValue>(jv.Object["Value"]));
+			                               jv => serializer.Deserialize<TValue>(jv.Object["Value"]));
 		}
 	}
 }

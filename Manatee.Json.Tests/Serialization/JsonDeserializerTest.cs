@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Humanizer;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Test_References;
 using NUnit.Framework;
@@ -671,6 +672,56 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(false, actual[1]);
 			Assert.AreEqual("string", actual[2]);
 			Assert.AreEqual(5.5, actual[3].DoubleProp);
+		}
+		[Test]
+		public void DeserializeEnumKeyedDictionary()
+		{
+			var expected = new Dictionary<JsonValueType, object>
+				{
+					[JsonValueType.String] = "yes",
+					[JsonValueType.Array] = new List<object> {1},
+					[JsonValueType.Number] = 1,
+				};
+
+			JsonValue target = new JsonObject
+				{
+					["String"] = "yes",
+					["Array"] = new JsonArray {1},
+					["Number"] = 1
+				};
+
+			var serializer = new JsonSerializer();
+			var actual = serializer.Deserialize<Dictionary<JsonValueType, object>>(target);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void DeserializeEnumKeyedDictionaryWithTransform()
+		{
+			var expected = new Dictionary<JsonValueType, object>
+				{
+					[JsonValueType.String] = "yes",
+					[JsonValueType.Array] = new List<object> {1},
+					[JsonValueType.Number] = 1,
+				};
+
+			JsonValue target = new JsonObject
+				{
+					["string"] = "yes",
+					["array"] = new JsonArray {1},
+					["number"] = 1
+				};
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DeserializationNameTransform = s => s.Pascalize()
+						}
+				};
+			var actual = serializer.Deserialize<Dictionary<JsonValueType, object>>(target);
+
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }
