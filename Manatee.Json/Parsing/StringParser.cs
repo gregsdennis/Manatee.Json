@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
@@ -162,7 +163,7 @@ namespace Manatee.Json.Parsing
 			value = builder.ToString();
 			return errorMessage;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream, CancellationToken token)
 		{
 			string errorMessage = null;
 			var builder = new StringBuilder();
@@ -172,6 +173,8 @@ namespace Manatee.Json.Parsing
 			string backup = null;
 			while (!stream.EndOfStream)
 			{
+				if (token.IsCancellationRequested)
+					return ("Parsing incomplete. The task was cancelled.", null);
 				char c;
 				if (!string.IsNullOrEmpty(backup))
 				{

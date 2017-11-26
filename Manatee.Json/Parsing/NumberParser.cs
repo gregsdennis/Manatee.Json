@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
@@ -93,7 +94,7 @@ namespace Manatee.Json.Parsing
 			value = dbl;
 			return null;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream, CancellationToken token)
 		{
 			var bufferSize = 0;
 			var bufferLength = FibSequence[bufferSize];
@@ -101,6 +102,8 @@ namespace Manatee.Json.Parsing
 			var bufferIndex = 0;
 			while (!stream.EndOfStream)
 			{
+				if (token.IsCancellationRequested)
+					return ("Parsing incomplete. The task was cancelled.", null);
 				if (bufferIndex == bufferLength)
 				{
 					var currentLength = bufferLength;
