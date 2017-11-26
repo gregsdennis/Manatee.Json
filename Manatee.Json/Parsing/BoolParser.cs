@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
@@ -85,7 +86,7 @@ namespace Manatee.Json.Parsing
 			value = null;
 			return $"Value not recognized: '{result}'";
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream, CancellationToken token)
 		{
 			var buffer = new char[4];
 			var count = await stream.ReadAsync(buffer, 0, 4);

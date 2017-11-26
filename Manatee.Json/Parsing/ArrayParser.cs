@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
 
@@ -77,11 +78,13 @@ namespace Manatee.Json.Parsing
 			}
 			return null;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream)
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream, CancellationToken token)
 		{
 			var array = new JsonArray();
 			while (!stream.EndOfStream)
 			{
+				if (token.IsCancellationRequested)
+					return ("Parsing incomplete. The task was cancelled.", null);
 				await stream.TryRead(); // waste the '[' or ','
 				var (message, c) = await stream.SkipWhiteSpaceAsync();
 				if (message != null) return (message, array);
@@ -95,7 +98,7 @@ namespace Manatee.Json.Parsing
 					else return ("Expected value.", null);
 				// get value
 				JsonValue item;
-				(message, item) = await JsonParser.TryParseAsync(stream);
+				(message, item) = await JsonParser.TryParseAsync(stream, token);
 				array.Add(item);
 				if (message != null) return (message, null);
 				(message, c) = await stream.SkipWhiteSpaceAsync();
