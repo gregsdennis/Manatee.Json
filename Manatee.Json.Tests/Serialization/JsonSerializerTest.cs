@@ -733,5 +733,55 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, json);
 		}
+		[Test]
+		public void SerializeEnumKeyedDictionary()
+		{
+			var target = new Dictionary<JsonValueType, object>
+				{
+					[JsonValueType.String] = "yes",
+					[JsonValueType.Array] = new List<object> {1},
+					[JsonValueType.Number] = 1,
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["String"] = "yes",
+					["Array"] = new JsonArray { 1},
+					["Number"] = 1
+				};
+
+			var serializer = new JsonSerializer();
+			var json = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
+		[Test]
+		public void SerializeEnumKeyedDictionaryWithTransform()
+		{
+			var target = new Dictionary<JsonValueType, object>
+				{
+					[JsonValueType.String] = "yes",
+					[JsonValueType.Array] = new List<object> {1},
+					[JsonValueType.Number] = 1,
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["string"] = "yes",
+					["array"] = new JsonArray { 1},
+					["number"] = 1
+				};
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							SerializationNameTransform = s => s.ToLower()
+						}
+				};
+			var json = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
 	}
 }
