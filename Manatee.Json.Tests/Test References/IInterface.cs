@@ -25,6 +25,12 @@ namespace Manatee.Json.Tests.Test_References
 	}
 
 	public class Derived<T> : Impl<T> { }
+}
 
-
+namespace Manatee.Json.Tests.AlternateNamespace
+{
+	public interface IInterface
+	{
+		string Value { get; set; }
+	}
 }

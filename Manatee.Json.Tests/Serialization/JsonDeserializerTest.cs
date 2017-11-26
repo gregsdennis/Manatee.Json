@@ -723,5 +723,24 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, actual);
 		}
+		[Test]
+		public void TwoInterfacesWithSameNameDeserialized()
+		{
+			var serializer = new JsonSerializer();
+			JsonValue json = new JsonObject
+				{
+					{"RequiredProp", "test"}
+				};
+			IInterface expected = new ImplementationClass { RequiredProp = "test" };
+			var alternateJson = new JsonObject
+				{
+					{"Value", "string"}
+				};
+
+			var actual = serializer.Deserialize<IInterface>(json);
+			var alternateActual = serializer.Deserialize<AlternateNamespace.IInterface>(alternateJson);
+
+			Assert.AreEqual(actual.GetType().Name + "2", alternateActual.GetType().Name);
+		}
 	}
 }
