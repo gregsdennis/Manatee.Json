@@ -29,6 +29,14 @@ namespace Manatee.Json.Tests.Schema
 								"test2"
 							}
 					});
+				yield return new TestCaseData(new JsonSchema07
+				{
+						Enum = new List<EnumSchemaValue>
+							{
+								"test1",
+								"test2"
+							}
+					});
 			}
 		}
 

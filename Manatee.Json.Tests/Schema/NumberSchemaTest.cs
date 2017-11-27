@@ -14,6 +14,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new JsonSchema04 {Type = JsonSchemaType.Number};
 				yield return new JsonSchema06 {Type = JsonSchemaType.Number};
+				yield return new JsonSchema07 { Type = JsonSchemaType.Number};
 			}
 		}
 		[TestCaseSource(nameof(TypeData))]
@@ -32,6 +33,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5});
 				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 5});
+				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Number, Minimum = 5});
 			}
 		}
 		[TestCaseSource(nameof(MinimumData))]
@@ -93,6 +95,26 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid();
 		}
+		[Test]
+		public void Draft07_ValidateReturnsErrorOnEqualsExclusiveMinimum()
+		{
+			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
+			var json = (JsonValue) 5;
+
+			var results = schema.Validate(json);
+
+			results.AssertInvalid();
+		}
+		[Test]
+		public void Draft07_ValidateReturnsValidOnMoreThanExclusiveMinimum()
+		{
+			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
+			var json = (JsonValue) 10;
+
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
 		
 		public static IEnumerable MaximumData
 		{
@@ -100,6 +122,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 5});
 				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 5});
+				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Number, Maximum = 5});
 			}
 		}
 		[TestCaseSource(nameof(MaximumData))]
@@ -161,6 +184,26 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid();
 		}
+		[Test]
+		public void Draft07_ValidateReturnsErrorOnEqualsExclusiveMaximum()
+		{
+			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
+			var json = (JsonValue) 5;
+
+			var results = schema.Validate(json);
+
+			results.AssertInvalid();
+		}
+		[Test]
+		public void Draft07_ValidateReturnsValidOnLessThanExclusiveMaximum()
+		{
+			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
+			var json = (JsonValue) 3;
+
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
 		
 		public static IEnumerable MultipleOfData
 		{
@@ -168,6 +211,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, MultipleOf = 7.5});
 				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, MultipleOf = 7.5});
+				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Number, MultipleOf = 7.5});
 			}
 		}
 		[TestCaseSource(nameof(MultipleOfData))]

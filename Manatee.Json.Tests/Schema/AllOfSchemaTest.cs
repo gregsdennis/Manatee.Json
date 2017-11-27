@@ -29,6 +29,14 @@ namespace Manatee.Json.Tests.Schema
 								new JsonSchema06 {Type = JsonSchemaType.Number}
 							}
 					});
+				yield return new TestCaseData(new JsonSchema07
+				{
+						AllOf = new List<IJsonSchema>
+							{
+								new JsonSchema07 {Type = JsonSchemaType.Array},
+								new JsonSchema07 {Type = JsonSchemaType.Number}
+							}
+					});
 			}
 		}
 		[TestCaseSource(nameof(ValidateReturnsErrorOnAnyInvalidData))]
@@ -59,6 +67,14 @@ namespace Manatee.Json.Tests.Schema
 							{
 								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10},
 								new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 20}
+							}
+					});
+				yield return new TestCaseData(new JsonSchema07
+				{
+						AllOf = new List<IJsonSchema>
+							{
+								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 10},
+								new JsonSchema07 {Type = JsonSchemaType.Number, Maximum = 20}
 							}
 					});
 			}

@@ -14,6 +14,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 10};
 				yield return new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 10};
+				yield return new JsonSchema07 { Type = JsonSchemaType.Number, Maximum = 10};
 			}
 		} 
 		

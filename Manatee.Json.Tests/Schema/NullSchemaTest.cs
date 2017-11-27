@@ -13,6 +13,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new JsonSchema04 {Type = JsonSchemaType.Null};
 				yield return new JsonSchema06 {Type = JsonSchemaType.Null};
+				yield return new JsonSchema07 { Type = JsonSchemaType.Null};
 			}
 		}
 		

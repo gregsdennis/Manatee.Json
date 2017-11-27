@@ -14,11 +14,13 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 	{
 		private const string Draft04TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
 		private const string Draft06TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft6\";
+		private const string Draft07TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft7\";
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 
 		public static IEnumerable TestData04 => _LoadSchemaJson(Draft04TestFolder);
 		public static IEnumerable TestData06 => _LoadSchemaJson(Draft06TestFolder);
+		public static IEnumerable TestData07 => _LoadSchemaJson(Draft07TestFolder);
 
 		private static IEnumerable<TestCaseData> _LoadSchemaJson(string testFolder)
 		{

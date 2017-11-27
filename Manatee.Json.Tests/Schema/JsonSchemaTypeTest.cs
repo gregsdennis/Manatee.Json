@@ -42,5 +42,23 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.IsFalse(results.Valid);
 		}
+		[Test]
+		public void Draft07_PrimitiveSchemaSucceeds()
+		{
+			var json = new JsonObject {{"type", "integer"}};
+
+			var results = JsonSchema07.MetaSchema.Validate(json);
+
+			Assert.IsTrue(results.Valid);
+		}
+		[Test]
+		public void Draft07_NonPrimitiveStringSchemaFails()
+		{
+			var json = new JsonObject {{"type", "other"}};
+
+			var results = JsonSchema07.MetaSchema.Validate(json);
+
+			Assert.IsFalse(results.Valid);
+		}
 	}
 }
