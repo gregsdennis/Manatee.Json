@@ -54,7 +54,11 @@ namespace Manatee.Json.Serialization.Internal
 
 		private static TypeBuilder _CreateTypeBuilder(Type type)
 		{
-			var typeBuilder = _moduleBuilder.DefineType("Concrete" + type.Name, TypeAttributes.Public);
+			var expectedTypeName = "Concrete" + type.Name;
+			var existingCount = _cache.Values.Count(t => t.Name == expectedTypeName);
+			if (existingCount != 0)
+				expectedTypeName += existingCount + 1;
+			var typeBuilder = _moduleBuilder.DefineType(expectedTypeName, TypeAttributes.Public);
 			typeBuilder.AddInterfaceImplementation(type);
 			return typeBuilder;
 		}
