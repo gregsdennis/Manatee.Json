@@ -41,4 +41,12 @@ namespace Manatee.Json.Schema.Validators
 			return JsonSchema06.MetaSchema;
 		}
 	}
+	
+	internal class DefinitionsSchema07PropertyValidator : DefinitionsSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override IJsonSchema GetMetaSchema()
+		{
+			return JsonSchema07.MetaSchema;
+		}
+	}
 }

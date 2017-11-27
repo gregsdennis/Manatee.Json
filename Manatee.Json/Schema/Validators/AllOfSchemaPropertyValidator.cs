@@ -34,4 +34,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.AllOf;
 		}
 	}
+	
+	internal class AllOfSchema07PropertyValidator : AllOfSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override IEnumerable<IJsonSchema> GetAllOf(JsonSchema07 schema)
+		{
+			return schema.AllOf;
+		}
+	}
 }
