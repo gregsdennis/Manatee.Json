@@ -15,8 +15,16 @@ namespace Manatee.Json.Serialization
 	{
 		private readonly Dictionary<Type, Type> _registry;
 
-		public static AbstractionMap Default { get; } = new AbstractionMap();
+		public static AbstractionMap Default { get; }
 
+		static AbstractionMap()
+		{
+			Default = new AbstractionMap();
+			Default.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
+			Default.MapGeneric(typeof(ICollection<>), typeof(List<>));
+			Default.MapGeneric(typeof(IList<>), typeof(List<>));
+			Default.MapGeneric(typeof(IDictionary<,>), typeof(Dictionary<,>));
+		}
 		public AbstractionMap()
 		{
 			_registry = new Dictionary<Type, Type>();

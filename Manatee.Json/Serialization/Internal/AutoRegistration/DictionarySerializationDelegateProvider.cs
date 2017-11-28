@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.AutoRegistration
 {
@@ -9,7 +10,9 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 	{
 		public override bool CanHandle(Type type)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>);
+			return type.GetTypeInfo().IsGenericType &&
+			       (type.GetGenericTypeDefinition() == typeof(Dictionary<,>) ||
+			        type.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>)));
 		}
 
 		private static JsonValue _Encode<TKey, TValue>(Dictionary<TKey, TValue> dict, JsonSerializer serializer)
@@ -30,6 +33,9 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 						                         return key;
 					                         },
 				                         kvp => serializer.Serialize(kvp.Value)).ToJson();
+
+			if (typeof(TKey) == typeof(string))
+				return dict.ToDictionary(kvp => (string) (object) kvp.Key, kvp => serializer.Serialize(kvp.Value)).ToJson();
 
 			var array = new JsonArray();
 			array.AddRange(dict.Select(item => (JsonValue) new JsonObject
@@ -55,6 +61,10 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 						                                serializer.Options.EncodeDefaultValues = encodeDefaults;
 						                                return key;
 					                                },
+				                                kvp => serializer.Deserialize<TValue>(kvp.Value));
+
+			if (typeof(TKey) == typeof(string))
+				return json.Object.ToDictionary(kvp => (TKey) (object) kvp.Key,
 				                                kvp => serializer.Deserialize<TValue>(kvp.Value));
 
 			return json.Array.ToDictionary(jv => serializer.Deserialize<TKey>(jv.Object["Key"]),
