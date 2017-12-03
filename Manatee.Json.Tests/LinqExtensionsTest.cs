@@ -167,7 +167,6 @@ namespace Manatee.Json.Tests
 		public void FromJson_SerializableArray_ReturnsArray()
 		{
 			var serializer = new JsonSerializer();
-			serializer.AbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
 			var json = new JsonArray { new JsonObject { { "StringProp", "this" }, { "IntProp", 0 } }, new JsonObject { { "StringProp", "that" }, { "IntProp", 1 } } };
 			var expected = new List<JsonSerializableClass> { new JsonSerializableClass("this", 0), new JsonSerializableClass("that", 1) };
 			var actual = json.FromJson<JsonSerializableClass>(serializer);

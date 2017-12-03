@@ -41,7 +41,6 @@ namespace Manatee.Json.Tests.Path.TestSuite
 		static JsonPathTestSuite()
 		{
 			_serializer = new JsonSerializer();
-			_serializer.AbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
 		}
 
 		[TestCaseSource(nameof(TestData))]

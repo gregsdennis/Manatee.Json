@@ -222,8 +222,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var entry in memberMap)
 			{
 				var memberInfo = entry.Key;
-				if (memberInfo.MemberInfo is PropertyInfo)
-					((PropertyInfo) memberInfo.MemberInfo).SetValue(obj, entry.Value, null);
+				if (memberInfo.MemberInfo is PropertyInfo info)
+				{
+					if (info.CanWrite)
+						info.SetValue(obj, entry.Value, null);
+				}
 				else
 					((FieldInfo) memberInfo.MemberInfo).SetValue(obj, entry.Value);
 			}
