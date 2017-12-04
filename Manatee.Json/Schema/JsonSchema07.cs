@@ -23,15 +23,15 @@ namespace Manatee.Json.Schema
 		public static readonly JsonSchema07 True = new JsonSchema07 {BooleanSchemaDefinition = true};
 		public static readonly JsonSchema07 False = new JsonSchema07 {BooleanSchemaDefinition = false};
 		/// <summary>
-		/// Defines the Draft-04 Schema as presented at http://json-schema.org/draft-06/schema#
+		/// Defines the Draft-07 Schema as presented at http://json-schema.org/draft-07/schema#
 		/// </summary>
 		public static readonly JsonSchema07 MetaSchema = new JsonSchema07
 			{
-				Id = "http://json-schema.org/draft-06/schema#",
-				Schema = "http://json-schema.org/draft-06/schema#",
+				Id = "http://json-schema.org/draft-07/schema#",
+				Schema = "http://json-schema.org/draft-07/schema#",
 				Title = "Core schema meta-schema",
 				Definitions = new Dictionary<string, IJsonSchema>
-				{
+					{
 						["schemaArray"] = new JsonSchema07
 							{
 								Type = JsonSchemaType.Array,
@@ -90,15 +90,20 @@ namespace Manatee.Json.Schema
 								Type = JsonSchemaType.String,
 								Format = StringFormat.UriReference
 							},
+						["$comment"] = new JsonSchema07 {Type = JsonSchemaType.String}, //new
 						["title"] = new JsonSchema07 {Type = JsonSchemaType.String},
 						["description"] = new JsonSchema07 {Type = JsonSchemaType.String},
-						["default"] = Empty,
+						["default"] = True, //updated
+						["readOnly"] = new JsonSchema07 //new
+							{
+								Type = JsonSchemaType.Boolean,
+								Default = false
+							},
 						["examples"] = new JsonSchema07
 							{
-
 								Type = JsonSchemaType.Array,
-								Items = Empty
-							},
+								Items = True //updated
+						},
 						["multipleOf"] = new JsonSchema07
 							{
 								Type = JsonSchemaType.Number,
@@ -123,8 +128,8 @@ namespace Manatee.Json.Schema
 										Root,
 										new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07))
 									},
-								Default = new JsonObject()
-							},
+								Default = true //updated
+						},
 						["maxItems"] = new JsonSchemaReference("#/definitions/nonNegativeInteger", typeof(JsonSchema07)),
 						["minItems"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0", typeof(JsonSchema07)),
 						["uniqueItems"] = new JsonSchema07
@@ -147,12 +152,14 @@ namespace Manatee.Json.Schema
 							{
 								Type = JsonSchemaType.Object,
 								AdditionalProperties = Root,
+								PropertyNames = new JsonSchema07 {Format = StringFormat.Regex},
 								Default = new JsonObject()
 							},
 						["patternProperties"] = new JsonSchema07
 							{
 								Type = JsonSchemaType.Object,
 								AdditionalProperties = Root,
+								PropertyNames = new JsonSchema07 {Format = StringFormat.Regex},
 								Default = new JsonObject()
 							},
 						["dependencies"] = new JsonSchema07
@@ -168,11 +175,12 @@ namespace Manatee.Json.Schema
 									}
 							},
 						["propertyNames"] = Root,
-						["const"] = Empty,
-						["enum"] = new JsonSchema07
+						["const"] = True, //updated
+					["enum"] = new JsonSchema07
 							{
 								Type = JsonSchemaType.Array,
-								MinItems = 1,
+								Items = True, //updated
+						MinItems = 1,
 								UniqueItems = true
 							},
 						["type"] = new JsonSchema07
@@ -190,13 +198,18 @@ namespace Manatee.Json.Schema
 									}
 							},
 						["format"] = new JsonSchema07 {Type = JsonSchemaType.String},
+						["contentMediaType"] = new JsonSchema07 {Type = JsonSchemaType.String}, //new
+						["contentEncoding"] = new JsonSchema07 {Type = JsonSchemaType.String}, //new
+						["if"] = Root, //new
+						["then"] = Root, //new
+						["else"] = Root, //new
 						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07)),
 						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07)),
 						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07)),
 						["not"] = Root,
 					},
-				Default = new JsonObject()
-			};
+				Default = true //updated
+		};
 
 		private static readonly IEnumerable<string> _definedProperties = MetaSchema.Properties.Keys.ToList();
 
@@ -235,6 +248,10 @@ namespace Manatee.Json.Schema
 			}
 		}
 		/// <summary>
+		/// Defines a comment for this schema;
+		/// </summary>
+		public string Comment { get; set; }
+		/// <summary>
 		/// Defines a title for this schema.
 		/// </summary>
 		public string Title { get; set; }
@@ -250,6 +267,17 @@ namespace Manatee.Json.Schema
 		/// to a .Net data structure.
 		/// </remarks>
 		public JsonValue Default { get; set; }
+		/// <summary>
+		/// Defines whether this schema is intended to be read-only.
+		/// </summary>
+		/// <remarks>
+		/// A true value in this property only has an effect when <see cref="JsonSchemaOptions.EnforceReadOnly"/> is also true.
+		/// </remarks>
+		public bool? ReadOnly { get; set; }
+		/// <summary>
+		/// Examples of JSON that conform to this schemata.
+		/// </summary>
+		public JsonArray Examples { get; set; }
 		/// <summary>
 		/// Defines a divisor for acceptable values.
 		/// </summary>
@@ -359,6 +387,40 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonSchemaType Type { get; set; }
 		/// <summary>
+		/// Defines a required format for the string.
+		/// </summary>
+		public StringFormat Format
+		{
+			get { return _format; }
+			set
+			{
+				value?.ValidateForDraft<JsonSchema07>();
+				_format = value;
+			}
+		}
+		/// <summary>
+		/// Defines a content media type for this schema.
+		/// </summary>
+		public string ContentMediaType { get; set; }
+		/// <summary>
+		/// Defines a content encoding for this schema.
+		/// </summary>
+		public ContentEncoding? ContentEncoding { get; set; }
+		/// <summary>
+		/// Defines a schema which, if validated, the JSON is validated against the
+		/// <see cref="Then"/> schema, otherwise it is validated against the
+		/// <see cref="Else"/> schema.
+		/// </summary>
+		public IJsonSchema If { get; set; }
+		/// <summary>
+		/// Defines a schema to use when the <see cref="If"/> schema validates successfully.
+		/// </summary>
+		public IJsonSchema Then { get; set; }
+		/// <summary>
+		/// Defines a schema to use when the <see cref="If"/> schema validates unsuccessfully.
+		/// </summary>
+		public IJsonSchema Else { get; set; }
+		/// <summary>
 		/// A collection of required schema which must be satisfied.
 		/// </summary>
 		public IEnumerable<IJsonSchema> AllOf { get; set; }
@@ -378,19 +440,6 @@ namespace Manatee.Json.Schema
 		/// A collection of property names that are required.
 		/// </summary>
 		public IEnumerable<string> Required { get; set; }
-		/// <summary>
-		/// Defines a required format for the string.
-		/// </summary>
-		public StringFormat Format
-		{
-			get { return _format; }
-			set
-			{
-				value?.ValidateForDraft<JsonSchema07>();
-				_format = value;
-			}
-		}
-		public IEnumerable<IJsonSchema> Examples { get; set; }
 		/// <summary>
 		/// Gets other, non-schema-defined properties.
 		/// </summary>
@@ -446,12 +495,17 @@ namespace Manatee.Json.Schema
 				JsonSchemaRegistry.Register(this);
 			}
 			Schema = obj.TryGetString("$schema");
+			Comment = obj.TryGetString("$comment");
 			Title = obj.TryGetString("title");
 			Description = obj.TryGetString("description");
 			if (obj.ContainsKey("default"))
 				Default = obj["default"];
+			ReadOnly = obj.TryGetBoolean("readOnly");
 			if (obj.ContainsKey("examples"))
-				Examples = json.Object["examples"].Array.Select(_ReadSchema);
+			{
+				Examples = json.Object["examples"].Array;
+				Examples.EqualityStandard = ArrayEquality.ContentsEqual;
+			}
 			MultipleOf = obj.TryGetNumber("multipleOf");
 			Maximum = obj.TryGetNumber("maximum");
 			ExclusiveMaximum = obj.TryGetNumber("exclusiveMaximum");
@@ -519,6 +573,19 @@ namespace Manatee.Json.Schema
 				Not = _ReadSchema(obj["not"]);
 			var formatKey = obj.TryGetString("format");
 			Format = StringFormat.GetFormat(formatKey);
+			ContentMediaType = obj.TryGetString("contentMediaType");
+			var options = serializer.Options;
+			var newOptions = new JsonSerializerOptions(options) {CaseSensitiveDeserialization = false};
+			serializer.Options = newOptions;
+			if (obj.ContainsKey("contentEncoding"))
+				ContentEncoding = serializer.Deserialize<ContentEncoding>(obj["contentEncoding"]);
+			serializer.Options = options;
+			if (obj.ContainsKey("if"))
+				If = _ReadSchema(obj["if"]);
+			if (obj.ContainsKey("then"))
+				Then = _ReadSchema(obj["then"]);
+			if (obj.ContainsKey("else"))
+				Else = _ReadSchema(obj["else"]);
 			var details = obj.Where(kvp => !_definedProperties.Contains(kvp.Key)).ToJson();
 			if (details.Any())
 				ExtraneousDetails = details;
@@ -537,10 +604,13 @@ namespace Manatee.Json.Schema
 			var json = new JsonObject();
 			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
 			if (Id != null) json["$id"] = Id;
+			if (Comment != null) json["$comment"] = Comment;
 			if (Title != null) json["title"] = Title;
 			if (!string.IsNullOrWhiteSpace(Description)) json["description"] = Description;
 			if (Definitions != null)
 				json["definitions"] = Definitions.ToJson(serializer);
+			if (ReadOnly.HasValue)
+				json["readOnly"] = ReadOnly;
 			if (Type != JsonSchemaType.NotDefined)
 			{
 				var array = Type.ToJson();
@@ -592,6 +662,18 @@ namespace Manatee.Json.Schema
 				array.Array.EqualityStandard = ArrayEquality.ContentsEqual;
 				json["enum"] = Enum.ToJson(serializer);
 			}
+			if (Format != null)
+				json["format"] = Format.Key;
+			if (ContentMediaType != null)
+				json["contentMediaType"] = ContentMediaType;
+			if (ContentEncoding != null)
+				json["contentEncoding"] = ContentEncoding;
+			if (If != null)
+				json["if"] = If.ToJson(serializer);
+			if (Then != null)
+				json["then"] = Then.ToJson(serializer);
+			if (Else != null)
+				json["else"] = Else.ToJson(serializer);
 			if (AllOf != null)
 			{
 				var array = AllOf.Select(s => s.ToJson(serializer)).ToJson();
@@ -611,14 +693,9 @@ namespace Manatee.Json.Schema
 				json["oneOf"] = array;
 			}
 			if (Not != null) json["not"] = Not.ToJson(serializer);
-			if (Format != null) json["format"] = Format.Key;
 			if (Default != null) json["default"] = Default;
 			if (Examples != null)
-			{
-				var array = Examples.Select(s => s.ToJson(serializer)).ToJson();
-				array.EqualityStandard = ArrayEquality.ContentsEqual;
-				json["examples"] = array;
-			}
+				json["examples"] = Examples;
 			if (ExtraneousDetails != null)
 			{
 				foreach (var kvp in ExtraneousDetails.Where(kvp => !_definedProperties.Contains(kvp.Key)))
@@ -643,9 +720,11 @@ namespace Manatee.Json.Schema
 			if (BooleanSchemaDefinition != schema.BooleanSchemaDefinition) return false;
 			if (Id != schema.Id) return false;
 			if (Schema != schema.Schema) return false;
+			if (Comment != schema.Comment) return false;
 			if (Title != schema.Title) return false;
 			if (Description != schema.Description) return false;
 			if (!Equals(Default, schema.Default)) return false;
+			if (ReadOnly != schema.ReadOnly) return false;
 			if (MultipleOf != schema.MultipleOf) return false;
 			if (Maximum != schema.Maximum) return false;
 			if (ExclusiveMaximum != schema.ExclusiveMaximum) return false;
@@ -700,39 +779,45 @@ namespace Manatee.Json.Schema
 			unchecked
 			{
 				var hashCode = Type.GetHashCode();
-				hashCode = (hashCode*397) ^ (Id?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Schema?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Title?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Description?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Default?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ MultipleOf.GetHashCode();
-				hashCode = (hashCode*397) ^ Maximum.GetHashCode();
-				hashCode = (hashCode*397) ^ ExclusiveMaximum.GetHashCode();
-				hashCode = (hashCode*397) ^ Minimum.GetHashCode();
-				hashCode = (hashCode*397) ^ ExclusiveMinimum.GetHashCode();
-				hashCode = (hashCode*397) ^ (MaxLength?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (MinLength?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Pattern?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (AdditionalItems?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Items?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (MaxItems?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (MinItems?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (UniqueItems?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Contains?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (AdditionalProperties?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Definitions?.GetCollectionHashCode().GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Properties?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (PatternProperties?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Dependencies?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Const?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Enum?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (AllOf?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (AnyOf?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (OneOf?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Not?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Format?.GetHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Required?.GetCollectionHashCode() ?? 0);
-				hashCode = (hashCode*397) ^ (Examples?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Id?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Schema?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Comment?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Title?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Description?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Default?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ MultipleOf.GetHashCode();
+				hashCode = (hashCode * 397) ^ Maximum.GetHashCode();
+				hashCode = (hashCode * 397) ^ ExclusiveMaximum.GetHashCode();
+				hashCode = (hashCode * 397) ^ Minimum.GetHashCode();
+				hashCode = (hashCode * 397) ^ ExclusiveMinimum.GetHashCode();
+				hashCode = (hashCode * 397) ^ (MaxLength?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (MinLength?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Pattern?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (AdditionalItems?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Items?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (MaxItems?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (MinItems?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (UniqueItems?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Contains?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (AdditionalProperties?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Definitions?.GetCollectionHashCode().GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Properties?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (PatternProperties?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Dependencies?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Const?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Enum?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Format?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (ContentMediaType?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (ContentEncoding?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (If?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Then?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Else?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (AllOf?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (AnyOf?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (OneOf?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Not?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Required?.GetCollectionHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (Examples?.GetCollectionHashCode() ?? 0);
 				return hashCode;
 			}
 		}

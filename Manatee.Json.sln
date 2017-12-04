@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,6 +22,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests.FrameworkConsole", "Manatee.Json.Tests.FrameworkConsole\Manatee.Json.Tests.FrameworkConsole.csproj", "{C9738A5D-C68C-4838-AF1F-C00C46CDD403}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Study", "Manatee.Study\Manatee.Study.csproj", "{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{2EABC48C-8556-4A6D-B0CA-B2D5A46C7239}"
+	ProjectSection(SolutionItems) = preProject
+		schema04.json = schema04.json
+		schema06.json = schema06.json
+		schema07.json = schema07.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -23,7 +23,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets whether the "format" schema keyword should be validated.  The default is true.
 		/// </summary>
-		public static bool ValidateFormat { get; }
+		public static bool ValidateFormat { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether the "readOnly" schema keyword should be enforced.  The default is true.
+		/// </summary>
+		public static bool EnforceReadOnly { get; set; }
 
 		/// <summary>
 		/// Initializes all properties.
@@ -31,6 +36,7 @@ namespace Manatee.Json.Schema
 		static JsonSchemaOptions()
 		{
 			ValidateFormat = true;
+			EnforceReadOnly = true;
 		}
 
 		private static string _BasicDownload(string path)
