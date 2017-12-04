@@ -32,4 +32,12 @@
 			return schema.MultipleOf;
 		}
 	}
+	
+	internal class MultipleOfSchema07PropertyValidator : MultipleOfSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override double? GetMultipleOf(JsonSchema07 schema)
+		{
+			return schema.MultipleOf;
+		}
+	}
 }

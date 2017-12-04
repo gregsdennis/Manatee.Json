@@ -32,4 +32,12 @@
 			return schema.MinProperties;
 		}
 	}
+	
+	internal class MinPropertiesSchema07PropertyValidator : MinPropertiesSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override uint? GetMinProperties(JsonSchema07 schema)
+		{
+			return schema.MinProperties;
+		}
+	}
 }

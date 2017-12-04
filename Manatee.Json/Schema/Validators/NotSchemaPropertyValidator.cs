@@ -33,4 +33,12 @@
 			return schema.Not;
 		}
 	}
+	
+	internal class NotSchema07PropertyValidator : NotSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override IJsonSchema GetNot(JsonSchema07 schema)
+		{
+			return schema.Not;
+		}
+	}
 }

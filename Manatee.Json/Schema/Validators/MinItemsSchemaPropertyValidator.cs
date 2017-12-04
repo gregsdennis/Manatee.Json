@@ -32,4 +32,12 @@
 			return schema.MinItems;
 		}
 	}
+	
+	internal class MinItemsSchema07PropertyValidator : MinItemsSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override uint? GetMinItems(JsonSchema07 schema)
+		{
+			return schema.MinItems;
+		}
+	}
 }

@@ -34,4 +34,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.Pattern;
 		}
 	}
+	
+	internal class PatternSchema07PropertyValidator : PatternSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override string GetPattern(JsonSchema07 schema)
+		{
+			return schema.Pattern;
+		}
+	}
 }

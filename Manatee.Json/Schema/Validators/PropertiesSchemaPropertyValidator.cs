@@ -139,4 +139,36 @@ namespace Manatee.Json.Schema.Validators
 				       : json.Object.Keys.SelectMany(k => schema.PropertyNames.Validate(k, root).Errors);
 		}
 	}
+	
+	internal class PropertiesSchema07PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		public override bool Applies(JsonSchema07 schema, JsonValue json)
+		{
+			return base.Applies(schema, json) || (json.Type == JsonValueType.Object && schema.PropertyNames != null);
+		}
+
+		protected override IDictionary<string, IJsonSchema> GetProperties(JsonSchema07 schema)
+		{
+			return schema.Properties;
+		}
+		protected override IEnumerable<string> GetRequiredProperties(JsonSchema07 schema)
+		{
+			return schema.Required;
+		}
+		protected override AdditionalProperties GetAdditionalProperties(JsonSchema07 schema)
+		{
+			if (schema.AdditionalProperties == null) return null;
+			return new AdditionalProperties {Definition = schema.AdditionalProperties};
+		}
+		protected override Dictionary<Regex, IJsonSchema> GetPatternProperties(JsonSchema07 schema)
+		{
+			return schema.PatternProperties;
+		}
+		protected override IEnumerable<SchemaValidationError> AdditionValidation(JsonSchema07 schema, JsonValue json, JsonValue root)
+		{
+			return schema.PropertyNames == null
+				       ? new SchemaValidationError[] { }
+				       : json.Object.Keys.SelectMany(k => schema.PropertyNames.Validate(k, root).Errors);
+		}
+	}
 }

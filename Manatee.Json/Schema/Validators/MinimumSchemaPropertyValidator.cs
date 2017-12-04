@@ -22,6 +22,7 @@
 			return new SchemaValidationResults();
 		}
 	}
+
 	internal class MinimumSchema06PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema06>
 	{
 		public bool Applies(JsonSchema06 schema, JsonValue json)
@@ -30,6 +31,25 @@
 			       json.Type == JsonValueType.Number;
 		}
 		public SchemaValidationResults Validate(JsonSchema06 schema, JsonValue json, JsonValue root)
+		{
+			var min = schema.ExclusiveMinimum ?? schema.Minimum;
+			var operation = schema.ExclusiveMaximum.HasValue ? ">" : ">=";
+			
+			if (json.Number < min || (schema.ExclusiveMinimum.HasValue && json.Number <= min))
+				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {min}; Actual: {json.Number}.");
+
+			return new SchemaValidationResults();
+		}
+	}
+
+	internal class MinimumSchema07PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema07>
+	{
+		public bool Applies(JsonSchema07 schema, JsonValue json)
+		{
+			return (schema.Minimum.HasValue || schema.ExclusiveMinimum.HasValue) &&
+			       json.Type == JsonValueType.Number;
+		}
+		public SchemaValidationResults Validate(JsonSchema07 schema, JsonValue json, JsonValue root)
 		{
 			var min = schema.ExclusiveMinimum ?? schema.Minimum;
 			var operation = schema.ExclusiveMaximum.HasValue ? ">" : ">=";

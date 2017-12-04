@@ -71,4 +71,19 @@ namespace Manatee.Json.Schema.Validators
 			return new AdditionalItems {Definition = schema.AdditionalItems};
 		}
 	}
+	
+	internal class ItemsSchema07PropertyValidator : ItemsSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override IJsonSchema GetItems(JsonSchema07 schema)
+		{
+			return schema.Items;
+		}
+		protected override AdditionalItems GetAdditionalItems(JsonSchema07 schema)
+		{
+			if (schema.AdditionalItems == null) return null;
+			if (Equals(schema.AdditionalItems, JsonSchema07.True)) return AdditionalItems.True;
+			if (Equals(schema.AdditionalItems, JsonSchema07.False)) return AdditionalItems.False;
+			return new AdditionalItems {Definition = schema.AdditionalItems};
+		}
+	}
 }

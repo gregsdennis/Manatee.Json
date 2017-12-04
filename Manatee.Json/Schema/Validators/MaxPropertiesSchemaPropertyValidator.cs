@@ -33,4 +33,12 @@
 			return schema.MaxProperties;
 		}
 	}
+	
+	internal class MaxPropertiesSchema07PropertyValidator : MaxPropertiesSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override uint? GetMaxProperties(JsonSchema07 schema)
+		{
+			return schema.MaxProperties;
+		}
+	}
 }
