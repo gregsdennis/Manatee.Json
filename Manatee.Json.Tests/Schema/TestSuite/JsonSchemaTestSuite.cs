@@ -91,8 +91,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestCaseSource(nameof(TestData07))]
 		public void Run07(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
 		{
-			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema06>();
-			_Run<JsonSchema06>(fileName, testJson, schemaJson);
+			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema07>();
+			_Run<JsonSchema07>(fileName, testJson, schemaJson);
 		}
 
 		private static void _Run<T>(string fileName, JsonValue testJson, JsonValue schemaJson)

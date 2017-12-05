@@ -8,6 +8,8 @@
 		}
 		public SchemaValidationResults Validate(JsonSchema07 schema, JsonValue json, JsonValue root)
 		{
+			if (schema.If == null) return new SchemaValidationResults();
+
 			var ifResults = _ValidateSubSchema(schema.If, json, root);
 			if (ifResults.Valid)
 			{
