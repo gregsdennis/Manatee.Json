@@ -37,11 +37,31 @@ namespace Manatee.Json.Schema
 				    var schemaValue = JsonValue.Parse(schemaJson);
 					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
 
-					var validation = JsonSchema04.MetaSchema.Validate(schemaValue);
+					var metaSchemas = new IJsonSchema[]
+						{
+							JsonSchema07.MetaSchema,
+							JsonSchema06.MetaSchema,
+							JsonSchema04.MetaSchema
+						};
 
-					if (!validation.Valid)
+					SchemaValidationResults validation = null;
+					if (schema.Schema != null)
 					{
-						validation = JsonSchema06.MetaSchema.Validate(schemaValue);
+						var bySchema = metaSchemas.FirstOrDefault(s => s.Id == schema.Schema);
+						if (bySchema != null)
+							validation = bySchema.Validate(schemaValue);
+					}
+					else
+					{
+						foreach (var metaSchema in metaSchemas)
+						{
+							validation = metaSchema.Validate(schemaValue);
+							if (validation.Valid) break;
+						}
+					}
+
+					if (validation != null && !validation.Valid)
+					{
 						var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
 						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 					}
@@ -96,11 +116,13 @@ namespace Manatee.Json.Schema
 		{
 			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
 			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
+			var draft07Uri = JsonSchema07.MetaSchema.Id.Split('#')[0];
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
 				_schemaLookup[draft04Uri] = JsonSchema04.MetaSchema;
 				_schemaLookup[draft06Uri] = JsonSchema06.MetaSchema;
+				_schemaLookup[draft07Uri] = JsonSchema07.MetaSchema;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

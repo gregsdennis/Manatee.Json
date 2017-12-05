@@ -152,7 +152,6 @@ namespace Manatee.Json.Schema
 							{
 								Type = JsonSchemaType.Object,
 								AdditionalProperties = Root,
-								PropertyNames = new JsonSchema07 {Format = StringFormat.Regex},
 								Default = new JsonObject()
 							},
 						["patternProperties"] = new JsonSchema07
@@ -212,6 +211,7 @@ namespace Manatee.Json.Schema
 		};
 
 		private static readonly IEnumerable<string> _definedProperties = MetaSchema.Properties.Keys.ToList();
+		private static readonly JsonSerializer _schemaSerializer = new JsonSerializer {Options = {CaseSensitiveDeserialization = false}};
 
 		private string _id;
 		private string _schema;
@@ -484,6 +484,8 @@ namespace Manatee.Json.Schema
 				BooleanSchemaDefinition = json.Boolean;
 				return;
 			}
+
+			serializer = serializer ?? _schemaSerializer;
 			
 			var obj = json.Object;
 			Id = obj.TryGetString("$id");
@@ -601,6 +603,8 @@ namespace Manatee.Json.Schema
 		{
 			if (BooleanSchemaDefinition != null) return BooleanSchemaDefinition;
 
+			serializer = serializer ?? _schemaSerializer;
+
 			var json = new JsonObject();
 			if (!string.IsNullOrWhiteSpace(Schema)) json["$schema"] = Schema;
 			if (Id != null) json["$id"] = Id;
@@ -667,7 +671,7 @@ namespace Manatee.Json.Schema
 			if (ContentMediaType != null)
 				json["contentMediaType"] = ContentMediaType;
 			if (ContentEncoding != null)
-				json["contentEncoding"] = ContentEncoding;
+				json["contentEncoding"] = serializer.Serialize(ContentEncoding);
 			if (If != null)
 				json["if"] = If.ToJson(serializer);
 			if (Then != null)
