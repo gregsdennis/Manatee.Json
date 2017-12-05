@@ -29,6 +29,14 @@ namespace Manatee.Json.Tests.Schema
 								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10}
 							}
 					};
+				yield return new JsonSchema07
+				{
+						OneOf = new List<IJsonSchema>
+							{
+								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 5},
+								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 10}
+							}
+					};
 			}
 		}
 		

@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Schema;
+﻿using System.Collections;
+using Manatee.Json.Schema;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -6,15 +7,24 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ExamplesSchemaTest
 	{
-		[Test]
-		public void ExamplesNotAnArray()
+		public static IEnumerable TestData
+		{
+			get
+			{
+				yield return new TestCaseData(JsonSchema06.MetaSchema);
+				yield return new TestCaseData(JsonSchema07.MetaSchema);
+			}
+		}
+
+		[TestCaseSource(nameof(TestData))]
+		public void ExamplesNotAnArray(IJsonSchema metaSchema)
 		{
 			var json = new JsonObject
 				{
 					["examples"] = 5
 				};
 
-			var results = JsonSchema06.MetaSchema.Validate(json);
+			var results = metaSchema.Validate(json);
 			
 			Assert.IsFalse(results.Valid);
 		}

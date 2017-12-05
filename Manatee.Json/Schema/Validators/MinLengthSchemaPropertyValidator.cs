@@ -35,4 +35,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.MinLength;
 		}
 	}
+	
+	internal class MinLengthSchema07PropertyValidator : MinLengthSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override uint? GetMinLength(JsonSchema07 schema)
+		{
+			return schema.MinLength;
+		}
+	}
 }

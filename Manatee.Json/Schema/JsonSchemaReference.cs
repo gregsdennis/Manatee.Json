@@ -67,7 +67,7 @@ namespace Manatee.Json.Schema
 		internal JsonSchemaReference(Type baseSchemaType)
 		{
 			_schemaFactory = _GetSchemaFactory(baseSchemaType ?? throw new ArgumentNullException(nameof(baseSchemaType))) ??
-			                 throw new ArgumentException($"{nameof(baseSchemaType)} must be either {nameof(JsonSchema04)} or {nameof(JsonSchema06)}.");
+			                 throw new ArgumentException($"{nameof(baseSchemaType)} must be {nameof(JsonSchema04)}, {nameof(JsonSchema06)} or {nameof(JsonSchema07)}.");
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class that supports additional schema properties.
@@ -252,6 +252,8 @@ namespace Manatee.Json.Schema
 				return () => new JsonSchema04();
 			if (type == typeof(JsonSchema06))
 				return () => new JsonSchema06();
+			if (type == typeof(JsonSchema07))
+				return () => new JsonSchema07();
 			return null;
 		}
 	}

@@ -36,4 +36,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.AnyOf;
 		}
 	}
+	
+	internal class AnyOfSchema07PropertyValidator : AnyOfSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override IEnumerable<IJsonSchema> GetAnyOf(JsonSchema07 schema)
+		{
+			return schema.AnyOf;
+		}
+	}
 }

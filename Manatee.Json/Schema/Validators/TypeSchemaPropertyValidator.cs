@@ -58,4 +58,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.Type;
 		}
 	}
+
+	internal class TypeSchema07PropertyValidator : TypeSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override JsonSchemaType GetType(JsonSchema07 schema)
+		{
+			return schema.Type;
+		}
+	}
 }

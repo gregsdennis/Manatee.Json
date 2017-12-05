@@ -33,4 +33,12 @@
 			return schema.Format;
 		}
 	}
+	
+	internal class FormatSchema07PropertyValidator : FormatSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override StringFormat GetFormat(JsonSchema07 schema)
+		{
+			return schema.Format;
+		}
+	}
 }

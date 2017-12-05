@@ -13,6 +13,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new TestCaseData(JsonSchema04.MetaSchema);
 				yield return new TestCaseData(JsonSchema06.MetaSchema);
+				yield return new TestCaseData(JsonSchema07.MetaSchema);
 			}
 		}
 		

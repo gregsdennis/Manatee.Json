@@ -37,4 +37,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.Enum;
 		}
 	}
+	
+	internal class Enumchema07PropertyValidator : EnumSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override IEnumerable<EnumSchemaValue> GetEnum(JsonSchema07 schema)
+		{
+			return schema.Enum;
+		}
+	}
 }

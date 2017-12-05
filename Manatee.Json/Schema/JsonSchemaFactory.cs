@@ -37,27 +37,22 @@ namespace Manatee.Json.Schema
 			};
 
 		private static Func<IJsonSchema> _schemaFactory = () => new JsonSchema04();
-		private static Type _defaultSchemaSelection = typeof(JsonSchema04);
 
 		public static void SetDefaultSchemaVersion<T>()
 			where T : IJsonSchema
 		{
-			SetDefaultSchemaVersion(typeof(T));
+			_SetDefaultSchemaVersion(typeof(T));
 		}
-		internal static void SetDefaultSchemaVersion(Type type)
+		private static void _SetDefaultSchemaVersion(Type type)
 		{
 			if (type == typeof(JsonSchema04))
-			{
 				_schemaFactory = () => new JsonSchema04();
-				_defaultSchemaSelection = typeof(JsonSchema04);
-			}
 			else if (type == typeof(JsonSchema06))
-			{
 				_schemaFactory = () => new JsonSchema06();
-				_defaultSchemaSelection = typeof(JsonSchema06);
-			}
+			else if (type == typeof(JsonSchema07))
+				_schemaFactory = () => new JsonSchema07();
 			else
-				throw new ArgumentException($"Only {nameof(JsonSchema04)} and {nameof(JsonSchema06)} are supported.");
+				throw new ArgumentException($"Only {nameof(JsonSchema04)}, {nameof(JsonSchema06)}, and {nameof(JsonSchema07)} are supported.");
 		}
 		
 		/// <summary>
@@ -89,6 +84,12 @@ namespace Manatee.Json.Schema
 						var id = json.Object.TryGetString("$id");
 						if (id == JsonSchema06.MetaSchema.Id) return JsonSchema06.MetaSchema;
 						schema = new JsonSchema06();
+					}
+					else if (schemaDeclaration == JsonSchema07.MetaSchema.Id)
+					{
+						var id = json.Object.TryGetString("$id");
+						if (id == JsonSchema07.MetaSchema.Id) return JsonSchema07.MetaSchema;
+						schema = new JsonSchema07();
 					}
 					schema = schema ?? schemaFactory();
 					if (json.Object.ContainsKey("$ref"))

@@ -23,7 +23,7 @@ namespace Manatee.Json.Schema
 		public static readonly JsonSchema06 True = new JsonSchema06 {BooleanSchemaDefinition = true};
 		public static readonly JsonSchema06 False = new JsonSchema06 {BooleanSchemaDefinition = false};
 		/// <summary>
-		/// Defines the Draft-04 Schema as presented at http://json-schema.org/draft-06/schema#
+		/// Defines the Draft-06 Schema as presented at http://json-schema.org/draft-06/schema#
 		/// </summary>
 		public static readonly JsonSchema06 MetaSchema = new JsonSchema06
 			{
@@ -251,6 +251,11 @@ namespace Manatee.Json.Schema
 		/// </remarks>
 		public JsonValue Default { get; set; }
 		/// <summary>
+		/// Examples of JSON that conform to this schemata.
+		/// </summary>
+		// TODO: Verify this property isn't supposed to be JsonArray.
+		public JsonArray Examples { get; set; }
+		/// <summary>
 		/// Defines a divisor for acceptable values.
 		/// </summary>
 		public double? MultipleOf
@@ -390,7 +395,6 @@ namespace Manatee.Json.Schema
 				_format = value;
 			}
 		}
-		public IEnumerable<IJsonSchema> Examples { get; set; }
 		/// <summary>
 		/// Gets other, non-schema-defined properties.
 		/// </summary>
@@ -451,7 +455,10 @@ namespace Manatee.Json.Schema
 			if (obj.ContainsKey("default"))
 				Default = obj["default"];
 			if (obj.ContainsKey("examples"))
-				Examples = json.Object["examples"].Array.Select(_ReadSchema);
+			{
+				Examples = json.Object["examples"].Array;
+				Examples.EqualityStandard = ArrayEquality.ContentsEqual;
+			}
 			MultipleOf = obj.TryGetNumber("multipleOf");
 			Maximum = obj.TryGetNumber("maximum");
 			ExclusiveMaximum = obj.TryGetNumber("exclusiveMaximum");
@@ -614,11 +621,7 @@ namespace Manatee.Json.Schema
 			if (Format != null) json["format"] = Format.Key;
 			if (Default != null) json["default"] = Default;
 			if (Examples != null)
-			{
-				var array = Examples.Select(s => s.ToJson(serializer)).ToJson();
-				array.EqualityStandard = ArrayEquality.ContentsEqual;
-				json["examples"] = array;
-			}
+				json["examples"] = Examples;
 			if (ExtraneousDetails != null)
 			{
 				foreach (var kvp in ExtraneousDetails.Where(kvp => !_definedProperties.Contains(kvp.Key)))

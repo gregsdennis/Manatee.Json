@@ -33,4 +33,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.Dependencies;
 		}
 	}
+	
+	internal class DependeciesSchema07PropertyValidator : DependenciesSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override IEnumerable<IJsonSchemaDependency> GetDependencies(JsonSchema07 schema)
+		{
+			return schema.Dependencies;
+		}
+	}
 }

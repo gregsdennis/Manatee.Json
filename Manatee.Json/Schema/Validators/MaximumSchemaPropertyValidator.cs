@@ -35,7 +35,26 @@
 			var max = schema.ExclusiveMaximum ?? schema.Maximum;
 			var operation = schema.ExclusiveMaximum.HasValue ? "<" : "<=";
 			
-			if (json.Number > max || (schema.ExclusiveMaximum.HasValue && json.Number >= max))
+			if (json.Number > max || schema.ExclusiveMaximum.HasValue && json.Number >= max)
+				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {max}; Actual: {json.Number}.");
+			
+			return new SchemaValidationResults();
+		}
+	}
+	
+	internal class MaximumSchema07PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema07>
+	{
+		public bool Applies(JsonSchema07 schema, JsonValue json)
+		{
+			return (schema.Maximum.HasValue || schema.ExclusiveMaximum.HasValue) &&
+			       json.Type == JsonValueType.Number;
+		}
+		public SchemaValidationResults Validate(JsonSchema07 schema, JsonValue json, JsonValue root)
+		{
+			var max = schema.ExclusiveMaximum ?? schema.Maximum;
+			var operation = schema.ExclusiveMaximum.HasValue ? "<" : "<=";
+			
+			if (json.Number > max || schema.ExclusiveMaximum.HasValue && json.Number >= max)
 				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {max}; Actual: {json.Number}.");
 			
 			return new SchemaValidationResults();

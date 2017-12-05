@@ -9,6 +9,7 @@ namespace Manatee.Json.Schema.Validators
 	{
 		private static readonly IEnumerable<IJsonSchemaPropertyValidator<JsonSchema04>> _schema04Validators;
 		private static readonly IEnumerable<IJsonSchemaPropertyValidator<JsonSchema06>> _schema06Validators;
+		private static readonly IEnumerable<IJsonSchemaPropertyValidator<JsonSchema07>> _schema07Validators;
 
 		static JsonSchemaPropertyValidatorFactory()
 		{
@@ -20,6 +21,7 @@ namespace Manatee.Json.Schema.Validators
 			                                                        .ToList();
 			_schema04Validators = allValidators.OfType<IJsonSchemaPropertyValidator<JsonSchema04>>().ToList();
 			_schema06Validators = allValidators.OfType<IJsonSchemaPropertyValidator<JsonSchema06>>().ToList();
+			_schema07Validators = allValidators.OfType<IJsonSchemaPropertyValidator<JsonSchema07>>().ToList();
 		}
 
 		public static IEnumerable<IJsonSchemaPropertyValidator<JsonSchema04>> Get(JsonSchema04 schema, JsonValue json)
@@ -30,6 +32,11 @@ namespace Manatee.Json.Schema.Validators
 		public static IEnumerable<IJsonSchemaPropertyValidator<JsonSchema06>> Get(JsonSchema06 schema, JsonValue json)
 		{
 			return _schema06Validators.Where(v => v.Applies(schema, json));
+		}
+
+		public static IEnumerable<IJsonSchemaPropertyValidator<JsonSchema07>> Get(JsonSchema07 schema, JsonValue json)
+		{
+			return _schema07Validators.Where(v => v.Applies(schema, json));
 		}
 	}
 }

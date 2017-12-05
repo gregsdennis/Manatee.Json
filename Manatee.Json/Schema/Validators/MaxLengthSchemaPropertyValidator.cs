@@ -36,4 +36,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.MaxLength;
 		}
 	}
+	
+	internal class MaxLengthSchema07PropertyValidator : MaxLengthSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override uint? GetMaxLength(JsonSchema07 schema)
+		{
+			return schema.MaxLength;
+		}
+	}
 }

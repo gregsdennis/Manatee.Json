@@ -34,4 +34,12 @@ namespace Manatee.Json.Schema.Validators
 			return schema.UniqueItems;
 		}
 	}
+
+	internal class UniqueItemsSchema07PropertyValidator : UniqueItemsSchemaPropertyValidatorBase<JsonSchema07>
+	{
+		protected override bool? GetUniqueItems(JsonSchema07 schema)
+		{
+			return schema.UniqueItems;
+		}
+	}
 }
