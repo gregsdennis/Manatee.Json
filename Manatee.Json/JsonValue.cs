@@ -358,12 +358,10 @@ namespace Manatee.Json
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is at the end.</exception>
 		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="stream"/> contains invalid JSON syntax.</exception>
-		public static JsonValue Parse(StreamReader stream)
+		public static JsonValue Parse(TextReader stream)
 		{
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
-			if (stream.EndOfStream)
-				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.Parse(stream);
 		}
 		/// <summary>
@@ -374,12 +372,10 @@ namespace Manatee.Json
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is at the end.</exception>
 		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="stream"/> contains invalid JSON syntax.</exception>
-		public static Task<JsonValue> ParseAsync(StreamReader stream)
+		public static Task<JsonValue> ParseAsync(TextReader stream)
 		{
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
-			if (stream.EndOfStream)
-				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.ParseAsync(stream);
 		}
 
