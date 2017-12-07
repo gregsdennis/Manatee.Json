@@ -94,7 +94,7 @@ namespace Manatee.Json.Parsing
 					return "Expected ':'.";
 				}
 				stream.Read(); // waste the ':'
-				// get value (whitespace is removed in Parse)
+							   // get value (whitespace is removed in Parse)
 				message = JsonParser.Parse(stream, out item);
 				obj.Add(key, item);
 				if (message != null) return message;
@@ -115,80 +115,80 @@ namespace Manatee.Json.Parsing
 			var obj = new JsonObject();
 			JsonValue value = null;
 
-            var scratch = SmallBufferCache.Acquire(1);
+			var scratch = SmallBufferCache.Acquire(1);
 
-            char c;
-            string errorMessage = null;
-            while (stream.Peek() != -1)
-            {
-                if (token.IsCancellationRequested)
-                {
-                    errorMessage = "Parsing incomplete. The task was cancelled.";
-                    break;
-                }
-                await stream.TryRead(scratch, 0, 1); // waste the '{' or ','
-                (errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
-                if (errorMessage != null) break;
-                // check for empty object
-                if (c == '}')
-                    if (obj.Count == 0)
-                    {
-                        await stream.TryRead(scratch, 0, 1); // waste the '}'
-                        break;
-                    }
-                    else
-                    {
-                        errorMessage = "Expected key.";
-                        break;
-                    }
+			char c;
+			string errorMessage = null;
+			while (stream.Peek() != -1)
+			{
+				if (token.IsCancellationRequested)
+				{
+					errorMessage = "Parsing incomplete. The task was cancelled.";
+					break;
+				}
+				await stream.TryRead(scratch, 0, 1); // waste the '{' or ','
+				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
+				if (errorMessage != null) break;
+				// check for empty object
+				if (c == '}')
+					if (obj.Count == 0)
+					{
+						await stream.TryRead(scratch, 0, 1); // waste the '}'
+						break;
+					}
+					else
+					{
+						errorMessage = "Expected key.";
+						break;
+					}
 				// get key
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
-                if (errorMessage != null) break; ;
-                if (c != '\"')
-                {
-                    errorMessage = "Expected key.";
-                    break;
-                }
+				if (errorMessage != null) break; ;
+				if (c != '\"')
+				{
+					errorMessage = "Expected key.";
+					break;
+				}
 
 				JsonValue item;
 				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
-                if (errorMessage != null) break;
+				if (errorMessage != null) break;
 				var key = item.String;
 				// check for colon
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
-                if (errorMessage != null) break;
+				if (errorMessage != null) break;
 				if (c != ':')
 				{
 					obj.Add(key, null);
-					errorMessage ="Expected ':'.";
-                    break;
+					errorMessage = "Expected ':'.";
+					break;
 				}
 				await stream.TryRead(scratch, 0, 1); // waste the ':'
-                                                     // get value (whitespace is removed in Parse)
-                errorMessage = JsonParser.Parse(stream, out item);
+													 // get value (whitespace is removed in Parse)
+				errorMessage = JsonParser.Parse(stream, out item);
 				obj.Add(key, item);
 				if (errorMessage != null) break;
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
-                if (errorMessage != null) break;
+				if (errorMessage != null) break;
 				// check for end or separator
 				if (c == '}')
 				{
 					await stream.TryRead(scratch, 0, 1); // waste the '}'
 					break;
 				}
-                if (c != ',')
-                {
-                    errorMessage = "Expected ','.";
-                    break;
-                }
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					break;
+				}
 			}
 
-            if (errorMessage == null)
-            {
-                value = obj;
-            }
+			if (errorMessage == null)
+			{
+				value = obj;
+			}
 
-            SmallBufferCache.Release(scratch);
+			SmallBufferCache.Release(scratch);
 			return (errorMessage, value);
 		}
 	}

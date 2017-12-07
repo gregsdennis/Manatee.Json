@@ -12,53 +12,53 @@ namespace Manatee.Json.Parsing
 	{
 		public bool Handles(char c)
 		{
-            switch (c)
-            {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '-':
-                    return true;
-            }
-            return false;
+			switch (c)
+			{
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+				case '-':
+					return true;
+			}
+			return false;
 		}
 
-        private static bool IsNumberChar(char c)
-        {
-            switch (c)
-            {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '-':
-                case '+':
-                case '.':
-                case 'e':
-                case 'E':
-                    return true;
-            }
-            return false;
-        }
+		private static bool IsNumberChar(char c)
+		{
+			switch (c)
+			{
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+				case '-':
+				case '+':
+				case '.':
+				case 'e':
+				case 'E':
+					return true;
+			}
+			return false;
+		}
 
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
 			var sourceLength = source.Length;
-            var originalIndex = index;
-            while (index < source.Length)
+			var originalIndex = index;
+			while (index < source.Length)
 			{
 				var c = source[index];
 				if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
@@ -91,19 +91,19 @@ namespace Manatee.Json.Parsing
 			var bufferIndex = 0;
 			while (stream.Peek() != -1)
 			{
-				var c = (char) stream.Peek();
-                if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
+				var c = (char)stream.Peek();
+				if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
 
-                stream.Read(); // eat the character
+				stream.Read(); // eat the character
 
-                if (!IsNumberChar(c))
-                {
-                    value = null;
-                    StringBuilderCache.Release(buffer);
-                    return "Expected ',', ']', or '}'.";
-                }
+				if (!IsNumberChar(c))
+				{
+					value = null;
+					StringBuilderCache.Release(buffer);
+					return "Expected ',', ']', or '}'.";
+				}
 
-                buffer.Append(c);
+				buffer.Append(c);
 				bufferIndex++;
 			}
 
@@ -120,45 +120,45 @@ namespace Manatee.Json.Parsing
 
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-            var buffer = StringBuilderCache.Acquire();
-            var scratch = SmallBufferCache.Acquire(1);
+			var buffer = StringBuilderCache.Acquire();
+			var scratch = SmallBufferCache.Acquire(1);
 
-            string errorMessage = null;
-            while (stream.Peek() != -1)
+			string errorMessage = null;
+			while (stream.Peek() != -1)
 			{
-                if (token.IsCancellationRequested)
-                {
-                    errorMessage = "Parsing incomplete. The task was cancelled.";
-                    break;
-                }
+				if (token.IsCancellationRequested)
+				{
+					errorMessage = "Parsing incomplete. The task was cancelled.";
+					break;
+				}
 
 				var c = (char)stream.Peek();
-                if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
+				if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
 
-                await stream.TryRead(scratch, 0, 1); // eat the character
+				await stream.TryRead(scratch, 0, 1); // eat the character
 
-                if (!IsNumberChar(c))
-                {
-                    errorMessage = "Expected ',', ']', or '}'.";
-                    break;
-                }
+				if (!IsNumberChar(c))
+				{
+					errorMessage = "Expected ',', ']', or '}'.";
+					break;
+				}
 
-                buffer.Append(c);
+				buffer.Append(c);
 			}
 
-            SmallBufferCache.Release(scratch);
+			SmallBufferCache.Release(scratch);
 
-            if (errorMessage != null)
-            {
-                StringBuilderCache.Release(buffer);
-                return (errorMessage, null);
-            }
+			if (errorMessage != null)
+			{
+				StringBuilderCache.Release(buffer);
+				return (errorMessage, null);
+			}
 
-            var result = StringBuilderCache.GetStringAndRelease(buffer);
-            if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
-            {
-                return ($"Value not recognized: '{result}'", null);
-            }
+			var result = StringBuilderCache.GetStringAndRelease(buffer);
+			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
+			{
+				return ($"Value not recognized: '{result}'", null);
+			}
 
 			return (null, dbl);
 		}

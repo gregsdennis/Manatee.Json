@@ -12,9 +12,9 @@ namespace Manatee.Json.Internal
 	internal static class StringExtensions
 	{
 		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
-		                                                                     .Select(n => (char) n)
-		                                                                     .Where(c => !char.IsControl(c))
-                                                                             .ToArray();
+																			 .Select(n => (char)n)
+																			 .Where(c => !char.IsControl(c))
+																			 .ToArray();
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
 		public static string EvaluateEscapeSequences(this string source, out string result)
@@ -128,10 +128,10 @@ namespace Manatee.Json.Internal
 		}
 		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
 		{
-            ch = default(char);
+			ch = default(char);
 			while (index < length)
 			{
-                ch = source[index];
+				ch = source[index];
 				if (!char.IsWhiteSpace(ch)) break;
 				index++;
 			}
@@ -146,12 +146,12 @@ namespace Manatee.Json.Internal
 		}
 		public static string SkipWhiteSpace(this TextReader stream, out char ch)
 		{
-			ch = (char) stream.Peek();
+			ch = (char)stream.Peek();
 			while (ch != -1)
 			{
 				if (!char.IsWhiteSpace(ch)) break;
 				stream.Read();
-				ch = (char) stream.Peek();
+				ch = (char)stream.Peek();
 			}
 
 			if (ch == -1)
@@ -162,49 +162,49 @@ namespace Manatee.Json.Internal
 
 			return null;
 		}
-        public static async Task<(string, char)> SkipWhiteSpaceAsync(this TextReader stream, char[] scratch)
-        {
-            System.Diagnostics.Debug.Assert(scratch.Length >= 1);
-            char ch;
-            ch = (char)stream.Peek();
-            while (ch != -1)
-            {
-                if (!char.IsWhiteSpace(ch)) break;
-                await stream.ReadAsync(scratch, 0, 1);
-                ch = (char)stream.Peek();
-            }
-            if (ch == -1)
-            {
-                ch = default(char);
-                return ("Unexpected end of input.", ch);
-            }
-            return (null, ch);
-        }
-        public static string UnescapePointer(this string reference)
+		public static async Task<(string, char)> SkipWhiteSpaceAsync(this TextReader stream, char[] scratch)
+		{
+			System.Diagnostics.Debug.Assert(scratch.Length >= 1);
+			char ch;
+			ch = (char)stream.Peek();
+			while (ch != -1)
+			{
+				if (!char.IsWhiteSpace(ch)) break;
+				await stream.ReadAsync(scratch, 0, 1);
+				ch = (char)stream.Peek();
+			}
+			if (ch == -1)
+			{
+				ch = default(char);
+				return ("Unexpected end of input.", ch);
+			}
+			return (null, ch);
+		}
+		public static string UnescapePointer(this string reference)
 		{
 			var unescaped = reference.Replace("~1", "/")
-			                         .Replace("~0", "~");
+									 .Replace("~0", "~");
 			var matches = _generalEscapePattern.Matches(unescaped);
 			foreach (Match match in matches)
 			{
 				var value = int.Parse(match.Groups["Value"].Value, NumberStyles.HexNumber);
-				var ch = (char) value;
+				var ch = (char)value;
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}
 			return unescaped;
 		}
-        public static Task<bool> TryRead(this TextReader stream, char[] buffer, int offset, int count)
-        {
-            return TryRead(stream, buffer, offset, count, CancellationToken.None);
-        }
-        public static async Task<bool> TryRead(this TextReader stream, char[] buffer, int offset, int count, CancellationToken token)
-        {
-            if (token.IsCancellationRequested)
-                return false;
+		public static Task<bool> TryRead(this TextReader stream, char[] buffer, int offset, int count)
+		{
+			return TryRead(stream, buffer, offset, count, CancellationToken.None);
+		}
+		public static async Task<bool> TryRead(this TextReader stream, char[] buffer, int offset, int count, CancellationToken token)
+		{
+			if (token.IsCancellationRequested)
+				return false;
 
-            var charsRead = await stream.ReadBlockAsync(buffer, offset, count);
+			var charsRead = await stream.ReadBlockAsync(buffer, offset, count);
 
-            return count == charsRead;
-        }
-    }
+			return count == charsRead;
+		}
+	}
 }

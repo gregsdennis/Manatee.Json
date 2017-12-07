@@ -80,49 +80,49 @@ namespace Manatee.Json.Parsing
 		}
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-            var scratch = SmallBufferCache.Acquire(1);
+			var scratch = SmallBufferCache.Acquire(1);
 			var array = new JsonArray();
 
-            char c;
-            string errorMessage = null;
+			char c;
+			string errorMessage = null;
 			while (stream.Peek() != -1)
 			{
-                if (token.IsCancellationRequested)
-                {
-                    errorMessage = "Parsing incomplete. The task was cancelled.";
-                    break;
-                }
+				if (token.IsCancellationRequested)
+				{
+					errorMessage = "Parsing incomplete. The task was cancelled.";
+					break;
+				}
 
 				await stream.TryRead(scratch, 0, 1); // waste the '[' or ','
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
-                if (errorMessage != null)
-                    break;
+				if (errorMessage != null)
+					break;
 
-                // check for empty array
-                if (c == ']')
-                {
-                    if (array.Count == 0)
-                    {
-                        await stream.TryRead(scratch, 0, 1); // waste the ']'
-                        break;
-                    }
-                    else
-                    {
-                        errorMessage = "Expected value.";
-                        break;
-                    }
-                }
+				// check for empty array
+				if (c == ']')
+				{
+					if (array.Count == 0)
+					{
+						await stream.TryRead(scratch, 0, 1); // waste the ']'
+						break;
+					}
+					else
+					{
+						errorMessage = "Expected value.";
+						break;
+					}
+				}
 
 				// get value
 				JsonValue item;
 				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
 				array.Add(item);
-                if (errorMessage != null)
-                    break;
+				if (errorMessage != null)
+					break;
 
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
-                if (errorMessage != null)
-                    break;
+				if (errorMessage != null)
+					break;
 
 				// check for end or separator
 				if (c == ']')
@@ -131,17 +131,17 @@ namespace Manatee.Json.Parsing
 					break;
 				}
 
-                if (c != ',')
-                {
-                    errorMessage = "Expected ','.";
-                    break;
-                }
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					break;
+				}
 			}
 
-            JsonValue value = errorMessage == null ? array : null;
+			JsonValue value = errorMessage == null ? array : null;
 
-            SmallBufferCache.Release(scratch);
-            return (errorMessage, value);
+			SmallBufferCache.Release(scratch);
+			return (errorMessage, value);
 		}
 	}
 }

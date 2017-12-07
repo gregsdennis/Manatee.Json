@@ -16,10 +16,10 @@ namespace Manatee.Json.Parsing
 		static JsonParser()
 		{
 			Parsers = typeof(JsonParser).GetTypeInfo().Assembly.DefinedTypes
-			                            .Where(t => typeof(IJsonParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
-			                            .Select(ti => Activator.CreateInstance(ti.AsType()))
-			                            .Cast<IJsonParser>()
-			                            .ToList();
+										.Where(t => typeof(IJsonParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
+										.Select(ti => Activator.CreateInstance(ti.AsType()))
+										.Cast<IJsonParser>()
+										.ToList();
 		}
 
 		public static JsonValue Parse(string source)
@@ -54,11 +54,11 @@ namespace Manatee.Json.Parsing
 				return errorMessage;
 			}
 
-            foreach (var parser in Parsers)
-            {
-                if (parser.Handles(c))
-                    return parser.TryParse(source, ref index, out value, allowExtraChars);
-            }
+			foreach (var parser in Parsers)
+			{
+				if (parser.Handles(c))
+					return parser.TryParse(source, ref index, out value, allowExtraChars);
+			}
 
 			value = null;
 			return "Cannot determine type.";
@@ -72,13 +72,13 @@ namespace Manatee.Json.Parsing
 				return errorMessage;
 			}
 
-            foreach (var parser in Parsers)
-            {
-                if (parser.Handles(c))
-                    return parser.TryParse(stream, out value);
-            }
+			foreach (var parser in Parsers)
+			{
+				if (parser.Handles(c))
+					return parser.TryParse(stream, out value);
+			}
 
-            value = null;
+			value = null;
 			return "Cannot determine type.";
 		}
 		public static async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
@@ -89,13 +89,13 @@ namespace Manatee.Json.Parsing
 				return (errorMessage, null);
 			}
 
-            foreach (var parser in Parsers)
-            {
-                if (parser.Handles(c))
-                    return await parser.TryParseAsync(stream, token);
-            }
+			foreach (var parser in Parsers)
+			{
+				if (parser.Handles(c))
+					return await parser.TryParseAsync(stream, token);
+			}
 
-    		return ("Cannot determine type.", null);
+			return ("Cannot determine type.", null);
 		}
 	}
 }
