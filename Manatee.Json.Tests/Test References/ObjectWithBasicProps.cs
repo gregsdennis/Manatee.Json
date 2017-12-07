@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Manatee.Json.Serialization;
 
@@ -20,6 +21,8 @@ namespace Manatee.Json.Tests.Test_References
 		public FlagsEnum FlagsEnumProp { get; set; }
 		[JsonMapTo("MapToMe")]
 		public int MappedProp { get; set; }
+		public List<int> ReadOnlyListProp { get; } = new List<int>();
+		public Dictionary<string, int> ReadOnlyDictionaryProp { get; } = new Dictionary<string, int>();
 		#endregion
 
 		#region Nonserializable Instance Properties
