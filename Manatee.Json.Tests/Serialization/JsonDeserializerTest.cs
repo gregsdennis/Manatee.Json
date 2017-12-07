@@ -770,5 +770,28 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(actual.GetType().Name + "2", alternateActual.GetType().Name);
 		}
+		[Test]
+		public void PrepopulatedReadonlyAutoprop()
+		{
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite
+						}
+				};
+			var json = new JsonObject
+				{
+					["ReadOnlyListProp"] = new JsonArray {1, 5, 10, -6}
+				};
+			var expected = new ObjectWithBasicProps
+				{
+					ReadOnlyListProp = {1, 5, 10, -6}
+				};
+
+			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
+
+			Assert.IsTrue(expected.ReadOnlyListProp.SequenceEqual(actual.ReadOnlyListProp));
+		}
 	}
 }
