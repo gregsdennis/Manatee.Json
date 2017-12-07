@@ -771,7 +771,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(actual.GetType().Name + "2", alternateActual.GetType().Name);
 		}
 		[Test]
-		public void PrepopulatedReadonlyAutoprop()
+		public void PrepopulatedReadonlyListAutoprop()
 		{
 			var serializer = new JsonSerializer
 				{
@@ -792,6 +792,37 @@ namespace Manatee.Json.Tests.Serialization
 			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
 
 			Assert.IsTrue(expected.ReadOnlyListProp.SequenceEqual(actual.ReadOnlyListProp));
+		}
+		[Test]
+		public void PrepopulatedReadonlyDictionaryAutoprop()
+		{
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite
+						}
+				};
+			var json = new JsonObject
+				{
+					["ReadOnlyDictionaryProp"] = new JsonObject
+						{
+							["key1"] = 1,
+							["key2"] = 2
+						}
+				};
+			var expected = new ObjectWithBasicProps
+				{
+					ReadOnlyDictionaryProp =
+						{
+							["key1"] = 1,
+							["key2"] = 2
+						}
+				};
+
+			var actual = serializer.Deserialize<ObjectWithBasicProps>(json);
+
+			Assert.IsTrue(expected.ReadOnlyDictionaryProp.SequenceEqual(actual.ReadOnlyDictionaryProp));
 		}
 	}
 }

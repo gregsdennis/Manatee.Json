@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -155,7 +156,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					else
 						deserialize = SerializerCache.GetDeserializeMethod(((FieldInfo)memberInfo.MemberInfo).FieldType);
 					var valueObj = deserialize.Invoke(serializer, new object[] {value});
-					if ((value.Type == JsonValueType.Object) && value.Object.ContainsKey(Constants.RefKey))
+					if (value.Type == JsonValueType.Object && value.Object.ContainsKey(Constants.RefKey))
 					{
 						var guid = new Guid(value.Object[Constants.RefKey].String);
 						var pair = serializer.SerializationMap[guid];
@@ -195,7 +196,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					else
 						deserialize = SerializerCache.GetDeserializeMethod(((FieldInfo) memberInfo.MemberInfo).FieldType);
 					var valueObj = deserialize.Invoke(serializer, new object[] {value});
-					if ((value.Type == JsonValueType.Object) && value.Object.ContainsKey(Constants.RefKey))
+					if (value.Type == JsonValueType.Object && value.Object.ContainsKey(Constants.RefKey))
 					{
 						var guid = new Guid(value.Object[Constants.RefKey].String);
 						var pair = serializer.SerializationMap[guid];
@@ -226,6 +227,22 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				{
 					if (info.CanWrite)
 						info.SetValue(obj, entry.Value, null);
+					else if (typeof(IList).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()))
+					{
+						var list = (IList) info.GetValue(obj);
+						foreach (var value in (IList)entry.Value)
+						{
+							list.Add(value);
+						}
+					}
+					else if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()))
+					{
+						var dictionary = (IDictionary) info.GetValue(obj);
+						foreach (DictionaryEntry kvp in (IDictionary)entry.Value)
+						{
+							dictionary.Add(kvp.Key, kvp.Value);
+						}
+					}
 				}
 				else
 					((FieldInfo) memberInfo.MemberInfo).SetValue(obj, entry.Value);

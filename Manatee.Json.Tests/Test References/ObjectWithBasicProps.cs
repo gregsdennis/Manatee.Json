@@ -22,6 +22,7 @@ namespace Manatee.Json.Tests.Test_References
 		[JsonMapTo("MapToMe")]
 		public int MappedProp { get; set; }
 		public List<int> ReadOnlyListProp { get; } = new List<int>();
+		public Dictionary<string, int> ReadOnlyDictionaryProp { get; } = new Dictionary<string, int>();
 		#endregion
 
 		#region Nonserializable Instance Properties
