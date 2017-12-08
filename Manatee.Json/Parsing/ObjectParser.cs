@@ -117,7 +117,6 @@ namespace Manatee.Json.Parsing
 
 			var scratch = SmallBufferCache.Acquire(1);
 
-			char c;
 			string errorMessage = null;
 			while (stream.Peek() != -1)
 			{
@@ -126,14 +125,15 @@ namespace Manatee.Json.Parsing
 					errorMessage = "Parsing incomplete. The task was cancelled.";
 					break;
 				}
-				await stream.TryRead(scratch, 0, 1); // waste the '{' or ','
+				await stream.TryRead(scratch, 0, 1, token); // waste the '{' or ','
+				char c;
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null) break;
 				// check for empty object
 				if (c == '}')
 					if (obj.Count == 0)
 					{
-						await stream.TryRead(scratch, 0, 1); // waste the '}'
+						await stream.TryRead(scratch, 0, 1, token); // waste the '}'
 						break;
 					}
 					else
@@ -163,7 +163,7 @@ namespace Manatee.Json.Parsing
 					errorMessage = "Expected ':'.";
 					break;
 				}
-				await stream.TryRead(scratch, 0, 1); // waste the ':'
+				await stream.TryRead(scratch, 0, 1, token); // waste the ':'
 													 // get value (whitespace is removed in Parse)
 				errorMessage = JsonParser.Parse(stream, out item);
 				obj.Add(key, item);
@@ -173,7 +173,7 @@ namespace Manatee.Json.Parsing
 				// check for end or separator
 				if (c == '}')
 				{
-					await stream.TryRead(scratch, 0, 1); // waste the '}'
+					await stream.TryRead(scratch, 0, 1, token); // waste the '}'
 					break;
 				}
 				if (c != ',')

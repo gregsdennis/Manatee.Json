@@ -1,80 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace Manatee.Json.Internal
 {
-	class ObjectCache<T> where T : class
+	internal class ObjectCache<T> where T : class
 	{
-		private static readonly int CACHE_SIZE = Environment.ProcessorCount * 2;
+		private static readonly int _cacheSize = Environment.ProcessorCount * 2;
 
-		private T item = null;
-		private readonly T[] items = new T[CACHE_SIZE];
+		private readonly T[] _items = new T[_cacheSize];
+		private T _item;
 
-		private readonly Func<T> builder;
+		private readonly Func<T> _builder;
 
 		public ObjectCache(Func<T> builder)
 		{
-			this.builder = builder;
+			_builder = builder;
 		}
 
 		public T Acquire()
 		{
-			var instance = item;
-			if (instance == null || instance != Interlocked.CompareExchange(ref item, null, instance))
+			var instance = _item;
+			if (instance == null || instance != Interlocked.CompareExchange(ref _item, null, instance))
 			{
-				instance = AcquireSlow();
+				instance = _AcquireSlow();
 			}
 
 			return instance;
 		}
 
-		private T AcquireSlow()
+		public void Release(T obj)
 		{
-			for (int ii = 0; ii < items.Length; ++ii)
+			if (_item == null)
+			{
+				// Intentionally not using interlocked here. 
+				// In a worst case scenario two objects may be stored into same slot.
+				// It is very unlikely to happen and will only mean that one of the objects will get collected.
+				_item = obj;
+			}
+			else
+			{
+				_ReleaseSlow(obj);
+			}
+		}
+
+		private T _AcquireSlow()
+		{
+			for (int ii = 0; ii < _items.Length; ++ii)
 			{
 				// Note that the initial read is optimistically not synchronized. That is intentional. 
 				// We will interlock only when we have a candidate. in a worst case we may miss some
 				// recently returned objects. Not a big deal.
-				var instance = items[ii];
+				var instance = _items[ii];
 				if (instance != null)
 				{
-					if (instance == Interlocked.CompareExchange(ref items[ii], null, instance))
+					if (instance == Interlocked.CompareExchange(ref _items[ii], null, instance))
 					{
 						return instance;
 					}
 				}
 			}
 
-			return builder();
+			return _builder();
 		}
 
-		public void Release(T obj)
+		private void _ReleaseSlow(T obj)
 		{
-			if (item == null)
+			for (int ii = 0; ii < _items.Length; ii++)
 			{
-				// Intentionally not using interlocked here. 
-				// In a worst case scenario two objects may be stored into same slot.
-				// It is very unlikely to happen and will only mean that one of the objects will get collected.
-				item = obj;
-			}
-			else
-			{
-				ReleaseSlow(obj);
-			}
-		}
-
-		private void ReleaseSlow(T obj)
-		{
-			for (int ii = 0; ii < items.Length; ii++)
-			{
-				if (items[ii] == null)
+				if (_items[ii] == null)
 				{
 					// Intentionally not using interlocked here. 
 					// In a worst case scenario two objects may be stored into same slot.
 					// It is very unlikely to happen and will only mean that one of the objects will get collected.
-					items[ii] = obj;
+					_items[ii] = obj;
 					break;
 				}
 			}

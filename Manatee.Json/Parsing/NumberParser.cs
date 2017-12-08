@@ -1,7 +1,5 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
@@ -12,58 +10,20 @@ namespace Manatee.Json.Parsing
 	{
 		public bool Handles(char c)
 		{
-			switch (c)
-			{
-				case '0':
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-				case '7':
-				case '8':
-				case '9':
-				case '-':
-					return true;
-			}
-			return false;
-		}
-
-		private static bool IsNumberChar(char c)
-		{
-			switch (c)
-			{
-				case '0':
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-				case '7':
-				case '8':
-				case '9':
-				case '-':
-				case '+':
-				case '.':
-				case 'e':
-				case 'E':
-					return true;
-			}
-			return false;
+			return c == '0' || c == '1' || c == '2' || c == '3' || c == '4' ||
+			       c == '5' || c == '6' || c == '7' || c == '8' || c == '9' ||
+			       c == '-';
 		}
 
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
-			var sourceLength = source.Length;
 			var originalIndex = index;
 			while (index < source.Length)
 			{
 				var c = source[index];
-				if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
+				if (char.IsWhiteSpace(c) || c == ',' || c == ']' || c == '}') break;
 
-				var isNumber = IsNumberChar(c);
+				var isNumber = _IsNumberChar(c);
 				if (!isNumber && allowExtraChars) break;
 				if (!isNumber)
 				{
@@ -92,11 +52,11 @@ namespace Manatee.Json.Parsing
 			while (stream.Peek() != -1)
 			{
 				var c = (char)stream.Peek();
-				if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
+				if (char.IsWhiteSpace(c) || c == ',' || c == ']' || c == '}') break;
 
 				stream.Read(); // eat the character
 
-				if (!IsNumberChar(c))
+				if (!_IsNumberChar(c))
 				{
 					value = null;
 					StringBuilderCache.Release(buffer);
@@ -133,11 +93,11 @@ namespace Manatee.Json.Parsing
 				}
 
 				var c = (char)stream.Peek();
-				if (char.IsWhiteSpace(c) || (c == ',' || c == ']' || c == '}')) break;
+				if (char.IsWhiteSpace(c) || c == ',' || c == ']' || c == '}') break;
 
-				await stream.TryRead(scratch, 0, 1); // eat the character
+				await stream.TryRead(scratch, 0, 1, token); // eat the character
 
-				if (!IsNumberChar(c))
+				if (!_IsNumberChar(c))
 				{
 					errorMessage = "Expected ',', ']', or '}'.";
 					break;
@@ -156,11 +116,16 @@ namespace Manatee.Json.Parsing
 
 			var result = StringBuilderCache.GetStringAndRelease(buffer);
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
-			{
 				return ($"Value not recognized: '{result}'", null);
-			}
 
 			return (null, dbl);
+		}
+
+		private static bool _IsNumberChar(char c)
+		{
+			return c == '0' || c == '1' || c == '2' || c == '3' || c == '4' ||
+			       c == '5' || c == '6' || c == '7' || c == '8' || c == '9' ||
+			       c == '-' || c == '+' || c == '.' || c == 'e' || c == 'E';
 		}
 	}
 }

@@ -93,7 +93,7 @@ namespace Manatee.Json.Parsing
 					break;
 				}
 
-				await stream.TryRead(scratch, 0, 1); // waste the '[' or ','
+				await stream.TryRead(scratch, 0, 1, token); // waste the '[' or ','
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null)
 					break;
@@ -103,7 +103,7 @@ namespace Manatee.Json.Parsing
 				{
 					if (array.Count == 0)
 					{
-						await stream.TryRead(scratch, 0, 1); // waste the ']'
+						await stream.TryRead(scratch, 0, 1, token); // waste the ']'
 						break;
 					}
 					else
@@ -127,7 +127,7 @@ namespace Manatee.Json.Parsing
 				// check for end or separator
 				if (c == ']')
 				{
-					await stream.TryRead(scratch, 0, 1); // waste the ']'
+					await stream.TryRead(scratch, 0, 1, token); // waste the ']'
 					break;
 				}
 

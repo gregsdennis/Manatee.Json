@@ -8,19 +8,11 @@ namespace Manatee.Json.Parsing
 {
 	internal class BoolParser : IJsonParser
 	{
-		static readonly string UnexpectedEndOfInput = "Unexpected end of input.";
+		private const string _unexpectedEndOfInput = "Unexpected end of input.";
 
 		public bool Handles(char c)
 		{
-			switch (c)
-			{
-				case 't':
-				case 'T':
-				case 'f':
-				case 'F':
-					return true;
-			}
-			return false;
+			return c == 't' || c == 'T' || c == 'f' || c == 'F';
 		}
 
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
@@ -30,12 +22,10 @@ namespace Manatee.Json.Parsing
 			if (source[index] == 't' || source[index] == 'T')
 			{
 				if (index + 4 >= source.Length)
-					return UnexpectedEndOfInput;
+					return _unexpectedEndOfInput;
 
 				if (source.IndexOf("true", index, 4, StringComparison.OrdinalIgnoreCase) != index)
-				{
 					return $"Value not recognized: '{source.Substring(index, 4)}'";
-				}
 
 				index += 4;
 				value = true;
@@ -43,12 +33,10 @@ namespace Manatee.Json.Parsing
 			else
 			{
 				if (index + 5 >= source.Length)
-					return UnexpectedEndOfInput;
+					return _unexpectedEndOfInput;
 
 				if (source.IndexOf("false", index, 5, StringComparison.OrdinalIgnoreCase) != index)
-				{
 					return $"Value not recognized: '{source.Substring(index, 5)}'";
-				}
 
 				index += 5;
 				value = false;
@@ -61,55 +49,42 @@ namespace Manatee.Json.Parsing
 		{
 			value = null;
 
-			char[] buffer;
 			int count;
-			var current = (char)stream.Peek();
+			var current = (char) stream.Peek();
 			if (current == 't' || current == 'T')
-			{
 				count = 4;
-			}
 			else
-			{
 				count = 5;
-			}
 
-			buffer = SmallBufferCache.Acquire(count);
+			var buffer = SmallBufferCache.Acquire(count);
 			var charsRead = stream.ReadBlock(buffer, 0, count);
 			if (charsRead != count)
 			{
 				SmallBufferCache.Release(buffer);
-				return UnexpectedEndOfInput;
+				return _unexpectedEndOfInput;
 			}
 
 			string errorMessage = null;
 			if (count == 4)
 			{
 				if ((buffer[0] == 't' || buffer[0] == 'T')
-				 && (buffer[1] == 'r' || buffer[1] == 'R')
-				 && (buffer[2] == 'u' || buffer[2] == 'U')
-				 && (buffer[3] == 'e' || buffer[3] == 'E'))
-				{
+				    && (buffer[1] == 'r' || buffer[1] == 'R')
+				    && (buffer[2] == 'u' || buffer[2] == 'U')
+				    && (buffer[3] == 'e' || buffer[3] == 'E'))
 					value = true;
-				}
 				else
-				{
 					errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
-				}
 			}
 			else
 			{
-				if ((buffer[0] == 'f' || buffer[0] == 'F')
-				 && (buffer[1] == 'a' || buffer[1] == 'A')
-				 && (buffer[2] == 'l' || buffer[2] == 'L')
-				 && (buffer[3] == 's' || buffer[3] == 'S')
-				 && (buffer[4] == 'e' || buffer[4] == 'E'))
-				{
+				if ((buffer[0] == 'f' || buffer[0] == 'F') &&
+				    (buffer[1] == 'a' || buffer[1] == 'A') &&
+				    (buffer[2] == 'l' || buffer[2] == 'L') &&
+				    (buffer[3] == 's' || buffer[3] == 'S') &&
+				    (buffer[4] == 'e' || buffer[4] == 'E'))
 					value = false;
-				}
 				else
-				{
 					errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
-				}
 			}
 
 			SmallBufferCache.Release(buffer);
@@ -123,7 +98,7 @@ namespace Manatee.Json.Parsing
 			if (count < 4)
 			{
 				SmallBufferCache.Release(buffer);
-				return ("Unexpected end of input.", null);
+				return (_unexpectedEndOfInput, null);
 			}
 
 			if (token.IsCancellationRequested)
@@ -134,38 +109,30 @@ namespace Manatee.Json.Parsing
 
 			JsonValue value = null;
 			string errorMessage = null;
-			if ((buffer[0] == 't' || buffer[0] == 'T')
-			 && (buffer[1] == 'r' || buffer[1] == 'R')
-			 && (buffer[2] == 'u' || buffer[2] == 'U')
-			 && (buffer[3] == 'e' || buffer[3] == 'E'))
+			if ((buffer[0] == 't' || buffer[0] == 'T') &&
+			    (buffer[1] == 'r' || buffer[1] == 'R') &&
+			    (buffer[2] == 'u' || buffer[2] == 'U') &&
+			    (buffer[3] == 'e' || buffer[3] == 'E'))
 			{
 				value = true;
 			}
-			else if ((buffer[0] == 'f' || buffer[0] == 'F')
-				  && (buffer[1] == 'a' || buffer[1] == 'A')
-				  && (buffer[2] == 'l' || buffer[2] == 'L')
-				  && (buffer[3] == 's' || buffer[3] == 'S'))
+			else if ((buffer[0] == 'f' || buffer[0] == 'F') &&
+			         (buffer[1] == 'a' || buffer[1] == 'A') &&
+			         (buffer[2] == 'l' || buffer[2] == 'L') &&
+			         (buffer[3] == 's' || buffer[3] == 'S'))
 			{
-				if (await stream.TryRead(buffer, 4, 1))
+				if (await stream.TryRead(buffer, 4, 1, token))
 				{
 					if (buffer[4] == 'e' || buffer[4] == 'E')
-					{
 						value = false;
-					}
 					else
-					{
 						errorMessage = $"Value not recognized: 'fals{buffer[4]}'.";
-					}
 				}
 				else
-				{
 					errorMessage = "Unexpected end of input.";
-				}
 			}
 			else
-			{
 				errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
-			}
 
 			SmallBufferCache.Release(buffer);
 			return (errorMessage, value);

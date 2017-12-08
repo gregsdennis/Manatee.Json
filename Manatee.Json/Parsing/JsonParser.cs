@@ -11,15 +11,15 @@ namespace Manatee.Json.Parsing
 {
 	internal static class JsonParser
 	{
-		private static readonly List<IJsonParser> Parsers;
+		private static readonly List<IJsonParser> _parsers;
 
 		static JsonParser()
 		{
-			Parsers = typeof(JsonParser).GetTypeInfo().Assembly.DefinedTypes
-										.Where(t => typeof(IJsonParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
-										.Select(ti => Activator.CreateInstance(ti.AsType()))
-										.Cast<IJsonParser>()
-										.ToList();
+			_parsers = typeof(JsonParser).GetTypeInfo().Assembly.DefinedTypes
+			                             .Where(t => typeof(IJsonParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
+			                             .Select(ti => Activator.CreateInstance(ti.AsType()))
+			                             .Cast<IJsonParser>()
+			                             .ToList();
 		}
 
 		public static JsonValue Parse(string source)
@@ -54,7 +54,7 @@ namespace Manatee.Json.Parsing
 				return errorMessage;
 			}
 
-			foreach (var parser in Parsers)
+			foreach (var parser in _parsers)
 			{
 				if (parser.Handles(c))
 					return parser.TryParse(source, ref index, out value, allowExtraChars);
@@ -72,7 +72,7 @@ namespace Manatee.Json.Parsing
 				return errorMessage;
 			}
 
-			foreach (var parser in Parsers)
+			foreach (var parser in _parsers)
 			{
 				if (parser.Handles(c))
 					return parser.TryParse(stream, out value);
@@ -89,7 +89,7 @@ namespace Manatee.Json.Parsing
 				return (errorMessage, null);
 			}
 
-			foreach (var parser in Parsers)
+			foreach (var parser in _parsers)
 			{
 				if (parser.Handles(c))
 					return await parser.TryParseAsync(stream, token);

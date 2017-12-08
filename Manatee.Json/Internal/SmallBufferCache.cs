@@ -6,25 +6,22 @@ namespace Manatee.Json.Internal
 {
 	internal static class SmallBufferCache
 	{
-		static readonly int bufferSize = 8;
+		private const int _bufferSize = 8;
 
-		static readonly ObjectCache<char[]> cache = new ObjectCache<char[]>(() => new char[bufferSize]);
+		private static readonly ObjectCache<char[]> _cache = new ObjectCache<char[]>(() => new char[_bufferSize]);
 
 		public static char[] Acquire(int size)
 		{
-			if (size <= bufferSize)
-				return cache.Acquire();
+			if (size <= _bufferSize)
+				return _cache.Acquire();
 
-			return new char[bufferSize];
+			return new char[_bufferSize];
 		}
 
 		public static void Release(char[] buffer)
 		{
-			if (buffer != null)
-			{
-				if (buffer.Length <= bufferSize)
-					cache.Release(buffer);
-			}
+			if (buffer?.Length <= _bufferSize)
+				_cache.Release(buffer);
 		}
 	}
 }

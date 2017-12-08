@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -29,7 +28,7 @@ namespace Manatee.Json.Parsing
 					mustInterpret = true;
 					break;
 				}
-				else if (source[index] == '"')
+				if (source[index] == '"')
 				{
 					complete = true;
 					break;
@@ -48,14 +47,108 @@ namespace Manatee.Json.Parsing
 				index += 1; // eat the trailing '"'
 				return null;
 			}
-			else
-			{
-				index = originalIndex;
-				return TryParseInterpretedString(source, ref index, out value, allowExtraChars);
-			}
+
+			index = originalIndex;
+			return _TryParseInterpretedString(source, ref index, out value);
 		}
 
-		private string TryParseInterpretedString(string source, ref int index, out JsonValue value, bool allowExtraChars)
+		public string TryParse(TextReader stream, out JsonValue value)
+		{
+			value = null;
+
+			stream.Read(); // waste the '"'
+
+			var builder = StringBuilderCache.Acquire();
+
+			var complete = false;
+			bool mustInterpret = false;
+			char c;
+			while ((c = (char)stream.Peek()) != -1)
+			{
+				if (c == '\\')
+				{
+					mustInterpret = true;
+					break;
+				}
+
+				stream.Read(); // eat the character
+				if (c == '"')
+				{
+					complete = true;
+					break;
+				}
+
+				builder.Append(c);
+			}
+
+			// if there are not any escape sequences--most of a JSON's strings--just
+			// return the string as-is.
+			if (!mustInterpret)
+			{
+				if (!complete)
+					return "Could not find end of string value.";
+
+				value = StringBuilderCache.GetStringAndRelease(builder);
+				return null;
+			}
+			
+			// NOTE: TryParseInterpretedString is responsible for releasing builder
+			// NOTE: TryParseInterpretedString assumes stream is sitting at the '\\'
+			return _TryParseInterpretedString(builder, stream, out value);
+		}
+
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		{
+			var scratch = SmallBufferCache.Acquire(4);
+
+			await stream.TryRead(scratch, 0, 1, token); // waste the '"'
+
+			var builder = StringBuilderCache.Acquire();
+
+			var complete = false;
+			bool mustInterpret = false;
+			char c;
+			while ((c = (char)stream.Peek()) != -1)
+			{
+				if (c == '\\')
+				{
+					mustInterpret = true;
+					break;
+				}
+
+				await stream.TryRead(scratch, 0, 1, token); // eat the character
+				if (c == '"')
+				{
+					complete = true;
+					break;
+				}
+
+				builder.Append(c);
+			}
+
+			// if there are not any escape sequences--most of a JSON's strings--just
+			// return the string as-is.
+			if (!mustInterpret)
+			{
+				SmallBufferCache.Release(scratch);
+
+				string errorMessage = null;
+				JsonValue value = null;
+				if (!complete)
+					errorMessage = "Could not find end of string value.";
+				else
+					value = StringBuilderCache.GetStringAndRelease(builder);
+
+				return (errorMessage, value);
+			}
+			
+			// NOTE: TryParseInterpretedString is responsible for releasing builder
+			// NOTE: TryParseInterpretedString assumes stream is sitting at the '\\'
+			// NOTE: TryParseInterpretedString assumes scratch can hold at least 4 chars
+			return await TryParseInterpretedStringAsync(builder, stream, scratch);
+		}
+
+		private static string _TryParseInterpretedString(string source, ref int index, out JsonValue value)
 		{
 			value = null;
 
@@ -98,7 +191,6 @@ namespace Manatee.Json.Parsing
 						case 't':
 							append = "\t";
 							break;
-
 						case 'u':
 							var length = 4;
 							var hex = int.Parse(source.Substring(index, 4), NumberStyles.HexNumber);
@@ -111,32 +203,24 @@ namespace Manatee.Json.Parsing
 							append = char.ConvertFromUtf32(hex);
 							index += length;
 							break;
-
 						case '"':
 							append = "\"";
 							break;
 						case '\\':
 							append = "\\";
 							break;
-
 						// Is this correct?
 						case '/':
 							append = "/";
 							break;
-
 						default:
 							errorMessage = $"Invalid escape sequence: '\\{c}'.";
 							break;
 					}
 
-					if (append != null)
-					{
-						builder.Append(append);
-					}
-					else
-					{
-						break;
-					}
+					if (append == null) break;
+
+					builder.Append(append);
 				}
 			}
 
@@ -150,54 +234,7 @@ namespace Manatee.Json.Parsing
 			return errorMessage;
 		}
 
-		public string TryParse(TextReader stream, out JsonValue value)
-		{
-			value = null;
-
-			stream.Read(); // waste the '"'
-
-			var builder = StringBuilderCache.Acquire();
-
-			var complete = false;
-			bool mustInterpret = false;
-			char c;
-			while ((c = (char)stream.Peek()) != -1)
-			{
-				if (c == '\\')
-				{
-					mustInterpret = true;
-					break;
-				}
-
-				stream.Read(); // eat the character
-				if (c == '"')
-				{
-					complete = true;
-					break;
-				}
-
-				builder.Append(c);
-			}
-
-			// if there are not any escape sequences--most of a JSON's strings--just
-			// return the string as-is.
-			if (!mustInterpret)
-			{
-				if (!complete)
-					return "Could not find end of string value.";
-
-				value = StringBuilderCache.GetStringAndRelease(builder);
-				return null;
-			}
-			else
-			{
-				// NOTE: TryParseInterpretedString is responsible for releasing builder
-				// NOTE: TryParseInterpretedString assumes stream is sitting at the '\\'
-				return TryParseInterpretedString(builder, stream, out value);
-			}
-		}
-
-		private string TryParseInterpretedString(StringBuilder builder, TextReader stream, out JsonValue value)
+		private static string _TryParseInterpretedString(StringBuilder builder, TextReader stream, out JsonValue value)
 		{
 			// NOTE: `builder` contains the portion of the string found in `stream`, up to the first
 			//       (possible) escape sequence.
@@ -219,10 +256,10 @@ namespace Manatee.Json.Parsing
 				{
 					// escape sequence
 					var lookAhead = (char)stream.Peek();
-					if (!MustInterpretComplex(lookAhead))
+					if (!_MustInterpretComplex(lookAhead))
 					{
 						stream.Read(); // eat the simple escape
-						c = InterpretSimpleEscapeSequence(lookAhead);
+						c = _InterpretSimpleEscapeSequence(lookAhead);
 					}
 					else
 					{
@@ -274,9 +311,7 @@ namespace Manatee.Json.Parsing
 
 			// if we had a hanging UTF32 escape sequence, apply it now
 			if (previousHex != null)
-			{
 				builder.Append(char.ConvertFromUtf32(previousHex.Value));
-			}
 
 			if (!complete)
 			{
@@ -296,7 +331,7 @@ namespace Manatee.Json.Parsing
 		/// <param name="lookAhead">Lookahead character.</param>
 		/// <returns><c>true</c> if and only if <paramref name="lookAhead"/>
 		/// would require complex interpretation.</returns>
-		private static bool MustInterpretComplex(char lookAhead)
+		private static bool _MustInterpretComplex(char lookAhead)
 		{
 			switch (lookAhead)
 			{
@@ -312,18 +347,16 @@ namespace Manatee.Json.Parsing
 				case 't':
 					// These escape as an escape char
 					return false;
-
 				case 'u':
 					// this requires more work...
 					return true;
-
 				default:
 					// this is an error, which our complex handler will report
 					return true;
 			}
 		}
 
-		private static char InterpretSimpleEscapeSequence(char lookAhead)
+		private static char _InterpretSimpleEscapeSequence(char lookAhead)
 		{
 			switch (lookAhead)
 			{
@@ -339,63 +372,6 @@ namespace Manatee.Json.Parsing
 					return '\t';
 				default:
 					return lookAhead;
-			}
-		}
-
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
-		{
-			var scratch = SmallBufferCache.Acquire(4);
-
-			await stream.TryRead(scratch, 0, 1); // waste the '"'
-
-			var builder = StringBuilderCache.Acquire();
-
-			var complete = false;
-			bool mustInterpret = false;
-			char c;
-			while ((c = (char)stream.Peek()) != -1)
-			{
-				if (c == '\\')
-				{
-					mustInterpret = true;
-					break;
-				}
-
-				await stream.TryRead(scratch, 0, 1); // eat the character
-				if (c == '"')
-				{
-					complete = true;
-					break;
-				}
-
-				builder.Append(c);
-			}
-
-			// if there are not any escape sequences--most of a JSON's strings--just
-			// return the string as-is.
-			if (!mustInterpret)
-			{
-				SmallBufferCache.Release(scratch);
-
-				string errorMessage = null;
-				JsonValue value = null;
-				if (!complete)
-				{
-					errorMessage = "Could not find end of string value.";
-				}
-				else
-				{
-					value = StringBuilderCache.GetStringAndRelease(builder);
-				}
-
-				return (errorMessage, value);
-			}
-			else
-			{
-				// NOTE: TryParseInterpretedString is responsible for releasing builder
-				// NOTE: TryParseInterpretedString assumes stream is sitting at the '\\'
-				// NOTE: TryParseInterpretedString assumes scratch can hold at least 4 chars
-				return await TryParseInterpretedStringAsync(builder, stream, scratch);
 			}
 		}
 
@@ -419,10 +395,10 @@ namespace Manatee.Json.Parsing
 				{
 					// escape sequence
 					var lookAhead = (char)stream.Peek();
-					if (!MustInterpretComplex(lookAhead))
+					if (!_MustInterpretComplex(lookAhead))
 					{
 						await stream.TryRead(scratch, 0, 1); // eat the simple escape
-						c = InterpretSimpleEscapeSequence(lookAhead);
+						c = _InterpretSimpleEscapeSequence(lookAhead);
 					}
 					else
 					{
@@ -453,9 +429,7 @@ namespace Manatee.Json.Parsing
 							previousHex = null;
 						}
 						else
-						{
 							previousHex = currentHex;
-						}
 
 						continue;
 					}

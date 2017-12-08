@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
@@ -7,7 +8,7 @@ namespace Manatee.Json.Parsing
 {
 	internal class NullParser : IJsonParser
 	{
-		static readonly string UnexpectedEndOfInput = "Unexpected end of input.";
+		private const string _unexpectedEndOfInput = "Unexpected end of input.";
 
 		public bool Handles(char c)
 		{
@@ -19,9 +20,9 @@ namespace Manatee.Json.Parsing
 			value = null;
 
 			if (index + 4 >= source.Length)
-				return UnexpectedEndOfInput;
+				return _unexpectedEndOfInput;
 
-			if (source.IndexOf("null", index, 4, System.StringComparison.OrdinalIgnoreCase) != index)
+			if (source.IndexOf("null", index, 4, StringComparison.OrdinalIgnoreCase) != index)
 				return $"Value not recognized: {source.Substring(index, 4)}";
 
 			index += 4;
@@ -38,21 +39,17 @@ namespace Manatee.Json.Parsing
 			if (charsRead != 4)
 			{
 				SmallBufferCache.Release(buffer);
-				return UnexpectedEndOfInput;
+				return _unexpectedEndOfInput;
 			}
 
 			string errorMessage = null;
-			if ((buffer[0] == 'n' || buffer[0] == 'N')
-			 && (buffer[1] == 'u' || buffer[1] == 'U')
-			 && (buffer[2] == 'l' || buffer[2] == 'L')
-			 && (buffer[3] == 'l' || buffer[3] == 'L'))
-			{
+			if ((buffer[0] == 'n' || buffer[0] == 'N') &&
+			    (buffer[1] == 'u' || buffer[1] == 'U') &&
+			    (buffer[2] == 'l' || buffer[2] == 'L') &&
+			    (buffer[3] == 'l' || buffer[3] == 'L'))
 				value = JsonValue.Null;
-			}
 			else
-			{
 				errorMessage = $"Value not recognized: '{new string(buffer)}'.";
-			}
 
 			SmallBufferCache.Release(buffer);
 			return errorMessage;
@@ -69,13 +66,13 @@ namespace Manatee.Json.Parsing
 
 			var value = JsonValue.Null;
 			string errorMessage = null;
-			if ((buffer[0] != 'n' && buffer[0] != 'N')
-			 && (buffer[1] != 'u' && buffer[1] != 'U')
-			 && (buffer[2] != 'l' && buffer[2] != 'L')
-			 && (buffer[3] != 'l' && buffer[3] != 'L'))
+			if (buffer[0] != 'n' && buffer[0] != 'N' &&
+			    buffer[1] != 'u' && buffer[1] != 'U' &&
+			    buffer[2] != 'l' && buffer[2] != 'L' &&
+			    buffer[3] != 'l' && buffer[3] != 'L')
 			{
 				value = null;
-				errorMessage = $"Value not recognized: '{value}'.";
+				errorMessage = $"Value not recognized: '{new string(buffer)}'.";
 			}
 
 			SmallBufferCache.Release(buffer);
