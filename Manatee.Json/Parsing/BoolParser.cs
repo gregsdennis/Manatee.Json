@@ -8,102 +8,167 @@ namespace Manatee.Json.Parsing
 {
 	internal class BoolParser : IJsonParser
 	{
+		static readonly string UnexpectedEndOfInput = "Unexpected end of input.";
+
 		public bool Handles(char c)
 		{
-			return c.In('t', 'T', 'f', 'F');
+			switch (c)
+			{
+				case 't':
+				case 'T':
+				case 'f':
+				case 'F':
+					return true;
+			}
+			return false;
 		}
+
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
-			char[] buffer;
-			int count;
-			if (source[index].In('t', 'T'))
+			value = null;
+
+			if (source[index] == 't' || source[index] == 'T')
 			{
-				buffer = new char[4];
-				count = 4;
-			}
-			else
-			{
-				buffer = new char[5];
-				count = 5;
-			}
-			count = Math.Min(count, source.Length - index);
-			for (var i = 0; i < count; i++)
-			{
-				buffer[i] = source[index + i];
-			}
-			var result = new string(buffer).ToLower();
-			if (result == "true")
-			{
+				if (index + 4 >= source.Length)
+					return UnexpectedEndOfInput;
+
+				if (source.IndexOf("true", index, 4, StringComparison.OrdinalIgnoreCase) != index)
+				{
+					return $"Value not recognized: '{source.Substring(index, 4)}'";
+				}
+
 				index += 4;
 				value = true;
-				return null;
 			}
-			if (result == "false")
+			else
 			{
+				if (index + 5 >= source.Length)
+					return UnexpectedEndOfInput;
+
+				if (source.IndexOf("false", index, 5, StringComparison.OrdinalIgnoreCase) != index)
+				{
+					return $"Value not recognized: '{source.Substring(index, 5)}'";
+				}
+
 				index += 5;
 				value = false;
-				return null;
 			}
-			value = null;
-			return $"Value not recognized: '{result}'";
+
+			return null;
 		}
-		public string TryParse(StreamReader stream, out JsonValue value)
+
+		public string TryParse(TextReader stream, out JsonValue value)
 		{
+			value = null;
+
 			char[] buffer;
 			int count;
-			var current = (char) stream.Read();
-			if (current.In('t', 'T'))
+			var current = (char)stream.Peek();
+			if (current == 't' || current == 'T')
 			{
-				buffer = new char[4];
 				count = 4;
 			}
 			else
 			{
-				buffer = new char[5];
 				count = 5;
 			}
-			buffer[0] = current;
-			for (int i = 1; i < count && !stream.EndOfStream; i++)
+
+			buffer = SmallBufferCache.Acquire(count);
+			var charsRead = stream.ReadBlock(buffer, 0, count);
+			if (charsRead != count)
 			{
-				buffer[i] = (char) stream.Read();
+				SmallBufferCache.Release(buffer);
+				return UnexpectedEndOfInput;
 			}
-			if (buffer[count - 1] == (char) 0 && stream.EndOfStream)
+
+			string errorMessage = null;
+			if (count == 4)
 			{
-				value = null;
-				return "Unexpected end of input.";
+				if ((buffer[0] == 't' || buffer[0] == 'T')
+				 && (buffer[1] == 'r' || buffer[1] == 'R')
+				 && (buffer[2] == 'u' || buffer[2] == 'U')
+				 && (buffer[3] == 'e' || buffer[3] == 'E'))
+				{
+					value = true;
+				}
+				else
+				{
+					errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
+				}
 			}
-			var result = new string(buffer).ToLower();
-			if (result == "true")
+			else
 			{
-				value = true;
-				return null;
+				if ((buffer[0] == 'f' || buffer[0] == 'F')
+				 && (buffer[1] == 'a' || buffer[1] == 'A')
+				 && (buffer[2] == 'l' || buffer[2] == 'L')
+				 && (buffer[3] == 's' || buffer[3] == 'S')
+				 && (buffer[4] == 'e' || buffer[4] == 'E'))
+				{
+					value = false;
+				}
+				else
+				{
+					errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
+				}
 			}
-			if (result == "false")
-			{
-				value = false;
-				return null;
-			}
-			value = null;
-			return $"Value not recognized: '{result}'";
+
+			SmallBufferCache.Release(buffer);
+			return errorMessage;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream, CancellationToken token)
+
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-			var buffer = new char[4];
+			var buffer = SmallBufferCache.Acquire(5);
 			var count = await stream.ReadAsync(buffer, 0, 4);
 			if (count < 4)
+			{
+				SmallBufferCache.Release(buffer);
 				return ("Unexpected end of input.", null);
-			var result = new string(buffer).ToLower();
-			if (result == "true")
-				return (null, true);
-			if (result != "fals")
-				return ($"Value not recognized: '{result}'.", null);
-			var readResult = await stream.TryRead();
-			if (!readResult.success)
-				return ("Unexpected end of input.", null);
-			result += readResult.c;
-			if (result == "false")
-				return (null, false);
-			return ($"Value not recognized: '{result}'.", null);
+			}
+
+			if (token.IsCancellationRequested)
+			{
+				SmallBufferCache.Release(buffer);
+				return ("Parsing incomplete. The task was cancelled.", null);
+			}
+
+			JsonValue value = null;
+			string errorMessage = null;
+			if ((buffer[0] == 't' || buffer[0] == 'T')
+			 && (buffer[1] == 'r' || buffer[1] == 'R')
+			 && (buffer[2] == 'u' || buffer[2] == 'U')
+			 && (buffer[3] == 'e' || buffer[3] == 'E'))
+			{
+				value = true;
+			}
+			else if ((buffer[0] == 'f' || buffer[0] == 'F')
+				  && (buffer[1] == 'a' || buffer[1] == 'A')
+				  && (buffer[2] == 'l' || buffer[2] == 'L')
+				  && (buffer[3] == 's' || buffer[3] == 'S'))
+			{
+				if (await stream.TryRead(buffer, 4, 1))
+				{
+					if (buffer[4] == 'e' || buffer[4] == 'E')
+					{
+						value = false;
+					}
+					else
+					{
+						errorMessage = $"Value not recognized: 'fals{buffer[4]}'.";
+					}
+				}
+				else
+				{
+					errorMessage = "Unexpected end of input.";
+				}
+			}
+			else
+			{
+				errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
+			}
+
+			SmallBufferCache.Release(buffer);
+			return (errorMessage, value);
 		}
 	}
 }

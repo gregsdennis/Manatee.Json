@@ -45,11 +45,11 @@ namespace Manatee.Json.Parsing
 			}
 			return null;
 		}
-		public string TryParse(StreamReader stream, out JsonValue value)
+		public string TryParse(TextReader stream, out JsonValue value)
 		{
 			var array = new JsonArray();
 			value = array;
-			while (!stream.EndOfStream)
+			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '[' or ','
 				var message = stream.SkipWhiteSpace(out char c);
@@ -78,40 +78,70 @@ namespace Manatee.Json.Parsing
 			}
 			return null;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream, CancellationToken token)
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
+			var scratch = SmallBufferCache.Acquire(1);
 			var array = new JsonArray();
-			while (!stream.EndOfStream)
+
+			char c;
+			string errorMessage = null;
+			while (stream.Peek() != -1)
 			{
 				if (token.IsCancellationRequested)
-					return ("Parsing incomplete. The task was cancelled.", null);
-				await stream.TryRead(); // waste the '[' or ','
-				var (message, c) = await stream.SkipWhiteSpaceAsync();
-				if (message != null) return (message, array);
+				{
+					errorMessage = "Parsing incomplete. The task was cancelled.";
+					break;
+				}
+
+				await stream.TryRead(scratch, 0, 1); // waste the '[' or ','
+				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
+				if (errorMessage != null)
+					break;
+
 				// check for empty array
 				if (c == ']')
+				{
 					if (array.Count == 0)
 					{
-						await stream.TryRead(); // waste the ']'
+						await stream.TryRead(scratch, 0, 1); // waste the ']'
 						break;
 					}
-					else return ("Expected value.", null);
+					else
+					{
+						errorMessage = "Expected value.";
+						break;
+					}
+				}
+
 				// get value
 				JsonValue item;
-				(message, item) = await JsonParser.TryParseAsync(stream, token);
+				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
 				array.Add(item);
-				if (message != null) return (message, null);
-				(message, c) = await stream.SkipWhiteSpaceAsync();
-				if (message != null) return (message, null);
+				if (errorMessage != null)
+					break;
+
+				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
+				if (errorMessage != null)
+					break;
+
 				// check for end or separator
 				if (c == ']')
 				{
-					await stream.TryRead(); // waste the ']'
+					await stream.TryRead(scratch, 0, 1); // waste the ']'
 					break;
 				}
-				if (c != ',') return ("Expected ','.", null);
+
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					break;
+				}
 			}
-			return (null, array);
+
+			JsonValue value = errorMessage == null ? array : null;
+
+			SmallBufferCache.Release(scratch);
+			return (errorMessage, value);
 		}
 	}
 }

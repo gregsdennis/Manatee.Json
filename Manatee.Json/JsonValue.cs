@@ -46,8 +46,8 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Boolean)
 					return !JsonOptions.ThrowOnIncorrectTypeAccess
-						       ? default(bool)
-						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
+							   ? default(bool)
+							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
 				return _boolValue;
 			}
 			private set
@@ -72,8 +72,8 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.String)
 					return !JsonOptions.ThrowOnIncorrectTypeAccess
-						       ? default(string)
-						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
+							   ? default(string)
+							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
 				return _stringValue;
 			}
 			private set
@@ -98,8 +98,8 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Number)
 					return !JsonOptions.ThrowOnIncorrectTypeAccess
-						       ? default(double)
-						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
+							   ? default(double)
+							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
 				return _numberValue;
 			}
 			private set
@@ -124,8 +124,8 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Object)
 					return !JsonOptions.ThrowOnIncorrectTypeAccess
-						       ? default(JsonObject)
-						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
+							   ? default(JsonObject)
+							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
 				return _objectValue;
 			}
 			private set
@@ -150,8 +150,8 @@ namespace Manatee.Json
 			{
 				if (Type != JsonValueType.Array)
 					return !JsonOptions.ThrowOnIncorrectTypeAccess
-						       ? default(JsonArray)
-						       : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
+							   ? default(JsonArray)
+							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
 				return _arrayValue;
 			}
 			private set
@@ -358,12 +358,10 @@ namespace Manatee.Json
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is at the end.</exception>
 		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="stream"/> contains invalid JSON syntax.</exception>
-		public static JsonValue Parse(StreamReader stream)
+		public static JsonValue Parse(TextReader stream)
 		{
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
-			if (stream.EndOfStream)
-				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.Parse(stream);
 		}
 		/// <summary>
@@ -374,12 +372,10 @@ namespace Manatee.Json
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stream"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown if <paramref name="stream"/> is at the end.</exception>
 		/// <exception cref="JsonSyntaxException">Thrown if <paramref name="stream"/> contains invalid JSON syntax.</exception>
-		public static Task<JsonValue> ParseAsync(StreamReader stream)
+		public static Task<JsonValue> ParseAsync(TextReader stream)
 		{
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
-			if (stream.EndOfStream)
-				throw new ArgumentException("Source string contains no data.");
 			return JsonParser.ParseAsync(stream);
 		}
 
