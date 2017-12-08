@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -271,8 +272,9 @@ namespace Manatee.Json.Parsing
 						}
 
 						var buffer = SmallBufferCache.Acquire(4);
+						stream.Read(buffer, 0, 1); // eat the 'u'
 						stream.Read(buffer, 0, 4);
-						var hexString = new string(buffer);
+						var hexString = new string(buffer).Trim('\0');
 						var currentHex = int.Parse(hexString, NumberStyles.HexNumber);
 
 						if (previousHex != null)
@@ -283,9 +285,7 @@ namespace Manatee.Json.Parsing
 							previousHex = null;
 						}
 						else
-						{
 							previousHex = currentHex;
-						}
 
 						SmallBufferCache.Release(buffer);
 						continue;

@@ -21,22 +21,22 @@ namespace Manatee.Json.Parsing
 
 			if (source[index] == 't' || source[index] == 'T')
 			{
-				if (index + 4 >= source.Length)
+				if (index + 4 > source.Length)
 					return _unexpectedEndOfInput;
 
 				if (source.IndexOf("true", index, 4, StringComparison.OrdinalIgnoreCase) != index)
-					return $"Value not recognized: '{source.Substring(index, 4)}'";
+					return $"Value not recognized: '{source.Substring(index, 4)}'.";
 
 				index += 4;
 				value = true;
 			}
 			else
 			{
-				if (index + 5 >= source.Length)
+				if (index + 5 > source.Length)
 					return _unexpectedEndOfInput;
 
 				if (source.IndexOf("false", index, 5, StringComparison.OrdinalIgnoreCase) != index)
-					return $"Value not recognized: '{source.Substring(index, 5)}'";
+					return $"Value not recognized: '{source.Substring(index, 5)}'.";
 
 				index += 5;
 				value = false;

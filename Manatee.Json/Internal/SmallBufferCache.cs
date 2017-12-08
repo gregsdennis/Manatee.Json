@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manatee.Json.Internal
 {
@@ -21,7 +19,10 @@ namespace Manatee.Json.Internal
 		public static void Release(char[] buffer)
 		{
 			if (buffer?.Length <= _bufferSize)
+			{
+				Array.Clear(buffer, 0, buffer.Length);
 				_cache.Release(buffer);
+			}
 		}
 	}
 }

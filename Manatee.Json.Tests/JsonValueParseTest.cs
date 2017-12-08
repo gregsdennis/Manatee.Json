@@ -163,7 +163,7 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Parse_EmptyStream_ThrowsException()
 		{
-			Assert.Throws<ArgumentException>(() => JsonValue.Parse(StreamReader.Null));
+			Assert.Throws<JsonSyntaxException>(() => JsonValue.Parse(StreamReader.Null));
 		}
 		[Test]
 		public void Parse_WhitespaceString_ThrowsException()

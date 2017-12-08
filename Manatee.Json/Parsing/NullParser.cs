@@ -19,11 +19,11 @@ namespace Manatee.Json.Parsing
 		{
 			value = null;
 
-			if (index + 4 >= source.Length)
+			if (index + 4 > source.Length)
 				return _unexpectedEndOfInput;
 
 			if (source.IndexOf("null", index, 4, StringComparison.OrdinalIgnoreCase) != index)
-				return $"Value not recognized: {source.Substring(index, 4)}";
+				return $"Value not recognized: '{source.Substring(index, 4)}'.";
 
 			index += 4;
 			value = JsonValue.Null;
@@ -49,7 +49,7 @@ namespace Manatee.Json.Parsing
 			    (buffer[3] == 'l' || buffer[3] == 'L'))
 				value = JsonValue.Null;
 			else
-				errorMessage = $"Value not recognized: '{new string(buffer)}'.";
+				errorMessage = $"Value not recognized: '{new string(buffer).Trim('\0')}'.";
 
 			SmallBufferCache.Release(buffer);
 			return errorMessage;
@@ -72,7 +72,7 @@ namespace Manatee.Json.Parsing
 			    buffer[3] != 'l' && buffer[3] != 'L')
 			{
 				value = null;
-				errorMessage = $"Value not recognized: '{new string(buffer)}'.";
+				errorMessage = $"Value not recognized: '{new string(buffer).Trim('\0')}'.";
 			}
 
 			SmallBufferCache.Release(buffer);
