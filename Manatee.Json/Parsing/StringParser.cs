@@ -175,7 +175,8 @@ namespace Manatee.Json.Parsing
 						return "Could not find end of string value.";
 
 					string append = null;
-					switch (source[index++])
+					c = source[index++];
+					switch (c)
 					{
 						case 'b':
 							append = "\b";
@@ -215,6 +216,7 @@ namespace Manatee.Json.Parsing
 							append = "/";
 							break;
 						default:
+							complete = true;
 							errorMessage = $"Invalid escape sequence: '\\{c}'.";
 							break;
 					}
@@ -225,14 +227,14 @@ namespace Manatee.Json.Parsing
 				}
 			}
 
-			if (!complete)
+			if (!complete || errorMessage != null)
 			{
 				value = null;
 				StringBuilderCache.Release(builder);
-				return "Could not find end of string value.";
+				return errorMessage ?? "Could not find end of string value.";
 			}
 			value = StringBuilderCache.GetStringAndRelease(builder);
-			return errorMessage;
+			return null;
 		}
 
 		private static string _TryParseInterpretedString(StringBuilder builder, TextReader stream, out JsonValue value)
@@ -272,7 +274,7 @@ namespace Manatee.Json.Parsing
 						}
 
 						var buffer = SmallBufferCache.Acquire(4);
-						stream.Read(buffer, 0, 1); // eat the 'u'
+						stream.Read(); // eat the 'u'
 						stream.Read(buffer, 0, 4);
 						var hexString = new string(buffer).Trim('\0');
 						var currentHex = int.Parse(hexString, NumberStyles.HexNumber);
@@ -410,6 +412,7 @@ namespace Manatee.Json.Parsing
 							return ($"Invalid escape sequence: '\\{lookAhead}'.", null);
 						}
 
+						await stream.TryRead(scratch, 0, 1); // eat the 'u'
 						var charsRead = await stream.ReadAsync(scratch, 0, 4);
 						if (charsRead < 4)
 						{
@@ -456,9 +459,7 @@ namespace Manatee.Json.Parsing
 
 			// if we had a hanging UTF32 escape sequence, apply it now
 			if (previousHex != null)
-			{
 				builder.Append(char.ConvertFromUtf32(previousHex.Value));
-			}
 
 			if (!complete)
 			{

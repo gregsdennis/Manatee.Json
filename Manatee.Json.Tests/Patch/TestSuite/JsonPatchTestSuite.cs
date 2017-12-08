@@ -45,7 +45,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 			_serializer = new JsonSerializer();
 		}
 
-		//[TestCaseSource(nameof(TestData))]
+		[TestCaseSource(nameof(TestData))]
 		public void Run(string fileName, JsonValue testJson)
 		{
 			JsonPatchResult result = null;

@@ -74,21 +74,21 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = null;
 		}
 
-		//[TestCaseSource(nameof(TestData04))]
+		[TestCaseSource(nameof(TestData04))]
 		public void Run04(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
 		{
 			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
 			_Run<JsonSchema04>(fileName, testJson, schemaJson);
 		}
 
-		//[TestCaseSource(nameof(TestData06))]
+		[TestCaseSource(nameof(TestData06))]
 		public void Run06(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
 		{
 			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema06>();
 			_Run<JsonSchema06>(fileName, testJson, schemaJson);
 		}
 
-		//[TestCaseSource(nameof(TestData07))]
+		[TestCaseSource(nameof(TestData07))]
 		public void Run07(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
 		{
 			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema07>();
