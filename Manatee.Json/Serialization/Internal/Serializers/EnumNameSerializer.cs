@@ -38,7 +38,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var entry = _descriptions[typeof (T)].FirstOrDefault(d => string.Equals(d.String, json.String, options));
 			if (entry == null)
 			{
-				return (T) Enum.Parse(typeof (T), json.String);
+				return (T) Enum.Parse(typeof (T), json.String, !serializer.Options.CaseSensitiveDeserialization);
 			}
 			return (T) entry.Value;
 		}
