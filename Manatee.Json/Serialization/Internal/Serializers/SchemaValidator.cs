@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class SchemaValidator : ISerializer
 	{
+		private static readonly ConcurrentDictionary<TypeInfo, IJsonSchema> _schemas
+			= new ConcurrentDictionary<TypeInfo, IJsonSchema>();
+
 		private readonly ISerializer _innerSerializer;
 
 		public bool ShouldMaintainReferences => _innerSerializer.ShouldMaintainReferences;
@@ -27,45 +31,53 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
 			var typeInfo = typeof(T).GetTypeInfo();
-			var attribute = typeInfo.GetCustomAttribute<SchemaAttribute>();
-			if (attribute != null)
+			var schema = _GetSchema(typeInfo);
+			if (schema != null)
 			{
-				Exception exception = null;
-				IJsonSchema schema = null;
-				try
-				{
-					schema = _GetSchema(typeInfo, attribute);
-				}
-				catch (FileNotFoundException e)
-				{
-					exception = e;
-				}
-				catch (UriFormatException e)
-				{
-					exception = e;
-				}
-				if (schema == null)
-				{
-					throw new JsonSerializationException($"The value '{attribute.Source}' could not be translated into a valid schema. " +
-					                                     $"This value should represent either a public static property on the {typeof(T).Name} type " +
-					                                     $"or a file with this name should exist at the execution path.", exception);
-				}
-
 				var results = schema.Validate(json);
 				if (!results.Valid)
 				{
 					throw new JsonSerializationException($"JSON did not pass schema defined by type '{typeof(T)}'.\n" +
-					                                     "Errors:\n" +
-					                                     string.Join("    \n", results.Errors.Select(e => e.Message)));
+														 "Errors:\n" +
+														 string.Join("    \n", results.Errors.Select(e => e.Message)));
 				}
 			}
 
 			return _innerSerializer.Deserialize<T>(json, serializer);
 		}
-
-		private static IJsonSchema _GetSchema(TypeInfo typeInfo, SchemaAttribute attribute)
+		private static IJsonSchema _GetSchema(TypeInfo typeInfo)
 		{
-			return _GetPropertySchema(typeInfo, attribute) ?? _GetFileSchema(attribute);
+			return _schemas.GetOrAdd(typeInfo, _GetSchemaSlow);
+		}
+		private static IJsonSchema _GetSchemaSlow(TypeInfo typeInfo)
+		{
+			var attribute = typeInfo.GetCustomAttribute<SchemaAttribute>();
+			if (attribute == null)
+				return null;
+
+			Exception exception = null;
+			IJsonSchema schema = null;
+			try
+			{
+				schema = _GetPropertySchema(typeInfo, attribute) ?? _GetFileSchema(attribute);
+			}
+			catch (FileNotFoundException e)
+			{
+				exception = e;
+			}
+			catch (UriFormatException e)
+			{
+				exception = e;
+			}
+
+			if (schema == null)
+			{
+				throw new JsonSerializationException($"The value '{attribute.Source}' could not be translated into a valid schema. " +
+													 $"This value should represent either a public static property on the {typeInfo.Name} type " +
+													 $"or a file with this name should exist at the execution path.", exception);
+			}
+
+			return schema;
 		}
 		private static IJsonSchema _GetPropertySchema(TypeInfo typeInfo, SchemaAttribute attribute)
 		{

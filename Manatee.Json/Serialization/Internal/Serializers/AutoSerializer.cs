@@ -142,20 +142,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
-			    if (memberInfo.ShouldTransform)
-			        name = serializer.Options.DeserializationNameTransform(name);
-				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
-																								? StringComparison.CurrentCultureIgnoreCase
-																								: StringComparison.CurrentCulture) == 0);
-				if (kvp.Key != null)
+				if (memberInfo.ShouldTransform)
+					name = serializer.Options.DeserializationNameTransform(name);
+
+				string key;
+				JsonValue value;
+				if (_TryGetKeyValue(json, name, ignoreCase, out key, out value))
 				{
-					var value = kvp.Value;
 					MethodInfo deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo info)
 						deserialize = SerializerCache.GetDeserializeMethod(info.PropertyType);
 					else
 						deserialize = SerializerCache.GetDeserializeMethod(((FieldInfo)memberInfo.MemberInfo).FieldType);
-					var valueObj = deserialize.Invoke(serializer, new object[] {value});
+					var valueObj = deserialize.Invoke(serializer, new object[] { value });
 					if (value.Type == JsonValueType.Object && value.Object.ContainsKey(Constants.RefKey))
 					{
 						var guid = new Guid(value.Object[Constants.RefKey].String);
@@ -184,12 +183,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
-				var kvp = json.Object.FirstOrDefault(pair => string.Compare(pair.Key, name, ignoreCase
-																								? StringComparison.CurrentCultureIgnoreCase
-																								: StringComparison.CurrentCulture) == 0);
-				if (kvp.Key != null)
+
+				string key;
+				JsonValue value;
+				if (_TryGetKeyValue(json, name, ignoreCase, out key, out value))
 				{
-					var value = kvp.Value;
 					MethodInfo deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo)
 						deserialize = SerializerCache.GetDeserializeMethod(((PropertyInfo) memberInfo.MemberInfo).PropertyType);
@@ -217,6 +215,35 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				}
 			}
 			return dict;
+		}
+		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, out string key, out JsonValue value)
+		{
+			key = name;
+			value = null;
+
+			// PERF: attempt to read the name AS-IS before searching
+			if (!json.Object.TryGetValue(name, out value))
+			{
+				key = null;
+
+				// PERF: if we didn't have an exact match, we must be 'ignore case'.
+				//       Otherwise the key does not exist and we should not go
+				//       looking for the key.
+				if (ignoreCase)
+				{
+					foreach (var kvp in json.Object)
+					{
+						if (string.Compare(kvp.Key, name, ignoreCase) == 0)
+						{
+							key = kvp.Key;
+							value = kvp.Value;
+							break;
+						}
+					}
+				}
+			}
+
+			return key != null;
 		}
 		private static void _AssignObjectProperties(object obj, Dictionary<SerializationInfo, object> memberMap)
 		{
