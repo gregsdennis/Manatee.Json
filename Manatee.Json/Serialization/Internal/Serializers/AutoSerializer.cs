@@ -145,9 +145,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (memberInfo.ShouldTransform)
 					name = serializer.Options.DeserializationNameTransform(name);
 
-				string key;
-				JsonValue value;
-				if (_TryGetKeyValue(json, name, ignoreCase, out key, out value))
+				if (_TryGetKeyValue(json, name, ignoreCase, out var value))
 				{
 					MethodInfo deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo info)
@@ -184,9 +182,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				var name = memberInfo.SerializationName;
 
-				string key;
-				JsonValue value;
-				if (_TryGetKeyValue(json, name, ignoreCase, out key, out value))
+				if (_TryGetKeyValue(json, name, ignoreCase, out var value))
 				{
 					MethodInfo deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo)
@@ -216,9 +212,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return dict;
 		}
-		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, out string key, out JsonValue value)
+		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, out JsonValue value)
 		{
-			key = name;
+			var key = name;
 			value = null;
 
 			// PERF: attempt to read the name AS-IS before searching
@@ -233,12 +229,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				{
 					foreach (var kvp in json.Object)
 					{
-						if (string.Compare(kvp.Key, name, ignoreCase) == 0)
-						{
-							key = kvp.Key;
-							value = kvp.Value;
-							break;
-						}
+						if (string.Compare(kvp.Key, name, StringComparison.OrdinalIgnoreCase) != 0) continue;
+
+						key = kvp.Key;
+						value = kvp.Value;
+						break;
 					}
 				}
 			}
