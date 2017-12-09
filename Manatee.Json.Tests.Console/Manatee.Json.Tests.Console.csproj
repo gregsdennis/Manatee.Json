@@ -9,4 +9,10 @@
     <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="generated.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

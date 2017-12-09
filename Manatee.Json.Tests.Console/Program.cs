@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
@@ -12,46 +14,29 @@ namespace Manatee.Json.Tests.Console
 	{
 		static void Main(string[] args)
 		{
-			dynamic dyn = new ExpandoObject();
-			dyn.StringProp = "string";
-			dyn.IntProp = 5;
-			dyn.NestProp = new ExpandoObject();
-			dyn.NestProp.Value = false;
+			var stopwatch = new Stopwatch();
 
-			JsonValue expected = new JsonObject
-				{
-					["StringProp"] = "string",
-					["IntProp"] = 5,
-					["NestProp"] = new JsonObject
-						{
-							["Value"] = false
-						}
-				};
+			var count = 1000;
 
-			var serializer = new JsonSerializer
-				{
-					Options =
-						{
-							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
-						}
-				};
-			var json = serializer.Serialize<dynamic>(dyn);
-			System.Console.WriteLine(json);
+			stopwatch.Start();
+
+			for (int i = 0; i < count; i++)
+			{
+				_RunTest();
+			}
+
+			stopwatch.Stop();
+
+			System.Console.WriteLine($"# of runs {count}.");
+			System.Console.WriteLine($"Elapsed time: {stopwatch.Elapsed} ({stopwatch.ElapsedTicks}).");
 
 			System.Console.ReadLine();
 		}
-	}
 
-	internal interface ITest
-	{
-		[JsonMapTo("test1")]
-		int Test1 { get; set; }
-		[JsonMapTo("test2")]
-		string Test2 { get; set; }
-
-		event EventHandler SomethingHappened;
-
-		void Action(object withParameter);
-		int Function(string withParameter);
+		private static void _RunTest()
+		{
+			var text = File.ReadAllText("generated.json");
+			var json = JsonValue.Parse(text);
+		}
 	}
 }
