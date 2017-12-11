@@ -145,7 +145,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (memberInfo.ShouldTransform)
 					name = serializer.Options.DeserializationNameTransform(name);
 
-				if (_TryGetKeyValue(json, name, ignoreCase, out var value))
+				var visited = new HashSet<string>(ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+				if (_TryGetKeyValue(json, name, ignoreCase, out var value)
+				 && visited.Add(name))
 				{
 					Func<JsonSerializer, JsonValue, object> deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo info)
@@ -170,7 +172,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					}
 					else
 						dict.Add(memberInfo, valueObj);
-					json.Object.Remove(name);
 				}
 			}
 			return dict;
@@ -182,7 +183,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				var name = memberInfo.SerializationName;
 
-				if (_TryGetKeyValue(json, name, ignoreCase, out var value))
+				var visited = new HashSet<string>(ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+				if (_TryGetKeyValue(json, name, ignoreCase, out var value)
+				 && visited.Add(name))
 				{
 					Func<JsonSerializer, JsonValue, object> deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo)
@@ -207,7 +210,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					}
 					else
 						dict.Add(memberInfo, valueObj);
-					json.Object.Remove(name);
 				}
 			}
 			return dict;
@@ -231,12 +233,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					{
 						if (string.Compare(kvp.Key, name, StringComparison.OrdinalIgnoreCase) != 0) continue;
 
-						key = kvp.Key;
-						value = kvp.Value;
-						break;
+							key = kvp.Key;
+							value = kvp.Value;
+							break;
+						}
 					}
 				}
-			}
 
 			return key != null;
 		}
