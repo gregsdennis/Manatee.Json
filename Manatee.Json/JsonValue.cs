@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
 using Manatee.Json.Parsing;
@@ -242,6 +243,21 @@ namespace Manatee.Json
 					return ToString();
 			}
 		}
+		internal void AppendIndentedString(StringBuilder builder, int indentLevel)
+		{
+			switch (Type)
+			{
+				case JsonValueType.Object:
+					_objectValue.AppendIndentedString(builder, indentLevel);
+					break;
+				case JsonValueType.Array:
+					_arrayValue.AppendIndentedString(builder, indentLevel);
+					break;
+				default:
+					AppendString(builder);
+					break;
+			}
+		}
 
 		/// <summary>
 		/// Creates a string that represents this <see cref="JsonValue"/>.
@@ -267,6 +283,32 @@ namespace Manatee.Json
 					return _arrayValue.ToString();
 				default:
 					return "null";
+			}
+		}
+		internal void AppendString(StringBuilder builder)
+		{
+			switch (Type)
+			{
+				case JsonValueType.Number:
+					builder.AppendFormat(CultureInfo.InvariantCulture, "{0}", _numberValue);
+					break;
+				case JsonValueType.String:
+					builder.Append('"');
+					_stringValue.InsertEscapeSequences(builder);
+					builder.Append('"');
+					break;
+				case JsonValueType.Boolean:
+					builder.Append(_boolValue ? "true" : "false");
+					break;
+				case JsonValueType.Object:
+					_objectValue.AppendString(builder);
+					break;
+				case JsonValueType.Array:
+					_arrayValue.AppendString(builder);
+					break;
+				default:
+					builder.Append("null");
+					break;
 			}
 		}
 		/// <summary>

@@ -84,10 +84,11 @@ namespace Manatee.Json.Internal
 						if (AvailableChars[source[ii]] == 0)
 						{
 							var builder = StringBuilderCache.Acquire();
-							builder.Append(source, 0, ii);
 
-							// _InsertEscapeSequencesSlow will release 'builder'
-							return _InsertEscapeSequencesSlow(source, builder, ii);
+							builder.Append(source, 0, ii);
+							_InsertEscapeSequencesSlow(source, builder, ii);
+
+							return StringBuilderCache.GetStringAndRelease(builder);
 						}
 						break;
 				}
@@ -95,7 +96,34 @@ namespace Manatee.Json.Internal
 
 			return source;
 		}
-		private static string _InsertEscapeSequencesSlow(string source, StringBuilder builder, int index)
+		public static void InsertEscapeSequences(this string source, StringBuilder builder)
+		{
+			for (int ii = 0; ii < source.Length; ++ii)
+			{
+				switch (source[ii])
+				{
+					case '"':
+					case '\\':
+					case '\b':
+					case '\f':
+					case '\n':
+					case '\r':
+					case '\t':
+					default:
+						if (AvailableChars[source[ii]] == 0)
+						{
+							builder.Append(source, 0, ii);
+
+							_InsertEscapeSequencesSlow(source, builder, ii);
+							return;
+						}
+						break;
+				}
+			}
+
+			builder.Append(source);
+		}
+		private static void _InsertEscapeSequencesSlow(string source, StringBuilder builder, int index)
 		{ 
 			for (int ii = index; ii < source.Length; ++ii)
 			{
@@ -135,8 +163,6 @@ namespace Manatee.Json.Internal
 						break;
 				}
 			}
-
-			return StringBuilderCache.GetStringAndRelease(builder);
 		}
 		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
 		{

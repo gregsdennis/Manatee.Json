@@ -37,10 +37,23 @@ namespace Manatee.Json
 		public string GetIndentedString(int indentLevel = 0)
 		{
 			if (Count == 0) return "[]";
+
+			var builder = new StringBuilder();
+
+			AppendIndentedString(builder, indentLevel);
+
+			return builder.ToString();
+		}
+		internal void AppendIndentedString(StringBuilder builder, int indentLevel)
+		{
+			if (Count == 0)
+			{
+				builder.Append("[]");
+				return;
+			}
+
 			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
 				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar);
-
-			var builder = StringBuilderCache.Acquire();
 
 			builder.Append("[\n");
 			bool comma = false;
@@ -52,17 +65,15 @@ namespace Manatee.Json
 				builder.Append(tab1);
 
 				if (value != null)
-					builder.Append(value.GetIndentedString(indentLevel + 1));
+					value.AppendIndentedString(builder, indentLevel + 1);
 				else
-					builder.Append(JsonValue.Null.GetIndentedString(indentLevel + 1));
+					JsonValue.Null.AppendIndentedString(builder, indentLevel + 1);
 
 				comma = true;
 			}
 			builder.Append('\n');
 			builder.Append(tab0);
 			builder.Append(']');
-
-			return StringBuilderCache.GetStringAndRelease(builder);
 		}
 		/// <summary>
 		/// Adds an object to the end of the <see cref="JsonArray"/>.
@@ -96,7 +107,21 @@ namespace Manatee.Json
 		{
 			if (Count == 0) return "[]";
 
-			var builder = StringBuilderCache.Acquire();
+			var builder = new StringBuilder();
+
+			AppendString(builder);
+
+			return builder.ToString();
+		}
+
+		internal void AppendString(StringBuilder builder)
+		{
+			if (Count == 0)
+			{
+				builder.Append("[]");
+				return;
+			}
+
 			builder.Append('[');
 			bool comma = false;
 			foreach (var value in this)
@@ -105,15 +130,13 @@ namespace Manatee.Json
 					builder.Append(',');
 
 				if (value != null)
-					builder.Append(value.ToString());
+					value.AppendString(builder);
 				else
-					builder.Append(JsonValue.Null.ToString());
+					JsonValue.Null.AppendString(builder);
 
 				comma = true;
 			}
 			builder.Append(']');
-
-			return StringBuilderCache.GetStringAndRelease(builder);
 		}
 
 		/// <summary>
