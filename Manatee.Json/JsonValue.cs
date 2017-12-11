@@ -258,13 +258,13 @@ namespace Manatee.Json
 				case JsonValueType.Number:
 					return string.Format(CultureInfo.InvariantCulture, "{0}", _numberValue);
 				case JsonValueType.String:
-					return $"\"{_stringValue.InsertEscapeSequences()}\"";
+					return String.Concat("\"", _stringValue.InsertEscapeSequences(), "\"");
 				case JsonValueType.Boolean:
 					return _boolValue ? "true" : "false";
 				case JsonValueType.Object:
-					return $"{_objectValue}";
+					return _objectValue.ToString();
 				case JsonValueType.Array:
-					return $"{_arrayValue}";
+					return _arrayValue.ToString();
 				default:
 					return "null";
 			}

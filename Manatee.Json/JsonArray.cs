@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json
@@ -37,16 +38,31 @@ namespace Manatee.Json
 		{
 			if (Count == 0) return "[]";
 			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
-				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar),
-				   s = "[\n";
-			int i;
-			for (i = 0; i < Count - 1; i++)
+				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar);
+
+			var builder = StringBuilderCache.Acquire();
+
+			builder.Append("[\n");
+			bool comma = false;
+			foreach (var value in this)
 			{
-				var value = this[i] ?? JsonValue.Null;
-				s += $"{tab1}{value.GetIndentedString(indentLevel + 1)},\n";
+				if (comma)
+					builder.Append(",\n");
+
+				builder.Append(tab1);
+
+				if (value != null)
+					builder.Append(value.GetIndentedString(indentLevel + 1));
+				else
+					builder.Append(JsonValue.Null.GetIndentedString(indentLevel + 1));
+
+				comma = true;
 			}
-			s += $"{tab1}{this[i].GetIndentedString(indentLevel + 1)}\n{tab0}]";
-			return s;
+			builder.Append('\n');
+			builder.Append(tab0);
+			builder.Append(']');
+
+			return StringBuilderCache.GetStringAndRelease(builder);
 		}
 		/// <summary>
 		/// Adds an object to the end of the <see cref="JsonArray"/>.
@@ -79,7 +95,25 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "[]";
-			return "[" + string.Join(",", this.Select(value => value?.ToString() ?? JsonValue.Null.ToString()).ToArray()) + "]";
+
+			var builder = StringBuilderCache.Acquire();
+			builder.Append('[');
+			bool comma = false;
+			foreach (var value in this)
+			{
+				if (comma)
+					builder.Append(',');
+
+				if (value != null)
+					builder.Append(value.ToString());
+				else
+					builder.Append(JsonValue.Null.ToString());
+
+				comma = true;
+			}
+			builder.Append(']');
+
+			return StringBuilderCache.GetStringAndRelease(builder);
 		}
 
 		/// <summary>

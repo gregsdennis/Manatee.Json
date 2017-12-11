@@ -18,6 +18,9 @@ namespace Manatee.Json
 		/// <returns>An equivalent <see cref="JsonArray"/></returns>
 		public static JsonArray ToJson(this IEnumerable<JsonValue> results)
 		{
+			if (results is JsonValue[] array)
+				return new JsonArray(array);
+
 			var json = new JsonArray();
 			json.AddRange(results);
 			return json;

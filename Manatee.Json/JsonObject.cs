@@ -45,19 +45,31 @@ namespace Manatee.Json
 		public string GetIndentedString(int indentLevel = 0)
 		{
 			if (Count == 0) return "{}";
-			string key, tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
-				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar),
-				   s = "{\n";
-			int i;
-			for (i = 0; i < Count - 1; i++)
+			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
+				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar);
+
+			var builder = StringBuilderCache.Acquire();
+
+			builder.Append("{\n");
+			bool comma = false;
+			foreach (var kvp in this)
 			{
-				key = Keys.ElementAt(i);
-				var value = this[key] ?? new JsonValue();
-				s += $"{tab1}\"{key}\" : {value.GetIndentedString(indentLevel + 2)},\n";
+				if (comma)
+					builder.Append(",\n");
+
+				builder.Append(tab1);
+				builder.Append('"');
+				builder.Append(kvp.Key);
+				builder.Append("\":");
+				builder.Append(kvp.Value.GetIndentedString(indentLevel + 2));
+
+				comma = true;
 			}
-			key = Keys.ElementAt(i);
-			s += $"{tab1}\"{key}\" : {this[key].GetIndentedString(indentLevel + 2)}\n{tab0}}}";
-			return s;
+			builder.Append('\n');
+			builder.Append(tab0);
+			builder.Append('}');
+
+			return StringBuilderCache.GetStringAndRelease(builder);
 		}
 		/// <summary>
 		/// Adds the specified key and value to the dictionary.
@@ -91,7 +103,25 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "{}";
-			return "{" + string.Join(",", this.Select(kvp => $"\"{kvp.Key}\":{kvp.Value}").ToArray()) + "}";
+
+			var builder = StringBuilderCache.Acquire();
+			builder.Append('{');
+			bool comma = false;
+			foreach (var kvp in this)
+			{
+				if (comma)
+					builder.Append(',');
+
+				builder.Append('"');
+				builder.Append(kvp.Key);
+				builder.Append("\":");
+				builder.Append(kvp.Value.ToString());
+
+				comma = true;
+			}
+			builder.Append('}');
+
+			return StringBuilderCache.GetStringAndRelease(builder);
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="object"/> is equal to the current <see cref="object"/>.
