@@ -34,32 +34,32 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public static IEnumerable<SerializationInfo> GetMembers(Type type, PropertySelectionStrategy propertyTypes, bool includeFields)
 		{
 			var info = _InitializeInstanceCache(type);
-			var members = _GetProperties(info, propertyTypes);
+			var members = new List<SerializationInfo>();
+			_GetProperties(info, propertyTypes, members);
 			if (includeFields)
-				members = members.Concat(_GetFields(info));
+				_GetFields(info, members);
 			return members;
 		}
 		public static IEnumerable<SerializationInfo> GetTypeMembers(Type type, PropertySelectionStrategy propertyTypes, bool includeFields)
 		{
 			var info = _InitializeStaticCache(type);
-			var members = _GetProperties(info, propertyTypes);
+			var members = new List<SerializationInfo>();
+			_GetProperties(info, propertyTypes, members);
 			if (includeFields)
-				members = members.Concat(_GetFields(info));
+				_GetFields(info, members);
 			return members;
 		}
 
-		private static IEnumerable<SerializationInfo> _GetProperties(ReflectionInfo info, PropertySelectionStrategy propertyTypes)
+		private static IEnumerable<SerializationInfo> _GetProperties(ReflectionInfo info, PropertySelectionStrategy propertyTypes, List<SerializationInfo> properties)
 		{
-			var properties = new List<SerializationInfo>();
 			if (propertyTypes.HasFlag(PropertySelectionStrategy.ReadWriteOnly))
 				properties.AddRange(info.ReadWriteProperties);
 			if (propertyTypes.HasFlag(PropertySelectionStrategy.ReadOnly))
 				properties.AddRange(info.ReadOnlyProperties);
 			return properties;
 		}
-		private static IEnumerable<SerializationInfo> _GetFields(ReflectionInfo info)
+		private static IEnumerable<SerializationInfo> _GetFields(ReflectionInfo info, List<SerializationInfo> fields)
 		{
-			var fields = new List<SerializationInfo>();
 			fields.AddRange(info.Fields);
 			return fields;
 		}

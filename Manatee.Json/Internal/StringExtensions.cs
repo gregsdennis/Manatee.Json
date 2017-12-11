@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,10 +12,9 @@ namespace Manatee.Json.Internal
 {
 	internal static class StringExtensions
 	{
-		private static readonly IEnumerable<char> AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
-																			 .Select(n => (char)n)
-																			 .Where(c => !char.IsControl(c))
-																			 .ToArray();
+		private static readonly int[] AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
+																 .Select(n => !char.IsControl((char)n) ? n : 0)
+																 .ToArray();
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
 		public static string EvaluateEscapeSequences(this string source, out string result)
@@ -69,62 +69,100 @@ namespace Manatee.Json.Internal
 		}
 		public static string InsertEscapeSequences(this string source)
 		{
-			var index = 0;
-			while (index < source.Length)
+			for (int ii = 0; ii < source.Length; ++ii)
 			{
-				var count = 0;
-				string replace = null;
-				switch (source[index])
+				switch (source[ii])
 				{
 					case '"':
 					case '\\':
-						source = source.Insert(index, "\\");
-						index++;
-						break;
 					case '\b':
-						count = 1;
-						replace = "\\b";
-						break;
 					case '\f':
-						count = 1;
-						replace = "\\f";
-						break;
 					case '\n':
-						count = 1;
-						replace = "\\n";
-						break;
 					case '\r':
-						count = 1;
-						replace = "\\r";
-						break;
 					case '\t':
-						count = 1;
-						replace = "\\t";
-						break;
 					default:
-						if (!AvailableChars.Contains(source[index]))
+						if (AvailableChars[source[ii]] == 0)
 						{
-							var hex = Convert.ToInt16(source[index]).ToString("X4");
-							source = source.Substring(0, index) + "\\u" + hex + source.Substring(index + 1);
-							index += 5;
+							var builder = StringBuilderCache.Acquire();
+
+							builder.Append(source, 0, ii);
+							_InsertEscapeSequencesSlow(source, builder, ii);
+
+							return StringBuilderCache.GetStringAndRelease(builder);
 						}
 						break;
 				}
-				if (replace != null)
-				{
-					source = _Replace(source, index, count, replace);
-					index++;
-				}
-				index++;
 			}
+
 			return source;
 		}
-
-		private static string _Replace(string source, int index, int count, string content)
+		public static void InsertEscapeSequences(this string source, StringBuilder builder)
 		{
-			// I've checked both of these methods with ILSpy.  They occur in external methods, so
-			// we're not going to do much better than this.
-			return source.Remove(index, count).Insert(index, content);
+			for (int ii = 0; ii < source.Length; ++ii)
+			{
+				switch (source[ii])
+				{
+					case '"':
+					case '\\':
+					case '\b':
+					case '\f':
+					case '\n':
+					case '\r':
+					case '\t':
+					default:
+						if (AvailableChars[source[ii]] == 0)
+						{
+							builder.Append(source, 0, ii);
+
+							_InsertEscapeSequencesSlow(source, builder, ii);
+							return;
+						}
+						break;
+				}
+			}
+
+			builder.Append(source);
+		}
+		private static void _InsertEscapeSequencesSlow(string source, StringBuilder builder, int index)
+		{ 
+			for (int ii = index; ii < source.Length; ++ii)
+			{
+				switch (source[ii])
+				{
+					case '"':
+						builder.Append(@"\""");
+						break;
+					case '\\':
+						builder.Append(@"\\");
+						break;
+					case '\b':
+						builder.Append(@"\b");
+						break;
+					case '\f':
+						builder.Append(@"\f");
+						break;
+					case '\n':
+						builder.Append(@"\n");
+						break;
+					case '\r':
+						builder.Append(@"\r");
+						break;
+					case '\t':
+						builder.Append(@"\t");
+						break;
+					default:
+						if (AvailableChars[source[ii]] != 0)
+						{
+							builder.Append(source[ii]);
+						}
+						else
+						{
+							builder.Append(@"\u");
+							builder.AppendFormat("{0:X4}", source[ii]);
+						}
+						break;
+				}
+			}
 		}
 		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
 		{

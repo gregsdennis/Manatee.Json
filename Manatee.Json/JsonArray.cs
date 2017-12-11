@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json
@@ -36,17 +37,43 @@ namespace Manatee.Json
 		public string GetIndentedString(int indentLevel = 0)
 		{
 			if (Count == 0) return "[]";
-			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
-				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar),
-				   s = "[\n";
-			int i;
-			for (i = 0; i < Count - 1; i++)
+
+			var builder = new StringBuilder();
+
+			AppendIndentedString(builder, indentLevel);
+
+			return builder.ToString();
+		}
+		internal void AppendIndentedString(StringBuilder builder, int indentLevel)
+		{
+			if (Count == 0)
 			{
-				var value = this[i] ?? JsonValue.Null;
-				s += $"{tab1}{value.GetIndentedString(indentLevel + 1)},\n";
+				builder.Append("[]");
+				return;
 			}
-			s += $"{tab1}{this[i].GetIndentedString(indentLevel + 1)}\n{tab0}]";
-			return s;
+
+			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
+				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar);
+
+			builder.Append("[\n");
+			bool comma = false;
+			foreach (var value in this)
+			{
+				if (comma)
+					builder.Append(",\n");
+
+				builder.Append(tab1);
+
+				if (value != null)
+					value.AppendIndentedString(builder, indentLevel + 1);
+				else
+					JsonValue.Null.AppendIndentedString(builder, indentLevel + 1);
+
+				comma = true;
+			}
+			builder.Append('\n');
+			builder.Append(tab0);
+			builder.Append(']');
 		}
 		/// <summary>
 		/// Adds an object to the end of the <see cref="JsonArray"/>.
@@ -79,7 +106,37 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "[]";
-			return "[" + string.Join(",", this.Select(value => value?.ToString() ?? JsonValue.Null.ToString()).ToArray()) + "]";
+
+			var builder = new StringBuilder();
+
+			AppendString(builder);
+
+			return builder.ToString();
+		}
+
+		internal void AppendString(StringBuilder builder)
+		{
+			if (Count == 0)
+			{
+				builder.Append("[]");
+				return;
+			}
+
+			builder.Append('[');
+			bool comma = false;
+			foreach (var value in this)
+			{
+				if (comma)
+					builder.Append(',');
+
+				if (value != null)
+					value.AppendString(builder);
+				else
+					JsonValue.Null.AppendString(builder);
+
+				comma = true;
+			}
+			builder.Append(']');
 		}
 
 		/// <summary>

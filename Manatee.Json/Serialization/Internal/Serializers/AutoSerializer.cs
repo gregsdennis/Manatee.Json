@@ -70,7 +70,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				Type type;
 				if (property.MemberInfo is PropertyInfo propertyInfo)
 				{
-					if (propertyInfo.GetIndexParameters().Any()) continue;
+					if (propertyInfo.GetIndexParameters().Length > 0) continue;
 					value = propertyInfo.GetValue(obj, null);
 					if (value == null && !serializer.Options.EncodeDefaultValues) continue;
 					type = propertyInfo.PropertyType;
@@ -86,7 +86,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (value != null)
 				{
 					var serialize = SerializerCache.GetSerializeMethod(type);
-					json = (JsonValue) serialize.Invoke(serializer, new[] {value});
+					json = (JsonValue)serialize(serializer, value);
 				}
 				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
 				if (serializer.Options.IncludeContentSample && json.Type == JsonValueType.Array)
@@ -120,7 +120,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					type = fieldInfo.FieldType;
 				}
 				var serialize = SerializerCache.GetSerializeMethod(type);
-				var json = (JsonValue) serialize.Invoke(serializer, new[] {value});
+				var json = (JsonValue)serialize(serializer, value);
 				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
 				dict.Add(memberInfo, json);
 			}
@@ -145,14 +145,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (memberInfo.ShouldTransform)
 					name = serializer.Options.DeserializationNameTransform(name);
 
-				if (_TryGetKeyValue(json, name, ignoreCase, out var value))
+				var visited = new HashSet<string>(ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+				if (_TryGetKeyValue(json, name, ignoreCase, out var value)
+				 && visited.Add(name))
 				{
-					MethodInfo deserialize;
+					Func<JsonSerializer, JsonValue, object> deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo info)
 						deserialize = SerializerCache.GetDeserializeMethod(info.PropertyType);
 					else
 						deserialize = SerializerCache.GetDeserializeMethod(((FieldInfo)memberInfo.MemberInfo).FieldType);
-					var valueObj = deserialize.Invoke(serializer, new object[] { value });
+					var valueObj = deserialize(serializer, value);
 					if (value.Type == JsonValueType.Object && value.Object.ContainsKey(Constants.RefKey))
 					{
 						var guid = new Guid(value.Object[Constants.RefKey].String);
@@ -170,7 +172,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					}
 					else
 						dict.Add(memberInfo, valueObj);
-					json.Object.Remove(name);
 				}
 			}
 			return dict;
@@ -182,14 +183,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				var name = memberInfo.SerializationName;
 
-				if (_TryGetKeyValue(json, name, ignoreCase, out var value))
+				var visited = new HashSet<string>(ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+				if (_TryGetKeyValue(json, name, ignoreCase, out var value)
+				 && visited.Add(name))
 				{
-					MethodInfo deserialize;
+					Func<JsonSerializer, JsonValue, object> deserialize;
 					if (memberInfo.MemberInfo is PropertyInfo)
 						deserialize = SerializerCache.GetDeserializeMethod(((PropertyInfo) memberInfo.MemberInfo).PropertyType);
 					else
 						deserialize = SerializerCache.GetDeserializeMethod(((FieldInfo) memberInfo.MemberInfo).FieldType);
-					var valueObj = deserialize.Invoke(serializer, new object[] {value});
+					var valueObj = deserialize(serializer, value);
 					if (value.Type == JsonValueType.Object && value.Object.ContainsKey(Constants.RefKey))
 					{
 						var guid = new Guid(value.Object[Constants.RefKey].String);
@@ -207,7 +210,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					}
 					else
 						dict.Add(memberInfo, valueObj);
-					json.Object.Remove(name);
 				}
 			}
 			return dict;
@@ -231,12 +233,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					{
 						if (string.Compare(kvp.Key, name, StringComparison.OrdinalIgnoreCase) != 0) continue;
 
-						key = kvp.Key;
-						value = kvp.Value;
-						break;
+							key = kvp.Key;
+							value = kvp.Value;
+							break;
+						}
 					}
 				}
-			}
 
 			return key != null;
 		}
@@ -276,7 +278,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var buildMethod = TemplateGenerator.GetBuildMethod(elementType);
 			var value = buildMethod.Invoke(null, new object[] {serializer.Options});
 			var serialize = SerializerCache.GetSerializeMethod(elementType);
-			json.Add((JsonValue) serialize.Invoke(serializer, new[] {value}));
+			json.Add((JsonValue)serialize(serializer, value));
 		}
 		private static Type _GetElementType(Type collectionType)
 		{

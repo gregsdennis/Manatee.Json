@@ -14,15 +14,31 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			try
 			{
-				var constructors = type.GetTypeInfo().DeclaredConstructors.ToList();
-				if (!constructors.Any())
-					return Activator.CreateInstance(type);
-				var parameterless = constructors.FirstOrDefault(c => !c.GetParameters().Any());
-				if (parameterless != null)
-					return parameterless.Invoke(null);
-				var constructor = constructors.OrderBy(c => c.GetParameters().Length).First();
-				var parameters = constructor.GetParameters().Select(p => Resolve(p.ParameterType)).ToArray();
-				return constructor.Invoke(parameters);
+				ConstructorInfo shortestCtor = null;
+				foreach (var constructor in type.GetTypeInfo().DeclaredConstructors)
+				{
+					if (constructor.GetParameters().Length == 0)
+					{
+						return constructor.Invoke(null);
+					}
+
+					if (shortestCtor == null)
+					{
+						shortestCtor = constructor;
+					}
+					else if (constructor.GetParameters().Length < shortestCtor.GetParameters().Length)
+					{
+						shortestCtor = constructor;
+					}
+				}
+
+				if (shortestCtor != null)
+				{
+					var parameters = shortestCtor.GetParameters().Select(p => Resolve(p.ParameterType)).ToArray();
+					return shortestCtor.Invoke(parameters);
+				}
+
+				return Activator.CreateInstance(type);
 			}
 			catch
 			{

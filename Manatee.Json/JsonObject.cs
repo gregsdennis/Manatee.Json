@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json
@@ -45,19 +46,42 @@ namespace Manatee.Json
 		public string GetIndentedString(int indentLevel = 0)
 		{
 			if (Count == 0) return "{}";
-			string key, tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
-				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar),
-				   s = "{\n";
-			int i;
-			for (i = 0; i < Count - 1; i++)
+
+			var builder = new StringBuilder();
+
+			AppendIndentedString(builder, indentLevel);
+
+			return builder.ToString();
+		}
+		internal void AppendIndentedString(StringBuilder builder, int indentLevel = 0)
+		{
+			if (Count == 0)
 			{
-				key = Keys.ElementAt(i);
-				var value = this[key] ?? new JsonValue();
-				s += $"{tab1}\"{key}\" : {value.GetIndentedString(indentLevel + 2)},\n";
+				builder.Append("{}");
+				return;
 			}
-			key = Keys.ElementAt(i);
-			s += $"{tab1}\"{key}\" : {this[key].GetIndentedString(indentLevel + 2)}\n{tab0}}}";
-			return s;
+
+			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
+				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar);
+
+			builder.Append("{\n");
+			bool comma = false;
+			foreach (var kvp in this)
+			{
+				if (comma)
+					builder.Append(",\n");
+
+				builder.Append(tab1);
+				builder.Append('"');
+				builder.Append(kvp.Key);
+				builder.Append("\":");
+				kvp.Value.AppendIndentedString(builder, indentLevel + 2);
+
+				comma = true;
+			}
+			builder.Append('\n');
+			builder.Append(tab0);
+			builder.Append('}');
 		}
 		/// <summary>
 		/// Adds the specified key and value to the dictionary.
@@ -91,7 +115,36 @@ namespace Manatee.Json
 		public override string ToString()
 		{
 			if (Count == 0) return "{}";
-			return "{" + string.Join(",", this.Select(kvp => $"\"{kvp.Key}\":{kvp.Value}").ToArray()) + "}";
+
+			var builder = new StringBuilder();
+
+			AppendString(builder);
+
+			return builder.ToString();
+		}
+		internal void AppendString(StringBuilder builder)
+		{
+			if (Count == 0)
+			{
+				builder.Append("{}");
+				return;
+			}
+
+			builder.Append('{');
+			bool comma = false;
+			foreach (var kvp in this)
+			{
+				if (comma)
+					builder.Append(',');
+
+				builder.Append('"');
+				builder.Append(kvp.Key);
+				builder.Append("\":");
+				kvp.Value.AppendString(builder);
+
+				comma = true;
+			}
+			builder.Append('}');
 		}
 		/// <summary>
 		/// Determines whether the specified <see cref="object"/> is equal to the current <see cref="object"/>.

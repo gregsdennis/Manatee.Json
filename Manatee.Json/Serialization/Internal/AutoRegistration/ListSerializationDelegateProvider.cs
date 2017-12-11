@@ -14,14 +14,21 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 
 		private static JsonValue _Encode<T>(List<T> list, JsonSerializer serializer)
 		{
-			var array = new JsonArray();
-			array.AddRange(list.Select(serializer.Serialize));
-			return array;
+			var array = new JsonValue[list.Count];
+			for (int ii = 0; ii < array.Length; ++ii)
+			{
+				array[ii] = serializer.Serialize(list[ii]);
+			}
+			return new JsonArray(array);
 		}
 		private static List<T> _Decode<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var list = new List<T>();
-			list.AddRange(json.Array.Select(serializer.Deserialize<T>));
+			var array = json.Array;
+			var list = new List<T>(array.Count);
+			for (int ii = 0; ii < array.Count; ++ii)
+			{
+				list.Add(serializer.Deserialize<T>(array[ii]));
+			}
 			return list;
 		}
 	}

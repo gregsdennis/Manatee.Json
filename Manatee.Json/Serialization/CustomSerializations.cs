@@ -47,7 +47,7 @@ namespace Manatee.Json.Serialization
 			                                                 .Select(ti => Activator.CreateInstance(ti.AsType()))
 			                                                 .Cast<ISerializationDelegateProvider>()
 			                                                 .ToList();
-			_autoregistrationMethod = typeof(CustomSerializations).GetTypeInfo().GetDeclaredMethod("_RegisterProviderDelegates");
+			_autoregistrationMethod = typeof(CustomSerializations).GetTypeInfo().GetDeclaredMethod(nameof(CustomSerializations._RegisterProviderDelegates));
 		}
 		public CustomSerializations()
 		{
@@ -102,12 +102,17 @@ namespace Manatee.Json.Serialization
 			if (_toJsonConverters.ContainsKey(type)) return true;
 			if (type.GetTypeInfo().IsGenericTypeDefinition) return false;
 
-			var delegateProvider = _delegateProviders.FirstOrDefault(p => p.CanHandle(type));
-			if (delegateProvider == null) return false;
+			foreach (var delegateProvider in _delegateProviders)
+			{
+				if (delegateProvider.CanHandle(type))
+				{
+					var registerMethod = _autoregistrationMethod.MakeGenericMethod(type);
+					registerMethod.Invoke(this, new object[] { delegateProvider });
+					return true;
+				}
+			}
 
-			var registerMethod = _autoregistrationMethod.MakeGenericMethod(type);
-			registerMethod.Invoke(this, new object[] { delegateProvider });
-			return true;
+			return false;
 		}
 
 		internal void Encode<T>(JsonSerializer serializer, T obj, out JsonValue json)
