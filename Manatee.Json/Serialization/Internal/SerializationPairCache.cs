@@ -1,18 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Manatee.Json.Serialization.Internal
 {
-	internal class SerializationPairCache : Dictionary<Guid, SerializationPair>
+	internal class SerializationPairCache
 	{
-		public bool Contains(object obj)
+		private IDictionary<Guid, SerializationPair> map = new Dictionary<Guid, SerializationPair>();
+		private IDictionary<SerializationPair, Guid> reverse = new Dictionary<SerializationPair, Guid>();
+
+		public SerializationPair this[Guid key]
 		{
-			return Values.Any(v => ReferenceEquals(v.Object, obj));
+			get
+			{
+				return map[key];
+			}
+			set
+			{
+				map[key] = value;
+				reverse[value] = key;
+			}
 		}
-		public Guid GetKey(object obj)
+
+		public int Count => map.Count;
+
+		public void Add(Guid key, SerializationPair value)
 		{
-			return this.First(v => ReferenceEquals(v.Value.Object, obj)).Key;
+			map.Add(key, value);
+			reverse.Add(value, key);
+		}
+
+		public void Clear()
+		{
+			map.Clear();
+			reverse.Clear();
+		}
+
+		public bool TryGetPair(object obj, out Guid key, out SerializationPair pair)
+		{
+			foreach (var value in map.Values)
+			{
+				if (ReferenceEquals(value.Object, obj))
+				{
+					key = reverse[value];
+					pair = value;
+					return true;
+				}
+			}
+
+			key = default(Guid);
+			pair = null;
+			return false;
 		}
 	}
 }
