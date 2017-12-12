@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,11 @@ namespace Manatee.Json.Parsing
 		}
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
+			if (source == null)
+				throw new ArgumentNullException(nameof(source));
+
+			bool complete = false;
+
 			var obj = new JsonObject();
 			value = obj;
 			var length = source.Length;
@@ -25,6 +31,7 @@ namespace Manatee.Json.Parsing
 				if (c == '}')
 					if (obj.Count == 0)
 					{
+						complete = true;
 						index++;
 						break;
 					}
@@ -55,14 +62,24 @@ namespace Manatee.Json.Parsing
 				index++;
 				if (c == '}')
 				{
+					complete = true;
 					break;
 				}
 				if (c != ',') return "Expected ','.";
 			}
+
+			if (!complete)
+				return "Unterminated object (missing '}').";
+
 			return null;
 		}
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
+			if (stream == null)
+				throw new ArgumentNullException(nameof(stream));
+
+			bool complete = false;
+
 			var obj = new JsonObject();
 			value = obj;
 			while (stream.Peek() != -1)
@@ -74,6 +91,7 @@ namespace Manatee.Json.Parsing
 				if (c == '}')
 					if (obj.Count == 0)
 					{
+						complete = true;
 						stream.Read(); // waste the '}'
 						break;
 					}
@@ -103,15 +121,25 @@ namespace Manatee.Json.Parsing
 				// check for end or separator
 				if (c == '}')
 				{
+					complete = true;
 					stream.Read(); // waste the '}'
 					break;
 				}
 				if (c != ',') return "Expected ','.";
 			}
+
+			if (!complete)
+				return "Unterminated object (missing '}').";
+
 			return null;
 		}
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
+			if (stream == null)
+				throw new ArgumentNullException(nameof(stream));
+
+			bool complete = false;
+
 			var obj = new JsonObject();
 			JsonValue value = null;
 
@@ -133,6 +161,7 @@ namespace Manatee.Json.Parsing
 				if (c == '}')
 					if (obj.Count == 0)
 					{
+						complete = true;
 						await stream.TryRead(scratch, 0, 1, token); // waste the '}'
 						break;
 					}
@@ -173,6 +202,7 @@ namespace Manatee.Json.Parsing
 				// check for end or separator
 				if (c == '}')
 				{
+					complete = true;
 					await stream.TryRead(scratch, 0, 1, token); // waste the '}'
 					break;
 				}
@@ -181,6 +211,11 @@ namespace Manatee.Json.Parsing
 					errorMessage = "Expected ','.";
 					break;
 				}
+			}
+
+			if (!complete)
+			{
+				errorMessage = "Unterminated object (missing '}').";
 			}
 
 			if (errorMessage == null)
