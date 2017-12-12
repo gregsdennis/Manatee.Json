@@ -14,10 +14,11 @@ namespace Manatee.Json.Parsing
 		}
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
+			value = null;
+
 			bool complete = false;
 
 			var obj = new JsonObject();
-			value = obj;
 			var length = source.Length;
 			index++;
 			while (index < length)
@@ -68,14 +69,16 @@ namespace Manatee.Json.Parsing
 			if (!complete)
 				return "Unterminated object (missing '}').";
 
+			value = obj;
 			return null;
 		}
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
+			value = null;
+
 			bool complete = false;
 
 			var obj = new JsonObject();
-			value = obj;
 			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '{' or ','
@@ -125,6 +128,7 @@ namespace Manatee.Json.Parsing
 			if (!complete)
 				return "Unterminated object (missing '}').";
 
+			value = obj;
 			return null;
 		}
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
@@ -132,7 +136,6 @@ namespace Manatee.Json.Parsing
 			bool complete = false;
 
 			var obj = new JsonObject();
-			JsonValue value = null;
 
 			var scratch = SmallBufferCache.Acquire(1);
 
@@ -209,10 +212,7 @@ namespace Manatee.Json.Parsing
 				errorMessage = "Unterminated object (missing '}').";
 			}
 
-			if (errorMessage == null)
-			{
-				value = obj;
-			}
+			JsonValue value = errorMessage == null ? obj : null;
 
 			SmallBufferCache.Release(scratch);
 			return (errorMessage, value);

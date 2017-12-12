@@ -51,6 +51,8 @@ namespace Manatee.Json.Parsing
 
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
+			value = null;
+
 			var buffer = StringBuilderCache.Acquire();
 			var bufferIndex = 0;
 			while (stream.Peek() != -1)
@@ -62,7 +64,6 @@ namespace Manatee.Json.Parsing
 
 				if (!_IsNumberChar(c))
 				{
-					value = null;
 					StringBuilderCache.Release(buffer);
 					return "Expected ',', ']', or '}'.";
 				}
@@ -74,7 +75,6 @@ namespace Manatee.Json.Parsing
 			var result = StringBuilderCache.GetStringAndRelease(buffer);
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
 			{
-				value = null;
 				return $"Value not recognized: '{result}'";
 			}
 
