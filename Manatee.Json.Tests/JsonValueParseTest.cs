@@ -208,5 +208,14 @@ namespace Manatee.Json.Tests
 			var json = JsonValue.Parse(str);
 			Console.WriteLine(json);
 		}
+		[Test]
+		public void Parse_InvalidUtf32Code()
+		{
+			// Found during Pex testing of StringParser.TryParse
+
+			// Message: System.ArgumentOutOfRangeException : A valid UTF32 value is between 0x000000 and 0x10ffff,
+			// inclusive, and should not include surrogate codepoint values(0x00d800 ~0x00dfff).
+			var json = JsonValue.Parse("\"\\uA000\\uA000\"");
+		}
 	}
 }

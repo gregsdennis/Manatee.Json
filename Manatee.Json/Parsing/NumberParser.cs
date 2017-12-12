@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,11 @@ namespace Manatee.Json.Parsing
 
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
+			if (index >= source.Length)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			value = null;
+
 			var originalIndex = index;
 			while (index < source.Length)
 			{
@@ -27,7 +33,6 @@ namespace Manatee.Json.Parsing
 				if (!isNumber && allowExtraChars) break;
 				if (!isNumber)
 				{
-					value = null;
 					return "Expected ',', ']', or '}'.";
 				}
 
@@ -37,7 +42,6 @@ namespace Manatee.Json.Parsing
 			var result = source.Substring(originalIndex, index - originalIndex);
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
 			{
-				value = null;
 				return $"Value not recognized: '{result}'";
 			}
 
@@ -47,6 +51,8 @@ namespace Manatee.Json.Parsing
 
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
+			value = null;
+
 			var buffer = StringBuilderCache.Acquire();
 			var bufferIndex = 0;
 			while (stream.Peek() != -1)
@@ -58,7 +64,6 @@ namespace Manatee.Json.Parsing
 
 				if (!_IsNumberChar(c))
 				{
-					value = null;
 					StringBuilderCache.Release(buffer);
 					return "Expected ',', ']', or '}'.";
 				}
@@ -70,7 +75,6 @@ namespace Manatee.Json.Parsing
 			var result = StringBuilderCache.GetStringAndRelease(buffer);
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
 			{
-				value = null;
 				return $"Value not recognized: '{result}'";
 			}
 

@@ -17,6 +17,9 @@ namespace Manatee.Json.Parsing
 
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
+			if (index >= source.Length)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
 			value = null;
 
 			if (source[index] == 't' || source[index] == 'T')

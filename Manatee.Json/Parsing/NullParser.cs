@@ -64,16 +64,15 @@ namespace Manatee.Json.Parsing
 				return ("Unexpected end of input.", null);
 			}
 
-			var value = JsonValue.Null;
+			JsonValue value = null;
 			string errorMessage = null;
-			if (buffer[0] != 'n' && buffer[0] != 'N' &&
-			    buffer[1] != 'u' && buffer[1] != 'U' &&
-			    buffer[2] != 'l' && buffer[2] != 'L' &&
-			    buffer[3] != 'l' && buffer[3] != 'L')
-			{
-				value = null;
+			if ((buffer[0] == 'n' || buffer[0] == 'N') &&
+				(buffer[1] == 'u' || buffer[1] == 'U') &&
+				(buffer[2] == 'l' || buffer[2] == 'L') &&
+				(buffer[3] == 'l' || buffer[3] == 'L'))
+				value = JsonValue.Null;
+			else
 				errorMessage = $"Value not recognized: '{new string(buffer).Trim('\0')}'.";
-			}
 
 			SmallBufferCache.Release(buffer);
 			return (errorMessage, value);

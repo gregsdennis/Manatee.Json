@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +14,12 @@ namespace Manatee.Json.Parsing
 		}
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
+			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '[');
+
+			value = null;
+
+			bool complete = false;
 			var array = new JsonArray();
-			value = array;
 			var length = source.Length;
 			index++;
 			while (index < length)
@@ -25,6 +30,7 @@ namespace Manatee.Json.Parsing
 				if (c == ']')
 					if (array.Count == 0)
 					{
+						complete = true;
 						index++;
 						break;
 					}
@@ -39,16 +45,26 @@ namespace Manatee.Json.Parsing
 				index++;
 				if (c == ']')
 				{
+					complete = true;
 					break;
 				}
 				if (c != ',') return "Expected ','.";
 			}
+
+			if (!complete)
+				return "Unterminated array (missing ']')";
+
+			value = array;
 			return null;
 		}
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
+			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
+
+			value = null;
+
+			bool complete = false;
 			var array = new JsonArray();
-			value = array;
 			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '[' or ','
@@ -58,6 +74,7 @@ namespace Manatee.Json.Parsing
 				if (c == ']')
 					if (array.Count == 0)
 					{
+						complete = true;
 						stream.Read(); // waste the ']'
 						break;
 					}
@@ -71,17 +88,27 @@ namespace Manatee.Json.Parsing
 				// check for end or separator
 				if (c == ']')
 				{
+					complete = true;
 					stream.Read(); // waste the ']'
 					break;
 				}
 				if (c != ',') return "Expected ','.";
 			}
+
+			if (!complete)
+				return "Unterminated array (missing ']')";
+
+			value = array;
 			return null;
 		}
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
+			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
+
 			var scratch = SmallBufferCache.Acquire(1);
 			var array = new JsonArray();
+
+			bool complete = false;
 
 			char c;
 			string errorMessage = null;
@@ -103,6 +130,7 @@ namespace Manatee.Json.Parsing
 				{
 					if (array.Count == 0)
 					{
+						complete = true;
 						await stream.TryRead(scratch, 0, 1, token); // waste the ']'
 						break;
 					}
@@ -127,6 +155,7 @@ namespace Manatee.Json.Parsing
 				// check for end or separator
 				if (c == ']')
 				{
+					complete = true;
 					await stream.TryRead(scratch, 0, 1, token); // waste the ']'
 					break;
 				}
@@ -136,6 +165,11 @@ namespace Manatee.Json.Parsing
 					errorMessage = "Expected ','.";
 					break;
 				}
+			}
+
+			if (!complete)
+			{
+				errorMessage = "Unterminated array (missing ']')";
 			}
 
 			JsonValue value = errorMessage == null ? array : null;

@@ -17,6 +17,8 @@ namespace Manatee.Json.Parsing
 
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
+			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '"');
+
 			value = null;
 
 			bool complete = false;
@@ -57,6 +59,7 @@ namespace Manatee.Json.Parsing
 		{
 			value = null;
 
+			System.Diagnostics.Debug.Assert(stream.Peek() == '"');
 			stream.Read(); // waste the '"'
 
 			var builder = StringBuilderCache.Acquire();
@@ -64,8 +67,9 @@ namespace Manatee.Json.Parsing
 			var complete = false;
 			bool mustInterpret = false;
 			char c;
-			while ((c = (char)stream.Peek()) != -1)
+			while (stream.Peek() != -1)
 			{
+				c = (char)stream.Peek();
 				if (c == '\\')
 				{
 					mustInterpret = true;
@@ -103,14 +107,16 @@ namespace Manatee.Json.Parsing
 			var scratch = SmallBufferCache.Acquire(4);
 
 			await stream.TryRead(scratch, 0, 1, token); // waste the '"'
+			System.Diagnostics.Debug.Assert(scratch[0] == '"');
 
 			var builder = StringBuilderCache.Acquire();
 
 			var complete = false;
 			bool mustInterpret = false;
 			char c;
-			while ((c = (char)stream.Peek()) != -1)
+			while (stream.Peek() != -1)
 			{
+				c = (char)stream.Peek();
 				if (c == '\\')
 				{
 					mustInterpret = true;
@@ -195,13 +201,45 @@ namespace Manatee.Json.Parsing
 							break;
 						case 'u':
 							var length = 4;
-							var hex = int.Parse(source.Substring(index, 4), NumberStyles.HexNumber);
-							if (source.IndexOf("\\u", index + 4, 2) == index + 4)
+							if (index + length >= source.Length)
 							{
-								var hex2 = int.Parse(source.Substring(index + 6, 4), NumberStyles.HexNumber);
-								hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
-								length += 6;
+								errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index)}'.";
+								break;
 							}
+
+							int hex;
+							if (!_IsValidHex(source, index, 4)
+							 || !int.TryParse(source.Substring(index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out hex))
+							{
+								errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
+								break;
+							}
+
+							if (index + length + 2 < source.Length
+						     && source.IndexOf("\\u", index + length, 2) == index + length)
+							{
+								// +2 from \u
+								// +4 from the next four hex chars
+								length += 6;
+
+								if (index + length >= source.Length)
+								{
+									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index)}'.";
+									break;
+								}
+
+								if (!_IsValidHex(source, index + 6, 4)
+								 || !int.TryParse(source.Substring(index + 6, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hex2))
+								{
+									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
+									break;
+								}
+								else
+								{
+									hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
+								}
+							}
+
 							append = char.ConvertFromUtf32(hex);
 							index += length;
 							break;
@@ -251,12 +289,18 @@ namespace Manatee.Json.Parsing
 			int? previousHex = null;
 
 			char c;
-			while ((c = (char)stream.Peek()) != -1)
+			while (stream.Peek() != -1)
 			{
-				stream.Read(); // eat this character
+				c = (char)stream.Read(); // eat this character
 
 				if (c == '\\')
 				{
+					if (stream.Peek() == -1)
+					{
+						StringBuilderCache.Release(builder);
+						return "Could not find end of string value.";
+					}
+
 					// escape sequence
 					var lookAhead = (char)stream.Peek();
 					if (!_MustInterpretComplex(lookAhead))
@@ -275,9 +319,19 @@ namespace Manatee.Json.Parsing
 
 						var buffer = SmallBufferCache.Acquire(4);
 						stream.Read(); // eat the 'u'
-						stream.Read(buffer, 0, 4);
-						var hexString = new string(buffer).Trim('\0');
-						var currentHex = int.Parse(hexString, NumberStyles.HexNumber);
+						if (4 != stream.Read(buffer, 0, 4))
+						{
+							StringBuilderCache.Release(builder);
+							return "Could not find end of string value.";
+						}
+
+						var hexString = new string(buffer, 0, 4);
+						if (!_IsValidHex(hexString, 0, 4)
+						 || !int.TryParse(hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var currentHex))
+						{
+							StringBuilderCache.Release(builder);
+							return $"Invalid escape sequence: '\\{lookAhead}{hexString}'.";
+						}
 
 						if (previousHex != null)
 						{
@@ -324,6 +378,22 @@ namespace Manatee.Json.Parsing
 
 			value = StringBuilderCache.GetStringAndRelease(builder);
 			return errorMessage;
+		}
+
+		private static bool _IsValidHex(string source, int offset, int count)
+		{
+			for (int ii = offset; ii < offset + count; ++ii)
+			{
+				// if not a hex digit
+				if ((source[ii] < '0' || source[ii] > '9')
+				 && (source[ii] < 'A' || source[ii] > 'F')
+				 && (source[ii] < 'a' || source[ii] > 'f'))
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -389,12 +459,20 @@ namespace Manatee.Json.Parsing
 			int? previousHex = null;
 
 			char c;
-			while ((c = (char)stream.Peek()) != -1)
+			while (stream.Peek() != -1)
 			{
 				await stream.TryRead(scratch, 0, 1); // eat this character
 
+				c = scratch[0];
 				if (c == '\\')
 				{
+					if (stream.Peek() == -1)
+					{
+						StringBuilderCache.Release(builder);
+						SmallBufferCache.Release(scratch);
+						return ("Could not find end of string value.", null);
+					}
+
 					// escape sequence
 					var lookAhead = (char)stream.Peek();
 					if (!_MustInterpretComplex(lookAhead))
