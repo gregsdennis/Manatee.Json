@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -59,10 +57,16 @@ namespace Manatee.Json.Internal
 							if (source.Substring(i + 6, 2) == "\\u")
 							{
 								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
-								hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
+								hex = CalculateUtf32(hex, hex2);
 								length += 6;
 							}
-							source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
+							if (hex.IsValidUtf32CodePoint())
+								source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
+							else
+							{
+								result = null;
+								return "Invalid UTF-32 code point.";
+							}
 							length = 2; // unicode pairs are 2 chars in .Net strings.
 							break;
 						default:
@@ -73,6 +77,16 @@ namespace Manatee.Json.Internal
 			}
 			result = source;
 			return null;
+		}
+
+		public static int CalculateUtf32(int hex, int hex2)
+		{
+			return (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
+		}
+
+		public static bool IsValidUtf32CodePoint(this int hex)
+		{
+			return 0 <= hex && hex <= 0x10FFFF && !(0xD800 <= hex && hex <= 0xDFFF);
 		}
 
 		public static string InsertEscapeSequences(this string source)
