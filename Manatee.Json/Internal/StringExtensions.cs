@@ -172,15 +172,18 @@ namespace Manatee.Json.Internal
 
 		public static string SkipWhiteSpace(this TextReader stream, out char ch)
 		{
-			ch = (char)stream.Peek();
-			while (ch != -1)
+			ch = default(char);
+
+			int c = stream.Peek();
+			while (c != -1)
 			{
+				ch = (char)c;
 				if (!char.IsWhiteSpace(ch)) break;
 				stream.Read();
-				ch = (char)stream.Peek();
+				c = stream.Peek();
 			}
 
-			if (ch == -1)
+			if (c == -1)
 			{
 				ch = default(char);
 				return "Unexpected end of input.";
@@ -192,15 +195,17 @@ namespace Manatee.Json.Internal
 		public static async Task<(string, char)> SkipWhiteSpaceAsync(this TextReader stream, char[] scratch)
 		{
 			System.Diagnostics.Debug.Assert(scratch.Length >= 1);
-			char ch;
-			ch = (char)stream.Peek();
-			while (ch != -1)
+			char ch = default(char);
+			int c = stream.Peek();
+			while (c != -1)
 			{
+				ch = (char)c;
 				if (!char.IsWhiteSpace(ch)) break;
 				await stream.ReadAsync(scratch, 0, 1);
-				ch = (char)stream.Peek();
+				c = stream.Peek();
 			}
-			if (ch == -1)
+
+			if (c == -1)
 			{
 				ch = default(char);
 				return ("Unexpected end of input.", ch);
