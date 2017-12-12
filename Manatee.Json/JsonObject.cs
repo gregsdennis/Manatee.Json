@@ -74,7 +74,7 @@ namespace Manatee.Json
 				builder.Append(tab1);
 				builder.Append('"');
 				builder.Append(kvp.Key);
-				builder.Append("\":");
+				builder.Append("\" : ");
 				kvp.Value.AppendIndentedString(builder, indentLevel + 2);
 
 				comma = true;

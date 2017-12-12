@@ -17,7 +17,7 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 			var values = new JsonValue[stack.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[0] = serializer.Serialize(stack.ElementAt(i));
+				values[i] = serializer.Serialize(stack.ElementAt(i));
 			}
 			return new JsonArray(values);
 		}

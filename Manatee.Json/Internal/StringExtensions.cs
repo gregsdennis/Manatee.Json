@@ -12,9 +12,16 @@ namespace Manatee.Json.Internal
 {
 	internal static class StringExtensions
 	{
-		private static readonly int[] AvailableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
-																 .Select(n => !char.IsControl((char)n) ? n : 0)
-																 .ToArray();
+		private static readonly int[] _availableChars = Enumerable.Range(ushort.MinValue, ushort.MaxValue)
+		                                                          .Select(n =>
+			                                                          {
+				                                                          var asChar = (char) n;
+				                                                          return char.IsControl(asChar) ||
+				                                                                 asChar == '\\' || asChar == '\"'
+					                                                                 ? 0
+					                                                                 : n;
+			                                                          })
+		                                                          .ToArray();
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
 		public static string EvaluateEscapeSequences(this string source, out string result)
@@ -67,67 +74,46 @@ namespace Manatee.Json.Internal
 			result = source;
 			return null;
 		}
+
 		public static string InsertEscapeSequences(this string source)
 		{
-			for (int ii = 0; ii < source.Length; ++ii)
+			for (int i = 0; i < source.Length; i++)
 			{
-				switch (source[ii])
+				if (_availableChars[source[i]] == 0)
 				{
-					case '"':
-					case '\\':
-					case '\b':
-					case '\f':
-					case '\n':
-					case '\r':
-					case '\t':
-					default:
-						if (AvailableChars[source[ii]] == 0)
-						{
-							var builder = StringBuilderCache.Acquire();
+					var builder = StringBuilderCache.Acquire();
 
-							builder.Append(source, 0, ii);
-							_InsertEscapeSequencesSlow(source, builder, ii);
+					builder.Append(source, 0, i);
+					_InsertEscapeSequencesSlow(source, builder, i);
 
-							return StringBuilderCache.GetStringAndRelease(builder);
-						}
-						break;
+					return StringBuilderCache.GetStringAndRelease(builder);
 				}
 			}
 
 			return source;
 		}
+
 		public static void InsertEscapeSequences(this string source, StringBuilder builder)
 		{
-			for (int ii = 0; ii < source.Length; ++ii)
+			for (int i = 0; i < source.Length; i++)
 			{
-				switch (source[ii])
+				if (_availableChars[source[i]] == 0)
 				{
-					case '"':
-					case '\\':
-					case '\b':
-					case '\f':
-					case '\n':
-					case '\r':
-					case '\t':
-					default:
-						if (AvailableChars[source[ii]] == 0)
-						{
-							builder.Append(source, 0, ii);
+					builder.Append(source, 0, i);
 
-							_InsertEscapeSequencesSlow(source, builder, ii);
-							return;
-						}
-						break;
+					_InsertEscapeSequencesSlow(source, builder, i);
+					return;
 				}
 			}
 
 			builder.Append(source);
 		}
+
 		private static void _InsertEscapeSequencesSlow(string source, StringBuilder builder, int index)
 		{ 
-			for (int ii = index; ii < source.Length; ++ii)
+			for (int i = index; i < source.Length; i++)
 			{
-				switch (source[ii])
+				switch (source[i])
 				{
 					case '"':
 						builder.Append(@"\""");
@@ -151,19 +137,20 @@ namespace Manatee.Json.Internal
 						builder.Append(@"\t");
 						break;
 					default:
-						if (AvailableChars[source[ii]] != 0)
+						if (_availableChars[source[i]] != 0)
 						{
-							builder.Append(source[ii]);
+							builder.Append(source[i]);
 						}
 						else
 						{
 							builder.Append(@"\u");
-							builder.AppendFormat("{0:X4}", source[ii]);
+							builder.Append(((int) source[i]).ToString("X4"));
 						}
 						break;
 				}
 			}
 		}
+
 		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
 		{
 			ch = default(char);
@@ -182,6 +169,7 @@ namespace Manatee.Json.Internal
 
 			return null;
 		}
+
 		public static string SkipWhiteSpace(this TextReader stream, out char ch)
 		{
 			ch = (char)stream.Peek();
@@ -200,6 +188,7 @@ namespace Manatee.Json.Internal
 
 			return null;
 		}
+
 		public static async Task<(string, char)> SkipWhiteSpaceAsync(this TextReader stream, char[] scratch)
 		{
 			System.Diagnostics.Debug.Assert(scratch.Length >= 1);
@@ -218,6 +207,7 @@ namespace Manatee.Json.Internal
 			}
 			return (null, ch);
 		}
+
 		public static string UnescapePointer(this string reference)
 		{
 			var unescaped = reference.Replace("~1", "/")
@@ -231,10 +221,12 @@ namespace Manatee.Json.Internal
 			}
 			return unescaped;
 		}
+
 		public static Task<bool> TryRead(this TextReader stream, char[] buffer, int offset, int count)
 		{
 			return TryRead(stream, buffer, offset, count, CancellationToken.None);
 		}
+
 		public static async Task<bool> TryRead(this TextReader stream, char[] buffer, int offset, int count, CancellationToken token)
 		{
 			if (token.IsCancellationRequested)

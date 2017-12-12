@@ -95,12 +95,9 @@ namespace Manatee.Json.Serialization
 		public Type GetMap(Type type)
 		{
 			if (_registry.TryGetValue(type, out Type tConcrete)) return tConcrete;
-			if (!type.GetTypeInfo().IsAbstract && !type.GetTypeInfo().IsInterface)
-			{
-				_registry[type] = type;
-				return type;
-			}
-			if (type.GetTypeInfo().IsGenericType)
+
+			var typeInfo = type.GetTypeInfo();
+			if (typeInfo.IsGenericType)
 			{
 				var genericDefinition = type.GetGenericTypeDefinition();
 				foreach (var genericMatch in _registry)
@@ -112,26 +109,26 @@ namespace Manatee.Json.Serialization
 					}
 				}
 			}
+			if (!typeInfo.IsAbstract && !typeInfo.IsInterface)
+			{
+				_registry[type] = type;
+				return type;
+			}
 			return type;
 		}
 
 		internal T CreateInstance<T>(JsonValue json, IResolver resolver)
 		{
-			var type = typeof (T);
-			var resolveSlow = type.GetTypeInfo().IsAbstract || type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsGenericType;
-			if (!resolveSlow)
-			{
-				return resolver.Resolve<T>();
-			}
-			else
-			{
-				return _ResolveSlow<T>(json, resolver);
-			}
+			var typeInfo = typeof(T).GetTypeInfo();
+			var resolveSlow = typeInfo.IsAbstract || typeInfo.IsInterface || typeInfo.IsGenericType;
+			return resolveSlow
+				       ? _ResolveSlow<T>(json, resolver)
+				       : resolver.Resolve<T>();
 		}
 
 		private T _ResolveSlow<T>(JsonValue json, IResolver resolver)
 		{
-			if ((json != null) && (json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
+			if (json != null && json.Type == JsonValueType.Object && json.Object.ContainsKey(Constants.TypeKey))
 			{
 				var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
 				return (T)resolver.Resolve(concrete);
