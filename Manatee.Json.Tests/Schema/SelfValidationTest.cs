@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -29,22 +33,32 @@ namespace Manatee.Json.Tests.Schema
 		[TestCaseSource(nameof(TestData))]
 		public void Online(IJsonSchema schema)
 		{
-			// TODO: Catch web exceptions and assert inconclusive.
-			var localSchemaJson = schema.ToJson(null);
+			try
+			{
+				// TODO: Catch web exceptions and assert inconclusive.
+				var localSchemaJson = schema.ToJson(null);
 
-			var onlineSchemaText = JsonSchemaOptions.Download(schema.Id);
-			var onlineSchemaJson = JsonValue.Parse(onlineSchemaText);
-			var onlineSchema = JsonSchemaFactory.FromJson(onlineSchemaJson);
+				var onlineSchemaText = JsonSchemaOptions.Download(schema.Id);
+				var onlineSchemaJson = JsonValue.Parse(onlineSchemaText);
+				var onlineSchema = JsonSchemaFactory.FromJson(onlineSchemaJson);
 
-			var localValidation = schema.Validate(onlineSchemaJson);
-			var onlineValidation = onlineSchema.Validate(localSchemaJson);
+				var localValidation = schema.Validate(onlineSchemaJson);
+				var onlineValidation = onlineSchema.Validate(localSchemaJson);
 
-			Assert.AreEqual(onlineSchema, schema);
+				Assert.AreEqual(onlineSchema, schema);
 			
-			onlineValidation.AssertValid();
-			localValidation.AssertValid();
+				onlineValidation.AssertValid();
+				localValidation.AssertValid();
 
-			Assert.AreEqual(onlineSchemaJson, localSchemaJson);
+				Assert.AreEqual(onlineSchemaJson, localSchemaJson);
+
+			}
+			catch (AggregateException e)
+			{
+				if (e.InnerExceptions.OfType<HttpRequestException>().Any())
+					Assert.Inconclusive();
+				throw;
+			}
 		}
 	}
 }
