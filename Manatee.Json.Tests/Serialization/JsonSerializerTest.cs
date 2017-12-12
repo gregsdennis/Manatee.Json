@@ -242,9 +242,6 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[Test]
-#if IOS
-		[Ignore]
-#endif
 		public void AbstractAndInterfaceProps_Successful()
 		{
 			var serializer = new JsonSerializer();
@@ -468,7 +465,7 @@ namespace Manatee.Json.Tests.Serialization
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);
 		}
-		//[Test]
+		[Test]
 		public void CircularStructure_SerializesWithReference()
 		{
 			var serializer = new JsonSerializer();

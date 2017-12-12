@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Dynamic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Humanizer;
-using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 
 [assembly:InternalsVisibleTo("Manatee.Json.DynamicTypes")]
@@ -30,27 +28,31 @@ namespace Manatee.Json.Tests.Console
 						}
 				};
 
+			var total = 0;
 
 			stopwatch.Start();
 
 			for (int i = 0; i < count; i++)
 			{
-				_RunTest(serializer);
+				total += _RunTest(serializer);
 			}
 
 			stopwatch.Stop();
 
-			System.Console.WriteLine($"# of runs {count}.");
+			System.Console.WriteLine($"# of runs: {count}.");
+			System.Console.WriteLine($"# of items: {total}.");
 			System.Console.WriteLine($"Elapsed time: {stopwatch.Elapsed} ({stopwatch.ElapsedTicks}).");
 
 			System.Console.ReadLine();
 		}
 
-		private static void _RunTest(JsonSerializer serializer)
+		private static int _RunTest(JsonSerializer serializer)
 		{
 			var text = File.ReadAllText("generated.json");
 			var json = JsonValue.Parse(text);
-			var target = serializer.Deserialize<IEnumerable<Target>>(json);
+			var target = serializer.Deserialize<List<Target>>(json);
+
+			return target.Count;
 		}
 	}
 

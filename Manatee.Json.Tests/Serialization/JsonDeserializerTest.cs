@@ -487,7 +487,7 @@ namespace Manatee.Json.Tests.Serialization
 					}
 				});
 		}
-		//[Test]
+		[Test]
 		public void CircularStructure_MaintainsReferences()
 		{
 			var serializer = new JsonSerializer();

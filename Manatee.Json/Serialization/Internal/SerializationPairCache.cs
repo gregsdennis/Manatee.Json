@@ -1,33 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Manatee.Json.Serialization.Internal
 {
 	internal class SerializationPairCache
 	{
-		private IDictionary<object, SerializationPair> _objMap = new Dictionary<object, SerializationPair>();
-		private IDictionary<Guid, SerializationPair> _guidMap = new Dictionary<Guid, SerializationPair>();
-		private IDictionary<SerializationPair, Guid> _reverse = new Dictionary<SerializationPair, Guid>();
+		private readonly IDictionary<object, SerializationPair> _objMap = new Dictionary<object, SerializationPair>();
+		private readonly IDictionary<Guid, SerializationPair> _guidMap = new Dictionary<Guid, SerializationPair>();
+		private readonly IDictionary<SerializationPair, Guid> _reverse = new Dictionary<SerializationPair, Guid>();
 
-		public SerializationPair this[Guid key]
-		{
-			get
-			{
-				return _guidMap[key];
-			}
-			set
-			{
-				throw new NotSupportedException();
-			}
-		}
+		public SerializationPair this[Guid key] => _guidMap[key];
 
 		public int Count => _guidMap.Count;
 
 		public void Add(Guid key, SerializationPair value)
 		{
-			Debug.Assert(value.Object != null);
-			_objMap.Add(value.Object, value);
+			if (value.Object != null)
+				_objMap.Add(value.Object, value);
 			_guidMap.Add(key, value);
 			_reverse.Add(value, key);
 		}
@@ -48,8 +37,13 @@ namespace Manatee.Json.Serialization.Internal
 			}
 
 			key = default(Guid);
-			pair = null;
 			return false;
+		}
+
+		public void Update(SerializationPair pair, object obj)
+		{
+			pair.Object = obj;
+			_objMap.Add(obj, pair);
 		}
 	}
 }
