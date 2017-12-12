@@ -14,9 +14,6 @@ namespace Manatee.Json.Parsing
 		}
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
-			if (source == null)
-				throw new ArgumentNullException(nameof(source));
-
 			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '[');
 
 			bool complete = false;
@@ -61,9 +58,6 @@ namespace Manatee.Json.Parsing
 		}
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
-			if (stream == null)
-				throw new ArgumentNullException(nameof(stream));
-
 			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
 
 			bool complete = false;
@@ -106,9 +100,6 @@ namespace Manatee.Json.Parsing
 		}
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-			if (stream == null)
-				throw new ArgumentNullException(nameof(stream));
-
 			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
 
 			var scratch = SmallBufferCache.Acquire(1);

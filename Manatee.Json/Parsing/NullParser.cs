@@ -17,9 +17,6 @@ namespace Manatee.Json.Parsing
 
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
-			if (source == null)
-				throw new ArgumentNullException(nameof(source));
-
 			value = null;
 
 			if (index + 4 > source.Length)
@@ -35,9 +32,6 @@ namespace Manatee.Json.Parsing
 
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
-			if (stream == null)
-				throw new ArgumentNullException(nameof(stream));
-
 			value = null;
 
 			var buffer = SmallBufferCache.Acquire(4);
@@ -62,9 +56,6 @@ namespace Manatee.Json.Parsing
 		}
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-			if (stream == null)
-				throw new ArgumentNullException(nameof(stream));
-
 			var buffer = SmallBufferCache.Acquire(4);
 			var count = await stream.ReadBlockAsync(buffer, 0, 4);
 			if (count < 4)
