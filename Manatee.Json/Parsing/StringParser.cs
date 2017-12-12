@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -152,7 +151,7 @@ namespace Manatee.Json.Parsing
 			// NOTE: TryParseInterpretedString is responsible for releasing builder
 			// NOTE: TryParseInterpretedString assumes stream is sitting at the '\\'
 			// NOTE: TryParseInterpretedString assumes scratch can hold at least 4 chars
-			return await TryParseInterpretedStringAsync(builder, stream, scratch);
+			return await _TryParseInterpretedStringAsync(builder, stream, scratch);
 		}
 
 		private static string _TryParseInterpretedString(string source, ref int index, out JsonValue value)
@@ -228,19 +227,22 @@ namespace Manatee.Json.Parsing
 									break;
 								}
 
-								if (!_IsValidHex(source, index + 6, 4)
-								 || !int.TryParse(source.Substring(index + 6, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hex2))
+								if (!_IsValidHex(source, index + 6, 4) ||
+								    !int.TryParse(source.Substring(index + 6, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hex2))
 								{
 									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
 									break;
 								}
-								else
-								{
-									hex = (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
-								}
+								hex = StringExtensions.CalculateUtf32(hex, hex2);
 							}
 
-							append = char.ConvertFromUtf32(hex);
+							if (hex.IsValidUtf32CodePoint())
+								append = char.ConvertFromUtf32(hex);
+							else
+							{
+								errorMessage = "Invalid UTF-32 code point.";
+								break;
+							}
 							index += length;
 							break;
 						case '"':
@@ -336,8 +338,14 @@ namespace Manatee.Json.Parsing
 						if (previousHex != null)
 						{
 							// Our last character was \u, so combine and emit the UTF32 codepoint
-							currentHex = ((previousHex - 0xD800) * 0x400 + (currentHex - 0xDC00) % 0x400 + 0x10000).Value;
-							builder.Append(char.ConvertFromUtf32(currentHex));
+							currentHex = StringExtensions.CalculateUtf32(previousHex.Value, currentHex);
+							if (currentHex.IsValidUtf32CodePoint())
+								builder.Append(char.ConvertFromUtf32(currentHex));
+							else
+							{
+								value = null;
+								return "Invalid UTF-32 code point.";
+							}
 							previousHex = null;
 						}
 						else
@@ -447,7 +455,7 @@ namespace Manatee.Json.Parsing
 			}
 		}
 
-		private async Task<(string errorMessage, JsonValue value)> TryParseInterpretedStringAsync(StringBuilder builder, TextReader stream, char[] scratch)
+		private static async Task<(string errorMessage, JsonValue value)> _TryParseInterpretedStringAsync(StringBuilder builder, TextReader stream, char[] scratch)
 		{
 			// NOTE: `builder` contains the portion of the string found in `stream`, up to the first
 			//       (possible) escape sequence.
@@ -505,8 +513,11 @@ namespace Manatee.Json.Parsing
 						if (previousHex != null)
 						{
 							// Our last character was \u, so combine and emit the UTF32 codepoint
-							currentHex = ((previousHex - 0xD800) * 0x400 + (currentHex - 0xDC00) % 0x400 + 0x10000).Value;
-							builder.Append(char.ConvertFromUtf32(currentHex));
+							currentHex = StringExtensions.CalculateUtf32(previousHex.Value, currentHex);
+							if (currentHex.IsValidUtf32CodePoint())
+								builder.Append(char.ConvertFromUtf32(currentHex));
+							else
+								return ("Invalid UTF-32 code point.", null);
 							previousHex = null;
 						}
 						else

@@ -36,6 +36,7 @@ namespace Manatee.Json.Tests
 			yield return ("\"\\uD83D\\uDCA9\\uD83D\\uDCA9\"", new JsonValue(char.ConvertFromUtf32(0x1F4A9) + char.ConvertFromUtf32(0x1F4A9)), null);
 			yield return ("\"An \\rescaped\\a carriage return\"", null, "Invalid escape sequence: '\\a'. Path: '$'");
 			yield return ("\"some text\\\\\"", new JsonValue("some text\\"), null);
+			yield return ("\"\\uA000\\uA000\"", null, "Invalid UTF-32 code point. Path: '$'");
 		}
 
 		public static IEnumerable TestData => _GetData()
@@ -61,14 +62,8 @@ namespace Manatee.Json.Tests
 
 		private static void _RunFail(string test, string message)
 		{
-			try
-			{
-				JsonValue.Parse(test);
-			}
-			catch (JsonSyntaxException e)
-			{
-				Assert.AreEqual(message, e.Message);
-			}
+			var ex = Assert.Throws<JsonSyntaxException>(() => JsonValue.Parse(test));
+			Assert.AreEqual(message, ex.Message);
 		}
 
 		#endregion
@@ -207,15 +202,6 @@ namespace Manatee.Json.Tests
 			var str = File.ReadAllText(fileName);
 			var json = JsonValue.Parse(str);
 			Console.WriteLine(json);
-		}
-		[Test]
-		public void Parse_InvalidUtf32Code()
-		{
-			// Found during Pex testing of StringParser.TryParse
-
-			// Message: System.ArgumentOutOfRangeException : A valid UTF32 value is between 0x000000 and 0x10ffff,
-			// inclusive, and should not include surrogate codepoint values(0x00d800 ~0x00dfff).
-			var json = JsonValue.Parse("\"\\uA000\\uA000\"");
 		}
 	}
 }
