@@ -274,7 +274,7 @@ namespace Manatee.Json
 				case JsonValueType.Number:
 					return string.Format(CultureInfo.InvariantCulture, "{0}", _numberValue);
 				case JsonValueType.String:
-					return String.Concat("\"", _stringValue.InsertEscapeSequences(), "\"");
+					return string.Concat("\"", _stringValue.InsertEscapeSequences(), "\"");
 				case JsonValueType.Boolean:
 					return _boolValue ? "true" : "false";
 				case JsonValueType.Object:

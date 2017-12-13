@@ -45,15 +45,15 @@ namespace Manatee.Json.Internal
 
 		private T _AcquireSlow()
 		{
-			for (int ii = 0; ii < _items.Length; ++ii)
+			for (int i = 0; i < _items.Length; ++i)
 			{
 				// Note that the initial read is optimistically not synchronized. That is intentional. 
 				// We will interlock only when we have a candidate. in a worst case we may miss some
 				// recently returned objects. Not a big deal.
-				var instance = _items[ii];
+				var instance = _items[i];
 				if (instance != null)
 				{
-					if (instance == Interlocked.CompareExchange(ref _items[ii], null, instance))
+					if (instance == Interlocked.CompareExchange(ref _items[i], null, instance))
 					{
 						return instance;
 					}
@@ -65,14 +65,14 @@ namespace Manatee.Json.Internal
 
 		private void _ReleaseSlow(T obj)
 		{
-			for (int ii = 0; ii < _items.Length; ii++)
+			for (int i = 0; i < _items.Length; i++)
 			{
-				if (_items[ii] == null)
+				if (_items[i] == null)
 				{
 					// Intentionally not using interlocked here. 
 					// In a worst case scenario two objects may be stored into same slot.
 					// It is very unlikely to happen and will only mean that one of the objects will get collected.
-					_items[ii] = obj;
+					_items[i] = obj;
 					break;
 				}
 			}

@@ -230,7 +230,7 @@ namespace Manatee.Json.Internal
 		public static string UnescapePointer(this string reference)
 		{
 			var unescaped = reference.Replace("~1", "/")
-									 .Replace("~0", "~");
+			                         .Replace("~0", "~");
 			var matches = _generalEscapePattern.Matches(unescaped);
 			foreach (Match match in matches)
 			{
