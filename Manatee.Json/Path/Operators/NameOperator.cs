@@ -15,9 +15,16 @@ namespace Manatee.Json.Path.Operators
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			return new JsonArray(json.Select(v => v.Type == JsonValueType.Object && v.Object.ContainsKey(Name)
-				                                      ? v.Object[Name]
-				                                      : null).WhereNotNull());
+			var results = new JsonArray();
+			foreach (var value in json)
+			{
+				if (value.Type == JsonValueType.Object
+					&& value.Object.TryGetValue(Name, out var match))
+				{
+					results.Add(match);
+				}
+			}
+			return results;
 		}
 		public override string ToString()
 		{

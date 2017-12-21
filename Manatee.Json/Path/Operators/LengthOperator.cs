@@ -9,9 +9,15 @@ namespace Manatee.Json.Path.Operators
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			return json.Where(v => v.Type == JsonValueType.Array)
-			           .Select(v => (JsonValue) v.Array.Count)
-			           .ToJson();
+			var results = new JsonArray();
+			foreach (var value in json)
+			{
+				if (value.Type == JsonValueType.Array)
+				{
+					results.Add(value.Array.Count);
+				}
+			}
+			return results;
 		}
 		public override string ToString()
 		{
