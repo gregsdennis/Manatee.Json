@@ -6,10 +6,16 @@ namespace Manatee.Json.Path.Parsing
 {
 	internal class IndexedArrayParser : IJsonPathParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input.Length > 1 && input[0] == '[' && (char.IsDigit(input[1]) || input[1].In('-', ':'));
+			if (index + 1 >= input.Length)
+				return false;
+
+			return input[index] == '['
+				&& (char.IsDigit(input[index + 1])
+					|| (input[index + 1] == '-' || input[index + 1] == ':'));
 		}
+
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
 			if (path == null) return "Start token not found.";
