@@ -2,9 +2,9 @@
 {
 	internal class DivideExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input.StartsWith("/");
+			return input[index] == '/';
 		}
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{

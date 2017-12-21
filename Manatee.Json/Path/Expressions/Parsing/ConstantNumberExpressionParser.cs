@@ -4,9 +4,9 @@ namespace Manatee.Json.Path.Expressions.Parsing
 {
 	internal class ConstantNumberExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return char.IsDigit(input[0]);
+			return char.IsDigit(input[index]);
 		}
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{

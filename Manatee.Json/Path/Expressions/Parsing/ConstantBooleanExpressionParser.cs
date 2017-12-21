@@ -2,9 +2,20 @@
 {
 	internal class ConstantBooleanExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input.StartsWith("true") || input.StartsWith("false");
+			if (input[index] == 't'
+				&& index + 3 < input.Length)
+			{
+				return input.IndexOf("true", index, 4) == index;
+			}
+			else if (input[index] == 'f'
+				&& index + 4 < input.Length)
+			{
+				return input.IndexOf("false", index, 5) == index;
+			}
+
+			return false;
 		}
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{

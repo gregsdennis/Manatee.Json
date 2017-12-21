@@ -2,10 +2,10 @@
 {
 	internal class SubtractExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
 			// TODO: Determine how to identify negations separately from subtractions.
-			return input.StartsWith("-");
+			return input[index] == '-';
 		}
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{

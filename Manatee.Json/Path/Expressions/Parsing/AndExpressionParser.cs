@@ -2,9 +2,13 @@
 {
 	internal class AndExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input.StartsWith("&&");
+			if (index + 1 >= input.Length)
+				return false;
+
+			return input[index] == '&'
+				&& input[index + 1] == '&';
 		}
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{

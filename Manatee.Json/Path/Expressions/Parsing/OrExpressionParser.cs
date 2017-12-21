@@ -2,9 +2,11 @@
 {
 	internal class OrExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input.StartsWith("||");
+			return index + 1 < input.Length
+				&& input[index] == '|'
+				&& input[index + 1] == '|';
 		}
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{
