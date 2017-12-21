@@ -103,6 +103,24 @@ namespace Manatee.Json.Path
 			var end = _ResolveIndex(_end ?? json.Count, json.Count);
 			var step = Math.Max(_step ?? 1, 1);
 
+			// quick copy
+			if (start == 0 && end == json.Count && step == 1)
+				return new List<JsonValue>(json);
+
+			if (step == 1)
+			{
+				var result = new JsonValue[end - start];
+				json.CopyTo(start, result, 0, end - start);
+				return result;
+			}
+			else
+			{
+				return _FindSlow(json, start, end, step);
+			}
+		}
+
+		private static IEnumerable<JsonValue> _FindSlow(JsonArray json, int start, int end, int step)
+		{
 			var index = start;
 			var list = new List<JsonValue>();
 			while (index < end)
