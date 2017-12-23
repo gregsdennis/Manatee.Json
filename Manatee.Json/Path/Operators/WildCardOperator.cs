@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Operators
 {
@@ -23,6 +21,7 @@ namespace Manatee.Json.Path.Operators
 			}
 			return results;
 		}
+
 		private void _Evaluate(JsonValue value, JsonArray results)
 		{
 			switch(value.Type)
@@ -35,18 +34,22 @@ namespace Manatee.Json.Path.Operators
 					break;
 			}
 		}
+
 		public override string ToString()
 		{
 			return ".*";
 		}
+
 		public bool Equals(WildCardOperator other)
 		{
 			return !ReferenceEquals(null, other);
 		}
+
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as WildCardOperator);
 		}
+
 		public override int GetHashCode()
 		{
 			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode

@@ -1,4 +1,3 @@
-using Manatee.Json.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +19,37 @@ namespace Manatee.Json.Path.SearchParameters
 
 			foreach (var value in json)
 			{
-				_Find(value, root, results);
+				_Find(value, results);
 			}
 
 			return results;
 		}
-		private void _Find(JsonValue value, JsonValue root, JsonArray results)
+
+		public override string ToString()
+		{
+			return _name.Any(c => !char.IsLetterOrDigit(c)) || string.IsNullOrWhiteSpace(_name)
+					   ? $"'{_name}'"
+					   : _name;
+		}
+
+		public bool Equals(NameSearchParameter other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(_name, other._name);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as NameSearchParameter);
+		}
+
+		public override int GetHashCode()
+		{
+			return _name?.GetHashCode() ?? 0;
+		}
+
+		private void _Find(JsonValue value, JsonArray results)
 		{
 			switch (value.Type)
 			{
@@ -34,38 +58,16 @@ namespace Manatee.Json.Path.SearchParameters
 						results.Add(match);
 					foreach (var subValue in value.Object.Values)
 					{
-						_Find(subValue, root, results);
+						_Find(subValue, results);
 					}
 					break;
 				case JsonValueType.Array:
 					foreach (var subValue in value.Array)
 					{
-						_Find(subValue, root, results);
+						_Find(subValue, results);
 					}
 					break;
-				default:
-					break;
 			}
-		}
-		public override string ToString()
-		{
-			return _name.Any(c => !char.IsLetterOrDigit(c)) || string.IsNullOrWhiteSpace(_name)
-					   ? $"'{_name}'"
-					   : _name;
-		}
-		public bool Equals(NameSearchParameter other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return string.Equals(_name, other._name);
-		}
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as NameSearchParameter);
-		}
-		public override int GetHashCode()
-		{
-			return _name?.GetHashCode() ?? 0;
 		}
 	}
 }

@@ -8,11 +8,11 @@ namespace Manatee.Json.Path.Expressions.Parsing
 {
 	internal static class JsonPathExpressionParser
 	{
-		private static readonly List<IJsonPathExpressionParser> Parsers;
+		private static readonly List<IJsonPathExpressionParser> _parsers;
 
 		static JsonPathExpressionParser()
 		{
-			Parsers = typeof(JsonPathExpressionParser).GetTypeInfo().Assembly.DefinedTypes
+			_parsers = typeof(JsonPathExpressionParser).GetTypeInfo().Assembly.DefinedTypes
 													  .Where(t => typeof(IJsonPathExpressionParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
 													  .Select(ti => Activator.CreateInstance(ti.AsType()))
 			                                          .Cast<IJsonPathExpressionParser>()
@@ -27,6 +27,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				expr = null;
 				return error;
 			}
+
 			if (root == null)
 			{
 				expr = null;
@@ -36,6 +37,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			expr = new Expression<T, TIn>(root);
 			return null;
 		}
+
 		public static string Parse<TIn>(string source, ref int index, out ExpressionTreeNode<TIn> root)
 		{
 			var nodes = new List<ExpressionTreeNode<TIn>>();
@@ -48,7 +50,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				if (errorMessage != null) return errorMessage;
 
 				IJsonPathExpressionParser foundParser = null;
-				foreach (var parser in Parsers)
+				foreach (var parser in _parsers)
 				{
 					if (parser.Handles(source, index))
 					{

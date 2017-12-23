@@ -15,6 +15,7 @@ namespace Manatee.Json.Path.Parsing
 				&& (char.IsLetterOrDigit(input[index + 1])
 					|| allowedChars.IndexOf(input[index + 1]) >= 0);
 		}
+
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
 			if (path == null)

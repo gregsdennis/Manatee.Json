@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Manatee.Json.Internal;
 using Manatee.Json.Parsing;
 using Manatee.Json.Path.ArrayParameters;
 using Manatee.Json.Path.Operators;
@@ -14,6 +13,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		{
 			return input[index] == '@' || input[index] == '$';
 		}
+
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{
 			var isLocal = source[index] == '@';

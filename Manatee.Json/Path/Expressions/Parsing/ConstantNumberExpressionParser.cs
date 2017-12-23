@@ -8,10 +8,10 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		{
 			return char.IsDigit(input[index]);
 		}
+
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{
-			double? number;
-			var error = source.GetNumber(ref index, out number);
+			var error = source.GetNumber(ref index, out var number);
 			if (error != null)
 			{
 				node = null;

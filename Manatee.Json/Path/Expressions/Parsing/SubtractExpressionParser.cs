@@ -7,6 +7,7 @@
 			// TODO: Determine how to identify negations separately from subtractions.
 			return input[index] == '-';
 		}
+
 		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
 		{
 			index++;
