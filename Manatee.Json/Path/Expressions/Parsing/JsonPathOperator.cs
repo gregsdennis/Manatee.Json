@@ -4,6 +4,7 @@
 	{
 		Add,
 		And,
+		// TODO: R# says this isn't used, but I don't want to break anything by removing it.  Run tests first.
 		Constant,
 		Divide,
 		Exponent,

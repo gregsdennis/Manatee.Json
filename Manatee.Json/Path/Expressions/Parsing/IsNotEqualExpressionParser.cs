@@ -4,9 +4,7 @@
 	{
 		public bool Handles(string input, int index)
 		{
-			return index + 1 < input.Length
-				&& input[index] == '!'
-				&& input[index + 1] == '=';
+			return index + 1 < input.Length && input[index] == '!' && input[index + 1] == '=';
 		}
 		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{

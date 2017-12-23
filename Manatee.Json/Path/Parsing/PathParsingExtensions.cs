@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -10,8 +9,6 @@ namespace Manatee.Json.Path.Parsing
 	internal static class PathParsingExtensions
 	{
 		#region GetKey
-
-		private static readonly int[] FibSequence = { 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657 };
 
 		public static string GetKey(this string source, ref int index, out string key)
 		{
@@ -25,14 +22,12 @@ namespace Manatee.Json.Path.Parsing
 		{
 			key = null;
 
-			int originalIndex = index;
-			bool complete = false;
+			var originalIndex = index;
+			var complete = false;
 			while (index < source.Length)
 			{
 				if (char.IsLetterOrDigit(source[index]) || source[index] == '_')
-				{
 					index++;
-				}
 				else
 				{
 					complete = true;
@@ -41,9 +36,7 @@ namespace Manatee.Json.Path.Parsing
 			}
 
 			if (!complete && index + 1 < source.Length)
-			{
 				return $"The character {source[index]} is not supported for unquoted names.";
-			}
 
 			key = source.Substring(originalIndex, index - originalIndex);
 			return null;
@@ -52,12 +45,11 @@ namespace Manatee.Json.Path.Parsing
 		private static string _GetQuotedKey(string source, ref int index, out string key)
 		{
 			key = null;
-
 			Debug.Assert(source[index] == '\'' || source[index] == '"');
 			var quoteChar = source[index];
 			index++;
 
-			int originalIndex = index;
+			var originalIndex = index;
 			bool complete = false, foundEscape = false;
 			while (index < source.Length)
 			{
@@ -66,22 +58,20 @@ namespace Manatee.Json.Path.Parsing
 					foundEscape = true;
 					break;
 				}
-				else if (source[index] == quoteChar)
+
+				if (source[index] == quoteChar)
 				{
 					complete = true;
 					break;
 				}
-				else
-				{
-					index++;
-				}
+
+				index++;
 			}
 
 			if (foundEscape)
 				return _GetQuotedKeyWithEscape(source, quoteChar, originalIndex, ref index, out key);
 
-			if (!complete)
-				return "Could not find end of string value.";
+			if (!complete) return "Could not find end of string value.";
 
 			key = source.Substring(originalIndex, index - originalIndex);
 			index++; // swallow quote character
@@ -91,7 +81,6 @@ namespace Manatee.Json.Path.Parsing
 		private static string _GetQuotedKeyWithEscape(string source, char quoteChar, int originalIndex, ref int index, out string key)
 		{
 			key = null;
-
 			string errorMessage = null;
 			var builder = StringBuilderCache.Acquire();
 			builder.Append(source.Substring(originalIndex, index - originalIndex));
@@ -109,101 +98,100 @@ namespace Manatee.Json.Path.Parsing
 					}
 
 					builder.Append(c);
+					continue;
 				}
-				else
-				{
-					if (index >= source.Length)
-						return "Could not find end of string value.";
 
-					string append = null;
-					c = source[index++];
-					switch (c)
-					{
-						case 'b':
-							append = "\b";
+				if (index >= source.Length) return "Could not find end of string value.";
+
+				string append = null;
+				c = source[index++];
+				switch (c)
+				{
+					case 'b':
+						append = "\b";
+						break;
+					case 'f':
+						append = "\f";
+						break;
+					case 'n':
+						append = "\n";
+						break;
+					case 'r':
+						append = "\r";
+						break;
+					case 't':
+						append = "\t";
+						break;
+					case 'u':
+						var length = 4;
+						if (index + length >= source.Length)
+						{
+							errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index)}'.";
 							break;
-						case 'f':
-							append = "\f";
+						}
+
+						if (!_IsValidHex(source, index, 4) ||
+							!int.TryParse(source.Substring(index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex))
+						{
+							errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
 							break;
-						case 'n':
-							append = "\n";
-							break;
-						case 'r':
-							append = "\r";
-							break;
-						case 't':
-							append = "\t";
-							break;
-						case 'u':
-							var length = 4;
+						}
+
+						if (index + length + 2 < source.Length &&
+						    source.IndexOf("\\u", index + length, 2) == index + length)
+						{
+							// +2 from \u
+							// +4 from the next four hex chars
+							length += 6;
+
 							if (index + length >= source.Length)
 							{
 								errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index)}'.";
 								break;
 							}
 
-							int hex;
-							if (!_IsValidHex(source, index, 4)
-							 || !int.TryParse(source.Substring(index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out hex))
+							if (!_IsValidHex(source, index + 6, 4) ||
+							    !int.TryParse(source.Substring(index + 6, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hex2))
 							{
 								errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
 								break;
 							}
 
-							if (index + length + 2 < source.Length
-							 && source.IndexOf("\\u", index + length, 2) == index + length)
-							{
-								// +2 from \u
-								// +4 from the next four hex chars
-								length += 6;
+							hex = StringExtensions.CalculateUtf32(hex, hex2);
+						}
 
-								if (index + length >= source.Length)
-								{
-									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index)}'.";
-									break;
-								}
+						if (hex.IsValidUtf32CodePoint())
+							append = char.ConvertFromUtf32(hex);
+						else
+						{
+							errorMessage = "Invalid UTF-32 code point.";
+							break;
+						}
 
-								if (!_IsValidHex(source, index + 6, 4) ||
-									!int.TryParse(source.Substring(index + 6, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hex2))
-								{
-									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
-									break;
-								}
-								hex = StringExtensions.CalculateUtf32(hex, hex2);
-							}
-
-							if (hex.IsValidUtf32CodePoint())
-								append = char.ConvertFromUtf32(hex);
-							else
-							{
-								errorMessage = "Invalid UTF-32 code point.";
-								break;
-							}
-							index += length;
-							break;
-						case '\'':
-							append = "'";
-							break;
-						case '"':
-							append = "\"";
-							break;
-						case '\\':
-							append = "\\";
-							break;
-						// Is this correct?
-						case '/':
-							append = "/";
-							break;
-						default:
-							complete = true;
-							errorMessage = $"Invalid escape sequence: '\\{c}'.";
-							break;
-					}
-
-					if (append == null) break;
-
-					builder.Append(append);
+						index += length;
+						break;
+					case '\'':
+						append = "'";
+						break;
+					case '"':
+						append = "\"";
+						break;
+					case '\\':
+						append = "\\";
+						break;
+					// Is this correct?
+					case '/':
+						append = "/";
+						break;
+					default:
+						complete = true;
+						errorMessage = $"Invalid escape sequence: '\\{c}'.";
+						break;
 				}
+
+				if (append == null) break;
+
+				builder.Append(append);
 			}
 
 			if (!complete || errorMessage != null)
@@ -217,15 +205,13 @@ namespace Manatee.Json.Path.Parsing
 
 		private static bool _IsValidHex(string source, int offset, int count)
 		{
-			for (int ii = offset; ii < offset + count; ++ii)
+			for (int i = offset; i < offset + count; ++i)
 			{
 				// if not a hex digit
-				if ((source[ii] < '0' || source[ii] > '9')
-				 && (source[ii] < 'A' || source[ii] > 'F')
-				 && (source[ii] < 'a' || source[ii] > 'f'))
-				{
+				if ((source[i] < '0' || source[i] > '9') &&
+				    (source[i] < 'A' || source[i] > 'F') &&
+				    (source[i] < 'a' || source[i] > 'f'))
 					return false;
-				}
 			}
 
 			return true;
@@ -258,41 +244,47 @@ namespace Manatee.Json.Path.Parsing
 			slice = null;
 			if (source[index - 1] == ']') return null;
 
-			var error = _GetInt(source, ref index, out int? n1);
+			var error = _GetInt(source, ref index, out var n1);
 			if (error != null) return error;
 			if (index >= source.Length) return "Expected ':', ',', or ']'.";
+
 			if (n1.HasValue && (source[index] == ',' || source[index] == ']'))
 			{
 				slice = new Slice(n1.Value);
 				return null;
 			}
+
 			if (source[index] != ':') return "Expected ':', ',', or ']'.";
 
 			index++;
-			error = _GetInt(source, ref index, out int? n2);
+			error = _GetInt(source, ref index, out var n2);
 			if (error != null) return error;
 			if (source[index] == ',' || source[index] == ']')
 			{
 				slice = new Slice(n1, n2);
 				return null;
 			}
+
 			if (source[index] != ':') return "Expected ':', ',', or ']'.";
 
 			index++;
-			error = _GetInt(source, ref index, out int? n3);
+			error = _GetInt(source, ref index, out var n3);
 			if (error != null) return error;
+
 			if (source[index] == ',' || source[index] == ']')
 			{
 				slice = new Slice(n1, n2, n3);
 				return null;
 			}
+
 			return "Expected ',' or ']'.";
 		}
+
 		private static string _GetInt(string source, ref int index, out int? number)
 		{
 			number = null;
 
-			int originalIndex = index;
+			var originalIndex = index;
 
 			// check for leading negative sign
 			if (source[index] == '-')
@@ -301,26 +293,17 @@ namespace Manatee.Json.Path.Parsing
 			while (index < source.Length)
 			{
 				if (char.IsDigit(source[index]))
-				{
 					index++;
-				}
-				else
-				{
-					break;
-				}
+				else break;
 			}
 
-			if ((index - originalIndex == 0)
-				&& (source[index] == ':' || source[index] == ',' || source[index] == ']'))
-			{
+			if (index - originalIndex == 0 &&
+			    (source[index] == ':' || source[index] == ',' || source[index] == ']'))
 				return null;
-			}
 
 			string text = source.Substring(originalIndex, index - originalIndex);
 			if (!int.TryParse(text, out var value))
-			{
 				return "Expected number.";
-			}
 
 			number = value;
 			return null;
@@ -330,7 +313,7 @@ namespace Manatee.Json.Path.Parsing
 
 		#region GetNumber
 
-		enum NumberPart
+		private enum NumberPart
 		{
 			LeadingInteger,
 			Fraction,
@@ -342,7 +325,7 @@ namespace Manatee.Json.Path.Parsing
 		{
 			number = null;
 
-			int originalIndex = index;
+			var originalIndex = index;
 
 			// check for leading negative sign
 			if (source[index] == '-')
@@ -357,9 +340,7 @@ namespace Manatee.Json.Path.Parsing
 				{
 					case NumberPart.LeadingInteger:
 						if (char.IsDigit(source[index]))
-						{
 							index++;
-						}
 						else if (source[index] == '.')
 						{
 							part = NumberPart.Fraction;
@@ -371,24 +352,18 @@ namespace Manatee.Json.Path.Parsing
 							index++;
 						}
 						else
-						{
 							complete = true;
-						}
 						break;
 					case NumberPart.Fraction:
 						if (char.IsDigit(source[index]))
-						{
 							index++;
-						}
 						else if (source[index] == 'e' || source[index] == 'E')
 						{
 							part = NumberPart.ExponentDigitsOrSign;
 							index++;
 						}
 						else
-						{
 							complete = true;
-						}
 						break;
 					case NumberPart.ExponentDigitsOrSign:
 						if (source[index] == '-' || source[index] == '+')
@@ -402,9 +377,7 @@ namespace Manatee.Json.Path.Parsing
 							index++;
 						}
 						else
-						{
 							complete = true;
-						}
 						break;
 					case NumberPart.ExponentDigitsOnly:
 						if (char.IsDigit(source[index]))
@@ -413,24 +386,18 @@ namespace Manatee.Json.Path.Parsing
 							index++;
 						}
 						else
-						{
 							complete = true;
-						}
 						break;
 				}
 			}
 
-			if ((index - originalIndex == 0)
-				&& (source[index] == ':' || source[index] == ',' || source[index] == ']'))
-			{
+			if (index - originalIndex == 0 &&
+			    (source[index] == ':' || source[index] == ',' || source[index] == ']'))
 				return null;
-			}
 
-			string text = source.Substring(originalIndex, index - originalIndex);
+			var text = source.Substring(originalIndex, index - originalIndex);
 			if (!double.TryParse(text, out var value))
-			{
 				return "Expected number.";
-			}
 
 			number = value;
 			return null;

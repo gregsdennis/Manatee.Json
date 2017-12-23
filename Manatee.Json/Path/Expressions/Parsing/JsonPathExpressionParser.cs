@@ -8,20 +8,20 @@ namespace Manatee.Json.Path.Expressions.Parsing
 {
 	internal static class JsonPathExpressionParser
 	{
-		private static readonly List<IJsonPathExpressionParser> Parsers;
+		private static readonly List<IJsonPathExpressionParser> _parsers;
 
 		static JsonPathExpressionParser()
 		{
-			Parsers = typeof(JsonPathExpressionParser).GetTypeInfo().Assembly.DefinedTypes
-													  .Where(t => typeof(IJsonPathExpressionParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
-													  .Select(ti => Activator.CreateInstance(ti.AsType()))
-			                                          .Cast<IJsonPathExpressionParser>()
-			                                          .ToList();
+			_parsers = typeof(JsonPathExpressionParser).GetTypeInfo().Assembly.DefinedTypes
+			                                           .Where(t => typeof(IJsonPathExpressionParser).GetTypeInfo().IsAssignableFrom(t) && t.IsClass)
+			                                           .Select(ti => Activator.CreateInstance(ti.AsType()))
+			                                           .Cast<IJsonPathExpressionParser>()
+			                                           .ToList();
 		}
 
 		public static string Parse<T, TIn>(string source, ref int index, out Expression<T, TIn> expr)
 		{
-			var error = Parse(source, ref index, out ExpressionTreeNode<TIn> root);
+			var error = _Parse(source, ref index, out ExpressionTreeNode<TIn> root);
 
 			if (error != null)
 			{
@@ -37,8 +37,8 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			expr = new Expression<T, TIn>(root);
 			return null;
 		}
-		
-		public static string Parse<TIn>(string source, ref int index, out ExpressionTreeNode<TIn> root)
+
+		private static string _Parse<TIn>(string source, ref int index, out ExpressionTreeNode<TIn> root)
 		{
 			root = null;
 
@@ -49,7 +49,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				if (errorMessage != null) return errorMessage;
 
 				IJsonPathExpressionParser foundParser = null;
-				foreach (var parser in Parsers)
+				foreach (var parser in _parsers)
 				{
 					if (parser.Handles(source, index))
 					{
@@ -123,7 +123,6 @@ namespace Manatee.Json.Path.Expressions.Parsing
 						// For all other operators, resolve any operators
 						// of greater (or equal right-assoc) precedence 
 						// before pushing ourselves onto the operator stack
-
 						while (context.Operators.Count > 0)
 						{
 							var top = context.Operators.Peek();
@@ -133,9 +132,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 							//   2. or, the operator has equal and is left-assoc
 							//   3. and, it is not group start...
 							var precedence = _Compare(op, top);
-							if ((precedence < 0
-								|| (precedence == 0 && !_IsRightAssociative(top.Operator)))
-								&& top.Operator != JsonPathOperator.GroupStart)
+							if ((precedence < 0 || precedence == 0 && !_IsRightAssociative(top.Operator)) && top.Operator != JsonPathOperator.GroupStart)
 							{
 								// Get the operator...
 								var expr = context.Operators.Pop();
@@ -146,10 +143,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 								// ...and push the completed operator sub-tree onto the output stack
 								context.Output.Push(expr);
 							}
-							else
-							{
-								break;
-							}
+							else break;
 						}
 
 						context.Operators.Push(op);
@@ -172,11 +166,8 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				expr.Children.Add(first);
 				expr.Children.Add(second);
 			}
-			else
-			{
-				// unary
+			else // unary
 				expr.Children.Add(context.Output.Pop());
-			}
 		}
 
 		private static int _Compare(OperatorExpression a, OperatorExpression b)
@@ -192,39 +183,30 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				case JsonPathOperator.GroupStart:
 				case JsonPathOperator.GroupEnd:
 					return 20;
-
 				case JsonPathOperator.Negate:
 				case JsonPathOperator.Not:
 					return 16;
-
 				case JsonPathOperator.Exponent:
 					return 15;
-
 				case JsonPathOperator.Multiply:
 				case JsonPathOperator.Divide:
 				case JsonPathOperator.Modulo:
 					return 14;
-
 				case JsonPathOperator.Add:
 				case JsonPathOperator.Subtract:
 					return 13;
-
 				case JsonPathOperator.GreaterThan:
 				case JsonPathOperator.GreaterThanOrEqual:
 				case JsonPathOperator.LessThan:
 				case JsonPathOperator.LessThanOrEqual:
 					return 11;
-
 				case JsonPathOperator.Equal:
 				case JsonPathOperator.NotEqual:
 					return 10;
-
 				case JsonPathOperator.And:
 					return 6;
-
 				case JsonPathOperator.Or:
 					return 5;
-
 				default:
 					return 0;
 			}
@@ -239,7 +221,6 @@ namespace Manatee.Json.Path.Expressions.Parsing
 				case JsonPathOperator.Not:
 				case JsonPathOperator.Exponent:
 					return true;
-					
 				default:
 					return false;
 			}

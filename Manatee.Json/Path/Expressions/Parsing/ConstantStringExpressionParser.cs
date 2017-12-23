@@ -13,13 +13,9 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		{
 			expression = null;
 
-			string value;
-			var error = source.GetKey(ref index, out value);
-			if (error != null)
-			{
-				return error;
-			}
-			
+			var error = source.GetKey(ref index, out var value);
+			if (error != null) return error;
+
 			expression = new ValueExpression { Value = value };
 			return null;
 		}

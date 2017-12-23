@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
@@ -13,11 +12,33 @@ namespace Manatee.Json.Path.SearchParameters
 			var results = new JsonArray();
 			foreach (var value in json)
 			{
-				_Find(value, root, results);
+				_Find(value, results);
 			}
 			return results;
 		}
-		private void _Find(JsonValue value, JsonValue root, JsonArray results)
+
+		public override string ToString()
+		{
+			return "*";
+		}
+
+		public bool Equals(WildCardSearchParameter other)
+		{
+			return !ReferenceEquals(null, other);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as WildCardSearchParameter);
+		}
+
+		public override int GetHashCode()
+		{
+			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
+			return base.GetHashCode();
+		}
+
+		private void _Find(JsonValue value, JsonArray results)
 		{
 			results.Add(value);
 			switch (value.Type)
@@ -25,33 +46,16 @@ namespace Manatee.Json.Path.SearchParameters
 				case JsonValueType.Object:
 					foreach (var subValue in value.Object.Values)
 					{
-						_Find(subValue, root, results);
+						_Find(subValue, results);
 					}
 					break;
 				case JsonValueType.Array:
 					foreach (var subValue in value.Array)
 					{
-						_Find(subValue, root, results);
+						_Find(subValue, results);
 					}
 					break;
 			}
-		}
-		public override string ToString()
-		{
-			return "*";
-		}
-		public bool Equals(WildCardSearchParameter other)
-		{
-			return !ReferenceEquals(null, other);
-		}
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as WildCardSearchParameter);
-		}
-		public override int GetHashCode()
-		{
-			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
-			return base.GetHashCode();
 		}
 	}
 }

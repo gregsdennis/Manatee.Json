@@ -9,12 +9,12 @@ namespace Manatee.Json.Path.Parsing
 	{
 		public bool Handles(string input, int index)
 		{
-			if (index + 1 >= input.Length)
-				return false;
+			if (index + 1 >= input.Length) return false;
 
-			return input[index] == '['
-				&& input[index + 1] == '(';
+			return input[index] == '[' &&
+			       input[index + 1] == '(';
 		}
+
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
 			index += 1;
@@ -26,6 +26,7 @@ namespace Manatee.Json.Path.Parsing
 
 			if (index >= source.Length) return "Unexpected end of input.";
 			if (source[index] != ']') return "Expected ']'";
+
 			index++;
 			path.Operators.Add(new ArrayOperator(new IndexExpressionQuery(expression)));
 			return null;

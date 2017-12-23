@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Operators
 {
@@ -25,6 +23,29 @@ namespace Manatee.Json.Path.Operators
 
 			return new JsonArray(results);
 		}
+
+		public override string ToString()
+		{
+			return $"[{Query}]";
+		}
+
+		public bool Equals(ArrayOperator other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Query, other.Query);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as ArrayOperator);
+		}
+
+		public override int GetHashCode()
+		{
+			return Query?.GetHashCode() ?? 0;
+		}
+
 		private void _Evaluate(JsonValue value, JsonValue root, List<JsonValue> results)
 		{
 			switch (value.Type)
@@ -37,24 +58,6 @@ namespace Manatee.Json.Path.Operators
 					results.AddRange(Query.Find(new JsonArray(value.Object.Values), root));
 					break;
 			}
-		}
-		public override string ToString()
-		{
-			return $"[{Query}]";
-		}
-		public bool Equals(ArrayOperator other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return Equals(Query, other.Query);
-		}
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as ArrayOperator);
-		}
-		public override int GetHashCode()
-		{
-			return Query?.GetHashCode() ?? 0;
 		}
 	}
 }

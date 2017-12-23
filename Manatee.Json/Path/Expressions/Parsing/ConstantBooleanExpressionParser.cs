@@ -4,16 +4,11 @@
 	{
 		public bool Handles(string input, int index)
 		{
-			if (input[index] == 't'
-				&& index + 3 < input.Length)
-			{
+			if (input[index] == 't' && index + 3 < input.Length)
 				return input.IndexOf("true", index, 4) == index;
-			}
-			else if (input[index] == 'f'
-				&& index + 4 < input.Length)
-			{
+
+			if (input[index] == 'f' && index + 4 < input.Length)
 				return input.IndexOf("false", index, 5) == index;
-			}
 
 			return false;
 		}
@@ -28,12 +23,9 @@
 			else if (source[index] == 'f')
 			{
 				index += 5;
-				expression = new ValueExpression { Value = false };
+				expression = new ValueExpression {Value = false};
 			}
-			else
-			{
-				return "Boolean value not recoginized.";
-			}
+			else return "Boolean value not recoginized.";
 
 			return null;
 		}

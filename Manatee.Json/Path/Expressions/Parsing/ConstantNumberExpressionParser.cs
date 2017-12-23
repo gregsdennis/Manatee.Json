@@ -12,12 +12,8 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		{
 			expression = null;
 
-			double? number;
-			var error = source.GetNumber(ref index, out number);
-			if (error != null)
-			{
-				return error;
-			}
+			var error = source.GetNumber(ref index, out var number);
+			if (error != null) return error;
 
 			expression = new ValueExpression { Value = number };
 			return null;

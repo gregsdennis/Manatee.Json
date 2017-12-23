@@ -8,6 +8,7 @@
 				&& input[index] == '='
 				&& input[index + 1] == '=';
 		}
+
 		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
 			index += 2;

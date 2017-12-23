@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
@@ -14,50 +13,52 @@ namespace Manatee.Json.Path.SearchParameters
 
 			foreach (var value in json)
 			{
-				_Find(value, root, results);
+				_Find(value, results);
 			}
 
 			return results;
 		}
-		private void _Find(JsonValue value, JsonValue root, JsonArray results)
+
+		public override string ToString()
 		{
-			if (value.Type == JsonValueType.Array)
-				results.Add(value.Array.Count);
-			else
-				results.Add(1);
+			return "length";
+		}
+
+		public bool Equals(LengthSearchParameter other)
+		{
+			return !ReferenceEquals(null, other);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as LengthSearchParameter);
+		}
+
+		public override int GetHashCode()
+		{
+			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
+			return base.GetHashCode();
+		}
+
+		private static void _Find(JsonValue value, JsonArray results)
+		{
+			results.Add(value.Type == JsonValueType.Array ? value.Array.Count : 1);
 
 			switch (value.Type)
 			{
 				case JsonValueType.Object:
 					foreach (var subValue in value.Object.Values)
 					{
-						_Find(subValue, root, results);
+						_Find(subValue, results);
 					}
 					break;
 				case JsonValueType.Array:
 					foreach (var subValue in value.Array)
 					{
-						_Find(subValue, root, results);
+						_Find(subValue, results);
 					}
 					break;
 			}
-		}
-		public override string ToString()
-		{
-			return "length";
-		}
-		public bool Equals(LengthSearchParameter other)
-		{
-			return !ReferenceEquals(null, other);
-		}
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as LengthSearchParameter);
-		}
-		public override int GetHashCode()
-		{
-			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
-			return base.GetHashCode();
 		}
 	}
 }

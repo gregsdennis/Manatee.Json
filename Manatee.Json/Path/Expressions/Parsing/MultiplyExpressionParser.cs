@@ -6,6 +6,7 @@
 		{
 			return input[index] == '*';
 		}
+
 		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
 			index++;

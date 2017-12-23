@@ -11,11 +11,11 @@ namespace Manatee.Json.Path.Parsing
 			if (index + 2 >= input.Length)
 				return false;
 
-			return input[index] == '.'
-				&& input[index + 1] == '.'
-				&& (char.IsLetterOrDigit(input[index + 2])
-					|| allowedChars.IndexOf(input[index + 2]) >= 0);
+			return input[index] == '.' &&
+			       input[index + 1] == '.' &&
+			       (char.IsLetterOrDigit(input[index + 2]) || allowedChars.IndexOf(input[index + 2]) >= 0);
 		}
+
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
 			if (path == null) return "Start token not found.";
@@ -29,8 +29,7 @@ namespace Manatee.Json.Path.Parsing
 				return null;
 			}
 
-			string key;
-			var error = source.GetKey(ref index, out key);
+			var error = source.GetKey(ref index, out var key);
 			if (error != null) return error;
 
 			path = path.Search(key);
