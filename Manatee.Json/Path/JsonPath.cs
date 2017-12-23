@@ -32,9 +32,12 @@ namespace Manatee.Json.Path
 		/// <returns></returns>
 		public JsonArray Evaluate(JsonValue json)
 		{
-			var current = new JsonArray {json};
-			var found = Operators.Aggregate(current, (c, o) => o.Evaluate(c, json));
-			return found;
+			var current = new JsonArray { json };
+			foreach (var op in Operators)
+			{
+				current = op.Evaluate(current, json);
+			}
+			return current;
 		}
 		/// <summary>
 		/// Returns a string that represents the current object.

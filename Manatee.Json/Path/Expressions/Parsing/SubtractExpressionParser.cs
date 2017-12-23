@@ -4,13 +4,13 @@
 	{
 		public bool Handles(string input, int index)
 		{
-			// TODO: Determine how to identify negations separately from subtractions.
+			// Negation is handled during the Shunting-yard Algorithm loop
 			return input[index] == '-';
 		}
-		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
+		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
 			index++;
-			node = new SubtractExpression<T>();
+			expression = new OperatorExpression { Operator = JsonPathOperator.Subtract };
 			return null;
 		}
 	}

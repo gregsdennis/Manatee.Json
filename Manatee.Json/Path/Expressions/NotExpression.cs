@@ -6,8 +6,6 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public ExpressionTreeNode<T> Root { get; set; }
 
-		protected override int BasePriority => 5;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var result = Root.Evaluate(json, root);
@@ -15,10 +13,7 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return Root is AndExpression<T> || Root is OrExpression<T> ||
-				   Root is IsEqualExpression<T> || Root is IsNotEqualExpression<T> ||
-				   Root is IsLessThanExpression<T> || Root is IsLessThanEqualExpression<T> ||
-				   Root is IsGreaterThanExpression<T> || Root is IsGreaterThanEqualExpression<T>
+			return Root is ExpressionTreeBranch<T>
 					   ? $"!({Root})"
 				       : $"!{Root}";
 		}

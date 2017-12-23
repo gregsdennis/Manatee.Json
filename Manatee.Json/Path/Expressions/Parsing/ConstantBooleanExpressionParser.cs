@@ -17,23 +17,25 @@
 
 			return false;
 		}
-		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
+		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
-			var substring = source.Substring(index);
-			if (substring.StartsWith("true"))
+			expression = null;
+			if (source[index] == 't')
 			{
 				index += 4;
-				node = new ValueExpression<T> {Value = true};
-				return null;
+				expression = new ValueExpression { Value = true };
 			}
-			if (substring.StartsWith("false"))
+			else if (source[index] == 'f')
 			{
 				index += 5;
-				node = new ValueExpression<T> {Value = false};
-				return null;
+				expression = new ValueExpression { Value = false };
 			}
-			node = null;
-			return "Boolean value not recognized.";
+			else
+			{
+				return "Boolean value not recoginized.";
+			}
+
+			return null;
 		}
 	}
 }

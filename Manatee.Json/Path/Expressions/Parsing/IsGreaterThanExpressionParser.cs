@@ -10,10 +10,10 @@
 			return index + 1 >= input.Length
 				|| input[index + 1] != '=';
 		}
-		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
+		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
 			index++;
-			node = new IsGreaterThanExpression<T>();
+			expression = new OperatorExpression { Operator = JsonPathOperator.GreaterThan };
 			return null;
 		}
 	}

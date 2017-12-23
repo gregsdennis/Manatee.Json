@@ -17,7 +17,7 @@ namespace Manatee.Json.Path.Parsing
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
-			index += 2;
+			index += 1;
 			Expression<int, JsonArray> expression;
 			var error = JsonPathExpressionParser.Parse(source, ref index, out expression);
 

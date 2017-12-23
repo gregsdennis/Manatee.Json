@@ -6,10 +6,10 @@
 		{
 			return input[index] == '+';
 		}
-		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
+		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
 			index++;
-			node = new AddExpression<T>();
+			expression = new OperatorExpression { Operator = JsonPathOperator.Add };
 			return null;
 		}
 	}

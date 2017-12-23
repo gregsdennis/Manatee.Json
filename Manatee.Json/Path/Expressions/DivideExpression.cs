@@ -4,8 +4,6 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class DivideExpression<T> : ExpressionTreeBranch<T>, IEquatable<DivideExpression<T>>
 	{
-		protected override int BasePriority => 3;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var left = Left.Evaluate(json, root);
@@ -15,8 +13,8 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			var left = Left.Priority <= Priority ? $"({Left})" : Left.ToString();
-			var right = Right.Priority <= Priority ? $"({Right})" : Right.ToString();
+			var left = Left is ExpressionTreeBranch<T> ? $"({Left})" : Left.ToString();
+			var right = Right is ExpressionTreeBranch<T> ? $"({Right})" : Right.ToString();
 			return $"{left}/{right}";
 		}
 		public bool Equals(DivideExpression<T> other)

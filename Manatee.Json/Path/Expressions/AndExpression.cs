@@ -4,15 +4,15 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class AndExpression<T> : ExpressionTreeBranch<T>, IEquatable<AndExpression<T>>
 	{
-		protected override int BasePriority => 0;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			return (bool)Left.Evaluate(json, root) && (bool)Right.Evaluate(json, root);
 		}
 		public override string ToString()
 		{
-			return $"{Left} && {Right}";
+			var left = Left is ExpressionTreeBranch<T> ? $"({Left})" : Left.ToString();
+			var right = Right is ExpressionTreeBranch<T> ? $"({Right})" : Right.ToString();
+			return $"{left} && {right}";
 		}
 		public bool Equals(AndExpression<T> other)
 		{

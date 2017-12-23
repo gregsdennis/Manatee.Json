@@ -8,8 +8,6 @@ namespace Manatee.Json.Path.Expressions
 		public JsonPath Path { get; set; }
 		public bool IsLocal { get; set; }
 
-		protected override int BasePriority => 6;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var value = IsLocal ? json as JsonValue : root;

@@ -4,6 +4,6 @@
 	{
 		bool Handles(string input, int index);
 
-		string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node);
+		string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression);
 	}
 }
