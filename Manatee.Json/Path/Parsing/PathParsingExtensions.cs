@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -13,94 +15,220 @@ namespace Manatee.Json.Path.Parsing
 
 		public static string GetKey(this string source, ref int index, out string key)
 		{
-			return source[index].In('"', '\'')
-				       ? _GetQuotedKey(source, ref index, out key)
-				       : _GetBasicKey(source, ref index, out key);
+			if (source[index] == '"' || source[index] == '\'')
+				return _GetQuotedKey(source, ref index, out key);
+
+			return _GetBasicKey(source, ref index, out key);
 		}
 
 		private static string _GetBasicKey(string source, ref int index, out string key)
 		{
-			var bufferSize = 0;
-			var bufferLength = FibSequence[bufferSize];
-			var buffer = new char[bufferLength];
-			var bufferIndex = 0;
-			var sourceLength = source.Length;
-			var complete = false;
-			var c = (char)0;
-			while (index < sourceLength)
+			key = null;
+
+			int originalIndex = index;
+			bool complete = false;
+			while (index < source.Length)
 			{
-				if (bufferIndex == bufferLength)
+				if (char.IsLetterOrDigit(source[index]) || source[index] == '_')
 				{
-					var currentLength = bufferLength;
-					bufferSize++;
-					bufferLength = FibSequence[bufferSize];
-					var newBuffer = new char[bufferLength];
-					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength * 2);
-					buffer = newBuffer;
+					index++;
 				}
-				c = source[index];
-				index++;
-				if (!(char.IsLetterOrDigit(c) || c == '_'))
+				else
 				{
 					complete = true;
-					index--;
 					break;
 				}
-				buffer[bufferIndex] = c;
-				bufferIndex++;
 			}
-			if (!complete && index + 1 < sourceLength)
+
+			if (!complete && index + 1 < source.Length)
 			{
-				key = null;
-				return $"The character '{c}' is not supported for unquoted names.";
+				return $"The character {source[index]} is not supported for unquoted names.";
 			}
-			var result = new string(buffer, 0, bufferIndex);
-			key = result;
+
+			key = source.Substring(originalIndex, index - originalIndex);
 			return null;
 		}
 
 		private static string _GetQuotedKey(string source, ref int index, out string key)
 		{
-			var bufferSize = 0;
-			var bufferLength = FibSequence[bufferSize];
-			var buffer = new char[bufferLength];
-			var bufferIndex = 0;
-			var sourceLength = source.Length;
-			var foundEscape = false;
-			var complete = false;
+			key = null;
+
+			Debug.Assert(source[index] == '\'' || source[index] == '"');
 			var quoteChar = source[index];
 			index++;
-			while (index < sourceLength)
+
+			int originalIndex = index;
+			bool complete = false, foundEscape = false;
+			while (index < source.Length)
 			{
-				if (bufferIndex == bufferLength)
+				if (source[index] == '\\')
 				{
-					var currentLength = bufferLength;
-					bufferSize++;
-					bufferLength = FibSequence[bufferSize];
-					var newBuffer = new char[bufferLength];
-					Buffer.BlockCopy(buffer, 0, newBuffer, 0, currentLength * 2);
-					buffer = newBuffer;
+					foundEscape = true;
+					break;
 				}
-				var c = source[index];
-				index++;
-				if (c == quoteChar && !foundEscape)
+				else if (source[index] == quoteChar)
 				{
 					complete = true;
 					break;
 				}
-				foundEscape = c == '\\';
-				buffer[bufferIndex] = c;
-				bufferIndex++;
+				else
+				{
+					index++;
+				}
 			}
+
+			if (foundEscape)
+				return _GetQuotedKeyWithEscape(source, quoteChar, originalIndex, ref index, out key);
+
 			if (!complete)
-			{
-				key = null;
 				return "Could not find end of string value.";
+
+			key = source.Substring(originalIndex, index - originalIndex);
+			index++; // swallow quote character
+			return null;
+		}
+
+		private static string _GetQuotedKeyWithEscape(string source, char quoteChar, int originalIndex, ref int index, out string key)
+		{
+			key = null;
+
+			string errorMessage = null;
+			var builder = StringBuilderCache.Acquire();
+			builder.Append(source.Substring(originalIndex, index - originalIndex));
+
+			var complete = false;
+			while (index < source.Length)
+			{
+				var c = source[index++];
+				if (c != '\\')
+				{
+					if (c == quoteChar)
+					{
+						complete = true;
+						break;
+					}
+
+					builder.Append(c);
+				}
+				else
+				{
+					if (index >= source.Length)
+						return "Could not find end of string value.";
+
+					string append = null;
+					c = source[index++];
+					switch (c)
+					{
+						case 'b':
+							append = "\b";
+							break;
+						case 'f':
+							append = "\f";
+							break;
+						case 'n':
+							append = "\n";
+							break;
+						case 'r':
+							append = "\r";
+							break;
+						case 't':
+							append = "\t";
+							break;
+						case 'u':
+							var length = 4;
+							if (index + length >= source.Length)
+							{
+								errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index)}'.";
+								break;
+							}
+
+							int hex;
+							if (!_IsValidHex(source, index, 4)
+							 || !int.TryParse(source.Substring(index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out hex))
+							{
+								errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
+								break;
+							}
+
+							if (index + length + 2 < source.Length
+							 && source.IndexOf("\\u", index + length, 2) == index + length)
+							{
+								// +2 from \u
+								// +4 from the next four hex chars
+								length += 6;
+
+								if (index + length >= source.Length)
+								{
+									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index)}'.";
+									break;
+								}
+
+								if (!_IsValidHex(source, index + 6, 4) ||
+									!int.TryParse(source.Substring(index + 6, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hex2))
+								{
+									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
+									break;
+								}
+								hex = StringExtensions.CalculateUtf32(hex, hex2);
+							}
+
+							if (hex.IsValidUtf32CodePoint())
+								append = char.ConvertFromUtf32(hex);
+							else
+							{
+								errorMessage = "Invalid UTF-32 code point.";
+								break;
+							}
+							index += length;
+							break;
+						case '\'':
+							append = "'";
+							break;
+						case '"':
+							append = "\"";
+							break;
+						case '\\':
+							append = "\\";
+							break;
+						// Is this correct?
+						case '/':
+							append = "/";
+							break;
+						default:
+							complete = true;
+							errorMessage = $"Invalid escape sequence: '\\{c}'.";
+							break;
+					}
+
+					if (append == null) break;
+
+					builder.Append(append);
+				}
 			}
-			var result = new string(buffer, 0, bufferIndex);
-			var errorMessage = result.EvaluateEscapeSequences(out string escaped);
-			key = escaped;
-			return errorMessage;
+
+			if (!complete || errorMessage != null)
+			{
+				StringBuilderCache.Release(builder);
+				return errorMessage ?? "Could not find end of string value.";
+			}
+			key = StringBuilderCache.GetStringAndRelease(builder);
+			return null;
+		}
+
+		private static bool _IsValidHex(string source, int offset, int count)
+		{
+			for (int ii = offset; ii < offset + count; ++ii)
+			{
+				// if not a hex digit
+				if ((source[ii] < '0' || source[ii] > '9')
+				 && (source[ii] < 'A' || source[ii] > 'F')
+				 && (source[ii] < 'a' || source[ii] > 'f'))
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		#endregion
@@ -119,6 +247,7 @@ namespace Manatee.Json.Path.Parsing
 				if (lastSlice != null)
 					slices.Add(lastSlice);
 			} while (error == null && lastSlice != null);
+
 			if (error != null) return error;
 
 			return !slices.Any() ? "Index required inside '[]'" : null;
@@ -129,11 +258,10 @@ namespace Manatee.Json.Path.Parsing
 			slice = null;
 			if (source[index - 1] == ']') return null;
 
-
 			var error = _GetInt(source, ref index, out int? n1);
 			if (error != null) return error;
 			if (index >= source.Length) return "Expected ':', ',', or ']'.";
-			if (n1.HasValue && source[index].In(',', ']'))
+			if (n1.HasValue && (source[index] == ',' || source[index] == ']'))
 			{
 				slice = new Slice(n1.Value);
 				return null;
@@ -143,7 +271,7 @@ namespace Manatee.Json.Path.Parsing
 			index++;
 			error = _GetInt(source, ref index, out int? n2);
 			if (error != null) return error;
-			if (source[index].In(',', ']'))
+			if (source[index] == ',' || source[index] == ']')
 			{
 				slice = new Slice(n1, n2);
 				return null;
@@ -153,7 +281,7 @@ namespace Manatee.Json.Path.Parsing
 			index++;
 			error = _GetInt(source, ref index, out int? n3);
 			if (error != null) return error;
-			if (source[index].In(',', ']'))
+			if (source[index] == ',' || source[index] == ']')
 			{
 				slice = new Slice(n1, n2, n3);
 				return null;
@@ -162,19 +290,38 @@ namespace Manatee.Json.Path.Parsing
 		}
 		private static string _GetInt(string source, ref int index, out int? number)
 		{
-			var text = new string(source.Substring(index).TakeWhile(c => char.IsDigit(c) || c == '-').ToArray());
-			if (text.Length == 0 && source[index].In(':', ',', ']'))
+			number = null;
+
+			int originalIndex = index;
+
+			// check for leading negative sign
+			if (source[index] == '-')
+				index++;
+
+			while (index < source.Length)
 			{
-				number = null;
+				if (char.IsDigit(source[index]))
+				{
+					index++;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			if ((index - originalIndex == 0)
+				&& (source[index] == ':' || source[index] == ',' || source[index] == ']'))
+			{
 				return null;
 			}
-			if (!int.TryParse(text, out int value))
+
+			string text = source.Substring(originalIndex, index - originalIndex);
+			if (!int.TryParse(text, out var value))
 			{
-				number = null;
 				return "Expected number.";
 			}
 
-			index += text.Length;
 			number = value;
 			return null;
 		}
@@ -183,23 +330,108 @@ namespace Manatee.Json.Path.Parsing
 
 		#region GetNumber
 
-		private const string NumberChars = "0123456789e.-";
+		enum NumberPart
+		{
+			LeadingInteger,
+			Fraction,
+			ExponentDigitsOrSign,
+			ExponentDigitsOnly,
+		}
 
 		public static string GetNumber(this string source, ref int index, out double? number)
 		{
-			var text = new string(source.Substring(index).TakeWhile(c => NumberChars.Contains(c)).ToArray());
-			if (text.Length == 0 && source[index].In(':', ',', ']'))
+			number = null;
+
+			int originalIndex = index;
+
+			// check for leading negative sign
+			if (source[index] == '-')
+				index++;
+
+			var complete = false;
+			var part = NumberPart.LeadingInteger;
+			while (index < source.Length
+			    && !complete)
 			{
-				number = null;
+				switch (part)
+				{
+					case NumberPart.LeadingInteger:
+						if (char.IsDigit(source[index]))
+						{
+							index++;
+						}
+						else if (source[index] == '.')
+						{
+							part = NumberPart.Fraction;
+							index++;
+						}
+						else if (source[index] == 'e' || source[index] == 'E')
+						{
+							part = NumberPart.ExponentDigitsOrSign;
+							index++;
+						}
+						else
+						{
+							complete = true;
+						}
+						break;
+					case NumberPart.Fraction:
+						if (char.IsDigit(source[index]))
+						{
+							index++;
+						}
+						else if (source[index] == 'e' || source[index] == 'E')
+						{
+							part = NumberPart.ExponentDigitsOrSign;
+							index++;
+						}
+						else
+						{
+							complete = true;
+						}
+						break;
+					case NumberPart.ExponentDigitsOrSign:
+						if (source[index] == '-' || source[index] == '+')
+						{
+							part = NumberPart.ExponentDigitsOnly;
+							index++;
+						}
+						else if (char.IsDigit(source[index]))
+						{
+							part = NumberPart.ExponentDigitsOnly;
+							index++;
+						}
+						else
+						{
+							complete = true;
+						}
+						break;
+					case NumberPart.ExponentDigitsOnly:
+						if (char.IsDigit(source[index]))
+						{
+							part = NumberPart.ExponentDigitsOnly;
+							index++;
+						}
+						else
+						{
+							complete = true;
+						}
+						break;
+				}
+			}
+
+			if ((index - originalIndex == 0)
+				&& (source[index] == ':' || source[index] == ',' || source[index] == ']'))
+			{
 				return null;
 			}
-			if (!double.TryParse(text, out double value))
+
+			string text = source.Substring(originalIndex, index - originalIndex);
+			if (!double.TryParse(text, out var value))
 			{
-				number = null;
 				return "Expected number.";
 			}
 
-			index += text.Length;
 			number = value;
 			return null;
 		}

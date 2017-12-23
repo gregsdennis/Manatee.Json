@@ -10,20 +10,37 @@ namespace Manatee.Json.Path.SearchParameters
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{
-			return new JsonArray(json.SelectMany(v =>
-				{
-					var contents = new List<JsonValue> {v.Array.Count};
-					switch (v.Type)
+			var results = new JsonArray();
+
+			foreach (var value in json)
+			{
+				_Find(value, root, results);
+			}
+
+			return results;
+		}
+		private void _Find(JsonValue value, JsonValue root, JsonArray results)
+		{
+			if (value.Type == JsonValueType.Array)
+				results.Add(value.Array.Count);
+			else
+				results.Add(1);
+
+			switch (value.Type)
+			{
+				case JsonValueType.Object:
+					foreach (var subValue in value.Object.Values)
 					{
-						case JsonValueType.Object:
-							contents.AddRange(v.Object.Values.SelectMany(jv => Find(new JsonArray {jv}, root)));
-							break;
-						case JsonValueType.Array:
-							contents.AddRange(v.Array.SelectMany(jv => Find(new JsonArray {jv}, root)));
-							break;
+						_Find(subValue, root, results);
 					}
-					return contents;
-				}));
+					break;
+				case JsonValueType.Array:
+					foreach (var subValue in value.Array)
+					{
+						_Find(subValue, root, results);
+					}
+					break;
+			}
 		}
 		public override string ToString()
 		{

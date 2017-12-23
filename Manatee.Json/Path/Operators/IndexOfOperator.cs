@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Path.Expressions;
 
@@ -15,10 +16,17 @@ namespace Manatee.Json.Path.Operators
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
+			var results = new JsonArray();
 			var parameter = Parameter.Evaluate(json, root);
-			return json.Where(v => v.Type == JsonValueType.Array)
-			           .Select(v => (JsonValue) v.Array.IndexOf(parameter))
-			           .ToJson();
+			foreach (var value in json)
+			{
+				if (value.Type == JsonValueType.Array)
+				{
+					results.Add(value.Array.IndexOf(parameter));
+				}
+			}
+
+			return results;
 		}
 		public override string ToString()
 		{

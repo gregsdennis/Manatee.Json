@@ -183,22 +183,22 @@ namespace Manatee.Json.Tests.Path
 		[Test]
 		public void ArrayFilterExpression_SubtractionGreaterThanValue()
 		{
-			Run("$[?(@.length-1 > 2)]", JsonPathWith.Array(jv => jv.Length() - 1 > 2));
+			Run("$[?((@.length-1) > 2)]", JsonPathWith.Array(jv => jv.Length() - 1 > 2));
 		}
 		[Test]
 		public void ArrayFilterExpression_MultiplicationGreaterThanEqualValue()
 		{
-			Run("$[?(@.length*1 >= 2)]", JsonPathWith.Array(jv => jv.Length() * 1 >= 2));
+			Run("$[?((@.length*1) >= 2)]", JsonPathWith.Array(jv => jv.Length() * 1 >= 2));
 		}
 		[Test]
 		public void ArrayFilterExpression_DivisionEqualValue()
 		{
-			Run("$[?(@.length/1 == 2)]", JsonPathWith.Array(jv => jv.Length() / 1 == 2));
+			Run("$[?((@.length/1) == 2)]", JsonPathWith.Array(jv => jv.Length() / 1 == 2));
 		}
 		[Test]
 		public void ArrayFilterExpression_ModulusEqualValue()
 		{
-			Run("$[?(@.length%1 == 2)]", JsonPathWith.Array(jv => jv.Length() % 1 == 2));
+			Run("$[?((@.length%1) == 2)]", JsonPathWith.Array(jv => jv.Length() % 1 == 2));
 		}
 		[Test]
 		public void ArrayIndexExpression_IndexOfNumber()

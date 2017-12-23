@@ -2,16 +2,15 @@
 {
 	internal class GroupExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input[0] == '(';
+			return input[index] == '(';
 		}
-		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
+		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
-			index++;
-			var error = JsonPathExpressionParser.Parse(source, ref index, out node);
-			node?.BumpPriority();
-			return error;
+			index += 1;
+			expression = new OperatorExpression { Operator = JsonPathOperator.GroupStart };
+			return null;
 		}
 	}
 }

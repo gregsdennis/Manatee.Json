@@ -4,9 +4,17 @@ namespace Manatee.Json.Path.Parsing
 {
 	internal class SearchParser : IJsonPathParser
 	{
-		public bool Handles(string input)
+		private static readonly string allowedChars = "_'\"*";
+
+		public bool Handles(string input, int index)
 		{
-			return input.StartsWith("..") && input.Length >= 3 && (char.IsLetterOrDigit(input[2]) || input[2].In('_', '\'', '"', '*'));
+			if (index + 2 >= input.Length)
+				return false;
+
+			return input[index] == '.'
+				&& input[index + 1] == '.'
+				&& (char.IsLetterOrDigit(input[index + 2])
+					|| allowedChars.IndexOf(input[index + 2]) >= 0);
 		}
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{

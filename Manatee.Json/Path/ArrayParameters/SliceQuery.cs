@@ -15,7 +15,14 @@ namespace Manatee.Json.Path.ArrayParameters
 		}
 		public IEnumerable<JsonValue> Find(JsonArray json, JsonValue root)
 		{
-			return Slices.SelectMany(s => s.Find(json, root)).Distinct();
+			var results = new HashSet<JsonValue>();
+
+			foreach (var slice in Slices)
+			{
+				results.UnionWith(slice.Find(json, root));
+			}
+
+			return results;
 		}
 		public override string ToString()
 		{

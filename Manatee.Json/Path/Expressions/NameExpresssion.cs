@@ -9,8 +9,6 @@ namespace Manatee.Json.Path.Expressions
 		public string Name { get; set; }
 		public ExpressionTreeNode<T> NameExp { get; set; }
 
-		protected override int BasePriority => 6;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var value = IsLocal ? json.AsJsonValue() : root;

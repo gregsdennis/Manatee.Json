@@ -35,12 +35,26 @@ namespace Manatee.Json.Path.Parsing
 			{
 				var errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
 				if (errorMessage != null) return errorMessage;
+
 				var substring = source.Substring(index);
-				var parser = Parsers.FirstOrDefault(p => p.Handles(substring));
-				if (parser == null) return "Unrecognized JSON Path element.";
-				errorMessage = parser.TryParse(source, ref index, ref path);
+
+				IJsonPathParser foundParser = null;
+				foreach (var parser in Parsers)
+				{
+					if (parser.Handles(source, index))
+					{
+						foundParser = parser;
+						break;
+					}
+				}
+
+				if (foundParser == null)
+					return "Unrecognized JSON Path element.";
+
+				errorMessage = foundParser.TryParse(source, ref index, ref path);
 				if (errorMessage != null) return errorMessage;
 			}
+
 			return null;
 		}
 	}

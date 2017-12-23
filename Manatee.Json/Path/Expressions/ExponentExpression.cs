@@ -4,8 +4,6 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class ExponentExpression<T> : ExpressionTreeBranch<T>, IEquatable<ExponentExpression<T>>
 	{
-		protected override int BasePriority => 4;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var left = Convert.ToDouble(Left.Evaluate(json, root));
@@ -14,8 +12,8 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			var left = Left.Priority <= Priority ? $"({Left})" : Left.ToString();
-			var right = Right.Priority <= Priority ? $"({Right})" : Right.ToString();
+			var left = Left is ExpressionTreeBranch<T> ? $"({Left})" : Left.ToString();
+			var right = Right is ExpressionTreeBranch<T> ? $"({Right})" : Right.ToString();
 			return $"{left}^{right}";
 		}
 		public bool Equals(ExponentExpression<T> other)

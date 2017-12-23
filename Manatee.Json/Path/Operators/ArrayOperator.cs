@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -15,14 +16,28 @@ namespace Manatee.Json.Path.Operators
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			return new JsonArray(json.SelectMany(v => v.Type == JsonValueType.Array
-				                                          ? Query.Find(v.Array, root)
-				                                          : v.Type == JsonValueType.Object
-					                                          ? Query.Find(v.Object.Values.ToJson(), root)
-					                                          : Enumerable.Empty<JsonValue>())
-			                         .WhereNotNull());
-		}
+			var results = new List<JsonValue>();
 
+			foreach (var value in json)
+			{
+				_Evaluate(value, root, results);
+			}
+
+			return new JsonArray(results);
+		}
+		private void _Evaluate(JsonValue value, JsonValue root, List<JsonValue> results)
+		{
+			switch (value.Type)
+			{
+				case JsonValueType.Array:
+					results.AddRange(Query.Find(value.Array, root));
+					break;
+
+				case JsonValueType.Object:
+					results.AddRange(Query.Find(new JsonArray(value.Object.Values), root));
+					break;
+			}
+		}
 		public override string ToString()
 		{
 			return $"[{Query}]";
