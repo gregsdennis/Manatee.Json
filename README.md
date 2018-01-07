@@ -107,6 +107,10 @@ See the wiki pages for more information on how to use this wonderful library!
 
 If you'd like to contribute to Manatee.Json, please feel free to fork and create a pull request.
 
+### Special thanks
+
+@sixlettervariables (Christopher Watford) for digging around the muck that was the serialization code and drastically improving performance.
+
 ### The Project
 
 This code uses C# 7 features, so a compiler/IDE that supports these features is required.

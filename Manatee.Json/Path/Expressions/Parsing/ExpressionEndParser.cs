@@ -2,14 +2,20 @@
 {
 	internal class ExpressionEndParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input[0] == ')';
+			return input[index] == ')' || input[index] == ']';
 		}
-		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
+		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
-			index++;
-			node = null;
+			if (source[index] == ']')
+			{
+				expression = null;
+				return null;
+			}
+
+			index += 1;
+			expression = new OperatorExpression { Operator = JsonPathOperator.GroupEnd };
 			return null;
 		}
 	}

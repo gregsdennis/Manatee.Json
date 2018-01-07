@@ -13,13 +13,13 @@ namespace Manatee.Json.Serialization.Internal
 			_cache = new Dictionary<Type, SerializerMethodPair>();
 		}
 
-		public static MethodInfo GetSerializeMethod(Type type)
+		public static Func<JsonSerializer, object, object> GetSerializeMethod(Type type)
 		{
 			var pair = _EnsureMethodPair(type);
 			return pair.Serializer;
 		}
 
-		public static MethodInfo GetDeserializeMethod(Type type)
+		public static Func<JsonSerializer, object, object> GetDeserializeMethod(Type type)
 		{
 			var pair = _EnsureMethodPair(type);
 			return pair.Deserializer;

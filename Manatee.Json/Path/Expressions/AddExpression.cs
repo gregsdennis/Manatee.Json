@@ -4,8 +4,6 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class AddExpression<T> : ExpressionTreeBranch<T>, IEquatable<AddExpression<T>>
 	{
-		protected override int BasePriority => 2;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var left = Left.Evaluate(json, root);
@@ -21,7 +19,8 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return $"{Left}+{Right}";
+			var right = Right is ExpressionTreeBranch<T> ? $"({Right})" : Right.ToString();
+			return $"{Left}+{right}";
 		}
 		public bool Equals(AddExpression<T> other)
 		{

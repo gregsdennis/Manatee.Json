@@ -15,17 +15,14 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			SerializationPair pair;
-			if (serializer.SerializationMap.Contains(obj))
+			if (serializer.SerializationMap.TryGetPair(obj, out var guid, out var pair))
 			{
-				var guid = serializer.SerializationMap.GetKey(obj);
-				pair = serializer.SerializationMap[guid];
 				pair.UsageCount++;
 				return new JsonObject {{Constants.RefKey, guid.ToString()}};
 			}
 			if (_innerSerializer.ShouldMaintainReferences)
 			{
-				var guid = Guid.NewGuid();
+				guid = Guid.NewGuid();
 				pair = new SerializationPair {Object = obj};
 				serializer.SerializationMap.Add(guid, pair);
 				pair.Json = _innerSerializer.Serialize(obj, serializer);
@@ -47,7 +44,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					jsonObj.Remove(Constants.DefKey);
 					pair = new SerializationPair {Json = json};
 					serializer.SerializationMap.Add(guid, pair);
-					pair.Object = _innerSerializer.Deserialize<T>(json, serializer);
+					serializer.SerializationMap.Update(pair, _innerSerializer.Deserialize<T>(json, serializer));
 					pair.DeserializationIsComplete = true;
 					pair.Reconcile();
 					return (T) pair.Object;

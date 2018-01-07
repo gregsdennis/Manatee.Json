@@ -82,7 +82,7 @@ namespace Manatee.Json.Tests.Test_References
 				result = (result * 397) ^ (IgnoreProp != null ? IgnoreProp.GetHashCode() : 0);
 				result = (result * 397) ^ EnumProp.GetHashCode();
 				result = (result * 397) ^ MappedProp;
-				result = (result * 397) ^ Field.GetHashCode();
+				result = (result * 397) ^ Field?.GetHashCode() ?? 0;
 				return result;
 			}
 		}

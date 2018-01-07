@@ -1,7 +1,10 @@
 ﻿using System;
-using System.Dynamic;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
-using Manatee.Json.Schema;
+using Humanizer;
 using Manatee.Json.Serialization;
 
 [assembly:InternalsVisibleTo("Manatee.Json.DynamicTypes")]
@@ -12,46 +15,96 @@ namespace Manatee.Json.Tests.Console
 	{
 		static void Main(string[] args)
 		{
-			dynamic dyn = new ExpandoObject();
-			dyn.StringProp = "string";
-			dyn.IntProp = 5;
-			dyn.NestProp = new ExpandoObject();
-			dyn.NestProp.Value = false;
+			var stopwatch = new Stopwatch();
 
-			JsonValue expected = new JsonObject
-				{
-					["StringProp"] = "string",
-					["IntProp"] = 5,
-					["NestProp"] = new JsonObject
-						{
-							["Value"] = false
-						}
-				};
-
+			var count = 1000;
 			var serializer = new JsonSerializer
 				{
 					Options =
 						{
-							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
+							DeserializationNameTransform = s => s.Pascalize(),
+							SerializationNameTransform = s => s.Camelize(),
+							EncodeDefaultValues = true
 						}
 				};
-			var json = serializer.Serialize<dynamic>(dyn);
-			System.Console.WriteLine(json);
+
+			var total = 0;
+
+			stopwatch.Start();
+
+			for (int i = 0; i < count; i++)
+			{
+				total += _RunTest(serializer);
+			}
+
+			stopwatch.Stop();
+
+			System.Console.WriteLine($"# of runs: {count}.");
+			System.Console.WriteLine($"# of items: {total}.");
+			System.Console.WriteLine($"Elapsed time: {stopwatch.Elapsed} ({stopwatch.ElapsedTicks}).");
 
 			System.Console.ReadLine();
 		}
+
+		private static int _RunTest(JsonSerializer serializer)
+		{
+			var text = File.ReadAllText("generated.json");
+			var json = JsonValue.Parse(text);
+			var target = serializer.Deserialize<List<Target>>(json);
+
+			return target.Count;
+		}
 	}
 
-	internal interface ITest
+	internal class Target
 	{
-		[JsonMapTo("test1")]
-		int Test1 { get; set; }
-		[JsonMapTo("test2")]
-		string Test2 { get; set; }
+		[JsonMapTo("_id")]
+		public string Id { get; set; }
+		public int Index { get; set; }
+		public Guid Guid { get; set; }
+		public bool IsActive { get; set; }
+		public string Balance { get; set; }
+		public Uri Picture { get; set; }
+		public int Age { get; set; }
+		public EyeColor EyeColor { get; set; }
+		public string Name { get; set; }
+		public Gender Gender { get; set; }
+		public string Company { get; set; }
+		public string Email { get; set; }
+		public string Phone { get; set; }
+		public string Address { get; set; }
+		public string About { get; set; }
+		public DateTime Registered { get; set; }
+		public double Latitude { get; set; }
+		public double Longitude { get; set; }
+		public List<string> Tags { get; set; }
+		public IEnumerable<Friend> Friends { get; set; }
+		public string Greeting { get; set; }
+		public string FavoriteFruit { get; set; }
+	}
 
-		event EventHandler SomethingHappened;
+	internal enum EyeColor
+	{
+		Blue,
+		Brown,
+		Black,
+		Green,
+		Hazel,
+	}
 
-		void Action(object withParameter);
-		int Function(string withParameter);
+	internal enum Gender
+	{
+		[Display(Description = "male")]
+		Male,
+		[Display(Description = "female")]
+		Female,
+		[Display(Description = "other")]
+		IIdentifyAsAHelicopter
+	}
+
+	internal class Friend
+	{
+		public int Id { get; set; }
+		public string Name { get; set; }
 	}
 }

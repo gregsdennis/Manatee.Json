@@ -622,7 +622,7 @@ namespace Manatee.Json.Tests.Serialization
 					{"porPgnirtS", "stringValue"},
 					{"porPtnI", 42},
 					{"porPlooB", true},
-						{"MapToMe", 4}
+					{"MapToMe", 4}
 				};
 			var expected = new ObjectWithBasicProps
 				{

@@ -7,18 +7,22 @@ namespace Manatee.Json.Path.Parsing
 {
 	internal class ExpressionFilterParser : IJsonPathParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return input.StartsWith("[?(");
+			if (index + 2 >= input.Length) return false;
+
+			return input[index] == '['&& 
+				input[index + 1] == '?'&&
+				input[index + 2] == '(';
 		}
+
 		public string TryParse(string source, ref int index, ref JsonPath path)
 		{
-			index += 3;
+			index += 2;
 			Expression<bool, JsonValue> expression;
 			var error = JsonPathExpressionParser.Parse(source, ref index, out expression);
 
-			if (error != null)
-				return error;
+			if (error != null) return error;
 
 			if (index >= source.Length) return "Unexpected end of input.";
 			if (source[index] != ']') return "Expected ']'";

@@ -22,12 +22,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			_EnsureDescriptions<T>();
 			var attributes = typeof (T).GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
-			if (!attributes.Any())
-			{
-				var entry = _descriptions[typeof (T)].FirstOrDefault(d => Equals(d.Value, obj));
-				return entry == null ? obj.ToString() : entry.String;
-			}
-			return _BuildFlagsValues(obj, serializer.Options.FlagsEnumSeparator);
+			if (attributes.Any()) return _BuildFlagsValues(obj, serializer.Options);
+
+			var entry = _descriptions[typeof (T)].FirstOrDefault(d => Equals(d.Value, obj));
+			if (entry != null) return entry.String;
+
+			var enumValue = serializer.Options.SerializationNameTransform(obj.ToString());
+			return enumValue;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -38,7 +39,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var entry = _descriptions[typeof (T)].FirstOrDefault(d => string.Equals(d.String, json.String, options));
 			if (entry == null)
 			{
-				return (T) Enum.Parse(typeof (T), json.String);
+				var enumValue = serializer.Options.DeserializationNameTransform(json.String);
+				return (T) Enum.Parse(typeof(T), enumValue, !serializer.Options.CaseSensitiveDeserialization);
 			}
 			return (T) entry.Value;
 		}
@@ -62,7 +64,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var attributes = memInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
 			return attributes.Any() ? ((DisplayAttribute) attributes.First()).Description : name;
 		}
-		private static string _BuildFlagsValues<T>(T obj, string separator)
+		private static string _BuildFlagsValues<T>(T obj, JsonSerializerOptions options)
 		{
 			var descriptions = _descriptions[typeof (T)];
 			var value = Convert.ToInt64(obj);
@@ -78,7 +80,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				}
 				index--;
 			}
-			return string.Join(separator, names);
+			return string.Join(options.FlagsEnumSeparator, names.Select(options.SerializationNameTransform));
 		}
 	}
 }

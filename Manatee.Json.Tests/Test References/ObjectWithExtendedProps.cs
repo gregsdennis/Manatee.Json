@@ -4,6 +4,10 @@ namespace Manatee.Json.Tests.Test_References
 {
 	public class ObjectWithExtendedProps : ObjectWithBasicProps
 	{
+		private readonly object _hashCodeLock = new object();
+
+		private bool _isCalculatingHasCode;
+
 		public ObjectWithExtendedProps LoopProperty { get; set; }
 		public List<int> ListProperty { get; set; }
 		public bool[] ArrayProperty { get; set; }
@@ -22,14 +26,26 @@ namespace Manatee.Json.Tests.Test_References
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return base.Equals(other) && Equals(other.LoopProperty, LoopProperty);
+			return base.Equals(other) && ReferenceEquals(other.LoopProperty, LoopProperty);
 		}
 
 		public override int GetHashCode()
 		{
-			unchecked
+			if (_isCalculatingHasCode) return 0;
+			lock (_hashCodeLock)
 			{
-				return (base.GetHashCode() * 397) ^ (LoopProperty != null ? LoopProperty.GetHashCode() : 0);
+				if (_isCalculatingHasCode) return 0;
+				_isCalculatingHasCode = true;
+
+				int value;
+
+				unchecked
+				{
+					value = (base.GetHashCode() * 397) ^ (LoopProperty != null ? LoopProperty.GetHashCode() : 0);
+				}
+
+				_isCalculatingHasCode = false;
+				return value;
 			}
 		}
 		#endregion

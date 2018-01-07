@@ -9,22 +9,32 @@ namespace Manatee.Json.Path.Operators
 
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
-			return json.Where(v => v.Type == JsonValueType.Array)
-			           .Select(v => (JsonValue) v.Array.Count)
-			           .ToJson();
+			var results = new JsonArray();
+			foreach (var value in json)
+			{
+				if (value.Type == JsonValueType.Array)
+				{
+					results.Add(value.Array.Count);
+				}
+			}
+			return results;
 		}
+
 		public override string ToString()
 		{
 			return ".length";
 		}
+
 		public bool Equals(LengthOperator other)
 		{
 			return !ReferenceEquals(null, other);
 		}
+
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as LengthOperator);
 		}
+
 		public override int GetHashCode()
 		{
 			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode

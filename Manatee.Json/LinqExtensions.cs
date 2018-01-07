@@ -18,11 +18,22 @@ namespace Manatee.Json
 		/// <returns>An equivalent <see cref="JsonArray"/></returns>
 		public static JsonArray ToJson(this IEnumerable<JsonValue> results)
 		{
+			if (results is JsonValue[] array)
+				return new JsonArray(array);
+
 			var json = new JsonArray();
 			json.AddRange(results);
 			return json;
 		}
-
+		/// <summary>
+		/// Converts an <see cref="IDictionary{String, JsonValue}"/> into a <see cref="JsonObject"/>.
+		/// </summary>
+		/// <param name="results">An <see cref="IDictionary{String, JsonValue}"/></param>
+		/// <returns>An equivalent <see cref="JsonObject"/></returns>
+		public static JsonObject ToJson(this IDictionary<string, JsonValue> results)
+		{
+			return new JsonObject(results);
+		}
 		/// <summary>
 		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a
 		/// LINQ query back into a <see cref="JsonObject"/>.

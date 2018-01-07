@@ -4,8 +4,6 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class IsNotEqualExpression<T> : ExpressionTreeBranch<T>, IEquatable<IsNotEqualExpression<T>>
 	{
-		protected override int BasePriority => 1;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			var left = Left.Evaluate(json, root);
@@ -16,7 +14,9 @@ namespace Manatee.Json.Path.Expressions
 		}
 		public override string ToString()
 		{
-			return $"{Left} != {Right}";
+			var left = Left is ExpressionTreeBranch<T> ? $"({Left})" : Left.ToString();
+			var right = Right is ExpressionTreeBranch<T> ? $"({Right})" : Right.ToString();
+			return $"{left} != {right}";
 		}
 		public bool Equals(IsNotEqualExpression<T> other)
 		{

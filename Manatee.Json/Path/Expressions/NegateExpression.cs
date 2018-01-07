@@ -6,15 +6,13 @@ namespace Manatee.Json.Path.Expressions
 	{
 		public ExpressionTreeNode<T> Root { get; set; }
 
-		protected override int BasePriority => 6;
-
 		public override object Evaluate(T json, JsonValue root)
 		{
 			return -Convert.ToDouble(Root.Evaluate(json, root));
 		}
 		public override string ToString()
 		{
-			return Root is AddExpression<T> || Root is SubtractExpression<T>
+			return Root is ExpressionTreeBranch<T>
 					   ? $"-({Root})"
 				       : $"-{Root}";
 		}

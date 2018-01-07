@@ -94,49 +94,64 @@ namespace Manatee.Json.Serialization
 		/// <returns>The mapped type if a mapping exists; otherwise the abstraction type.</returns>
 		public Type GetMap(Type type)
 		{
-			if (!type.GetTypeInfo().IsAbstract && !type.GetTypeInfo().IsInterface) return type;
 			if (_registry.TryGetValue(type, out Type tConcrete)) return tConcrete;
 
-			if (type.GetTypeInfo().IsGenericType)
+			var typeInfo = type.GetTypeInfo();
+			if (typeInfo.IsGenericType)
 			{
 				var genericDefinition = type.GetGenericTypeDefinition();
-				var genericMatches = _registry.Where(t => t.Key.GetTypeInfo().IsGenericTypeDefinition && t.Key.GetGenericTypeDefinition() == genericDefinition).ToList();
-				if (genericMatches.Any())
+				foreach (var genericMatch in _registry)
 				{
-					var typeArguments = type.GetTypeArguments();
-					return genericMatches.First().Value.MakeGenericType(typeArguments);
+					if (genericMatch.Key.GetTypeInfo().IsGenericTypeDefinition && genericMatch.Key.GetGenericTypeDefinition() == genericDefinition)
+					{
+						var typeArguments = type.GetTypeArguments();
+						return genericMatch.Value.MakeGenericType(typeArguments);
+					}
 				}
+			}
+			if (!typeInfo.IsAbstract && !typeInfo.IsInterface)
+			{
+				_registry[type] = type;
+				return type;
 			}
 			return type;
 		}
 
 		internal T CreateInstance<T>(JsonValue json, IResolver resolver)
 		{
-			var type = typeof (T);
-			if (type.GetTypeInfo().IsAbstract || type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsGenericType)
+			var typeInfo = typeof(T).GetTypeInfo();
+			var resolveSlow = typeInfo.IsAbstract || typeInfo.IsInterface || typeInfo.IsGenericType;
+			return resolveSlow
+				       ? _ResolveSlow<T>(json, resolver)
+				       : resolver.Resolve<T>();
+		}
+
+		private T _ResolveSlow<T>(JsonValue json, IResolver resolver)
+		{
+			if (json != null && json.Type == JsonValueType.Object && json.Object.ContainsKey(Constants.TypeKey))
 			{
-				if ((json != null) && (json.Type == JsonValueType.Object) && (json.Object.ContainsKey(Constants.TypeKey)))
-				{
-					var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
-					return (T) resolver.Resolve(concrete);
-				}
-				if (!_registry.TryGetValue(type, out Type tConcrete))
-				{
-					if (type.GetTypeInfo().IsGenericType)
-						type = type.GetGenericTypeDefinition();
-					_registry.TryGetValue(type, out tConcrete);
-				}
-
-				if (tConcrete != null)
-				{
-					if (tConcrete.GetTypeInfo().IsGenericTypeDefinition)
-						tConcrete = tConcrete.MakeGenericType(typeof(T).GetTypeArguments());
-					return (T) resolver.Resolve(tConcrete);
-				}
-
-				if (type.GetTypeInfo().IsInterface)
-					return TypeGenerator.Generate<T>();
+				var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
+				return (T)resolver.Resolve(concrete);
 			}
+
+			var type = typeof(T);
+			if (!_registry.TryGetValue(type, out Type tConcrete))
+			{
+				if (type.GetTypeInfo().IsGenericType)
+					type = type.GetGenericTypeDefinition();
+				_registry.TryGetValue(type, out tConcrete);
+			}
+
+			if (tConcrete != null)
+			{
+				if (tConcrete.GetTypeInfo().IsGenericTypeDefinition)
+					tConcrete = tConcrete.MakeGenericType(typeof(T).GetTypeArguments());
+				return (T)resolver.Resolve(tConcrete);
+			}
+
+			if (type.GetTypeInfo().IsInterface)
+				return TypeGenerator.Generate<T>();
+
 			return resolver.Resolve<T>();
 		}
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Manatee.Json.Path.SearchParameters
 {
@@ -15,39 +14,56 @@ namespace Manatee.Json.Path.SearchParameters
 
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{
-			return new JsonArray(json.SelectMany(v =>
-				{
-					switch (v.Type)
-					{
-						case JsonValueType.Object:
-							return v.Object.Values.SelectMany(jv => Find(new[] {jv}, root)).ToList();
-						case JsonValueType.Array:
-							var matches = _query.Find(v.Array, root).ToList();
-							var search = v.Array.SelectMany(jv => Find(new[] {jv}, root));
-							matches.AddRange(search);
-							return matches;
-						default:
-							return Enumerable.Empty<JsonValue>();
-					}
-				}));
+			var results = new JsonArray();
+
+			foreach (var value in json)
+			{
+				_Find(value, root, results);
+			}
+
+			return results;
 		}
+
 		public override string ToString()
 		{
 			return $"[{_query}]";
 		}
+
 		public bool Equals(ArraySearchParameter other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(_query, other._query);
 		}
+
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as ArraySearchParameter);
 		}
+
 		public override int GetHashCode()
 		{
 			return _query?.GetHashCode() ?? 0;
+		}
+
+		private void _Find(JsonValue value, JsonValue root, JsonArray results)
+		{
+			switch (value.Type)
+			{
+				case JsonValueType.Object:
+					foreach (var subValue in value.Object.Values)
+					{
+						_Find(subValue, root, results);
+					}
+					break;
+				case JsonValueType.Array:
+					results.AddRange(_query.Find(value.Array, root));
+					foreach (var subValue in value.Array)
+					{
+						_Find(subValue, root, results);
+					}
+					break;
+			}
 		}
 	}
 }

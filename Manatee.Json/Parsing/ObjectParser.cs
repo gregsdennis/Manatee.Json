@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +14,11 @@ namespace Manatee.Json.Parsing
 		}
 		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
 		{
+			value = null;
+
+			bool complete = false;
+
 			var obj = new JsonObject();
-			value = obj;
 			var length = source.Length;
 			index++;
 			while (index < length)
@@ -25,6 +29,7 @@ namespace Manatee.Json.Parsing
 				if (c == '}')
 					if (obj.Count == 0)
 					{
+						complete = true;
 						index++;
 						break;
 					}
@@ -55,17 +60,26 @@ namespace Manatee.Json.Parsing
 				index++;
 				if (c == '}')
 				{
+					complete = true;
 					break;
 				}
 				if (c != ',') return "Expected ','.";
 			}
+
+			if (!complete)
+				return "Unterminated object (missing '}').";
+
+			value = obj;
 			return null;
 		}
-		public string TryParse(StreamReader stream, out JsonValue value)
+		public string TryParse(TextReader stream, out JsonValue value)
 		{
+			value = null;
+
+			bool complete = false;
+
 			var obj = new JsonObject();
-			value = obj;
-			while (!stream.EndOfStream)
+			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '{' or ','
 				var message = stream.SkipWhiteSpace(out char c);
@@ -74,6 +88,7 @@ namespace Manatee.Json.Parsing
 				if (c == '}')
 					if (obj.Count == 0)
 					{
+						complete = true;
 						stream.Read(); // waste the '}'
 						break;
 					}
@@ -94,7 +109,7 @@ namespace Manatee.Json.Parsing
 					return "Expected ':'.";
 				}
 				stream.Read(); // waste the ':'
-				// get value (whitespace is removed in Parse)
+							   // get value (whitespace is removed in Parse)
 				message = JsonParser.Parse(stream, out item);
 				obj.Add(key, item);
 				if (message != null) return message;
@@ -103,64 +118,104 @@ namespace Manatee.Json.Parsing
 				// check for end or separator
 				if (c == '}')
 				{
+					complete = true;
 					stream.Read(); // waste the '}'
 					break;
 				}
 				if (c != ',') return "Expected ','.";
 			}
+
+			if (!complete)
+				return "Unterminated object (missing '}').";
+
+			value = obj;
 			return null;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(StreamReader stream, CancellationToken token)
+		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
+			bool complete = false;
+
 			var obj = new JsonObject();
-			var value = obj;
-			while (!stream.EndOfStream)
+
+			var scratch = SmallBufferCache.Acquire(1);
+
+			string errorMessage = null;
+			while (stream.Peek() != -1)
 			{
 				if (token.IsCancellationRequested)
-					return ("Parsing incomplete. The task was cancelled.", null);
-				await stream.TryRead(); // waste the '{' or ','
-				var (message, c) = await stream.SkipWhiteSpaceAsync();
-				if (message != null) return (message, value);
+				{
+					errorMessage = "Parsing incomplete. The task was cancelled.";
+					break;
+				}
+				await stream.TryRead(scratch, 0, 1, token); // waste the '{' or ','
+				char c;
+				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
+				if (errorMessage != null) break;
 				// check for empty object
 				if (c == '}')
 					if (obj.Count == 0)
 					{
-						await stream.TryRead(); // waste the '}'
+						complete = true;
+						await stream.TryRead(scratch, 0, 1, token); // waste the '}'
 						break;
 					}
-					else return ("Expected key.", value);
+					else
+					{
+						errorMessage = "Expected key.";
+						break;
+					}
 				// get key
-				(message, c) = await stream.SkipWhiteSpaceAsync();
-				if (message != null) return (message, value);
-				if (c != '\"') return ("Expected key.", value);
+				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
+				if (errorMessage != null) break; ;
+				if (c != '\"')
+				{
+					errorMessage = "Expected key.";
+					break;
+				}
+
 				JsonValue item;
-				(message, item) = await JsonParser.TryParseAsync(stream, token);
-				if (message != null) return (message, value);
+				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
+				if (errorMessage != null) break;
 				var key = item.String;
 				// check for colon
-				(message, c) = await stream.SkipWhiteSpaceAsync();
-				if (message != null) return (message, value);
+				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
+				if (errorMessage != null) break;
 				if (c != ':')
 				{
 					obj.Add(key, null);
-					return ("Expected ':'.", value);
+					errorMessage = "Expected ':'.";
+					break;
 				}
-				await stream.TryRead(); // waste the ':'
-				// get value (whitespace is removed in Parse)
-				message = JsonParser.Parse(stream, out item);
+				await stream.TryRead(scratch, 0, 1, token); // waste the ':'
+													 // get value (whitespace is removed in Parse)
+				errorMessage = JsonParser.Parse(stream, out item);
 				obj.Add(key, item);
-				if (message != null) return (message, value);
-				(message, c) = await stream.SkipWhiteSpaceAsync();
-				if (message != null) return (message, value);
+				if (errorMessage != null) break;
+				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
+				if (errorMessage != null) break;
 				// check for end or separator
 				if (c == '}')
 				{
-					await stream.TryRead(); // waste the '}'
+					complete = true;
+					await stream.TryRead(scratch, 0, 1, token); // waste the '}'
 					break;
 				}
-				if (c != ',') return ("Expected ','.", value);
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					break;
+				}
 			}
-			return (null, value);
+
+			if (!complete)
+			{
+				errorMessage = "Unterminated object (missing '}').";
+			}
+
+			JsonValue value = errorMessage == null ? obj : null;
+
+			SmallBufferCache.Release(scratch);
+			return (errorMessage, value);
 		}
 	}
 }

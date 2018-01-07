@@ -116,21 +116,5 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				throw;
 			}
 		}
-
-		[Test]
-		[Ignore("Test for debugging purposes only")]
-		public void RunOne()
-		{
-			var testName = "propertyNames_validation.some_property_names_invalid";
-
-			var selectedTest = _LoadSchemaJson(Draft06TestFolder)
-				.First(d => Equals(d.Arguments[3], testName));
-
-			// ReSharper disable PossibleInvalidCastException
-			_Run<JsonSchema06>((string) selectedTest.Arguments[0],
-			                   (JsonValue) selectedTest.Arguments[0],
-			                   (JsonValue) selectedTest.Arguments[0]);
-			// ReSharper restore PossibleInvalidCastException
-		}
 	}
 }

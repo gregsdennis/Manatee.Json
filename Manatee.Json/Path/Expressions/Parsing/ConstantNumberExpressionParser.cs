@@ -4,21 +4,18 @@ namespace Manatee.Json.Path.Expressions.Parsing
 {
 	internal class ConstantNumberExpressionParser : IJsonPathExpressionParser
 	{
-		public bool Handles(string input)
+		public bool Handles(string input, int index)
 		{
-			return char.IsDigit(input[0]);
+			return char.IsDigit(input[index]);
 		}
-		public string TryParse<T>(string source, ref int index, out ExpressionTreeNode<T> node)
+		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
 		{
-			double? number;
-			var error = source.GetNumber(ref index, out number);
-			if (error != null)
-			{
-				node = null;
-				return error;
-			}
+			expression = null;
 
-			node = new ValueExpression<T> {Value = number};
+			var error = source.GetNumber(ref index, out var number);
+			if (error != null) return error;
+
+			expression = new ValueExpression { Value = number };
 			return null;
 		}
 	}

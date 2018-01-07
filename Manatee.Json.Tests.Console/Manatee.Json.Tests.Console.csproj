@@ -6,7 +6,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Humanizer">
+      <HintPath>..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="generated.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

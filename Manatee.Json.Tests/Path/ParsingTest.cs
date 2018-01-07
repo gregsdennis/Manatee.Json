@@ -260,5 +260,35 @@ namespace Manatee.Json.Tests.Path
 		{
 			Run(JsonPathWith.Search(""), "$..''");
 		}
+		[Test]
+		public void UnaryNegate_WithAdd()
+		{
+			Run(JsonPathWith.Array(jv => jv.Length() + -3 > 1), "$[?(@.length + -3 > 1)]");
+		}
+		[Test]
+		public void UnaryNegate_WithSubtract()
+		{
+			Run(JsonPathWith.Array(jv => jv.Length() - -3 > 1), "$[?(@.length - -3 > 1)]");
+		}
+		[Test]
+		public void UnaryNegate_WithMultiply()
+		{
+			Run(JsonPathWith.Array(jv => jv.Length() * -3 > 1), "$[?(@.length * -3 > 1)]");
+		}
+		[Test]
+		public void UnaryNegate_WithDivide()
+		{
+			Run(JsonPathWith.Array(jv => jv.Length() / -3 > 1), "$[?(@.length / -3 > 1)]");
+		}
+		[Test]
+		public void UnaryNegate_WithModulo()
+		{
+			Run(JsonPathWith.Array(jv => jv.Length() % -3 > 1), "$[?(@.length % -3 > 1)]");
+		}
+		[Test]
+		public void Complicated_SubtractNegate()
+		{
+			Run(JsonPathWith.Array(jv => (jv.Length() - -3) - -5 > 1), "$[?((@.length - -3)--5 > 1)]");
+		}
 	}
 }
