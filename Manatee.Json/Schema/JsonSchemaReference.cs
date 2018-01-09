@@ -212,12 +212,11 @@ namespace Manatee.Json.Schema
 				if (value.Type == JsonValueType.Object)
 				{
 					if (!value.Object.ContainsKey(unescaped)) return null;
-					JsonValue id;
 					// There's not really another way to do this well without the reference knowing what
 					// version schema it should be using at each step in the path, so we test for both.
 					// Since draft-06's '$id' is less likely to be used as a regular JSON property, we
 					// check it first.
-					if (value.Object.TryGetValue("$id", out id) || value.Object.TryGetValue("id", out id))
+					if (value.Object.TryGetValue("$id", out var id) || value.Object.TryGetValue("id", out id))
 					{
 						documentPath = Uri.TryCreate(id.String, UriKind.Absolute, out Uri uri)
 							               ? uri
