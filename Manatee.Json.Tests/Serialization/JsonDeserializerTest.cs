@@ -824,5 +824,45 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.IsTrue(expected.ReadOnlyDictionaryProp.SequenceEqual(actual.ReadOnlyDictionaryProp));
 		}
+		[Test]
+		public void DeserializeDictionaryWithDefaultValues()
+		{
+			JsonValue target = new JsonObject
+				{
+					["A"] = true,
+					["B"] = false
+				};
+
+			var expected = new Dictionary<string, bool>
+				{
+					["A"] = true,
+					["B"] = false
+				};
+
+			var serializer = new JsonSerializer();
+			var json = serializer.Deserialize<Dictionary<string, bool>>(target);
+
+			Assert.AreEqual(expected, json);
+		}
+		[Test]
+		public void DeserializeDictionaryWithNullValues()
+		{
+			JsonValue target = new JsonObject
+				{
+					["A"] = true,
+					["B"] = null
+				};
+
+			var expected = new Dictionary<string, bool>
+				{
+					["A"] = true,
+					["B"] = false
+				};
+
+			var serializer = new JsonSerializer();
+			var json = serializer.Deserialize<Dictionary<string, bool>>(target);
+
+			Assert.AreEqual(expected, json);
+		}
 	}
 }
