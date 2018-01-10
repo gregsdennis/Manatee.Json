@@ -405,7 +405,7 @@ namespace Manatee.Json.Tests
 							PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite
 						}
 				};
-			var expected = new JsonObject
+			JsonValue expected = new JsonObject
 				{
 					["A"] = "00:00:30",
 					["B"] = "00:00:30"
@@ -413,7 +413,7 @@ namespace Manatee.Json.Tests
 
 			var json = new {A = TimeSpan.FromSeconds(30), B = TimeSpan.FromSeconds(30)};
 			var actual = serializer.Serialize(json);
-			// {"A":"00:00:30","B":{"#Ref":"94e343ba-4ffd-4402-80be-67feb8299d90"}}
+			// produces {"A":"00:00:30","B":{"#Ref":"94e343ba-4ffd-4402-80be-67feb8299d90"}}
 
 			Assert.AreEqual(expected, actual);
 		}
