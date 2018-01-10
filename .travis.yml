@@ -1,7 +1,0 @@
-language: csharp
-solution: Manatee.Json.sln
-mono: none
-dotnet: 2.1.4
-script:
-  - dotnet build
-  - dotnet test ./Manatee.Json.Tests/Manatee.Json.Tests.csproj
