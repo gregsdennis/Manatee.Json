@@ -455,5 +455,28 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
+
+		[Test]
+		public void Issue130_SerializingStructsShouldNotProduceReferences()
+		{
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite
+						}
+				};
+			JsonValue expected = new JsonObject
+				{
+					["A"] = "00:00:30",
+					["B"] = "00:00:30"
+				};
+
+			var json = new {A = TimeSpan.FromSeconds(30), B = TimeSpan.FromSeconds(30)};
+			var actual = serializer.Serialize(json);
+			// produces {"A":"00:00:30","B":{"#Ref":"94e343ba-4ffd-4402-80be-67feb8299d90"}}
+
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }

@@ -54,44 +54,46 @@ namespace Manatee.Json.Serialization.Internal
 			typeToSerialize = serializer.AbstractionMap.GetMap(typeToSerialize);
 			var typeInfo = typeToSerialize.GetTypeInfo();
 			if (typeof (IJsonSchema).GetTypeInfo().IsAssignableFrom(typeInfo))
-				return _BuildSerializer(_schemaSerializer);
+				return _BuildSerializer(_schemaSerializer, typeInfo);
 			if (serializer.CustomSerializations.IsRegistered(typeToSerialize))
-				return _BuildSerializer(_registeredObjectSerializer);
+				return _BuildSerializer(_registeredObjectSerializer, typeInfo);
 			if (typeof (IJsonSerializable).GetTypeInfo().IsAssignableFrom(typeInfo))
-				return _BuildSerializer(_jsonSerializableSerializer);
+				return _BuildSerializer(_jsonSerializableSerializer, typeInfo);
 			if (typeof (Enum).GetTypeInfo().IsAssignableFrom(typeInfo))
 			{
 				if (json != null)
 				{
 					if (json.Type == JsonValueType.Number)
-						return _BuildSerializer(_enumValueSerializer);
+						return _BuildSerializer(_enumValueSerializer, typeInfo);
 					if (json.Type == JsonValueType.String)
-						return _BuildSerializer(_enumNameSerializer);
+						return _BuildSerializer(_enumNameSerializer, typeInfo);
 				}
 				switch (serializer.Options.EnumSerializationFormat)
 				{
 					case EnumSerializationFormat.AsInteger:
-						return _BuildSerializer(_enumValueSerializer);
+						return _BuildSerializer(_enumValueSerializer, typeInfo);
 					case EnumSerializationFormat.AsName:
-						return _BuildSerializer(_enumNameSerializer);
+						return _BuildSerializer(_enumNameSerializer, typeInfo);
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
 			return _BuildSerializer(_library.TryGetValue(typeToSerialize, out var internalSerializer)
 				                        ? internalSerializer
-										: _autoSerializer);
+										: _autoSerializer, typeInfo);
 		}
 		public static ITypeSerializer GetTypeSerializer<T>(JsonSerializerOptions options)
 		{
 			return _autoSerializer;
 		}
 
-		private static ISerializer _BuildSerializer(ISerializer innerSerializer)
+		private static ISerializer _BuildSerializer(ISerializer innerSerializer, TypeInfo typeInfo)
 		{
+			if (!typeInfo.IsValueType)
+				innerSerializer = new ReferencingSerializer(innerSerializer);
+
 			return new SchemaValidator(
-				new DefaultValueSerializer(
-					new ReferencingSerializer(innerSerializer)));
+				new DefaultValueSerializer(innerSerializer));
 		}
 	}
 }
