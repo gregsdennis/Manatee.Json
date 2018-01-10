@@ -1,7 +1,5 @@
 image: Visual Studio 2017
 
-clone_depth: 3
-
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
@@ -11,16 +9,13 @@ before_build:
  - cd json-patch-tests
  - git remote add source https://github.com/json-patch/json-patch-tests.git
  - git fetch source
- - git rebase --onto master --root source/master
+ - git checkout source/master
  - cd ../Json-Path-Test-Suite
  - git remote add source https://github.com/gregsdennis/JSON-Path-Test-Suite.git
  - git fetch source
- - git rebase --onto master --root source/master
+ - git checkout source/master
  - cd ../Json-Schema-Test-Suite
  - git remote add source https://github.com/json-schema-org/JSON-Schema-Test-Suite.git
  - git fetch source
- - git rebase --onto master --root source/master
+ - git checkout source/master
  - cd ..
-
-# build_script:
-#   - build-local.bat
