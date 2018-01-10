@@ -1,4 +1,3 @@
-platform: AnyCPU
 configuration: Release
 
 build_script:
