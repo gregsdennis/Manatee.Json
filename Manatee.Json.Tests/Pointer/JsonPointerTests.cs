@@ -1,65 +1,94 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Manatee.Json.Pointer;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Pointer
 {
 	[TestFixture]
-	public class SpecificationTests
+	public class JsonPointerTests
 	{
-		public static IEnumerable ExampleCases
+		public static IEnumerable ErrorCases
 		{
 			get
 			{
-				yield return new TestCaseData("", (JsonValue) new JsonObject
-					{
-						["foo"] = new JsonArray {"bar", "baz"},
-						[""] = 0,
-						["a/b"] = 1,
-						["c%d"] = 2,
-						["e^f"] = 3,
-						["g|h"] = 4,
-						["i\\j"] = 5,
-						["k\"l"] = 6,
-						[" "] = 7,
-						["m~n"] = 8,
-					});
-				yield return new TestCaseData("/foo", (JsonValue) new JsonArray{"bar", "baz"});
-				yield return new TestCaseData("/foo/0", new JsonValue("bar"));
-				yield return new TestCaseData("/", new JsonValue(0));
-				yield return new TestCaseData("/a~1b", new JsonValue(1));
-				yield return new TestCaseData("/c%d", new JsonValue(2));
-				yield return new TestCaseData("/e^f", new JsonValue(3));
-				yield return new TestCaseData("/g|h", new JsonValue(4));
-				yield return new TestCaseData("/i\\j", new JsonValue(5));
-				yield return new TestCaseData("/k\"l", new JsonValue(6));
-				yield return new TestCaseData("/ ", new JsonValue(7));
-				yield return new TestCaseData("/m~0n", new JsonValue(8));
+				yield return new TestCaseData("/d", "/d");
+				yield return new TestCaseData("/a/0", "/a/0");
+				yield return new TestCaseData("/d/something", "/d");
+				yield return new TestCaseData("/b/false", "/b/false");
+				yield return new TestCaseData("/b/-1", "/b/-1");
+				yield return new TestCaseData("/b/5", "/b/5");
+				yield return new TestCaseData("/c/1", "/c/1");
 			}
 		}
 
-		[TestCaseSource(nameof(ExampleCases))]
-		public void Example(string pointerString, JsonValue expected)
+		[TestCaseSource(nameof(ErrorCases))]
+		public void Errors(string pointerString, string expectedError)
 		{
 			var target = new JsonObject
 				{
-					["foo"] = new JsonArray {"bar", "baz"},
-					[""] = 0,
-					["a/b"] = 1,
-					["c%d"] = 2,
-					["e^f"] = 3,
-					["g|h"] = 4,
-					["i\\j"] = 5,
-					["k\"l"] = 6,
-					[" "] = 7,
-					["m~n"] = 8,
+					["a"] = 1,
+					["b"] = new JsonArray {5, true, null},
+					["c"] = new JsonObject
+						{
+							["false"] = false
+						}
 				};
+
 
 			var pointer = JsonPointer.Parse(pointerString);
 
 			var actual = pointer.Evaluate(target);
 
-			Assert.AreEqual(expected, actual);
+			Assert.AreEqual($"No value found at '{expectedError}'", actual.Error);
+		}
+
+		[Test]
+		public void IndexingAnObjectInterpretsIndexAsKey()
+		{
+			var target = new JsonObject
+				{
+					["a"] = 1,
+					["b"] = new JsonArray {5, true, null},
+					["c"] = new JsonObject
+						{
+							["0"] = false
+						}
+				};
+
+
+			var pointer = JsonPointer.Parse("/c/0");
+
+			var actual = pointer.Evaluate(target);
+
+			if (actual.Error != null)
+				Console.WriteLine(actual.Error);
+
+			Assert.AreEqual((JsonValue) false, actual.Result);
+		}
+
+		[Test]
+		public void GettingLastItemInArray()
+		{
+			var target = new JsonObject
+				{
+					["a"] = 1,
+					["b"] = new JsonArray {5, true, null},
+					["c"] = new JsonObject
+						{
+							["0"] = false
+						}
+				};
+
+
+			var pointer = JsonPointer.Parse("/b/-");
+
+			var actual = pointer.Evaluate(target);
+
+			if (actual.Error != null)
+				Console.WriteLine(actual.Error);
+
+			Assert.AreEqual(JsonValue.Null, actual.Result);
 		}
 	}
 }
