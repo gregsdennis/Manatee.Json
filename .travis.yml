@@ -1,8 +1,10 @@
 language: csharp
 solution: Manatee.Json.sln
+mono: none
+dotnet: 2.1.4
 install:
   - nuget restore Manatee.Json.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release Manatee.Json.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Manatee.Json.Tests/bin/Release/Manatee.Json.Tests.dll
+  - dotnet build
+  - dotnet test ./Manatee.Json.Tests/Manatee.Json.Tests.csproj
