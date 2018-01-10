@@ -19,6 +19,7 @@ namespace Manatee.Json.Tests.Pointer
 				yield return new TestCaseData("/b/-1", "/b/-1");
 				yield return new TestCaseData("/b/5", "/b/5");
 				yield return new TestCaseData("/c/1", "/c/1");
+				yield return new TestCaseData("/b/001", "/b/001");
 			}
 		}
 

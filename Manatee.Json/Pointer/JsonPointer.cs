@@ -42,9 +42,13 @@ namespace Manatee.Json.Pointer
 			if (current.Type == JsonValueType.Array)
 			{
 				if (int.TryParse(segment, out var index))
-					return 0 <= index && index < current.Array.Count
-						       ? current.Array[index]
-						       : null;
+				{
+					return (segment != "0" && segment.StartsWith("0")) ||
+					       (0 > index || index >= current.Array.Count)
+						       ? null
+						       : current.Array[index];
+				}
+
 				if (segment == "-")
 					return current.Array[current.Array.Count-1];
 			}
