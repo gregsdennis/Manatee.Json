@@ -7,6 +7,7 @@ using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Path;
 using Manatee.Json.Tests.Schema;
+using Manatee.Json.Tests.Test_References;
 using NUnit.Framework;
 // ReSharper disable EqualExpressionComparison
 // ReSharper disable ExpressionIsAlwaysNull
@@ -393,6 +394,66 @@ namespace Manatee.Json.Tests
 			{
 				JsonSchemaOptions.Download = null;
 			}
+		}
+
+		[Test]
+		public void Issue126_DictionarySerializationWithDefaultValuesExtendedExample()
+		{
+			var a = new Issue126
+				{
+					X = 1,
+					Y = new Dictionary<string, bool>
+						{
+							{"t", true},
+							{"f", false}, // ("f", false) != default((string, bool))
+						},
+					Z = new Dictionary<string, Issue126>
+						{
+							{"a", null}, // ("a", null) != default((string, A))
+							{
+								"b", new Issue126
+									{
+										X = 2,
+										// Y is the default value for Dictionary<TKey,TValue>
+										Z = new Dictionary<string, Issue126>
+											{
+												{"c", new Issue126 {X = 3}} // Y and Z are default values
+											}
+									}
+							},
+						},
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["X"] = 1,
+					["Y"] = new JsonObject
+						{
+							["t"] = true,
+							["f"] = false
+						},
+					["Z"] = new JsonObject
+						{
+							["a"] = null,
+							["b"] = new JsonObject
+								{
+									["X"] = 2,
+									["Z"] = new JsonObject
+										{
+											["c"] = new JsonObject
+												{
+													["X"] = 3
+
+												}
+										}
+								}
+						}
+				};
+			var serializer = new JsonSerializer();
+
+			var actual = serializer.Serialize(a);
+
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]

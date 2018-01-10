@@ -781,7 +781,7 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, json);
 		}
 		[Test]
-		public void SerializestringKeyedDictionary()
+		public void SerializeStringKeyedDictionary()
 		{
 			var target = new Dictionary<string, object>
 				{
@@ -804,6 +804,26 @@ namespace Manatee.Json.Tests.Serialization
 							SerializationNameTransform = s => s.ToLower()
 						}
 				};
+			var json = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
+		[Test]
+		public void SerializeDictionaryWithDefaultValues()
+		{
+			var target = new Dictionary<string, bool>
+				{
+					["A"] = true,
+					["B"] = false
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["A"] = true,
+					["B"] = false
+				};
+
+			var serializer = new JsonSerializer();
 			var json = serializer.Serialize(target);
 
 			Assert.AreEqual(expected, json);
