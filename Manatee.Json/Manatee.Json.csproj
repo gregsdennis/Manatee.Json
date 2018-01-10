@@ -11,7 +11,12 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v9.5.2
+    <PackageReleaseNotes>v9.6.0
+Added JSON Pointer support.
+BUG FIX: Value-type serialization generating reference tags.
+BUG FIX: Default value serialized as null within dictionaries.
+
+v9.5.2
 Major speed &amp; memory performance enhancements.
 
 v9.5.1
@@ -26,57 +31,10 @@ Added autoregistration for the following (can be overridden):
  - IEnumerable&lt;T&gt;, ICollection&lt;T&gt;, IList&lt;T&gt; to List&lt;T&gt;
  - IDictionary&lt;T&gt; to Dictionary&lt;T&gt;
 Added URI serialization.
-
-v9.3.2
-BUG FIX: Attempts to write to read-only properties when options specify read-only properties to be serialized.
-
-v9.3.1
-BUG FIX: Error when deserializing two abstraction types with the same type name (different namespaces).
-
-v9.3.0
-Added defaulted CancellationToken to async parsing.
-Added support for serializing enum-keyed dictionaries.
-
-v9.2.0
-Added instance versions of JsonSerializationAbstractionMap (AbstractionMap) and JsonSerializationTypeRegistry (CustomSerializations) to further customize different serializer instances.  Old types now marked obsolete.
-Added properties to JsonSerializer to support new customizations.
-Added async stream parsing support.
-
-v9.1.1
-BUG FIX: Incorrect access off -&gt; props always null
-
-v9.1.0
-Added JsonOptions.
-Removed null/JsonValue.Null equality as it was confusing to work with.
-
-v9.0.1
-BUG FIX - Autoserializer throwing errors in reflection analysis.
-
-v9.0.0
-Added Required property to JsonSchema04 &amp; JsonSchema06 as IEnumerable&lt;string&gt;.
-BREAKING CHANGES:
-- Changed JsonSchema04.Properties &amp; JsonSchema06.Properties to Dictionary&lt;string, IJsonSchema&gt;.
-- Changed JsonSchema04.Type &amp; JsonSchema06.Type to JsonSchemaType (flags enum).
-- Changed JsonSchema04.Definitions &amp; JsonSchema06.Definitions to Dictionary&lt;string, IJsonSchema&gt;.
-- Changed JsonSchema06.AdditionalItems to IJsonSchema.
-- Removed code marked obsolete
-  - JsonPathWith.Wildcard()
-- Removed types
-  - JsonSchemaPropertyDefinition
-  - JsonSchemaPropertyDefinitionCollection
-  - JsonSchemaTypeDefinition
-  - JsonSchemaMultiTypeDefinition
-  - JsonSchemaTypeDefinitionCollection
-
-v8.3.0
-Added option to serialize only properties defined by type parameter or all properties of target object.
-Added property name transformation.
-Added Schema attribute for validation during deserialization.
-Added support for serializing dynamics.
 </PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>9.5.2.0</FileVersion>
+    <FileVersion>9.6.0.0</FileVersion>
     <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
