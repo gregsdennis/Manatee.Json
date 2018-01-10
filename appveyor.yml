@@ -6,6 +6,12 @@ configuration: Release
 before_build:
  - nuget restore
  - dotnet restore
+ - cd json-patch-tests
+ - git pull https://github.com/json-patch/json-patch-tests.git master
+ - cd ../Json-Path-Test-Suite
+ - git pull https://github.com/gregsdennis/JSON-Path-Test-Suite.git master
+ - cd ../Json-Schema-Test-Suite
+ - git pull https://github.com/json-schema-org/JSON-Schema-Test-Suite.git master
 
 # build_script:
 #   - build-local.bat
