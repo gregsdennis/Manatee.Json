@@ -2,7 +2,7 @@ platform: AnyCPU
 configuration: Release
 
 build_script:
-  - dotnet build .\Manatee.Jon.sln
+  - dotnet build .\Manatee.Json.sln
 
 test_script:
   - dotnet test .\Manatee.Json.Tests\
