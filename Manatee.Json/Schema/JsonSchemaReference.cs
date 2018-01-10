@@ -203,6 +203,7 @@ namespace Manatee.Json.Schema
 		// TODO: This is a JSON pointer.  Since JsonPatch uses it, it might be beneficial to implement as an object or at least reuse this.
 		private IJsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
+			// I'd like to use the JsonPointer implementation here, but I have to also manage the document path...
 			var properties = path.Split('/').Skip(1).ToList();
 			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, _schemaFactory, documentPath);
 			var value = root;
