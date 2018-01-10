@@ -127,6 +127,8 @@
     <Compile Include="Path\TestSuite\PathTestSet.cs" />
     <Compile Include="Path\ToStringTest.cs" />
     <Compile Include="JsonOptionsTest.cs" />
+    <Compile Include="Pointer\JsonPointerTests.cs" />
+    <Compile Include="Pointer\SpecificationTests.cs" />
     <Compile Include="Schema\ExamplesSchemaTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SchemaValidationResultsExtensions.cs" />
@@ -226,6 +228,7 @@
       <Name>Manatee.Json</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

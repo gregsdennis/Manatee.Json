@@ -35,10 +35,9 @@ namespace Manatee.Json.Tests.Patch
         [TestCaseSource(nameof(TestData))]
         public void Run(JsonValue json, string path, JsonValue expectedTarget, JsonValue expectedValue)
         {
-            var (actualTarget, _, _, actualValue, success) = JsonPointerFunctions.ResolvePointer(json, path);
+            var (actualTarget, _, _, _) = JsonPointerFunctions.ResolvePointer(json, path);
             
             Assert.AreEqual(expectedTarget, actualTarget);
-            Assert.AreEqual(expectedValue, actualValue);
         }
     }
 }
