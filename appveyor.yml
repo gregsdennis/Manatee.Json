@@ -1,0 +1,9 @@
+image: Visual Studio 2017
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+before_build:
+ - nuget restore
+ - dotnet restore
+ - git submodule update --init

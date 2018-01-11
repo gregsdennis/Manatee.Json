@@ -16,5 +16,6 @@
 **/*.nupkg
 msbuild.log
 nuget.exe
+TestResult.xml
 
 **/.DS_Store
