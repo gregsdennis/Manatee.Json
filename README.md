@@ -67,7 +67,7 @@ There are many ways to customize serialization.  See the wiki page for more deta
 Manatee.Json also:
 
 - Is covered by over 2000 unit tests
-- Conforms to ECMA-404: The JSON specification
+- Conforms to RFC-8259: The JSON specification
 - Supports .Net Standard 1.3
 - Outputs compact and prettified JSON text
 - Supports [JSON Schema](http://json-schema.org/) (both draft-04/06/07) **INCLUDED AND FREE!** (with object model)
