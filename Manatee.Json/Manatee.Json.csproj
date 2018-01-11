@@ -33,7 +33,6 @@ Added autoregistration for the following (can be overridden):
 Added URI serialization.
 </PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
     <FileVersion>9.6.0.0</FileVersion>
     <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
