@@ -24,7 +24,16 @@ if exist "%programfiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15
     set msbuild="%programfiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe"
 )
 
+REM Run build		
+call "%msbuild%" Manatee.Json.sln /p:Configuration="%config%" /m:1 /v:m /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false		
+if not "%errorlevel%"=="0" goto failure
+
 REM package
 call "%msbuild%" Manatee.Json\Manatee.Json.csproj /t:pack /p:Configuration="%config%"
-
-exit "%errorlevel%"
+if not "%errorlevel%"=="0" goto failure		
+		
+:success		
+exit 0		
+ 		  
+:failure
+exit -1 
