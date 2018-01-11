@@ -6,6 +6,7 @@ configuration: Release
 before_build:
  - nuget restore
  - dotnet restore
+ - git submodule -q update --init
  - dir /s
 #  - git remote add source https://github.com/json-patch/json-patch-tests.git
 #  - git fetch source
