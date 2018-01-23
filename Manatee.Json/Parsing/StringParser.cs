@@ -65,10 +65,9 @@ namespace Manatee.Json.Parsing
 
 			var complete = false;
 			bool mustInterpret = false;
-			char c;
 			while (stream.Peek() != -1)
 			{
-				c = (char)stream.Peek();
+				var c = (char)stream.Peek();
 				if (c == '\\')
 				{
 					mustInterpret = true;
@@ -112,10 +111,9 @@ namespace Manatee.Json.Parsing
 
 			var complete = false;
 			bool mustInterpret = false;
-			char c;
 			while (stream.Peek() != -1)
 			{
-				c = (char)stream.Peek();
+				var c = (char)stream.Peek();
 				if (c == '\\')
 				{
 					mustInterpret = true;
@@ -206,16 +204,15 @@ namespace Manatee.Json.Parsing
 								break;
 							}
 
-							int hex;
-							if (!_IsValidHex(source, index, 4)
-							 || !int.TryParse(source.Substring(index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out hex))
+							if (!_IsValidHex(source, index, 4) ||
+							    !int.TryParse(source.Substring(index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hex))
 							{
 								errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
 								break;
 							}
 
-							if (index + length + 2 < source.Length
-						     && source.IndexOf("\\u", index + length, 2) == index + length)
+							if (index + length + 2 < source.Length &&
+							    source.IndexOf("\\u", index + length, 2) == index + length)
 							{
 								// +2 from \u
 								// +4 from the next four hex chars
@@ -233,6 +230,7 @@ namespace Manatee.Json.Parsing
 									errorMessage = $"Invalid escape sequence: '\\{c}{source.Substring(index, length)}'.";
 									break;
 								}
+
 								hex = StringExtensions.CalculateUtf32(hex, hex2);
 							}
 
@@ -290,10 +288,9 @@ namespace Manatee.Json.Parsing
 
 			int? previousHex = null;
 
-			char c;
 			while (stream.Peek() != -1)
 			{
-				c = (char)stream.Read(); // eat this character
+				var c = (char)stream.Read();
 
 				if (c == '\\')
 				{
@@ -328,8 +325,8 @@ namespace Manatee.Json.Parsing
 						}
 
 						var hexString = new string(buffer, 0, 4);
-						if (!_IsValidHex(hexString, 0, 4)
-						 || !int.TryParse(hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var currentHex))
+						if (!_IsValidHex(hexString, 0, 4) ||
+						    !int.TryParse(hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var currentHex))
 						{
 							StringBuilderCache.Release(builder);
 							return $"Invalid escape sequence: '\\{lookAhead}{hexString}'.";
@@ -390,15 +387,13 @@ namespace Manatee.Json.Parsing
 
 		private static bool _IsValidHex(string source, int offset, int count)
 		{
-			for (int ii = offset; ii < offset + count; ++ii)
+			for (int i = offset; i < offset + count; ++i)
 			{
 				// if not a hex digit
-				if ((source[ii] < '0' || source[ii] > '9')
-				 && (source[ii] < 'A' || source[ii] > 'F')
-				 && (source[ii] < 'a' || source[ii] > 'f'))
-				{
+				if ((source[i] < '0' || source[i] > '9') &&
+				    (source[i] < 'A' || source[i] > 'F') &&
+				    (source[i] < 'a' || source[i] > 'f'))
 					return false;
-				}
 			}
 
 			return true;
@@ -466,12 +461,11 @@ namespace Manatee.Json.Parsing
 
 			int? previousHex = null;
 
-			char c;
 			while (stream.Peek() != -1)
 			{
 				await stream.TryRead(scratch, 0, 1); // eat this character
 
-				c = scratch[0];
+				var c = scratch[0];
 				if (c == '\\')
 				{
 					if (stream.Peek() == -1)

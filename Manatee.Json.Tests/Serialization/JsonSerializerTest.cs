@@ -828,5 +828,41 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, json);
 		}
+		[Test]
+		public void SerializeNullableEnum_WithValue()
+		{
+			JsonValueType? target = JsonValueType.Array;
+
+			JsonValue expected = "Array";
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							EnumSerializationFormat = EnumSerializationFormat.AsName
+						}
+				};
+			var json = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
+		[Test]
+		public void SerializeNullableEnum_WithNullValue()
+		{
+			JsonValueType? target = null;
+
+			JsonValue expected = JsonValue.Null;
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							EnumSerializationFormat = EnumSerializationFormat.AsName
+						}
+				};
+			var json = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
 	}
 }

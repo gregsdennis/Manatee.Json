@@ -105,6 +105,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonOrgTests.cs" />
     <Compile Include="Patch\TestSuite\JsonPatchTest.cs" />
     <Compile Include="Patch\JsonPointerResolutionTests.cs" />
     <Compile Include="Patch\TestSuite\JsonPatchTestSuite.cs" />
