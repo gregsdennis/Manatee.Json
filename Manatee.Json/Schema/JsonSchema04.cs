@@ -76,12 +76,12 @@ namespace Manatee.Json.Schema
 						["id"] = new JsonSchema04
 							{
 								Type = JsonSchemaType.String,
-								Format = StringFormat.Uri
+								//Format = StringFormat.Uri
 							},
 						["$schema"] = new JsonSchema04
 							{
 								Type = JsonSchemaType.String,
-								Format = StringFormat.Uri
+								//Format = StringFormat.Uri
 							},
 						["title"] = new JsonSchema04 {Type = JsonSchemaType.String},
 						["description"] = new JsonSchema04 {Type = JsonSchemaType.String},
@@ -198,6 +198,7 @@ namespace Manatee.Json.Schema
 											}
 									}
 							},
+						["format"] = new JsonSchema04 {Type = JsonSchemaType.String},
 						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema04)),
 						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema04)),
 						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema04)),
