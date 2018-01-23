@@ -840,9 +840,9 @@ namespace Manatee.Json.Tests.Serialization
 				};
 
 			var serializer = new JsonSerializer();
-			var json = serializer.Deserialize<Dictionary<string, bool>>(target);
+			var actual = serializer.Deserialize<Dictionary<string, bool>>(target);
 
-			Assert.AreEqual(expected, json);
+			Assert.AreEqual(expected, actual);
 		}
 		[Test]
 		public void DeserializeDictionaryWithNullValues()
@@ -860,9 +860,45 @@ namespace Manatee.Json.Tests.Serialization
 				};
 
 			var serializer = new JsonSerializer();
-			var json = serializer.Deserialize<Dictionary<string, bool>>(target);
+			var actual = serializer.Deserialize<Dictionary<string, bool>>(target);
 
-			Assert.AreEqual(expected, json);
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void DeserializeNullableEnum_WithValue()
+		{
+			JsonValueType? expected = JsonValueType.Array;
+
+			JsonValue target = "Array";
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							EnumSerializationFormat = EnumSerializationFormat.AsName
+						}
+				};
+			var actual = serializer.Deserialize<JsonValueType?>(target);
+
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void DeserializeNullableEnum_WithNullValue()
+		{
+			JsonValueType? expected = null;
+
+			JsonValue target = JsonValue.Null;
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							EnumSerializationFormat = EnumSerializationFormat.AsName
+						}
+				};
+			var actual = serializer.Deserialize<JsonValueType?>(target);
+
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }
