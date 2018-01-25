@@ -742,7 +742,7 @@ namespace Manatee.Json.Schema
 
 		private IJsonSchema _ReadSchema(JsonValue json)
 		{
-			return JsonSchemaFactory.FromJson(json, () => new JsonSchema06(), DocumentPath);
+			return JsonSchemaFactory.FromJson<JsonSchema06>(json, DocumentPath);
 		}
 
 		/// <summary>

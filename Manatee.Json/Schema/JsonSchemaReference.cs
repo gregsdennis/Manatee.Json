@@ -16,7 +16,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
-		private readonly Func<IJsonSchema> _schemaFactory;
+		private readonly Type _schemaType;
 		private Uri _documentPath;
 		private string _id;
 		private string _schema;
@@ -66,8 +66,7 @@ namespace Manatee.Json.Schema
 
 		internal JsonSchemaReference(Type baseSchemaType)
 		{
-			_schemaFactory = _GetSchemaFactory(baseSchemaType ?? throw new ArgumentNullException(nameof(baseSchemaType))) ??
-			                 throw new ArgumentException($"{nameof(baseSchemaType)} must be {nameof(JsonSchema04)}, {nameof(JsonSchema06)} or {nameof(JsonSchema07)}.");
+			_schemaType = baseSchemaType;
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchemaReference"/> class that supports additional schema properties.
@@ -145,8 +144,8 @@ namespace Manatee.Json.Schema
 		/// <param name="other">An object to compare with this object.</param>
 		public bool Equals(IJsonSchema other)
 		{
-			var schema = other as JsonSchemaReference;
-			return schema != null && schema.Reference == Reference &&
+			return other is JsonSchemaReference schema &&
+			       schema.Reference == Reference &&
 			       Equals(Base, schema.Base);
 		}
 		/// <summary>
@@ -205,7 +204,7 @@ namespace Manatee.Json.Schema
 		{
 			// I'd like to use the JsonPointer implementation here, but I have to also manage the document path...
 			var properties = path.Split('/').Skip(1).ToList();
-			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, _schemaFactory, documentPath);
+			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, _schemaType, documentPath);
 			var value = root;
 			foreach (var property in properties)
 			{
@@ -231,7 +230,7 @@ namespace Manatee.Json.Schema
 					value = value.Array[index];
 				}
 			}
-			return JsonSchemaFactory.FromJson(value, _schemaFactory, documentPath);
+			return JsonSchemaFactory.FromJson(value, _schemaType, documentPath);
 		}
 		private static string _Unescape(string reference)
 		{
@@ -245,16 +244,6 @@ namespace Manatee.Json.Schema
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}
 			return unescaped;
-		}
-		private static Func<IJsonSchema> _GetSchemaFactory(Type type)
-		{
-			if (type == typeof(JsonSchema04))
-				return () => new JsonSchema04();
-			if (type == typeof(JsonSchema06))
-				return () => new JsonSchema06();
-			if (type == typeof(JsonSchema07))
-				return () => new JsonSchema07();
-			return null;
 		}
 	}
 }

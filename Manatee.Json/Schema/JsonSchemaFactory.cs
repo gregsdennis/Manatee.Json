@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+using System.Linq;
+using System.Reflection;
 
 namespace Manatee.Json.Schema
 {
@@ -9,50 +10,52 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaFactory
 	{
-		private static readonly List<Type> _integerTypes = new List<Type>
-			{
-				typeof (sbyte),
-				typeof (byte),
-				typeof (char),
-				typeof (short),
-				typeof (ushort),
-				typeof (int),
-				typeof (uint),
-				typeof (long),
-				typeof (ulong)
-			};
-		private static readonly List<Type> _numberTypes = new List<Type>
-			{
-				typeof (sbyte),
-				typeof (byte),
-				typeof (char),
-				typeof (short),
-				typeof (ushort),
-				typeof (int),
-				typeof (uint),
-				typeof (long),
-				typeof (ulong),
-				typeof (double),
-				typeof (decimal)
-			};
+		private class SchemaFactory
+		{
+			public Func<IJsonSchema> Factory { get; set; }
+			public Type SchemaType { get; set; }
+			public string Id { get; set; }
+			public string IdKey { get; set; }
+			public IJsonSchema MetaSchema { get; set; }
+		}
 
-		private static Func<IJsonSchema> _schemaFactory = () => new JsonSchema04();
+		private static readonly List<SchemaFactory> _schemaFactories;
+		private static SchemaFactory _schemaFactory;
+
+		static JsonSchemaFactory()
+		{
+			_schemaFactories = new List<SchemaFactory>();
+
+			RegisterExtendedSchema(JsonSchema04.MetaSchema.Id, () => new JsonSchema04(), JsonSchema04.MetaSchema);
+			RegisterExtendedSchema(JsonSchema06.MetaSchema.Id, () => new JsonSchema06(), JsonSchema06.MetaSchema);
+			RegisterExtendedSchema(JsonSchema07.MetaSchema.Id, () => new JsonSchema07(), JsonSchema07.MetaSchema);
+
+			SetDefaultSchemaVersion<JsonSchema04>();
+		}
 
 		public static void SetDefaultSchemaVersion<T>()
 			where T : IJsonSchema
 		{
 			_SetDefaultSchemaVersion(typeof(T));
 		}
+		public static void RegisterExtendedSchema<T>(string id, Func<T> factory, T metaSchema = default(T))
+			where T : IJsonSchema
+		{
+			var schemaFactory = new SchemaFactory
+				{
+					Factory = () => factory(),
+					SchemaType = typeof(T),
+					Id = id,
+					IdKey = typeof(JsonSchema04).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? "id" : "$id",
+					MetaSchema = metaSchema
+				};
+			_schemaFactories.Add(schemaFactory);
+		}
 		private static void _SetDefaultSchemaVersion(Type type)
 		{
-			if (type == typeof(JsonSchema04))
-				_schemaFactory = () => new JsonSchema04();
-			else if (type == typeof(JsonSchema06))
-				_schemaFactory = () => new JsonSchema06();
-			else if (type == typeof(JsonSchema07))
-				_schemaFactory = () => new JsonSchema07();
-			else
-				throw new ArgumentException($"Only {nameof(JsonSchema04)}, {nameof(JsonSchema06)}, and {nameof(JsonSchema07)} are supported.");
+			var factory = _schemaFactories.FirstOrDefault(f => f.SchemaType == type);
+
+			_schemaFactory = factory ?? throw new ArgumentException($"Schema type '{type}' is not supported.  Has it been registered?");
 		}
 		
 		/// <summary>
@@ -63,9 +66,21 @@ namespace Manatee.Json.Schema
 		/// <returns>A schema object</returns>
 		public static IJsonSchema FromJson(JsonValue json, Uri documentPath = null)
 		{
-			return FromJson(json, _schemaFactory, documentPath);
+			return _FromJson(json, _schemaFactory, documentPath);
 		}
-		internal static IJsonSchema FromJson(JsonValue json, Func<IJsonSchema> schemaFactory, Uri documentPath = null)
+		public static IJsonSchema FromJson<T>(JsonValue json, Uri documentPath = null)
+		{
+			return FromJson(json, typeof(T), documentPath);
+		}
+		public static IJsonSchema FromJson(JsonValue json, Type type, Uri documentPath = null)
+		{
+			var factory = _schemaFactories.FirstOrDefault(f => f.SchemaType == type);
+			if (factory == null)
+				throw new ArgumentException($"Schema type '{type}' is not supported.  Has it been registered?");
+
+			return _FromJson(json, factory, documentPath);
+		}
+		private static IJsonSchema _FromJson(JsonValue json, SchemaFactory schemaFactory, Uri documentPath = null)
 		{
 			if (json == null) return null;
 			IJsonSchema schema = null;
@@ -73,25 +88,14 @@ namespace Manatee.Json.Schema
 			{
 				case JsonValueType.Object:
 					var schemaDeclaration = json.Object.TryGetString("$schema");
-					if (schemaDeclaration == JsonSchema04.MetaSchema.Id)
+					var factory = _schemaFactories.FirstOrDefault(f => f.Id == schemaDeclaration);
+					if (factory != null)
 					{
-						var id = json.Object.TryGetString("id");
-						if (id == JsonSchema04.MetaSchema.Id) return JsonSchema04.MetaSchema;
-						schema = new JsonSchema04();
+						var id = json.Object.TryGetString(factory.IdKey);
+						if (id == factory.MetaSchema.Id) return factory.MetaSchema;
+						schema = factory.Factory();
 					}
-					else if (schemaDeclaration == JsonSchema06.MetaSchema.Id)
-					{
-						var id = json.Object.TryGetString("$id");
-						if (id == JsonSchema06.MetaSchema.Id) return JsonSchema06.MetaSchema;
-						schema = new JsonSchema06();
-					}
-					else if (schemaDeclaration == JsonSchema07.MetaSchema.Id)
-					{
-						var id = json.Object.TryGetString("$id");
-						if (id == JsonSchema07.MetaSchema.Id) return JsonSchema07.MetaSchema;
-						schema = new JsonSchema07();
-					}
-					schema = schema ?? schemaFactory();
+					schema = schema ?? schemaFactory.Factory();
 					if (json.Object.ContainsKey("$ref"))
 						schema = json.Object.Count > 1
 							         ? new JsonSchemaReference(schema.GetType()) {Base = schema}
@@ -101,6 +105,9 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchemaCollection();
 					break;
 				case JsonValueType.Boolean:
+					// not determining draft here is fine
+					// True is intended to pass all instances
+					// False is intended to fail all instances
 					schema = new JsonSchema06();
 					break;
 				default:
