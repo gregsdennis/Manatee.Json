@@ -1,11 +1,8 @@
 ﻿namespace Manatee.Json.Schema
 {
-	public interface IJsonSchemaPropertyValidator { }
-
-	public interface IJsonSchemaPropertyValidator<in T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	public interface IJsonSchemaPropertyValidator
 	{
-		bool Applies(T schema, JsonValue json);
-		SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root);
+		bool Applies(IJsonSchema schema, JsonValue json);
+		SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root);
 	}
 }

@@ -2,18 +2,18 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class ContainsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class ContainsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract IJsonSchema GetContains(T schema);
 
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return json.Type == JsonValueType.Array && GetContains(schema) != null;
+			return schema is T typed && json.Type == JsonValueType.Array && GetContains(typed) != null;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var contains = GetContains(schema);
+			var contains = GetContains((T)schema);
 			if (json.Array.Count == 0)
 				return new SchemaValidationResults(string.Empty, $"Expected an item that matched '{contains}' but no items were found.");
 

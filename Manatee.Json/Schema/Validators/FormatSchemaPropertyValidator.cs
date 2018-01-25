@@ -1,19 +1,20 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class FormatSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class FormatSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract StringFormat GetFormat(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetFormat(schema) != null && JsonSchemaOptions.ValidateFormat &&
+			return schema is T typed && GetFormat(typed) != null && JsonSchemaOptions.ValidateFormat &&
 			       json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (!GetFormat(schema).Validate(json.String))
-				return new SchemaValidationResults(string.Empty, $"Value [{json.String}] is not in an acceptable {GetFormat(schema).Key} format.");
+			var format = GetFormat((T) schema);
+			if (!format.Validate(json.String))
+				return new SchemaValidationResults(string.Empty, $"Value [{json.String}] is not in an acceptable {format.Key} format.");
 			return new SchemaValidationResults();
 		}
 	}

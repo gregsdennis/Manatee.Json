@@ -1,60 +1,64 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal class MaximumSchema04PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema04>
+	internal class MaximumSchema04PropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema04 schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return (schema.Maximum.HasValue || (schema.ExclusiveMaximum ?? false)) &&
+			return schema is JsonSchema04 typed && (typed.Maximum.HasValue || (typed.ExclusiveMaximum ?? false)) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(JsonSchema04 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (schema.ExclusiveMaximum ?? false)
+			var typed = (JsonSchema04) schema;
+			if (typed.ExclusiveMaximum ?? false)
 			{
-				if (json.Number >= schema.Maximum)
-					return new SchemaValidationResults(string.Empty, $"Expected: < {schema.Maximum}; Actual: {json.Number}.");
+				if (json.Number >= typed.Maximum)
+					return new SchemaValidationResults(string.Empty, $"Expected: < {typed.Maximum}; Actual: {json.Number}.");
 			}
 			else
 			{
-				if (json.Number > schema.Maximum)
-					return new SchemaValidationResults(string.Empty, $"Expected: <= {schema.Maximum}; Actual: {json.Number}.");
+				if (json.Number > typed.Maximum)
+					return new SchemaValidationResults(string.Empty, $"Expected: <= {typed.Maximum}; Actual: {json.Number}.");
 			}
 			return new SchemaValidationResults();
 		}
 	}
 	
-	internal class MaximumSchema06PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema06>
+	// TODO: extract a base class for 6/7 
+	internal class MaximumSchema06PropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema06 schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return (schema.Maximum.HasValue || schema.ExclusiveMaximum.HasValue) &&
+			return schema is JsonSchema06 typed && (typed.Maximum.HasValue || typed.ExclusiveMaximum.HasValue) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(JsonSchema06 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var max = schema.ExclusiveMaximum ?? schema.Maximum;
-			var operation = schema.ExclusiveMaximum.HasValue ? "<" : "<=";
+			var typed = (JsonSchema06) schema;
+			var max = typed.ExclusiveMaximum ?? typed.Maximum;
+			var operation = typed.ExclusiveMaximum.HasValue ? "<" : "<=";
 			
-			if (json.Number > max || schema.ExclusiveMaximum.HasValue && json.Number >= max)
+			if (json.Number > max || typed.ExclusiveMaximum.HasValue && json.Number >= max)
 				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {max}; Actual: {json.Number}.");
 			
 			return new SchemaValidationResults();
 		}
 	}
 	
-	internal class MaximumSchema07PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema07>
+	internal class MaximumSchema07PropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema07 schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return (schema.Maximum.HasValue || schema.ExclusiveMaximum.HasValue) &&
+			return schema is JsonSchema06 typed && (typed.Maximum.HasValue || typed.ExclusiveMaximum.HasValue) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(JsonSchema07 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var max = schema.ExclusiveMaximum ?? schema.Maximum;
-			var operation = schema.ExclusiveMaximum.HasValue ? "<" : "<=";
+			var typed = (JsonSchema07) schema;
+			var max = typed.ExclusiveMaximum ?? typed.Maximum;
+			var operation = typed.ExclusiveMaximum.HasValue ? "<" : "<=";
 			
-			if (json.Number > max || schema.ExclusiveMaximum.HasValue && json.Number >= max)
+			if (json.Number > max || typed.ExclusiveMaximum.HasValue && json.Number >= max)
 				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {max}; Actual: {json.Number}.");
 			
 			return new SchemaValidationResults();

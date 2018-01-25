@@ -117,5 +117,14 @@ namespace Manatee.Json.Schema
 			schema.FromJson(json, null);
 			return schema;
 		}
+
+		internal static IJsonSchema GetMetaSchema(Type schemaType)
+		{
+			var factory = _schemaFactories.FirstOrDefault(f => f.SchemaType == schemaType) ??
+			              _schemaFactories.FirstOrDefault(f => schemaType.GetTypeInfo().IsSubclassOf(f.SchemaType)) ??
+			              throw new ArgumentException($"Schema type '{schemaType}' is not supported.  Has it been registered?");
+
+			return factory.MetaSchema;
+		}
 	}
 }

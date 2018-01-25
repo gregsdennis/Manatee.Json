@@ -3,25 +3,26 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class ItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class ItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract IJsonSchema GetItems(T schema);
 		protected abstract AdditionalItems GetAdditionalItems(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return (GetItems(schema) != null || GetAdditionalItems(schema) != null) &&
+			return schema is T typed && (GetItems(typed) != null || GetAdditionalItems(typed) != null) &&
 			       json.Type == JsonValueType.Array;
 		}
 
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
+			var typed = (T) schema;
 			var errors = new List<SchemaValidationError>();
 			var array = json.Array;
-		    if (GetItems(schema) is JsonSchemaCollection items)
+		    if (GetItems(typed) is JsonSchemaCollection items)
 		    {
-			    var additionalItems = GetAdditionalItems(schema);
+			    var additionalItems = GetAdditionalItems(typed);
 				// have array of schemata: validate in sequence
 				var i = 0;
 				while (i < array.Count && i < items.Count)
@@ -35,10 +36,10 @@ namespace Manatee.Json.Schema.Validators
 					else if (!Equals(additionalItems, AdditionalItems.True))
 						errors.AddRange(array.Skip(i).SelectMany(j => additionalItems.Definition.Validate(j, root).Errors));
 			}
-			else if (GetItems(schema) != null)
+			else if (GetItems(typed) != null)
 			{
 				// have single schema: validate all against this
-				var itemValidations = array.Select(v => GetItems(schema).Validate(v, root));
+				var itemValidations = array.Select(v => GetItems(typed).Validate(v, root));
 				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertyName($"[{i}]"))));
 			}
 			return new SchemaValidationResults(errors);
