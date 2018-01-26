@@ -12,7 +12,7 @@
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
     <PackageReleaseNotes>v9.7.0
-Added extensibility for schemas.
+Added support for extended-vocabulary schemas.
 
 v9.6.1
 Updated Draft-04 meta-schema to conform with changes to online document.
