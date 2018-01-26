@@ -125,15 +125,29 @@ namespace Manatee.Json.Schema
 			return Definition.ToJson(serializer);
 		}
 
-
+		/// <summary>
+		/// Implicitly converts a <see cref="JsonSchema04"/> instance to an <see cref="AdditionalProperties"/> instance.
+		/// Supports defining schema in code.
+		/// </summary>
+		/// <param name="schema">The schema to convert.</param>
 		public static implicit operator AdditionalProperties(JsonSchema04 schema)
 		{
 			return new AdditionalProperties {Definition = schema};
 		}
+		/// <summary>
+		/// Implicitly converts a <see cref="JsonSchema06"/> instance to an <see cref="AdditionalProperties"/> instance.
+		/// Supports defining schema in code.
+		/// </summary>
+		/// <param name="schema">The schema to convert.</param>
 		public static implicit operator AdditionalProperties(JsonSchema06 schema)
 		{
 			return new AdditionalProperties {Definition = schema};
 		}
+		/// <summary>
+		/// Implicitly converts a <see cref="JsonSchema07"/> instance to an <see cref="AdditionalProperties"/> instance.
+		/// Supports defining schema in code.
+		/// </summary>
+		/// <param name="schema">The schema to convert.</param>
 		public static implicit operator AdditionalProperties(JsonSchemaReference schema)
 		{
 			return new AdditionalProperties {Definition = schema};

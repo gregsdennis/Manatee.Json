@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Manatee.Json.Serialization;
 using Manatee.Json.Internal;
-using Manatee.Json.Schema.Validators;
 
 namespace Manatee.Json.Schema
 {
@@ -15,6 +14,9 @@ namespace Manatee.Json.Schema
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + "}")]
 	public class JsonSchema04 : IJsonSchema
 	{
+		/// <summary>
+		/// Defines the root reference schema for <see cref="JsonSchema04"/>.
+		/// </summary>
 		public static readonly JsonSchemaReference Root = new JsonSchemaReference("#", typeof(JsonSchema04));
 		/// <summary>
 		/// Defines an empty Schema.  Useful for specifying that any schema is valid.

@@ -33,11 +33,22 @@ namespace Manatee.Json.Schema
 			SetDefaultSchemaVersion<JsonSchema04>();
 		}
 
+		/// <summary>
+		/// Sets the default schema to use when deserializing a schema that doesn't define its version.
+		/// </summary>
+		/// <typeparam name="T">The schema type.</typeparam>
 		public static void SetDefaultSchemaVersion<T>()
 			where T : IJsonSchema
 		{
 			_SetDefaultSchemaVersion(typeof(T));
 		}
+		/// <summary>
+		/// Registers a schema with an extended vocabulary so that it can be deserialized properly.
+		/// </summary>
+		/// <typeparam name="T">The schema type.</typeparam>
+		/// <param name="id">The schema's ID.</param>
+		/// <param name="factory">A factory function for creating instances.</param>
+		/// <param name="metaSchema">Optional - A meta-schema instance for this schema.</param>
 		public static void RegisterExtendedSchema<T>(string id, Func<T> factory, T metaSchema = default(T))
 			where T : IJsonSchema
 		{
@@ -68,10 +79,24 @@ namespace Manatee.Json.Schema
 		{
 			return _FromJson(json, _schemaFactory, documentPath);
 		}
+		/// <summary>
+		/// Creates a schema object from its JSON representation, allowing a specific schema version to be used..
+		/// </summary>
+		/// <param name="json">A JSON object.</param>
+		/// <param name="documentPath">The path to the physical location to this document</param>
+		/// <typeparam name="T">The type representing the schema version to create.</typeparam>
+		/// <returns>A schema object</returns>
 		public static IJsonSchema FromJson<T>(JsonValue json, Uri documentPath = null)
 		{
 			return FromJson(json, typeof(T), documentPath);
 		}
+		/// <summary>
+		/// Creates a schema object from its JSON representation, allowing a specific schema version to be used..
+		/// </summary>
+		/// <param name="json">A JSON object.</param>
+		/// <param name="type">The type representing the schema version to create.</param>
+		/// <param name="documentPath">The path to the physical location to this document</param>
+		/// <returns>A schema object</returns>
 		public static IJsonSchema FromJson(JsonValue json, Type type, Uri documentPath = null)
 		{
 			var factory = _schemaFactories.FirstOrDefault(f => f.SchemaType == type);

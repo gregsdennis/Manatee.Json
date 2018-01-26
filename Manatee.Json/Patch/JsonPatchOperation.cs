@@ -2,19 +2,40 @@
 
 namespace Manatee.Json.Patch
 {
-    public enum JsonPatchOperation
-    {
-        [Display(Description = "add")]
-        Add,
-        [Display(Description = "remove")]
-        Remove,
-        [Display(Description = "replace")]
-        Replace,
-        [Display(Description = "move")]
-        Move,
-        [Display(Description = "copy")]
-        Copy,
-        [Display(Description = "test")]
-        Test
-    }
+	/// <summary>
+	/// Defines available operations for JSON Patch actions.
+	/// </summary>
+	public enum JsonPatchOperation
+	{
+		/// <summary>
+		/// Indicates an addition operation.
+		/// </summary>
+		[Display(Description = "add")]
+		Add,
+		/// <summary>
+		/// Indicates a removal operation.
+		/// </summary>
+		[Display(Description = "remove")]
+		Remove,
+		/// <summary>
+		/// Indicates a replacement operation.
+		/// </summary>
+		[Display(Description = "replace")]
+		Replace,
+		/// <summary>
+		/// Indicates a movement operation.
+		/// </summary>
+		[Display(Description = "move")]
+		Move,
+		/// <summary>
+		/// Indicates a copy operation.
+		/// </summary>
+		[Display(Description = "copy")]
+		Copy,
+		/// <summary>
+		/// Indicates a test operation.
+		/// </summary>
+		[Display(Description = "test")]
+		Test
+	}
 }

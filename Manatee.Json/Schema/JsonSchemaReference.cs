@@ -32,7 +32,13 @@ namespace Manatee.Json.Schema
 		/// The <see cref="_Resolve"/> method must first be called.
 		/// </remarks>
 		public IJsonSchema Resolved { get; private set; }
+		/// <summary>
+		/// Provides a mechanism to include sibling keywords alongside $ref.
+		/// </summary>
 		public IJsonSchema Base { get; set; }
+		/// <summary>
+		/// Used to specify which this schema defines.
+		/// </summary>
 		public string Id
 		{
 			get { return _id ?? (_id = Base?.Id); }
@@ -43,6 +49,12 @@ namespace Manatee.Json.Schema
 					Base.Id = value;
 			}
 		}
+		/// <summary>
+		/// Used to specify a schema which contains the definitions used by this schema.
+		/// </summary>
+		/// <remarks>
+		/// if left null, the default of http://json-schema.org/draft-04/schema# is used.
+		/// </remarks>
 		public string Schema
 		{
 			get { return _schema ?? (_schema = Base?.Schema); }
@@ -53,6 +65,9 @@ namespace Manatee.Json.Schema
 					Base.Schema = value;
 			}
 		}
+		/// <summary>
+		/// Identifies the physical path for the schema document (may be different than the ID).
+		/// </summary>
 		public Uri DocumentPath
 		{
 			get { return _documentPath ?? (_documentPath = Base?.DocumentPath); }

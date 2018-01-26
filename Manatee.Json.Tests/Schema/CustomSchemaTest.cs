@@ -13,7 +13,7 @@ namespace Manatee.Json.Tests.Schema
 	{
 		private class MySchema04 : JsonSchema04
 		{
-			public JsonValue Equals { get; set; }
+			public JsonValue ShouldEqual { get; set; }
 		}
 
 		private class MySchemaEqualsValidator : IJsonSchemaPropertyValidator
@@ -25,7 +25,7 @@ namespace Manatee.Json.Tests.Schema
 			public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 			{
 				var typed = (MySchema04) schema;
-				return typed.Equals == json
+				return typed.ShouldEqual == json
 						   ? new SchemaValidationResults()
 						   : new SchemaValidationResults(null, "The values aren't equal.");
 			}
@@ -37,7 +37,7 @@ namespace Manatee.Json.Tests.Schema
 			JsonSchemaPropertyValidatorFactory.RegisterValidator(new MySchemaEqualsValidator());
 
 			JsonValue json = 4;
-			var target = new MySchema04 {Equals = 4};
+			var target = new MySchema04 {ShouldEqual = 4};
 
 			var results = target.Validate(json);
 
@@ -50,7 +50,7 @@ namespace Manatee.Json.Tests.Schema
 			JsonSchemaPropertyValidatorFactory.RegisterValidator(new MySchemaEqualsValidator());
 
 			JsonValue json = 4;
-			var target = new MySchema04 {Equals = 5};
+			var target = new MySchema04 {ShouldEqual = 5};
 
 			var results = target.Validate(json);
 

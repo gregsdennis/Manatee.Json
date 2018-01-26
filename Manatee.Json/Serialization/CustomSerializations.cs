@@ -30,6 +30,9 @@ namespace Manatee.Json.Serialization
 		/// <returns>The deserialized object.</returns>
 		public delegate T FromJsonDelegate<out T>(JsonValue json, JsonSerializer serializer);
 
+		/// <summary>
+		/// Provides a default custom serialization set for new <see cref="JsonSerializer"/> instances.
+		/// </summary>
 		public static CustomSerializations Default { get; } = new CustomSerializations();
 
 		private static readonly List<ISerializationDelegateProvider> _delegateProviders;
@@ -49,11 +52,17 @@ namespace Manatee.Json.Serialization
 			                                                 .ToList();
 			_autoregistrationMethod = typeof(CustomSerializations).GetTypeInfo().GetDeclaredMethod(nameof(CustomSerializations._RegisterProviderDelegates));
 		}
+		/// <summary>
+		/// Creates a new <see cref="CustomSerializations"/> instance.
+		/// </summary>
 		public CustomSerializations()
 		{
 			_toJsonConverters = new Dictionary<Type, Delegate>();
 			_fromJsonConverters = new Dictionary<Type, Delegate>();
 		}
+		/// <summary>
+		/// Creates a new <see cref="CustomSerializations"/> instance using another as a basis.
+		/// </summary>
 		public CustomSerializations(CustomSerializations other)
 		{
 			_toJsonConverters = other._toJsonConverters.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -70,8 +79,8 @@ namespace Manatee.Json.Serialization
 		/// or <paramref name="fromJson"/> is null.</exception>
 		public void RegisterType<T>(ToJsonDelegate<T> toJson, FromJsonDelegate<T> fromJson)
 		{
-			if (((toJson == null) && (fromJson != null)) ||
-				((toJson != null) && (fromJson == null)))
+			if ((toJson == null && fromJson != null) ||
+				(toJson != null && fromJson == null))
 				throw new TypeRegistrationException(typeof(T));
 			var type = typeof(T);
 			if (toJson == null)

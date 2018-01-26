@@ -15,6 +15,9 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonArray : List<JsonValue>
 	{
+		/// <summary>
+		/// Defines how this <see cref="JsonArray"/> evaluates equality.
+		/// </summary>
 		public ArrayEquality EqualityStandard { get; set; } = JsonOptions.DefaultArrayEquality;
 
 		/// <summary>

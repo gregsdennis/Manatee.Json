@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Manatee.Json.Schema
 {
+	/// <summary>
+	/// Provides the validation system with validators.
+	/// </summary>
 	public static class JsonSchemaPropertyValidatorFactory
 	{
 		private static readonly List<IJsonSchemaPropertyValidator> _validators;
@@ -19,6 +22,10 @@ namespace Manatee.Json.Schema
 			                                                  .ToList();
 		}
 
+		/// <summary>
+		/// Registers a new validator to be executed during schema validation.
+		/// </summary>
+		/// <param name="validator"></param>
 		public static void RegisterValidator(IJsonSchemaPropertyValidator validator)
 		{
 			_validators.Add(validator);
