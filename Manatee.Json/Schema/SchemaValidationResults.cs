@@ -18,17 +18,26 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public IEnumerable<SchemaValidationError> Errors { get; }
 
-		internal SchemaValidationResults(string propertyName, string message)
+		/// <summary>
+		/// Creates an instance of <see cref="SchemaValidationResults"/>.
+		/// </summary>
+		/// <param name="propertyName">The name of the property that failed.</param>
+		/// <param name="message">A message explaining the error.</param>
+		public SchemaValidationResults(string propertyName, string message)
 		{
 			Errors = new[] {new SchemaValidationError(propertyName, message)};
+		}
+		/// <summary>
+		/// Creates an instance of <see cref="SchemaValidationResults"/>.
+		/// </summary>
+		/// <param name="aggregate">A collection of <see cref="SchemaValidationResults"/> to aggregate together.</param>
+		public SchemaValidationResults(IEnumerable<SchemaValidationResults> aggregate)
+		{
+			Errors = aggregate.SelectMany(r => r.Errors).Distinct();
 		}
 		internal SchemaValidationResults(IEnumerable<SchemaValidationError> errors = null)
 		{
 			Errors = errors?.Distinct() ?? Enumerable.Empty<SchemaValidationError>();
-		}
-		internal SchemaValidationResults(IEnumerable<SchemaValidationResults> aggregate)
-		{
-			Errors = aggregate.SelectMany(r => r.Errors).Distinct();
 		}
 	}
 }

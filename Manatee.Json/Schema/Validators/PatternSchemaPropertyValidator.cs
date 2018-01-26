@@ -2,20 +2,21 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class PatternSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class PatternSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract string GetPattern(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetPattern(schema) != null && json.Type == JsonValueType.String;
+			return schema is T typed && GetPattern(typed) != null && json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			return Regex.IsMatch(json.String, GetPattern(schema))
+			var pattern = GetPattern((T) schema);
+			return Regex.IsMatch(json.String, pattern)
 				       ? new SchemaValidationResults()
-				       : new SchemaValidationResults(string.Empty, $"Value [{json.String}] does not match required Regex pattern [{GetPattern(schema)}].");
+				       : new SchemaValidationResults(string.Empty, $"Value [{json.String}] does not match required Regex pattern [{pattern}].");
 		}
 	}
 	

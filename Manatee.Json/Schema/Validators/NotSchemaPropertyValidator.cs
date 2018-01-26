@@ -1,17 +1,17 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class NotSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class NotSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract IJsonSchema GetNot(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetNot(schema) != null;
+			return schema is T typed && GetNot(typed) != null;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var results = GetNot(schema).Validate(json, root);
+			var results = GetNot((T)schema).Validate(json, root);
 			return results.Valid
 				       ? new SchemaValidationResults(string.Empty, "Expected schema to be invalid, but was valid.")
 				       : new SchemaValidationResults();

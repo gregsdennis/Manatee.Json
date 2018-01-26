@@ -1,18 +1,19 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class MultipleOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class MultipleOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract double? GetMultipleOf(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetMultipleOf(schema).HasValue && json.Type == JsonValueType.Number;
+			return schema is T typed && GetMultipleOf(typed).HasValue && json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			return (decimal) json.Number % (decimal?) GetMultipleOf(schema) != 0
-				       ? new SchemaValidationResults(string.Empty, $"Expected: {json.Number}%{GetMultipleOf(schema)}=0; Actual: {json.Number % GetMultipleOf(schema)}.")
+			var multipleOf = GetMultipleOf((T) schema);
+			return (decimal) json.Number % (decimal?) multipleOf != 0
+				       ? new SchemaValidationResults(string.Empty, $"Expected: {json.Number}%{multipleOf}=0; Actual: {json.Number % multipleOf}.")
 				       : new SchemaValidationResults();
 		}
 	}

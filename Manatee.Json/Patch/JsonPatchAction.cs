@@ -4,11 +4,26 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Patch
 {
+	/// <summary>
+	/// Defines an action that can be applied within a JSON Patch document.
+	/// </summary>
 	public class JsonPatchAction : IJsonSerializable
 	{
+		/// <summary>
+		/// Gets or sets the operation.
+		/// </summary>
 		public JsonPatchOperation Operation { get; set; }
+		/// <summary>
+		/// Gets or sets the path.
+		/// </summary>
 		public string Path { get; set; }
+		/// <summary>
+		/// Gets or sets the source for a value.
+		/// </summary>
 		public string From { get; set; }
+		/// <summary>
+		/// Gets or sets a discrete value to be used.
+		/// </summary>
 		public JsonValue Value { get; set; }
 		
 		internal JsonPatchResult TryApply(JsonValue json)

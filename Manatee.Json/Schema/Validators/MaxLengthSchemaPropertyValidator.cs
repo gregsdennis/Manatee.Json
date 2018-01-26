@@ -2,18 +2,18 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class MaxLengthSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class MaxLengthSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract uint? GetMaxLength(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetMaxLength(schema).HasValue && json.Type == JsonValueType.String;
+			return schema is T typed && GetMaxLength(typed).HasValue && json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var maxLength = GetMaxLength(schema);
+			var maxLength = GetMaxLength((T)schema);
 			var length = new StringInfo(json.String).LengthInTextElements;
 			if (maxLength.HasValue && length > maxLength)
 				return new SchemaValidationResults(string.Empty, $"Expected: {maxLength}; Actual: {length}.");

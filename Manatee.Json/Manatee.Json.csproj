@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.3</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to JSON, including its structure, serialization, JSON Schema, JSON Path, and JSON Patch.</Description>
-    <Version>9.6.1</Version>
+    <Version>9.7.0</Version>
     <Copyright>Copyright © 2018 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
@@ -11,7 +11,10 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v9.6.1
+    <PackageReleaseNotes>v9.7.0
+Added support for extended-vocabulary schemas.
+
+v9.6.1
 Updated Draft-04 meta-schema to conform with changes to online document.
 BUG FIX: Serialization of nullable enums throws exception.
 
@@ -27,17 +30,23 @@ v9.5.1
 Added support for deserializing pre-populated readonly IList and IDictionary properties.
 
 v9.5.0
-Added JSON Schema draft 07 support.
-</PackageReleaseNotes>
+Added JSON Schema draft 07 support.</PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>9.6.1.0</FileVersion>
+    <FileVersion>9.7.0.0</FileVersion>
     <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworkIdentifier>.NETStandard</TargetFrameworkIdentifier>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.3|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.3\Manatee.Json.xml</DocumentationFile>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.3\Manatee.Json.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
