@@ -19,16 +19,15 @@ namespace Manatee.Json.Schema
 			                                                  .ToList();
 		}
 
-		public static void RegisterValidator<T>(IJsonSchemaPropertyValidator<T> validator)
-			where T : IJsonSchema
+		public static void RegisterValidator(IJsonSchemaPropertyValidator validator)
 		{
 			_validators.Add(validator);
 		}
 
-		internal static IEnumerable<IJsonSchemaPropertyValidator<T>> Get<T>(T schema, JsonValue json)
+		internal static IEnumerable<IJsonSchemaPropertyValidator> Get<T>(T schema, JsonValue json)
 			where T : IJsonSchema
 		{
-			return _validators.OfType<IJsonSchemaPropertyValidator<T>>().Where(v => v.Applies(schema, json));
+			return _validators.Where(v => v.Applies(schema, json));
 		}
 	}
 }

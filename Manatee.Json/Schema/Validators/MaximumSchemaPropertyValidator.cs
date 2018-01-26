@@ -49,7 +49,7 @@
 	{
 		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return schema is JsonSchema06 typed && (typed.Maximum.HasValue || typed.ExclusiveMaximum.HasValue) &&
+			return schema is JsonSchema07 typed && (typed.Maximum.HasValue || typed.ExclusiveMaximum.HasValue) &&
 			       json.Type == JsonValueType.Number;
 		}
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)

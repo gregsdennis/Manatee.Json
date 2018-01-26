@@ -2,18 +2,18 @@
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class TypeSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class TypeSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract JsonSchemaType GetType(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetType(schema) != JsonSchemaType.NotDefined;
+			return schema is T typed && GetType(typed) != JsonSchemaType.NotDefined;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var type = GetType(schema);
+			var type = GetType((T)schema);
 			switch (json.Type)
 			{
 				case JsonValueType.Number:

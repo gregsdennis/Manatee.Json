@@ -1,18 +1,19 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class MinPropertiesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class MinPropertiesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract uint? GetMinProperties(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetMinProperties(schema).HasValue && json.Type == JsonValueType.Object;
+			return schema is T typed && GetMinProperties(typed).HasValue && json.Type == JsonValueType.Object;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			return json.Object.Count < GetMinProperties(schema)
-				       ? new SchemaValidationResults(string.Empty, $"Expected: >= {GetMinProperties(schema)} items; Actual: {json.Object.Count} items.")
+			var minProperties = GetMinProperties((T) schema);
+			return json.Object.Count < minProperties
+				       ? new SchemaValidationResults(string.Empty, $"Expected: >= {minProperties} items; Actual: {json.Object.Count} items.")
 				       : new SchemaValidationResults();
 		}
 	}
