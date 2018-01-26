@@ -1,25 +1,26 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal class IfThenElseSchema07PropertyValidator : IJsonSchemaPropertyValidator<JsonSchema07>
+	internal class IfThenElseSchema07PropertyValidator : IJsonSchemaPropertyValidator
 	{
-		public bool Applies(JsonSchema07 schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return schema.If != null || schema.Then != null || schema.Else != null;
+			return schema is JsonSchema07 typed && (typed.If != null || typed.Then != null || typed.Else != null);
 		}
-		public SchemaValidationResults Validate(JsonSchema07 schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			if (schema.If == null) return new SchemaValidationResults();
+			var typed = (JsonSchema07) schema;
+			if (typed.If == null) return new SchemaValidationResults();
 
-			var ifResults = _ValidateSubSchema(schema.If, json, root);
+			var ifResults = _ValidateSubSchema(typed.If, json, root);
 			if (ifResults.Valid)
 			{
-				var thenResults = _ValidateSubSchema(schema.Then, json, root);
+				var thenResults = _ValidateSubSchema(typed.Then, json, root);
 				if (thenResults.Valid) return new SchemaValidationResults();
 
 				return new SchemaValidationResults("then", "Validation of `if` succeeded, but validation of `then` failed.");
 			}
 
-			var elseResults = _ValidateSubSchema(schema.Else, json, root);
+			var elseResults = _ValidateSubSchema(typed.Else, json, root);
 			if (elseResults.Valid) return new SchemaValidationResults();
 
 			return new SchemaValidationResults("else", "Validation of `if` failed, but validation of `else` also failed.");

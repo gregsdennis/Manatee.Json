@@ -2,8 +2,11 @@
 
 namespace Manatee.Json.Schema
 {
-    public class SchemaLoadException : Exception
-    {
-        public SchemaLoadException(string message) : base(message) { }
-    }
+	/// <summary>
+	/// Thrown when a schema could not be loaded.
+	/// </summary>
+	public class SchemaLoadException : Exception
+	{
+		internal SchemaLoadException(string message) : base(message) { }
+	}
 }

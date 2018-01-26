@@ -5,8 +5,14 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Patch
 {
+	/// <summary>
+	/// Models JSON Patch documents.
+	/// </summary>
 	public class JsonPatch : List<JsonPatchAction>, IJsonSerializable
 	{
+		/// <summary>
+		/// Provides a schema that can be used to validate JSON Patch documents before deserialization.
+		/// </summary>
 		public static readonly JsonSchema04 Schema = new JsonSchema04
 			{
 				Title = "JSON schema for JSONPatch files",
@@ -83,6 +89,11 @@ namespace Manatee.Json.Patch
 					}
 			};
 		
+		/// <summary>
+		/// Attempts to apply the patch to a JSON instance.
+		/// </summary>
+		/// <param name="json"></param>
+		/// <returns></returns>
 		public JsonPatchResult TryApply(JsonValue json)
 		{
 			var current = new JsonValue(json);

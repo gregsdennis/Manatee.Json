@@ -1,17 +1,17 @@
 ﻿namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class MaxItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class MaxItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract uint? GetMaxItems(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetMaxItems(schema).HasValue && json.Type == JsonValueType.Array;
+			return schema is T typed && GetMaxItems(typed).HasValue && json.Type == JsonValueType.Array;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			var maxItems = GetMaxItems(schema);
+			var maxItems = GetMaxItems((T)schema);
 			if (json.Array.Count > maxItems)
 				return new SchemaValidationResults(string.Empty, $"Expected: <= {maxItems} items; Actual: {json.Array.Count} items.");
 			return new SchemaValidationResults();

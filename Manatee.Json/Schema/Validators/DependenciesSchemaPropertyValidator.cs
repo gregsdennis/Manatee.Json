@@ -3,18 +3,18 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class DependenciesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator<T>
+	internal abstract class DependenciesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
 	{
 		protected abstract IEnumerable<IJsonSchemaDependency> GetDependencies(T schema);
 		
-		public bool Applies(T schema, JsonValue json)
+		public bool Applies(IJsonSchema schema, JsonValue json)
 		{
-			return GetDependencies(schema) != null;
+			return schema is T typed && GetDependencies(typed) != null;
 		}
-		public SchemaValidationResults Validate(T schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			return new SchemaValidationResults(GetDependencies(schema).SelectMany(d => d.Validate(json, root).Errors));
+			return new SchemaValidationResults(GetDependencies((T)schema).SelectMany(d => d.Validate(json, root).Errors));
 		}
 	}
 	

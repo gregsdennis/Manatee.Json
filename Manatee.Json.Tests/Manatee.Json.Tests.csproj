@@ -130,6 +130,7 @@
     <Compile Include="JsonOptionsTest.cs" />
     <Compile Include="Pointer\JsonPointerTests.cs" />
     <Compile Include="Pointer\SpecificationTests.cs" />
+    <Compile Include="Schema\CustomSchemaTest.cs" />
     <Compile Include="Schema\ExamplesSchemaTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SchemaValidationResultsExtensions.cs" />

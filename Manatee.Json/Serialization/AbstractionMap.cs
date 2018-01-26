@@ -15,6 +15,9 @@ namespace Manatee.Json.Serialization
 	{
 		private readonly Dictionary<Type, Type> _registry;
 
+		/// <summary>
+		/// Provides a default abstraction map for new <see cref="JsonSerializer"/> instances.
+		/// </summary>
 		public static AbstractionMap Default { get; }
 
 		static AbstractionMap()
@@ -25,10 +28,16 @@ namespace Manatee.Json.Serialization
 			Default.MapGeneric(typeof(IList<>), typeof(List<>));
 			Default.MapGeneric(typeof(IDictionary<,>), typeof(Dictionary<,>));
 		}
+		/// <summary>
+		/// Creates a new <see cref="AbstractionMap"/> instance.
+		/// </summary>
 		public AbstractionMap()
 		{
 			_registry = new Dictionary<Type, Type>();
 		}
+		/// <summary>
+		/// Creates a new <see cref="AbstractionMap"/> instance using another as a basis.
+		/// </summary>
 		public AbstractionMap(AbstractionMap other)
 		{
 			_registry = other._registry.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);

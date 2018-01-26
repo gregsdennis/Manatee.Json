@@ -14,18 +14,24 @@ namespace Manatee.Json.Serialization
 		private AbstractionMap _abstractionMap;
 
 		/// <summary>
-		/// Gets or sets a set of options for the serializer.
+		/// Gets or sets a set of options for this serializer.
 		/// </summary>
 		public JsonSerializerOptions Options
 		{
 			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
 			set { _options = value; }
 		}
+		/// <summary>
+		/// Gets or sets the set of custom serializations supported by this serializer. 
+		/// </summary>
 		public CustomSerializations CustomSerializations
 		{
 			get { return _customSerializations ?? (_customSerializations = new CustomSerializations(CustomSerializations.Default)); }
 			set { _customSerializations = value; }
 		}
+		/// <summary>
+		/// Gets or sets the abstraction map used by this serializer.
+		/// </summary>
 		public AbstractionMap AbstractionMap
 		{
 			get { return _abstractionMap ?? (_abstractionMap = new AbstractionMap(AbstractionMap.Default)); }
