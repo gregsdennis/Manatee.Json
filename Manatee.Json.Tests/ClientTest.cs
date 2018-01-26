@@ -478,5 +478,34 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
+
+		[Test]
+		public void Issue141_ExamplesInSchema()
+		{
+			var schema = new JsonSchema06
+				{
+					Schema = JsonSchema06.MetaSchema.Id,
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
+						{
+							["test"] = new JsonSchema06
+								{
+									Id = "/properties/test",
+									Type = JsonSchemaType.String,
+									Title = "Test property",
+									Description = "Test property",
+									Default = "",
+									Examples = new JsonArray {"any string"}
+								}
+						}
+				};
+			var json = new JsonObject {["test"] = "a valid string"};
+
+			var results = schema.Validate(json);
+
+			Console.WriteLine(string.Join("\n", results.Errors));
+
+			Assert.IsTrue(results.Valid);
+		}
 	}
 }
