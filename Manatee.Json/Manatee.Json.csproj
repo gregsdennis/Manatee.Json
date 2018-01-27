@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.3</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to JSON, including its structure, serialization, JSON Schema, JSON Path, and JSON Patch.</Description>
-    <Version>9.7.0</Version>
+    <Version>9.7.1</Version>
     <Copyright>Copyright © 2018 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
@@ -11,7 +11,10 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v9.7.0
+    <PackageReleaseNotes>v9.7.1
+BUG FIX: 'examples' keyword should have no validation.
+
+v9.7.0
 Added support for extended-vocabulary schemas.
 
 v9.6.1
@@ -33,7 +36,7 @@ v9.5.0
 Added JSON Schema draft 07 support.</PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>9.7.0.0</FileVersion>
+    <FileVersion>9.7.1.0</FileVersion>
     <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
