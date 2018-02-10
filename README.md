@@ -105,7 +105,9 @@ See the wiki pages for more information on how to use this wonderful library!
 
 ## Contributing
 
-If you'd like to contribute to Manatee.Json, please feel free to fork and create a pull request.
+If you have questions, experience problems, or feature ideas, please create an issue.
+
+If you'd like to help out with the code, please feel free to fork and create a pull request.
 
 ### Special thanks
 
@@ -124,3 +126,9 @@ During development, building within Visual Studio should be fine.  There is a bu
 ### Code style and maintenance
 
 I use [Jetbrains Resharper](https://www.jetbrains.com/resharper/) in Visual Studio to maintain the code style (and for many of the other things that it does).  The solution is set up with team style settings, so if you're using Resharper the settings should automatically load.  Please follow the suggestions.
+
+### Appreciation
+
+If you've enjoyed using this library and you'd like to contribute financially, please use the button below.
+
+[![Donate](https://i.imgur.com/Fkk2ET1.png)](https://gogetfunding.com/campaign_funds/?pre=5486922)
