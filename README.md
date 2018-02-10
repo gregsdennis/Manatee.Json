@@ -117,7 +117,7 @@ If you'd like to help out with the code, please feel free to fork and create a p
 
 This code uses C# 7 features, so a compiler/IDE that supports these features is required.
 
-The project is a single project that targets both .Net Framework 4.6 and .Net Standard 1.3.
+The library consists of a single project that target .Net Standard 1.3.  The test project targets .Net Framework 4.6.
 
 ### Building
 
