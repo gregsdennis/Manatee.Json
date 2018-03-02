@@ -18,6 +18,7 @@ namespace Manatee.Json.Serialization.Internal
 		private static readonly StringSerializer _stringSerializer;
 		private static readonly Dictionary<Type, ISerializer> _library;
 		private static readonly SchemaSerializer _schemaSerializer;
+		private static readonly UriSerializer _uriSerializer;
 
 		static SerializerFactory()
 		{
@@ -30,6 +31,7 @@ namespace Manatee.Json.Serialization.Internal
 			_registeredObjectSerializer = new RegisteredObjectSerializer();
 			_stringSerializer = new StringSerializer();
 			_schemaSerializer = new SchemaSerializer();
+			_uriSerializer = new UriSerializer();
 			_library = new Dictionary<Type, ISerializer>
 				{
 					{typeof (sbyte), _numericSerializer},
@@ -46,6 +48,7 @@ namespace Manatee.Json.Serialization.Internal
 					{typeof (decimal), _numericSerializer},
 					{typeof (bool), _booleanSerializer},
 					{typeof (string), _stringSerializer},
+					{typeof (Uri), _uriSerializer }
 				};
 		}
 
@@ -89,7 +92,7 @@ namespace Manatee.Json.Serialization.Internal
 
 		private static ISerializer _BuildSerializer(ISerializer innerSerializer, TypeInfo typeInfo)
 		{
-			if (!typeInfo.IsValueType)
+			if (!typeInfo.IsValueType && innerSerializer.ShouldMaintainReferences)
 				innerSerializer = new ReferencingSerializer(innerSerializer);
 
 			return new SchemaValidator(

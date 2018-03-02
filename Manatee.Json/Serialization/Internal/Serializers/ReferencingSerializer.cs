@@ -20,17 +20,14 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				pair.UsageCount++;
 				return new JsonObject {{Constants.RefKey, guid.ToString()}};
 			}
-			if (_innerSerializer.ShouldMaintainReferences)
-			{
-				guid = Guid.NewGuid();
-				pair = new SerializationPair {Object = obj};
-				serializer.SerializationMap.Add(guid, pair);
-				pair.Json = _innerSerializer.Serialize(obj, serializer);
-				if (pair.UsageCount != 0)
-					pair.Json.Object.Add(Constants.DefKey, guid.ToString());
-				return pair.Json;
-			}
-			return _innerSerializer.Serialize(obj, serializer);
+
+			guid = Guid.NewGuid();
+			pair = new SerializationPair {Object = obj};
+			serializer.SerializationMap.Add(guid, pair);
+			pair.Json = _innerSerializer.Serialize(obj, serializer);
+			if (pair.UsageCount != 0)
+				pair.Json.Object.Add(Constants.DefKey, guid.ToString());
+			return pair.Json;
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{

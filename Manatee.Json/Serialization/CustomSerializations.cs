@@ -50,7 +50,7 @@ namespace Manatee.Json.Serialization
 			                                                 .Select(ti => Activator.CreateInstance(ti.AsType()))
 			                                                 .Cast<ISerializationDelegateProvider>()
 			                                                 .ToList();
-			_autoregistrationMethod = typeof(CustomSerializations).GetTypeInfo().GetDeclaredMethod(nameof(CustomSerializations._RegisterProviderDelegates));
+			_autoregistrationMethod = typeof(CustomSerializations).GetTypeInfo().GetDeclaredMethod(nameof(_RegisterProviderDelegates));
 		}
 		/// <summary>
 		/// Creates a new <see cref="CustomSerializations"/> instance.

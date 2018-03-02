@@ -864,5 +864,26 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, json);
 		}
+		[Test]
+		public void SerializeEqualUris_NoReferences()
+		{
+			var target = new ObjectWithTwoUriProps
+				{
+					Test = new Uri("http://google.com"),
+					Other = new Uri("http://google.com")
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["Test"] = "http://google.com",
+					["Other"] = "http://google.com"
+				};
+
+			var serializer = new JsonSerializer();
+
+			var json = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
 	}
 }
