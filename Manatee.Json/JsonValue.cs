@@ -27,7 +27,7 @@ namespace Manatee.Json
 		/// Globally defined null-valued JSON value.
 		/// </summary>
 		/// <remarks>
-		/// Use this when initializing a JSON object or array.
+		/// When adding values to a <see cref="JsonObject"/> or <see cref="JsonArray"/>, nulls will automatically be converted into this field.
 		/// </remarks>
 		public static readonly JsonValue Null = new JsonValue();
 
@@ -37,10 +37,6 @@ namespace Manatee.Json
 		/// <exception cref="JsonValueIncorrectTypeException">
 		/// Thrown when this <see cref="JsonValue"/> does not contain a boolean.
 		/// </exception>
-		/// <remarks>
-		/// Setting the value as a boolean will automatically change the <see cref="JsonValue"/>'s type and
-		/// discard the old data.
-		/// </remarks>
 		public bool Boolean
 		{
 			get
@@ -64,8 +60,7 @@ namespace Manatee.Json
 		/// Thrown when this <see cref="JsonValue"/> does not contain a string.
 		/// </exception>
 		/// <remarks>
-		/// Setting the value as a string will automatically change the <see cref="JsonValue"/>'s type and
-		/// discard the old data.
+		/// Setting the value as a string will automatically change the <see cref="JsonValue"/>'s type and discard the old data.
 		/// </remarks>
 		public string String
 		{
@@ -89,10 +84,6 @@ namespace Manatee.Json
 		/// <exception cref="JsonValueIncorrectTypeException">
 		/// Thrown when this <see cref="JsonValue"/> does not contain a numeric value.
 		/// </exception>
-		/// <remarks>
-		/// Setting the value as a numeric value will automatically change the <see cref="JsonValue"/>'s type and
-		/// discard the old data.
-		/// </remarks>
 		public double Number
 		{
 			get
@@ -115,10 +106,6 @@ namespace Manatee.Json
 		/// <exception cref="JsonValueIncorrectTypeException">
 		/// Thrown when this <see cref="JsonValue"/> does not contain a Json object.
 		/// </exception>
-		/// <remarks>
-		/// Setting the value as a JSON object will automatically change the <see cref="JsonValue"/>'s type and
-		/// discard the old data.
-		/// </remarks>
 		public JsonObject Object
 		{
 			get
@@ -141,10 +128,6 @@ namespace Manatee.Json
 		/// <exception cref="JsonValueIncorrectTypeException">
 		/// Thrown when this <see cref="JsonValue"/> does not contain a Json array.
 		/// </exception>
-		/// <remarks>
-		/// Setting the value as a JSON array will automatically change the <see cref="JsonValue"/>'s type and
-		/// discard the old data.
-		/// </remarks>
 		public JsonArray Array
 		{
 			get
@@ -264,8 +247,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <returns>A string representation of this <see cref="JsonValue"/>.</returns>
 		/// <remarks>
-		/// Passing the returned string back into the parser will result in a copy of
-		/// this <see cref="JsonValue"/>.
+		/// Passing the returned string back into the parser will result in a copy of this <see cref="JsonValue"/>.
 		/// </remarks>
 		public override string ToString()
 		{
@@ -317,7 +299,7 @@ namespace Manatee.Json
 		/// <returns>
 		/// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
 		/// </returns>
-		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
+		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param>
 		public override bool Equals(object obj)
 		{
 			return Equals(obj.AsJsonValue());
@@ -355,7 +337,6 @@ namespace Manatee.Json
 		/// <returns>
 		/// A hash code for the current <see cref="T:System.Object"/>.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
 			switch (Type)
@@ -532,19 +513,21 @@ namespace Manatee.Json
 			return a == null ? null : new JsonValue(a);
 		}
 		///<summary>
+		/// Performs an equality comparison between two <see cref="JsonValue"/>s.
 		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
+		///<param name="a">A JsonValue.</param>
+		///<param name="b">A JsonValue.</param>
+		///<returns>true if the values are equal; otherwise, false.</returns>
 		public static bool operator ==(JsonValue a, JsonValue b)
 		{
 			return ReferenceEquals(a, b) || (a != null && a.Equals(b));
 		}
 		///<summary>
+		/// Performs an inverted equality comparison between two <see cref="JsonValue"/>s.
 		///</summary>
-		///<param name="a"></param>
-		///<param name="b"></param>
-		///<returns></returns>
+		///<param name="a">A JsonValue.</param>
+		///<param name="b">A JsonValue.</param>
+		///<returns>false if the values are equal; otherwise, true.</returns>
 		public static bool operator !=(JsonValue a, JsonValue b)
 		{
 			return !Equals(a, b);

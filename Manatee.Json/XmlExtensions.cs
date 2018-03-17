@@ -25,11 +25,9 @@ namespace Manatee.Json
 		/// <param name="key">The key to be used as a top-level element name.</param>
 		/// <returns>An <see cref="XElement"/> representation of the <see cref="JsonValue"/>.</returns>
 		/// <remarks>
-		/// The 'key' parameter may be null only when the underlying JSON is an
-		/// object which contains a single key/value pair.
+		/// The 'key' parameter may be null only when the underlying JSON is an object which contains a single key/value pair.
 		/// </remarks>
-		/// <exception cref="ArgumentException">Thrown if <paramref name="key"/> is null, empty, or whitespace
-		/// and <paramref name="json"/> is not a non-empty <see cref="JsonObject"/>.</exception>
+		/// <exception cref="ArgumentException">Thrown if <paramref name="key"/> is null, empty, or whitespace and <paramref name="json"/> is not a non-empty <see cref="JsonObject"/>.</exception>
 		public static XElement ToXElement(this JsonValue json, string key)
 		{
 			if (string.IsNullOrWhiteSpace(key) && json.Type != JsonValueType.Object)

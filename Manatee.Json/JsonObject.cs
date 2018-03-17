@@ -10,8 +10,7 @@ namespace Manatee.Json
 	/// Represents a collection of key:value pairs in a JSON structure.
 	/// </summary>
 	/// <remarks>
-	/// A key is always represented as a string.  A value can consist of a string, a numerical value, 
-	/// a boolean (true or false), a null placeholder, a JSON array of values, or a nested JSON object.
+	/// A key is always represented as a string.  A value can consist of a string, a numerical value, a boolean (true or false), a null placeholder, a JSON array of values, or a nested JSON object.
 	/// </remarks>
 	public class JsonObject : Dictionary<string, JsonValue>
 	{
@@ -87,8 +86,7 @@ namespace Manatee.Json
 		/// Adds the specified key and value to the dictionary.
 		/// </summary>
 		/// <param name="key">The key of the element to add.</param>
-		/// <param name="value">The value of the element to add. If the value is null,
-		/// it will be replaced by <see cref="JsonValue.Null"/>.</param>
+		/// <param name="value">The value of the element to add. If the value is null, it will be replaced by <see cref="JsonValue.Null"/>.</param>
 		public new void Add(string key, JsonValue value)
 		{
 			switch (JsonOptions.DuplicateKeyBehavior)
@@ -109,8 +107,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <returns>A string.</returns>
 		/// <remarks>
-		/// Passing the returned string back into the parser will result in a copy of
-		/// this JSON object.
+		/// Passing the returned string back into the parser will result in a copy of this JSON object.
 		/// </remarks>
 		public override string ToString()
 		{
@@ -152,7 +149,7 @@ namespace Manatee.Json
 		/// <returns>
 		/// true if the specified <see cref="object"/> is equal to the current <see cref="object"/>; otherwise, false.
 		/// </returns>
-		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>. </param><filterpriority>2</filterpriority>
+		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>. </param>
 		public override bool Equals(object obj)
 		{
 			if (!(obj is JsonObject json)) return false;
@@ -166,7 +163,6 @@ namespace Manatee.Json
 		/// <returns>
 		/// A hash code for the current <see cref="object"/>.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
 			return this.GetCollectionHashCode();

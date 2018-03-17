@@ -22,7 +22,6 @@ namespace Manatee.Json
 		/// <returns>
 		/// The error message that explains the reason for the exception, or an empty string("").
 		/// </returns>
-		/// <filterpriority>1</filterpriority>
 		public override string Message => $"{base.Message} Path: '{Path}'";
 
 		[StringFormatMethod("format")]

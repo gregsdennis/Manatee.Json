@@ -11,8 +11,7 @@ namespace Manatee.Json
 	public static class LinqExtensions
 	{
 		/// <summary>
-		/// Converts an <see cref="IEnumerable{JsonValue}"/> returned from a LINQ query back into
-		/// a <see cref="JsonArray"/>.
+		/// Converts an <see cref="IEnumerable{JsonValue}"/> returned from a LINQ query back into a <see cref="JsonArray"/>.
 		/// </summary>
 		/// <param name="results">An <see cref="IEnumerable{JsonValue}"/></param>
 		/// <returns>An equivalent <see cref="JsonArray"/></returns>
@@ -35,8 +34,7 @@ namespace Manatee.Json
 			return new JsonObject(results);
 		}
 		/// <summary>
-		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a
-		/// LINQ query back into a <see cref="JsonObject"/>.
+		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a LINQ query back into a <see cref="JsonObject"/>.
 		/// </summary>
 		/// <param name="results">An <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/></param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
@@ -137,8 +135,7 @@ namespace Manatee.Json
 		/// Serializes a collection of objects which implement <see cref="IJsonSerializable"/> to a <see cref="JsonArray"/> of equivalent JsonValues.
 		/// </summary>
 		/// <param name="list">A collection of equivalent <see cref="JsonValue"/>s</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>A <see cref="JsonArray"/> containing the equivalent JsonValues</returns>
 		public static JsonValue ToJson<T>(this IEnumerable<T> list, JsonSerializer serializer)
 			where T : IJsonSerializable
@@ -149,12 +146,10 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
-		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a
-		/// LINQ query back into a <see cref="JsonObject"/>.
+		/// Converts an <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/> returned from a LINQ query back into a <see cref="JsonObject"/>.
 		/// </summary>
 		/// <param name="results">An <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/></param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
 		public static JsonObject ToJson<T>(this IEnumerable<KeyValuePair<string, T>> results, JsonSerializer serializer)
 			where T : IJsonSerializable
@@ -171,8 +166,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <typeparam name="T">The type of object contained in the collection</typeparam>
 		/// <param name="json">The collection of <see cref="JsonValue"/>s</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>A collection of the deserialized objects</returns>
 		public static IEnumerable<T> FromJson<T>(this IEnumerable<JsonValue> json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
@@ -191,8 +185,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <typeparam name="T">The type of object</typeparam>
 		/// <param name="json">The <see cref="JsonValue"/> to deserialize</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>A collection of the deserialized objects</returns>
 		public static T FromJson<T>(this JsonObject json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()

@@ -28,7 +28,7 @@ namespace Manatee.Json
 		/// Creates an instance of a JSON array and initializes it with the
 		/// supplied JSON values.
 		/// </summary>
-		/// <param name="collection"></param>
+		/// <param name="collection">A collection of <see cref="JsonValue"/>s.</param>
 		public JsonArray(IEnumerable<JsonValue> collection)
 			: base(collection) { }
 
@@ -81,8 +81,7 @@ namespace Manatee.Json
 		/// <summary>
 		/// Adds an object to the end of the <see cref="JsonArray"/>.
 		/// </summary>
-		/// <param name="item">The object to be added to the end of the <see cref="JsonArray"/>.
-		/// If the value is null, it will be replaced by <see cref="JsonValue.Null"/>.</param>
+		/// <param name="item">The object to be added to the end of the <see cref="JsonArray"/>. If the value is null, it will be replaced by <see cref="JsonValue.Null"/>.</param>
 		public new void Add(JsonValue item)
 		{
 			base.Add(item ?? JsonValue.Null);
@@ -90,9 +89,7 @@ namespace Manatee.Json
 		/// <summary>
 		/// Adds the elements of the specified collection to the end of the <see cref="JsonArray"/>.
 		/// </summary>
-		/// <param name="collection">The collection whose elements should be added to the end of the
-		/// <see cref="JsonArray"/>. The collection itself cannot be null, but it can contain elements
-		/// that are null.  These elements will be replaced by <see cref="JsonValue.Null"/></param>
+		/// <param name="collection">The collection whose elements should be added to the end of the <see cref="JsonArray"/>. The collection itself cannot be null, but it can contain elements that are null.  These elements will be replaced by <see cref="JsonValue.Null"/></param>
 		/// <exception cref="ArgumentNullException"><paramref name="collection"/> is null.</exception>
 		public new void AddRange(IEnumerable<JsonValue> collection)
 		{
@@ -103,8 +100,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <returns>A string.</returns>
 		/// <remarks>
-		/// Passing the returned string back into the parser will result in a copy of
-		/// this Json array.
+		/// Passing the returned string back into the parser will result in a copy of this Json array.
 		/// </remarks>
 		public override string ToString()
 		{
@@ -148,7 +144,7 @@ namespace Manatee.Json
 		/// <returns>
 		/// true if the specified <see cref="object"/> is equal to the current <see cref="object"/>; otherwise, false.
 		/// </returns>
-		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>. </param><filterpriority>2</filterpriority>
+		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>.</param>
 		public override bool Equals(object obj)
 		{
 			if (!(obj is JsonArray json)) return false;
@@ -164,7 +160,6 @@ namespace Manatee.Json
 		/// <returns>
 		/// A hash code for the current <see cref="object"/>.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
 			// ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
