@@ -17,8 +17,7 @@
 		/// </summary>
 		/// <param name="schema">The schema.</param>
 		/// <param name="json">The JSON instance.</param>
-		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used resolving references.
-		/// Pass this to any subschema validations that need to be performed.</param>
+		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used resolving references. Pass this to any subschema validations that need to be performed.</param>
 		/// <returns>A <see cref="SchemaValidationResults"/> instance.</returns>
 		SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root);
 	}

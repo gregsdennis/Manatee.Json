@@ -8,8 +8,7 @@ using Manatee.Json.Serialization.Internal;
 namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Provides an interface to map abstract and interface types to
-	/// concrete types for object instantiation during deserialization.
+	/// Provides an interface to map abstract and interface types to concrete types for object instantiation during deserialization.
 	/// </summary>
 	public class AbstractionMap
 	{
@@ -49,8 +48,7 @@ namespace Manatee.Json.Serialization
 		/// <typeparam name="TAbstract">The abstract type.</typeparam>
 		/// <typeparam name="TConcrete">The concrete type.</typeparam>
 		/// <param name="mappingBehavior">The mapping behavior.</param>
-		/// <exception cref="JsonTypeMapException{TAbstract, TConcrete}">Thrown if TConcrete is an
-		/// abstract class or an interface.</exception>
+		/// <exception cref="JsonTypeMapException{TAbstract, TConcrete}">Thrown if TConcrete is an abstract class or an interface.</exception>
 		public void Map<TAbstract, TConcrete>(MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
 			where TConcrete : TAbstract, new()
 		{
@@ -66,9 +64,7 @@ namespace Manatee.Json.Serialization
 		/// <param name="tAbstract">The abstract type.</param>
 		/// <param name="tConcrete">The concrete type.</param>
 		/// <param name="mappingBehavior">The mapping behavior.</param>
-		/// <exception cref="JsonTypeMapException">Thrown if <paramref name="tConcrete"/> is an
-		/// abstract class or an interface or if <paramref name="tConcrete"/> does not inherit
-		/// from <paramref name="tAbstract"/>.</exception>
+		/// <exception cref="JsonTypeMapException">Thrown if <paramref name="tConcrete"/> is an abstract class or an interface or if <paramref name="tConcrete"/> does not inherit from <paramref name="tAbstract"/>.</exception>
 		public void MapGeneric(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior = MapBaseAbstractionBehavior.Unmapped)
 		{
 			if (tConcrete.GetTypeInfo().IsAbstract || tConcrete.GetTypeInfo().IsInterface)

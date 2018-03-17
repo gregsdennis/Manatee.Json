@@ -7,8 +7,7 @@ using Manatee.Json.Serialization.Internal;
 namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Manages methods for serializing object types which do not implement <see cref="IJsonSerializable"/> and
-	/// cannot be automatically serialized.
+	/// Manages methods for serializing object types which do not implement <see cref="IJsonSerializable"/> and cannot be automatically serialized.
 	/// </summary>
 	public class CustomSerializations
 	{

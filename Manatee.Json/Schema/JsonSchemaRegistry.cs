@@ -6,8 +6,7 @@ using Manatee.Json.Patch;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Provides a registry in which JSON schema can be saved to be referenced by the
-	/// system.
+	/// Provides a registry in which JSON schema can be saved to be referenced by the system.
 	/// </summary>
 	public static class JsonSchemaRegistry
 	{

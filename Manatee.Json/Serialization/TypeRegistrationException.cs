@@ -3,7 +3,7 @@
 namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Thrown when <see cref="JsonSerializationTypeRegistry.RegisterType&lt;T&gt;(JsonSerializationTypeRegistry.ToJsonDelegate&lt;T&gt;, JsonSerializationTypeRegistry.FromJsonDelegate&lt;T&gt;)"/>
+	/// Thrown when <see cref="CustomSerializations.RegisterType&lt;T&gt;(CustomSerializations.ToJsonDelegate&lt;T&gt;, CustomSerializations.FromJsonDelegate&lt;T&gt;)"/>
 	/// is passed one method and a null.
 	/// </summary>
 	public class TypeRegistrationException : Exception

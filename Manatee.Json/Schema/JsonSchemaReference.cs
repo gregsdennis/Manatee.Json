@@ -89,8 +89,7 @@ namespace Manatee.Json.Schema
 		/// <param name="reference">The relative (internal) or absolute (URI) path to the referenced type definition.</param>
 		/// <param name="baseSchema">An instance of the base schema to use (either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>).</param>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> or <paramref name="baseSchema"/> is null.</exception>
-		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace or
-		/// if <paramref name="baseSchema"/> is not of type <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</exception>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace or if <paramref name="baseSchema"/> is not of type <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</exception>
 		public JsonSchemaReference(string reference, IJsonSchema baseSchema)
 			: this(reference, baseSchema.GetType())
 		{
@@ -103,8 +102,7 @@ namespace Manatee.Json.Schema
 		/// <param name="baseSchemaType">The draft version of schema to use as a base when resolving if not defined in the resolved schema.
 		/// Must be either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</param>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> is null.</exception>
-		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace or
-		/// when <paramref name="baseSchemaType"/> is not <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</exception>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace or when <paramref name="baseSchemaType"/> is not <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</exception>
 		public JsonSchemaReference(string reference, Type baseSchemaType)
 			: this(baseSchemaType)
 		{
@@ -131,8 +129,7 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			Base?.FromJson(json, serializer);
@@ -141,8 +138,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
@@ -170,7 +166,6 @@ namespace Manatee.Json.Schema
 		/// true if the specified object  is equal to the current object; otherwise, false.
 		/// </returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		/// <filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as IJsonSchema);
@@ -181,7 +176,6 @@ namespace Manatee.Json.Schema
 		/// <returns>
 		/// A hash code for the current <see cref="T:System.Object"/>.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
 			// ReSharper disable once NonReadonlyMemberInGetHashCode

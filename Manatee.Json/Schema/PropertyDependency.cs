@@ -20,7 +20,7 @@ namespace Manatee.Json.Schema
 		/// Creates a new instance of the <see cref="PropertyDependency"/> class.
 		/// </summary>
 		/// <param name="propertyName">The property name.</param>
-		/// <param name="dependencies"></param>
+		/// <param name="dependencies">A collection of properties on which <paramref name="propertyName"/> is dependent.</param>
 		public PropertyDependency(string propertyName, IEnumerable<string> dependencies)
 		{
 			if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));

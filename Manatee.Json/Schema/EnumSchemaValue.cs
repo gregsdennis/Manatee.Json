@@ -44,8 +44,7 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			_value = json;
@@ -64,8 +63,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Implicitly converts a <see cref="String"/> to a <see cref="EnumSchemaValue"/>.
 		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="value">A string.</param>
+		/// <returns>An <see cref="EnumSchemaValue"/> that represents the string value.</returns>
 		public static implicit operator EnumSchemaValue(string value)
 		{
 			return new EnumSchemaValue(value);

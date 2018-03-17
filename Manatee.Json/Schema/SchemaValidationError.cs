@@ -37,7 +37,6 @@ namespace Manatee.Json.Schema
 		/// <returns>
 		/// A string that represents the current object.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
 			return string.IsNullOrWhiteSpace(PropertyName)
@@ -56,14 +55,12 @@ namespace Manatee.Json.Schema
 		/// <summary>Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.</summary>
 		/// <returns>true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		/// <filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as SchemaValidationError);
 		}
 		/// <summary>Serves as a hash function for a particular type. </summary>
 		/// <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
 			unchecked

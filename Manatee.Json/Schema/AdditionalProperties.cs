@@ -24,8 +24,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a schema to which any additional properties must validate.
 		/// </summary>
-		/// <exception cref="ReadOnlyException">Thrown when attempting to set the definition
-		/// of one of the static <see cref="AdditionalProperties"/> fields.</exception>
+		/// <exception cref="ReadOnlyException">Thrown when attempting to set the definition of one of the static <see cref="AdditionalProperties"/> fields.</exception>
 		public IJsonSchema Definition
 		{
 			get { return _definition; }
@@ -74,7 +73,6 @@ namespace Manatee.Json.Schema
 		/// <returns>
 		/// A hash code for the current <see cref="T:System.Object"/>.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
 			unchecked
@@ -88,7 +86,6 @@ namespace Manatee.Json.Schema
 		/// <returns>
 		/// A string that represents the current object.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
 			if (Equals(True)) return ((JsonValue) true).ToString();
@@ -99,8 +96,7 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			if (json.Type == JsonValueType.Boolean)
@@ -115,8 +111,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{

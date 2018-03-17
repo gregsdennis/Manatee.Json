@@ -271,8 +271,7 @@ namespace Manatee.Json.Schema
 		/// The default value for this schema.
 		/// </summary>
 		/// <remarks>
-		/// The default value is defined as a JSON value which may need to be deserialized
-		/// to a .Net data structure.
+		/// The default value is defined as a JSON value which may need to be deserialized to a .Net data structure.
 		/// </remarks>
 		public JsonValue Default { get; set; }
 		/// <summary>
@@ -415,9 +414,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public ContentEncoding? ContentEncoding { get; set; }
 		/// <summary>
-		/// Defines a schema which, if validated, the JSON is validated against the
-		/// <see cref="Then"/> schema, otherwise it is validated against the
-		/// <see cref="Else"/> schema.
+		/// Defines a schema which, if validated, the JSON is validated against the <see cref="Then"/> schema, otherwise it is validated against the <see cref="Else"/> schema.
 		/// </summary>
 		public IJsonSchema If { get; set; }
 		/// <summary>
@@ -483,8 +480,7 @@ namespace Manatee.Json.Schema
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>
 		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		public virtual void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			if (json.Type == JsonValueType.Boolean)
@@ -604,8 +600,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
-		/// serialization of values.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public virtual JsonValue ToJson(JsonSerializer serializer)
 		{
@@ -774,7 +769,7 @@ namespace Manatee.Json.Schema
 		/// <returns>
 		/// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
 		/// </returns>
-		/// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
+		/// <param name="obj">The object to compare with the current object. </param>
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as IJsonSchema);
@@ -785,7 +780,6 @@ namespace Manatee.Json.Schema
 		/// <returns>
 		/// A hash code for the current <see cref="T:System.Object"/>.
 		/// </returns>
-		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
 			unchecked

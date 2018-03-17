@@ -14,8 +14,7 @@
 		/// </summary>
 		Unmapped,
 		/// <summary>
-		/// Specifies that all base classes and interfaces will be mapped,
-		/// overriding any existing mappings.
+		/// Specifies that all base classes and interfaces will be mapped, overriding any existing mappings.
 		/// </summary>
 		Override
 	}
