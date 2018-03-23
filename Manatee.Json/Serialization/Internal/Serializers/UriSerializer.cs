@@ -7,6 +7,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	{
 		public bool ShouldMaintainReferences => false;
 
+		public bool Handles(Type type, JsonSerializerOptions options)
+		{
+			return type == typeof(Uri);
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var uri = obj as Uri;

@@ -6,7 +6,7 @@ namespace Manatee.Json.Serialization
 	/// Manages methods for serializing object types which do not implement <see cref="IJsonSerializable"/> and
 	/// cannot be automatically serialized.
 	/// </summary>
-	[Obsolete("Please use the CustomSerializations class instead.")]
+	[Obsolete("Please use SerializerFactory.UserSerializers instead.")]
 	public static class JsonSerializationTypeRegistry
 	{
 		/// <summary>

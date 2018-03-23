@@ -63,7 +63,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the type.</returns>
 		public JsonValue SerializeType<T>()
 		{
-			var serializer = SerializerFactory.GetTypeSerializer<T>(Options);
+			var serializer = SerializerFactory.GetTypeSerializer();
 			var json = serializer.SerializeType<T>(this);
 			SerializationMap.Clear();
 			return json;
@@ -107,7 +107,7 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public void DeserializeType<T>(JsonValue json)
 		{
-			var serializer = SerializerFactory.GetTypeSerializer<T>(Options);
+			var serializer = SerializerFactory.GetTypeSerializer();
 			serializer.DeserializeType<T>(json, this);
 		}
 	}

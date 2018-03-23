@@ -13,6 +13,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
+		public bool Handles(Type type, JsonSerializerOptions options)
+		{
+			return true;
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			if (serializer.SerializationMap.TryGetPair(obj, out var guid, out var pair))

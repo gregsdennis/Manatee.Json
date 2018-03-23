@@ -19,9 +19,9 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 		private static JsonValue _Encode<T>(T[] array, JsonSerializer serializer)
 		{
 			var values = new JsonValue[array.Length];
-			for (int ii = 0; ii < array.Length; ++ii)
+			for (int i = 0; i < array.Length; i++)
 			{
-				values[ii] = serializer.Serialize(array[ii]);
+				values[i] = serializer.Serialize(array[i]);
 			}
 			return new JsonArray(values);
 		}
@@ -29,9 +29,9 @@ namespace Manatee.Json.Serialization.Internal.AutoRegistration
 		{
 			var array = json.Array;
 			var values = new T[array.Count];
-			for (int ii = 0; ii < array.Count; ++ii)
+			for (int i = 0; i < array.Count; i++)
 			{
-				values[ii] = serializer.Deserialize<T>(array[ii]);
+				values[i] = serializer.Deserialize<T>(array[i]);
 			}
 			return values;
 		}

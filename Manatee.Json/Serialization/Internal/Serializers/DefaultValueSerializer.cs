@@ -1,4 +1,6 @@
-﻿namespace Manatee.Json.Serialization.Internal.Serializers
+﻿using System;
+
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class DefaultValueSerializer : ISerializer
 	{
@@ -11,6 +13,10 @@
 			_innerSerializer = innerSerializer;
 		}
 
+		public bool Handles(Type type, JsonSerializerOptions options)
+		{
+			return true;
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			if (Equals(obj, default(T)) && !serializer.Options.EncodeDefaultValues) return JsonValue.Null;

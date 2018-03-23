@@ -1,4 +1,6 @@
-﻿using Manatee.Json.Schema;
+﻿using System;
+using System.Reflection;
+using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -6,6 +8,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	{
 		public bool ShouldMaintainReferences => false;
 
+		public bool Handles(Type type, JsonSerializerOptions options)
+		{
+			return typeof(IJsonSchema).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var schema = (IJsonSchema) obj;

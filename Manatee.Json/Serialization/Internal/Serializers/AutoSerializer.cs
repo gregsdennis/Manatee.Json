@@ -11,6 +11,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	{
 		public bool ShouldMaintainReferences => true;
 
+		public bool Handles(Type type, JsonSerializerOptions options)
+		{
+			return true;
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var json = new JsonObject();

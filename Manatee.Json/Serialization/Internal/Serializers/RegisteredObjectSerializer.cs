@@ -1,9 +1,15 @@
-﻿namespace Manatee.Json.Serialization.Internal.Serializers
+﻿using System;
+
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class RegisteredObjectSerializer : ISerializer
 	{
 		public bool ShouldMaintainReferences => true;
 
+		public bool Handles(Type type, JsonSerializerOptions options)
+		{
+			return true;
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			serializer.CustomSerializations.Encode(serializer, obj, out var json);
