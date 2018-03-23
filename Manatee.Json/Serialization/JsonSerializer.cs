@@ -10,7 +10,6 @@ namespace Manatee.Json.Serialization
 	{
 		private int _callCount;
 		private JsonSerializerOptions _options;
-		private CustomSerializations _customSerializations;
 		private AbstractionMap _abstractionMap;
 
 		/// <summary>
@@ -20,14 +19,6 @@ namespace Manatee.Json.Serialization
 		{
 			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
 			set { _options = value; }
-		}
-		/// <summary>
-		/// Gets or sets the set of custom serializations supported by this serializer. 
-		/// </summary>
-		public CustomSerializations CustomSerializations
-		{
-			get { return _customSerializations ?? (_customSerializations = new CustomSerializations(CustomSerializations.Default)); }
-			set { _customSerializations = value; }
 		}
 		/// <summary>
 		/// Gets or sets the abstraction map used by this serializer.
