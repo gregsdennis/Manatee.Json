@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class UriSerializer : IPrioritizedSerializer
+	internal class TimeSpanSerializer : IPrioritizedSerializer
 	{
 		public int Priority => -10;
 
@@ -10,17 +10,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
-			return type == typeof(Uri);
+			return type == typeof(TimeSpan);
 		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			var uri = obj as Uri;
+			var ts = (TimeSpan) (object) obj;
 
-			return uri?.OriginalString;
+			return ts.ToString();
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			return (T) (object) new Uri(json.String);
+			return json.Type == JsonValueType.String ? (T) (object) TimeSpan.Parse(json.String) : default(T);
 		}
 	}
 }

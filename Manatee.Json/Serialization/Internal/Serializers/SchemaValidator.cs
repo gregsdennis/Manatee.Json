@@ -24,6 +24,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		{
+			return true;
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			return _innerSerializer.Serialize(obj, serializer);

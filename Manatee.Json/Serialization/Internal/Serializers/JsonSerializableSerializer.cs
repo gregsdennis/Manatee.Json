@@ -1,9 +1,18 @@
-﻿namespace Manatee.Json.Serialization.Internal.Serializers
+﻿using System;
+using System.Reflection;
+
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class JsonSerializableSerializer : ISerializer
+	internal class JsonSerializableSerializer : IPrioritizedSerializer
 	{
+		public int Priority => -9;
+
 		public bool ShouldMaintainReferences => true;
 
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		{
+			return typeof(IJsonSerializable).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var serializable = (IJsonSerializable) obj;
