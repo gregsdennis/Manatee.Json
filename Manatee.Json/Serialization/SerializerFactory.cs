@@ -9,7 +9,7 @@ namespace Manatee.Json.Serialization
 {
 	public static class SerializerFactory
 	{
-		private static readonly AutoSerializer _autoSerializer;
+		private static readonly ITypeSerializer _autoSerializer;
 		private static readonly List<ISerializer> _serializers;
 		private static readonly TypeInfo[] _dependentSerializers =
 			{
@@ -30,6 +30,7 @@ namespace Manatee.Json.Serialization
 			                                  .Select(t => Activator.CreateInstance(t.AsType()))
 			                                  .Cast<ISerializer>()
 			                                  .ToList();
+			_autoSerializer = _serializers.OfType<ITypeSerializer>().FirstOrDefault();
 			_orderedSerializers = _serializers.OrderBy(s => (s as IPrioritizedSerializer)?.Priority ?? 0);
 		}
 
