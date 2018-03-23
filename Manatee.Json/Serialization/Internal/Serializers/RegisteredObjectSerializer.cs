@@ -2,7 +2,7 @@
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class RegisteredObjectSerializer : ISerializer
+	internal class RegisteredObjectSerializer// : ISerializer
 	{
 		public bool ShouldMaintainReferences => true;
 

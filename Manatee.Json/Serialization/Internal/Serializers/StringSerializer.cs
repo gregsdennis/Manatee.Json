@@ -2,11 +2,13 @@
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class StringSerializer : ISerializer
+	internal class StringSerializer : IPrioritizedSerializer
 	{
+		public int Priority => int.MinValue;
+
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return type == typeof(string);
 		}

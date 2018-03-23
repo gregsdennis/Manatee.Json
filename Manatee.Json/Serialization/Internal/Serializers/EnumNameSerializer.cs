@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class EnumNameSerializer : ISerializer
+	internal class EnumNameSerializer : IPrioritizedSerializer
 	{
 		private class Description
 		{
@@ -16,11 +16,15 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		private static readonly Dictionary<Type, List<Description>> _descriptions = new Dictionary<Type,List<Description>>();
 
+		public int Priority => int.MinValue;
+
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
-			return type.GetTypeInfo().IsEnum && options.EnumSerializationFormat == EnumSerializationFormat.AsName;
+			return type.GetTypeInfo().IsEnum &&
+			       (options.EnumSerializationFormat == EnumSerializationFormat.AsName ||	// used during serialization
+			        json?.Type == JsonValueType.String);									// used during deserialiaztion
 		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{

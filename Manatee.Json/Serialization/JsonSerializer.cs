@@ -49,7 +49,7 @@ namespace Manatee.Json.Serialization
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), this);
-			var json = serializer.Serialize(obj, this);
+			var json = serializer.Serialize<T>(obj, this);
 			if (--_callCount == 0)
 			{
 				SerializationMap.Clear();

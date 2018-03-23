@@ -42,5 +42,18 @@ namespace Manatee.Json.Internal
 			}
 			return properties;
 		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsNumericType(this Type value)
+		{
+			return value == typeof(double) ||
+			       value == typeof(float) ||
+			       value == typeof(int) ||
+			       value == typeof(uint) ||
+			       value == typeof(short) ||
+			       value == typeof(ushort) ||
+			       value == typeof(byte) ||
+			       value == typeof(long) ||
+			       value == typeof(ulong);
+		}
 	}
 }

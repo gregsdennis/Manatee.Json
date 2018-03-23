@@ -4,11 +4,13 @@ using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class SchemaSerializer : ISerializer
+	internal class SchemaSerializer : IPrioritizedSerializer
 	{
+		public int Priority => int.MinValue;
+
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return typeof(IJsonSchema).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
 		}

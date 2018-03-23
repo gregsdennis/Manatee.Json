@@ -6,7 +6,7 @@ namespace Manatee.Json.Serialization
 	{
 		bool ShouldMaintainReferences { get; }
 
-		bool Handles(Type type, JsonSerializerOptions options);
+		bool Handles(Type type, JsonSerializerOptions options, JsonValue json);
 		JsonValue Serialize<T>(T obj, JsonSerializer serializer);
 		T Deserialize<T>(JsonValue json, JsonSerializer serializer);
 	}

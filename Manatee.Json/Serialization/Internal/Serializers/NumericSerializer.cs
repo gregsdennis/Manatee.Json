@@ -3,13 +3,15 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class NumericSerializer : ISerializer
+	internal class NumericSerializer : IPrioritizedSerializer
 	{
+		public int Priority => int.MinValue;
+
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
-			return type.IsNumber();
+			return type.IsNumericType();
 		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{

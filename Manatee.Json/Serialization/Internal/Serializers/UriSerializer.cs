@@ -2,12 +2,13 @@
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	[Obsolete("Need to replace this with extensible serializer.")]
-	internal class UriSerializer : ISerializer
+	internal class UriSerializer : IPrioritizedSerializer
 	{
+		public int Priority => int.MinValue;
+
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return type == typeof(Uri);
 		}

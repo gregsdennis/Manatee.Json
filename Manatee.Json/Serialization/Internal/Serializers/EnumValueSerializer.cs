@@ -3,13 +3,17 @@ using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class EnumValueSerializer : ISerializer
+	internal class EnumValueSerializer : IPrioritizedSerializer
 	{
+		public int Priority => int.MinValue;
+
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
-			return type.GetTypeInfo().IsEnum && options.EnumSerializationFormat == EnumSerializationFormat.AsInteger;
+			return type.GetTypeInfo().IsEnum &&
+			       (options.EnumSerializationFormat == EnumSerializationFormat.AsInteger ||		// used during serialization
+			        json?.Type == JsonValueType.Number);										// used during deserialization
 		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{

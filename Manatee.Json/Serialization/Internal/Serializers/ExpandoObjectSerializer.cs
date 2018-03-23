@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 
-namespace Manatee.Json.Serialization.Internal.AutoRegistration
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class ExpandoObjectSerializationDeleteProvider : SerializationDelegateProviderBase
+	internal class ExpandoObjectSerializer : GenericTypeSerializerBase
 	{
-		public override bool CanHandle(Type type)
+		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return type == typeof(ExpandoObject);
 		}

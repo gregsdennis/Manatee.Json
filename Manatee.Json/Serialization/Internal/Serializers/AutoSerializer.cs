@@ -7,11 +7,13 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class AutoSerializer : ISerializer, ITypeSerializer
+	internal class AutoSerializer : IPrioritizedSerializer, ITypeSerializer
 	{
+		public int Priority => int.MaxValue;
+
 		public bool ShouldMaintainReferences => true;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return true;
 		}

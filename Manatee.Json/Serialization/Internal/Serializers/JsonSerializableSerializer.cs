@@ -3,11 +3,13 @@ using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class JsonSerializableSerializer : ISerializer
+	internal class JsonSerializableSerializer : IPrioritizedSerializer
 	{
+		public int Priority => int.MinValue;
+
 		public bool ShouldMaintainReferences => true;
 
-		public bool Handles(Type type, JsonSerializerOptions options)
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return typeof(IJsonSerializable).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
 		}
