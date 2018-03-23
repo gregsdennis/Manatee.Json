@@ -2,20 +2,25 @@ using System;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class TimeSpanSerializer : GenericTypeSerializerBase
+	internal class TimeSpanSerializer : IPrioritizedSerializer
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public int Priority => -10;
+
+		public bool ShouldMaintainReferences => false;
+
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return type == typeof(TimeSpan);
 		}
-
-		private static JsonValue _Encode(TimeSpan ts, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
+			var ts = (TimeSpan) (object) obj;
+
 			return ts.ToString();
 		}
-		private static TimeSpan _Decode(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			return json.Type == JsonValueType.String ? TimeSpan.Parse(json.String) : default(TimeSpan);
+			return json.Type == JsonValueType.String ? (T) (object) TimeSpan.Parse(json.String) : default(T);
 		}
 	}
 }

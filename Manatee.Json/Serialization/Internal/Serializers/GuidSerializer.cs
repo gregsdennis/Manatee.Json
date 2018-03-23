@@ -2,20 +2,25 @@ using System;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class GuidSerializer : GenericTypeSerializerBase
+	internal class GuidSerializer : IPrioritizedSerializer
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public int Priority => -10;
+
+		public bool ShouldMaintainReferences => false;
+
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
 		{
 			return type == typeof(Guid);
 		}
 
-		private static JsonValue _Encode(Guid guid, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
+			var guid = (Guid) (object) obj;
 			return guid.ToString();
 		}
-		private static Guid _Decode(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			return json.Type == JsonValueType.String ? new Guid(json.String) : default(Guid);
+			return json.Type == JsonValueType.String ? (T) (object) new Guid(json.String) : default(T);
 		}
 	}
 }

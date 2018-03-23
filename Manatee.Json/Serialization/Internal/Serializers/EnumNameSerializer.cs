@@ -16,7 +16,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		private static readonly Dictionary<Type, List<Description>> _descriptions = new Dictionary<Type,List<Description>>();
 
-		public int Priority => int.MinValue;
+		public int Priority => -10;
 
 		public bool ShouldMaintainReferences => false;
 

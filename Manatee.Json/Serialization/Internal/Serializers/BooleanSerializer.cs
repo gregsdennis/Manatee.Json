@@ -4,7 +4,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class BooleanSerializer : IPrioritizedSerializer
 	{
-		public int Priority => int.MinValue;
+		public int Priority => -10;
 
 		public bool ShouldMaintainReferences => false;
 

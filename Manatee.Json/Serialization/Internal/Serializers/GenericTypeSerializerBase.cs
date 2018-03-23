@@ -9,7 +9,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private readonly MethodInfo _encodeMethod;
 		private readonly MethodInfo _decodeMethod;
 
-		public virtual int Priority => int.MinValue;
+		public virtual int Priority => -10;
 
 		public virtual bool ShouldMaintainReferences => false;
 
