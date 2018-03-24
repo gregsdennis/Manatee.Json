@@ -404,7 +404,6 @@ namespace Manatee.Json
 
 		#region Casts
 
-
 		/// <summary>
 		/// Implicitly converts a <see cref="bool"/> into a <see cref="JsonValue"/>.
 		/// </summary>
@@ -489,7 +488,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(float? n)
+		public static explicit operator JsonValue(float? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -511,9 +510,9 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(decimal? n)
+		public static explicit operator JsonValue(decimal? n)
 		{
-			return n == null ? null : new JsonValue(n);
+			return n == null ? null : new JsonValue((double?)n);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="Nullable{int}"/> into a <see cref="JsonValue"/>.
@@ -533,7 +532,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(int? n)
+		public static explicit operator JsonValue(int? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -555,7 +554,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(long? n)
+		public static explicit operator JsonValue(long? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -577,7 +576,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(short? n)
+		public static explicit operator JsonValue(short? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -599,7 +598,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(byte? n)
+		public static explicit operator JsonValue(byte? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -621,7 +620,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(sbyte? n)
+		public static explicit operator JsonValue(sbyte? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -643,7 +642,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(ushort? n)
+		public static explicit operator JsonValue(ushort? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -665,7 +664,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(uint? n)
+		public static explicit operator JsonValue(uint? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -687,7 +686,7 @@ namespace Manatee.Json
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
-		public static implicit operator JsonValue(ulong? n)
+		public static explicit operator JsonValue(ulong? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
