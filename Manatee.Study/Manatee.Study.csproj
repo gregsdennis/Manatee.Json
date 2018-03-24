@@ -56,5 +56,11 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj">
+      <Project>{7548217B-8C18-4CA5-A248-59889EF93CF5}</Project>
+      <Name>Manatee.Json</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

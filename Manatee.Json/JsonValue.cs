@@ -402,6 +402,9 @@ namespace Manatee.Json
 			return JsonParser.ParseAsync(stream);
 		}
 
+		#region Casts
+
+
 		/// <summary>
 		/// Implicitly converts a <see cref="bool"/> into a <see cref="JsonValue"/>.
 		/// </summary>
@@ -447,10 +450,10 @@ namespace Manatee.Json
 			return s == null ? null : new JsonValue(s);
 		}
 		/// <summary>
-		/// Implicitly converts a <see cref="double"/> into a <see cref="JsonValue"/>.
+		/// Implicitly converts a <see cref="Nullable{double}"/> into a <see cref="JsonValue"/>.
 		/// </summary>
-		/// <param name="n">A <see cref="double"/>.</param>
-		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="double"/>.</returns>
+		/// <param name="n">A <see cref="Nullable{double}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{double}"/>.</returns>
 		/// <remarks>
 		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
@@ -465,6 +468,226 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// </code></example>
 		public static implicit operator JsonValue(double? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{float}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{float}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{float}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(float? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{decimal}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{decimal}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{decimal}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(decimal? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{int}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{int}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{int}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(int? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{long}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{long}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{long}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(long? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{short}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{short}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{short}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(short? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{byte}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{byte}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{byte}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(byte? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{sbyte}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{sbyte}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{sbyte}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(sbyte? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{ushort}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{ushort}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{ushort}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(ushort? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{uint}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{uint}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{uint}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(uint? n)
+		{
+			return n == null ? null : new JsonValue(n);
+		}
+		/// <summary>
+		/// Implicitly converts a <see cref="Nullable{ulong}"/> into a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="n">A <see cref="Nullable{ulong}"/>.</param>
+		/// <returns>A <see cref="JsonValue"/> that represents the <see cref="Nullable{ulong}"/>.</returns>
+		/// <remarks>
+		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
+		/// </remarks>
+		/// <example><code>
+		/// JsonObject obj = new JsonObject{
+		///		{"stringData", "string"},
+		///		{"numberData", 10.6},
+		///		{"boolData", true},
+		///		{"arrayData", new JsonArray{false, "Array String", JsonValue.Null, 8e-4}},
+		///		{"objectData", new JsonObject{
+		///			{"stringData2", "another string"},
+		///			{"moreBoolData", false}}}};
+		/// </code></example>
+		public static implicit operator JsonValue(ulong? n)
 		{
 			return n == null ? null : new JsonValue(n);
 		}
@@ -512,6 +735,8 @@ namespace Manatee.Json
 		{
 			return a == null ? null : new JsonValue(a);
 		}
+
+		#endregion
 		///<summary>
 		/// Performs an equality comparison between two <see cref="JsonValue"/>s.
 		///</summary>

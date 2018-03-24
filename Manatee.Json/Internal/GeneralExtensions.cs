@@ -57,6 +57,7 @@ namespace Manatee.Json.Internal
 			       value is short ||
 			       value is ushort ||
 				   value is byte ||
+				   value is sbyte ||
 				   value is long ||
 				   value is ulong;
 		}
