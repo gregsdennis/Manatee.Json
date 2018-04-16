@@ -885,5 +885,33 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, json);
 		}
+
+		[Test]
+		public void SerializeCustomStruct()
+		{
+			var target = new CustomStruct
+				{
+					A = "a string",
+					B = 5
+				};
+
+			JsonValue expected = new JsonObject
+				{
+					["A"] = "a string",
+					["B"] = 5
+				};
+
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							AutoSerializeFields = true
+						}
+				};
+
+			var json = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, json);
+		}
 	}
 }
