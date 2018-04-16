@@ -184,6 +184,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Serialization\SchemaAttributeTests.cs" />
+    <Compile Include="Test References\CustomStruct.cs" />
     <Compile Include="Test References\Issue126.cs" />
     <Compile Include="Test References\ObjectWithTwoUriProps.cs" />
     <Compile Include="Transform\ClientTest.cs" />
