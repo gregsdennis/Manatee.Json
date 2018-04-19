@@ -3,7 +3,7 @@
     <TargetFrameworks>net45;netstandard1.3;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to JSON, including its structure, serialization, JSON Schema, JSON Path, and JSON Patch.</Description>
-    <Version>9.7.2</Version>
+    <Version>9.8.0</Version>
     <Copyright>Copyright © 2018 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
@@ -11,35 +11,21 @@
     <RepositoryUrl>
     </RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v9.7.2
+    <PackageReleaseNotes>v9.8.0
+Explicit builds for .Net Framework 4.5, .Net Standard 1.3, and .Net Standard 2.0.
+BUG FIX: struct deserialization not handling references correctly.
+
+v9.7.2
 BUG FIX: Uri serialization produces reference markers.
 
 v9.7.1
 BUG FIX: 'examples' keyword should have no validation.
 
 v9.7.0
-Added support for extended-vocabulary schemas.
-
-v9.6.1
-Updated Draft-04 meta-schema to conform with changes to online document.
-BUG FIX: Serialization of nullable enums throws exception.
-
-v9.6.0
-Added JSON Pointer support.
-BUG FIX: Value-type serialization generating reference tags.
-BUG FIX: Default value serialized as null within dictionaries.
-
-v9.5.2
-Major speed &amp; memory performance enhancements.
-
-v9.5.1
-Added support for deserializing pre-populated readonly IList and IDictionary properties.
-
-v9.5.0
-Added JSON Schema draft 07 support.</PackageReleaseNotes>
+Added support for extended-vocabulary schemas.</PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>9.7.2.0</FileVersion>
+    <FileVersion>9.8.0.0</FileVersion>
     <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
