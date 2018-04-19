@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -46,16 +45,20 @@ namespace Manatee.Json.Tests.Schema
 				var onlineValidation = onlineSchema.Validate(localSchemaJson);
 
 				Assert.AreEqual(onlineSchema, schema);
-			
+
 				onlineValidation.AssertValid();
 				localValidation.AssertValid();
 
 				Assert.AreEqual(onlineSchemaJson, localSchemaJson);
 
 			}
+			catch (WebException)
+			{
+				Assert.Inconclusive();
+			}
 			catch (AggregateException e)
 			{
-				if (e.InnerExceptions.OfType<HttpRequestException>().Any())
+				if (e.InnerExceptions.OfType<WebException>().Any())
 					Assert.Inconclusive();
 				throw;
 			}
