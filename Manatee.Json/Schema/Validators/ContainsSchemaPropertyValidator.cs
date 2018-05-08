@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -15,7 +17,13 @@ namespace Manatee.Json.Schema.Validators
 		{
 			var contains = GetContains((T)schema);
 			if (json.Array.Count == 0)
-				return new SchemaValidationResults(string.Empty, $"Expected an item that matched '{contains}' but no items were found.");
+			{
+				var message = SchemaErrorMessages.ContainsFoundNoMatch.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = contains
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 
 			var validations = json.Array.Select(jv => contains.Validate(jv, root)).ToList();
 			if (!validations.Any(v => v.Valid))

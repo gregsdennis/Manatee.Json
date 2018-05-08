@@ -101,6 +101,7 @@
     <Compile Include="JsonOptionsTest.cs" />
     <Compile Include="Pointer\JsonPointerTests.cs" />
     <Compile Include="Pointer\SpecificationTests.cs" />
+    <Compile Include="Schema\ConstSchemaTests.cs" />
     <Compile Include="Schema\ExamplesSchemaTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SchemaExtensionsTests.cs" />

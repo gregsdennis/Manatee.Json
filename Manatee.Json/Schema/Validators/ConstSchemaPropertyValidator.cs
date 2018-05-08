@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal abstract class ConstSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
@@ -13,7 +16,14 @@
 		{
 			var constant = GetConst((T)schema);
 			if (constant != json)
-				return new SchemaValidationResults(string.Empty, $"Expected: {constant}; Actual: {json}.");
+			{
+				var message = SchemaErrorMessages.ConstNotEqual.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = constant,
+						["actual"] = json
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 			return new SchemaValidationResults();
 		}
 	}

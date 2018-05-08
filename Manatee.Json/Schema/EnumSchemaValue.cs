@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -27,7 +29,12 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(JsonValue json)
 		{
 			if (json == _value) return new SchemaValidationResults();
-			return new SchemaValidationResults("value", $"'{json}' does not match the required value.");
+			var message = SchemaErrorMessages.EnumValueMismatch.ResolveTokens(new Dictionary<string, object>
+				{
+					["expected"] = _value,
+					["actual"] = json
+				});
+			return new SchemaValidationResults("value", message);
 		}
 		/// <summary>
 		/// Indicates whether the current object is equal to another object of the same type.
