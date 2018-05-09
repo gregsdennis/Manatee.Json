@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -13,7 +14,14 @@ namespace Manatee.Json.Schema.Validators
 			var errors = new List<SchemaValidationError>();
 			var definitions = json.Object["definitions"];
 			if (definitions.Type != JsonValueType.Object)
-				errors.Add(new SchemaValidationError("definitions", "Property 'definitions' must contain an object."));
+			{
+				var message = SchemaErrorMessages.Definitions.ResolveTokens(new Dictionary<string, object>
+					{
+						["value"] = json
+					});
+				errors.Add(new SchemaValidationError("definitions", message));
+			}
+
 			var metaSchema = JsonSchemaFactory.GetMetaSchema(schema.GetType());
 			foreach (var value in definitions.Object.Values)
 			{

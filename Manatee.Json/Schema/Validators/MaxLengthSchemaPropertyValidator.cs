@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -16,7 +18,15 @@ namespace Manatee.Json.Schema.Validators
 			var maxLength = GetMaxLength((T)schema);
 			var length = new StringInfo(json.String).LengthInTextElements;
 			if (maxLength.HasValue && length > maxLength)
-				return new SchemaValidationResults(string.Empty, $"Expected: {maxLength}; Actual: {length}.");
+			{
+				var message = SchemaErrorMessages.MaxLength.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = maxLength,
+						["actual"] = length,
+						["value"] = json
+				});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 			return new SchemaValidationResults();
 		}
 	}

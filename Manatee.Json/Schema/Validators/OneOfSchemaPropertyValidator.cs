@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -23,7 +24,11 @@ namespace Manatee.Json.Schema.Validators
 				case 1:
 					return new SchemaValidationResults();
 				default:
-					return new SchemaValidationResults(string.Empty, "More than one option was valid.");
+					var message = SchemaErrorMessages.OneOf.ResolveTokens(new Dictionary<string, object>
+						{
+							["value"] = json
+						});
+					return new SchemaValidationResults(string.Empty, message);
 			}
 		}
 	}

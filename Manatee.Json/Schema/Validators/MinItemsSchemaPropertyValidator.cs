@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal abstract class MinItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
@@ -12,9 +15,18 @@
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var minItems = GetMinItems((T) schema);
-			return json.Array.Count < minItems
-				       ? new SchemaValidationResults(string.Empty, $"Expected: >= {minItems} items; Actual: {json.Array.Count} items.")
-				       : new SchemaValidationResults();
+			if (json.Array.Count < minItems)
+			{
+				var message = SchemaErrorMessages.MinItems.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = minItems,
+						["actual"] = json.Array.Count,
+						["value"] = json
+				});
+				return new SchemaValidationResults(string.Empty, message);
+			}
+
+			return new SchemaValidationResults();
 		}
 	}
 	
