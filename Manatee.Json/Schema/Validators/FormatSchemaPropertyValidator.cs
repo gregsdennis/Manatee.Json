@@ -20,7 +20,6 @@ namespace Manatee.Json.Schema.Validators
 			{
 				var message = SchemaErrorMessages.Format.ResolveTokens(new Dictionary<string, object>
 					{
-						["actual"] = json.String,
 						["format"] = format.Key,
 						["value"] = json
 				});

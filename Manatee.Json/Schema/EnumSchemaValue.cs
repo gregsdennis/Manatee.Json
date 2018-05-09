@@ -32,7 +32,7 @@ namespace Manatee.Json.Schema
 			var message = SchemaErrorMessages.Enum.ResolveTokens(new Dictionary<string, object>
 				{
 					["expected"] = _value,
-					["actual"] = json
+					["value"] = json
 				});
 			return new SchemaValidationResults("value", message);
 		}
