@@ -24,7 +24,7 @@ namespace Manatee.Json.Tests.Schema
 			var results = schema.Validate(json);
 
 			Assert.IsFalse(results.Valid);
-			Assert.AreEqual("Expected: 5; Actual: 6.", results.Errors.First().Message);
+			Assert.AreEqual("Expected: 5; Actual: 6", results.Errors.First().Message);
 		}
 
 		[Test]
