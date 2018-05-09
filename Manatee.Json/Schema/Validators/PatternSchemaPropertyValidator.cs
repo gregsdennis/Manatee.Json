@@ -20,9 +20,9 @@ namespace Manatee.Json.Schema.Validators
 			{
 				var message = SchemaErrorMessages.Pattern.ResolveTokens(new Dictionary<string, object>
 					{
-						["actual"] = json.String,
-						["pattern"] = pattern
-					});
+						["pattern"] = pattern,
+						["value"] = json
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

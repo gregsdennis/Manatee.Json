@@ -20,8 +20,8 @@ namespace Manatee.Json.Schema.Validators
 					var message = SchemaErrorMessages.ExclusiveMaximum.ResolveTokens(new Dictionary<string, object>
 						{
 							["expected"] = typed.Maximum,
-							["actual"] = json.Number
-						});
+							["value"] = json,
+					});
 					return new SchemaValidationResults(string.Empty, message);
 				}
 			}
@@ -32,8 +32,8 @@ namespace Manatee.Json.Schema.Validators
 					var message = SchemaErrorMessages.Maximum.ResolveTokens(new Dictionary<string, object>
 						{
 							["expected"] = typed.Maximum,
-							["actual"] = json.Number
-						});
+							["value"] = json
+					});
 					return new SchemaValidationResults(string.Empty, message);
 				}
 			}
@@ -62,8 +62,8 @@ namespace Manatee.Json.Schema.Validators
 				var message = template.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = max,
-						["actual"] = json.Number
-					});
+						["value"] = json
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 			
@@ -91,8 +91,8 @@ namespace Manatee.Json.Schema.Validators
 				var message = template.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = max,
-						["actual"] = json.Number
-					});
+						["value"] = json
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

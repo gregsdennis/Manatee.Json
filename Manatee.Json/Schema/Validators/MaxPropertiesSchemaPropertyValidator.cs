@@ -20,8 +20,9 @@ namespace Manatee.Json.Schema.Validators
 				var message = SchemaErrorMessages.MaxProperties.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = maxProperties,
-						["actual"] = json.Object.Count
-					});
+						["actual"] = json.Object.Count,
+						["value"] = json
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -32,7 +33,13 @@ namespace Manatee.Json.Schema.Validators
 				}
 				if (i < array.Count && additionalItems != null)
 					if (Equals(additionalItems, AdditionalItems.False))
-						errors.Add(new SchemaValidationError(string.Empty, SchemaErrorMessages.Items));
+					{
+						var message = SchemaErrorMessages.Items.ResolveTokens(new Dictionary<string, object>
+							{
+								["value"] = json
+							});
+						errors.Add(new SchemaValidationError(string.Empty, message));
+					}
 					else if (!Equals(additionalItems, AdditionalItems.True))
 						errors.AddRange(array.Skip(i).SelectMany(j => additionalItems.Definition.Validate(j, root).Errors));
 			}

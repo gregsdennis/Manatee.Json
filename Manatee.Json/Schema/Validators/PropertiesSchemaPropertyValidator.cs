@@ -47,8 +47,9 @@ namespace Manatee.Json.Schema.Validators
 				{
 					var message = SchemaErrorMessages.Required.ResolveTokens(new Dictionary<string, object>
 						{
-							["property"] = property
-						});
+							["property"] = property,
+							["value"] = json
+					});
 					errors.Add(new SchemaValidationError(property, message));
 				}
 			}
@@ -87,8 +88,9 @@ namespace Manatee.Json.Schema.Validators
 						{
 							var message = SchemaErrorMessages.AdditionalProperties_False.ResolveTokens(new Dictionary<string, object>
 								{
-									["property"] = k
-								});
+									["property"] = k,
+									["value"] = json
+							});
 							return new SchemaValidationError(k, message);
 						}));
 				else

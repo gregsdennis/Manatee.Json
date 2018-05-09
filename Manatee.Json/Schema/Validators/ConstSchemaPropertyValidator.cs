@@ -20,7 +20,7 @@ namespace Manatee.Json.Schema.Validators
 				var message = SchemaErrorMessages.Const.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = constant,
-						["actual"] = json
+						["value"] = json
 					});
 				return new SchemaValidationResults(string.Empty, message);
 			}

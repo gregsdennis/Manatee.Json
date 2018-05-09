@@ -21,7 +21,8 @@ namespace Manatee.Json.Schema.Validators
 				case JsonValueType.Number:
 					if (type.HasFlag(JsonSchemaType.Number)) break;
 					if (json.Number.IsInt() && type.HasFlag(JsonSchemaType.Integer)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {type}; Actual: {json.Type}.");
+					valid = false;
+					break;
 				case JsonValueType.String:
 					var expected = type.ToJson();
 					if (expected.Type == JsonValueType.String && expected == json) break;
@@ -52,8 +53,9 @@ namespace Manatee.Json.Schema.Validators
 				var message = SchemaErrorMessages.Type.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = type,
-						["actual"] = json.Type
-					});
+						["actual"] = json.Type,
+						["value"] = json
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

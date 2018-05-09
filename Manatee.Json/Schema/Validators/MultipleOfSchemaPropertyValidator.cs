@@ -19,10 +19,10 @@ namespace Manatee.Json.Schema.Validators
 			{
 				var message = SchemaErrorMessages.MultipleOf.ResolveTokens(new Dictionary<string, object>
 					{
-						["number"] = json.Number,
 						["multipleOf"] = multipleOf,
-						["actual"] = json.Number % multipleOf
-					});
+						["actual"] = json.Number % multipleOf,
+						["value"] = json
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

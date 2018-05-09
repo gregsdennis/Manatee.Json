@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal abstract class NotSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
@@ -12,9 +15,16 @@
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var results = GetNot((T)schema).Validate(json, root);
-			return results.Valid
-				       ? new SchemaValidationResults(string.Empty, SchemaErrorMessages.Not)
-				       : new SchemaValidationResults();
+			if (results.Valid)
+			{
+				var message = SchemaErrorMessages.Not.ResolveTokens(new Dictionary<string, object>
+					{
+						["value"] = json
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
+
+			return new SchemaValidationResults();
 		}
 	}
 	

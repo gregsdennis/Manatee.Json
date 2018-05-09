@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal class IfThenElseSchema07PropertyValidator : IJsonSchemaPropertyValidator
 	{
@@ -12,18 +15,27 @@
 			if (typed.If == null) return new SchemaValidationResults();
 
 			var ifResults = _ValidateSubSchema(typed.If, json, root);
+			string message;
 			if (ifResults.Valid)
 			{
 				var thenResults = _ValidateSubSchema(typed.Then, json, root);
 				if (thenResults.Valid) return new SchemaValidationResults();
 
-				return new SchemaValidationResults("then", SchemaErrorMessages.Then);
+				message = SchemaErrorMessages.Then.ResolveTokens(new Dictionary<string, object>
+					{
+						["value"] = json
+					});
+				return new SchemaValidationResults("then", message);
 			}
 
 			var elseResults = _ValidateSubSchema(typed.Else, json, root);
 			if (elseResults.Valid) return new SchemaValidationResults();
 
-			return new SchemaValidationResults("else", SchemaErrorMessages.Else);
+			message = SchemaErrorMessages.Else.ResolveTokens(new Dictionary<string, object>
+				{
+					["value"] = json
+				});
+			return new SchemaValidationResults("else", message);
 		}
 
 		private static SchemaValidationResults _ValidateSubSchema(IJsonSchema schema, JsonValue json, JsonValue root)

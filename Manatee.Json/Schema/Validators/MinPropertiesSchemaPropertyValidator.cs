@@ -20,8 +20,9 @@ namespace Manatee.Json.Schema.Validators
 				var message = SchemaErrorMessages.MinProperties.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = minProperties,
-						["actual"] = json.Object.Count
-					});
+						["actual"] = json.Object.Count,
+						["value"] = json
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 
