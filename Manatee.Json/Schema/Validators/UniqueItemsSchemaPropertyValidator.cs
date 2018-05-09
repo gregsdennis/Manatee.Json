@@ -13,9 +13,12 @@ namespace Manatee.Json.Schema.Validators
 		}
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			return json.Array.Count != json.Array.Distinct().Count()
-				       ? new SchemaValidationResults(string.Empty, "Expected unique items; Duplicates were found.")
-				       : new SchemaValidationResults();
+			if (json.Array.Count != json.Array.Distinct().Count())
+			{
+				return new SchemaValidationResults(string.Empty, SchemaErrorMessages.UniqueItems);
+			}
+
+			return new SchemaValidationResults();
 		}
 	}
 

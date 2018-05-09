@@ -17,7 +17,7 @@ namespace Manatee.Json.Schema.Validators
 			var constant = GetConst((T)schema);
 			if (constant != json)
 			{
-				var message = SchemaErrorMessages.ConstNotEqual.ResolveTokens(new Dictionary<string, object>
+				var message = SchemaErrorMessages.Const.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = constant,
 						["actual"] = json

@@ -13,7 +13,7 @@ namespace Manatee.Json.Schema.Validators
 			var errors = new List<SchemaValidationError>();
 			var definitions = json.Object["definitions"];
 			if (definitions.Type != JsonValueType.Object)
-				errors.Add(new SchemaValidationError("definitions", SchemaErrorMessages.DefinitionsShouldBeObject));
+				errors.Add(new SchemaValidationError("definitions", SchemaErrorMessages.Definitions));
 			var metaSchema = JsonSchemaFactory.GetMetaSchema(schema.GetType());
 			foreach (var value in definitions.Object.Values)
 			{

@@ -13,7 +13,7 @@
 		{
 			var results = GetNot((T)schema).Validate(json, root);
 			return results.Valid
-				       ? new SchemaValidationResults(string.Empty, "Expected schema to be invalid, but was valid.")
+				       ? new SchemaValidationResults(string.Empty, SchemaErrorMessages.Not)
 				       : new SchemaValidationResults();
 		}
 	}

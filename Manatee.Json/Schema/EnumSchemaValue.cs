@@ -29,7 +29,7 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(JsonValue json)
 		{
 			if (json == _value) return new SchemaValidationResults();
-			var message = SchemaErrorMessages.EnumValueMismatch.ResolveTokens(new Dictionary<string, object>
+			var message = SchemaErrorMessages.Enum.ResolveTokens(new Dictionary<string, object>
 				{
 					["expected"] = _value,
 					["actual"] = json

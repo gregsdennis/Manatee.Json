@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal class MaximumSchema04PropertyValidator : IJsonSchemaPropertyValidator
 	{
@@ -13,12 +16,26 @@
 			if (typed.ExclusiveMaximum ?? false)
 			{
 				if (json.Number >= typed.Maximum)
-					return new SchemaValidationResults(string.Empty, $"Expected: < {typed.Maximum}; Actual: {json.Number}.");
+				{
+					var message = SchemaErrorMessages.ExclusiveMaximum.ResolveTokens(new Dictionary<string, object>
+						{
+							["expected"] = typed.Maximum,
+							["actual"] = json.Number
+						});
+					return new SchemaValidationResults(string.Empty, message);
+				}
 			}
 			else
 			{
 				if (json.Number > typed.Maximum)
-					return new SchemaValidationResults(string.Empty, $"Expected: <= {typed.Maximum}; Actual: {json.Number}.");
+				{
+					var message = SchemaErrorMessages.Maximum.ResolveTokens(new Dictionary<string, object>
+						{
+							["expected"] = typed.Maximum,
+							["actual"] = json.Number
+						});
+					return new SchemaValidationResults(string.Empty, message);
+				}
 			}
 			return new SchemaValidationResults();
 		}
@@ -36,10 +53,19 @@
 		{
 			var typed = (JsonSchema06) schema;
 			var max = typed.ExclusiveMaximum ?? typed.Maximum;
-			var operation = typed.ExclusiveMaximum.HasValue ? "<" : "<=";
-			
+			var template = typed.ExclusiveMaximum.HasValue 
+				               ? SchemaErrorMessages.ExclusiveMaximum 
+				               : SchemaErrorMessages.Maximum;
+
 			if (json.Number > max || typed.ExclusiveMaximum.HasValue && json.Number >= max)
-				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {max}; Actual: {json.Number}.");
+			{
+				var message = template.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = max,
+						["actual"] = json.Number
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 			
 			return new SchemaValidationResults();
 		}
@@ -56,11 +82,20 @@
 		{
 			var typed = (JsonSchema07) schema;
 			var max = typed.ExclusiveMaximum ?? typed.Maximum;
-			var operation = typed.ExclusiveMaximum.HasValue ? "<" : "<=";
-			
+			var template = typed.ExclusiveMaximum.HasValue
+				               ? SchemaErrorMessages.ExclusiveMaximum
+				               : SchemaErrorMessages.Maximum;
+
 			if (json.Number > max || typed.ExclusiveMaximum.HasValue && json.Number >= max)
-				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {max}; Actual: {json.Number}.");
-			
+			{
+				var message = template.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = max,
+						["actual"] = json.Number
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
+
 			return new SchemaValidationResults();
 		}
 	}

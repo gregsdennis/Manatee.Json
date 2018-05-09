@@ -18,7 +18,7 @@ namespace Manatee.Json.Schema.Validators
 			var format = GetFormat((T) schema);
 			if (!format.Validate(json.String))
 			{
-				var message = SchemaErrorMessages.FormatMismatch.ResolveTokens(new Dictionary<string, object>
+				var message = SchemaErrorMessages.Format.ResolveTokens(new Dictionary<string, object>
 					{
 						["actual"] = json.String,
 						["format"] = format.Key

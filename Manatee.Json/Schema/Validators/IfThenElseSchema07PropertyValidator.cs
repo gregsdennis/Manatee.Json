@@ -17,13 +17,13 @@
 				var thenResults = _ValidateSubSchema(typed.Then, json, root);
 				if (thenResults.Valid) return new SchemaValidationResults();
 
-				return new SchemaValidationResults("then", "Validation of `if` succeeded, but validation of `then` failed.");
+				return new SchemaValidationResults("then", SchemaErrorMessages.Then);
 			}
 
 			var elseResults = _ValidateSubSchema(typed.Else, json, root);
 			if (elseResults.Valid) return new SchemaValidationResults();
 
-			return new SchemaValidationResults("else", "Validation of `if` failed, but validation of `else` also failed.");
+			return new SchemaValidationResults("else", SchemaErrorMessages.Else);
 		}
 
 		private static SchemaValidationResults _ValidateSubSchema(IJsonSchema schema, JsonValue json, JsonValue root)

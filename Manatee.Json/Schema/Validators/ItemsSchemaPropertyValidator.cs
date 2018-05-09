@@ -32,7 +32,7 @@ namespace Manatee.Json.Schema.Validators
 				}
 				if (i < array.Count && additionalItems != null)
 					if (Equals(additionalItems, AdditionalItems.False))
-						errors.Add(new SchemaValidationError(string.Empty, "Schema indicates no additional items are allowed."));
+						errors.Add(new SchemaValidationError(string.Empty, SchemaErrorMessages.Items));
 					else if (!Equals(additionalItems, AdditionalItems.True))
 						errors.AddRange(array.Skip(i).SelectMany(j => additionalItems.Definition.Validate(j, root).Errors));
 			}

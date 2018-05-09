@@ -23,7 +23,7 @@ namespace Manatee.Json.Schema.Validators
 				case 1:
 					return new SchemaValidationResults();
 				default:
-					return new SchemaValidationResults(string.Empty, "More than one option was valid.");
+					return new SchemaValidationResults(string.Empty, SchemaErrorMessages.OneOf);
 			}
 		}
 	}

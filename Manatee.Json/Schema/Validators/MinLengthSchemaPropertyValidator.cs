@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -16,7 +18,14 @@ namespace Manatee.Json.Schema.Validators
 			var minLength = GetMinLength((T)schema);
 			var length = new StringInfo(json.String).LengthInTextElements;
 			if (minLength.HasValue && length < minLength)
-				return new SchemaValidationResults(string.Empty, $"Expected: length >= {minLength}; Actual: {length}.");
+			{
+				var message = SchemaErrorMessages.MinLength.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = minLength,
+						["actual"] = length
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 			return new SchemaValidationResults();
 		}
 	}

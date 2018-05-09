@@ -18,7 +18,7 @@ namespace Manatee.Json.Schema.Validators
 			var contains = GetContains((T)schema);
 			if (json.Array.Count == 0)
 			{
-				var message = SchemaErrorMessages.ContainsFoundNoMatch.ResolveTokens(new Dictionary<string, object>
+				var message = SchemaErrorMessages.Contains.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = contains
 					});

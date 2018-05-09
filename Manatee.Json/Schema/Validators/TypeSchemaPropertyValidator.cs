@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Internal;
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -14,6 +15,7 @@ namespace Manatee.Json.Schema.Validators
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var type = GetType((T)schema);
+			bool valid = true;
 			switch (json.Type)
 			{
 				case JsonValueType.Number:
@@ -25,21 +27,38 @@ namespace Manatee.Json.Schema.Validators
 					if (expected.Type == JsonValueType.String && expected == json) break;
 					if (expected.Type == JsonValueType.Array && expected.Array.Contains(json)) break;
 					if (type.HasFlag(JsonSchemaType.String)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {type}; Actual: {json.Type}.");
+					valid = false;
+					break;
 				case JsonValueType.Boolean:
 					if (type.HasFlag(JsonSchemaType.Boolean)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {type}; Actual: {json.Type}.");
+					valid = false;
+					break;
 				case JsonValueType.Object:
 					if (type.HasFlag(JsonSchemaType.Object)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {type}; Actual: {json.Type}.");
+					valid = false;
+					break;
 				case JsonValueType.Array:
 					if (type.HasFlag(JsonSchemaType.Array)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {type}; Actual: {json.Type}.");
+					valid = false;
+					break;
 				case JsonValueType.Null:
 					if (type.HasFlag(JsonSchemaType.Null)) break;
-					return new SchemaValidationResults(string.Empty, $"Expected: {type}; Actual: {json.Type}.");
+					valid = false;
+					break;
 			}
+
+			if (!valid)
+			{
+				var message = SchemaErrorMessages.Type.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = type,
+						["actual"] = json.Type
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
+
 			return new SchemaValidationResults();
+
 		}
 	}
 

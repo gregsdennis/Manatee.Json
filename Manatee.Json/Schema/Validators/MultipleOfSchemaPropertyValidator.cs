@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal abstract class MultipleOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
@@ -12,9 +15,18 @@
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var multipleOf = GetMultipleOf((T) schema);
-			return (decimal) json.Number % (decimal?) multipleOf != 0
-				       ? new SchemaValidationResults(string.Empty, $"Expected: {json.Number}%{multipleOf}=0; Actual: {json.Number % multipleOf}.")
-				       : new SchemaValidationResults();
+			if ((decimal) json.Number % (decimal?) multipleOf != 0)
+			{
+				var message = SchemaErrorMessages.MultipleOf.ResolveTokens(new Dictionary<string, object>
+					{
+						["number"] = json.Number,
+						["multipleOf"] = multipleOf,
+						["actual"] = json.Number % multipleOf
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
+
+			return new SchemaValidationResults();
 		}
 	}
 	

@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal class MinimumSchema04PropertyValidator : IJsonSchemaPropertyValidator
 	{
@@ -13,12 +16,26 @@
 			if (typed.ExclusiveMinimum ?? false)
 			{
 				if (json.Number <= typed.Minimum)
-					return new SchemaValidationResults(string.Empty, $"Expected: > {typed.Minimum}; Actual: {json.Number}.");
+				{
+					var message = SchemaErrorMessages.ExclusiveMinimum.ResolveTokens(new Dictionary<string, object>
+						{
+							["expected"] = typed.Minimum,
+							["actual"] = json.Number
+						});
+					return new SchemaValidationResults(string.Empty, message);
+				}
 			}
 			else
 			{
 				if (json.Number < typed.Minimum)
-					return new SchemaValidationResults(string.Empty, $"Expected: >= {typed.Minimum}; Actual: {json.Number}.");
+				{
+					var message = SchemaErrorMessages.Minimum.ResolveTokens(new Dictionary<string, object>
+						{
+							["expected"] = typed.Minimum,
+							["actual"] = json.Number
+						});
+					return new SchemaValidationResults(string.Empty, message);
+				}
 			}
 			return new SchemaValidationResults();
 		}
@@ -36,10 +53,19 @@
 		{
 			var typed = (JsonSchema06)schema;
 			var min = typed.ExclusiveMinimum ?? typed.Minimum;
-			var operation = typed.ExclusiveMaximum.HasValue ? ">" : ">=";
-			
+			var template = typed.ExclusiveMinimum.HasValue
+				               ? SchemaErrorMessages.ExclusiveMinimum
+				               : SchemaErrorMessages.Minimum;
+
 			if (json.Number < min || (typed.ExclusiveMinimum.HasValue && json.Number <= min))
-				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {min}; Actual: {json.Number}.");
+			{
+				var message = template.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = min,
+						["actual"] = json.Number
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 
 			return new SchemaValidationResults();
 		}
@@ -56,10 +82,19 @@
 		{
 			var typed = (JsonSchema07) schema;
 			var min = typed.ExclusiveMinimum ?? typed.Minimum;
-			var operation = typed.ExclusiveMaximum.HasValue ? ">" : ">=";
-			
+			var template = typed.ExclusiveMinimum.HasValue
+				               ? SchemaErrorMessages.ExclusiveMinimum
+				               : SchemaErrorMessages.Minimum;
+
 			if (json.Number < min || (typed.ExclusiveMinimum.HasValue && json.Number <= min))
-				return new SchemaValidationResults(string.Empty, $"Expected: {operation} {min}; Actual: {json.Number}.");
+			{
+				var message = template.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = min,
+						["actual"] = json.Number
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 
 			return new SchemaValidationResults();
 		}

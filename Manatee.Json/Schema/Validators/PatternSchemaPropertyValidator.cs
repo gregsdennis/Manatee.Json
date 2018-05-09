@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -14,9 +16,17 @@ namespace Manatee.Json.Schema.Validators
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var pattern = GetPattern((T) schema);
-			return Regex.IsMatch(json.String, pattern)
-				       ? new SchemaValidationResults()
-				       : new SchemaValidationResults(string.Empty, $"Value [{json.String}] does not match required Regex pattern [{pattern}].");
+			if (!Regex.IsMatch(json.String, pattern))
+			{
+				var message = SchemaErrorMessages.Pattern.ResolveTokens(new Dictionary<string, object>
+					{
+						["actual"] = json.String,
+						["pattern"] = pattern
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
+
+			return new SchemaValidationResults();
 		}
 	}
 	

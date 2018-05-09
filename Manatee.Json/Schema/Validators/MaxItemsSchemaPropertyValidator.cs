@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal abstract class MaxItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
@@ -13,7 +16,14 @@
 		{
 			var maxItems = GetMaxItems((T)schema);
 			if (json.Array.Count > maxItems)
-				return new SchemaValidationResults(string.Empty, $"Expected: <= {maxItems} items; Actual: {json.Array.Count} items.");
+			{
+				var message = SchemaErrorMessages.MaxItems.ResolveTokens(new Dictionary<string, object>
+					{
+						["expected"] = maxItems,
+						["actual"] = json.Array.Count
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 			return new SchemaValidationResults();
 		}
 	}
