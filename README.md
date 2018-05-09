@@ -1,6 +1,10 @@
 # Manatee.Json
 
-[![NuGet version (Manatee.Json)](https://img.shields.io/nuget/v/Manatee.Json.svg?style=flat-square)](https://www.nuget.org/packages/Manatee.Json/) [![Join the chat at https://gitter.im/gregsdennis/Manatee.Json](https://badges.gitter.im/gregsdennis/Manatee.Json.svg)](https://gitter.im/gregsdennis/Manatee.Json?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build status](https://ci.appveyor.com/api/projects/status/wda5exdfiuic3kg2/branch/master?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master) [![littlecrabsolutions MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/) <a href="http://www.jetbrains.com/resharper"><img src="http://i61.tinypic.com/15qvwj7.jpg" alt="ReSharper" title="ReSharper"></a>
+[![Build status](https://ci.appveyor.com/api/projects/status/wda5exdfiuic3kg2/branch/master?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)<br>
+[![MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)<br>
+[![NuGet version (Manatee.Json)](https://img.shields.io/nuget/v/Manatee.Json.svg?style=flat-square)](https://www.nuget.org/packages/Manatee.Json/)
+[![Discuss on Slack](/Resources/Slack_RGB.png)]<br>(https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI)<br>
+<a href="http://www.jetbrains.com/resharper"><img src="http://i61.tinypic.com/15qvwj7.jpg" alt="ReSharper" title="ReSharper"></a>
 
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
@@ -68,15 +72,26 @@ Manatee.Json also:
 
 - Is covered by over 2000 unit tests
 - Conforms to RFC-8259: The JSON specification
-- Supports .Net Standard 1.3
+- Supports:
+    - .Net Framework 4.5
+    - .Net Standard 1.3
+    - .Net Standard 2.0
 - Outputs compact and prettified JSON text
-- Supports [JSON Schema](http://json-schema.org/) (both draft-04/06/07) **INCLUDED AND FREE!** (with object model)
-- Supports [JSONPath](http://goessner.net/articles/JsonPath/) (with object model and compile-time checking)
+- Supports [JSON Schema](http://json-schema.org/) **INCLUDED AND FREE!**
+    - Draft 4
+    - Draft 6
+    - Draft 7
+    - Native object model
+    - Customizable JSON Schema validation errors
+- Supports [JSONPath](http://goessner.net/articles/JsonPath/)
+    - Native object model
+    - Compile-time checking
 - Supports [JsonPatch](http://jsonpatch.com/) (with object model)
 - Is fully LINQ-compatible
 - Converts between JSON and XML
 - Reports parsing errors using JSONPath to identify location
 - Supports streamed parsing
+- Customizable JSON Schema validation errors
 - Is fully open-source under the MIT license
 
 Serialization features:
@@ -121,7 +136,7 @@ The library consists of a single project that target .Net Standard 1.3.  The tes
 
 ### Building
 
-During development, building within Visual Studio should be fine.  There is a build script in the root directory, but I use that for CI and to generate Nuget packages.
+During development, building within Visual Studio should be fine.
 
 ### Code style and maintenance
 
