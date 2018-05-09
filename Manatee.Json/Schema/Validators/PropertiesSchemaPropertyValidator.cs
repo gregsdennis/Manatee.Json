@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -43,7 +44,14 @@ namespace Manatee.Json.Schema.Validators
 			foreach (var property in requiredProperties)
 			{
 				if (!obj.ContainsKey(property))
-					errors.Add(new SchemaValidationError(property, "Required property not found."));
+				{
+					var message = SchemaErrorMessages.Required.ResolveTokens(new Dictionary<string, object>
+						{
+							["property"] = property,
+							["value"] = json
+					});
+					errors.Add(new SchemaValidationError(property, message));
+				}
 			}
 			// if additionalProperties is false, we perform the property elimination,
 			// otherwise properties and patternProperties applies to all properties.
@@ -76,7 +84,15 @@ namespace Manatee.Json.Schema.Validators
 			if (additionalProperties != null)
 			{
 				if (Equals(additionalProperties, AdditionalProperties.False) && extraData.Any())
-					errors.AddRange(extraData.Keys.Select(k => new SchemaValidationError(k, "Additional properties are not allowed.")));
+					errors.AddRange(extraData.Keys.Select(k =>
+						{
+							var message = SchemaErrorMessages.AdditionalProperties_False.ResolveTokens(new Dictionary<string, object>
+								{
+									["property"] = k,
+									["value"] = json
+							});
+							return new SchemaValidationError(k, message);
+						}));
 				else
 				{
 					var localSchema = additionalProperties.Definition;

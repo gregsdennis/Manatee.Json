@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
@@ -13,9 +15,16 @@ namespace Manatee.Json.Schema.Validators
 		}
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
-			return json.Array.Count != json.Array.Distinct().Count()
-				       ? new SchemaValidationResults(string.Empty, "Expected unique items; Duplicates were found.")
-				       : new SchemaValidationResults();
+			if (json.Array.Count != json.Array.Distinct().Count())
+			{
+				var message = SchemaErrorMessages.UniqueItems.ResolveTokens(new Dictionary<string, object>
+					{
+						["value"] = json
+					});
+				return new SchemaValidationResults(string.Empty, message);
+			}
+
+			return new SchemaValidationResults();
 		}
 	}
 

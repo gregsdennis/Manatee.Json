@@ -49,14 +49,14 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
-			var obj = serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
+			var obj = (object) serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			var type = obj.GetType();
 			var propertyList = ReflectionCache.GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _DeserializeValues(obj, json, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);
 			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(type, json);
-			_AssignObjectProperties(obj, map);
-			return obj;
+			_AssignObjectProperties(ref obj, map);
+			return (T) obj;
 		}
 		public void DeserializeType<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -65,7 +65,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var map = _DeserializeTypeValues(json, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);
 			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(type, json);
-			_AssignObjectProperties(null, map);
+			object obj = null;
+			_AssignObjectProperties(ref obj, map);
 		}
 		private static Dictionary<SerializationInfo, JsonValue> _SerializeValues<T>(T obj, JsonSerializer serializer, IEnumerable<SerializationInfo> properties)
 		{
@@ -248,7 +249,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return key != null;
 		}
-		private static void _AssignObjectProperties(object obj, Dictionary<SerializationInfo, object> memberMap)
+		private static void _AssignObjectProperties(ref object obj, Dictionary<SerializationInfo, object> memberMap)
 		{
 			foreach (var entry in memberMap)
 			{

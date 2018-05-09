@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+#if !NET45
 using System.Net.Http;
+#endif
 
 namespace Manatee.Json.Schema
 {
@@ -47,7 +50,11 @@ namespace Manatee.Json.Schema
 			{
 				case "http":
 				case "https:":
+#if NET45
+					return new WebClient().DownloadString(uri);
+#else
 					return new HttpClient().GetStringAsync(uri).Result;
+#endif
 				case "file":
 					var filename = Uri.UnescapeDataString(uri.AbsolutePath);
 					return File.ReadAllText(filename);

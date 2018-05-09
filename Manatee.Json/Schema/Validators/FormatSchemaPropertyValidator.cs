@@ -1,4 +1,7 @@
-﻿namespace Manatee.Json.Schema.Validators
+﻿using System.Collections.Generic;
+using Manatee.Json.Internal;
+
+namespace Manatee.Json.Schema.Validators
 {
 	internal abstract class FormatSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : IJsonSchema
@@ -14,7 +17,14 @@
 		{
 			var format = GetFormat((T) schema);
 			if (!format.Validate(json.String))
-				return new SchemaValidationResults(string.Empty, $"Value [{json.String}] is not in an acceptable {format.Key} format.");
+			{
+				var message = SchemaErrorMessages.Format.ResolveTokens(new Dictionary<string, object>
+					{
+						["format"] = format.Key,
+						["value"] = json
+				});
+				return new SchemaValidationResults(string.Empty, message);
+			}
 			return new SchemaValidationResults();
 		}
 	}
