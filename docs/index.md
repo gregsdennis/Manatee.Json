@@ -2,14 +2,6 @@
 title: Welcome
 ---
 
-# Manatee.Json
-
-[![Build status](https://ci.appveyor.com/api/projects/status/wda5exdfiuic3kg2/branch/master?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)<br>
-[![MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)<br>
-[![NuGet version (Manatee.Json)](https://img.shields.io/nuget/v/Manatee.Json.svg?style=flat-square)](https://www.nuget.org/packages/Manatee.Json/)<br>
-[![Discuss on Slack](/Resources/Slack_RGB.png)](https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI)<br>
-<a href="http://www.jetbrains.com/resharper"><img src="http://i61.tinypic.com/15qvwj7.jpg" alt="ReSharper" title="ReSharper"></a>
-
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
 Secondarily, Manatee.Json is *intended* to be strictly compliant with RFC-8259, which means that it purposefully does not support JSON variants, like single-quoted strings or BSON.
