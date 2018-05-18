@@ -1,0 +1,44 @@
+{
+	"sections": [
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.JsonSerializer"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.AbstractionMap"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.CustomSerializations"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.IJsonSerializable"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.JsonIgnoreAttribute"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.JsonMapToAttribute"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.SchemaAttribute"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.JsonSerializationException"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.TypeDoesNotContainPropertyException"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Serialization.TypeInstantiationException"
+		}
+	]
+}

@@ -1,0 +1,8 @@
+{
+	"sections": [
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchema07"
+		}
+	]
+}

@@ -1,0 +1,40 @@
+{
+	"sections": [
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.JsonValue"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.JsonValueType"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.JsonValueIncorrectTypeException"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.JsonObject"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.JsonArray"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.JsonOptions"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.DuplicateKeyBehavior"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.ArrayEquality"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.JsonSyntaxException"
+		}
+	]
+}

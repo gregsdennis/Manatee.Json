@@ -1,0 +1,12 @@
+{
+	"sections": [
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Pointer.JsonPointer"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Pointer.PointerEvaluationResults"
+		}
+	]
+}

@@ -1,0 +1,48 @@
+{
+	"sections": [
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.IJsonSchema"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.SchemaValidationResults"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.SchemaValidationError"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchemaOptions"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchemaFactory"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchemaRegistry"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.SchemaLoadException"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchemaReference"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchemaType"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchemaPropertyValidatorFactory"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.IJsonSchemaPropertyValidator"
+		}
+	]
+}

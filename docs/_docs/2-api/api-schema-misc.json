@@ -1,0 +1,40 @@
+{
+	"sections": [
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.StringFormat"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.ContentEncoding"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.AdditionalItems"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.AdditionalProperties"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.EnumSchemaValue"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.IJsonSchemaDependency"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.PropertyDependency"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.SchemaDependency"
+		},
+		{
+			"assembly": "Manatee.Json",
+			"type": "Manatee.Json.Schema.JsonSchemaCollection"
+		}
+	]
+}
