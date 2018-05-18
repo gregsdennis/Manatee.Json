@@ -116,7 +116,7 @@ Serialization features:
 - Opt-out property inclusion via attribute
 - Optionally serialize only properties for requested type or all properties defined by object
 
-See the wiki pages for more information on how to use this wonderful library!
+See the [docs](https://gregsdennis.github.io/Manatee.Json) for more information on how to use this wonderful library!
 
 ## Contributing
 
