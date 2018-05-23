@@ -1,9 +1,13 @@
 # Manatee.Json
 
-[![Build status](https://ci.appveyor.com/api/projects/status/wda5exdfiuic3kg2/branch/master?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)<br>
-[![MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)<br>
 [![NuGet version (Manatee.Json)](https://img.shields.io/nuget/v/Manatee.Json.svg?style=flat-square)](https://www.nuget.org/packages/Manatee.Json/)
-[![Discuss on Slack](/Resources/Slack_RGB.png)](https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI)<br>
+[![Build status](https://ci.appveyor.com/api/projects/status/wda5exdfiuic3kg2/branch/master?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)
+[![MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/gregsdennis/Manatee.Json.svg)](http://isitmaintained.com/project/gregsdennis/Manatee.Json "Percentage of issues still open")
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/gregsdennis/Manatee.Json.svg)](http://isitmaintained.com/project/gregsdennis/Manatee.Json "Average time to resolve an issue")
+
+[![Discuss on Slack](/Resources/Slack_RGB.png)](https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI)
+
 <a href="http://www.jetbrains.com/resharper"><img src="http://i61.tinypic.com/15qvwj7.jpg" alt="ReSharper" title="ReSharper"></a>
 
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
