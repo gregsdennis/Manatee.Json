@@ -1,8 +1,0 @@
-{
-	"sections": [
-		{
-			"assembly": "Manatee.Json",
-			"type": "Manatee.Json.Transform.JsonTransformer"
-		}
-	]
-}

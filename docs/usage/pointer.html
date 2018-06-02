@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>JSON Pointer </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="JSON Pointer ">
+    <meta name="generator" content="docfx 2.36.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg site-icon" src="../siteicon.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="json-pointer">JSON Pointer</h1>
+
+<p><a href="https://tools.ietf.org/html/rfc6901">JSON Pointer</a> is a syntax that allows the selection of a specific value within a JSON document.  This is contrasted to JSON Path which is used to perform searches, returning multiple values.</p>
+<h2 id="an-overview-of-json-pointer">An overview of JSON Pointer</h2>
+<p>The syntax is fairly simple:</p>
+<ul>
+<li>The path starts with <code>/</code>.</li>
+<li>Each segment is separated by <code>/</code>.</li>
+<li>Each segment can be interpreted as either an array index or an object key.</li>
+</ul>
+<p>For example, given the JSON document (from the spec linked above):</p>
+<pre><code class="lang-json">{
+    &quot;foo&quot;: [&quot;bar&quot;, &quot;baz&quot;],
+    &quot;&quot;: 0,
+    &quot;a/b&quot;: 1,
+    &quot;c%d&quot;: 2,
+    &quot;e^f&quot;: 3,
+    &quot;g|h&quot;: 4,
+    &quot;i\\j&quot;: 5,
+    &quot;k\&quot;l&quot;: 6,
+    &quot; &quot;: 7,
+    &quot;m~n&quot;: 8
+}
+</code></pre>
+<p>The following pointers evaluate to the accompanying values:</p>
+<pre><code>&lt;empty&gt;      // the whole document
+/foo&quot;       [&quot;bar&quot;, &quot;baz&quot;]
+/foo/0&quot;     &quot;bar&quot;
+/&quot;          0
+/a~1b       1
+/c%d        2
+/e^f        3
+/g|h        4
+/i\j        5
+/k&quot;l        6
+/           7
+/m~0n       8
+</code></pre>
+<p>Note the paths <code>a~1b</code> and <code>m~0n</code>.  These show the only two characters which must be delimited: <code>~</code> and <code>/</code> which are delimited as <code>~0</code> and <code>~1</code>, respectively.</p>
+<p>JSON Pointer also supports a URL syntax which starts with <code>#</code> and allows for characters to be encoded as <code>%xx</code> format, where <code>xx</code> is the hexadecimal equivalent of the character.</p>
+<h2 id="usage">Usage</h2>
+<p>Manatee.Json's implementation is the <code>JsonPointer</code> class.  This class extends <code>List&lt;string&gt;</code> to represent each segment individually.  It also exposes <code>Evaluate(JsonValue)</code>.  This method returns a result object that exposes either the value found at the path or an error describing where the path ended.</p>
+<p>To create a path, you can either write out the path in a string and parse it using the <code>JsonPointer.Parse()</code> method:</p>
+<pre><code class="lang-csharp">var pointer = JsonPointer.Parse(&quot;/foo/0&quot;);
+</code></pre>
+<p>or you can supply the segments individually or in a collection through one of the constructors:</p>
+<pre><code class="lang-csharp">var pointer = new JsonPointer { &quot;foo&quot;, &quot;0&quot; };
+</code></pre>
+<p>Both of these create the same path.</p>
+<p>Once created, evaluation is simple:</p>
+<pre><code class="lang-csharp">var sample = new JsonObject { /* example from above */ };
+var results = pointer.Evaluate(sample);
+</code></pre>
+<p>This will return a PointerEvaluationResults object with <code>results.Value</code> equal to the JsonValue <code>0</code>.</p>
+<p>In the case a path does not exist, the <code>results.Error</code> property will contain the path as far as the first segment that was missing.  For example, the path <code>foo/0/notFound/dn</code> would return an error with the path <code>foo/0/notFound</code>.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/pointer.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

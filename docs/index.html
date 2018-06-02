@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Welcome! </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Welcome! ">
+    <meta name="generator" content="docfx 2.36.1.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg site-icon" src="siteicon.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="welcome">Welcome!</h1>
+
+<p>The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.</p>
+<p>Secondarily, Manatee.Json is <em>intended</em> to be strictly compliant with RFC-8259, which means that it purposefully does not support JSON variants, like single-quoted strings or BSON.</p>
+<h2 id="read-from-a-file">Read from a file</h2>
+<pre><code>var text = File.ReadAllText(&quot;content.json&quot;);
+var json = JsonValue.Parse(text);
+</code></pre>
+<p>The <code>json</code> field now contains the content of the <em>.json</em> file.  The object structure is exactly what you'd expect by looking at the file.</p>
+<h2 id="object-model">Object model</h2>
+<p>These JSON types map to primitive .Net types:</p>
+<ul>
+<li><code>true</code>/<code>false</code> as <code>Boolean</code>,</li>
+<li>numbers as <code>Double</code>,</li>
+<li>strings as <code>String</code></li>
+</ul>
+<p>These JSON types map to types defined in Manatee.Json:</p>
+<ul>
+<li>objects (<code>{&quot;key&quot;:&quot;value&quot;, &quot;otherKey&quot;:9}</code>) as <code>JsonObject</code> which derives from <code>Dictionary&lt;string, JsonValue&gt;</code></li>
+<li>arrays (<code>[&quot;value&quot;, 9]</code> as <code>JsonArray</code> which derives from <code>List&lt;JsonValue&gt;</code></li>
+</ul>
+<p>All of these types are encapsulated in a container type, <code>JsonValue</code>.  This type exposes a property for each value type, as well as a property for which type the value contains.</p>
+<p>For the JSON <code>null</code> there is a readonly static <code>JsonValue.Null</code> field.</p>
+<h2 id="building-json-manually">Building JSON manually</h2>
+<p>Manatee.Json defines implicit conversions to <code>JsonValue</code> from <code>Boolean</code>, <code>Double</code>, <code>String</code>, <code>JsonObject</code>, and <code>JsonArray</code>.  This helps greatly in building complex objects manually.</p>
+<pre><code>JsonValue str = &quot;value&quot;,
+          num = 10,
+          boolean = false;
+</code></pre>
+<p>Because the collection types are derived from core .Net types, you also get all of the initialization capabilities.</p>
+<pre><code>var obj = new JsonObject
+    {
+        [&quot;key&quot;] = &quot;value&quot;,
+        [&quot;otherKey&quot;] = 9
+    }
+var array = new JsonArray { &quot;value&quot;, 9, obj };
+</code></pre>
+<h2 id="serialization">Serialization</h2>
+<p>Converting .Net objects to and from JSON is also simple:</p>
+<ol>
+<li><p>Create a serializer</p>
+<pre><code> var serializer = new JsonSerializer();
+</code></pre>
+</li>
+<li><p>De/Serialize</p>
+<pre><code> var myObject = serializer.Deserialize&lt;MyObject&gt;(json);
+ var backToJson = serializer.Serialize(myObject);
+</code></pre>
+</li>
+</ol>
+<p>There are many ways to customize serialization.  See the wiki page for more details!</p>
+<h2 id="but-wait-theres-more">But wait, there's more!</h2>
+<p>Manatee.Json also:</p>
+<ul>
+<li>Is covered by over 2000 unit tests</li>
+<li>Conforms to RFC-8259: The JSON specification</li>
+<li>Supports:
+<ul>
+<li>.Net Framework 4.5</li>
+<li>.Net Standard 1.3</li>
+<li>.Net Standard 2.0</li>
+</ul>
+</li>
+<li>Outputs compact and prettified JSON text</li>
+<li>Supports <a href="http://json-schema.org/">JSON Schema</a> <strong>INCLUDED AND FREE!</strong>
+<ul>
+<li>Draft 4</li>
+<li>Draft 6</li>
+<li>Draft 7</li>
+<li>Native object model</li>
+<li>Customizable JSON Schema validation errors</li>
+</ul>
+</li>
+<li>Supports <a href="http://goessner.net/articles/JsonPath/">JSONPath</a>
+<ul>
+<li>Native object model</li>
+<li>Compile-time checking</li>
+</ul>
+</li>
+<li>Supports <a href="http://jsonpatch.com/">JsonPatch</a> (with object model)</li>
+<li>Is fully LINQ-compatible</li>
+<li>Converts between JSON and XML</li>
+<li>Reports parsing errors using JSONPath to identify location</li>
+<li>Supports streamed parsing</li>
+<li>Customizable JSON Schema validation errors</li>
+<li>Is fully open-source under the MIT license</li>
+</ul>
+<p>Serialization features:</p>
+<ul>
+<li>De/Serialize abstraction types (abstract classes and interfaces) by type registration</li>
+<li>De/Serialize dynamic types</li>
+<li>JIT type creation for unregistered abstraction types</li>
+<li>De/Serialize anonymous types</li>
+<li>Fully customizable serialization of both 1st- and 3rd-party types</li>
+<li>De/Serialize static types/properties</li>
+<li>De/Serialize fields</li>
+<li>De/Serialize enumerations by name or numeric value</li>
+<li>Maintain object references/graphs</li>
+<li>De/Serialize circular references</li>
+<li>Optionally include type names</li>
+<li>Each serializer instance can be independently configured</li>
+<li>Supports multiple date/time formats (ISO 8601, JavaScript, custom)</li>
+<li>Supports using DI containers for object creation</li>
+<li>Supports non-default constructors</li>
+<li>Property name customization via attribute</li>
+<li>Global property name transformations</li>
+<li>Opt-out property inclusion via attribute</li>
+<li>Optionally serialize only properties for requested type or all properties defined by object</li>
+</ul>
+<h1 id="about-this-library">About this library</h1>
+<p>Most JSON libraries skip over the JSON part and move right on to serialization.  Some even give extended functionality, like JSON Schema and JSONPath.</p>
+<p>This library is different.  Rather than hiding the JSON structure, Manatee.Json proudly exposes it.  In fact, working with the object model is an integral part of using this library.</p>
+<h2 id="why-create-another-json-library">Why create another JSON library?</h2>
+<p>I was introduced to the JSON format while working for a previous employer where we were designing remote systems for flight simulators and the JSON data format was specified by the client.  Those programs were written in C and were quite limited as they had to run on microcontrollers.</p>
+<p>In order to test these systems, I had to write a Windows-based client with which they could communicate.  I looked at some of the solutions out there (Json.Net, etc.) and was unimpressed with how the libraries glossed over the object model.  I didn't need serialization so much as direct JSON manipulation.  So I wrote my own.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/index.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>
