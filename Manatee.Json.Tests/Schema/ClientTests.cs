@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -12,6 +10,219 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ClientTests
 	{
+		[Test]
+		public void Issue15_DeclaredTypeWithDeclaredEnum()
+		{
+			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
+
+			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
+			var json = JsonValue.Parse(text);
+			var expected = new JsonSchema04
+			{
+				Type = JsonSchemaType.String,
+				Enum = new List<EnumSchemaValue>
+						{
+							new EnumSchemaValue("FeatureCollection")
+						}
+			};
+
+			var actual = JsonSchemaFactory.FromJson(json);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Issue45a_Utf8SupportInReferenceSchemaEnums()
+		{
+			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\baseSchema.json").AdjustForOS();
+
+			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
+			var schema = JsonSchemaRegistry.Get(fileName);
+			var json = JsonValue.Parse(jsonString);
+
+			var result = schema.Validate(json);
+
+			result.AssertValid();
+		}
+
+		[Test]
+		public void Issue45b_Utf8SupportInReferenceSchemaEnums()
+		{
+			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\baseSchema.json").AdjustForOS();
+
+			const string jsonString = "{\"prop1\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}";
+			var schema = JsonSchemaRegistry.Get(fileName);
+			var json = JsonValue.Parse(jsonString);
+
+			var result = schema.Validate(json);
+
+			Console.WriteLine(schema.ToJson(null));
+			var refSchema = ((JsonSchemaReference)((JsonSchema04)schema).Properties["prop2"]).Resolved;
+			Console.WriteLine(refSchema.ToJson(null));
+			Console.WriteLine(json);
+			foreach (var error in result.Errors)
+			{
+				Console.WriteLine(error);
+			}
+
+			result.AssertValid();
+		}
+
+		[Test]
+		public void Issue49_RequiredAndAllOfInSingleSchema()
+		{
+			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\issue49.json").AdjustForOS();
+			var expected = new JsonSchema04
+			{
+				Title = "JSON schema for Something",
+				Schema = "http://json-schema.org/draft-04/schema#",
+				Definitions = new Dictionary<string, IJsonSchema>
+				{
+					["something"] = new JsonSchema04
+					{
+						Type = JsonSchemaType.Object,
+						AllOf = new[]
+										{
+											new JsonSchema04
+												{
+													Properties = new Dictionary<string, IJsonSchema>
+														{
+															["name"] = new JsonSchema04 {Type = JsonSchemaType.String}
+														}
+												}
+										},
+						Required = new List<string> { "name" }
+					}
+				},
+				Type = JsonSchemaType.Array,
+				Description = "An array of somethings.",
+				Items = new JsonSchemaReference("#/definitions/something", typeof(JsonSchema04))
+			};
+
+			var schema = JsonSchemaRegistry.Get(fileName);
+
+			Assert.AreEqual(expected, schema);
+
+			var schemaJson = schema.ToJson(null);
+			var expectedJson = expected.ToJson(null);
+
+			Console.WriteLine(schemaJson);
+			Assert.AreEqual(expectedJson, schemaJson);
+		}
+
+		[Test]
+		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
+		{
+			string path = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue50A.json").AdjustForOS();
+			var schema = JsonSchemaRegistry.Get(path);
+			var json = new JsonObject
+			{
+				["text"] = "something",
+				["refa"] = new JsonObject
+				{
+					["text"] = "something else",
+					["refb"] = new JsonObject
+					{
+						["refd"] = new JsonObject
+						{
+							["refe"] = new JsonObject { ["test"] = "test" },
+							["text"] = "test"
+						}
+					}
+				}
+			};
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
+
+		[Test]
+		public void Issue58_UriReferenceSchemaTest()
+		{
+			const string coreSchemaUri = "http://example.org/Issue58RefCore.json";
+			const string childSchemaUri = "http://example.org/Issue58RefChild.json";
+
+			var coreSchemaPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue58RefCore.json").AdjustForOS();
+			var childSchemaPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue58RefChild.json").AdjustForOS();
+
+			string coreSchemaText;
+			string childSchemaText;
+
+			using (TextReader reader = File.OpenText(coreSchemaPath))
+			{
+				coreSchemaText = reader.ReadToEnd();
+			}
+
+			using (TextReader reader = File.OpenText(childSchemaPath))
+			{
+				childSchemaText = reader.ReadToEnd();
+			}
+
+			var requestedUris = new List<string>();
+			try
+			{
+				JsonSchemaOptions.Download = uri =>
+				{
+					requestedUris.Add(uri);
+					switch (uri)
+					{
+						case coreSchemaUri:
+							return coreSchemaText;
+
+						case childSchemaUri:
+							return childSchemaText;
+					}
+					return coreSchemaText;
+				};
+				var schema = JsonSchemaRegistry.Get(childSchemaUri);
+
+				var testJson = new JsonObject();
+				testJson["myProperty"] = "http://example.org/";
+
+				//Console.WriteLine(testJson);
+				//Console.WriteLine(schema.ToJson(null).GetIndentedString());
+
+				var result = schema.Validate(testJson);
+
+				result.AssertValid();
+				Assert.AreEqual(requestedUris[0], childSchemaUri);
+				Assert.AreEqual(requestedUris[1], coreSchemaUri);
+			}
+			finally
+			{
+				JsonSchemaOptions.Download = null;
+			}
+		}
+
+		[Test]
+		public void Issue141_ExamplesInSchema()
+		{
+			var schema = new JsonSchema06
+			{
+				Schema = JsonSchema06.MetaSchema.Id,
+				Type = JsonSchemaType.Object,
+				Properties = new Dictionary<string, IJsonSchema>
+				{
+					["test"] = new JsonSchema06
+					{
+						Id = "/properties/test",
+						Type = JsonSchemaType.String,
+						Title = "Test property",
+						Description = "Test property",
+						Default = "",
+						Examples = new JsonArray { "any string" }
+					}
+				}
+			};
+			var json = new JsonObject { ["test"] = "a valid string" };
+
+			var results = schema.Validate(json);
+
+			Console.WriteLine(string.Join("\n", results.Errors));
+
+			Assert.IsTrue(results.Valid);
+		}
+
 		public static IEnumerable Issue167TestCaseSource
 		{
 			get
