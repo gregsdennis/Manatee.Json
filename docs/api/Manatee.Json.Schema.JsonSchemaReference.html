@@ -85,31 +85,13 @@
     <h5>Implements</h5>
     <div><a class="xref" href="Manatee.Json.Schema.IJsonSchema.html">IJsonSchema</a></div>
     <div><a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a></div>
-    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchema.html">IJsonSchema</a>&gt;</div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
+    <div><span class="xref">IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchema.html">IJsonSchema</a>&gt;</div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.Schema.html">Manatee.Json.Schema</a></h6>
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_Schema_JsonSchemaReference_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class JsonSchemaReference : IJsonSchema, IJsonSerializable, IEquatable&lt;IJsonSchema&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class JsonSchemaReference : object, IJsonSchema, IJsonSerializable, IEquatable&lt;IJsonSchema&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -153,36 +135,15 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>Thrown when <code data-dev-comment-type="paramref" class="paramref">reference</code> or <code data-dev-comment-type="paramref" class="paramref">baseSchema</code> is null.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.ArgumentException</span></td>
-        <td><p>Thrown when <code data-dev-comment-type="paramref" class="paramref">reference</code> is empty or whitespace or if <code data-dev-comment-type="paramref" class="paramref">baseSchema</code> is not of type <a class="xref" href="Manatee.Json.Schema.JsonSchema04.html">JsonSchema04</a> or <a class="xref" href="Manatee.Json.Schema.JsonSchema06.html">JsonSchema06</a>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_JsonSchemaReference__ctor_System_String_System_Type_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchemaReference.%23ctor(System.String%2CSystem.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_JsonSchemaReference__ctor_System_String_Type_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchemaReference.%23ctor(System.String%2CType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/JsonSchemaReference.cs/#L106">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_JsonSchemaReference__ctor_" data-uid="Manatee.Json.Schema.JsonSchemaReference.#ctor*"></a>
-  <h4 id="Manatee_Json_Schema_JsonSchemaReference__ctor_System_String_System_Type_" data-uid="Manatee.Json.Schema.JsonSchemaReference.#ctor(System.String,System.Type)">JsonSchemaReference(String, Type)</h4>
+  <h4 id="Manatee_Json_Schema_JsonSchemaReference__ctor_System_String_Type_" data-uid="Manatee.Json.Schema.JsonSchemaReference.#ctor(System.String,Type)">JsonSchemaReference(String, Type)</h4>
   <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="Manatee.Json.Schema.JsonSchemaReference.html">JsonSchemaReference</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -207,31 +168,10 @@
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Type</span></td>
+        <td><span class="xref">Type</span></td>
         <td><span class="parametername">baseSchemaType</span></td>
         <td><p>The draft version of schema to use as a base when resolving if not defined in the resolved schema.
 Must be either <a class="xref" href="Manatee.Json.Schema.JsonSchema04.html">JsonSchema04</a> or <a class="xref" href="Manatee.Json.Schema.JsonSchema06.html">JsonSchema06</a>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>Thrown when <code data-dev-comment-type="paramref" class="paramref">reference</code> is null.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.ArgumentException</span></td>
-        <td><p>Thrown when <code data-dev-comment-type="paramref" class="paramref">reference</code> is empty or whitespace or when <code data-dev-comment-type="paramref" class="paramref">baseSchemaType</code> is not <a class="xref" href="Manatee.Json.Schema.JsonSchema04.html">JsonSchema04</a> or <a class="xref" href="Manatee.Json.Schema.JsonSchema06.html">JsonSchema06</a>.</p>
 </td>
       </tr>
     </tbody>
@@ -295,7 +235,7 @@ Must be either <a class="xref" href="Manatee.Json.Schema.JsonSchema04.html">Json
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Uri</span></td>
+        <td><span class="xref">Uri</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -532,8 +472,6 @@ Must be either <a class="xref" href="Manatee.Json.Schema.JsonSchema04.html">Json
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_JsonSchemaReference_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchemaReference.FromJson(Manatee.Json.JsonValue%2CManatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -606,8 +544,6 @@ Must be either <a class="xref" href="Manatee.Json.Schema.JsonSchema04.html">Json
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">System.Object.GetHashCode()</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_JsonSchemaReference_ToJson_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchemaReference.ToJson(Manatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -722,7 +658,7 @@ Must be either <a class="xref" href="Manatee.Json.Schema.JsonSchema04.html">Json
       <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a>
   </div>
   <div>
-      <span class="xref">System.IEquatable&lt;T&gt;</span>
+      <span class="xref">IEquatable&lt;&gt;</span>
   </div>
 </article>
           </div>

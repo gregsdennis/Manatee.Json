@@ -84,37 +84,13 @@
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a></div>
-    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.EnumSchemaValue.html">EnumSchemaValue</a>&gt;</div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
+    <div><span class="xref">IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.EnumSchemaValue.html">EnumSchemaValue</a>&gt;</div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.Schema.html">Manatee.Json.Schema</a></h6>
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_Schema_EnumSchemaValue_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class EnumSchemaValue : IJsonSerializable, IEquatable&lt;EnumSchemaValue&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class EnumSchemaValue : object, IJsonSerializable, IEquatable&lt;EnumSchemaValue&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -356,7 +332,7 @@ serialization of values.</p>
   </span>
   <a id="Manatee_Json_Schema_EnumSchemaValue_op_Implicit_" data-uid="Manatee.Json.Schema.EnumSchemaValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_Schema_EnumSchemaValue_op_Implicit_System_String__Manatee_Json_Schema_EnumSchemaValue" data-uid="Manatee.Json.Schema.EnumSchemaValue.op_Implicit(System.String)~Manatee.Json.Schema.EnumSchemaValue">Implicit(String to EnumSchemaValue)</h4>
-  <div class="markdown level1 summary"><p>Implicitly converts a <span class="xref">System.String</span> to a <a class="xref" href="Manatee.Json.Schema.EnumSchemaValue.html">EnumSchemaValue</a>.</p>
+  <div class="markdown level1 summary"><p>Implicitly converts a <see cref="!:String"></see> to a <a class="xref" href="Manatee.Json.Schema.EnumSchemaValue.html">EnumSchemaValue</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -402,7 +378,7 @@ serialization of values.</p>
       <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a>
   </div>
   <div>
-      <span class="xref">System.IEquatable&lt;T&gt;</span>
+      <span class="xref">IEquatable&lt;&gt;</span>
   </div>
 </article>
           </div>
