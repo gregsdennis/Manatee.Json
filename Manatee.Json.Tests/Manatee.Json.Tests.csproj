@@ -81,7 +81,7 @@
     <Compile Include="Patch\JsonPointerResolutionTests.cs" />
     <Compile Include="Patch\TestSuite\JsonPatchTestSuite.cs" />
     <Compile Include="PathExtensions.cs" />
-    <Compile Include="ClientTest.cs" />
+    <Compile Include="ClientTests.cs" />
     <Compile Include="DevTest.cs" />
     <Compile Include="JsonArrayExtensionsTest.cs" />
     <Compile Include="JsonObjectExtensionsTest.cs" />
@@ -89,6 +89,7 @@
     <Compile Include="JsonValueEqualsTest.cs" />
     <Compile Include="JsonValueOperatorTest.cs" />
     <Compile Include="JsonValueParseTest.cs" />
+    <Compile Include="Path\ClientTests.cs" />
     <Compile Include="Path\EvaluationTest.cs" />
     <Compile Include="Path\FilterExpressionTest.cs" />
     <Compile Include="Path\IndexExpressionParseTest.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="JsonOptionsTest.cs" />
     <Compile Include="Pointer\JsonPointerTests.cs" />
     <Compile Include="Pointer\SpecificationTests.cs" />
+    <Compile Include="Schema\ClientTests.cs" />
     <Compile Include="Schema\ConstSchemaTests.cs" />
     <Compile Include="Schema\ExamplesSchemaTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Schema\TestSuite\JsonSchemaTestSuite.cs" />
     <Compile Include="Schema\TestSuite\SchemaTest.cs" />
     <Compile Include="Schema\TestSuite\SchemaTestSet.cs" />
+    <Compile Include="Serialization\ClientTests.cs" />
     <Compile Include="Serialization\JsonDeserializerTest.cs" />
     <None Include="app.config" />
     <None Include="Files\baseSchema.json">
