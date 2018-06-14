@@ -223,7 +223,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.IsTrue(results.Valid);
 		}
 
-		public static IEnumerable Issue167TestCaseSource
+		public static IEnumerable Issue167TestCaseSource1
 		{
 			get
 			{
@@ -300,7 +300,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[Test]
-		[TestCaseSource(nameof(Issue167TestCaseSource))]
+		[TestCaseSource(nameof(Issue167TestCaseSource1))]
 		public void Issue167_OneOfWithRequiredShouldFailValidation(IJsonSchema schema)
 		{
 			var json = new JsonObject
@@ -315,6 +315,132 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.IsFalse(results.Valid);
 			Console.WriteLine(string.Join("\n", results.Errors));
+		}
+
+		public static IEnumerable Issue167TestCaseSource2
+		{
+			get
+			{
+				yield return new TestCaseData(new JsonObject
+					                              {
+						                              ["xyz"] = new JsonObject
+							                              {
+								                              ["field1"] = "abc",
+								                              ["field2"] = 1,
+								                              ["A"] = "def"
+							                              }
+					                              },
+				                              true);
+				yield return new TestCaseData(new JsonObject
+					                              {
+						                              ["xyz"] = new JsonObject
+							                              {
+								                              ["field1"] = "abc",
+								                              ["A"] = "def"
+							                              }
+					                              },
+				                              true);
+				yield return new TestCaseData(new JsonObject
+					                              {
+						                              ["xyz"] = new JsonObject
+							                              {
+								                              ["field1"] = "abc",
+								                              ["field2"] = 1,
+								                              ["A"] = "def",
+								                              ["B"] = 3
+							                              }
+					                              },
+				                              false);
+				yield return new TestCaseData(new JsonObject
+					                              {
+						                              ["xyz"] = new JsonObject
+							                              {
+								                              ["A"] = "def"
+							                              }
+					                              },
+				                              false);
+				yield return new TestCaseData(new JsonObject
+					                              {
+						                              ["xyz"] = new JsonObject
+							                              {
+								                              ["field2"] = 1,
+								                              ["A"] = "def"
+							                              }
+					                              },
+				                              false);
+			}
+		}
+
+		[Test]
+		[TestCaseSource(nameof(Issue167TestCaseSource2))]
+		public void Issue167_PropertyNamesWithPropertylessRequired(JsonObject json, bool isValid)
+		{
+			var schema = new JsonSchema06
+				{
+					Schema = JsonSchema06.MetaSchema.Id,
+					Definitions = new Dictionary<string, IJsonSchema>
+						{
+							["fields"] = new JsonSchema06
+								{
+									Type = JsonSchemaType.Object,
+									Properties = new Dictionary<string, IJsonSchema>
+										{
+											["field1"] = new JsonSchema06 {Type = JsonSchemaType.String},
+											["field2"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
+										}
+								},
+							["xyzBaseFieldNames"] = new JsonSchema06
+								{
+									Enum = new EnumSchemaValue[] {"field1", "field2"}
+								},
+							["worldwide"] = new JsonSchema06
+								{
+									AllOf = new IJsonSchema[]
+										{
+											new JsonSchemaReference("#/definitions/fields", typeof(JsonSchema06)),
+											new JsonSchema06 {Required = new[] {"field1"}},
+											new JsonSchema06
+												{
+													Properties = new Dictionary<string, IJsonSchema>
+														{
+															["A"] = new JsonSchema06 {Type = JsonSchemaType.String},
+															["B"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
+														},
+													OneOf = new IJsonSchema[]
+														{
+															new JsonSchema06 {Required = new[] {"A"}},
+															new JsonSchema06 {Required = new[] {"B"}},
+														}
+												},
+											new JsonSchema06
+												{
+													PropertyNames = new JsonSchema06
+														{
+															AnyOf = new IJsonSchema[]
+																{
+																	new JsonSchemaReference("#/definitions/xyzBaseFieldNames", typeof(JsonSchema06)),
+																	new JsonSchema06
+																		{
+																			Enum = new EnumSchemaValue[] {"A", "B"}
+																		}
+																}
+														}
+												}
+										}
+								}
+						},
+					Type = JsonSchemaType.Object,
+					Properties = new Dictionary<string, IJsonSchema>
+						{
+							["xyz"] = new JsonSchemaReference("#/definitions/worldwide", typeof(JsonSchema06))
+						},
+					AdditionalProperties = JsonSchema06.False,
+					Required = new[] {"xyz"}
+				};
+
+			var results = schema.Validate(json);
+
+			Assert.AreEqual(isValid, results.Valid);
 		}
 	}
 }
