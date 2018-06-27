@@ -175,7 +175,11 @@ namespace Manatee.Json.Schema
 											}
 									}
 							},
-						["propertyNames"] = Root,
+						["propertyNames"] = new JsonSchema06
+							{
+								Type = JsonSchemaType.Object,
+								AdditionalProperties = Root
+							},
 						["const"] = Empty,
 						["enum"] = new JsonSchema06
 							{
