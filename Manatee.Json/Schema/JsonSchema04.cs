@@ -77,13 +77,11 @@ namespace Manatee.Json.Schema
 					{
 						["id"] = new JsonSchema04
 							{
-								Type = JsonSchemaType.String,
-								//Format = StringFormat.Uri
+								Type = JsonSchemaType.String
 							},
 						["$schema"] = new JsonSchema04
 							{
-								Type = JsonSchemaType.String,
-								//Format = StringFormat.Uri
+								Type = JsonSchemaType.String
 							},
 						["title"] = new JsonSchema04 {Type = JsonSchemaType.String},
 						["description"] = new JsonSchema04 {Type = JsonSchemaType.String},
