@@ -6,5 +6,4 @@ configuration: Release
 before_build:
  - nuget restore
  - dotnet restore
- - git submodule update --init
- - git submodule update --recursive --remote
+ - git submodule update --init --recursive --remote
