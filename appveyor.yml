@@ -7,13 +7,4 @@ before_build:
  - nuget restore
  - dotnet restore
  - git submodule update --init
- - cd Json-Schema-Test-Suite
- - git checkout master
- - git pull
- - cd ..\Json-Path-Test-Suite
- - git checkout master
- - git pull
- - cd ..\json-patch-tests
- - git checkout master
- - git pull
- - cd ..
+ - git submodule update --recursive --remote
