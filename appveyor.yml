@@ -7,3 +7,10 @@ before_build:
  - nuget restore
  - dotnet restore
  - git submodule update --init
+ - cd Json-Schema-Test-Suite
+ - git pull
+ - cd ..\Json-Path-Test-Suite
+ - git pull
+ - cd ..\json-patch-tests
+ - git pull
+ - cd ..
