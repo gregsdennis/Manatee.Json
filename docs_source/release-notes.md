@@ -1,6 +1,6 @@
 # 9.9.2
 
-<span id="spec">spec</span>
+<span id="patch">patch</span> <span id="spec">spec</span>
 
 ([#170](https://github.com/gregsdennis/Manatee.Json/issues/170)) [JSON-Schema.org](http://json-schema.org/) updated the meta-schemas for all drafts to be more inline with the specifications.  This update matches those changes.
 
