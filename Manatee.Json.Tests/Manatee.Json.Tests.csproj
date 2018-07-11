@@ -118,6 +118,9 @@
     <None Include="Files\baseSchema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Files\Issue173\BaseSchema.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Files\issue49.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -141,6 +144,9 @@
     </None>
     <None Include="Files\Issue58RefCore.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Issue173Child.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Files\refSchema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

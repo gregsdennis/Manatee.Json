@@ -442,5 +442,33 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.AreEqual(isValid, results.Valid);
 		}
+
+		[Test]
+		public void Issue173_ReferencedSchemaInParentFolder()
+		{
+			var schemaPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue173\BaseSchema.json").AdjustForOS();
+
+			var schema = JsonSchemaRegistry.Get(schemaPath);
+
+			var invalid = new JsonObject
+				{
+					["localProp"] = "test",
+					["refProp"] = 15
+				};
+			var valid = new JsonObject
+				{
+					["localProp"] = "test",
+					["refProp"] = 5
+				};
+
+			//Console.WriteLine(testJson);
+			//Console.WriteLine(schema.ToJson(null).GetIndentedString());
+
+			var result = schema.Validate(invalid);
+			result.AssertInvalid();
+
+			result = schema.Validate(valid);
+			result.AssertValid();
+		}
 	}
 }
