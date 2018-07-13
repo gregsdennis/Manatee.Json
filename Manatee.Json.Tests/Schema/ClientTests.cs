@@ -447,7 +447,9 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue173_ReferencedSchemaInParentFolder()
 		{
-			var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/bug/173-parent-folder-schema-ref/Manatee.Json.Tests/Files/";
+			// this links to the commit after the one that submitted the schema files.
+			// otherwise we have a paradox of trying to know the commit hash before the commit is created.
+			var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/c264db5c75478e0a33269baba7813901829f8244/Manatee.Json.Tests/Files/";
 
 			var schema = (JsonSchema07) JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
 
