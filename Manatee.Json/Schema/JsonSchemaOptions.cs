@@ -49,7 +49,7 @@ namespace Manatee.Json.Schema
 			switch (uri.Scheme)
 			{
 				case "http":
-				case "https:":
+				case "https":
 #if NET45
 					return new WebClient().DownloadString(uri);
 #else

@@ -1,4 +1,5 @@
 ﻿{
+	"$id": "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/bug/173-parent-folder-schema-ref/Manatee.Json.Tests/Files/Issue173Child.json",
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"type": "integer",
 	"maximum": 10

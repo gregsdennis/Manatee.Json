@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
+using Manatee.Json.Serialization;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -446,13 +447,13 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue173_ReferencedSchemaInParentFolder()
 		{
-			var schemaPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue173\BaseSchema.json").AdjustForOS();
+			var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/bug/173-parent-folder-schema-ref/Manatee.Json.Tests/Files/";
 
-			var schema = JsonSchemaRegistry.Get(schemaPath);
+			var schema = (JsonSchema07) JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
 
 			var invalid = new JsonObject
 				{
-					["localProp"] = "test",
+					["targets"] = "test",
 					["refProp"] = 15
 				};
 			var valid = new JsonObject
@@ -460,9 +461,6 @@ namespace Manatee.Json.Tests.Schema
 					["localProp"] = "test",
 					["refProp"] = 5
 				};
-
-			//Console.WriteLine(testJson);
-			//Console.WriteLine(schema.ToJson(null).GetIndentedString());
 
 			var result = schema.Validate(invalid);
 			result.AssertInvalid();
