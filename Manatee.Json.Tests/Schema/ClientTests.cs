@@ -454,12 +454,12 @@ namespace Manatee.Json.Tests.Schema
 			var invalid = new JsonObject
 				{
 					["targets"] = "test",
-					["refProp"] = 15
+					["refProp"] = new JsonArray {150, "hello", 6}
 				};
 			var valid = new JsonObject
 				{
 					["localProp"] = "test",
-					["refProp"] = 5
+					["refProp"] = new JsonArray {1, 2, 3, 4}
 				};
 
 			var result = schema.Validate(invalid);
