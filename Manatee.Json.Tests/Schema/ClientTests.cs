@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
+using Manatee.Json.Serialization;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -441,6 +442,31 @@ namespace Manatee.Json.Tests.Schema
 			var results = schema.Validate(json);
 
 			Assert.AreEqual(isValid, results.Valid);
+		}
+
+		[Test]
+		public void Issue173_ReferencedSchemaInParentFolder()
+		{
+			// this links to the commit after the one that submitted the schema files.
+			// otherwise we have a paradox of trying to know the commit hash before the commit is created.
+			var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/c264db5c75478e0a33269baba7813901829f8244/Manatee.Json.Tests/Files/";
+
+			var schema = (JsonSchema07) JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
+
+			var invalid = new JsonObject
+				{
+					["localProp"] = new JsonArray {150, "hello", 6}
+				};
+			var valid = new JsonObject
+				{
+					["localProp"] = new JsonArray {1, 2, 3, 4}
+				};
+
+			var result = schema.Validate(invalid);
+			result.AssertInvalid();
+
+			result = schema.Validate(valid);
+			result.AssertValid();
 		}
 	}
 }

@@ -1,0 +1,6 @@
+﻿{
+	"$id": "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/34dbad1e79b622975bf251dfc2020d2a6115a76d/Manatee.Json.Tests/Files/Issue173Child.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "integer",
+	"maximum": 10
+}

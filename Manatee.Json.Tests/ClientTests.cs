@@ -99,6 +99,5 @@ namespace Manatee.Json.Tests
 			// This may seem inconsistent, but check out the notes in the issue.
 			Assert.IsFalse(Equals(null, json2));
 		}
-
 	}
 }

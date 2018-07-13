@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 #if !NET45
@@ -44,12 +45,13 @@ namespace Manatee.Json.Schema
 
 		private static string _BasicDownload(string path)
 		{
+			Console.WriteLine(path);
 			var uri = new Uri(path);
 
 			switch (uri.Scheme)
 			{
 				case "http":
-				case "https:":
+				case "https":
 #if NET45
 					return new WebClient().DownloadString(uri);
 #else
