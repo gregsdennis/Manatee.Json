@@ -1,3 +1,9 @@
+#9.9.3
+
+<span id="patch">patch</span>
+
+Fixed bug where attempting to download schemas behind `https` links would throw the least helpful of exceptions: a message-less `Exception`.
+
 # 9.9.2
 
 <span id="patch">patch</span> <span id="spec">spec</span>

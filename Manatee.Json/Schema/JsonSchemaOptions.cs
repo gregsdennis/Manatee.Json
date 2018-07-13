@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 					var filename = Uri.UnescapeDataString(uri.AbsolutePath);
 					return File.ReadAllText(filename);
 				default:
-					throw new Exception();
+					throw new Exception($"URI scheme {uri.Scheme} is not supported.  Only HTTP(S) and local file system URIs are allowed.");
 			}
 		}
 	}
