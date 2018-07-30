@@ -33,8 +33,7 @@ namespace Manatee.Json.Serialization
 		/// Gets and sets the format for <see cref="DateTime"/> serialization using the default serializer methods.
 		/// </summary>
 		/// <remarks>
-		/// If the <see cref="JsonSerializationTypeRegistry"/> entry for DateTime has been changed to custom
-		/// methods, this property will have no effect.
+		/// If a custom serializer for DateTime has been registered, this property will have no effect.
 		/// </remarks>
 		public DateTimeSerializationFormat DateTimeSerializationFormat { get; set; }
 		/// <summary>
@@ -45,8 +44,7 @@ namespace Manatee.Json.Serialization
 		/// Gets and sets the format for enumeration serialization using the default serializer methods.
 		/// </summary>
 		/// <remarks>
-		/// If an entry has been made in <see cref="JsonSerializationTypeRegistry"/> for the specific type,
-		/// this property will have no effect.
+		/// If a custom serializer for DateTime has been registered, this property will have no effect.
 		/// </remarks>
 		public EnumSerializationFormat EnumSerializationFormat { get; set; }
 		/// <summary>
@@ -132,11 +130,21 @@ namespace Manatee.Json.Serialization
 		public JsonSerializerOptions(JsonSerializerOptions options)
 			: this()
 		{
-			// TODO: This is not a proper copy constructor.
 			EncodeDefaultValues = options.EncodeDefaultValues;
 			InvalidPropertyKeyBehavior = options.InvalidPropertyKeyBehavior;
 			DateTimeSerializationFormat = options.DateTimeSerializationFormat;
+			CustomDateTimeSerializationFormat = options.CustomDateTimeSerializationFormat;
 			EnumSerializationFormat = options.EnumSerializationFormat;
+			FlagsEnumSeparator = options.FlagsEnumSeparator;
+			CaseSensitiveDeserialization = options.CaseSensitiveDeserialization;
+			TypeNameSerializationBehavior = options.TypeNameSerializationBehavior;
+			PropertySelectionStrategy = options.PropertySelectionStrategy;
+			Resolver = options.Resolver;
+			AutoSerializeFields = options.AutoSerializeFields;
+			SerializationNameTransform = options.SerializationNameTransform;
+			DeserializationNameTransform = options.DeserializationNameTransform;
+			OnlyExplicitProperties = options.OnlyExplicitProperties;
+			IncludeContentSample = options.IncludeContentSample;
 		}
 	}
 }
