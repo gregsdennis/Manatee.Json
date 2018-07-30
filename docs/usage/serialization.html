@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Serialization </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Serialization ">
+    <meta name="generator" content="docfx 2.36.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg site-icon" src="../siteicon.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="serialization">Serialization</h1>
+
+<p>The primary objective of every other JSON library that I have found is serialization; that is, converting an object into a JSON-formatted string.  The problem with existing implementations is that they gloss over the part about building the JSON structure, which hides the actual structure from the library consumer.  To contrast this behavior, Manatee.Json neatly defines and exposes the underlying structure to the consumer.  The main benefit of this approach is that the consumer can browse and even edit the JSON structure before serializing it to a string or deserializing it into a model.</p>
+<p>The process of serializing an object checks for certain cases.  These cases are listed in order of descending priority.</p>
+<ol>
+<li>Has the object already been serialized during the current call?
+<ul>
+<li>This ensures that each object is only serialized once and to maintain reference trees when deserializing.  Further attempts to serialize the object will place a reference marker.  The deserialization process will key on this marker to maintain object references.</li>
+</ul>
+</li>
+<li>Is the object a (JSON) primitive type or an enumeration?
+<ul>
+<li>Strings, numeric values, and booleans are considered primitive types for JSON.  Serialization of other types requires more information.</li>
+<li>Enumerations are optionally serialized to their numeric value or to their string representation.</li>
+</ul>
+</li>
+<li>Does the object implement <code>IJsonSerializable</code>?
+<ul>
+<li>By implementing <code>IJsonSerializable</code>, an object expresses that it has a preferred format for JSON serialization.  The serializer respects this preference.</li>
+</ul>
+</li>
+<li>Does a pair of converter methods exist for the object’s type?
+<ul>
+<li>For types that do not implement <code>IJsonSerializable</code>, are not primitive, and will not be auto-serialized (see next point) as desired, a public registry exists that manages pairs of methods which convert those types to and from the JSON structure.</li>
+</ul>
+</li>
+<li>Attempt to auto-serialize.
+<ul>
+<li>If none of the conditions above are met, the serializer will attempt to de/serialize the object based on a best-guess and a few other rules.</li>
+<li>If this fails, <code>JsonValue.Null</code> is returned for serialization, and the type’s default value is returned for deserialization.</li>
+</ul>
+</li>
+</ol>
+<p>Furthermore, to reduce the size of the serialized data, any object whose value is the default for its type will be serialized to <code>JsonValue.Null</code>.  By default, the serializer will omit these values from the output structure.</p>
+<h2 id="maintaining-references">Maintaining References</h2>
+<p>Object references will be tracked by the serializer.  This is performed by an object cache that tracks every object that is serialized through a single call to the serializer.  This means that if the same object is referenced by multiple properties in the hierarchy, a reference marker (GUID) is created for those properties in the JSON representation, and the original object will receive a define marker with the same GUID.</p>
+<p>With these markers, the deserialization process can properly reconstruct the object tree as it existed prior to serialization.</p>
+<p>An a highly-contrived example, given the following classes:</p>
+<pre><code class="lang-csharp">class Child
+{
+    public string Name { get; set; }
+}
+
+class Parent
+{
+    public string Name { get; set; }
+    public IEnumerable&lt;Child&gt; Children { get; set; }
+}
+</code></pre>
+<p>and the following structure:</p>
+<pre><code class="lang-csharp">var joe = new Child { Name = &quot;Joe&quot; };
+var sue = new Child { Name = &quot;Sue&quot; };
+var alex = new Parent
+    {
+        Name = &quot;Alex&quot;,
+        Children = new[]{ joe, sue, joe }
+    };
+</code></pre>
+<p>the resulting JSON would look like this:</p>
+<pre><code class="lang-csharp">{
+    &quot;Name&quot; : &quot;Alex&quot;,
+    &quot;Children&quot; : [
+        {
+            &quot;#Def&quot; : &quot;1ef15b13-7063-4894-8a1c-5793f4957763&quot;,
+            &quot;Name&quot; : &quot;Joe&quot;
+        },
+        {
+            &quot;Name&quot; : &quot;Sue&quot;
+        },
+        {
+            &quot;#Ref&quot; : &quot;1ef15b13-7063-4894-8a1c-5793f4957763&quot;
+        }
+    ]
+}
+</code></pre>
+<p>When the serializer encounters the reference key, it knows to look up that GUID and insert the corresponding object.</p>
+<blockquote>
+<p><strong>NOTE</strong> Due to the nature of value types (structs), maintaining references is not enabled for them.</p>
+</blockquote>
+<h2 id="ijsonserializable">IJsonSerializable</h2>
+<p>This interface has been created to allow objects to define their own serialization requirements.  In this way, non-public members may be serialized and deserialized.  These requirements will be respected when the object is serialized as a member of another object.  The interface exposes two methods:</p>
+<ul>
+<li><code>JsonValue ToJson(JsonSerializer serializer)</code>
+<ul>
+<li>Returns a JSON representation of the object.</li>
+</ul>
+</li>
+<li><code>void FromJson(JsonValue json, JsonSerializer serializer)</code>
+<ul>
+<li>Given a JSON representation, this method assigns values to the pertinent data members.</li>
+</ul>
+</li>
+</ul>
+<p>At minimum, the <code>FromJson()</code> method should correctly deserialize the output from the <code>ToJson()</code> method.</p>
+<blockquote>
+<p><strong>NOTE</strong> The serializer cannot prevent default values from appearing in the JSON structure when these methods are used.</p>
+</blockquote>
+<h2 id="jsonserializationtyperegistry">JsonSerializationTypeRegistry</h2>
+<p>This class has been implemented as a work-around for those objects which are not controlled by the client and will not be auto-serialized properly or as desired.  Many explicit types, such as <code>DateTime</code>, and generic types, such as <code>Nullable&lt;T&gt;</code>, are examples of these.</p>
+<p>Some common explicit types are automatically registered.  These include:</p>
+<ul>
+<li><code>System.DateTime</code></li>
+<li><code>System.TimeSpan</code></li>
+<li><code>System.Guid</code></li>
+<li><code>System.Uri</code></li>
+<li><em>more to come as they are requested</em></li>
+</ul>
+<p>To register explicit types such as these, first two methods must be implemented: one that converts to a <code>JsonValue</code>, and one that converts back from a <code>JsonValue</code> to an instance of the type.  Then a call is made to the <code>RegisterType&lt;T&gt;()</code> method.  For example, registering the <code>System.Drawing.Point</code> object could be implemented as follows:</p>
+<pre><code class="lang-csharp">public static class Program
+{
+    JsonSerializer _serializer = new JsonSerializer();
+
+    public void Main()
+    {
+        JsonSerializationTypeRegistry.RegisterType(PointToJson, JsonToPoint);
+        var json = _serializer.Serialize(new Point(5, 6));
+    }
+
+    static JsonValue PointToJson(Point p, JsonSerializer serializer)
+    {
+        return new JsonObject { {&quot;x&quot;, p.x}, {&quot;y&quot;, p.y} };
+    }
+
+    static Point JsonToPoint(JsonValue p, JsonSerializer serializer)
+    {
+        return new Point(json.Object[&quot;x&quot;].Number, json.Object[&quot;y&quot;].Number);
+    }
+}
+</code></pre>
+<p>At any time, the serialization methods for a type can be changed by calling the <code>RegisterType&lt;T&gt;()</code> method with a new method pair.  This means, for example, that if the default encoding for <code>DateTime</code> is not preferred for the application, the behavior can be overridden by registering new methods.  In this way, serialization is completely customizable.</p>
+<p>Some generic types are automatically registered.  These include:</p>
+<ul>
+<li><code>Nullable&lt;T&gt;</code></li>
+<li><code>T[]</code> <em>(not a generic, but included)</em></li>
+<li><code>List&lt;T&gt;</code></li>
+<li><code>Dictionary&lt;TKey, TValue&gt;</code></li>
+<li><code>Queue&lt;T&gt;</code></li>
+<li><code>Stack&lt;T&gt;</code></li>
+<li><em>more to come as they are requested</em></li>
+</ul>
+<blockquote>
+<p><strong>NOTE</strong> The default behavior for serializing a <code>Dictionary&lt;TKey, TValue&gt;</code> yields a <code>JsonArray</code> of <code>JsonObjects</code>, each containing “Key” and “Value” items.  This is done because the JSON object structure only supports strings as keys, and TKey may not be representable as a string.</p>
+</blockquote>
+<p>For generic types that are not listed above, simply call <code>RegisterType&lt;T&gt;()</code> on the explicitly-defined type.  For instance, if a generic class <code>MyGenericClass&lt;T&gt;</code> exists, and a you need to register a <code>MyGenericClass&lt;int&gt;</code>, create the required conversion methods and call <code>RegisterType&lt;MyGenericClass&lt;int&gt;&gt;()</code>.</p>
+<p>To unregister a type, simply call <code>RegisterType&lt;T&gt;()</code> and pass nulls for both methods.  If only one method is null, an exception is thrown.  This works for both explicit types and explicitly-defined generic types.</p>
+<ul>
+<li><code>RegisterType&lt;int&gt;(null, null)</code></li>
+<li><code>RegisterType&lt;List&lt;int&gt;&gt;(null, null)</code></li>
+</ul>
+<p>This approach can be likened to implementing <code>IJsonSerializable</code> on third-party types.  The ideal solution would be to create one or more static classes which contain these conversion methods, then make a single call to a static method to register them all.  Once registered, they remain in memory throughout the life of the application or until they are unregistered.</p>
+<h2 id="auto-serialization">Auto-serialization</h2>
+<p>The serializer can automatically serialize most types.  There are some notes to consider, however:</p>
+<ul>
+<li>All of the properties to serialize must be implemented with public getters and setters,
+<ul>
+<li>For instance, the <code>DateTime</code> object cannot be automatically serialized because it exposes no public properties that have both public getters and public setters.</li>
+</ul>
+</li>
+<li>Properties of interface or abstract class types can be serialized, but the value’s type will be explicitly listed in the serialization.
+<ul>
+<li>Serialization of properties of these types will result in a <code>JsonObject</code> with an additional key:  <code>“#Type”</code>.  This is used to indicate the serialized value’s assembly-qualified type name.</li>
+</ul>
+</li>
+<li>Any property marked with the <code>JsonIgnore</code> attribute will not be serialized.</li>
+<li>Any property marked with the <code>JsonMapTo</code> attribute will be serialized to the supplied key, not to the property name.  This can be used to support non-property-friendly keys within JSON objects.</li>
+</ul>
+<p>Any type that does not implement <code>IJsonSerializable</code> and cannot be properly auto-serialized will need to be registered, or else it will be ignored by the serializer.</p>
+<h2 id="type-serialization">Type Serialization</h2>
+<p>In addition to serializing objects, the serializer can also serialize the public static properties of types.  To do this, simply call the <code>SerializeType&lt;T&gt;()</code> method with the desired type.</p>
+<p>No type information is encoded in the JSON structure for type serializations.  It remains the responsibility of the client to track the various JSON structures that are created to know which types they represent.</p>
+<h2 id="deserialization">Deserialization</h2>
+<p>To deserialize an object, call the <code>Deserialize&lt;T&gt;()</code> method with the appropriate type argument and pass in the JSON representation of the object.  The deserializer will parse out which properties are set.</p>
+<p>To deserialize a type, call the <code>DeserializeType&lt;T&gt;()</code> method with the appropriate type argument.</p>
+<p>If the JSON structure contains keys that are not properties of the object or type, the associated values are ignored by default.  Any properties which are not explicitly set in the JSON structure will remain the default value for the type of that property.</p>
+<p>Deserializing the type <code>object</code> or <code>dynamic</code> will result in an <code>ExpandoObject</code> that contains all of the properties contained within the JSON.  Since the types of nested properties cannot be determined, they will also be deserialized as <code>ExpandoObject</code>.</p>
+<h3 id="validation-during-deserialization">Validation during deserialization</h3>
+<p>If so desired, JSON can be validated by a JSON Schema before deserialization of client-defined types.  The schema must be available either:</p>
+<ul>
+<li>by URI (on the web or in a remote or local file) or</li>
+<li>on the class as a public static property</li>
+</ul>
+<p>To enable validation, place the <code>SchemaAttribute</code> on the type definition.</p>
+<pre><code class="lang-csharp">[Schema(&quot;http://json-schema.org/geo&quot;)]
+public class Geo
+{
+    public double Longitude { get; set; }
+    public double Latitude { get; set; }
+}
+</code></pre>
+<p>or</p>
+<pre><code class="lang-csharp">[Schema(nameof(Schema))]
+public class Geo
+{
+    public static IJsonSchema Schema =&gt;
+        new JsonSchema06
+        {
+            Id = &quot;http://json-schema.org/geo&quot;,
+            Schema = &quot;http://json-schema.org/draft-06/schema#&quot;,
+            Description = &quot;A geographical coordinate&quot;,
+            Type = JsonSchemaType.Object,
+            Definitions = new Dictionary&lt;string, IJsonSchema&gt;
+            {
+                [&quot;Longitude&quot;] = new JsonSchema06 { Type = JsonSchemaType.Number },
+                [&quot;Latitude&quot;] = new JsonSchema06 { Type = JsonSchemaType.Number }
+            }
+        }
+
+    public double Longitude { get; set; }
+    public double Latitude { get; set; }
+}
+</code></pre>
+<h2 id="deserialization-of-abstract-class-and-interface-types">Deserialization of abstract class and interface types</h2>
+<p>The serializer has the ability to automatically deserialize abstract class and interface types.  There are two mechanisms through which this is performed.</p>
+<ul>
+<li><code>JsonSerializationAbstractionMap</code></li>
+<li>Auto-generation of interface types (JIT type creation)</li>
+</ul>
+<p>The <code>JsonSerializationAbstractionMap</code> static class maps an abstraction type to an implementation of that abstraction.  During deserialization the registered implementation type will be instantiated and returned, having been casted to the abstraction type requested.</p>
+<p>To create a mapping between an abstraction and its implementation, simply call the <code>Map&lt;TAbstract, TConcrete&gt;()</code> method.  At any time the mapping can be removed by using the <code>RemoveMapping&lt;TAbstract&gt;()</code> method.</p>
+<pre><code class="lang-csharp">// To create a map:
+JsonSerializationAbstractionMap.Map&lt;IEnumerable, Array&gt;();
+// To remove the map:
+JsonSerializationAbstractionMap.RemoveMapping&lt;IEnumerable&gt;();
+</code></pre>
+<p>You can also map an open generic abstract or interface type, like <code>IEnumerable&lt;T&gt;,</code> to an open generic concrete type, like <code>List&lt;T&gt;</code>.  This will tell the serializer to use <code>List&lt;T&gt;</code> whenever <code>IEnumerable&lt;T&gt;</code> is requested.</p>
+<pre><code class="lang-csharp">JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable&lt;&gt;), typeof(List&lt;&gt;));
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong> For this example, you must still register the specific <code>List&lt;T&gt;</code> types using the <code>JsonSerializationTypeRegistry</code> methods mentioned above.</p>
+</blockquote>
+<p>The other mechanism, type generation, should only be used when a compile-time solution is not possible.  If the requested type is an interface, the system has the ability to dynamically create a type which implements that interface.  If relying on this feature, please note the following:</p>
+<ul>
+<li>Properties and indexers with both getters and setters will correctly return the values to which they are set.</li>
+<li>Methods do not process any inputs.</li>
+<li>Methods with return values will only return the default value for the return type.</li>
+<li>Events will not be raised, although they can be subscribed to.</li>
+</ul>
+<p>The generated types are, for all intents and purposes, dummy classes.</p>
+<h2 id="object-resolution">Object Resolution</h2>
+<p>The serializer must (obviously) create instances of objects in order to deserialize to them.  This is achieved via a configurable resolver.</p>
+<p>The default resolver can be replaced with any DI container you wish to use.</p>
+<p>The default resolver uses reflection to discover constructors on a type and chooses one in order to attempt to create and instance, passing in default values for any of the parameters.  This may result in an exception being thrown that the instance cannot be created.</p>
+<p>One example is <code>Guid</code>.  The simplest constructor for this type takes a string, but throws an exception if the string is null.  Unfortunately, this is precisely what the default resolver tries to do.</p>
+<p>To combat this, a simple resolver decorator can be created that properly resolves <code>Guid</code>s, but passes other types on to the default resolver.</p>
+<pre><code class="lang-csharp">class ResolverDecorator : IResolver
+{
+    private IResolver _innerResolver;
+    public ResolverDecorator(IResolver innerResolver)
+    {
+        _innerResolver = innerResolver;
+    }
+
+    public T Resolve&lt;T&gt;()
+    {
+        if (typeof(T) == typeof(Guid)) return Guid.NewGuid();
+        else return _innerResolver.Resolve&lt;T&gt;();
+    }
+
+    public object Resolve(Type type)
+    {
+        if (type == typeof(Guid)) return Guid.NewGuid();
+        else return _innerResolver.Resolve(type);
+    }
+}
+</code></pre>
+<p>This can then be set in the serializer options (see below):</p>
+<pre><code class="lang-csharp">serializer.Options.Resolver = new ResolverDecorator(serializer.Options.Resolver);
+</code></pre>
+<h2 id="serialization-options">Serialization Options</h2>
+<p>The <code>JsonSerializerOptions</code> object represents a series of options available for the serializer.  Each serializer instance may have its own options.  There is also a static default options object.  The options for the serializer are as follows:</p>
+<ul>
+<li><code>EncodeDefaultValues</code>
+<ul>
+<li><code>true</code> will encode properties whose values are the default for the type.</li>
+<li><code>false</code> will ignore these properties.</li>
+<li>The default is <code>false</code>.</li>
+</ul>
+</li>
+<li><code>InvalidPropertyKeyBehavior</code>
+<ul>
+<li><code>DoNothing</code> will ignore properties that do not belong to a type during deserialization.</li>
+<li><code>ThrowException</code> will throw an exception when the deserializer encounters these properties.</li>
+<li>The default is <code>DoNothing</code>.</li>
+</ul>
+</li>
+<li><code>DateTimeSerializationFormat</code>
+<ul>
+<li><code>Iso8601</code> outputs a string formatted to meet the requirements of ISO 8601.</li>
+<li><code>JavaConstructor</code> outputs a string in the format &quot;/Date(ms)/&quot;, where ms is the number of milliseconds since January 1, 1970.</li>
+<li><code>Milliseconds</code> outputs the number of milliseconds since January 1, 1970 as a numeric value.</li>
+<li><code>Custom</code> uses the format in the <code>CustomDateTimeSerializationFormat</code> property.</li>
+<li>The default is <code>Iso8601</code>.</li>
+<li>See <a href="http://weblogs.asp.net/bleroy/archive/2008/01/18/dates-and-json.aspx">http://weblogs.asp.net/bleroy/archive/2008/01/18/dates-and-json.aspx</a> for more information regarding encoding dates and times into JSON constructs.</li>
+</ul>
+</li>
+<li><code>CustomDateTimeSerializationFormat</code>
+<ul>
+<li>Defines a custom format for serializing <code>DateTime</code> objects.</li>
+<li>Only applicable when <code>DateTimeSerializationFormat</code> is set to <code>Custom</code>.</li>
+</ul>
+</li>
+<li><code>EnumSerializationFormat</code>
+<ul>
+<li><code>AsInteger</code> will encode enumerations to their numeric value.</li>
+<li><code>AsName</code> will encode enumerations to their name (string) value.</li>
+<li>The default is <code>AsInteger</code>.</li>
+</ul>
+</li>
+<li><code>CaseSensitiveDeserialization</code>
+<ul>
+<li>Controls whether the auto-serializer considers case while deserializing.</li>
+<li>The default is <code>false</code>.</li>
+</ul>
+</li>
+<li><code>AlwaysSerializeTypeName</code>
+<ul>
+<li>Controls whether the auto-serializer always includes the type name when serializing.</li>
+<li>The default is <code>false</code>.</li>
+</ul>
+</li>
+<li><code>Resolver</code>
+<ul>
+<li>Provides an interface to inject a custom type resolver.  This is useful when a DI container is being used to control object lifetime.</li>
+<li>The default is <code>null</code>.  (An internal implementation is used in this case which uses reflection to discover constructors.)</li>
+</ul>
+</li>
+<li><code>AutoSerializeFields</code>
+<ul>
+<li><code>true</code> will encode public fields.</li>
+<li><code>false</code> will ignore fields.</li>
+<li>The default is <code>false</code>.</li>
+</ul>
+</li>
+<li><code>SerializationNameTransform</code>
+<ul>
+<li>Provides a key transformation method used during serialization; for instance, reversing the string.</li>
+<li>The default implementation provides no transformation.</li>
+</ul>
+</li>
+<li><code>DeserializationNameTransform</code>
+<ul>
+<li>Provides a key transformation method used during deserialization; for instance, un-reversing the string.</li>
+<li>The default implementation provides no transformation.</li>
+</ul>
+</li>
+<li><code>OnlyExplicitProperties</code>
+<ul>
+<li><code>true</code> will only serialize those properties defined by the type in the <code>.Serialize&lt;T&gt;()</code> call.</li>
+<li><code>false</code> will serialize all properties defined by the object.</li>
+<li>The default is <code>false</code></li>
+</ul>
+</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/serialization.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PathExpressionExtensions
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PathExpressionExtensions
+   ">
+    <meta name="generator" content="docfx 2.36.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg site-icon" src="../siteicon.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Manatee.Json.Path.PathExpressionExtensions">
+  
+  
+  <h1 id="Manatee_Json_Path_PathExpressionExtensions" data-uid="Manatee.Json.Path.PathExpressionExtensions" class="text-break">Class PathExpressionExtensions
+  </h1>
+  <div class="markdown level0 summary"><p>Provides extension methods which can be used within array and search JSON Path queries.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">PathExpressionExtensions</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.Path.html">Manatee.Json.Path</a></h6>
+  <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
+  <h5 id="Manatee_Json_Path_PathExpressionExtensions_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class PathExpressionExtensions : object</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions_ArrayIndex_Manatee_Json_Path_JsonPathValue_System_Int32_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions.ArrayIndex(Manatee.Json.Path.JsonPathValue%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L64">View Source</a>
+  </span>
+  <a id="Manatee_Json_Path_PathExpressionExtensions_ArrayIndex_" data-uid="Manatee.Json.Path.PathExpressionExtensions.ArrayIndex*"></a>
+  <h4 id="Manatee_Json_Path_PathExpressionExtensions_ArrayIndex_Manatee_Json_Path_JsonPathValue_System_Int32_" data-uid="Manatee.Json.Path.PathExpressionExtensions.ArrayIndex(Manatee.Json.Path.JsonPathValue,System.Int32)">ArrayIndex(JsonPathValue, Int32)</h4>
+  <div class="markdown level1 summary"><p>Determines if an object contains a property containing a number and retrieves its value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static JsonPathValue ArrayIndex(this JsonPathValue json, int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathValue.html">JsonPathValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The index to retreive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathValue.html">JsonPathValue</a></td>
+        <td><p>The value if the property exists and is a number; otherwise null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions_HasProperty_Manatee_Json_Path_JsonPathValue_System_String_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions.HasProperty(Manatee.Json.Path.JsonPathValue%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L44">View Source</a>
+  </span>
+  <a id="Manatee_Json_Path_PathExpressionExtensions_HasProperty_" data-uid="Manatee.Json.Path.PathExpressionExtensions.HasProperty*"></a>
+  <h4 id="Manatee_Json_Path_PathExpressionExtensions_HasProperty_Manatee_Json_Path_JsonPathValue_System_String_" data-uid="Manatee.Json.Path.PathExpressionExtensions.HasProperty(Manatee.Json.Path.JsonPathValue,System.String)">HasProperty(JsonPathValue, String)</h4>
+  <div class="markdown level1 summary"><p>Determines if an object contains a property or, if its value is a boolean, whether the value is true.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool HasProperty(this JsonPathValue json, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathValue.html">JsonPathValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the value is an object and contains key <code data-dev-comment-type="paramref" class="paramref">name</code> or if its value is true; otherwise false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions_IndexOf_Manatee_Json_Path_JsonPathValue_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions.IndexOf(Manatee.Json.Path.JsonPathValue%2CManatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L74">View Source</a>
+  </span>
+  <a id="Manatee_Json_Path_PathExpressionExtensions_IndexOf_" data-uid="Manatee.Json.Path.PathExpressionExtensions.IndexOf*"></a>
+  <h4 id="Manatee_Json_Path_PathExpressionExtensions_IndexOf_Manatee_Json_Path_JsonPathValue_Manatee_Json_JsonValue_" data-uid="Manatee.Json.Path.PathExpressionExtensions.IndexOf(Manatee.Json.Path.JsonPathValue,Manatee.Json.JsonValue)">IndexOf(JsonPathValue, JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Gets the index of a value within an array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int IndexOf(this JsonPathValue json, JsonValue value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathValue.html">JsonPathValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The query.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The index of the requested value or -1 if the value does not exist.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions_Length_Manatee_Json_Path_JsonPathArray_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions.Length(Manatee.Json.Path.JsonPathArray)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L15">View Source</a>
+  </span>
+  <a id="Manatee_Json_Path_PathExpressionExtensions_Length_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Length*"></a>
+  <h4 id="Manatee_Json_Path_PathExpressionExtensions_Length_Manatee_Json_Path_JsonPathArray_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Length(Manatee.Json.Path.JsonPathArray)">Length(JsonPathArray)</h4>
+  <div class="markdown level1 summary"><p>Specifies the length of a <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int Length(this JsonPathArray json)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathArray.html">JsonPathArray</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The length of the array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions_Length_Manatee_Json_Path_JsonPathValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions.Length(Manatee.Json.Path.JsonPathValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L34">View Source</a>
+  </span>
+  <a id="Manatee_Json_Path_PathExpressionExtensions_Length_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Length*"></a>
+  <h4 id="Manatee_Json_Path_PathExpressionExtensions_Length_Manatee_Json_Path_JsonPathValue_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Length(Manatee.Json.Path.JsonPathValue)">Length(JsonPathValue)</h4>
+  <div class="markdown level1 summary"><p>Specifies the length of a <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int Length(this JsonPathValue json)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathValue.html">JsonPathValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The length of the array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions_Name_Manatee_Json_Path_JsonPathArray_System_String_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions.Name(Manatee.Json.Path.JsonPathArray%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L25">View Source</a>
+  </span>
+  <a id="Manatee_Json_Path_PathExpressionExtensions_Name_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Name*"></a>
+  <h4 id="Manatee_Json_Path_PathExpressionExtensions_Name_Manatee_Json_Path_JsonPathArray_System_String_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Name(Manatee.Json.Path.JsonPathArray,System.String)">Name(JsonPathArray, String)</h4>
+  <div class="markdown level1 summary"><p>Specifies the length of a <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static JsonPathArray Name(this JsonPathArray json, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathArray.html">JsonPathArray</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The array.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathArray.html">JsonPathArray</a></td>
+        <td><p>The length of the array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions_Name_Manatee_Json_Path_JsonPathValue_System_String_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions.Name(Manatee.Json.Path.JsonPathValue%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L54">View Source</a>
+  </span>
+  <a id="Manatee_Json_Path_PathExpressionExtensions_Name_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Name*"></a>
+  <h4 id="Manatee_Json_Path_PathExpressionExtensions_Name_Manatee_Json_Path_JsonPathValue_System_String_" data-uid="Manatee.Json.Path.PathExpressionExtensions.Name(Manatee.Json.Path.JsonPathValue,System.String)">Name(JsonPathValue, String)</h4>
+  <div class="markdown level1 summary"><p>Determines if an object contains a property containing a number and retrieves its value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static JsonPathValue Name(this JsonPathValue json, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathValue.html">JsonPathValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Path.JsonPathValue.html">JsonPathValue</a></td>
+        <td><p>The value if the property exists and is a number; otherwise null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_PathExpressionExtensions.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.PathExpressionExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/PathExpressionExtensions.cs/#L8" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

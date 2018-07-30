@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>JSON Path </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="JSON Path ">
+    <meta name="generator" content="docfx 2.36.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg site-icon" src="../siteicon.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="json-path">JSON Path</h1>
+
+<p>The concept of JSONPath is widely credited to Stefan Goessner.  His <a href="http://goessner.net/articles/JsonPath/">blog post</a> describes it as a parallel to XPath but for JSON instead of XML.  In short, the syntax allows one to query a JSON object for one or more values.  While this page covers the basics of JSONPath, reading the blog post is still worthwhile.</p>
+<h2 id="concept">Concept</h2>
+<p>As with any programming language, JsonPath is constructed using a series of operators and values.  These work together to describe which values are returned and which are filtered out.  Below is a list of the operators.</p>
+<ul>
+<li><code>$</code> - The root of the JSON.  Can be used inside JavaScript expressions as well (see <code>()</code> and <code>?()</code>).</li>
+<li><code>.</code> - Indicates the desired value should be an object.  E.g. <code>$.</code> would return the value at the root only if it is an object.</li>
+<li><code>[]</code> - Indicates the desired value is an array.  E.g. <code>$[]</code> would return the value at the root only if it is an array.
+<ul>
+<li>Brackets must not be empty.</li>
+<li>A number within brackets specifies an index of the array to return.</li>
+<li>Numbers can be comma-separated to return multiple specific indices.</li>
+<li>Numbers can be colon-separated to indicate a start-end-step sequence. See <a href="http://stackoverflow.com/a/509295/878701">this StackOverflow post</a> for a concise description of the syntax.</li>
+</ul>
+</li>
+<li><code>..</code> - Performs a recursive search for the key that follows it.  E.g. <code>..store.</code> performs a recursive search for an object that contains the key <code>store</code> (and <code>..[]</code> recursively searches for an array).</li>
+<li><code>*</code> - A wildcard.  Returns all values at the current level.  May appear after <code>.</code> or <code>..</code> or inside <code>[]</code>.</li>
+<li><code>()</code> - Surrounds a JS expression which evaulates to an index.  *</li>
+<li><code>?()</code> - Surrounds a JS expression which evaluates to a boolean.  Used as a filter.  *</li>
+<li><code>@</code> - Self-referencing operator.  When inside <code>()</code>, references the array; when inside <code>?()</code>, references the current value while iterating; invalid elsewhere.</li>
+</ul>
+<p>* Only avlid inside the <code>[]</code> operator.</p>
+<p>In order to reference specific keys within a JSON object, the key itself is used.  For instance, if the root is a JSON object <code>$.store</code> will return the value under the <code>store</code> key, if it exists.  There is one exception to this: <code>length</code> is a reserved keyword and will return the length of an array.  For example, given the JSON <code>[5, true, &quot;string&quot;]</code>, the path <code>$.length</code> will return <code>[3]</code>.</p>
+<p>These operators can be chained together to create very complex paths.</p>
+<p>The results returned from evaluating a path is a JSON array containing the matching values, if any.</p>
+<blockquote>
+<p><strong>NOTE</strong> Although Mr. Goessner's post states that <code>false</code> should be returned for an empty result set, he does allow for an empty array to be optionally returned.  Manatee.Json takes this approach since client code will be simpler when a single return type is always expected.</p>
+</blockquote>
+<h2 id="javascript-expression-support-in-jsonpath">JavaScript Expression support in JsonPath</h2>
+<p>The <code>()</code> and <code>?()</code> operators require an expression to be entered.</p>
+<p>The expression inside <code>()</code> must evaluate to an integer index.  If the index is within the bounds of the array, the value at this index will be returned.</p>
+<p>The expression inside <code>?()</code> must evaluate to a boolean.  This expression will be evaluated for each value in the array.  If the expression returns <code>true</code>, the value is included; otherwise it is excluded from the results.</p>
+<p>Inside a search expression, the array or current value may be referenced using the <code>@</code> operator.  This functions the same as the root operator <code>$</code> but targets the array or current value instead.  However, the <code>$</code> operator can still be used to back-reference the root as well.</p>
+<blockquote>
+<p><strong>NOTE</strong>  Since the <code>()</code> operator does not iterate through the array, the target of the <code>@</code> operator is the array itself rather than an item contained within it.</p>
+</blockquote>
+<h2 id="building-a-jsonpath-with-manateejson">Building a JSONPath with Manatee.Json</h2>
+<p>To represent JSONPaths, Manatee.Json exposes the <code>JsonPath</code> object.  To create a <code>JsonPath</code> object, the <code>JsonPathWith</code> static class has been provided.  This class has static and extension methods which can be used to create any sort of path desired.  Below is a listing of the available methods.  All of these methods are available as extension methods as well, which allows them to be chained together.</p>
+<blockquote>
+<p><strong>NOTE</strong>  The extension methods return a new <code>JsonPath</code> instance rather than modifying the passed instance.  This behavior emulates that of Linq extension methods.</p>
+</blockquote>
+<ul>
+<li><code>Name()</code> - Adds <code>.*</code>.</li>
+<li><code>Name(string)</code> - Adds a <code>.</code> operator and a key.</li>
+<li><code>Length()</code> - Adds <code>.length</code>.</li>
+<li><code>Array()</code> - Adds <code>[*]</code></li>
+<li><code>Array(params Slice[])</code> - Adds <code>[]</code> with a list of indices and slices to return.</li>
+<li><code>Array(Expression&lt;Func&lt;JsonArray, int&gt;&gt;)</code> - Adds <code>[()]</code> with a function which takes a <code>JsonArray</code> and returns an <code>int</code>.</li>
+<li><code>Array(Expression&lt;Func&lt;JsonValue, bool&gt;&gt;)</code> - Adds <code>[?()]</code> with a function which takes a <code>JsonValue</code> and returns a <code>bool</code>.</li>
+<li><code>Search()</code> - Adds <code>..*</code>.</li>
+<li><code>Search(string)</code> - Adds a <code>..</code> operator and a key.</li>
+<li><code>SearchLength()</code> - Adds <code>..length</code>.</li>
+<li><code>SearchArray()</code> - Adds <code>..[*]</code></li>
+<li><code>SearchArray(params Slice[])</code> - Adds <code>..[]</code> with a list of indices and slices to return.</li>
+<li><code>SearchArray(Expression&lt;Func&lt;JsonArray, int&gt;&gt;)</code> - Adds <code>..[()]</code> with a function which takes a <code>JsonArray</code> and returns an <code>int</code>.</li>
+<li><code>SearchArray(Expression&lt;Func&lt;JsonValue, bool&gt;&gt;)</code> - Adds <code>..[?()]</code> with a function which takes a <code>JsonValue</code> and returns a <code>bool</code>.</li>
+</ul>
+<blockquote>
+<p><strong>TIP</strong> There is an implicit conversion from <code>int</code> to <code>Slice</code> so that you can pass just individual indexes into the <code>Array(params Slice[])</code> and <code>SearchArray(params Slice[])</code> methods.  This means that individual indexes mixed with slices are supported.  For example <code>JsonPathWith.Array(1, new Slice(3, 5))</code> will construct the path <code>$[1,3:5]</code>.</p>
+</blockquote>
+<p>You may have noticed that a few of these take Linq Expressions as their argument.  This is to facilitate easy creation of JSONPath expression arguments in a way familiar to .Net developers.  It also provides compile-time checking on the expressions.</p>
+<p>Two static classes have been created to aid in the creation of these expressions.  One that contains extension methods for <code>JsonValue</code> and <code>JsonArray</code>, and another which contains non-extension static versions of the same methods.  The reasoning for having two classes will be explained shortly.  For now let's have a look at the extension methods in <code>PathExpressionExtensions</code>.</p>
+<ul>
+<li><code>Length()</code> - Returns the length of an array.  Extends <code>JsonValue</code> and <code>JsonArray</code> for use in both kinds of expressions.</li>
+<li><code>HasProperty(string)</code> - Returns <code>false</code> if the current value:
+<ul>
+<li>is not an object,</li>
+<li>is an object but does not contain the indicated key,</li>
+<li>is an object and contains the indicated key, and the key's value is <code>false</code>.</li>
+</ul>
+</li>
+<li><code>Name(string)</code> - If the value is an object, returns the value under the indicated key; otherwise <code>null</code>.</li>
+<li><code>ArrayIndex(int)</code> - If the value is an array, returns the value at the indicated index; otherwise <code>null</code>.</li>
+<li><code>IndexOf(JsonValue)</code> - If the value is an array, returns the index of the indicated value if it is found; otherwise -1.
+<ul>
+<li>This can be useful when attempting to ascertain whether an array contains a specific value:  <code>.IndexOf() != -1</code> can be used like a <code>Contains()</code>.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>NOTE</strong> All of these extension methods can be considered <code>null</code>-proof.  That is, they will handle the case where they are called on a <code>null</code> object without throwing an exception.</p>
+</blockquote>
+<p>The above methods allow you to build paths on the value passed into the expression (either a JsonValue or JsonArray).  If you'd like to build a path on the root object within an expression, use the <code>JsonPathRoot</code> static class to start the path.  (These non-extension methods are specifically purposed for referencing the root.  This is why they're segregated into a separate class.)</p>
+<h2 id="examples">Examples</h2>
+<p>Below is the Manatee.Json implementations of the examples presented on Mr. Goessner's post.</p>
+<ul>
+<li><code>$.store.book[*].author</code>
+<ul>
+<li><code>JsonPathWith.Name(&quot;store&quot;).Name(&quot;book&quot;).Array().Name(&quot;author&quot;)</code></li>
+</ul>
+</li>
+<li><code>$..author</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;author&quot;)</code></li>
+</ul>
+</li>
+<li><code>$.store.*</code>
+<ul>
+<li><code>JsonPathWith.Name(&quot;store&quot;).Name()</code></li>
+</ul>
+</li>
+<li><code>$.store..price</code>
+<ul>
+<li><code>JsonPathWith.Name(&quot;store&quot;).Search(&quot;price&quot;)</code></li>
+</ul>
+</li>
+<li><code>$..book[2]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(2)</code></li>
+</ul>
+</li>
+<li><code>$..book[(@.length-1)]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(a =&gt; a.Length() - 1)</code></li>
+</ul>
+</li>
+<li><code>$..book[-1:]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(new Slice(-1, null))</code></li>
+</ul>
+</li>
+<li><code>$..book[0,1]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(0, 1)</code></li>
+</ul>
+</li>
+<li><code>$..book[:2]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(new Slice(null, 2))</code></li>
+</ul>
+</li>
+<li><code>$..book[?(@.isbn)]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(v =&gt; v.HasProperty(&quot;isbn&quot;))</code></li>
+</ul>
+</li>
+<li><code>$..book[?(@.price&lt;10)]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(v =&gt; v.Name(&quot;price&quot;) &lt; 10)</code></li>
+</ul>
+</li>
+<li><code>$..*</code>
+<ul>
+<li><code>JsonPathWith.Search()</code></li>
+</ul>
+</li>
+</ul>
+<p>Here's an example of a path with an expression which contains a path referencing the current value and the root:</p>
+<ul>
+<li><code>$..book[?(@.price&lt;$.store.bicycle.price)]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(v =&gt; v.Name(&quot;price&quot;) &lt; JsonPathRoot.Name(&quot;store&quot;).Name(&quot;bicycle&quot;).Name(&quot;price&quot;))</code></li>
+</ul>
+</li>
+</ul>
+<p>You can perform arithmetic operations within your expressions:</p>
+<ul>
+<li><code>$..book[?(@.price+1&lt;15.99)]</code>
+<ul>
+<li><code>JsonPathWith.Search(&quot;book&quot;).Array(v =&gt; v.Name(&quot;price&quot;) + 1 &lt; 15.99)</code></li>
+</ul>
+</li>
+</ul>
+<p>You can even use local and instance fields in your expression:</p>
+<pre><code class="lang-csharp">double price = 15.99;
+var path = JsonPathWith.Search(&quot;book&quot;).Array(v =&gt; v.Name(&quot;price&quot;) + 1 &lt; price);
+</code></pre>
+<p>As the field updates, the path evaluation will change accordingly.</p>
+<blockquote>
+<p><strong>IMPORTANT</strong> While you may use local and instance fields <em>in your expressions</em>, the extension methods currently only support literal arguments.  Passing fields, properties, or method calls into these methods will throw a <code>NotSupportedException</code>.</p>
+</blockquote>
+<blockquote>
+<p><strong>IMPORTANT</strong> The methods contained within <code>PathExpressionExtensions</code> and <code>JsonPathRoot</code> will throw a <code>InvalidOperationException</code> if called outside of the context of one of the <code>JsonPathWith</code> methods.</p>
+</blockquote>
+<h2 id="parsing">Parsing</h2>
+<p>Parsing string representations of JSONPaths is quite simple.  The <code>JsonPath</code> class exposes a <code>Parse(string)</code> method.  If there is a problem with the string which is passed, it will throw a <code>JsonPathSyntaxException</code> which contains the portion of the path which was successfully parsed.</p>
+<p>The return is the <code>JsonPath</code> instance.  It's really that simple.  The benefit of building the path with the extension methods is that you're pretty much guaranteed that the path will be valid if it compiles.</p>
+<h2 id="working-with-jsonpath">Working with <code>JsonPath</code></h2>
+<p>Evaluating JSONPaths is easy.  The <code>JsonPath</code> class exposes the <code>Evaluate(JsonValue)</code> method.  This method will return a <code>JsonArray</code> containing all matches (or empty if there were none).</p>
+<blockquote>
+<p><strong>NOTE</strong> The return deviates slightly from Mr. Groessner's implementation in that an empty array is returned when there are no matches, as opposed to a <code>false</code> value.</p>
+</blockquote>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/path.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

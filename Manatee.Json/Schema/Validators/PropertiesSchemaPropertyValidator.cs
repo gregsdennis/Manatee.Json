@@ -22,7 +22,8 @@ namespace Manatee.Json.Schema.Validators
 			return schema is T typed &&
 			       (GetProperties(typed) != null ||
 			        GetAdditionalProperties(typed) != null ||
-			        GetPatternProperties(typed) != null) &&
+			        GetPatternProperties(typed) != null ||
+			        GetRequiredProperties(typed) != null) &&
 			       json.Type == JsonValueType.Object;
 		}
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)

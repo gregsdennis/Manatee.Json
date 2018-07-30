@@ -98,11 +98,11 @@ namespace Manatee.Json.Schema
 								Type = JsonSchemaType.String,
 								Format = StringFormat.UriReference
 							},
-						["$comment"] = new JsonSchema07 {Type = JsonSchemaType.String}, //new
+						["$comment"] = new JsonSchema07 {Type = JsonSchemaType.String},
 						["title"] = new JsonSchema07 {Type = JsonSchemaType.String},
 						["description"] = new JsonSchema07 {Type = JsonSchemaType.String},
-						["default"] = True, //updated
-						["readOnly"] = new JsonSchema07 //new
+						["default"] = True,
+						["readOnly"] = new JsonSchema07
 							{
 								Type = JsonSchemaType.Boolean,
 								Default = false
@@ -110,7 +110,7 @@ namespace Manatee.Json.Schema
 						["examples"] = new JsonSchema07
 							{
 								Type = JsonSchemaType.Array,
-								Items = True //updated
+								Items = True
 						},
 						["multipleOf"] = new JsonSchema07
 							{
@@ -136,7 +136,7 @@ namespace Manatee.Json.Schema
 										Root,
 										new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07))
 									},
-								Default = true //updated
+								Default = true
 						},
 						["maxItems"] = new JsonSchemaReference("#/definitions/nonNegativeInteger", typeof(JsonSchema07)),
 						["minItems"] = new JsonSchemaReference("#/definitions/nonNegativeIntegerDefault0", typeof(JsonSchema07)),
@@ -182,12 +182,12 @@ namespace Manatee.Json.Schema
 									}
 							},
 						["propertyNames"] = Root,
-						["const"] = True, //updated
-					["enum"] = new JsonSchema07
+						["const"] = True,
+						["enum"] = new JsonSchema07
 							{
 								Type = JsonSchemaType.Array,
-								Items = True, //updated
-						MinItems = 1,
+								Items = True,
+								MinItems = 1,
 								UniqueItems = true
 							},
 						["type"] = new JsonSchema07
@@ -205,17 +205,17 @@ namespace Manatee.Json.Schema
 									}
 							},
 						["format"] = new JsonSchema07 {Type = JsonSchemaType.String},
-						["contentMediaType"] = new JsonSchema07 {Type = JsonSchemaType.String}, //new
-						["contentEncoding"] = new JsonSchema07 {Type = JsonSchemaType.String}, //new
-						["if"] = Root, //new
-						["then"] = Root, //new
-						["else"] = Root, //new
+						["contentMediaType"] = new JsonSchema07 {Type = JsonSchemaType.String},
+						["contentEncoding"] = new JsonSchema07 {Type = JsonSchemaType.String},
+						["if"] = Root,
+						["then"] = Root,
+						["else"] = Root,
 						["allOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07)),
 						["anyOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07)),
 						["oneOf"] = new JsonSchemaReference("#/definitions/schemaArray", typeof(JsonSchema07)),
 						["not"] = Root,
 					},
-				Default = true //updated
+				Default = true
 		};
 
 		private static readonly IEnumerable<string> _definedProperties = MetaSchema.Properties.Keys.ToList();

@@ -1,3 +1,1 @@
-v9.9.0
-
-Added `SchemaErrorMessages` static class which contains tokenized error messages.  All built-in validators use these error messages.
+The release notes can now be found in the [official documentation](https://gregsdennis.github.io/Manatee.Json/releasenotes).

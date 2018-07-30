@@ -1,0 +1,1510 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class JsonValue
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class JsonValue
+   ">
+    <meta name="generator" content="docfx 2.36.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg site-icon" src="../siteicon.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Manatee.Json.JsonValue">
+  
+  
+  <h1 id="Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue" class="text-break">Class JsonValue
+  </h1>
+  <div class="markdown level0 summary"><p>Represents a JSON value.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">JsonValue</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.html">Manatee.Json</a></h6>
+  <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
+  <h5 id="Manatee_Json_JsonValue_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class JsonValue : IEquatable&lt;JsonValue&gt;</code></pre>
+  </div>
+  <h5 id="Manatee_Json_JsonValue_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>A value can consist of a string, a numerical value, a boolean (true or false), a null
+placeholder, a JSON array of values, or a nested JSON object.</p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue__ctor.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L155">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue__ctor_" data-uid="Manatee.Json.JsonValue.#ctor*"></a>
+  <h4 id="Manatee_Json_JsonValue__ctor" data-uid="Manatee.Json.JsonValue.#ctor">JsonValue()</h4>
+  <div class="markdown level1 summary"><p>Creates a null <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue__ctor_Manatee_Json_JsonArray_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.%23ctor(Manatee.Json.JsonArray)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L194">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue__ctor_" data-uid="Manatee.Json.JsonValue.#ctor*"></a>
+  <h4 id="Manatee_Json_JsonValue__ctor_Manatee_Json_JsonArray_" data-uid="Manatee.Json.JsonValue.#ctor(Manatee.Json.JsonArray)">JsonValue(JsonArray)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> from a JSON array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue(JsonArray a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue__ctor_Manatee_Json_JsonObject_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.%23ctor(Manatee.Json.JsonObject)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L186">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue__ctor_" data-uid="Manatee.Json.JsonValue.#ctor*"></a>
+  <h4 id="Manatee_Json_JsonValue__ctor_Manatee_Json_JsonObject_" data-uid="Manatee.Json.JsonValue.#ctor(Manatee.Json.JsonObject)">JsonValue(JsonObject)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> from a JSON object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue(JsonObject o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a></td>
+        <td><span class="parametername">o</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue__ctor_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.%23ctor(Manatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L202">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue__ctor_" data-uid="Manatee.Json.JsonValue.#ctor*"></a>
+  <h4 id="Manatee_Json_JsonValue__ctor_Manatee_Json_JsonValue_" data-uid="Manatee.Json.JsonValue.#ctor(Manatee.Json.JsonValue)">JsonValue(JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Creates a copy of a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue(JsonValue other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue__ctor_System_Nullable_System_Boolean__.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.%23ctor(System.Nullable%7BSystem.Boolean%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L162">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue__ctor_" data-uid="Manatee.Json.JsonValue.#ctor*"></a>
+  <h4 id="Manatee_Json_JsonValue__ctor_System_Nullable_System_Boolean__" data-uid="Manatee.Json.JsonValue.#ctor(System.Nullable{System.Boolean})">JsonValue(Nullable&lt;Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> from a boolean.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue(bool? b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue__ctor_System_Nullable_System_Double__.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.%23ctor(System.Nullable%7BSystem.Double%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L178">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue__ctor_" data-uid="Manatee.Json.JsonValue.#ctor*"></a>
+  <h4 id="Manatee_Json_JsonValue__ctor_System_Nullable_System_Double__" data-uid="Manatee.Json.JsonValue.#ctor(System.Nullable{System.Double})">JsonValue(Nullable&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> from a numeric value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue(double? n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue__ctor_System_String_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L170">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue__ctor_" data-uid="Manatee.Json.JsonValue.#ctor*"></a>
+  <h4 id="Manatee_Json_JsonValue__ctor_System_String_" data-uid="Manatee.Json.JsonValue.#ctor(System.String)">JsonValue(String)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> from a string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue(string s)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">s</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Null.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Null%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L32">View Source</a>
+  </span>
+  <h4 id="Manatee_Json_JsonValue_Null" data-uid="Manatee.Json.JsonValue.Null">Null</h4>
+  <div class="markdown level1 summary"><p>Globally defined null-valued JSON value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly JsonValue Null</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_Null_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>When adding values to a <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>, nulls will automatically be converted into this field.</p>
+</div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Array.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Array%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L131">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Array_" data-uid="Manatee.Json.JsonValue.Array*"></a>
+  <h4 id="Manatee_Json_JsonValue_Array" data-uid="Manatee.Json.JsonValue.Array">Array</h4>
+  <div class="markdown level1 summary"><p>Accesses the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> as a JSON array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonArray Array { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValueIncorrectTypeException.html">JsonValueIncorrectTypeException</a></td>
+        <td><p>Thrown when this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> does not contain a Json array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Boolean.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Boolean%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L40">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Boolean_" data-uid="Manatee.Json.JsonValue.Boolean*"></a>
+  <h4 id="Manatee_Json_JsonValue_Boolean" data-uid="Manatee.Json.JsonValue.Boolean">Boolean</h4>
+  <div class="markdown level1 summary"><p>Accesses the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> as a boolean.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Boolean { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValueIncorrectTypeException.html">JsonValueIncorrectTypeException</a></td>
+        <td><p>Thrown when this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> does not contain a boolean.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Number.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Number%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L87">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Number_" data-uid="Manatee.Json.JsonValue.Number*"></a>
+  <h4 id="Manatee_Json_JsonValue_Number" data-uid="Manatee.Json.JsonValue.Number">Number</h4>
+  <div class="markdown level1 summary"><p>Accesses the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> as a numeric value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Number { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValueIncorrectTypeException.html">JsonValueIncorrectTypeException</a></td>
+        <td><p>Thrown when this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> does not contain a numeric value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Object.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Object%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L109">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Object_" data-uid="Manatee.Json.JsonValue.Object*"></a>
+  <h4 id="Manatee_Json_JsonValue_Object" data-uid="Manatee.Json.JsonValue.Object">Object</h4>
+  <div class="markdown level1 summary"><p>Accesses the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> as a JSON object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonObject Object { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValueIncorrectTypeException.html">JsonValueIncorrectTypeException</a></td>
+        <td><p>Thrown when this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> does not contain a Json object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_String.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.String%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L65">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_String_" data-uid="Manatee.Json.JsonValue.String*"></a>
+  <h4 id="Manatee_Json_JsonValue_String" data-uid="Manatee.Json.JsonValue.String">String</h4>
+  <div class="markdown level1 summary"><p>Accesses the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> as a string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string String { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_String_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Setting the value as a string will automatically change the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>'s type and discard the old data.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValueIncorrectTypeException.html">JsonValueIncorrectTypeException</a></td>
+        <td><p>Thrown when this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> does not contain a string.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Type.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Type%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L150">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Type_" data-uid="Manatee.Json.JsonValue.Type*"></a>
+  <h4 id="Manatee_Json_JsonValue_Type" data-uid="Manatee.Json.JsonValue.Type">Type</h4>
+  <div class="markdown level1 summary"><p>Gets the value type of the existing data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValueType Type { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValueType.html">JsonValueType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Equals_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Equals(Manatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L312">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Equals_" data-uid="Manatee.Json.JsonValue.Equals*"></a>
+  <h4 id="Manatee_Json_JsonValue_Equals_Manatee_Json_JsonValue_" data-uid="Manatee.Json.JsonValue.Equals(Manatee.Json.JsonValue)">Equals(JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(JsonValue other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>An object to compare with this object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the current object is equal to the <code data-dev-comment-type="paramref" class="paramref">other</code> parameter; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L303">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Equals_" data-uid="Manatee.Json.JsonValue.Equals*"></a>
+  <h4 id="Manatee_Json_JsonValue_Equals_System_Object_" data-uid="Manatee.Json.JsonValue.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the specified <span class="xref">System.Object</span> is equal to the current <span class="xref">System.Object</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>The <span class="xref">System.Object</span> to compare with the current <span class="xref">System.Object</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the specified <span class="xref">System.Object</span> is equal to the current <span class="xref">System.Object</span>; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_GetHashCode.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L340">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_GetHashCode_" data-uid="Manatee.Json.JsonValue.GetHashCode*"></a>
+  <h4 id="Manatee_Json_JsonValue_GetHashCode" data-uid="Manatee.Json.JsonValue.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Serves as a hash function for a particular type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>A hash code for the current <span class="xref">System.Object</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_GetIndentedString_System_Int32_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.GetIndentedString(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L217">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_GetIndentedString_" data-uid="Manatee.Json.JsonValue.GetIndentedString*"></a>
+  <h4 id="Manatee_Json_JsonValue_GetIndentedString_System_Int32_" data-uid="Manatee.Json.JsonValue.GetIndentedString(System.Int32)">GetIndentedString(Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates a string representation of the JSON data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetIndentedString(int indentLevel = 0)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">indentLevel</span></td>
+        <td><p>The indention level for the value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>A string.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Parse_System_String_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Parse(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L368">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Parse_" data-uid="Manatee.Json.JsonValue.Parse*"></a>
+  <h4 id="Manatee_Json_JsonValue_Parse_System_String_" data-uid="Manatee.Json.JsonValue.Parse(System.String)">Parse(String)</h4>
+  <div class="markdown level1 summary"><p>Parses a <see cref="!:System.String"></see> containing a JSON value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static JsonValue Parse(string source)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>the <see cref="!:System.String"></see> to parse.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>The JSON value represented by the <see cref="!:System.String"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonSyntaxException.html">JsonSyntaxException</a></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">source</code> contains invalid JSON syntax.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_Parse_TextReader_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.Parse(TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L384">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_Parse_" data-uid="Manatee.Json.JsonValue.Parse*"></a>
+  <h4 id="Manatee_Json_JsonValue_Parse_TextReader_" data-uid="Manatee.Json.JsonValue.Parse(TextReader)">Parse(TextReader)</h4>
+  <div class="markdown level1 summary"><p>Parses data from a <see cref="!:StreamReader"></see> containing a JSON value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static JsonValue Parse(TextReader stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TextReader</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td><p>the <see cref="!:StreamReader"></see> to parse.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>The JSON value represented by the <see cref="!:System.String"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonSyntaxException.html">JsonSyntaxException</a></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">stream</code> contains invalid JSON syntax.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_ParseAsync_TextReader_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.ParseAsync(TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L398">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_ParseAsync_" data-uid="Manatee.Json.JsonValue.ParseAsync*"></a>
+  <h4 id="Manatee_Json_JsonValue_ParseAsync_TextReader_" data-uid="Manatee.Json.JsonValue.ParseAsync(TextReader)">ParseAsync(TextReader)</h4>
+  <div class="markdown level1 summary"><p>Parses data from a <see cref="!:StreamReader"></see> containing a JSON value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Task&lt;JsonValue&gt; ParseAsync(TextReader stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TextReader</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td><p>the <see cref="!:StreamReader"></see> to parse.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>&gt;</td>
+        <td><p>The JSON value represented by the <see cref="!:System.String"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonSyntaxException.html">JsonSyntaxException</a></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">stream</code> contains invalid JSON syntax.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_ToString.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L252">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_ToString_" data-uid="Manatee.Json.JsonValue.ToString*"></a>
+  <h4 id="Manatee_Json_JsonValue_ToString" data-uid="Manatee.Json.JsonValue.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Creates a string that represents this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>A string representation of this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_ToString_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Passing the returned string back into the parser will result in a copy of this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Equality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Equality(Manatee.Json.JsonValue%2CManatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L521">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_op_Equality_" data-uid="Manatee.Json.JsonValue.op_Equality*"></a>
+  <h4 id="Manatee_Json_JsonValue_op_Equality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_" data-uid="Manatee.Json.JsonValue.op_Equality(Manatee.Json.JsonValue,Manatee.Json.JsonValue)">Equality(JsonValue, JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Performs an equality comparison between two <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>s.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(JsonValue a, JsonValue b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>A JsonValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>A JsonValue.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the values are equal; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonArray__Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonArray)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L511">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
+  <h4 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonArray__Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonArray)~Manatee.Json.JsonValue">Implicit(JsonArray to JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Implicitly converts a <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator JsonValue(JsonArray a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>A JSON array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonArray__Manatee_Json_JsonValue_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonArray__Manatee_Json_JsonValue_examples">Examples</h5>
+  <pre><code>    JsonObject obj = new JsonObject{
+    	{&quot;stringData&quot;, &quot;string&quot;},
+    	{&quot;numberData&quot;, 10.6},
+    	{&quot;boolData&quot;, true},
+    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
+    	{&quot;objectData&quot;, new JsonObject{
+    		{&quot;stringData2&quot;, &quot;another string&quot;},
+    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonObject__Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonObject)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L489">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
+  <h4 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonObject__Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonObject)~Manatee.Json.JsonValue">Implicit(JsonObject to JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Implicitly converts a <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator JsonValue(JsonObject o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a></td>
+        <td><span class="parametername">o</span></td>
+        <td><p>A JSON object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonObject__Manatee_Json_JsonValue_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonObject__Manatee_Json_JsonValue_examples">Examples</h5>
+  <pre><code>    JsonObject obj = new JsonObject{
+    	{&quot;stringData&quot;, &quot;string&quot;},
+    	{&quot;numberData&quot;, 10.6},
+    	{&quot;boolData&quot;, true},
+    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
+    	{&quot;objectData&quot;, new JsonObject{
+    		{&quot;stringData2&quot;, &quot;another string&quot;},
+    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(System.Nullable%7BSystem.Boolean%7D)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L423">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
+  <h4 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Boolean})~Manatee.Json.JsonValue">Implicit(Nullable&lt;Boolean&gt; to JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Implicitly converts a <see cref="!:System.Boolean"></see> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator JsonValue(bool? b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">b</span></td>
+        <td><p>A <see cref="!:System.Boolean"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <see cref="!:System.Boolean"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue_examples">Examples</h5>
+  <pre><code>    JsonObject obj = new JsonObject{
+    	{&quot;stringData&quot;, &quot;string&quot;},
+    	{&quot;numberData&quot;, 10.6},
+    	{&quot;boolData&quot;, true},
+    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
+    	{&quot;objectData&quot;, new JsonObject{
+    		{&quot;stringData2&quot;, &quot;another string&quot;},
+    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(System.Nullable%7BSystem.Double%7D)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L467">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
+  <h4 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Double})~Manatee.Json.JsonValue">Implicit(Nullable&lt;Double&gt; to JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Implicitly converts a <see cref="!:System.Double"></see> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator JsonValue(double? n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">n</span></td>
+        <td><p>A <see cref="!:System.Double"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <see cref="!:System.Double"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue_examples">Examples</h5>
+  <pre><code>    JsonObject obj = new JsonObject{
+    	{&quot;stringData&quot;, &quot;string&quot;},
+    	{&quot;numberData&quot;, 10.6},
+    	{&quot;boolData&quot;, true},
+    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
+    	{&quot;objectData&quot;, new JsonObject{
+    		{&quot;stringData2&quot;, &quot;another string&quot;},
+    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(System.String)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L445">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
+  <h4 id="Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.String)~Manatee.Json.JsonValue">Implicit(String to JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Implicitly converts a <see cref="!:System.String"></see> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator JsonValue(string s)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">s</span></td>
+        <td><p>A <see cref="!:System.String"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <see cref="!:System.String"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
+</div>
+  <h5 id="Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue_examples">Examples</h5>
+  <pre><code>    JsonObject obj = new JsonObject{
+    	{&quot;stringData&quot;, &quot;string&quot;},
+    	{&quot;numberData&quot;, 10.6},
+    	{&quot;boolData&quot;, true},
+    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
+    	{&quot;objectData&quot;, new JsonObject{
+    		{&quot;stringData2&quot;, &quot;another string&quot;},
+    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Inequality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Inequality(Manatee.Json.JsonValue%2CManatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L531">View Source</a>
+  </span>
+  <a id="Manatee_Json_JsonValue_op_Inequality_" data-uid="Manatee.Json.JsonValue.op_Inequality*"></a>
+  <h4 id="Manatee_Json_JsonValue_op_Inequality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_" data-uid="Manatee.Json.JsonValue.op_Inequality(Manatee.Json.JsonValue,Manatee.Json.JsonValue)">Inequality(JsonValue, JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Performs an inverted equality comparison between two <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>s.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(JsonValue a, JsonValue b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>A JsonValue.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>A JsonValue.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>false if the values are equal; otherwise, true.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Manatee.Json.XmlExtensions.html#Manatee_Json_XmlExtensions_ToXElement_Manatee_Json_JsonValue_System_String_">XmlExtensions.ToXElement(JsonValue, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Transform.JsonTransformer.html#Manatee_Json_Transform_JsonTransformer_Transform_Manatee_Json_JsonValue_Manatee_Json_JsonValue_">JsonTransformer.Transform(JsonValue, JsonValue)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L18" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

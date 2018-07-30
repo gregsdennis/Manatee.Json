@@ -6,18 +6,11 @@
     <Version>10.0.0</Version>
     <Copyright>Copyright © 2018 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/gregsdennis/Manatee.Json</PackageProjectUrl>
+    <PackageProjectUrl>https://gregsdennis.github.io/Manatee.Json/</PackageProjectUrl>
     <PackageIconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</PackageIconUrl>
-    <RepositoryUrl>
-    </RepositoryUrl>
+    <RepositoryUrl>https://github.com/gregsdennis/Manatee.Json</RepositoryUrl>
     <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
-    <PackageReleaseNotes>v10.0.0
-Changed how custom serialization is handled (see wiki).
-- Added SerializerFactory and ISerializer
-- Deleted CustomSerializations
-- Deleted obsolete code
--- JsonSerializationAbstractionMap
--- JsonSerializationTypeRegistry</PackageReleaseNotes>
+    <PackageReleaseNotes>See https://gregsdennis.github.io/Manatee.Json/release-notes.html</PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
     <FileVersion>10.0.0.0</FileVersion>

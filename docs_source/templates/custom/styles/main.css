@@ -1,0 +1,41 @@
+.site-icon {
+  margin: 6px;
+  height: 40px;
+  width: 40px;
+}
+
+#patch {
+  border-radius: 3px;
+  background: linear-gradient(#D90000, #B90000);
+  font-size: 14px;
+  color: white;
+  padding: 3px 5px 3px 5px;
+  text-shadow: 1px 1px #000000;
+}
+
+#feature {
+  border-radius: 3px;
+  background: linear-gradient(#00C94A, #009938);
+  font-size: 14px;
+  color: white;
+  padding: 3px 5px 3px 5px;
+  text-shadow: 1px 1px #000000;
+}
+
+#break {
+  border-radius: 3px;
+  background: black;
+  font-size: 14px;
+  color: white;
+  padding: 3px 5px 3px 5px;
+  text-shadow: 1px 1px #000000;
+}
+
+#spec {
+  border-radius: 3px;
+  background: linear-gradient(#2871BF, #0054AD);
+  font-size: 14px;
+  color: white;
+  padding: 3px 5px 3px 5px;
+  text-shadow: 1px 1px #000000;
+}
