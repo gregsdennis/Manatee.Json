@@ -39,7 +39,7 @@ namespace Manatee.Json.Schema.Validators
 				if (!obj.ContainsKey(property.Key)) continue;
 				var result = property.Value?.Validate(obj[property.Key], root);
 				if (result != null && !result.Valid)
-					errors.AddRange(result.Errors.Select(e => e.PrependPropertyName(property.Key)));
+					errors.AddRange(result.Errors.Select(e => e.PrependPropertySegment(property.Key)));
 			}
 			var requiredProperties = GetRequiredProperties(typed) ?? new List<string>();
 			foreach (var property in requiredProperties)
@@ -100,7 +100,7 @@ namespace Manatee.Json.Schema.Validators
 					foreach (var key in extraData.Keys)
 					{
 						var extraErrors = localSchema.Validate(extraData[key], root).Errors;
-						errors.AddRange(extraErrors.Select(e => e.PrependPropertyName(key)));
+						errors.AddRange(extraErrors.Select(e => e.PrependPropertySegment(key)));
 					}
 				}
 			}
