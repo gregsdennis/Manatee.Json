@@ -7,6 +7,9 @@ using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
+	/// <summary>
+	/// Provides access to custom serializers.
+	/// </summary>
 	public static class SerializerFactory
 	{
 		private static readonly ITypeSerializer _autoSerializer;
@@ -34,12 +37,20 @@ namespace Manatee.Json.Serialization
 			_orderedSerializers = _serializers.OrderBy(s => (s as IPrioritizedSerializer)?.Priority ?? 0);
 		}
 
+		/// <summary>
+		/// Adds a new custom serializer.
+		/// </summary>
+		/// <param name="serializer">The serializer to add.</param>
 		public static void AddSerializer(ISerializer serializer)
 		{
 			var existing = _serializers.FirstOrDefault(s => s.GetType() == serializer.GetType());
 			if (existing == null)
 				_serializers.Add(serializer);
 		}
+		/// <summary>
+		/// Removes a custom serializer.
+		/// </summary>
+		/// <typeparam name="T">The concrete type of serializer to remove.</typeparam>
 		public static void RemoveSerializer<T>()
 			where T : ISerializer
 		{

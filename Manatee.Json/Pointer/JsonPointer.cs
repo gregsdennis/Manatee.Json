@@ -20,6 +20,11 @@ namespace Manatee.Json.Pointer
 		/// Creates a new <see cref="JsonPointer"/> instance.
 		/// </summary>
 		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
+		public JsonPointer(params string[] source) : this((IEnumerable<string>)source) { }
+		/// <summary>
+		/// Creates a new <see cref="JsonPointer"/> instance.
+		/// </summary>
+		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
 		public JsonPointer(IEnumerable<string> source) : base(source) { }
 
 		/// <summary>

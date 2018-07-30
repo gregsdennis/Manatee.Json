@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
 {
@@ -8,9 +10,9 @@ namespace Manatee.Json.Schema
 	public class SchemaValidationError : IEquatable<SchemaValidationError>
 	{
 		/// <summary>
-		/// The property or property path which failed validation.
+		/// A pointer to the schema property which failed validation.
 		/// </summary>
-		public string PropertyName { get; private set; }
+		public JsonPointer Property { get; private set; }
 		/// <summary>
 		/// A message indicating the failure.
 		/// </summary>
@@ -18,16 +20,17 @@ namespace Manatee.Json.Schema
 
 		internal SchemaValidationError(string propertyName, string message)
 		{
-			PropertyName = propertyName;
+			if (propertyName != null)
+				Property = new JsonPointer(propertyName);
 			Message = message;
 		}
 
-		internal SchemaValidationError PrependPropertyName(string parent)
+		internal SchemaValidationError PrependPropertySegment(string parentSegment)
 		{
-			if (string.IsNullOrWhiteSpace(PropertyName))
-				PropertyName = parent;
+			if (Property == null)
+				Property = new JsonPointer(parentSegment);
 			else
-				PropertyName = parent + (PropertyName[0] == '[' ? string.Empty : ".") + PropertyName;
+				Property.Insert(0, parentSegment);
 			return this;
 		}
 
@@ -39,9 +42,9 @@ namespace Manatee.Json.Schema
 		/// </returns>
 		public override string ToString()
 		{
-			return string.IsNullOrWhiteSpace(PropertyName)
+			return Property == null
 				? Message
-				: $"Property: {PropertyName} - {Message}";
+				: $"Property: {Property} - {Message}";
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
@@ -50,7 +53,8 @@ namespace Manatee.Json.Schema
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return string.Equals(PropertyName, other.PropertyName) && string.Equals(Message, other.Message);
+			return (Property == null && other.Property == null) ||
+			       (Property != null && Property.SequenceEqual(other.Property) && string.Equals(Message, other.Message));
 		}
 		/// <summary>Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.</summary>
 		/// <returns>true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.</returns>
@@ -65,7 +69,7 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				return ((PropertyName?.GetHashCode() ?? 0)*397) ^ (Message?.GetHashCode() ?? 0);
+				return ((Property?.ToString().GetHashCode() ?? 0)*397) ^ (Message?.GetHashCode() ?? 0);
 			}
 		}
 	}

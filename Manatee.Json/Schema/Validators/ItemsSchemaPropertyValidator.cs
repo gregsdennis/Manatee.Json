@@ -47,7 +47,7 @@ namespace Manatee.Json.Schema.Validators
 			{
 				// have single schema: validate all against this
 				var itemValidations = array.Select(v => GetItems(typed).Validate(v, root));
-				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertyName($"[{i}]"))));
+				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertySegment($"{i}"))));
 			}
 			return new SchemaValidationResults(errors);
 		}
