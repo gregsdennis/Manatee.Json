@@ -52,7 +52,7 @@ Fixed bug where attempting to download schemas behind `https` links would throw 
 
 # 9.9.2
 
-*Released on 13 July, 2018*
+*Released on 8 Jun, 2018*
 
 <span id="patch">patch</span> <span id="spec">spec</span>
 
