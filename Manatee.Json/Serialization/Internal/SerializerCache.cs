@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+using System.Collections.Concurrent;
 
 namespace Manatee.Json.Serialization.Internal
 {
 	internal static class SerializerCache
 	{
-		private static readonly Dictionary<Type, SerializerMethodPair> _cache;
+		private static readonly ConcurrentDictionary<Type, SerializerMethodPair> _cache;
 
 		static SerializerCache()
 		{
-			_cache = new Dictionary<Type, SerializerMethodPair>();
+			_cache = new ConcurrentDictionary<Type, SerializerMethodPair>();
 		}
 
 		public static Func<JsonSerializer, object, object> GetSerializeMethod(Type type)
@@ -27,8 +26,7 @@ namespace Manatee.Json.Serialization.Internal
 
 		private static SerializerMethodPair _EnsureMethodPair(Type type)
 		{
-			SerializerMethodPair pair;
-			if (!_cache.TryGetValue(type, out pair))
+			if (!_cache.TryGetValue(type, out var pair))
 			{
 				pair = new SerializerMethodPair(type);
 				_cache[type] = pair;
