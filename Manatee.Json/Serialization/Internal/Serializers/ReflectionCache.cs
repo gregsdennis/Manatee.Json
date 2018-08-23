@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -22,13 +23,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 		}
 
-		private static readonly Dictionary<Type, ReflectionInfo> _instanceCache;
-		private static readonly Dictionary<Type, ReflectionInfo> _staticCache;
+		private static readonly ConcurrentDictionary<Type, ReflectionInfo> _instanceCache;
+		private static readonly ConcurrentDictionary<Type, ReflectionInfo> _staticCache;
 
 		static ReflectionCache()
 		{
-			_instanceCache = new Dictionary<Type, ReflectionInfo>();
-			_staticCache = new Dictionary<Type, ReflectionInfo>();
+			_instanceCache = new ConcurrentDictionary<Type, ReflectionInfo>();
+			_staticCache = new ConcurrentDictionary<Type, ReflectionInfo>();
 		}
 
 		public static IEnumerable<SerializationInfo> GetMembers(Type type, PropertySelectionStrategy propertyTypes, bool includeFields)
