@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema.Validators
 			{
 				if (!obj.ContainsKey(property.Key)) continue;
 				var result = property.Value?.Validate(obj[property.Key], root);
-				if (result != null && !result.Valid)
+				if (result != null && !result.IsValid)
 					errors.AddRange(result.Errors.Select(e => e.PrependPropertySegment(property.Key)));
 			}
 			var requiredProperties = GetRequiredProperties(typed) ?? new List<string>();

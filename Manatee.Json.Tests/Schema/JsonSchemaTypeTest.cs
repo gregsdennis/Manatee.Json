@@ -13,7 +13,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = JsonSchema04.MetaSchema.Validate(json);
 
-			Assert.IsTrue(results.Valid);
+			Assert.IsTrue(results.IsValid);
 		}
 		[Test]
 		public void Draft04_NonPrimitiveStringSchemaFails()
@@ -22,7 +22,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = JsonSchema04.MetaSchema.Validate(json);
 
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 		}
 		[Test]
 		public void Draft06_PrimitiveSchemaSucceeds()
@@ -31,7 +31,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = JsonSchema06.MetaSchema.Validate(json);
 
-			Assert.IsTrue(results.Valid);
+			Assert.IsTrue(results.IsValid);
 		}
 		[Test]
 		public void Draft06_NonPrimitiveStringSchemaFails()
@@ -40,7 +40,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = JsonSchema06.MetaSchema.Validate(json);
 
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 		}
 		[Test]
 		public void Draft07_PrimitiveSchemaSucceeds()
@@ -49,7 +49,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = JsonSchema07.MetaSchema.Validate(json);
 
-			Assert.IsTrue(results.Valid);
+			Assert.IsTrue(results.IsValid);
 		}
 		[Test]
 		public void Draft07_NonPrimitiveStringSchemaFails()
@@ -58,7 +58,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = JsonSchema07.MetaSchema.Validate(json);
 
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 		}
 	}
 }

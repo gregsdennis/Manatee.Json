@@ -102,9 +102,9 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				var schema = _serializer.Deserialize<IJsonSchema>(schemaJson);
 				var results = schema.Validate(test.Data);
 
-				if (test.Valid != results.Valid)
+				if (test.Valid != results.IsValid)
 					Console.WriteLine(string.Join("\n", results.Errors));
-				Assert.AreEqual(test.Valid, results.Valid);
+				Assert.AreEqual(test.Valid, results.IsValid);
 
 			}
 			catch (Exception)

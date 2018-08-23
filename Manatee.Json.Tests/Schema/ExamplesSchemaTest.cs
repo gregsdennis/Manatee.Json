@@ -26,7 +26,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = metaSchema.Validate(json);
 			
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 		}
 	}
 }

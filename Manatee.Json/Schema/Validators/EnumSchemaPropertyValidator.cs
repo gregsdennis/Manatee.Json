@@ -16,7 +16,7 @@ namespace Manatee.Json.Schema.Validators
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var errors = GetEnum((T)schema).Select(d => d.Validate(json)).ToList();
-			return errors.Any(r => r.Valid)
+			return errors.Any(r => r.IsValid)
 				? new SchemaValidationResults()
 				: new SchemaValidationResults(errors);
 		}

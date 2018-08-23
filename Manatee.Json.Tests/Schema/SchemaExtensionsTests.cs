@@ -44,16 +44,16 @@ namespace Manatee.Json.Tests.Schema
 				if (typed.If == null) return new SchemaValidationResults();
 
 				var ifResults = _ValidateSubSchema(typed.If, json, root);
-				if (ifResults.Valid)
+				if (ifResults.IsValid)
 				{
 					var thenResults = _ValidateSubSchema(typed.Then, json, root);
-					if (thenResults.Valid) return new SchemaValidationResults();
+					if (thenResults.IsValid) return new SchemaValidationResults();
 
 					return new SchemaValidationResults("then", "Validation of `if` succeeded, but validation of `then` failed.");
 				}
 
 				var elseResults = _ValidateSubSchema(typed.Else, json, root);
-				if (elseResults.Valid) return new SchemaValidationResults();
+				if (elseResults.IsValid) return new SchemaValidationResults();
 
 				return new SchemaValidationResults("else", "Validation of `if` failed, but validation of `else` also failed.");
 			}

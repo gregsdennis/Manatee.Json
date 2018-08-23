@@ -39,7 +39,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (schema != null)
 			{
 				var results = schema.Validate(json);
-				if (!results.Valid)
+				if (!results.IsValid)
 				{
 					throw new JsonSerializationException($"JSON did not pass schema defined by type '{typeof(T)}'.\n" +
 														 "Errors:\n" +

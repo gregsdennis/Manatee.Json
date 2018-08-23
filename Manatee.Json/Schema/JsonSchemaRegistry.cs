@@ -55,11 +55,11 @@ namespace Manatee.Json.Schema
 						foreach (var metaSchema in metaSchemas)
 						{
 							validation = metaSchema.Validate(schemaValue);
-							if (validation.Valid) break;
+							if (validation.IsValid) break;
 						}
 					}
 
-					if (validation != null && !validation.Valid)
+					if (validation != null && !validation.IsValid)
 					{
 						var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
 						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");

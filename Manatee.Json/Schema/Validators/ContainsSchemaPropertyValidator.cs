@@ -27,7 +27,7 @@ namespace Manatee.Json.Schema.Validators
 			}
 
 			var validations = json.Array.Select(jv => contains.Validate(jv, root)).ToList();
-			if (!validations.Any(v => v.Valid))
+			if (!validations.Any(v => v.IsValid))
 				return new SchemaValidationResults(validations);
 			
 			return new SchemaValidationResults();

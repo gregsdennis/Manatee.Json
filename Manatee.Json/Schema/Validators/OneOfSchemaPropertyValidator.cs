@@ -16,7 +16,7 @@ namespace Manatee.Json.Schema.Validators
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var errors = GetOneOf((T)schema).Select(s => s.Validate(json, root)).ToList();
-			var validCount = errors.Count(r => r.Valid);
+			var validCount = errors.Count(r => r.IsValid);
 			switch (validCount)
 			{
 				case 0:

@@ -221,7 +221,7 @@ namespace Manatee.Json.Tests.Schema
 
 			Console.WriteLine(string.Join("\n", results.Errors));
 
-			Assert.IsTrue(results.Valid);
+			Assert.IsTrue(results.IsValid);
 		}
 
 		public static IEnumerable Issue167TestCaseSource1
@@ -314,7 +314,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 			Console.WriteLine(string.Join("\n", results.Errors));
 		}
 
@@ -441,7 +441,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(isValid, results.Valid);
+			Assert.AreEqual(isValid, results.IsValid);
 		}
 
 		[Test]

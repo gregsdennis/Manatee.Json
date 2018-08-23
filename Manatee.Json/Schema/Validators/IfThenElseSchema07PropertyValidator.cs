@@ -16,10 +16,10 @@ namespace Manatee.Json.Schema.Validators
 
 			var ifResults = _ValidateSubSchema(typed.If, json, root);
 			string message;
-			if (ifResults.Valid)
+			if (ifResults.IsValid)
 			{
 				var thenResults = _ValidateSubSchema(typed.Then, json, root);
-				if (thenResults.Valid) return new SchemaValidationResults();
+				if (thenResults.IsValid) return new SchemaValidationResults();
 
 				message = SchemaErrorMessages.Then.ResolveTokens(new Dictionary<string, object>
 					{
@@ -29,7 +29,7 @@ namespace Manatee.Json.Schema.Validators
 			}
 
 			var elseResults = _ValidateSubSchema(typed.Else, json, root);
-			if (elseResults.Valid) return new SchemaValidationResults();
+			if (elseResults.IsValid) return new SchemaValidationResults();
 
 			message = SchemaErrorMessages.Else.ResolveTokens(new Dictionary<string, object>
 				{

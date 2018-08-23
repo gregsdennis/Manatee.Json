@@ -15,7 +15,7 @@ namespace Manatee.Json.Schema.Validators
 		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var results = GetNot((T)schema).Validate(json, root);
-			if (results.Valid)
+			if (results.IsValid)
 			{
 				var message = SchemaErrorMessages.Not.ResolveTokens(new Dictionary<string, object>
 					{

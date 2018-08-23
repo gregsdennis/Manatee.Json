@@ -23,7 +23,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 			Assert.AreEqual("Expected: 5; Actual: 6", results.Errors.First().Message);
 		}
 
@@ -39,7 +39,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.IsTrue(results.Valid);
+			Assert.IsTrue(results.IsValid);
 		}
 	}
 }
