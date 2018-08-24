@@ -16,7 +16,7 @@ namespace Manatee.Json.Tests
 {
 	[TestFixture]
 	// TODO: Add categories to exclude this test.
-	//[Ignore("This test fixture for development purposes only.")]
+	[Ignore("This test fixture for development purposes only.")]
 	public class DevTest
 	{
 		[Test]
@@ -24,21 +24,24 @@ namespace Manatee.Json.Tests
 		{
 			JsonValue json = new JsonObject
 				{
-					["type"] = "object",
-					["customKeyword"] = new JsonArray {1, 2, 3}
+					["id"] = "http://json-schema.org/draft-04/schema#",
+					["schema"] = "http://json-schema.org/draft-04/schema#",
+					["type"] = "array",
+					["const"] = new JsonArray {1, 2, 3}
 				};
 			var schema = new JsonSchema
 				{
-					Keywords =
-						{
-							new TypeKeyword {Type = JsonSchemaType.Object},
-							new OtherKeyword {Name = "customKeyword", Content = new JsonArray {1, 2, 3}}
-						}
+					new IdKeywordDraft04("http://json-schema.org/draft-04/schema#"),
+					new SchemaKeywordDraft04(JsonSchemaStandards.Draft04.Schema),
+					new TypeKeyword(JsonSchemaType.Array),
+					new ConstKeyword(new JsonArray {1, 2, 3})
 				};
 
-			Assert.IsTrue(schema.Validate(new JsonObject()).IsValid);
+			var results = schema.ValidateSchema();
+			Assert.IsTrue(results.IsValid, string.Join(Environment.NewLine, results.Errors.Select(e => e.Message)));
 
-			Assert.IsFalse(schema.Validate("this").IsValid);
+			results = schema.Validate(new JsonArray {1, 2, 3});
+			Assert.IsTrue(results.IsValid, results.Errors.FirstOrDefault()?.Message);
 
 			Assert.AreEqual(json, schema.ToJson(new JsonSerializer()));
 		}

@@ -41,5 +41,9 @@ namespace Manatee.Json.Schema
 		{
 			Errors = errors?.Distinct() ?? Enumerable.Empty<SchemaValidationError>();
 		}
+		internal SchemaValidationResults(IEnumerable<string> errors)
+		{
+			Errors = errors?.Select(e => new SchemaValidationError(null, e));
+		}
 	}
 }
