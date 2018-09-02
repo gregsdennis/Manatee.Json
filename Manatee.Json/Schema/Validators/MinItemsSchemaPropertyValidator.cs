@@ -3,16 +3,16 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class MinItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class MinItemsSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
 		protected abstract uint? GetMinItems(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetMinItems(typed).HasValue && json.Type == JsonValueType.Array;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var minItems = GetMinItems((T) schema);
 			if (json.Array.Count < minItems)

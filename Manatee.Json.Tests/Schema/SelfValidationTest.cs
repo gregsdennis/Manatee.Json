@@ -21,7 +21,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 		
 		[TestCaseSource(nameof(TestData))]
-		public void Hardcoded(IJsonSchema schema)
+		public void Hardcoded(JsonSchema schema)
 		{
 			var json = schema.ToJson(null);
 			var validation = schema.Validate(json);
@@ -30,7 +30,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[TestCaseSource(nameof(TestData))]
-		public void Online(IJsonSchema schema)
+		public void Online(JsonSchema schema)
 		{
 			try
 			{

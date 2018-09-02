@@ -53,12 +53,12 @@ namespace Manatee.Json.Tests.Serialization
 			var expected = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["home"] = new JsonSchema04
 								{
 									Type = JsonSchemaType.Object | JsonSchemaType.Null,
-									Properties = new Dictionary<string, IJsonSchema>
+									Properties = new Dictionary<string, JsonSchema>
 										{
 											["street"] = new JsonSchema04 { Type = JsonSchemaType.String }
 										}

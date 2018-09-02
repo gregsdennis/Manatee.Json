@@ -20,7 +20,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(TypeData))]
-		public void ValidateReturnsErrorOnNonArray(IJsonSchema schema)
+		public void ValidateReturnsErrorOnNonArray(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -29,7 +29,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(TypeData))]
-		public void ValidateReturnsErrorOnString(IJsonSchema schema)
+		public void ValidateReturnsErrorOnString(JsonSchema schema)
 		{
 			JsonValue json = "string";
 
@@ -48,7 +48,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(MinItemsData))]
-		public void ValidateReturnsErrorOnTooFewItems(IJsonSchema schema)
+		public void ValidateReturnsErrorOnTooFewItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string"};
 
@@ -57,7 +57,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MinItemsData))]
-		public void ValidateReturnsValidOnCountEqualsMinItems(IJsonSchema schema)
+		public void ValidateReturnsValidOnCountEqualsMinItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string", null, 4.0, "test"};
 
@@ -66,7 +66,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MinItemsData))]
-		public void ValidateReturnsValidOnCountGreaterThanMinItems(IJsonSchema schema)
+		public void ValidateReturnsValidOnCountGreaterThanMinItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string", null, 4.0, "test", false};
 
@@ -85,7 +85,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(MaxItemsData))]
-		public void ValidateReturnsErrorOnTooManyItems(IJsonSchema schema)
+		public void ValidateReturnsErrorOnTooManyItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null, 2};
 
@@ -94,7 +94,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MaxItemsData))]
-		public void ValidateReturnsValidOnCountEqualsMaxItems(IJsonSchema schema)
+		public void ValidateReturnsValidOnCountEqualsMaxItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null};
 
@@ -103,7 +103,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MaxItemsData))]
-		public void ValidateReturnsValidOnCountLessThanMaxItems(IJsonSchema schema)
+		public void ValidateReturnsValidOnCountLessThanMaxItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string", false};
 
@@ -122,7 +122,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(UniqueItemsData))]
-		public void ValidateReturnsErrorOnDuplicateItems(IJsonSchema schema)
+		public void ValidateReturnsErrorOnDuplicateItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null, 1};
 
@@ -131,7 +131,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(UniqueItemsData))]
-		public void ValidateReturnsValidOnUniqueItems(IJsonSchema schema)
+		public void ValidateReturnsValidOnUniqueItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string", false, Math.PI, JsonValue.Null};
 
@@ -162,7 +162,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(ItemsData))]
-		public void ValidateReturnsErrorOnInvalidItems(IJsonSchema schema)
+		public void ValidateReturnsErrorOnInvalidItems(JsonSchema schema)
 		{
 			var json = new JsonArray {1, "string"};
 
@@ -171,7 +171,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(ItemsData))]
-		public void ValidateReturnsValidOnValidItems(IJsonSchema schema)
+		public void ValidateReturnsValidOnValidItems(JsonSchema schema)
 		{
 			var json = new JsonArray {"start", "string"};
 

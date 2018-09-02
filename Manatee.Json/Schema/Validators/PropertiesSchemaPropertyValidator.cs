@@ -5,19 +5,19 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class PropertiesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class PropertiesSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
-		protected abstract IDictionary<string, IJsonSchema> GetProperties(T schema);
+		protected abstract IDictionary<string, JsonSchema> GetProperties(T schema);
 		protected abstract IEnumerable<string> GetRequiredProperties(T schema);
 		protected abstract AdditionalProperties GetAdditionalProperties(T schema);
-		protected abstract Dictionary<Regex, IJsonSchema> GetPatternProperties(T schema);
+		protected abstract Dictionary<Regex, JsonSchema> GetPatternProperties(T schema);
 		protected virtual IEnumerable<SchemaValidationError> AdditionValidation(T schema, JsonValue json, JsonValue root)
 		{
 			return new SchemaValidationError[] { };
 		}
 		
-		public virtual bool Applies(IJsonSchema schema, JsonValue json)
+		public virtual bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed &&
 			       (GetProperties(typed) != null ||
@@ -26,12 +26,12 @@ namespace Manatee.Json.Schema.Validators
 			        GetRequiredProperties(typed) != null) &&
 			       json.Type == JsonValueType.Object;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (T) schema;
 			var obj = json.Object;
 			var errors = new List<SchemaValidationError>();
-			var properties = GetProperties(typed) ?? new Dictionary<string, IJsonSchema>();
+			var properties = GetProperties(typed) ?? new Dictionary<string, JsonSchema>();
 			var additionalProperties = GetAdditionalProperties(typed);
 			var patternProperties = GetPatternProperties(typed);
 			foreach (var property in properties)
@@ -111,7 +111,7 @@ namespace Manatee.Json.Schema.Validators
 
 	internal class PropertiesSchema04PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema04>
 	{
-		protected override IDictionary<string, IJsonSchema> GetProperties(JsonSchema04 schema)
+		protected override IDictionary<string, JsonSchema> GetProperties(JsonSchema04 schema)
 		{
 			return schema.Properties;
 		}
@@ -123,7 +123,7 @@ namespace Manatee.Json.Schema.Validators
 		{
 			return schema.AdditionalProperties;
 		}
-		protected override Dictionary<Regex, IJsonSchema> GetPatternProperties(JsonSchema04 schema)
+		protected override Dictionary<Regex, JsonSchema> GetPatternProperties(JsonSchema04 schema)
 		{
 			return schema.PatternProperties;
 		}
@@ -132,12 +132,12 @@ namespace Manatee.Json.Schema.Validators
 	// TODO: extract a base class for 6/7 
 	internal class PropertiesSchema06PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema06>
 	{
-		public override bool Applies(IJsonSchema schema, JsonValue json)
+		public override bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return base.Applies(schema, json) || (schema is JsonSchema06 typed && json.Type == JsonValueType.Object && typed.PropertyNames != null);
 		}
 
-		protected override IDictionary<string, IJsonSchema> GetProperties(JsonSchema06 schema)
+		protected override IDictionary<string, JsonSchema> GetProperties(JsonSchema06 schema)
 		{
 			return schema.Properties;
 		}
@@ -150,7 +150,7 @@ namespace Manatee.Json.Schema.Validators
 			if (schema.AdditionalProperties == null) return null;
 			return new AdditionalProperties {Definition = schema.AdditionalProperties};
 		}
-		protected override Dictionary<Regex, IJsonSchema> GetPatternProperties(JsonSchema06 schema)
+		protected override Dictionary<Regex, JsonSchema> GetPatternProperties(JsonSchema06 schema)
 		{
 			return schema.PatternProperties;
 		}
@@ -164,12 +164,12 @@ namespace Manatee.Json.Schema.Validators
 
 	internal class PropertiesSchema07PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema07>
 	{
-		public override bool Applies(IJsonSchema schema, JsonValue json)
+		public override bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return base.Applies(schema, json) || (schema is JsonSchema07 typed && json.Type == JsonValueType.Object && typed.PropertyNames != null);
 		}
 
-		protected override IDictionary<string, IJsonSchema> GetProperties(JsonSchema07 schema)
+		protected override IDictionary<string, JsonSchema> GetProperties(JsonSchema07 schema)
 		{
 			return schema.Properties;
 		}
@@ -182,7 +182,7 @@ namespace Manatee.Json.Schema.Validators
 			if (schema.AdditionalProperties == null) return null;
 			return new AdditionalProperties {Definition = schema.AdditionalProperties};
 		}
-		protected override Dictionary<Regex, IJsonSchema> GetPatternProperties(JsonSchema07 schema)
+		protected override Dictionary<Regex, JsonSchema> GetPatternProperties(JsonSchema07 schema)
 		{
 			return schema.PatternProperties;
 		}

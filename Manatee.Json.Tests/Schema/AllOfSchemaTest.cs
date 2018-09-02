@@ -15,7 +15,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new TestCaseData(new JsonSchema04
 					{
-						AllOf = new List<IJsonSchema>
+						AllOf = new List<JsonSchema>
 							{
 								new JsonSchema04 {Type = JsonSchemaType.Array},
 								new JsonSchema04 {Type = JsonSchemaType.Number}
@@ -23,7 +23,7 @@ namespace Manatee.Json.Tests.Schema
 					});
 				yield return new TestCaseData(new JsonSchema06
 					{
-						AllOf = new List<IJsonSchema>
+						AllOf = new List<JsonSchema>
 							{
 								new JsonSchema06 {Type = JsonSchemaType.Array},
 								new JsonSchema06 {Type = JsonSchemaType.Number}
@@ -31,7 +31,7 @@ namespace Manatee.Json.Tests.Schema
 					});
 				yield return new TestCaseData(new JsonSchema07
 				{
-						AllOf = new List<IJsonSchema>
+						AllOf = new List<JsonSchema>
 							{
 								new JsonSchema07 {Type = JsonSchemaType.Array},
 								new JsonSchema07 {Type = JsonSchemaType.Number}
@@ -40,7 +40,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(ValidateReturnsErrorOnAnyInvalidData))]
-		public void ValidateReturnsErrorOnAnyInvalid(IJsonSchema schema)
+		public void ValidateReturnsErrorOnAnyInvalid(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new TestCaseData(new JsonSchema04
 					{
-						AllOf = new List<IJsonSchema>
+						AllOf = new List<JsonSchema>
 							{
 								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 10},
 								new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 20}
@@ -63,7 +63,7 @@ namespace Manatee.Json.Tests.Schema
 					});
 				yield return new TestCaseData(new JsonSchema06
 					{
-						AllOf = new List<IJsonSchema>
+						AllOf = new List<JsonSchema>
 							{
 								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10},
 								new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 20}
@@ -71,7 +71,7 @@ namespace Manatee.Json.Tests.Schema
 					});
 				yield return new TestCaseData(new JsonSchema07
 				{
-						AllOf = new List<IJsonSchema>
+						AllOf = new List<JsonSchema>
 							{
 								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 10},
 								new JsonSchema07 {Type = JsonSchemaType.Number, Maximum = 20}
@@ -80,7 +80,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(ValidateReturnsValidOnAllValidData))]
-		public void ValidateReturnsValidOnAllValid(IJsonSchema schema)
+		public void ValidateReturnsValidOnAllValid(JsonSchema schema)
 		{
 			var json = (JsonValue) 15;
 

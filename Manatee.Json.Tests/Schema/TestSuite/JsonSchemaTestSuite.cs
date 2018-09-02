@@ -93,13 +93,13 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		private static void _Run<T>(string fileName, JsonValue testJson, JsonValue schemaJson)
-			where T : IJsonSchema
+			where T : JsonSchema
 		{
 			try
 			{
 				JsonSchemaFactory.SetDefaultSchemaVersion<T>();
 				var test = _serializer.Deserialize<SchemaTest>(testJson);
-				var schema = _serializer.Deserialize<IJsonSchema>(schemaJson);
+				var schema = _serializer.Deserialize<JsonSchema>(schemaJson);
 				var results = schema.Validate(test.Data);
 
 				if (test.Valid != results.IsValid)

@@ -3,16 +3,16 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class MultipleOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class MultipleOfSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
 		protected abstract double? GetMultipleOf(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetMultipleOf(typed).HasValue && json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var multipleOf = GetMultipleOf((T) schema);
 			if ((decimal) json.Number % (decimal?) multipleOf != 0)

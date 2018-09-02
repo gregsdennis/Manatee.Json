@@ -3,17 +3,17 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class FormatSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class FormatSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
 		protected abstract StringFormat GetFormat(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetFormat(typed) != null && JsonSchemaOptions.ValidateFormat &&
 			       json.Type == JsonValueType.String;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var format = GetFormat((T) schema);
 			if (!format.Validate(json.String))

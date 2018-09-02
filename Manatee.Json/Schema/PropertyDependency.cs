@@ -7,7 +7,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Declares a dependency that is based on the presence of other properties in the JSON.
 	/// </summary>
-	public class PropertyDependency : IJsonSchemaDependency
+	public class PropertyDependency : JsonSchemaDependency
 	{
 		private readonly IEnumerable<string> _dependencies;
 
@@ -23,8 +23,6 @@ namespace Manatee.Json.Schema
 		/// <param name="dependencies">A collection of properties on which <paramref name="propertyName"/> is dependent.</param>
 		public PropertyDependency(string propertyName, IEnumerable<string> dependencies)
 		{
-			if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
-			if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Must provide a property name.");
 			if (dependencies == null) throw new ArgumentNullException(nameof(dependencies));
 			var dependencyList = dependencies as IList<string> ?? dependencies.ToList();
 
@@ -46,7 +44,7 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>The results of the validation.</returns>
-		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
 		{
 			var errors = new List<SchemaValidationError>();
 			if (json.Type == JsonValueType.Object && json.Object.ContainsKey(PropertyName))

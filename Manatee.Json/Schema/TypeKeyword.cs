@@ -4,7 +4,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class TypeKeyword : IJsonSchemaKeyword
+	public class TypeKeyword : JsonSchemaKeyword
 	{
 		public string Name => "type";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -16,7 +16,7 @@ namespace Manatee.Json.Schema
 			Type = type;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
 		{
 			bool valid = true;
 			switch (json.Type)

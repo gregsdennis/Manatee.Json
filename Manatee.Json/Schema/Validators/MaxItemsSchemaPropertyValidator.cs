@@ -3,16 +3,16 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class MaxItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class MaxItemsSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
 		protected abstract uint? GetMaxItems(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetMaxItems(typed).HasValue && json.Type == JsonValueType.Array;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var maxItems = GetMaxItems((T)schema);
 			if (json.Array.Count > maxItems)

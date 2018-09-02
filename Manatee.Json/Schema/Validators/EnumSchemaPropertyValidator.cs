@@ -3,17 +3,17 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class EnumSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class EnumSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
 		protected abstract IEnumerable<EnumSchemaValue> GetEnum(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetEnum(typed) != null;
 		}
 
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var errors = GetEnum((T)schema).Select(d => d.Validate(json)).ToList();
 			return errors.Any(r => r.IsValid)

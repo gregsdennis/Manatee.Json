@@ -2,7 +2,7 @@
 
 namespace Manatee.Json.Schema
 {
-	public class ConstKeyword : IJsonSchemaKeyword
+	public class ConstKeyword : JsonSchemaKeyword
 	{
 		public string Name => "const";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
@@ -14,7 +14,7 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
 		{
 			return json == Value
 				       ? SchemaValidationResults.Valid

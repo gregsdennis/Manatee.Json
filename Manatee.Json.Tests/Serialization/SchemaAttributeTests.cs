@@ -37,11 +37,11 @@ namespace Manatee.Json.Tests.Serialization
 		[Schema(nameof(Definition))]
 		public class DefinedByProperty
 		{
-			public static IJsonSchema Definition =>
+			public static JsonSchema Definition =>
 				new JsonSchema06
 					{
 						Schema = JsonSchema06.MetaSchema.Schema,
-						Properties = new Dictionary<string, IJsonSchema>
+						Properties = new Dictionary<string, JsonSchema>
 							{
 								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
 								["MyInt"] = new JsonSchema06
@@ -80,7 +80,7 @@ namespace Manatee.Json.Tests.Serialization
 				new JsonSchema06
 					{
 						Schema = JsonSchema06.MetaSchema.Schema,
-						Properties = new Dictionary<string, IJsonSchema>
+						Properties = new Dictionary<string, JsonSchema>
 							{
 								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
 								["MyInt"] = new JsonSchema06

@@ -2,11 +2,11 @@
 
 namespace Manatee.Json.Schema
 {
-	public interface IJsonSchemaKeyword : IJsonSerializable
+	public interface JsonSchemaKeyword : IJsonSerializable
 	{
 		string Name { get; }
 		JsonSchemaVersion SupportedVersions { get; }
 
-		SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root);
+		SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json);
 	}
 }

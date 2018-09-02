@@ -7,10 +7,10 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 {
     public class JsonPatchTest : IJsonSerializable
     {
-        public static readonly IJsonSchema Schema = new JsonSchema04
+        public static readonly JsonSchema Schema = new JsonSchema04
             {
                 Type = JsonSchemaType.Object,
-                Properties = new Dictionary<string, IJsonSchema>
+                Properties = new Dictionary<string, JsonSchema>
                     {
                         ["doc"] = JsonSchema04.Empty,
                         ["expected"] = JsonSchema04.Empty,

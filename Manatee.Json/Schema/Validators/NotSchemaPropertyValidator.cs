@@ -3,16 +3,16 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class NotSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class NotSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
-		protected abstract IJsonSchema GetNot(T schema);
+		protected abstract JsonSchema GetNot(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetNot(typed) != null;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var results = GetNot((T)schema).Validate(json, root);
 			if (results.IsValid)
@@ -30,7 +30,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class NotSchema04PropertyValidator : NotSchemaPropertyValidatorBase<JsonSchema04>
 	{
-		protected override IJsonSchema GetNot(JsonSchema04 schema)
+		protected override JsonSchema GetNot(JsonSchema04 schema)
 		{
 			return schema.Not;
 		}
@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class NotSchema06PropertyValidator : NotSchemaPropertyValidatorBase<JsonSchema06>
 	{
-		protected override IJsonSchema GetNot(JsonSchema06 schema)
+		protected override JsonSchema GetNot(JsonSchema06 schema)
 		{
 			return schema.Not;
 		}
@@ -46,7 +46,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class NotSchema07PropertyValidator : NotSchemaPropertyValidatorBase<JsonSchema07>
 	{
-		protected override IJsonSchema GetNot(JsonSchema07 schema)
+		protected override JsonSchema GetNot(JsonSchema07 schema)
 		{
 			return schema.Not;
 		}

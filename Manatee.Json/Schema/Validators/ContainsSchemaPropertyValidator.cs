@@ -4,16 +4,16 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class ContainsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class ContainsSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
-		protected abstract IJsonSchema GetContains(T schema);
+		protected abstract JsonSchema GetContains(T schema);
 
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && json.Type == JsonValueType.Array && GetContains(typed) != null;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var contains = GetContains((T)schema);
 			if (json.Array.Count == 0)
@@ -36,7 +36,7 @@ namespace Manatee.Json.Schema.Validators
 
 	internal class ContainsSchema06PropertyValidator : ContainsSchemaPropertyValidatorBase<JsonSchema06>
 	{
-		protected override IJsonSchema GetContains(JsonSchema06 schema)
+		protected override JsonSchema GetContains(JsonSchema06 schema)
 		{
 			return schema.Contains;
 		}
@@ -44,7 +44,7 @@ namespace Manatee.Json.Schema.Validators
 
 	internal class ContainsSchema07PropertyValidator : ContainsSchemaPropertyValidatorBase<JsonSchema07>
 	{
-		protected override IJsonSchema GetContains(JsonSchema07 schema)
+		protected override JsonSchema GetContains(JsonSchema07 schema)
 		{
 			return schema.Contains;
 		}

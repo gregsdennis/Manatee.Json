@@ -18,8 +18,8 @@ namespace Manatee.Json.Tests.Schema
 				{
 					Id = "http://schema.org/quasi7",
 					Schema = "http://schema.org/quasi7",
-					AllOf = new List<IJsonSchema>{new JsonSchemaReference(MetaSchema.Id, typeof(JsonSchema06))},
-					Properties = new Dictionary<string, IJsonSchema>
+					AllOf = new List<JsonSchema>{new JsonSchemaReference(MetaSchema.Id, typeof(JsonSchema06))},
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["if"] = True,
 							["then"] = True,
@@ -27,18 +27,18 @@ namespace Manatee.Json.Tests.Schema
 						}
 				};
 
-			public IJsonSchema If { get; set; }
-			public IJsonSchema Then { get; set; }
-			public IJsonSchema Else { get; set; }
+			public JsonSchema If { get; set; }
+			public JsonSchema Then { get; set; }
+			public JsonSchema Else { get; set; }
 		}
 
-		private class QuasiSchema7IfThenElseValidator : IJsonSchemaPropertyValidator
+		private class QuasiSchema7IfThenElseValidator : JsonSchemaPropertyValidator
 		{
-			public bool Applies(IJsonSchema schema, JsonValue json)
+			public bool Applies(JsonSchema schema, JsonValue json)
 			{
 				return schema is QuasiSchema7 typed && typed.If != null;
 			}
-			public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+			public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 			{
 				var typed = (QuasiSchema7)schema;
 				if (typed.If == null) return new SchemaValidationResults();
@@ -58,7 +58,7 @@ namespace Manatee.Json.Tests.Schema
 				return new SchemaValidationResults("else", "Validation of `if` failed, but validation of `else` also failed.");
 			}
 
-			private static SchemaValidationResults _ValidateSubSchema(IJsonSchema schema, JsonValue json, JsonValue root)
+			private static SchemaValidationResults _ValidateSubSchema(JsonSchema schema, JsonValue json, JsonValue root)
 			{
 				return schema == null
 					       ? new SchemaValidationResults()

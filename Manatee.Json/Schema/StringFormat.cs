@@ -140,7 +140,7 @@ namespace Manatee.Json.Schema
 		}
 
 		internal void ValidateForDraft<T>()
-			where T : IJsonSchema
+			where T : JsonSchema
 		{
 			if (!((IList) SupportedBy).Contains(typeof(T)))
 				throw new InvalidOperationException($"Format '{Key}' is not supported by {typeof(T).Name}");

@@ -9,7 +9,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines a reference to a schema.
 	/// </summary>
-	public class JsonSchemaReference : IJsonSchema
+	public class JsonSchemaReference : JsonSchema
 	{
 		/// <summary>
 		/// Defines a reference to the root schema.
@@ -31,11 +31,11 @@ namespace Manatee.Json.Schema
 		/// <remarks>
 		/// The <see cref="_Resolve"/> method must first be called.
 		/// </remarks>
-		public IJsonSchema Resolved { get; private set; }
+		public JsonSchema Resolved { get; private set; }
 		/// <summary>
 		/// Provides a mechanism to include sibling keywords alongside $ref.
 		/// </summary>
-		public IJsonSchema Base { get; set; }
+		public JsonSchema Base { get; set; }
 		/// <summary>
 		/// Used to specify which this schema defines.
 		/// </summary>
@@ -90,7 +90,7 @@ namespace Manatee.Json.Schema
 		/// <param name="baseSchema">An instance of the base schema to use (either <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>).</param>
 		/// <exception cref="ArgumentNullException">Thrown when <paramref name="reference"/> or <paramref name="baseSchema"/> is null.</exception>
 		/// <exception cref="ArgumentException">Thrown when <paramref name="reference"/> is empty or whitespace or if <paramref name="baseSchema"/> is not of type <see cref="JsonSchema04"/> or <see cref="JsonSchema06"/>.</exception>
-		public JsonSchemaReference(string reference, IJsonSchema baseSchema)
+		public JsonSchemaReference(string reference, JsonSchema baseSchema)
 			: this(reference, baseSchema.GetType())
 		{
 			Base = baseSchema;
@@ -153,7 +153,7 @@ namespace Manatee.Json.Schema
 		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
 		/// </returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchema other)
+		public bool Equals(JsonSchema other)
 		{
 			return other is JsonSchemaReference schema &&
 			       schema.Reference == Reference &&
@@ -168,7 +168,7 @@ namespace Manatee.Json.Schema
 		/// <param name="obj">The object to compare with the current object. </param>
 		public override bool Equals(object obj)
 		{
-			return Equals(obj as IJsonSchema);
+			return Equals(obj as JsonSchema);
 		}
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
@@ -209,7 +209,7 @@ namespace Manatee.Json.Schema
 			return jValue;
 		}
 		// TODO: This is a JSON pointer.  Since JsonPatch uses it, it might be beneficial to implement as an object or at least reuse this.
-		private IJsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
+		private JsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
 			// I'd like to use the JsonPointer implementation here, but I have to also manage the document path...
 			var properties = path.Split('/').Skip(1).ToList();

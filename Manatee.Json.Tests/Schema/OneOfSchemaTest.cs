@@ -15,7 +15,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new JsonSchema04
 					{
-						OneOf = new List<IJsonSchema>
+						OneOf = new List<JsonSchema>
 							{
 								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5},
 								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 10}
@@ -23,7 +23,7 @@ namespace Manatee.Json.Tests.Schema
 					};
 				yield return new JsonSchema06
 					{
-						OneOf = new List<IJsonSchema>
+						OneOf = new List<JsonSchema>
 							{
 								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 5},
 								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10}
@@ -31,7 +31,7 @@ namespace Manatee.Json.Tests.Schema
 					};
 				yield return new JsonSchema07
 				{
-						OneOf = new List<IJsonSchema>
+						OneOf = new List<JsonSchema>
 							{
 								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 5},
 								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 10}
@@ -41,7 +41,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 		
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnNoneValid(IJsonSchema schema)
+		public void ValidateReturnsErrorOnNoneValid(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -50,7 +50,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnMoreThanOneValid(IJsonSchema schema)
+		public void ValidateReturnsErrorOnMoreThanOneValid(JsonSchema schema)
 		{
 			var json = (JsonValue) 20;
 
@@ -59,7 +59,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsValidOnSingleValid(IJsonSchema schema)
+		public void ValidateReturnsValidOnSingleValid(JsonSchema schema)
 		{
 			var json = (JsonValue) 7;
 

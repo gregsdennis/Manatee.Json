@@ -3,13 +3,13 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class IfThenElseSchema07PropertyValidator : IJsonSchemaPropertyValidator
+	internal class IfThenElseSchema07PropertyValidator : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is JsonSchema07 typed && (typed.If != null || typed.Then != null || typed.Else != null);
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (JsonSchema07) schema;
 			if (typed.If == null) return new SchemaValidationResults();
@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema.Validators
 			return new SchemaValidationResults("else", message);
 		}
 
-		private static SchemaValidationResults _ValidateSubSchema(IJsonSchema schema, JsonValue json, JsonValue root)
+		private static SchemaValidationResults _ValidateSubSchema(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			return schema == null
 				       ? new SchemaValidationResults()

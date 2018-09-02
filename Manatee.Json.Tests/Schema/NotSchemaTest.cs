@@ -19,7 +19,7 @@ namespace Manatee.Json.Tests.Schema
 		} 
 		
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnInvalid(IJsonSchema schema)
+		public void ValidateReturnsErrorOnInvalid(JsonSchema schema)
 		{
 			var json = new JsonArray();
 
@@ -29,7 +29,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.AreEqual(false, results.IsValid);
 		}
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsValid(IJsonSchema schema)
+		public void ValidateReturnsValid(JsonSchema schema)
 		{
 			var json = (JsonValue) 5;
 

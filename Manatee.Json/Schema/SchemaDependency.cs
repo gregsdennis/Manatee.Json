@@ -5,9 +5,9 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Creates a dependency that is based on a secondary schema.
 	/// </summary>
-	public class SchemaDependency : IJsonSchemaDependency
+	public class SchemaDependency : JsonSchemaDependency
 	{
-		private readonly IJsonSchema _schema;
+		private readonly JsonSchema _schema;
 
 		/// <summary>
 		/// Gets or sets the property with the dependency.
@@ -19,7 +19,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="propertyName">The property name.</param>
 		/// <param name="schema">The schema which must be validated.</param>
-		public SchemaDependency(string propertyName, IJsonSchema schema)
+		public SchemaDependency(string propertyName, JsonSchema schema)
 		{
 			if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
 			if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentException("Must provide a property name.");
@@ -34,7 +34,7 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>The results of the validation.</returns>
-		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
 		{
 			if (json.Type != JsonValueType.Object || !json.Object.ContainsKey(PropertyName))
 				return new SchemaValidationResults();

@@ -4,19 +4,19 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class ItemsSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class ItemsSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
-		protected abstract IJsonSchema GetItems(T schema);
+		protected abstract JsonSchema GetItems(T schema);
 		protected abstract AdditionalItems GetAdditionalItems(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && (GetItems(typed) != null || GetAdditionalItems(typed) != null) &&
 			       json.Type == JsonValueType.Array;
 		}
 
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (T) schema;
 			var errors = new List<SchemaValidationError>();
@@ -55,7 +55,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class ItemsSchema04PropertyValidator : ItemsSchemaPropertyValidatorBase<JsonSchema04>
 	{
-		protected override IJsonSchema GetItems(JsonSchema04 schema)
+		protected override JsonSchema GetItems(JsonSchema04 schema)
 		{
 			return schema.Items;
 		}
@@ -67,7 +67,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class ItemsSchema06PropertyValidator : ItemsSchemaPropertyValidatorBase<JsonSchema06>
 	{
-		protected override IJsonSchema GetItems(JsonSchema06 schema)
+		protected override JsonSchema GetItems(JsonSchema06 schema)
 		{
 			return schema.Items;
 		}
@@ -82,7 +82,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class ItemsSchema07PropertyValidator : ItemsSchemaPropertyValidatorBase<JsonSchema07>
 	{
-		protected override IJsonSchema GetItems(JsonSchema07 schema)
+		protected override JsonSchema GetItems(JsonSchema07 schema)
 		{
 			return schema.Items;
 		}

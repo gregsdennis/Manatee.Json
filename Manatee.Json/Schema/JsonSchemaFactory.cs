@@ -12,11 +12,11 @@ namespace Manatee.Json.Schema
 	{
 		private class SchemaFactory
 		{
-			public Func<IJsonSchema> Factory { get; set; }
+			public Func<JsonSchema> Factory { get; set; }
 			public Type SchemaType { get; set; }
 			public string Id { get; set; }
 			public string IdKey { get; set; }
-			public IJsonSchema MetaSchema { get; set; }
+			public JsonSchema MetaSchema { get; set; }
 		}
 
 		private static readonly List<SchemaFactory> _schemaFactories;
@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <typeparam name="T">The schema type.</typeparam>
 		public static void SetDefaultSchemaVersion<T>()
-			where T : IJsonSchema
+			where T : JsonSchema
 		{
 			_SetDefaultSchemaVersion(typeof(T));
 		}
@@ -50,7 +50,7 @@ namespace Manatee.Json.Schema
 		/// <param name="factory">A factory function for creating instances.</param>
 		/// <param name="metaSchema">Optional - A meta-schema instance for this schema.</param>
 		public static void RegisterExtendedSchema<T>(string id, Func<T> factory, T metaSchema = default(T))
-			where T : IJsonSchema
+			where T : JsonSchema
 		{
 			var schemaFactory = new SchemaFactory
 				{
@@ -75,7 +75,7 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A JSON object.</param>
 		/// <param name="documentPath">The path to the physical location to this document</param>
 		/// <returns>A schema object</returns>
-		public static IJsonSchema FromJson(JsonValue json, Uri documentPath = null)
+		public static JsonSchema FromJson(JsonValue json, Uri documentPath = null)
 		{
 			return _FromJson(json, _schemaFactory, documentPath);
 		}
@@ -86,7 +86,7 @@ namespace Manatee.Json.Schema
 		/// <param name="documentPath">The path to the physical location to this document</param>
 		/// <typeparam name="T">The type representing the schema version to create.</typeparam>
 		/// <returns>A schema object</returns>
-		public static IJsonSchema FromJson<T>(JsonValue json, Uri documentPath = null)
+		public static JsonSchema FromJson<T>(JsonValue json, Uri documentPath = null)
 		{
 			return FromJson(json, typeof(T), documentPath);
 		}
@@ -97,7 +97,7 @@ namespace Manatee.Json.Schema
 		/// <param name="type">The type representing the schema version to create.</param>
 		/// <param name="documentPath">The path to the physical location to this document</param>
 		/// <returns>A schema object</returns>
-		public static IJsonSchema FromJson(JsonValue json, Type type, Uri documentPath = null)
+		public static JsonSchema FromJson(JsonValue json, Type type, Uri documentPath = null)
 		{
 			var factory = _schemaFactories.FirstOrDefault(f => f.SchemaType == type);
 			if (factory == null)
@@ -105,10 +105,10 @@ namespace Manatee.Json.Schema
 
 			return _FromJson(json, factory, documentPath);
 		}
-		private static IJsonSchema _FromJson(JsonValue json, SchemaFactory schemaFactory, Uri documentPath = null)
+		private static JsonSchema _FromJson(JsonValue json, SchemaFactory schemaFactory, Uri documentPath = null)
 		{
 			if (json == null) return null;
-			IJsonSchema schema = null;
+			JsonSchema schema = null;
 			switch (json.Type)
 			{
 				case JsonValueType.Object:
@@ -143,7 +143,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 
-		internal static IJsonSchema GetMetaSchema(Type schemaType)
+		internal static JsonSchema GetMetaSchema(Type schemaType)
 		{
 			var factory = _schemaFactories.FirstOrDefault(f => f.SchemaType == schemaType) ??
 			              _schemaFactories.FirstOrDefault(f => schemaType.GetTypeInfo().IsSubclassOf(f.SchemaType)) ??

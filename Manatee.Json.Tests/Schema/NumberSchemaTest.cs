@@ -18,7 +18,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(TypeData))]
-		public void ValidateReturnsErrorOnNonNumber(IJsonSchema schema)
+		public void ValidateReturnsErrorOnNonNumber(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -37,7 +37,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(MinimumData))]
-		public void ValidateReturnsErrorOnLessThanMinimum(IJsonSchema schema)
+		public void ValidateReturnsErrorOnLessThanMinimum(JsonSchema schema)
 		{
 			var json = (JsonValue) 4;
 
@@ -46,7 +46,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MinimumData))]
-		public void ValidateReturnsValidOnMoreThanMinimum(IJsonSchema schema)
+		public void ValidateReturnsValidOnMoreThanMinimum(JsonSchema schema)
 		{
 			var json = (JsonValue) 10;
 
@@ -126,7 +126,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(MaximumData))]
-		public void ValidateReturnsErrorOnMoreThanMaximum(IJsonSchema schema)
+		public void ValidateReturnsErrorOnMoreThanMaximum(JsonSchema schema)
 		{
 			var json = (JsonValue) 10;
 
@@ -135,7 +135,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MaximumData))]
-		public void ValidateReturnsValidOnLessThanMaximum(IJsonSchema schema)
+		public void ValidateReturnsValidOnLessThanMaximum(JsonSchema schema)
 		{
 			var json = (JsonValue) 3;
 
@@ -215,7 +215,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsValidOnMultipleOf_Positive(IJsonSchema schema)
+		public void ValidateReturnsValidOnMultipleOf_Positive(JsonSchema schema)
 		{
 			var json = (JsonValue) 7.5;
 
@@ -224,7 +224,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsValidOnMultipleOf_Negative(IJsonSchema schema)
+		public void ValidateReturnsValidOnMultipleOf_Negative(JsonSchema schema)
 		{
 			var json = (JsonValue) (-7.5);
 
@@ -233,7 +233,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsValidOnMultipleOf_Zero(IJsonSchema schema)
+		public void ValidateReturnsValidOnMultipleOf_Zero(JsonSchema schema)
 		{
 			var json = (JsonValue) 0;
 
@@ -242,7 +242,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsInvalicOnMultipleOf(IJsonSchema schema)
+		public void ValidateReturnsInvalicOnMultipleOf(JsonSchema schema)
 		{
 			var json = (JsonValue) 16;
 

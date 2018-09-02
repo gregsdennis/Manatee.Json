@@ -20,7 +20,7 @@ namespace Manatee.Json.Patch
 				Schema = JsonSchema04.MetaSchema.Id,
 				Type = JsonSchemaType.Array,
 				Items = new JsonSchemaReference("#/definitions/operation", typeof(JsonSchema04)),
-				Definitions = new Dictionary<string, IJsonSchema>
+				Definitions = new Dictionary<string, JsonSchema>
 					{
 						["operation"] = new JsonSchema04
 							{
@@ -31,7 +31,7 @@ namespace Manatee.Json.Patch
 									{
 										new JsonSchema04
 											{
-												Properties = new Dictionary<string, IJsonSchema>
+												Properties = new Dictionary<string, JsonSchema>
 													{
 														["op"] = new JsonSchema04
 															{
@@ -45,7 +45,7 @@ namespace Manatee.Json.Patch
 											},
 										new JsonSchema04
 											{
-												Properties = new Dictionary<string, IJsonSchema>
+												Properties = new Dictionary<string, JsonSchema>
 													{
 														["op"] = new JsonSchema04
 															{
@@ -57,7 +57,7 @@ namespace Manatee.Json.Patch
 											},
 										new JsonSchema04
 											{
-												Properties = new Dictionary<string, IJsonSchema>
+												Properties = new Dictionary<string, JsonSchema>
 													{
 														["op"] = new JsonSchema04
 															{
@@ -77,7 +77,7 @@ namespace Manatee.Json.Patch
 							},
 						["path"] = new JsonSchema04
 							{
-								Properties = new Dictionary<string, IJsonSchema>
+								Properties = new Dictionary<string, JsonSchema>
 									{
 										["path"] = new JsonSchema04
 											{

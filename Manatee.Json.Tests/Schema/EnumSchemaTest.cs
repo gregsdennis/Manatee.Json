@@ -41,7 +41,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnValueOutOfRange(IJsonSchema schema)
+		public void ValidateReturnsErrorOnValueOutOfRange(JsonSchema schema)
 		{
 			var json = (JsonValue) "string";
 
@@ -50,7 +50,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsValidOnValueInRange(IJsonSchema schema)
+		public void ValidateReturnsValidOnValueInRange(JsonSchema schema)
 		{
 			var json = (JsonValue) "test1";
 

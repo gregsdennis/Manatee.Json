@@ -3,13 +3,13 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class DefinitionsSchemaPropertyValidatorBase : IJsonSchemaPropertyValidator
+	internal class DefinitionsSchemaPropertyValidatorBase : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return json.Type == JsonValueType.Object && json.Object.ContainsKey("definitions");
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var errors = new List<SchemaValidationError>();
 			var definitions = json.Object["definitions"];

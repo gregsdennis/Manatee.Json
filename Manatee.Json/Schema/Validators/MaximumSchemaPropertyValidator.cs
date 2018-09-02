@@ -3,14 +3,14 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class MaximumSchema04PropertyValidator : IJsonSchemaPropertyValidator
+	internal class MaximumSchema04PropertyValidator : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is JsonSchema04 typed && (typed.Maximum.HasValue || (typed.ExclusiveMaximum ?? false)) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (JsonSchema04) schema;
 			if (typed.ExclusiveMaximum ?? false)
@@ -42,14 +42,14 @@ namespace Manatee.Json.Schema.Validators
 	}
 	
 	// TODO: extract a base class for 6/7 
-	internal class MaximumSchema06PropertyValidator : IJsonSchemaPropertyValidator
+	internal class MaximumSchema06PropertyValidator : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is JsonSchema06 typed && (typed.Maximum.HasValue || typed.ExclusiveMaximum.HasValue) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (JsonSchema06) schema;
 			var max = typed.ExclusiveMaximum ?? typed.Maximum;
@@ -71,14 +71,14 @@ namespace Manatee.Json.Schema.Validators
 		}
 	}
 	
-	internal class MaximumSchema07PropertyValidator : IJsonSchemaPropertyValidator
+	internal class MaximumSchema07PropertyValidator : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is JsonSchema07 typed && (typed.Maximum.HasValue || typed.ExclusiveMaximum.HasValue) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (JsonSchema07) schema;
 			var max = typed.ExclusiveMaximum ?? typed.Maximum;

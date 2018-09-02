@@ -4,16 +4,16 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class OneOfSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class OneOfSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
-		protected abstract IEnumerable<IJsonSchema> GetOneOf(T schema);
+		protected abstract IEnumerable<JsonSchema> GetOneOf(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetOneOf(typed) != null;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var errors = GetOneOf((T)schema).Select(s => s.Validate(json, root)).ToList();
 			var validCount = errors.Count(r => r.IsValid);
@@ -35,7 +35,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class OneOfSchema04PropertyValidator : OneOfSchemaPropertyValidatorBase<JsonSchema04>
 	{
-		protected override IEnumerable<IJsonSchema> GetOneOf(JsonSchema04 schema)
+		protected override IEnumerable<JsonSchema> GetOneOf(JsonSchema04 schema)
 		{
 			return schema.OneOf;
 		}
@@ -43,7 +43,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class OneOfSchema06PropertyValidator : OneOfSchemaPropertyValidatorBase<JsonSchema06>
 	{
-		protected override IEnumerable<IJsonSchema> GetOneOf(JsonSchema06 schema)
+		protected override IEnumerable<JsonSchema> GetOneOf(JsonSchema06 schema)
 		{
 			return schema.OneOf;
 		}
@@ -51,7 +51,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class OneOfSchema07PropertyValidator : OneOfSchemaPropertyValidatorBase<JsonSchema07>
 	{
-		protected override IEnumerable<IJsonSchema> GetOneOf(JsonSchema07 schema)
+		protected override IEnumerable<JsonSchema> GetOneOf(JsonSchema07 schema)
 		{
 			return schema.OneOf;
 		}

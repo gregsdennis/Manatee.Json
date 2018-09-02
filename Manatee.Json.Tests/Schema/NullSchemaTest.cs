@@ -18,7 +18,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 		
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnNonNull(IJsonSchema schema)
+		public void ValidateReturnsErrorOnNonNull(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -27,7 +27,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsValidOnNull(IJsonSchema schema)
+		public void ValidateReturnsValidOnNull(JsonSchema schema)
 		{
 			var json = JsonValue.Null;
 

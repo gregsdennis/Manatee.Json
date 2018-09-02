@@ -10,23 +10,23 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaRegistry
 	{
-		private static readonly Dictionary<string, IJsonSchema> _schemaLookup;
+		private static readonly Dictionary<string, JsonSchema> _schemaLookup;
 
 		/// <summary>
 		/// Initializes the <see cref="JsonSchemaRegistry"/> class.
 		/// </summary>
 		static JsonSchemaRegistry()
 		{
-			_schemaLookup = new Dictionary<string, IJsonSchema>();
+			_schemaLookup = new Dictionary<string, JsonSchema>();
 			Clear();
 		}
 
 		/// <summary>
 		/// Downloads and registers a schema at the specified URI.
 		/// </summary>
-		public static IJsonSchema Get(string uri)
+		public static JsonSchema Get(string uri)
 		{
-			IJsonSchema schema;
+			JsonSchema schema;
 			lock (_schemaLookup)
 			{
 				uri = uri.TrimEnd('#');
@@ -36,7 +36,7 @@ namespace Manatee.Json.Schema
 				    var schemaValue = JsonValue.Parse(schemaJson);
 					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
 
-					var metaSchemas = new IJsonSchema[]
+					var metaSchemas = new JsonSchema[]
 						{
 							JsonSchema07.MetaSchema,
 							JsonSchema06.MetaSchema,
@@ -75,7 +75,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Explicitly registers an existing schema.
 		/// </summary>
-		public static void Register(IJsonSchema schema)
+		public static void Register(JsonSchema schema)
 		{
 			if (string.IsNullOrWhiteSpace(schema.Id)) return;
 			lock (_schemaLookup)
@@ -87,7 +87,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Removes a schema from the registry.
 		/// </summary>
-		public static void Unregister(IJsonSchema schema)
+		public static void Unregister(JsonSchema schema)
 		{
 			if (string.IsNullOrWhiteSpace(schema.Id)) return;
 			lock (_schemaLookup)

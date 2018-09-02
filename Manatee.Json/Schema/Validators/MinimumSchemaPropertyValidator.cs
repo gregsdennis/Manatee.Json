@@ -3,14 +3,14 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal class MinimumSchema04PropertyValidator : IJsonSchemaPropertyValidator
+	internal class MinimumSchema04PropertyValidator : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is JsonSchema04 typed && (typed.Minimum.HasValue || (typed.ExclusiveMinimum ?? false)) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (JsonSchema04)schema;
 			if (typed.ExclusiveMinimum ?? false)
@@ -42,14 +42,14 @@ namespace Manatee.Json.Schema.Validators
 	}
 
 	// TODO: extract a base class for 6/7 
-	internal class MinimumSchema06PropertyValidator : IJsonSchemaPropertyValidator
+	internal class MinimumSchema06PropertyValidator : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is JsonSchema06 typed && (typed.Minimum.HasValue || typed.ExclusiveMinimum.HasValue) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (JsonSchema06)schema;
 			var min = typed.ExclusiveMinimum ?? typed.Minimum;
@@ -71,14 +71,14 @@ namespace Manatee.Json.Schema.Validators
 		}
 	}
 
-	internal class MinimumSchema07PropertyValidator : IJsonSchemaPropertyValidator
+	internal class MinimumSchema07PropertyValidator : JsonSchemaPropertyValidator
 	{
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is JsonSchema07 typed && (typed.Minimum.HasValue || typed.ExclusiveMinimum.HasValue) &&
 			       json.Type == JsonValueType.Number;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			var typed = (JsonSchema07) schema;
 			var min = typed.ExclusiveMinimum ?? typed.Minimum;

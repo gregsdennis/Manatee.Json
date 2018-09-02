@@ -2,7 +2,7 @@
 
 namespace Manatee.Json.Schema
 {
-	public class IdKeyword : IJsonSchemaKeyword
+	public class IdKeyword : JsonSchemaKeyword
 	{
 		public virtual string Name => "$id";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
@@ -14,7 +14,7 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
 		{
 			return StringFormat.Uri.Validate(Value)
 				       ? SchemaValidationResults.Valid

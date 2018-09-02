@@ -77,7 +77,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				Title = "JSON schema for Something",
 				Schema = "http://json-schema.org/draft-04/schema#",
-				Definitions = new Dictionary<string, IJsonSchema>
+				Definitions = new Dictionary<string, JsonSchema>
 				{
 					["something"] = new JsonSchema04
 					{
@@ -86,7 +86,7 @@ namespace Manatee.Json.Tests.Schema
 										{
 											new JsonSchema04
 												{
-													Properties = new Dictionary<string, IJsonSchema>
+													Properties = new Dictionary<string, JsonSchema>
 														{
 															["name"] = new JsonSchema04 {Type = JsonSchemaType.String}
 														}
@@ -202,7 +202,7 @@ namespace Manatee.Json.Tests.Schema
 			{
 				Schema = JsonSchema06.MetaSchema.Id,
 				Type = JsonSchemaType.Object,
-				Properties = new Dictionary<string, IJsonSchema>
+				Properties = new Dictionary<string, JsonSchema>
 				{
 					["test"] = new JsonSchema06
 					{
@@ -230,12 +230,12 @@ namespace Manatee.Json.Tests.Schema
 			{
 				yield return new JsonSchema04
 					{
-						Properties = new Dictionary<string, IJsonSchema>
+						Properties = new Dictionary<string, JsonSchema>
 							{
 								["xyz"] = new JsonSchema04
 									{
 										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, IJsonSchema>
+										Properties = new Dictionary<string, JsonSchema>
 											{
 												["A"] = new JsonSchema04 {Type = JsonSchemaType.String},
 												["B"] = new JsonSchema04 {Type = JsonSchemaType.Integer},
@@ -243,7 +243,7 @@ namespace Manatee.Json.Tests.Schema
 											},
 										Required = new[] {"A"},
 										AdditionalProperties = AdditionalProperties.False,
-										OneOf = new IJsonSchema[]
+										OneOf = new JsonSchema[]
 											{
 												new JsonSchema04 {Required = new[] {"B"}},
 												new JsonSchema04 {Required = new[] {"C"}}
@@ -253,12 +253,12 @@ namespace Manatee.Json.Tests.Schema
 					};
 				yield return new JsonSchema06
 					{
-						Properties = new Dictionary<string, IJsonSchema>
+						Properties = new Dictionary<string, JsonSchema>
 							{
 								["xyz"] = new JsonSchema06
 									{
 										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, IJsonSchema>
+										Properties = new Dictionary<string, JsonSchema>
 											{
 												["A"] = new JsonSchema06 {Type = JsonSchemaType.String},
 												["B"] = new JsonSchema06 {Type = JsonSchemaType.Integer},
@@ -266,7 +266,7 @@ namespace Manatee.Json.Tests.Schema
 											},
 										Required = new[] {"A"},
 										AdditionalProperties = (JsonSchema06)false,
-										OneOf = new IJsonSchema[]
+										OneOf = new JsonSchema[]
 											{
 												new JsonSchema06 {Required = new[] {"B"}},
 												new JsonSchema06 {Required = new[] {"C"}}
@@ -276,12 +276,12 @@ namespace Manatee.Json.Tests.Schema
 					};
 				yield return new JsonSchema07
 					{
-						Properties = new Dictionary<string, IJsonSchema>
+						Properties = new Dictionary<string, JsonSchema>
 							{
 								["xyz"] = new JsonSchema07
 									{
 										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, IJsonSchema>
+										Properties = new Dictionary<string, JsonSchema>
 											{
 												["A"] = new JsonSchema07 { Type = JsonSchemaType.String },
 												["B"] = new JsonSchema07 { Type = JsonSchemaType.Integer },
@@ -289,7 +289,7 @@ namespace Manatee.Json.Tests.Schema
 											},
 										Required = new[] { "A" },
 										AdditionalProperties = (JsonSchema07)false,
-										OneOf = new IJsonSchema[]
+										OneOf = new JsonSchema[]
 											{
 												new JsonSchema07 {Required = new[] {"B"}},
 												new JsonSchema07 {Required = new[] {"C"}}
@@ -302,7 +302,7 @@ namespace Manatee.Json.Tests.Schema
 
 		[Test]
 		[TestCaseSource(nameof(Issue167TestCaseSource1))]
-		public void Issue167_OneOfWithRequiredShouldFailValidation(IJsonSchema schema)
+		public void Issue167_OneOfWithRequiredShouldFailValidation(JsonSchema schema)
 		{
 			var json = new JsonObject
 				{
@@ -379,12 +379,12 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema06
 				{
 					Schema = JsonSchema06.MetaSchema.Id,
-					Definitions = new Dictionary<string, IJsonSchema>
+					Definitions = new Dictionary<string, JsonSchema>
 						{
 							["fields"] = new JsonSchema06
 								{
 									Type = JsonSchemaType.Object,
-									Properties = new Dictionary<string, IJsonSchema>
+									Properties = new Dictionary<string, JsonSchema>
 										{
 											["field1"] = new JsonSchema06 {Type = JsonSchemaType.String},
 											["field2"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
@@ -396,18 +396,18 @@ namespace Manatee.Json.Tests.Schema
 								},
 							["worldwide"] = new JsonSchema06
 								{
-									AllOf = new IJsonSchema[]
+									AllOf = new JsonSchema[]
 										{
 											new JsonSchemaReference("#/definitions/fields", typeof(JsonSchema06)),
 											new JsonSchema06 {Required = new[] {"field1"}},
 											new JsonSchema06
 												{
-													Properties = new Dictionary<string, IJsonSchema>
+													Properties = new Dictionary<string, JsonSchema>
 														{
 															["A"] = new JsonSchema06 {Type = JsonSchemaType.String},
 															["B"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
 														},
-													OneOf = new IJsonSchema[]
+													OneOf = new JsonSchema[]
 														{
 															new JsonSchema06 {Required = new[] {"A"}},
 															new JsonSchema06 {Required = new[] {"B"}},
@@ -417,7 +417,7 @@ namespace Manatee.Json.Tests.Schema
 												{
 													PropertyNames = new JsonSchema06
 														{
-															AnyOf = new IJsonSchema[]
+															AnyOf = new JsonSchema[]
 																{
 																	new JsonSchemaReference("#/definitions/xyzBaseFieldNames", typeof(JsonSchema06)),
 																	new JsonSchema06
@@ -431,7 +431,7 @@ namespace Manatee.Json.Tests.Schema
 								}
 						},
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["xyz"] = new JsonSchemaReference("#/definitions/worldwide", typeof(JsonSchema06))
 						},

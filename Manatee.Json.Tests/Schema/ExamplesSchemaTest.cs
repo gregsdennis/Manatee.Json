@@ -17,7 +17,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[TestCaseSource(nameof(TestData))]
-		public void ExamplesNotAnArray(IJsonSchema metaSchema)
+		public void ExamplesNotAnArray(JsonSchema metaSchema)
 		{
 			var json = new JsonObject
 				{

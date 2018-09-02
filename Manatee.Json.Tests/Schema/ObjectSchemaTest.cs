@@ -26,7 +26,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
@@ -44,7 +44,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						}
@@ -61,7 +61,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						}
@@ -78,7 +78,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						}
@@ -95,12 +95,12 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties = AdditionalProperties.False,
-					PatternProperties = new Dictionary<Regex, IJsonSchema>
+					PatternProperties = new Dictionary<Regex, JsonSchema>
 						{
 							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaType.String}}
 						}
@@ -117,12 +117,12 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties = AdditionalProperties.False,
-					PatternProperties = new Dictionary<Regex, IJsonSchema>
+					PatternProperties = new Dictionary<Regex, JsonSchema>
 						{
 							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaType.String}}
 						}
@@ -139,7 +139,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
@@ -158,7 +158,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
@@ -177,12 +177,12 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema04
 				{
 					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
+					Properties = new Dictionary<string, JsonSchema>
 						{
 							["test1"] = new JsonSchema04 {Type = JsonSchemaType.String}
 						},
 					AdditionalProperties = AdditionalProperties.False,
-					PatternProperties = new Dictionary<Regex, IJsonSchema>
+					PatternProperties = new Dictionary<Regex, JsonSchema>
 						{
 							{new Regex("[0-9]"), new JsonSchema04 {Type = JsonSchemaType.Integer}}
 						}

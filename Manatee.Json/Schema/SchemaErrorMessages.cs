@@ -40,7 +40,7 @@
 		/// Supports the following tokens:
 		/// Supports no other tokens.
 		/// </remarks>
-		public static string Enum { get; set; } = "'{{value}}' does not match the required value";
+		public static string Enum { get; set; } = "'{{value}}' does not match any of the required values";
 		/// <summary>
 		/// The error message used for the <code>format</code> property.
 		/// </summary>

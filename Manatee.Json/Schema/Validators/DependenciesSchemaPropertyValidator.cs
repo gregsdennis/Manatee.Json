@@ -3,16 +3,16 @@ using System.Linq;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class DependenciesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
-		where T : IJsonSchema
+	internal abstract class DependenciesSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+		where T : JsonSchema
 	{
-		protected abstract IEnumerable<IJsonSchemaDependency> GetDependencies(T schema);
+		protected abstract IEnumerable<JsonSchemaDependency> GetDependencies(T schema);
 		
-		public bool Applies(IJsonSchema schema, JsonValue json)
+		public bool Applies(JsonSchema schema, JsonValue json)
 		{
 			return schema is T typed && GetDependencies(typed) != null;
 		}
-		public SchemaValidationResults Validate(IJsonSchema schema, JsonValue json, JsonValue root)
+		public SchemaValidationResults Validate(JsonSchema schema, JsonValue json, JsonValue root)
 		{
 			return new SchemaValidationResults(GetDependencies((T)schema).SelectMany(d => d.Validate(json, root).Errors));
 		}
@@ -20,7 +20,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class DependeciesSchema04PropertyValidator : DependenciesSchemaPropertyValidatorBase<JsonSchema04>
 	{
-		protected override IEnumerable<IJsonSchemaDependency> GetDependencies(JsonSchema04 schema)
+		protected override IEnumerable<JsonSchemaDependency> GetDependencies(JsonSchema04 schema)
 		{
 			return schema.Dependencies;
 		}
@@ -28,7 +28,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class DependeciesSchema06PropertyValidator : DependenciesSchemaPropertyValidatorBase<JsonSchema06>
 	{
-		protected override IEnumerable<IJsonSchemaDependency> GetDependencies(JsonSchema06 schema)
+		protected override IEnumerable<JsonSchemaDependency> GetDependencies(JsonSchema06 schema)
 		{
 			return schema.Dependencies;
 		}
@@ -36,7 +36,7 @@ namespace Manatee.Json.Schema.Validators
 	
 	internal class DependeciesSchema07PropertyValidator : DependenciesSchemaPropertyValidatorBase<JsonSchema07>
 	{
-		protected override IEnumerable<IJsonSchemaDependency> GetDependencies(JsonSchema07 schema)
+		protected override IEnumerable<JsonSchemaDependency> GetDependencies(JsonSchema07 schema)
 		{
 			return schema.Dependencies;
 		}
