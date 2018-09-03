@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Concurrent;
 using Manatee.Json.Patch;
 
 namespace Manatee.Json.Schema
@@ -10,14 +9,14 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaRegistry
 	{
-		private static readonly Dictionary<string, JsonSchema> _schemaLookup;
+		private static readonly ConcurrentDictionary<string, JsonSchema> _schemaLookup;
 
 		/// <summary>
 		/// Initializes the <see cref="JsonSchemaRegistry"/> class.
 		/// </summary>
 		static JsonSchemaRegistry()
 		{
-			_schemaLookup = new Dictionary<string, JsonSchema>();
+			_schemaLookup = new ConcurrentDictionary<string, JsonSchema>();
 			Clear();
 		}
 
@@ -34,37 +33,12 @@ namespace Manatee.Json.Schema
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
 				    var schemaValue = JsonValue.Parse(schemaJson);
-					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
+					schema = new JsonSchema {DocumentPath = new Uri(uri)};
+					schema.FromJson(schemaValue, null);
 
-					var metaSchemas = new[]
-						{
-							MetaSchemas.Draft04,
-							MetaSchemas.Draft06,
-							MetaSchemas.Draft07,
-							MetaSchemas.Draft08
-						};
-
-					SchemaValidationResults validation = null;
-					if (schema.Schema != null)
-					{
-						var bySchema = metaSchemas.FirstOrDefault(s => s.Id == schema.Schema);
-						if (bySchema != null)
-							validation = bySchema.Validate(schemaValue);
-					}
-					else
-					{
-						foreach (var metaSchema in metaSchemas)
-						{
-							validation = metaSchema.Validate(schemaValue);
-							if (validation.IsValid) break;
-						}
-					}
-
-					if (validation != null && !validation.IsValid)
-					{
-						var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
-						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
-					}
+					var schemaStructureValidation = schema.ValidateSchema();
+					if (!schemaStructureValidation.IsValid)
+						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{schemaStructureValidation.Errors}");
 
 					_schemaLookup[uri] = schema;
 				}
@@ -93,7 +67,7 @@ namespace Manatee.Json.Schema
 			if (string.IsNullOrWhiteSpace(schema.Id)) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup.Remove(schema.Id);
+				_schemaLookup.TryRemove(schema.Id, out _);
 			}
 		}
 
@@ -105,7 +79,7 @@ namespace Manatee.Json.Schema
 			if (string.IsNullOrWhiteSpace(uri)) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup.Remove(uri);
+				_schemaLookup.TryRemove(uri, out _);
 			}
 		}
 
@@ -121,6 +95,7 @@ namespace Manatee.Json.Schema
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
+				_schemaLookup.Clear();
 				_schemaLookup[draft04Uri] = MetaSchemas.Draft04;
 				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
 				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;

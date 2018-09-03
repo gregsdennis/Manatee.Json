@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Schema
 {
@@ -57,7 +58,7 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
-		public static JsonSchema PatternProperty(this JsonSchema schema, string name, JsonSchema property)
+		public static JsonSchema PatternProperty(this JsonSchema schema, [RegexPattern] string name, JsonSchema property)
 		{
 			var keyword = schema.OfType<PatternPropertiesKeyword>().FirstOrDefault();
 
@@ -130,6 +131,12 @@ namespace Manatee.Json.Schema
 		public static JsonSchema Description(this JsonSchema schema, string description)
 		{
 			schema.Add(new DescriptionKeyword(description));
+
+			return schema;
+		}
+		public static JsonSchema Pattern(this JsonSchema schema, [RegexPattern] string description)
+		{
+			schema.Add(new PatternKeyword());
 
 			return schema;
 		}
@@ -220,6 +227,30 @@ namespace Manatee.Json.Schema
 		public static JsonSchema MaxItems(this JsonSchema schema, uint count)
 		{
 			schema.Add(new MaxItemsKeyword(count));
+
+			return schema;
+		}
+		public static JsonSchema MinLength(this JsonSchema schema, uint length)
+		{
+			schema.Add(new MinLengthKeyword(length));
+
+			return schema;
+		}
+		public static JsonSchema MaxLength(this JsonSchema schema, uint length)
+		{
+			schema.Add(new MaxLengthKeyword(length));
+
+			return schema;
+		}
+		public static JsonSchema MinProperties(this JsonSchema schema, uint count)
+		{
+			schema.Add(new MinPropertiesKeyword(count));
+
+			return schema;
+		}
+		public static JsonSchema MaxProperties(this JsonSchema schema, uint count)
+		{
+			schema.Add(new MaxPropertiesKeyword(count));
 
 			return schema;
 		}

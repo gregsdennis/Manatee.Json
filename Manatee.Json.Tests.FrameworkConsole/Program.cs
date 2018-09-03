@@ -7,38 +7,39 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Tests.FrameworkConsole
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var json = new JsonObject
-                {
-                    ["test1"] = 1,
-                    ["test2"] = "hello"
-                };
-            var serializer = new JsonSerializer();
-            var obj = serializer.Deserialize<ITest>(json);
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			var json = new JsonObject
+				{
+					["test1"] = 1,
+					["test2"] = "hello"
+				};
+			var serializer = new JsonSerializer();
+			var obj = serializer.Deserialize<ITest>(json);
 
-            System.Console.WriteLine(obj.Test1);
-            System.Console.WriteLine(obj.Test2);
+			Console.WriteLine(obj.Test1);
+			Console.WriteLine(obj.Test2);
 
-            var schema04json = MetaSchemas.Draft04.ToJson(null);
-            var schema04 = JsonSchemaFactory.FromJson(schema04json);
+			var schema04json = MetaSchemas.Draft04.ToJson(serializer);
+			var schema04 = new JsonSchema();
+			schema04.FromJson(schema04json, serializer);
 
-            System.Console.ReadLine();
-        }
-    }
+			Console.ReadLine();
+		}
+	}
 
-    internal interface ITest
-    {
-        [JsonMapTo("test1")]
-        int Test1 { get; set; }
-        [JsonMapTo("test2")]
-        string Test2 { get; set; }
+	internal interface ITest
+	{
+		[JsonMapTo("test1")]
+		int Test1 { get; set; }
+		[JsonMapTo("test2")]
+		string Test2 { get; set; }
 
-        event EventHandler SomethingHappened;
+		event EventHandler SomethingHappened;
 
-        void Action(object withParameter);
-        int Function(string withParameter);
-    }
+		void Action(object withParameter);
+		int Function(string withParameter);
+	}
 }

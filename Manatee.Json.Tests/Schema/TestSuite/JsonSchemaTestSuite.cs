@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
@@ -15,12 +14,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string Draft04TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
 		private const string Draft06TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft6\";
 		private const string Draft07TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft7\";
+		private const string Draft08TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft8\";
 		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 
 		public static IEnumerable TestData04 => _LoadSchemaJson(Draft04TestFolder);
 		public static IEnumerable TestData06 => _LoadSchemaJson(Draft06TestFolder);
 		public static IEnumerable TestData07 => _LoadSchemaJson(Draft07TestFolder);
+		public static IEnumerable TestData08 => _LoadSchemaJson(Draft08TestFolder);
 
 		private static IEnumerable<TestCaseData> _LoadSchemaJson(string testFolder)
 		{
@@ -75,29 +76,18 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		[TestCaseSource(nameof(TestData04))]
-		public void Run04(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
-		{
-			_Run<JsonSchema04>(fileName, testJson, schemaJson);
-		}
-
 		[TestCaseSource(nameof(TestData06))]
-		public void Run06(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
-		{
-			_Run<JsonSchema06>(fileName, testJson, schemaJson);
-		}
-
 		[TestCaseSource(nameof(TestData07))]
-		public void Run07(string fileName, JsonValue testJson, JsonValue schemaJson, string testname)
+		[TestCaseSource(nameof(TestData08))]
+		public void Run(string fileName, JsonValue testJson, JsonValue schemaJson, string testName)
 		{
-			_Run<JsonSchema07>(fileName, testJson, schemaJson);
+			_Run(fileName, testJson, schemaJson);
 		}
 
-		private static void _Run<T>(string fileName, JsonValue testJson, JsonValue schemaJson)
-			where T : JsonSchema
+		private static void _Run(string fileName, JsonValue testJson, JsonValue schemaJson)
 		{
 			try
 			{
-				JsonSchemaFactory.SetDefaultSchemaVersion<T>();
 				var test = _serializer.Deserialize<SchemaTest>(testJson);
 				var schema = _serializer.Deserialize<JsonSchema>(schemaJson);
 				var results = schema.Validate(test.Data);

@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -13,30 +11,9 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new JsonSchema04
-					{
-						OneOf = new List<JsonSchema>
-							{
-								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5},
-								new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 10}
-							}
-					};
-				yield return new JsonSchema06
-					{
-						OneOf = new List<JsonSchema>
-							{
-								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 5},
-								new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 10}
-							}
-					};
-				yield return new JsonSchema07
-				{
-						OneOf = new List<JsonSchema>
-							{
-								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 5},
-								new JsonSchema07 {Type = JsonSchemaType.Number, Minimum = 10}
-							}
-					};
+				yield return new JsonSchema()
+					.OneOf(new JsonSchema().Type(JsonSchemaType.Number).Minimum(5),
+					       new JsonSchema().Type(JsonSchemaType.Number).Minimum(10));
 			}
 		}
 		

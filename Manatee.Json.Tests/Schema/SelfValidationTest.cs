@@ -14,9 +14,10 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(JsonSchema04.MetaSchema);
-				yield return new TestCaseData(JsonSchema06.MetaSchema);
-				yield return new TestCaseData(JsonSchema07.MetaSchema);
+				yield return new TestCaseData(MetaSchemas.Draft04);
+				yield return new TestCaseData(MetaSchemas.Draft06);
+				yield return new TestCaseData(MetaSchemas.Draft07);
+				yield return new TestCaseData(MetaSchemas.Draft08);
 			}
 		}
 		
@@ -39,7 +40,8 @@ namespace Manatee.Json.Tests.Schema
 
 				var onlineSchemaText = JsonSchemaOptions.Download(schema.Id);
 				var onlineSchemaJson = JsonValue.Parse(onlineSchemaText);
-				var onlineSchema = JsonSchemaFactory.FromJson(onlineSchemaJson);
+				var onlineSchema = new JsonSchema();
+				onlineSchema.FromJson(onlineSchemaJson, null);
 
 				var localValidation = schema.Validate(onlineSchemaJson);
 				var onlineValidation = onlineSchema.Validate(localSchemaJson);

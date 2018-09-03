@@ -106,7 +106,6 @@
     <Compile Include="Schema\ConstSchemaTests.cs" />
     <Compile Include="Schema\ExamplesSchemaTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
-    <Compile Include="Schema\SchemaExtensionsTests.cs" />
     <Compile Include="Schema\SchemaValidationResultsExtensions.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
     <Compile Include="Schema\TestSuite\JsonSchemaTestSuite.cs" />

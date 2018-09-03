@@ -32,9 +32,9 @@ namespace Manatee.Json.Tests.Serialization
 		}
 
 		[Test]
-		public void DeserializeUnnamedEnumEtry_InspiredBy_Danoceline_Issue13()
+		public void DeserializeUnnamedEnumEntry_InspiredBy_Danoceline_Issue13()
 		{
-			var serializer = new JsonSerializer { Options = { EnumSerializationFormat = EnumSerializationFormat.AsName } };
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
 			JsonValue json = "10";
 			var expected = (NoNamedZero)10;
 
@@ -46,27 +46,16 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void DeserializeSchema_TypePropertyIsArray_Issue14()
 		{
-			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
-
 			var text = "{\"type\":\"object\",\"properties\":{\"home\":{\"type\":[\"object\",\"null\"],\"properties\":{\"street\":{\"type\":\"string\"}}}}}";
 			var json = JsonValue.Parse(text);
-			var expected = new JsonSchema04
-				{
-					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, JsonSchema>
-						{
-							["home"] = new JsonSchema04
-								{
-									Type = JsonSchemaType.Object | JsonSchemaType.Null,
-									Properties = new Dictionary<string, JsonSchema>
-										{
-											["street"] = new JsonSchema04 { Type = JsonSchemaType.String }
-										}
-								}
-						}
-				};
+			var expected = new JsonSchema()
+				.Type(JsonSchemaType.Object)
+				.Property("home", new JsonSchema()
+					          .Type(JsonSchemaType.Object | JsonSchemaType.Null)
+					          .Property("street", new JsonSchema().Type(JsonSchemaType.String)));
 
-			var actual = JsonSchemaFactory.FromJson(json);
+			var actual = new JsonSchema();
+			actual.FromJson(json, null);
 
 			Assert.AreEqual(expected, actual);
 		}

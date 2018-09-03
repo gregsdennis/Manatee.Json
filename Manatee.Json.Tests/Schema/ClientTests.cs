@@ -19,7 +19,8 @@ namespace Manatee.Json.Tests.Schema
 				.Type(JsonSchemaType.String)
 				.Enum("FeatureCollection");
 
-			var actual = JsonSchemaFactory.FromJson(json);
+			var actual = new JsonSchema();
+			actual.FromJson(json, null);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -205,7 +206,7 @@ namespace Manatee.Json.Tests.Schema
 						          .Property("B", new JsonSchema().Type(JsonSchemaType.Integer))
 						          .Property("C", new JsonSchema().Type(JsonSchemaType.Number))
 						          .Required("A")
-						          .AdditionalProperties(JsonSchema.False)
+						          .AdditionalProperties(false)
 						          .OneOf(new JsonSchema().Required("B"),
 						                 new JsonSchema().Required("C")));
 			}
@@ -309,7 +310,7 @@ namespace Manatee.Json.Tests.Schema
 							                                         new JsonSchema().Enum("A", "B")))))
 				.Type(JsonSchemaType.Object)
 				.Property("xyz", new JsonSchema().Ref("#/definitions/worldwide"))
-				.AdditionalProperties(JsonSchema.False)
+				.AdditionalProperties(false)
 				.Required("xyz");
 
 			var results = schema.Validate(json);

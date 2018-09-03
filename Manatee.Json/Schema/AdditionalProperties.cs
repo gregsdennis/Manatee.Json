@@ -105,7 +105,8 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				Definition = JsonSchemaFactory.FromJson(json);
+				Definition = new JsonSchema();
+				Definition.FromJson(json, null);
 			}
 		}
 		/// <summary>

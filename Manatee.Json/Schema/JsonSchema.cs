@@ -8,7 +8,7 @@ namespace Manatee.Json.Schema
 {
 	[ExperimentalType]
 	[FeedbackWelcome]
-	public class JsonSchema : List<IJsonSchemaKeyword>
+	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>
 	{
 		public static readonly JsonSchema Empty = new JsonSchema();
 		public static readonly JsonSchema True = new JsonSchema(true);
@@ -64,10 +64,6 @@ namespace Manatee.Json.Schema
 		{
 			return new SchemaValidationResults(this.Select(k => k.Validate(this, null, json)));
 		}
-		public bool Equals(JsonSchema other)
-		{
-			throw new NotImplementedException();
-		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			throw new NotImplementedException();
@@ -77,6 +73,33 @@ namespace Manatee.Json.Schema
 			if (_inherentValue.HasValue) return _inherentValue;
 
 			return this.Select(k => new KeyValuePair<string, JsonValue>(k.Name, k.ToJson(serializer))).ToJson();
+		}
+
+		public static implicit operator JsonSchema(bool value)
+		{
+			return value ? True : False;
+		}
+		public bool Equals(JsonSchema other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return _inherentValue == other._inherentValue && Equals(DocumentPath, other.DocumentPath);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as JsonSchema);
+		}
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
+		public static bool operator ==(JsonSchema left, JsonSchema right)
+		{
+			return Equals(left, right);
+		}
+		public static bool operator !=(JsonSchema left, JsonSchema right)
+		{
+			return !Equals(left, right);
 		}
 	}
 }

@@ -116,11 +116,11 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)
+		public SchemaValidationResults Validate(JsonValue json, JsonSchema root = null)
 		{
-			var jValue = root ?? ToJson(null);
+			var jValue = root ?? this;
 			if (Resolved == null || root == null)
-				jValue = _Resolve(jValue);
+				jValue = _Resolve(jValue.ToJson(null));
 			var refResults = Resolved?.Validate(json, jValue) ??
 			                 new SchemaValidationResults(null, "Error finding referenced schema.");
 			return new SchemaValidationResults(new[] {refResults});
@@ -182,8 +182,9 @@ namespace Manatee.Json.Schema
 			return Reference?.GetHashCode() ?? 0;
 		}
 
-		private JsonValue _Resolve(JsonValue root)
+		private JsonSchema _Resolve(JsonValue root)
 		{
+			JsonSchema resolved;
 			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
 			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? DocumentPath?.OriginalString : referenceParts[0];
 			var fragment = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
@@ -202,18 +203,31 @@ namespace Manatee.Json.Schema
 				}
 				jValue = JsonSchemaRegistry.Get(address).ToJson(null);
 			}
-			if (jValue == null) return root;
+
+			if (jValue == null)
+			{
+				resolved = new JsonSchema(); // TODO: document path?
+				resolved.FromJson(root, null);
+				return resolved;
+			}
 			if (jValue == "#") throw new ArgumentException("Cannot use a root reference as the base schema.");
  
 			Resolved = _ResolveLocalReference(jValue, fragment, string.IsNullOrWhiteSpace(address) ? null : new Uri(address));
-			return jValue;
+			resolved = new JsonSchema(); // TODO: document path?
+			resolved.FromJson(jValue, null);
+			return resolved;
 		}
 		// TODO: This is a JSON pointer.  Since JsonPatch uses it, it might be beneficial to implement as an object or at least reuse this.
 		private JsonSchema _ResolveLocalReference(JsonValue root, string path, Uri documentPath)
 		{
+			JsonSchema resolved;
 			// I'd like to use the JsonPointer implementation here, but I have to also manage the document path...
 			var properties = path.Split('/').Skip(1).ToList();
-			if (!properties.Any()) return JsonSchemaFactory.FromJson(root, _schemaType, documentPath);
+			if (!properties.Any())
+			{
+				resolved = new JsonSchema{DocumentPath = documentPath};
+				resolved.FromJson(root, null);
+			}
 			var value = root;
 			foreach (var property in properties)
 			{
@@ -239,7 +253,9 @@ namespace Manatee.Json.Schema
 					value = value.Array[index];
 				}
 			}
-			return JsonSchemaFactory.FromJson(value, _schemaType, documentPath);
+			resolved = new JsonSchema{DocumentPath = documentPath};
+			resolved.FromJson(value, null);
+			return resolved;
 		}
 		private static string _Unescape(string reference)
 		{
