@@ -7,7 +7,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Declares a dependency that is based on the presence of other properties in the JSON.
 	/// </summary>
-	public class PropertyDependency : JsonSchemaDependency
+	public class PropertyDependency : IJsonSchemaDependency
 	{
 		private readonly IEnumerable<string> _dependencies;
 

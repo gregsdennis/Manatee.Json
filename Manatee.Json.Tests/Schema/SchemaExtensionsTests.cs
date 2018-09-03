@@ -32,7 +32,7 @@ namespace Manatee.Json.Tests.Schema
 			public JsonSchema Else { get; set; }
 		}
 
-		private class QuasiSchema7IfThenElseValidator : JsonSchemaPropertyValidator
+		private class QuasiSchema7IfThenElseValidator : IJsonSchemaPropertyValidator
 		{
 			public bool Applies(JsonSchema schema, JsonValue json)
 			{

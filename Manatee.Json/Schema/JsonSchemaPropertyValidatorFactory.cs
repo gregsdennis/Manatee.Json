@@ -10,15 +10,15 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaPropertyValidatorFactory
 	{
-		private static readonly List<JsonSchemaPropertyValidator> _validators;
+		private static readonly List<IJsonSchemaPropertyValidator> _validators;
 
 		static JsonSchemaPropertyValidatorFactory()
 		{
-			_validators = typeof(JsonSchemaPropertyValidator).GetTypeInfo().Assembly.DefinedTypes
-			                                                  .Where(t => typeof(JsonSchemaPropertyValidator).GetTypeInfo().IsAssignableFrom(t) &&
+			_validators = typeof(IJsonSchemaPropertyValidator).GetTypeInfo().Assembly.DefinedTypes
+			                                                  .Where(t => typeof(IJsonSchemaPropertyValidator).GetTypeInfo().IsAssignableFrom(t) &&
 			                                                              !t.IsAbstract)
 			                                                  .Select(ti => Activator.CreateInstance(ti.AsType()))
-			                                                  .Cast<JsonSchemaPropertyValidator>()
+			                                                  .Cast<IJsonSchemaPropertyValidator>()
 			                                                  .ToList();
 		}
 
@@ -26,12 +26,12 @@ namespace Manatee.Json.Schema
 		/// Registers a new validator to be executed during schema validation.
 		/// </summary>
 		/// <param name="validator"></param>
-		public static void RegisterValidator(JsonSchemaPropertyValidator validator)
+		public static void RegisterValidator(IJsonSchemaPropertyValidator validator)
 		{
 			_validators.Add(validator);
 		}
 
-		internal static IEnumerable<JsonSchemaPropertyValidator> Get<T>(T schema, JsonValue json)
+		internal static IEnumerable<IJsonSchemaPropertyValidator> Get<T>(T schema, JsonValue json)
 			where T : JsonSchema
 		{
 			return _validators.Where(v => v.Applies(schema, json));

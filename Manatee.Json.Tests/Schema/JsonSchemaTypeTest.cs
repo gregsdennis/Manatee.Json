@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Schema;
+﻿using System.Collections;
+using Manatee.Json.Schema;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -6,57 +7,32 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class JsonSchemaTypeTest
 	{
-		[Test]
-		public void Draft04_PrimitiveSchemaSucceeds()
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				yield return new TestCaseData(MetaSchemas.Draft04);
+				yield return new TestCaseData(MetaSchemas.Draft06);
+				yield return new TestCaseData(MetaSchemas.Draft07);
+				yield return new TestCaseData(MetaSchemas.Draft08);
+			}
+		}
+
+		[TestCaseSource(nameof(TestCases))]
+		public void Draft04_PrimitiveSchemaSucceeds(JsonSchema schema)
 		{
 			var json = new JsonObject {{"type", "integer"}};
 
-			var results = JsonSchema04.MetaSchema.Validate(json);
+			var results = schema.Validate(json);
 
 			Assert.IsTrue(results.IsValid);
 		}
-		[Test]
-		public void Draft04_NonPrimitiveStringSchemaFails()
+		[TestCaseSource(nameof(TestCases))]
+		public void Draft04_NonPrimitiveStringSchemaFails(JsonSchema schema)
 		{
 			var json = new JsonObject {{"type", "other"}};
 
-			var results = JsonSchema04.MetaSchema.Validate(json);
-
-			Assert.IsFalse(results.IsValid);
-		}
-		[Test]
-		public void Draft06_PrimitiveSchemaSucceeds()
-		{
-			var json = new JsonObject {{"type", "integer"}};
-
-			var results = JsonSchema06.MetaSchema.Validate(json);
-
-			Assert.IsTrue(results.IsValid);
-		}
-		[Test]
-		public void Draft06_NonPrimitiveStringSchemaFails()
-		{
-			var json = new JsonObject {{"type", "other"}};
-
-			var results = JsonSchema06.MetaSchema.Validate(json);
-
-			Assert.IsFalse(results.IsValid);
-		}
-		[Test]
-		public void Draft07_PrimitiveSchemaSucceeds()
-		{
-			var json = new JsonObject {{"type", "integer"}};
-
-			var results = JsonSchema07.MetaSchema.Validate(json);
-
-			Assert.IsTrue(results.IsValid);
-		}
-		[Test]
-		public void Draft07_NonPrimitiveStringSchemaFails()
-		{
-			var json = new JsonObject {{"type", "other"}};
-
-			var results = JsonSchema07.MetaSchema.Validate(json);
+			var results = schema.Validate(json);
 
 			Assert.IsFalse(results.IsValid);
 		}

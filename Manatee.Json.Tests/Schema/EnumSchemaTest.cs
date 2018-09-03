@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -13,30 +11,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema06
-					{
-						Enum = new List<EnumSchemaValue>
-							{
-								"test1",
-								"test2"
-							}
-					});
-				yield return new TestCaseData(new JsonSchema06
-					{
-						Enum = new List<EnumSchemaValue>
-							{
-								"test1",
-								"test2"
-							}
-					});
-				yield return new TestCaseData(new JsonSchema07
-				{
-						Enum = new List<EnumSchemaValue>
-							{
-								"test1",
-								"test2"
-							}
-					});
+				yield return new TestCaseData(new JsonSchema().Enum("test1", "test2"));
 			}
 		}
 

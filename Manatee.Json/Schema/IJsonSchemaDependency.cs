@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Defines properties and methods required to represent dependencies within JSON Schema.
 	/// </summary>
-	public interface JsonSchemaDependency
+	public interface IJsonSchemaDependency
 	{
 		/// <summary>
 		/// Gets or sets the property with the dependency.

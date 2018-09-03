@@ -32,7 +32,7 @@ namespace Manatee.Json.Tests
 			var schema = new JsonSchema
 				{
 					new IdKeywordDraft04("http://json-schema.org/draft-04/schema#"),
-					new SchemaKeywordDraft04(MetaSchemas.Draft04.Schema),
+					new SchemaKeyword(MetaSchemas.Draft04.Schema),
 					new TypeKeyword(JsonSchemaType.Array),
 					new ConstKeyword(new JsonArray {1, 2, 3})
 				};

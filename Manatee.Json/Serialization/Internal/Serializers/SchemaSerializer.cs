@@ -16,13 +16,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
-			var schema = (JsonSchema) obj;
+			var schema = (JsonSchema)(object) obj;
 			return schema.ToJson(serializer);
 		}
 		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
 		{
 			var value = JsonSchemaFactory.FromJson(json);
-			return (T)value;
+			return (T) (object) value;
 		}
 	}
 }

@@ -11,8 +11,9 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(JsonSchema06.MetaSchema);
-				yield return new TestCaseData(JsonSchema07.MetaSchema);
+				yield return new TestCaseData(MetaSchemas.Draft06);
+				yield return new TestCaseData(MetaSchemas.Draft07);
+				yield return new TestCaseData(MetaSchemas.Draft08);
 			}
 		}
 

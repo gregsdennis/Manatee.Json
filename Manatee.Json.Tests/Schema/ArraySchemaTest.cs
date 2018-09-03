@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -12,12 +10,7 @@ namespace Manatee.Json.Tests.Schema
 	{
 		public static IEnumerable TypeData
 		{
-			get
-			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Array});
-			}
+			get { yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Array)); }
 		}
 		[TestCaseSource(nameof(TypeData))]
 		public void ValidateReturnsErrorOnNonArray(JsonSchema schema)
@@ -40,12 +33,7 @@ namespace Manatee.Json.Tests.Schema
 
 		public static IEnumerable MinItemsData
 		{
-			get
-			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array, MinItems = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array, MinItems = 5});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Array, MinItems = 5});
-			}
+			get { yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Array).MinItems(5)); }
 		}
 		[TestCaseSource(nameof(MinItemsData))]
 		public void ValidateReturnsErrorOnTooFewItems(JsonSchema schema)
@@ -77,12 +65,7 @@ namespace Manatee.Json.Tests.Schema
 
 		public static IEnumerable MaxItemsData
 		{
-			get
-			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array, MaxItems = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array, MaxItems = 5});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Array, MaxItems = 5});
-			}
+			get { yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Array).MaxItems(5)); }
 		}
 		[TestCaseSource(nameof(MaxItemsData))]
 		public void ValidateReturnsErrorOnTooManyItems(JsonSchema schema)
@@ -114,12 +97,7 @@ namespace Manatee.Json.Tests.Schema
 
 		public static IEnumerable UniqueItemsData
 		{
-			get
-			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Array, UniqueItems = true});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Array, UniqueItems = true});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Array, UniqueItems = true});
-			}
+			get { yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Array).UniqueItems(true)); }
 		}
 		[TestCaseSource(nameof(UniqueItemsData))]
 		public void ValidateReturnsErrorOnDuplicateItems(JsonSchema schema)
@@ -144,21 +122,9 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04
-					{
-						Type = JsonSchemaType.Array,
-						Items = new JsonSchema04 {Type = JsonSchemaType.String}
-					});
-				yield return new TestCaseData(new JsonSchema06
-					{
-						Type = JsonSchemaType.Array,
-						Items = new JsonSchema06 {Type = JsonSchemaType.String}
-					});
-				yield return new TestCaseData(new JsonSchema07
-				{
-						Type = JsonSchemaType.Array,
-						Items = new JsonSchema07 { Type = JsonSchemaType.String}
-					});
+				yield return new TestCaseData(new JsonSchema()
+					                              .Type(JsonSchemaType.Array)
+					                              .Items(new JsonSchema().Type(JsonSchemaType.String)));
 			}
 		}
 		[TestCaseSource(nameof(ItemsData))]

@@ -22,7 +22,7 @@ namespace Manatee.Json.Tests.FrameworkConsole
             System.Console.WriteLine(obj.Test1);
             System.Console.WriteLine(obj.Test2);
 
-            var schema04json = JsonSchema04.MetaSchema.ToJson(null);
+            var schema04json = MetaSchemas.Draft04.ToJson(null);
             var schema04 = JsonSchemaFactory.FromJson(schema04json);
 
             System.Console.ReadLine();

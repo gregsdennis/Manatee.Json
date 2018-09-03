@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema
 
 		static AdditionalProperties()
 		{
-			True = new AdditionalProperties {Definition = JsonSchema04.Empty, _isReadOnly = true};
+			True = new AdditionalProperties {Definition = JsonSchema.Empty, _isReadOnly = true};
 			False = new AdditionalProperties {_isReadOnly = true};
 		}
 
@@ -101,7 +101,7 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type == JsonValueType.Boolean)
 			{
-				if (json.Boolean) Definition = JsonSchema04.Empty;
+				if (json.Boolean) Definition = JsonSchema.Empty;
 			}
 			else
 			{
@@ -121,29 +121,11 @@ namespace Manatee.Json.Schema
 		}
 
 		/// <summary>
-		/// Implicitly converts a <see cref="JsonSchema04"/> instance to an <see cref="AdditionalProperties"/> instance.
+		/// Implicitly converts a <see cref="JsonSchema"/> instance to an <see cref="AdditionalProperties"/> instance.
 		/// Supports defining schema in code.
 		/// </summary>
 		/// <param name="schema">The schema to convert.</param>
-		public static implicit operator AdditionalProperties(JsonSchema04 schema)
-		{
-			return new AdditionalProperties {Definition = schema};
-		}
-		/// <summary>
-		/// Implicitly converts a <see cref="JsonSchema06"/> instance to an <see cref="AdditionalProperties"/> instance.
-		/// Supports defining schema in code.
-		/// </summary>
-		/// <param name="schema">The schema to convert.</param>
-		public static implicit operator AdditionalProperties(JsonSchema06 schema)
-		{
-			return new AdditionalProperties {Definition = schema};
-		}
-		/// <summary>
-		/// Implicitly converts a <see cref="JsonSchema07"/> instance to an <see cref="AdditionalProperties"/> instance.
-		/// Supports defining schema in code.
-		/// </summary>
-		/// <param name="schema">The schema to convert.</param>
-		public static implicit operator AdditionalProperties(JsonSchemaReference schema)
+		public static implicit operator AdditionalProperties(JsonSchema schema)
 		{
 			return new AdditionalProperties {Definition = schema};
 		}

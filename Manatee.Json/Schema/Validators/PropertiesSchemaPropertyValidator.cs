@@ -5,7 +5,7 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema.Validators
 {
-	internal abstract class PropertiesSchemaPropertyValidatorBase<T> : JsonSchemaPropertyValidator
+	internal abstract class PropertiesSchemaPropertyValidatorBase<T> : IJsonSchemaPropertyValidator
 		where T : JsonSchema
 	{
 		protected abstract IDictionary<string, JsonSchema> GetProperties(T schema);
@@ -37,7 +37,7 @@ namespace Manatee.Json.Schema.Validators
 			foreach (var property in properties)
 			{
 				if (!obj.ContainsKey(property.Key)) continue;
-				var result = property.Value?.Validate(obj[property.Key], root);
+				var result = property.Value?.Validate(obj[property.Key], null);
 				if (result != null && !result.IsValid)
 					errors.AddRange(result.Errors.Select(e => e.PrependPropertySegment(property.Key)));
 			}
@@ -70,7 +70,7 @@ namespace Manatee.Json.Schema.Validators
 					var matches = extraData.Keys.Where(k => pattern.IsMatch(k));
 					foreach (var match in matches)
 					{
-						var matchErrors = localSchema.Validate(extraData[match], root).Errors;
+						var matchErrors = localSchema.Validate(extraData[match], null).Errors;
 						errors.AddRange(matchErrors.Select(e => new SchemaValidationError(match, e.Message)));
 					}
 					propertiesToRemove.AddRange(extraData.Keys.Where(k => pattern.IsMatch(k)));
@@ -99,98 +99,13 @@ namespace Manatee.Json.Schema.Validators
 					var localSchema = additionalProperties.Definition;
 					foreach (var key in extraData.Keys)
 					{
-						var extraErrors = localSchema.Validate(extraData[key], root).Errors;
+						var extraErrors = localSchema.Validate(extraData[key], null).Errors;
 						errors.AddRange(extraErrors.Select(e => e.PrependPropertySegment(key)));
 					}
 				}
 			}
 			var additionalValidation = AdditionValidation(typed, json, root);
 			return new SchemaValidationResults(errors.Concat(additionalValidation));
-		}
-	}
-
-	internal class PropertiesSchema04PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema04>
-	{
-		protected override IDictionary<string, JsonSchema> GetProperties(JsonSchema04 schema)
-		{
-			return schema.Properties;
-		}
-		protected override IEnumerable<string> GetRequiredProperties(JsonSchema04 schema)
-		{
-			return schema.Required;
-		}
-		protected override AdditionalProperties GetAdditionalProperties(JsonSchema04 schema)
-		{
-			return schema.AdditionalProperties;
-		}
-		protected override Dictionary<Regex, JsonSchema> GetPatternProperties(JsonSchema04 schema)
-		{
-			return schema.PatternProperties;
-		}
-	}
-
-	// TODO: extract a base class for 6/7 
-	internal class PropertiesSchema06PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema06>
-	{
-		public override bool Applies(JsonSchema schema, JsonValue json)
-		{
-			return base.Applies(schema, json) || (schema is JsonSchema06 typed && json.Type == JsonValueType.Object && typed.PropertyNames != null);
-		}
-
-		protected override IDictionary<string, JsonSchema> GetProperties(JsonSchema06 schema)
-		{
-			return schema.Properties;
-		}
-		protected override IEnumerable<string> GetRequiredProperties(JsonSchema06 schema)
-		{
-			return schema.Required;
-		}
-		protected override AdditionalProperties GetAdditionalProperties(JsonSchema06 schema)
-		{
-			if (schema.AdditionalProperties == null) return null;
-			return new AdditionalProperties {Definition = schema.AdditionalProperties};
-		}
-		protected override Dictionary<Regex, JsonSchema> GetPatternProperties(JsonSchema06 schema)
-		{
-			return schema.PatternProperties;
-		}
-		protected override IEnumerable<SchemaValidationError> AdditionValidation(JsonSchema06 schema, JsonValue json, JsonValue root)
-		{
-			return schema.PropertyNames == null
-				       ? new SchemaValidationError[] { }
-				       : json.Object.Keys.SelectMany(k => schema.PropertyNames.Validate(k, root).Errors);
-		}
-	}
-
-	internal class PropertiesSchema07PropertyValidator : PropertiesSchemaPropertyValidatorBase<JsonSchema07>
-	{
-		public override bool Applies(JsonSchema schema, JsonValue json)
-		{
-			return base.Applies(schema, json) || (schema is JsonSchema07 typed && json.Type == JsonValueType.Object && typed.PropertyNames != null);
-		}
-
-		protected override IDictionary<string, JsonSchema> GetProperties(JsonSchema07 schema)
-		{
-			return schema.Properties;
-		}
-		protected override IEnumerable<string> GetRequiredProperties(JsonSchema07 schema)
-		{
-			return schema.Required;
-		}
-		protected override AdditionalProperties GetAdditionalProperties(JsonSchema07 schema)
-		{
-			if (schema.AdditionalProperties == null) return null;
-			return new AdditionalProperties {Definition = schema.AdditionalProperties};
-		}
-		protected override Dictionary<Regex, JsonSchema> GetPatternProperties(JsonSchema07 schema)
-		{
-			return schema.PatternProperties;
-		}
-		protected override IEnumerable<SchemaValidationError> AdditionValidation(JsonSchema07 schema, JsonValue json, JsonValue root)
-		{
-			return schema.PropertyNames == null
-				       ? new SchemaValidationError[] { }
-				       : json.Object.Keys.SelectMany(k => schema.PropertyNames.Validate(k, root).Errors);
 		}
 	}
 }

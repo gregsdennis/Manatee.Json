@@ -5,7 +5,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Creates a dependency that is based on a secondary schema.
 	/// </summary>
-	public class SchemaDependency : JsonSchemaDependency
+	public class SchemaDependency : IJsonSchemaDependency
 	{
 		private readonly JsonSchema _schema;
 

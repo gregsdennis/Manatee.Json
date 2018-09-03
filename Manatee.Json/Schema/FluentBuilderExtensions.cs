@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Schema
 {
@@ -56,6 +57,20 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
+		public static JsonSchema PatternProperty(this JsonSchema schema, string name, JsonSchema property)
+		{
+			var keyword = schema.OfType<PatternPropertiesKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new PatternPropertiesKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(name, property);
+
+			return schema;
+		}
 		public static JsonSchema Items(this JsonSchema schema, params JsonSchema[] definitions)
 		{
 			var keyword = schema.OfType<ItemsKeyword>().FirstOrDefault();
@@ -98,6 +113,20 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
+		public static JsonSchema OneOf(this JsonSchema schema, params JsonSchema[] definitions)
+		{
+			var keyword = schema.OfType<OneOfKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new OneOfKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.AddRange(definitions);
+
+			return schema;
+		}
 		public static JsonSchema Description(this JsonSchema schema, string description)
 		{
 			schema.Add(new DescriptionKeyword(description));
@@ -122,9 +151,21 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
+		public static JsonSchema PropertyNames(this JsonSchema schema, JsonSchema otherSchema)
+		{
+			schema.Add(new PropertyNamesKeyword(otherSchema));
+
+			return schema;
+		}
 		public static JsonSchema Enum(this JsonSchema schema, params JsonValue[] values)
 		{
 			schema.Add(new EnumKeyword(values));
+
+			return schema;
+		}
+		public static JsonSchema Required(this JsonSchema schema, params string[] values)
+		{
+			schema.Add(new RequiredKeyword(values));
 
 			return schema;
 		}
@@ -134,13 +175,25 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
-		public static JsonSchema Minimum(this JsonSchema schema, int minimum)
+		public static JsonSchema Const(this JsonSchema schema, JsonValue value)
+		{
+			schema.Add(new ConstKeyword(value));
+
+			return schema;
+		}
+		public static JsonSchema Examples(this JsonSchema schema, params JsonValue[] value)
+		{
+			schema.Add(new ExamplesKeyword(value));
+
+			return schema;
+		}
+		public static JsonSchema Minimum(this JsonSchema schema, double minimum)
 		{
 			schema.Add(new MinimumKeyword(minimum));
 
 			return schema;
 		}
-		public static JsonSchema Maximum(this JsonSchema schema, int maximum)
+		public static JsonSchema Maximum(this JsonSchema schema, double maximum)
 		{
 			schema.Add(new MaximumKeyword(maximum));
 
@@ -164,7 +217,13 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
-		public static JsonSchema UniqueItems(this JsonSchema schema, bool unique = true)
+		public static JsonSchema MaxItems(this JsonSchema schema, uint count)
+		{
+			schema.Add(new MaxItemsKeyword(count));
+
+			return schema;
+		}
+		public static JsonSchema UniqueItems(this JsonSchema schema, bool unique)
 		{
 			schema.Add(new UniqueItemsKeyword(unique));
 
@@ -197,6 +256,12 @@ namespace Manatee.Json.Schema
 		public static JsonSchema ExclusiveMaximum(this JsonSchema schema, double maximum)
 		{
 			schema.Add(new ExclusiveMaximumKeyword(maximum));
+
+			return schema;
+		}
+		public static JsonSchema MultipleOf(this JsonSchema schema, double divisor)
+		{
+			schema.Add(new MultipleOfKeyword(divisor));
 
 			return schema;
 		}

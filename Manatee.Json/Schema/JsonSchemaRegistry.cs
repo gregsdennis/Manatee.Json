@@ -36,11 +36,12 @@ namespace Manatee.Json.Schema
 				    var schemaValue = JsonValue.Parse(schemaJson);
 					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
 
-					var metaSchemas = new JsonSchema[]
+					var metaSchemas = new[]
 						{
-							JsonSchema07.MetaSchema,
-							JsonSchema06.MetaSchema,
-							JsonSchema04.MetaSchema
+							MetaSchemas.Draft04,
+							MetaSchemas.Draft06,
+							MetaSchemas.Draft07,
+							MetaSchemas.Draft08
 						};
 
 					SchemaValidationResults validation = null;
@@ -113,15 +114,17 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Clear()
 		{
-			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
-			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
-			var draft07Uri = JsonSchema07.MetaSchema.Id.Split('#')[0];
+			var draft04Uri = MetaSchemas.Draft04.Id.Split('#')[0];
+			var draft06Uri = MetaSchemas.Draft06.Id.Split('#')[0];
+			var draft07Uri = MetaSchemas.Draft07.Id.Split('#')[0];
+			var draft08Uri = MetaSchemas.Draft08.Id.Split('#')[0];
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
-				_schemaLookup[draft04Uri] = JsonSchema04.MetaSchema;
-				_schemaLookup[draft06Uri] = JsonSchema06.MetaSchema;
-				_schemaLookup[draft07Uri] = JsonSchema07.MetaSchema;
+				_schemaLookup[draft04Uri] = MetaSchemas.Draft04;
+				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
+				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
+				_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

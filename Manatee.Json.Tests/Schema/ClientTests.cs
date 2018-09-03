@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
-using Manatee.Json.Serialization;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -14,18 +13,11 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue15_DeclaredTypeWithDeclaredEnum()
 		{
-			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
-
 			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
 			var json = JsonValue.Parse(text);
-			var expected = new JsonSchema04
-			{
-				Type = JsonSchemaType.String,
-				Enum = new List<EnumSchemaValue>
-						{
-							new EnumSchemaValue("FeatureCollection")
-						}
-			};
+			var expected = new JsonSchema()
+				.Type(JsonSchemaType.String)
+				.Enum("FeatureCollection");
 
 			var actual = JsonSchemaFactory.FromJson(json);
 
@@ -58,7 +50,7 @@ namespace Manatee.Json.Tests.Schema
 			var result = schema.Validate(json);
 
 			Console.WriteLine(schema.ToJson(null));
-			var refSchema = ((JsonSchemaReference)((JsonSchema04)schema).Properties["prop2"]).Resolved;
+			var refSchema = ((JsonSchemaReference) schema.Properties()["prop2"]).Resolved;
 			Console.WriteLine(refSchema.ToJson(null));
 			Console.WriteLine(json);
 			foreach (var error in result.Errors)
@@ -73,32 +65,17 @@ namespace Manatee.Json.Tests.Schema
 		public void Issue49_RequiredAndAllOfInSingleSchema()
 		{
 			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\issue49.json").AdjustForOS();
-			var expected = new JsonSchema04
-			{
-				Title = "JSON schema for Something",
-				Schema = "http://json-schema.org/draft-04/schema#",
-				Definitions = new Dictionary<string, JsonSchema>
-				{
-					["something"] = new JsonSchema04
-					{
-						Type = JsonSchemaType.Object,
-						AllOf = new[]
-										{
-											new JsonSchema04
-												{
-													Properties = new Dictionary<string, JsonSchema>
-														{
-															["name"] = new JsonSchema04 {Type = JsonSchemaType.String}
-														}
-												}
-										},
-						Required = new List<string> { "name" }
-					}
-				},
-				Type = JsonSchemaType.Array,
-				Description = "An array of somethings.",
-				Items = new JsonSchemaReference("#/definitions/something", typeof(JsonSchema04))
-			};
+			var expected = new JsonSchema()
+				.Title("JSON schema for Something")
+				.Schema("http://json-schema.org/draft-04/schema#")
+				.Definition("something", new JsonSchema()
+					            .Type(JsonSchemaType.Object)
+					            .AllOf(new JsonSchema()
+						                   .Property("name", new JsonSchema().Type(JsonSchemaType.String)))
+					            .Required("name"))
+				.Type(JsonSchemaType.Array)
+				.Description("An array of somethings.")
+				.Items(new JsonSchema().Ref("#/definitions/something"));
 
 			var schema = JsonSchemaRegistry.Get(fileName);
 
@@ -198,23 +175,16 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue141_ExamplesInSchema()
 		{
-			var schema = new JsonSchema06
-			{
-				Schema = JsonSchema06.MetaSchema.Id,
-				Type = JsonSchemaType.Object,
-				Properties = new Dictionary<string, JsonSchema>
-				{
-					["test"] = new JsonSchema06
-					{
-						Id = "/properties/test",
-						Type = JsonSchemaType.String,
-						Title = "Test property",
-						Description = "Test property",
-						Default = "",
-						Examples = new JsonArray { "any string" }
-					}
-				}
-			};
+			var schema = new JsonSchema()
+				.Schema(MetaSchemas.Draft06.Id)
+				.Type(JsonSchemaType.Object)
+				.Property("test", new JsonSchema()
+					          .Id("/properties/test")
+					          .Type(JsonSchemaType.String)
+					          .Title("Test property")
+					          .Description("Test property")
+					          .Default("")
+					          .Examples("any string"));
 			var json = new JsonObject { ["test"] = "a valid string" };
 
 			var results = schema.Validate(json);
@@ -228,75 +198,16 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new JsonSchema04
-					{
-						Properties = new Dictionary<string, JsonSchema>
-							{
-								["xyz"] = new JsonSchema04
-									{
-										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, JsonSchema>
-											{
-												["A"] = new JsonSchema04 {Type = JsonSchemaType.String},
-												["B"] = new JsonSchema04 {Type = JsonSchemaType.Integer},
-												["C"] = new JsonSchema04 {Type = JsonSchemaType.Number},
-											},
-										Required = new[] {"A"},
-										AdditionalProperties = AdditionalProperties.False,
-										OneOf = new JsonSchema[]
-											{
-												new JsonSchema04 {Required = new[] {"B"}},
-												new JsonSchema04 {Required = new[] {"C"}}
-											}
-									}
-							}
-					};
-				yield return new JsonSchema06
-					{
-						Properties = new Dictionary<string, JsonSchema>
-							{
-								["xyz"] = new JsonSchema06
-									{
-										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, JsonSchema>
-											{
-												["A"] = new JsonSchema06 {Type = JsonSchemaType.String},
-												["B"] = new JsonSchema06 {Type = JsonSchemaType.Integer},
-												["C"] = new JsonSchema06 {Type = JsonSchemaType.Number},
-											},
-										Required = new[] {"A"},
-										AdditionalProperties = (JsonSchema06)false,
-										OneOf = new JsonSchema[]
-											{
-												new JsonSchema06 {Required = new[] {"B"}},
-												new JsonSchema06 {Required = new[] {"C"}}
-											}
-									}
-							}
-					};
-				yield return new JsonSchema07
-					{
-						Properties = new Dictionary<string, JsonSchema>
-							{
-								["xyz"] = new JsonSchema07
-									{
-										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, JsonSchema>
-											{
-												["A"] = new JsonSchema07 { Type = JsonSchemaType.String },
-												["B"] = new JsonSchema07 { Type = JsonSchemaType.Integer },
-												["C"] = new JsonSchema07 { Type = JsonSchemaType.Number },
-											},
-										Required = new[] { "A" },
-										AdditionalProperties = (JsonSchema07)false,
-										OneOf = new JsonSchema[]
-											{
-												new JsonSchema07 {Required = new[] {"B"}},
-												new JsonSchema07 {Required = new[] {"C"}}
-											}
-									}
-							}
-					};
+				yield return new JsonSchema()
+					.Property("xyz", new JsonSchema()
+						          .Type(JsonSchemaType.Object)
+						          .Property("A", new JsonSchema().Type(JsonSchemaType.String))
+						          .Property("B", new JsonSchema().Type(JsonSchemaType.Integer))
+						          .Property("C", new JsonSchema().Type(JsonSchemaType.Number))
+						          .Required("A")
+						          .AdditionalProperties(JsonSchema.False)
+						          .OneOf(new JsonSchema().Required("B"),
+						                 new JsonSchema().Required("C")));
 			}
 		}
 
@@ -376,68 +287,30 @@ namespace Manatee.Json.Tests.Schema
 		[TestCaseSource(nameof(Issue167TestCaseSource2))]
 		public void Issue167_PropertyNamesWithPropertylessRequired(JsonObject json, bool isValid)
 		{
-			var schema = new JsonSchema06
-				{
-					Schema = JsonSchema06.MetaSchema.Id,
-					Definitions = new Dictionary<string, JsonSchema>
-						{
-							["fields"] = new JsonSchema06
-								{
-									Type = JsonSchemaType.Object,
-									Properties = new Dictionary<string, JsonSchema>
-										{
-											["field1"] = new JsonSchema06 {Type = JsonSchemaType.String},
-											["field2"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
-										}
-								},
-							["xyzBaseFieldNames"] = new JsonSchema06
-								{
-									Enum = new EnumSchemaValue[] {"field1", "field2"}
-								},
-							["worldwide"] = new JsonSchema06
-								{
-									AllOf = new JsonSchema[]
-										{
-											new JsonSchemaReference("#/definitions/fields", typeof(JsonSchema06)),
-											new JsonSchema06 {Required = new[] {"field1"}},
-											new JsonSchema06
-												{
-													Properties = new Dictionary<string, JsonSchema>
-														{
-															["A"] = new JsonSchema06 {Type = JsonSchemaType.String},
-															["B"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
-														},
-													OneOf = new JsonSchema[]
-														{
-															new JsonSchema06 {Required = new[] {"A"}},
-															new JsonSchema06 {Required = new[] {"B"}},
-														}
-												},
-											new JsonSchema06
-												{
-													PropertyNames = new JsonSchema06
-														{
-															AnyOf = new JsonSchema[]
-																{
-																	new JsonSchemaReference("#/definitions/xyzBaseFieldNames", typeof(JsonSchema06)),
-																	new JsonSchema06
-																		{
-																			Enum = new EnumSchemaValue[] {"A", "B"}
-																		}
-																}
-														}
-												}
-										}
-								}
-						},
-					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, JsonSchema>
-						{
-							["xyz"] = new JsonSchemaReference("#/definitions/worldwide", typeof(JsonSchema06))
-						},
-					AdditionalProperties = JsonSchema06.False,
-					Required = new[] {"xyz"}
-				};
+			var schema = new JsonSchema()
+				.Schema(MetaSchemas.Draft06.Id)
+				.Definition("fields", new JsonSchema()
+					            .Type(JsonSchemaType.Object)
+					            .Property("field1", new JsonSchema().Type(JsonSchemaType.String))
+					            .Property("field2", new JsonSchema().Type(JsonSchemaType.Integer)))
+				.Definition("xyzBaseFieldNames", new JsonSchema()
+					            .Enum("field1", "field2"))
+				.Definition("worldwide", new JsonSchema()
+					            .AllOf(new JsonSchema().Ref("#/definitions/fields"),
+					                   new JsonSchema().Required("field1"),
+					                   new JsonSchema()
+						                   .Property("A", new JsonSchema().Type(JsonSchemaType.String))
+						                   .Property("B", new JsonSchema().Type(JsonSchemaType.Integer))
+						                   .OneOf(new JsonSchema().Required("A"),
+						                          new JsonSchema().Required("B")),
+					                   new JsonSchema()
+						                   .PropertyNames(new JsonSchema()
+							                                  .AnyOf(new JsonSchema().Ref("#/definitions/xyzBaseFieldNames"),
+							                                         new JsonSchema().Enum("A", "B")))))
+				.Type(JsonSchemaType.Object)
+				.Property("xyz", new JsonSchema().Ref("#/definitions/worldwide"))
+				.AdditionalProperties(JsonSchema.False)
+				.Required("xyz");
 
 			var results = schema.Validate(json);
 
@@ -451,7 +324,7 @@ namespace Manatee.Json.Tests.Schema
 			// otherwise we have a paradox of trying to know the commit hash before the commit is created.
 			var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/c264db5c75478e0a33269baba7813901829f8244/Manatee.Json.Tests/Files/";
 
-			var schema = (JsonSchema07) JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
+			var schema = JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
 
 			var invalid = new JsonObject
 				{

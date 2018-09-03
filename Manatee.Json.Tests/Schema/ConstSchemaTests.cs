@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -14,10 +10,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidationFails()
 		{
-			var schema = new JsonSchema07
-				{
-					Const = 5
-				};
+			var schema = new JsonSchema().Const(5);
 
 			JsonValue json = 6;
 
@@ -30,10 +23,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidationPasses()
 		{
-			var schema = new JsonSchema07
-				{
-					Const = 5
-				};
+			var schema = new JsonSchema().Const(5);
 
 			JsonValue json = 5;
 

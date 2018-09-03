@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Manatee.Json.Schema
 {
@@ -6,19 +7,23 @@ namespace Manatee.Json.Schema
 	{
 		public static string Description(this JsonSchema schema)
 		{
-			return (schema as JsonSchema)?.OfType<DescriptionKeyword>().FirstOrDefault()?.Value;
+			return schema.OfType<DescriptionKeyword>().FirstOrDefault()?.Value;
 		}
 		public static JsonSchema AdditionalItems(this JsonSchema schema)
 		{
-			return (schema as JsonSchema)?.OfType<AdditionalItemsKeyword>().FirstOrDefault()?.Value;
+			return schema.OfType<AdditionalItemsKeyword>().FirstOrDefault()?.Value;
 		}
 		public static bool ExclusiveMinimumDraft04(this JsonSchema schema)
 		{
-			return (schema as JsonSchema)?.OfType<ExclusiveMinimumDraft04Keyword>().FirstOrDefault()?.Value ?? false;
+			return schema.OfType<ExclusiveMinimumDraft04Keyword>().FirstOrDefault()?.Value ?? false;
 		}
 		public static bool ExclusiveMaximumDraft04(this JsonSchema schema)
 		{
-			return (schema as JsonSchema)?.OfType<ExclusiveMaximumDraft04Keyword>().FirstOrDefault()?.Value ?? false;
+			return schema.OfType<ExclusiveMaximumDraft04Keyword>().FirstOrDefault()?.Value ?? false;
+		}
+		public static Dictionary<string, JsonSchema> Properties(this JsonSchema schema)
+		{
+			return schema.OfType<PropertiesKeyword>().FirstOrDefault();
 		}
 	}
 }

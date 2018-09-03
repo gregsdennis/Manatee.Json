@@ -8,8 +8,9 @@ namespace Manatee.Json.Schema
 {
 	[ExperimentalType]
 	[FeedbackWelcome]
-	public class JsonSchema : List<JsonSchemaKeyword>
+	public class JsonSchema : List<IJsonSchemaKeyword>
 	{
+		public static readonly JsonSchema Empty = new JsonSchema();
 		public static readonly JsonSchema True = new JsonSchema(true);
 		public static readonly JsonSchema False = new JsonSchema(false);
 

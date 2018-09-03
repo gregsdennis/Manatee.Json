@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Performs validations for a single schema property.
 	/// </summary>
-	public interface JsonSchemaPropertyValidator
+	public interface IJsonSchemaPropertyValidator
 	{
 		/// <summary>
 		/// Determines whether the validator should execute for a particular schema and JSON instance.
