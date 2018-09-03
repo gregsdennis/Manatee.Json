@@ -20,7 +20,7 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
 
-			if (json.Array.Count <= Value)
+			if (json.Array.Count < Value)
 			{
 				var message = SchemaErrorMessages.MinItems.ResolveTokens(new Dictionary<string, object>
 					{

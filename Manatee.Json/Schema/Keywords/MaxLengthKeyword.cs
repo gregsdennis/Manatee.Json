@@ -20,12 +20,12 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type != JsonValueType.String) return SchemaValidationResults.Valid;
 
-			if (json.String.Length >= Value)
+			if (json.String.Length > Value)
 			{
 				var message = SchemaErrorMessages.MaxLength.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Value,
-						["actual"] = json.Array.Count,
+						["actual"] = json.String.Length,
 						["value"] = json
 					});
 				return new SchemaValidationResults(string.Empty, message);

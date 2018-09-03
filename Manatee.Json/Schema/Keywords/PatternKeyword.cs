@@ -12,6 +12,15 @@ namespace Manatee.Json.Schema
 
 		public Regex Value { get; private set; }
 
+		public PatternKeyword(Regex value)
+		{
+			Value = value;
+		}
+		public PatternKeyword(string value)
+		{
+			Value = new Regex(value, RegexOptions.Compiled);
+		}
+
 		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
 		{
 			if (json.Type != JsonValueType.String) return SchemaValidationResults.Valid;

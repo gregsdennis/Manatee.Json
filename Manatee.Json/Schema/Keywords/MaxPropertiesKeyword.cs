@@ -20,9 +20,9 @@ namespace Manatee.Json.Schema
 		{
 			if (json.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
 
-			if (json.Object.Count >= Value)
+			if (json.Object.Count > Value)
 			{
-				var message = SchemaErrorMessages.MaxLength.ResolveTokens(new Dictionary<string, object>
+				var message = SchemaErrorMessages.MaxProperties.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Value,
 						["actual"] = json.Array.Count,

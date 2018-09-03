@@ -19,7 +19,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[TestCaseSource(nameof(TestCases))]
-		public void Draft04_PrimitiveSchemaSucceeds(JsonSchema schema)
+		public void PrimitiveSchemaSucceeds(JsonSchema schema)
 		{
 			var json = new JsonObject {{"type", "integer"}};
 
@@ -28,7 +28,7 @@ namespace Manatee.Json.Tests.Schema
 			Assert.IsTrue(results.IsValid);
 		}
 		[TestCaseSource(nameof(TestCases))]
-		public void Draft04_NonPrimitiveStringSchemaFails(JsonSchema schema)
+		public void NonPrimitiveStringSchemaFails(JsonSchema schema)
 		{
 			var json = new JsonObject {{"type", "other"}};
 

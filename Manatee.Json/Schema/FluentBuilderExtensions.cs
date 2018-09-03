@@ -72,6 +72,34 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
+		public static JsonSchema Dependency(this JsonSchema schema, string name, params string[] dependencies)
+		{
+			var keyword = schema.OfType<DependenciesKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DependenciesKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(new PropertyDependency(name, dependencies));
+
+			return schema;
+		}
+		public static JsonSchema Dependency(this JsonSchema schema, string name, JsonSchema dependency)
+		{
+			var keyword = schema.OfType<DependenciesKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DependenciesKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(new SchemaDependency(name, dependency));
+
+			return schema;
+		}
 		public static JsonSchema Items(this JsonSchema schema, params JsonSchema[] definitions)
 		{
 			var keyword = schema.OfType<ItemsKeyword>().FirstOrDefault();
@@ -134,9 +162,15 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
-		public static JsonSchema Pattern(this JsonSchema schema, [RegexPattern] string description)
+		public static JsonSchema Pattern(this JsonSchema schema, [RegexPattern] string pattern)
 		{
-			schema.Add(new PatternKeyword());
+			schema.Add(new PatternKeyword(pattern));
+
+			return schema;
+		}
+		public static JsonSchema Pattern(this JsonSchema schema, Regex pattern)
+		{
+			schema.Add(new PatternKeyword(pattern));
 
 			return schema;
 		}

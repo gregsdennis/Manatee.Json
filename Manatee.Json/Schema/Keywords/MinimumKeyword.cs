@@ -22,7 +22,7 @@ namespace Manatee.Json.Schema
 
 			if (json.Number < Value)
 			{
-				var message = SchemaErrorMessages.MaxItems.ResolveTokens(new Dictionary<string, object>
+				var message = SchemaErrorMessages.Minimum.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Value,
 						["actual"] = json.Number,

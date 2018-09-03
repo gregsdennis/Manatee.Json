@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Manatee.Json.Schema;
+﻿using Manatee.Json.Schema;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -7,18 +6,13 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class AnyOfSchemaTest
 	{
-		public static IEnumerable ValidateReturnsErrorOnNoneValidData
+		[Test]
+		public void ValidateReturnsErrorOnNoneValid()
 		{
-			get
-			{
-				yield return new TestCaseData(new JsonSchema()
-					                              .AnyOf(new JsonSchema().Type(JsonSchemaType.Array),
-					                                     new JsonSchema().Type(JsonSchemaType.Number)));
-			}
-		}
-		[TestCaseSource(nameof(ValidateReturnsErrorOnNoneValidData))]
-		public void ValidateReturnsErrorOnNoneValid(JsonSchema schema)
-		{
+			var schema = new JsonSchema()
+				.AnyOf(new JsonSchema().Type(JsonSchemaType.Array),
+				       new JsonSchema().Type(JsonSchemaType.Number));
+
 			var json = new JsonObject();
 
 			var results = schema.Validate(json);
@@ -26,23 +20,38 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 
-		public static IEnumerable ValidateReturnsValidOnSingleValidData
+		[Test]
+		public void ValidateReturnsValidOnSingleValid()
 		{
-			get
-			{
-				yield return new TestCaseData(new JsonSchema()
-					                              .AllOf(new JsonSchema()
-						                                     .Type(JsonSchemaType.Number)
-						                                     .Minimum(10),
-					                                     new JsonSchema()
-						                                     .Type(JsonSchemaType.Number)
-						                                     .Maximum(20)));
-			}
-		}
-		[TestCaseSource(nameof(ValidateReturnsValidOnSingleValidData))]
-		public void ValidateReturnsValidOnSingleValid(JsonSchema schema)
-		{
+			var schema = new JsonSchema()
+				.AnyOf(new JsonSchema()
+					       .Type(JsonSchemaType.Number)
+					       .Minimum(10),
+				       new JsonSchema()
+					       .Type(JsonSchemaType.Number)
+					       .Maximum(20));
+
+
 			var json = (JsonValue) 25;
+
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
+
+		[Test]
+		public void ValidateReturnsValidOnMultipleValid()
+		{
+			var schema = new JsonSchema()
+				.AnyOf(new JsonSchema()
+					       .Type(JsonSchemaType.Number)
+					       .Minimum(10),
+				       new JsonSchema()
+					       .Type(JsonSchemaType.Number)
+					       .Maximum(20));
+
+
+			var json = (JsonValue) 15;
 
 			var results = schema.Validate(json);
 

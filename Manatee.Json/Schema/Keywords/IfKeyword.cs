@@ -28,6 +28,8 @@ namespace Manatee.Json.Schema
 
 			if (ifResults.IsValid)
 			{
+				if (then == null) return SchemaValidationResults.Valid;
+
 				var thenResults = then.Value.Validate(json, root);
 				if (thenResults.IsValid) return SchemaValidationResults.Valid;
 
@@ -39,6 +41,8 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
+				if (@else == null) return SchemaValidationResults.Valid;
+
 				var elseResults = @else.Value.Validate(json, root);
 				if (elseResults.IsValid) return SchemaValidationResults.Valid;
 

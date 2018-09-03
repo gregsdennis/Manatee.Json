@@ -22,7 +22,7 @@ namespace Manatee.Json.Schema
 
 			if ((decimal) json.Number % (decimal?) Value != 0)
 			{
-				var message = SchemaErrorMessages.MaxItems.ResolveTokens(new Dictionary<string, object>
+				var message = SchemaErrorMessages.MultipleOf.ResolveTokens(new Dictionary<string, object>
 					{
 						["multipleOf"] = Value,
 						["actual"] = json.Number % Value,
