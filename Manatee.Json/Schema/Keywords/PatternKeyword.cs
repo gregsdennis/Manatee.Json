@@ -13,6 +13,7 @@ namespace Manatee.Json.Schema
 
 		public Regex Value { get; private set; }
 
+		public PatternKeyword() { }
 		public PatternKeyword(Regex value)
 		{
 			Value = value;

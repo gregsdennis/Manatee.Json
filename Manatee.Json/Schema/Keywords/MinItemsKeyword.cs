@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public uint Value { get; private set; }
 
+		public MinItemsKeyword() { }
 		public MinItemsKeyword(uint value)
 		{
 			Value = value;

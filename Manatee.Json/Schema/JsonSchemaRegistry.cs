@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Manatee.Json.Patch;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -10,6 +11,7 @@ namespace Manatee.Json.Schema
 	public static class JsonSchemaRegistry
 	{
 		private static readonly ConcurrentDictionary<string, JsonSchema> _schemaLookup;
+		private static readonly JsonSerializer _serializer;
 
 		/// <summary>
 		/// Initializes the <see cref="JsonSchemaRegistry"/> class.
@@ -17,6 +19,7 @@ namespace Manatee.Json.Schema
 		static JsonSchemaRegistry()
 		{
 			_schemaLookup = new ConcurrentDictionary<string, JsonSchema>();
+			_serializer = new JsonSerializer();
 			Clear();
 		}
 
@@ -34,7 +37,7 @@ namespace Manatee.Json.Schema
 					var schemaJson = JsonSchemaOptions.Download(uri);
 				    var schemaValue = JsonValue.Parse(schemaJson);
 					schema = new JsonSchema {DocumentPath = new Uri(uri)};
-					schema.FromJson(schemaValue, null);
+					schema.FromJson(schemaValue, _serializer);
 
 					var schemaStructureValidation = schema.ValidateSchema();
 					if (!schemaStructureValidation.IsValid)
@@ -91,7 +94,7 @@ namespace Manatee.Json.Schema
 			var draft04Uri = MetaSchemas.Draft04.Id.Split('#')[0];
 			var draft06Uri = MetaSchemas.Draft06.Id.Split('#')[0];
 			var draft07Uri = MetaSchemas.Draft07.Id.Split('#')[0];
-			var draft08Uri = MetaSchemas.Draft08.Id.Split('#')[0];
+			//var draft08Uri = MetaSchemas.Draft08.Id.Split('#')[0];
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
@@ -99,7 +102,7 @@ namespace Manatee.Json.Schema
 				_schemaLookup[draft04Uri] = MetaSchemas.Draft04;
 				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
 				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
-				_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
+				//_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

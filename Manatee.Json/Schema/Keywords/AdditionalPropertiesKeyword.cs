@@ -7,12 +7,13 @@ namespace Manatee.Json.Schema
 {
 	public class AdditionalPropertiesKeyword : IJsonSchemaKeyword
 	{
-		public virtual string Name => "$id";
+		public virtual string Name => "additionalProperties";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 		public int ValidationSequence => 3;
 
 		public JsonSchema Value { get; private set; }
 
+		public AdditionalPropertiesKeyword() { }
 		public AdditionalPropertiesKeyword(JsonSchema value)
 		{
 			Value = value;

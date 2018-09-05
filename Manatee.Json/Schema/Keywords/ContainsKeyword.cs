@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public JsonValue Value { get; private set; }
 
+		public ContainsKeyword() { }
 		public ContainsKeyword(JsonValue value)
 		{
 			Value = value;

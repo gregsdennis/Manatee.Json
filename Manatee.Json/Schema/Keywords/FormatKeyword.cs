@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public StringFormat Value { get; private set; }
 
+		public FormatKeyword() { }
 		public FormatKeyword(StringFormat value)
 		{
 			Value = value;

@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public uint Value { get; private set; }
 
+		public MaxLengthKeyword() { }
 		public MaxLengthKeyword(uint value)
 		{
 			Value = value;

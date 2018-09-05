@@ -75,7 +75,7 @@ namespace Manatee.Json.Schema
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			throw new NotImplementedException();
+			AddRange(json.Object.Select(kvp => SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer)));
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{

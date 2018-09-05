@@ -10,6 +10,7 @@ namespace Manatee.Json.Schema
 
 		public JsonValue Value { get; private set; }
 
+		public DefaultKeyword() { }
 		public DefaultKeyword(JsonValue value)
 		{
 			Value = value;

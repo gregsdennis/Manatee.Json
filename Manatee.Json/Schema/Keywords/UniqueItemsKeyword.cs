@@ -13,6 +13,7 @@ namespace Manatee.Json.Schema
 
 		public bool Value { get; private set; }
 
+		public UniqueItemsKeyword() { }
 		public UniqueItemsKeyword(bool value = true)
 		{
 			Value = value;

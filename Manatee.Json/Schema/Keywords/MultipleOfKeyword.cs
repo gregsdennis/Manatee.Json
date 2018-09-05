@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public double Value { get; private set; }
 
+		public MultipleOfKeyword() { }
 		public MultipleOfKeyword(double value)
 		{
 			Value = value;

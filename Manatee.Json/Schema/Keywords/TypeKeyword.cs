@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public JsonSchemaType Type { get; private set; }
 
+		public TypeKeyword() { }
 		public TypeKeyword(JsonSchemaType type)
 		{
 			Type = type;

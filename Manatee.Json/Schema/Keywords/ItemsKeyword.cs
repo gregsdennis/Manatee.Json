@@ -62,9 +62,14 @@ namespace Manatee.Json.Schema
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			var schemas = this.Select(serializer.Serialize).ToJson();
+			if (IsArray)
+			{
+				var schemas = this.Select(serializer.Serialize).ToJson();
 
-			return !IsArray ? schemas : schemas[0];
+				return !IsArray ? schemas : schemas[0];
+			}
+
+			return serializer.Serialize(this[0]);
 		}
 	}
 }

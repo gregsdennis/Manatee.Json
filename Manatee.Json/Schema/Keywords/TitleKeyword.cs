@@ -10,6 +10,7 @@ namespace Manatee.Json.Schema
 
 		public string Value { get; private set; }
 
+		public TitleKeyword() { }
 		public TitleKeyword(string value)
 		{
 			Value = value;

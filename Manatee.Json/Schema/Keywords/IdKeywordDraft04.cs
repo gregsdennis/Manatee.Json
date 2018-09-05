@@ -6,6 +6,7 @@
 		public override JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft04;
 		public int ValidationSequence => 1;
 
+		public IdKeywordDraft04() { }
 		public IdKeywordDraft04(string value)
 			: base(value) { }
 	}

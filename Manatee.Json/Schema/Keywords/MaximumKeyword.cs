@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public double Value { get; private set; }
 
+		public MaximumKeyword() { }
 		public MaximumKeyword(double value)
 		{
 			Value = value;

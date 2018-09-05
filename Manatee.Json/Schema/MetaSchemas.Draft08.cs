@@ -2,6 +2,6 @@
 {
 	public static partial class MetaSchemas
 	{
-		public static JsonSchema Draft08 = new JsonSchema();
+		//public static JsonSchema Draft08 = new JsonSchema();
 	}
 }

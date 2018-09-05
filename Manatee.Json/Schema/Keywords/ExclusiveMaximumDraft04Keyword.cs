@@ -13,6 +13,7 @@ namespace Manatee.Json.Schema
 
 		public bool Value { get; private set; }
 
+		public ExclusiveMaximumDraft04Keyword() { }
 		public ExclusiveMaximumDraft04Keyword(bool value)
 		{
 			Value = value;

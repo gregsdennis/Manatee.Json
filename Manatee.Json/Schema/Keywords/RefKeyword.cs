@@ -15,6 +15,7 @@ namespace Manatee.Json.Schema
 
 		public JsonSchema Resolved { get; private set; }
 
+		public RefKeyword() { }
 		public RefKeyword(string reference)
 		{
 			Reference = reference;

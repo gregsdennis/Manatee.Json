@@ -111,7 +111,7 @@ namespace Manatee.Json.Serialization
 				{
 					EncodeDefaultValues = false,
 					InvalidPropertyKeyBehavior = InvalidPropertyKeyBehavior.DoNothing,
-					EnumSerializationFormat = EnumSerializationFormat.AsInteger
+					EnumSerializationFormat = EnumSerializationFormat.AsName
 				};
 		}
 		/// <summary>

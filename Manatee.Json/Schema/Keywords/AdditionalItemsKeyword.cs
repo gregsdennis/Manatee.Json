@@ -13,6 +13,7 @@ namespace Manatee.Json.Schema
 
 		public JsonSchema Value { get; private set; }
 
+		public AdditionalItemsKeyword() { }
 		public AdditionalItemsKeyword(JsonSchema value)
 		{
 			Value = value;

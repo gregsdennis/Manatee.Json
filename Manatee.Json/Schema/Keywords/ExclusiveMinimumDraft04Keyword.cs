@@ -13,6 +13,7 @@ namespace Manatee.Json.Schema
 
 		public bool Value { get; private set; }
 
+		public ExclusiveMinimumDraft04Keyword() { }
 		public ExclusiveMinimumDraft04Keyword(bool value)
 		{
 			Value = value;

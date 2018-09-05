@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public double Value { get; private set; }
 
+		public ExclusiveMinimumKeyword() { }
 		public ExclusiveMinimumKeyword(double value)
 		{
 			Value = value;

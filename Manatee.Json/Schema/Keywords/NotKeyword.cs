@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 
 		public JsonSchema Value { get; private set; }
 
+		public NotKeyword() { }
 		public NotKeyword(JsonSchema value)
 		{
 			Value = value;
