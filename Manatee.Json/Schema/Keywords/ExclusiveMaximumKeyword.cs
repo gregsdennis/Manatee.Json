@@ -4,7 +4,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class ExclusiveMaximumKeyword : IJsonSchemaKeyword
+	public class ExclusiveMaximumKeyword : IJsonSchemaKeywordPlus
 	{
 		public string Name => "exclusiveMaximum";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
@@ -35,6 +35,10 @@ namespace Manatee.Json.Schema
 			}
 
 			return SchemaValidationResults.Valid;
+		}
+		public bool Handles(JsonValue value)
+		{
+			return value.Type == JsonValueType.Number;
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

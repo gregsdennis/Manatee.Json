@@ -9,7 +9,7 @@ namespace Manatee.Json.Schema
 {
 	public static class SchemaKeywordCatalog
 	{
-		private static readonly Dictionary<string, Type> _cache = new Dictionary<string, Type>();
+		private static readonly Dictionary<string, List<Type>> _cache = new Dictionary<string, List<Type>>();
 		private static readonly ConstructorResolver _resolver = new ConstructorResolver();
 
 		static SchemaKeywordCatalog()
@@ -30,15 +30,31 @@ namespace Manatee.Json.Schema
 			where T : IJsonSchemaKeyword, new()
 		{
 			var keyword = (T) _resolver.Resolve(typeof(T));
-			_cache[keyword.Name] = typeof(T);
+			if (!_cache.TryGetValue(keyword.Name, out var list))
+			{
+				list = new List<Type>();
+				_cache[keyword.Name] = list;
+			}
+			if (!list.Contains(typeof(T)))
+				list.Add(typeof(T));
 		}
 
 		internal static IJsonSchemaKeyword Build(string keywordName, JsonValue json, JsonSerializer serializer)
 		{
-			if (!_cache.TryGetValue(keywordName, out var type))
+			if (!_cache.TryGetValue(keywordName, out var list) || !list.Any())
 				throw new ArgumentException("Keyword not registered", keywordName);
 
-			var keyword = (IJsonSchemaKeyword) _resolver.Resolve(type);
+			IJsonSchemaKeyword keyword;
+			var specials = list.Where(t => typeof(IJsonSchemaKeywordPlus).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()))
+				.Select(t => (IJsonSchemaKeywordPlus) _resolver.Resolve(t))
+				.ToList();
+			if (specials.Any())
+			{
+				keyword = specials.FirstOrDefault(k => k.Handles(json));
+				if (keyword != null) return keyword;
+			}
+
+			keyword = (IJsonSchemaKeyword) _resolver.Resolve(list.First());
 			keyword.FromJson(json, serializer);
 
 			return keyword;

@@ -195,27 +195,19 @@ namespace Manatee.Json.Tests.Schema
 			Assert.IsTrue(results.IsValid);
 		}
 
-		public static IEnumerable Issue167TestCaseSource1
-		{
-			get
-			{
-				yield return new JsonSchema()
-					.Property("xyz", new JsonSchema()
-						          .Type(JsonSchemaType.Object)
-						          .Property("A", new JsonSchema().Type(JsonSchemaType.String))
-						          .Property("B", new JsonSchema().Type(JsonSchemaType.Integer))
-						          .Property("C", new JsonSchema().Type(JsonSchemaType.Number))
-						          .Required("A")
-						          .AdditionalProperties(false)
-						          .OneOf(new JsonSchema().Required("B"),
-						                 new JsonSchema().Required("C")));
-			}
-		}
-
 		[Test]
-		[TestCaseSource(nameof(Issue167TestCaseSource1))]
-		public void Issue167_OneOfWithRequiredShouldFailValidation(JsonSchema schema)
+		public void Issue167_OneOfWithRequiredShouldFailValidation()
 		{
+			var schema = new JsonSchema()
+				.Property("xyz", new JsonSchema()
+					          .Type(JsonSchemaType.Object)
+					          .Property("A", new JsonSchema().Type(JsonSchemaType.String))
+					          .Property("B", new JsonSchema().Type(JsonSchemaType.Integer))
+					          .Property("C", new JsonSchema().Type(JsonSchemaType.Number))
+					          .Required("A")
+					          .AdditionalProperties(false)
+					          .OneOf(new JsonSchema().Required("B"),
+					                 new JsonSchema().Required("C")));
 			var json = new JsonObject
 				{
 					["xyz"] = new JsonObject

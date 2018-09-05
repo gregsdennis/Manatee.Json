@@ -38,7 +38,7 @@
 				.Property("title", new JsonSchema().Type(JsonSchemaType.String))
 				.Property("description", new JsonSchema().Type(JsonSchemaType.String))
 				.Property("default", true)
-				.Property("readonly", new JsonSchema()
+				.Property("readOnly", new JsonSchema()
 					          .Type(JsonSchemaType.Boolean)
 					          .Default(false))
 				.Property("examples", new JsonSchema()

@@ -4,8 +4,8 @@
 	{
 		public static readonly JsonSchema Draft06 =
 			new JsonSchema()
-				.Id("http://json-schema.org/draft-06/schema#")
 				.Schema("http://json-schema.org/draft-06/schema#")
+				.Id("http://json-schema.org/draft-06/schema#")
 				.Title("Core schema meta-schema")
 				.Definition("schemaArray", new JsonSchema()
 					            .Type(JsonSchemaType.Array)
@@ -36,7 +36,7 @@
 					          .Format(StringFormat.UriReference))
 				.Property("title", new JsonSchema().Type(JsonSchemaType.String))
 				.Property("description", new JsonSchema().Type(JsonSchemaType.String))
-				.Property("default", new JsonSchema().Default(new JsonObject()))
+				.Property("default", new JsonSchema())
 				.Property("examples", new JsonSchema()
 					          .Type(JsonSchemaType.Array)
 					          .Items(new JsonSchema()))

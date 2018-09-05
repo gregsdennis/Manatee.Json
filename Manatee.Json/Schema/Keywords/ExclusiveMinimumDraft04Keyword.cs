@@ -5,7 +5,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class ExclusiveMinimumDraft04Keyword : IJsonSchemaKeyword
+	public class ExclusiveMinimumDraft04Keyword : IJsonSchemaKeywordPlus
 	{
 		public string Name => "exclusiveMinimum";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft04;
@@ -41,6 +41,10 @@ namespace Manatee.Json.Schema
 			}
 
 			return SchemaValidationResults.Valid;
+		}
+		public bool Handles(JsonValue value)
+		{
+			return value.Type == JsonValueType.Boolean;
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

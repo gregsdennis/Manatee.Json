@@ -10,4 +10,9 @@ namespace Manatee.Json.Schema
 
 		SchemaValidationResults Validate(SchemaValidationContext context);
 	}
+
+	internal interface IJsonSchemaKeywordPlus : IJsonSchemaKeyword
+	{
+		bool Handles(JsonValue value);
+	}
 }

@@ -5,7 +5,7 @@
 		public static readonly JsonSchema Draft04 = new JsonSchema()
 			.IdDraft04("http://json-schema.org/draft-04/schema#")
 			.Schema("http://json-schema.org/draft-04/schema#")
-			.Description("Core schema met-schema")
+			.Description("Core schema meta-schema")
 			.Definition("schemaArray", new JsonSchema()
 				            .Type(JsonSchemaType.Array)
 				            .MinItems(1)
@@ -14,7 +14,7 @@
 				            .Type(JsonSchemaType.Integer)
 				            .Minimum(0))
 			.Definition("positiveIntegerDefault0", new JsonSchema()
-				            .AllOf(new JsonSchema().RefRoot(),
+				            .AllOf(new JsonSchema().Ref("#/definitions/positiveInteger"),
 				                   new JsonSchema().Default(0)))
 			.Definition("simpleTypes", new JsonSchema().Enum("array", "boolean", "integer", "null", "number", "object", "string"))
 			.Definition("stringArray", new JsonSchema()
@@ -23,18 +23,19 @@
 				            .MinItems(1)
 				            .UniqueItems(true))
 			.Type(JsonSchemaType.Object)
-			.Property("$id", new JsonSchema().Type(JsonSchemaType.String))
+			.Property("id", new JsonSchema().Type(JsonSchemaType.String))
 			.Property("$schema", new JsonSchema().Type(JsonSchemaType.String))
 			.Property("title", new JsonSchema().Type(JsonSchemaType.String))
 			.Property("description", new JsonSchema().Type(JsonSchemaType.String))
 			.Property("default", new JsonSchema())
 			.Property("multipleOf", new JsonSchema()
 				          .Type(JsonSchemaType.Number)
-				          .ExclusiveMinimum(0))
+				          .Minimum(0)
+				          .ExclusiveMinimumDraft04(true))
 			.Property("maximum", new JsonSchema().Type(JsonSchemaType.Number))
-			.Property("exclusiveMaximum", new JsonSchema().Type(JsonSchemaType.Number).Default(false))
+			.Property("exclusiveMaximum", new JsonSchema().Type(JsonSchemaType.Boolean).Default(false))
 			.Property("minimum", new JsonSchema().Type(JsonSchemaType.Number))
-			.Property("exclusiveMinimum", new JsonSchema().Type(JsonSchemaType.Number).Default(false))
+			.Property("exclusiveMinimum", new JsonSchema().Type(JsonSchemaType.Boolean).Default(false))
 			.Property("maxLength", new JsonSchema().Ref("#/definitions/positiveInteger"))
 			.Property("minLength", new JsonSchema().Ref("#/definitions/positiveIntegerDefault0"))
 			.Property("pattern", new JsonSchema()
@@ -42,13 +43,19 @@
 				          .Format(StringFormat.Regex))
 			.Property("additionalItems", new JsonSchema()
 				          .AnyOf(new JsonSchema().Type(JsonSchemaType.Boolean),
-				                 new JsonSchema().RefRoot()))
+				                 new JsonSchema().RefRoot())
+				          .Default(new JsonObject()))
 			.Property("items", new JsonSchema()
 				          .AnyOf(new JsonSchema().RefRoot(),
 				                 new JsonSchema().Ref("#/definitions/schemaArray"))
 				          .Default(new JsonObject()))
 			.Property("maxItems", new JsonSchema().Ref("#/definitions/positiveInteger"))
 			.Property("minItems", new JsonSchema().Ref("#/definitions/positiveIntegerDefault0"))
+			.Property("uniqueItems", new JsonSchema()
+				          .Type(JsonSchemaType.Boolean)
+				          .Default(false))
+			.Property("maxProperties", new JsonSchema().Ref("#/definitions/positiveInteger"))
+			.Property("minProperties", new JsonSchema().Ref("#/definitions/positiveIntegerDefault0"))
 			.Property("required", new JsonSchema().Ref("#/definitions/stringArray"))
 			.Property("additionalProperties", new JsonSchema()
 				          .AnyOf(new JsonSchema().Type(JsonSchemaType.Boolean),
@@ -87,7 +94,8 @@
 			.Property("anyOf", new JsonSchema().Ref("#/definitions/schemaArray"))
 			.Property("oneOf", new JsonSchema().Ref("#/definitions/schemaArray"))
 			.Property("not", new JsonSchema().RefRoot())
+			.Dependency("exclusiveMaximum", "maximum")
 			.Dependency("exclusiveMinimum", "minimum")
-			.Dependency("exclusiveMaximum", "maximum");
+			.Default(new JsonObject());
 	}
 }

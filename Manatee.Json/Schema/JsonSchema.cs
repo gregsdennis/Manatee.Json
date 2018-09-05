@@ -14,7 +14,7 @@ namespace Manatee.Json.Schema
 		public static readonly JsonSchema True = new JsonSchema(true);
 		public static readonly JsonSchema False = new JsonSchema(false);
 
-		private readonly bool? _inherentValue;
+		private bool? _inherentValue;
 
 		public Uri DocumentPath { get; set; }
 		public string Id
@@ -75,6 +75,12 @@ namespace Manatee.Json.Schema
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
+			if (json.Type == JsonValueType.Boolean)
+			{
+				_inherentValue = json.Boolean;
+				return;
+			}
+
 			AddRange(json.Object.Select(kvp => SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer)));
 		}
 		public JsonValue ToJson(JsonSerializer serializer)

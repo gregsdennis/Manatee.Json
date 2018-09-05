@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
@@ -69,7 +70,13 @@ namespace Manatee.Json.Schema
 
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Type = serializer.Deserialize<JsonSchemaType>(json);
+			if (json.Type == JsonValueType.Array)
+			{
+				var values = json.Array.Select(serializer.Deserialize<JsonSchemaType>);
+				Type = values.Aggregate(JsonSchemaType.NotDefined, (current, i) => current | i);
+			}
+			else
+				Type = serializer.Deserialize<JsonSchemaType>(json);
 		}
 
 		public JsonValue ToJson(JsonSerializer serializer)
