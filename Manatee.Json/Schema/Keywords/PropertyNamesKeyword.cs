@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -7,6 +8,7 @@ namespace Manatee.Json.Schema
 	{
 		public virtual string Name => "propertyNames";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public int ValidationSequence => 1;
 
 		public JsonSchema Value { get; private set; }
 
@@ -17,7 +19,21 @@ namespace Manatee.Json.Schema
 
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			throw new NotImplementedException();
+			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+
+			var results = context.Instance.Object.Keys.Select(propertyName =>
+				{
+					var newContext = new SchemaValidationContext
+						{
+							Instance = propertyName,
+							Root = context.Root
+						};
+					var result = Value.Validate(newContext);
+
+					return result;
+				});
+
+			return new SchemaValidationResults(results);
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

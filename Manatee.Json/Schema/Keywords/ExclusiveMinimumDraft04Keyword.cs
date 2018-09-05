@@ -9,6 +9,7 @@ namespace Manatee.Json.Schema
 	{
 		public string Name => "exclusiveMinimum";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft04;
+		public int ValidationSequence => 1;
 
 		public bool Value { get; private set; }
 

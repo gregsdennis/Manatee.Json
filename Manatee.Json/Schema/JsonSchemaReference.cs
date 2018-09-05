@@ -116,15 +116,15 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>True if the <see cref="JsonValue"/> passes validation; otherwise false.</returns>
-		public SchemaValidationResults Validate(JsonValue json, JsonSchema root = null)
-		{
-			var jValue = root ?? this;
-			if (Resolved == null || root == null)
-				jValue = _Resolve(jValue.ToJson(null));
-			var refResults = Resolved?.Validate(json, jValue) ??
-			                 new SchemaValidationResults(null, "Error finding referenced schema.");
-			return new SchemaValidationResults(new[] {refResults});
-		}
+		// TODO public SchemaValidationResults Validate(JsonValue json, JsonSchema root = null)
+		// TODO {
+		// TODO 	var jValue = root ?? this;
+		// TODO 	if (Resolved == null || root == null)
+		// TODO 		jValue = _Resolve(jValue.ToJson(null));
+		// TODO 	var refResults = Resolved?.Validate(json, jValue) ??
+		// TODO 	                 new SchemaValidationResults(null, "Error finding referenced schema.");
+		// TODO 	return new SchemaValidationResults(new[] {refResults});
+		// TODO }
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
 		/// </summary>

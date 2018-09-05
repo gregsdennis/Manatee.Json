@@ -8,6 +8,7 @@ namespace Manatee.Json.Schema
 	{
 		public string Name => "properties";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public int ValidationSequence => 1;
 
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
@@ -17,16 +18,15 @@ namespace Manatee.Json.Schema
 			var errors = new List<SchemaValidationError>();
 			foreach (var property in this)
 			{
-				context.EvaluatedPropertyNames.Add(property.Key);
 				if (!obj.ContainsKey(property.Key)) continue;
 
+				context.EvaluatedPropertyNames.Add(property.Key);
 				var newContext = new SchemaValidationContext
 					{
 						Instance = obj[property.Key],
 						Root = context.Root
 					};
-				var result = property.Value?.Validate(newContext);
-				context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
+				var result = property.Value.Validate(newContext);
 				if (result != null && !result.IsValid)
 					errors.AddRange(result.Errors.Select(e => e.PrependPropertySegment(property.Key)));
 			}

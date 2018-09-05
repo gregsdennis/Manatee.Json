@@ -71,7 +71,7 @@ namespace Manatee.Json.Schema
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			context.Local = this;
-			return new SchemaValidationResults(this.Select(k => k.Validate(context)));
+			return new SchemaValidationResults(this.OrderBy(k => k.ValidationSequence).Select(k => k.Validate(context)));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

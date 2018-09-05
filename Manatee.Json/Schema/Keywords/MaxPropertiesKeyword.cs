@@ -8,6 +8,7 @@ namespace Manatee.Json.Schema
 	{
 		public string Name => "maxProperties";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public int ValidationSequence => 1;
 
 		public uint Value { get; private set; }
 
@@ -25,7 +26,7 @@ namespace Manatee.Json.Schema
 				var message = SchemaErrorMessages.MaxProperties.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Value,
-						["actual"] = context.Instance.Array.Count,
+						["actual"] = context.Instance.Object.Count,
 						["value"] = context.Instance
 				});
 				return new SchemaValidationResults(string.Empty, message);

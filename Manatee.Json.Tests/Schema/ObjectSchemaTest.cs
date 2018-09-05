@@ -114,7 +114,7 @@ namespace Manatee.Json.Tests.Schema
 			var schema = new JsonSchema()
 				.Type(JsonSchemaType.Object)
 				.Property("test1", new JsonSchema().Type(JsonSchemaType.String))
-				.AdditionalProperties(false);
+				.AdditionalProperties(new JsonSchema().Type(JsonSchemaType.String));
 			var json = new JsonObject {{"test1", "value"}, {"test", "value"}};
 
 			var results = schema.Validate(json);
@@ -126,10 +126,10 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema()
 				.Type(JsonSchemaType.Object)
-				.Property("test1", new JsonSchema().Type(JsonSchemaType.String))
+				.Property("test", new JsonSchema().Type(JsonSchemaType.String))
 				.AdditionalProperties(false)
 				.PatternProperty("[0-9]", new JsonSchema().Type(JsonSchemaType.Integer));
-			var json = new JsonObject {{"test1", "value"}, {"test2", 2}};
+			var json = new JsonObject {{"test", "value"}, {"test2", 2}};
 
 			var results = schema.Validate(json);
 

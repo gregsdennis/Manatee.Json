@@ -75,10 +75,10 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = null;
 		}
 
-		[TestCaseSource(nameof(TestData04))]
-		[TestCaseSource(nameof(TestData06))]
-		[TestCaseSource(nameof(TestData07))]
-		[TestCaseSource(nameof(TestData08))]
+		//[TestCaseSource(nameof(TestData04))]
+		//[TestCaseSource(nameof(TestData06))]
+		//[TestCaseSource(nameof(TestData07))]
+		//[TestCaseSource(nameof(TestData08))]
 		public void Run(string fileName, JsonValue testJson, JsonValue schemaJson, string testName)
 		{
 			_Run(fileName, testJson, schemaJson);

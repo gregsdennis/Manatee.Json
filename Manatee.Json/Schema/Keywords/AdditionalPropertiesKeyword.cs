@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -7,6 +9,7 @@ namespace Manatee.Json.Schema
 	{
 		public virtual string Name => "$id";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public int ValidationSequence => 3;
 
 		public JsonSchema Value { get; private set; }
 
@@ -19,7 +22,36 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
 
-			throw new NotImplementedException();
+			var obj = context.Instance.Object;
+			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
+
+			var errors = new List<SchemaValidationError>();
+
+			if (Equals(Value, JsonSchema.False) && toEvaluate.Any())
+				errors.AddRange(toEvaluate.Keys.Select(k =>
+					{
+						var message = SchemaErrorMessages.AdditionalProperties_False.ResolveTokens(new Dictionary<string, object>
+							{
+								["property"] = k,
+								["value"] = context.Instance
+						});
+						return new SchemaValidationError(k, message);
+					}));
+			else
+			{
+				foreach (var key in toEvaluate.Keys)
+				{
+					var newContext = new SchemaValidationContext
+						{
+							Instance = toEvaluate[key],
+							Root = context.Root
+						};
+					var extraErrors = Value.Validate(newContext).Errors;
+					errors.AddRange(extraErrors.Select(e => e.PrependPropertySegment(key)));
+				}
+			}
+
+			return new SchemaValidationResults(errors);
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

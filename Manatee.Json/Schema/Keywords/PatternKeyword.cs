@@ -9,6 +9,7 @@ namespace Manatee.Json.Schema
 	{
 		public virtual string Name => "oneOf";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public int ValidationSequence => 1;
 
 		public Regex Value { get; private set; }
 

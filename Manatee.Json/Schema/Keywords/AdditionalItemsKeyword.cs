@@ -9,6 +9,7 @@ namespace Manatee.Json.Schema
 	{
 		public string Name => "additionalItems";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public int ValidationSequence => 1;
 
 		public JsonSchema Value { get; private set; }
 

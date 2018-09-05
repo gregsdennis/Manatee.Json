@@ -8,6 +8,7 @@ namespace Manatee.Json.Schema
 	{
 		public string Name => "const";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public int ValidationSequence => 1;
 
 		public JsonValue Value { get; private set; }
 

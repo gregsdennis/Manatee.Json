@@ -8,6 +8,7 @@ namespace Manatee.Json.Schema
 	{
 		public string Name => "exclusiveMaximum";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public int ValidationSequence => 1;
 
 		public double Value { get; private set; }
 

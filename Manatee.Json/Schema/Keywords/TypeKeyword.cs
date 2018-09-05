@@ -8,6 +8,7 @@ namespace Manatee.Json.Schema
 	{
 		public string Name => "type";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public int ValidationSequence => 1;
 
 		public JsonSchemaType Type { get; private set; }
 

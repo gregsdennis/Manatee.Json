@@ -9,6 +9,7 @@ namespace Manatee.Json.Schema
 
 		public string Name => "$ref";
 		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public int ValidationSequence => 1;
 
 		public string Reference { get; private set; }
 

@@ -104,7 +104,6 @@
     <Compile Include="Pointer\SpecificationTests.cs" />
     <Compile Include="Schema\ClientTests.cs" />
     <Compile Include="Schema\ConstSchemaTests.cs" />
-    <Compile Include="Schema\ExamplesSchemaTest.cs" />
     <Compile Include="Schema\JsonSchemaTypeTest.cs" />
     <Compile Include="Schema\SchemaValidationResultsExtensions.cs" />
     <Compile Include="Schema\SelfValidationTest.cs" />
