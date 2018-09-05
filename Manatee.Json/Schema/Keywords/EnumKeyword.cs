@@ -15,14 +15,14 @@ namespace Manatee.Json.Schema
 		public EnumKeyword(IEnumerable<JsonValue> values)
 			: base(values) { }
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return Contains(json)
+			return Contains(context.Instance)
 				       ? SchemaValidationResults.Valid
 				       : new SchemaValidationResults(Name, SchemaErrorMessages.Enum.ResolveTokens(new Dictionary<string, object>
 					       {
-						       ["value"] = json
-					       }));
+						       ["value"] = context.Instance
+					   }));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

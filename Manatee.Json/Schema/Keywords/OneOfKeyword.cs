@@ -10,20 +10,30 @@ namespace Manatee.Json.Schema
 		public virtual string Name => "oneOf";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var errors = this.Select(s => s.Validate(json, root)).ToList();
-			var validCount = errors.Count(r => r.IsValid);
+			var results = this.Select(s =>
+				{
+					var newContext = new SchemaValidationContext
+						{
+							Instance = context.Instance,
+							Root = context.Root
+						};
+					var result = s.Validate(newContext);
+					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
+					return result;
+				}).ToList();
+			var validCount = results.Count(r => r.IsValid);
 			switch (validCount)
 			{
 				case 0:
-					return new SchemaValidationResults(errors);
+					return new SchemaValidationResults(results);
 				case 1:
 					return new SchemaValidationResults();
 				default:
 					var message = SchemaErrorMessages.OneOf.ResolveTokens(new Dictionary<string, object>
 						{
-							["value"] = json
+							["value"] = context.Instance
 						});
 					return new SchemaValidationResults(string.Empty, message);
 			}

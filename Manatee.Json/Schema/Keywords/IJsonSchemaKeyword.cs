@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Serialization;
+﻿using System.Collections.Generic;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -7,6 +8,6 @@ namespace Manatee.Json.Schema
 		string Name { get; }
 		JsonSchemaVersion SupportedVersions { get; }
 
-		SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json);
+		SchemaValidationResults Validate(SchemaValidationContext context);
 	}
 }

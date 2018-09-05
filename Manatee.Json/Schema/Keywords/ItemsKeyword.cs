@@ -11,26 +11,39 @@ namespace Manatee.Json.Schema
 
 		public bool IsArray { get; private set; }
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (json.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
 
 			var errors = new List<SchemaValidationError>();
-			var array = json.Array;
+			var array = context.Instance.Array;
 			if (IsArray)
 			{
 				// have array of schemata: validate in sequence
 				var i = 0;
 				while (i < array.Count && i < Count)
 				{
-					errors.AddRange(this[i].Validate(array[i], root).Errors);
+					var newContext = new SchemaValidationContext
+						{
+							Instance = array[i],
+							Root = context.Root
+						};
+					errors.AddRange(this[i].Validate(newContext).Errors);
 					i++;
 				}
 			}
 			else
 			{
 				// have single schema: validate all against this
-				var itemValidations = array.Select(v => this[0].Validate(v, root));
+				var itemValidations = array.Select(jv =>
+					{
+						var newContext = new SchemaValidationContext
+							{
+								Instance = jv,
+								Root = context.Root
+							};
+						return this[0].Validate(newContext);
+					});
 				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertySegment($"{i}"))));
 			}
 

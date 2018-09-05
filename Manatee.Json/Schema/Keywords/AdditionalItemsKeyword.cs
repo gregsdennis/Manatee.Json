@@ -17,15 +17,15 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (json.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
 
-			var itemsKeyword = local.OfType<ItemsKeyword>().FirstOrDefault();
+			var itemsKeyword = context.Local.OfType<ItemsKeyword>().FirstOrDefault();
 			if (itemsKeyword == null || !itemsKeyword.IsArray) return SchemaValidationResults.Valid;
 
 			var errors = new List<SchemaValidationError>();
-			var array = json.Array;
+			var array = context.Instance.Array;
 
 			var i = itemsKeyword.Count;
 			if (i < array.Count)
@@ -33,12 +33,20 @@ namespace Manatee.Json.Schema
 				{
 					var message = SchemaErrorMessages.Items.ResolveTokens(new Dictionary<string, object>
 						{
-							["value"] = json
-						});
+							["value"] = context.Instance
+					});
 					errors.Add(new SchemaValidationError(string.Empty, message));
 				}
 				else if (!Equals(Value, JsonSchema.True))
-					errors.AddRange(array.Skip(i).SelectMany(j => Value.Validate(j, root).Errors));
+					errors.AddRange(array.Skip(i).SelectMany(j =>
+						{
+							var newContext = new SchemaValidationContext
+								{
+									Instance = j,
+									Root = context.Root
+								};
+							return Value.Validate(newContext).Errors;
+						}));
 
 			return new SchemaValidationResults(errors);
 		}

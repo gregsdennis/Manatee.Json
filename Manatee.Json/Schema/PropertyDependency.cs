@@ -44,12 +44,12 @@ namespace Manatee.Json.Schema
 		/// <param name="json">A <see cref="JsonValue"/></param>
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>The results of the validation.</returns>
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			var errors = new List<SchemaValidationError>();
-			if (json.Type == JsonValueType.Object && json.Object.ContainsKey(PropertyName))
+			if (context.Instance.Type == JsonValueType.Object && context.Instance.Object.ContainsKey(PropertyName))
 			{
-				errors.AddRange(_dependencies.Except(json.Object.Keys)
+				errors.AddRange(_dependencies.Except(context.Instance.Object.Keys)
 				                             .Select(d =>new SchemaValidationError(string.Empty, $"When property '{PropertyName}' exists, property '{d}' should exist as well.")));
 			}
 			return new SchemaValidationResults(errors);

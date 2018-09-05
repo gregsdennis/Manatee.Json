@@ -16,18 +16,18 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (json.Type != JsonValueType.Number) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Number) return SchemaValidationResults.Valid;
 
-			if ((decimal) json.Number % (decimal?) Value != 0)
+			if ((decimal)context.Instance.Number % (decimal?) Value != 0)
 			{
 				var message = SchemaErrorMessages.MultipleOf.ResolveTokens(new Dictionary<string, object>
 					{
 						["multipleOf"] = Value,
-						["actual"] = json.Number % Value,
-						["value"] = json
-					});
+						["actual"] = context.Instance.Number % Value,
+						["value"] = context.Instance
+				});
 
 				return new SchemaValidationResults(Name, message);
 			}

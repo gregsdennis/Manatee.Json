@@ -21,17 +21,17 @@ namespace Manatee.Json.Schema
 			Value = new Regex(value, RegexOptions.Compiled);
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (json.Type != JsonValueType.String) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.String) return SchemaValidationResults.Valid;
 
-			if (!Value.IsMatch(json.String))
+			if (!Value.IsMatch(context.Instance.String))
 			{
 				var message = SchemaErrorMessages.Pattern.ResolveTokens(new Dictionary<string, object>
 					{
 						["pattern"] = Value.ToString(),
-						["value"] = json
-					});
+						["value"] = context.Instance
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

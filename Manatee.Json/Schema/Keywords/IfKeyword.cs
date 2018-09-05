@@ -17,25 +17,31 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var then = local.OfType<ThenKeyword>().FirstOrDefault();
-			var @else = local.OfType<ElseKeyword>().FirstOrDefault();
+			var then = context.Local.OfType<ThenKeyword>().FirstOrDefault();
+			var @else = context.Local.OfType<ElseKeyword>().FirstOrDefault();
 
 			if (then == null && @else == null) return SchemaValidationResults.Valid;
 
-			var ifResults = Value.Validate(json, root);
+			var newContext = new SchemaValidationContext
+				{
+					Instance = context.Instance,
+					Root = context.Root
+				};
+
+			var ifResults = Value.Validate(newContext);
 
 			if (ifResults.IsValid)
 			{
 				if (then == null) return SchemaValidationResults.Valid;
 
-				var thenResults = then.Value.Validate(json, root);
+				var thenResults = then.Value.Validate(newContext);
 				if (thenResults.IsValid) return SchemaValidationResults.Valid;
 
 				var message = SchemaErrorMessages.Then.ResolveTokens(new Dictionary<string, object>
 					{
-						["value"] = json
+						["value"] = context.Instance
 					});
 				return new SchemaValidationResults("then", message);
 			}
@@ -43,12 +49,12 @@ namespace Manatee.Json.Schema
 			{
 				if (@else == null) return SchemaValidationResults.Valid;
 
-				var elseResults = @else.Value.Validate(json, root);
+				var elseResults = @else.Value.Validate(newContext);
 				if (elseResults.IsValid) return SchemaValidationResults.Valid;
 
 				var message = SchemaErrorMessages.Else.ResolveTokens(new Dictionary<string, object>
 					{
-						["value"] = json
+						["value"] = context.Instance
 					});
 				return new SchemaValidationResults("else", message);
 			}

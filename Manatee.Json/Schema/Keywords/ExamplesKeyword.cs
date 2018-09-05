@@ -14,7 +14,7 @@ namespace Manatee.Json.Schema
 		public ExamplesKeyword(IEnumerable<JsonValue> values)
 			: base(values) { }
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			return SchemaValidationResults.Valid;
 		}

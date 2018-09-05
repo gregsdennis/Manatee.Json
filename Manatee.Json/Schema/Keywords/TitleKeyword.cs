@@ -2,14 +2,14 @@
 
 namespace Manatee.Json.Schema
 {
-	public class DescriptionKeyword : IJsonSchemaKeyword
+	public class TitleKeyword : IJsonSchemaKeyword
 	{
-		public string Name => "description";
+		public string Name => "title";
 		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 
 		public string Value { get; private set; }
 
-		public DescriptionKeyword(string value)
+		public TitleKeyword(string value)
 		{
 			Value = value;
 		}

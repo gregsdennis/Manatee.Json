@@ -16,20 +16,20 @@ namespace Manatee.Json.Schema
 			Type = type;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			bool valid = true;
-			switch (json.Type)
+			switch (context.Instance.Type)
 			{
 				case JsonValueType.Number:
 					if (Type.HasFlag(JsonSchemaType.Number)) break;
-					if (json.Number.IsInt() && Type.HasFlag(JsonSchemaType.Integer)) break;
+					if (context.Instance.Number.IsInt() && Type.HasFlag(JsonSchemaType.Integer)) break;
 					valid = false;
 					break;
 				case JsonValueType.String:
 					var expected = Type.ToJson();
-					if (expected.Type == JsonValueType.String && expected == json) break;
-					if (expected.Type == JsonValueType.Array && expected.Array.Contains(json)) break;
+					if (expected.Type == JsonValueType.String && expected == context.Instance) break;
+					if (expected.Type == JsonValueType.Array && expected.Array.Contains(context.Instance)) break;
 					if (Type.HasFlag(JsonSchemaType.String)) break;
 					valid = false;
 					break;
@@ -56,9 +56,9 @@ namespace Manatee.Json.Schema
 				var message = SchemaErrorMessages.Type.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Type,
-						["actual"] = json.Type,
-						["value"] = json
-					});
+						["actual"] = context.Instance.Type,
+						["value"] = context.Instance
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

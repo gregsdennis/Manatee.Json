@@ -60,9 +60,18 @@ namespace Manatee.Json.Schema
 				       : SchemaValidationResults.Valid;
 		}
 
-		public SchemaValidationResults Validate(JsonValue json, JsonSchema root = null)
+		public SchemaValidationResults Validate(JsonValue json)
 		{
-			return new SchemaValidationResults(this.Select(k => k.Validate(this, null, json)));
+			return Validate(new SchemaValidationContext
+				{
+					Instance = json,
+					Root = this
+				});
+		}
+		internal SchemaValidationResults Validate(SchemaValidationContext context)
+		{
+			context.Local = this;
+			return new SchemaValidationResults(this.Select(k => k.Validate(context)));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

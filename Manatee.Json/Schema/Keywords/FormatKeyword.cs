@@ -16,16 +16,18 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			if (context.Instance.Type != JsonValueType.String) return SchemaValidationResults.Valid;
+
 			var format = Value;
-			if (!format.Validate(json.String))
+			if (!format.Validate(context.Instance.String))
 			{
 				var message = SchemaErrorMessages.Format.ResolveTokens(new Dictionary<string, object>
 					{
 						["format"] = format.Key,
-						["value"] = json
-					});
+						["value"] = context.Instance
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

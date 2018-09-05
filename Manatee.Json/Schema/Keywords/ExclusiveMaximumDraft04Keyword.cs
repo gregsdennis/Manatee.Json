@@ -17,23 +17,23 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (json.Type != JsonValueType.Number) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Number) return SchemaValidationResults.Valid;
 
-			var keyword = local.OfType<MaximumKeyword>().FirstOrDefault();
+			var keyword = context.Local.OfType<MaximumKeyword>().FirstOrDefault();
 			if (keyword == null) return SchemaValidationResults.Valid;
 
 			if (!Value) return SchemaValidationResults.Valid;
 			
-			if (json.Number >= keyword.Value)
+			if (context.Instance.Number >= keyword.Value)
 			{
 				var message = SchemaErrorMessages.ExclusiveMaximum.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Value,
-						["actual"] = json.Number,
-						["value"] = json
-					});
+						["actual"] = context.Instance.Number,
+						["value"] = context.Instance
+				});
 
 				return new SchemaValidationResults(Name, message);
 			}

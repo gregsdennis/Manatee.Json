@@ -9,9 +9,9 @@ namespace Manatee.Json.Schema
 		public virtual string Name => "dependencies";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return new SchemaValidationResults(this.SelectMany(d => d.Validate(local, root, json).Errors));
+			return new SchemaValidationResults(this.SelectMany(d => d.Validate(context).Errors));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

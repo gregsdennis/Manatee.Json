@@ -15,8 +15,10 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+
 			throw new NotImplementedException();
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)

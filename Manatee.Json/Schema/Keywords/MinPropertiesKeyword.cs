@@ -16,18 +16,18 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (json.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
 
-			if (json.Object.Count < Value)
+			if (context.Instance.Object.Count < Value)
 			{
 				var message = SchemaErrorMessages.MinProperties.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Value,
-						["actual"] = json.Array.Count,
-						["value"] = json
-					});
+						["actual"] = context.Instance.Array.Count,
+						["value"] = context.Instance
+				});
 				return new SchemaValidationResults(string.Empty, message);
 			}
 

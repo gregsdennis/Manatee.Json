@@ -9,7 +9,7 @@ namespace Manatee.Json.Schema
 		public string Name => "definitions";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			return SchemaValidationResults.Valid;
 		}

@@ -25,5 +25,17 @@ namespace Manatee.Json.Schema
 		{
 			return schema.OfType<PropertiesKeyword>().FirstOrDefault();
 		}
+		public static Dictionary<string, JsonSchema> PatternProperties(this JsonSchema schema)
+		{
+			return schema.OfType<PatternPropertiesKeyword>().FirstOrDefault();
+		}
+		public static JsonSchema AdditionalProperties(this JsonSchema schema)
+		{
+			return schema.OfType<AdditionalPropertiesKeyword>().FirstOrDefault()?.Value;
+		}
+		public static List<string> Required(this JsonSchema schema)
+		{
+			return schema.OfType<RequiredKeyword>().FirstOrDefault();
+		}
 	}
 }

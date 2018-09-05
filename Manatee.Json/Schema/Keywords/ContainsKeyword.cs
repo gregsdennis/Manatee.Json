@@ -16,15 +16,16 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return json.Type != JsonValueType.Array || json.Array.Contains(Value)
-				? SchemaValidationResults.Valid
-				: new SchemaValidationResults(Name, SchemaErrorMessages.Contains.ResolveTokens(new Dictionary<string, object>
-					{
-						["expected"] = Value,
-						["value"] = json
-					}));
+			if (context.Instance.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
+			if (context.Instance.Array.Contains(Value)) return SchemaValidationResults.Valid;
+
+			return new SchemaValidationResults(Name, SchemaErrorMessages.Contains.ResolveTokens(new Dictionary<string, object>
+				{
+					["expected"] = Value,
+					["value"] = context.Instance
+				}));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

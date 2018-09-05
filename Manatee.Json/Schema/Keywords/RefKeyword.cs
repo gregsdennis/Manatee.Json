@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Serialization;
+﻿using System;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -18,11 +19,9 @@ namespace Manatee.Json.Schema
 			Reference = reference;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return StringFormat.Uri.Validate(Reference)
-				       ? SchemaValidationResults.Valid
-				       : new SchemaValidationResults(Name, "should be a valid URI");
+			throw new NotImplementedException();
 		}
 
 		public void FromJson(JsonValue json, JsonSerializer serializer)

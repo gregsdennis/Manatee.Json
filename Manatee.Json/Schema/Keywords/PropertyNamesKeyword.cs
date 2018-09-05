@@ -1,10 +1,11 @@
-﻿using Manatee.Json.Serialization;
+﻿using System;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
 	public class PropertyNamesKeyword : IJsonSchemaKeyword
 	{
-		public virtual string Name => "required";
+		public virtual string Name => "propertyNames";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 
 		public JsonSchema Value { get; private set; }
@@ -14,9 +15,9 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return SchemaValidationResults.Valid;
+			throw new NotImplementedException();
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

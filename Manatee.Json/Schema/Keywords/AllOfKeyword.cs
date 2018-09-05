@@ -9,9 +9,19 @@ namespace Manatee.Json.Schema
 		public virtual string Name => "allOf";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return new SchemaValidationResults(this.Select(s => s.Validate(json, root)));
+			return new SchemaValidationResults(this.Select(s =>
+				{
+					var newContext = new SchemaValidationContext
+						{
+							Instance = context.Instance,
+							Root = context.Root
+						};
+					var result = s.Validate(newContext);
+					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
+					return result;
+				}));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

@@ -17,15 +17,15 @@ namespace Manatee.Json.Schema
 			Value = value;
 		}
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return json.Type != JsonValueType.Array ||
-			       json.Array.Distinct().Count() == json.Array.Count
-				       ? SchemaValidationResults.Valid
-				       : new SchemaValidationResults(Name, SchemaErrorMessages.UniqueItems.ResolveTokens(new Dictionary<string, object>
-					       {
-						       ["value"] = json
-					       }));
+			if (context.Instance.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
+			if (context.Instance.Array.Distinct().Count() == context.Instance.Array.Count) return SchemaValidationResults.Valid;
+
+			return new SchemaValidationResults(Name, SchemaErrorMessages.UniqueItems.ResolveTokens(new Dictionary<string, object>
+				{
+					["value"] = context.Instance
+				}));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

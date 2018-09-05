@@ -9,12 +9,22 @@ namespace Manatee.Json.Schema
 		public virtual string Name => "anyOf";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var errors = this.Select(s => s.Validate(json, root)).ToList();
-			return errors.Any(r => r.IsValid)
+			var results = this.Select(s =>
+				{
+					var newContext = new SchemaValidationContext
+						{
+							Instance = context.Instance,
+							Root = context.Root
+						};
+					var result = s.Validate(newContext);
+					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
+					return result;
+				}).ToList();
+			return results.Any(r => r.IsValid)
 				       ? new SchemaValidationResults()
-				       : new SchemaValidationResults(errors);
+				       : new SchemaValidationResults(results);
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

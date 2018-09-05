@@ -9,10 +9,28 @@ namespace Manatee.Json.Schema
 		public string Name => "properties";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 
-		public SchemaValidationResults Validate(JsonSchema local, JsonSchema root, JsonValue json)
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			// need to determine how to break out the work between properties, patternProperties, and additionalProperties
-			return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+
+			var obj = context.Instance.Object;
+			var errors = new List<SchemaValidationError>();
+			foreach (var property in this)
+			{
+				context.EvaluatedPropertyNames.Add(property.Key);
+				if (!obj.ContainsKey(property.Key)) continue;
+
+				var newContext = new SchemaValidationContext
+					{
+						Instance = obj[property.Key],
+						Root = context.Root
+					};
+				var result = property.Value?.Validate(newContext);
+				context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
+				if (result != null && !result.IsValid)
+					errors.AddRange(result.Errors.Select(e => e.PrependPropertySegment(property.Key)));
+			}
+			return new SchemaValidationResults(errors);
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
