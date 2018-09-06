@@ -12,12 +12,16 @@ namespace Manatee.Json.Schema
 			var types = allValues.Where(v => type.HasFlag(v))
 			                     .Select(_TranslateSingleType)
 			                     .ToList();
-			return types.Count == 1
-				       ? types[0]
-				       : types.ToJson();
+			if (types.Count == 1)
+				return types[0];
+
+			var array = types.ToJson();
+			array.Array.EqualityStandard = ArrayEquality.ContentsEqual;
+
+			return array;
 		}
 
-		public static JsonSchemaType FromJson(this JsonValue json)
+		public static JsonSchemaType ToSchemaType(this JsonValue json)
 		{
 			switch (json.Type)
 			{

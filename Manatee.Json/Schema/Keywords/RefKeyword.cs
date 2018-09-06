@@ -7,7 +7,7 @@ namespace Manatee.Json.Schema
 {
 	public class RefKeyword : IJsonSchemaKeyword, IEquatable<RefKeyword>
 	{
-		public static readonly RefKeyword Root = new RefKeyword("#");
+		public static RefKeyword Root => new RefKeyword("#");
 
 		private JsonSchema _resolvedRoot;
 
@@ -53,7 +53,7 @@ namespace Manatee.Json.Schema
 		}
 		public bool Equals(RefKeyword other)
 		{
-			if (ReferenceEquals(null, other)) return false;
+			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return string.Equals(Reference, other.Reference);
 		}
@@ -67,7 +67,7 @@ namespace Manatee.Json.Schema
 		}
 		public override int GetHashCode()
 		{
-			return (Reference != null ? Reference.GetHashCode() : 0);
+			return Reference != null ? Reference.GetHashCode() : 0;
 		}
 
 		private void _ResolveReference(SchemaValidationContext context)

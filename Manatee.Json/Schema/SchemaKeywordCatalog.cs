@@ -45,7 +45,7 @@ namespace Manatee.Json.Schema
 				return null;
 
 			IJsonSchemaKeyword keyword = null;
-			var specials = list.Where(t => typeof(IJsonSchemaKeywordPlus).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()))
+			var specials = list.Where(t => t.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IJsonSchemaKeywordPlus)))
 				.Select(t => (IJsonSchemaKeywordPlus) _resolver.Resolve(t))
 				.ToList();
 			if (specials.Any())

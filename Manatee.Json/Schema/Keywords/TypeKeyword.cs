@@ -71,13 +71,7 @@ namespace Manatee.Json.Schema
 
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			if (json.Type == JsonValueType.Array)
-			{
-				var values = json.Array.Select(serializer.Deserialize<JsonSchemaType>);
-				Value = values.Aggregate(JsonSchemaType.NotDefined, (current, i) => current | i);
-			}
-			else
-				Value = serializer.Deserialize<JsonSchemaType>(json);
+			Value = json.ToSchemaType();
 		}
 
 		public JsonValue ToJson(JsonSerializer serializer)

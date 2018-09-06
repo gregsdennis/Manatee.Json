@@ -35,7 +35,7 @@ namespace Manatee.Json.Schema
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return Equals(Value, other.Value);
+			return Name == other.Name && Equals(Value, other.Value);
 		}
 		public bool Equals(IJsonSchemaKeyword other)
 		{

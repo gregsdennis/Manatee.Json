@@ -10,6 +10,13 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaRegistry
 	{
+		// TODO: opportunity to refine the caching of resolved schemas:
+		private class RegisteredSchema
+		{
+			public string BaseUri { get; set; }
+			public ConcurrentDictionary<string, JsonSchema> LocalReferences { get; } = new ConcurrentDictionary<string, JsonSchema>();
+		}
+
 		private static readonly ConcurrentDictionary<string, JsonSchema> _schemaLookup;
 		private static readonly JsonSerializer _serializer;
 
@@ -41,7 +48,10 @@ namespace Manatee.Json.Schema
 
 					var schemaStructureValidation = schema.ValidateSchema();
 					if (!schemaStructureValidation.IsValid)
-						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{schemaStructureValidation.Errors}");
+					{
+						var errors = string.Join(Environment.NewLine, schemaStructureValidation.Errors);
+						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+					}
 
 					_schemaLookup[uri] = schema;
 				}

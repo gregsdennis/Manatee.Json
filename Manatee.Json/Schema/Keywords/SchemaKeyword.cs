@@ -6,7 +6,7 @@ namespace Manatee.Json.Schema
 	public class SchemaKeyword : IJsonSchemaKeyword, IEquatable<SchemaKeyword>
 	{
 		public virtual string Name => "$schema";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 		public int ValidationSequence => 1;
 
 		public string Value { get; private set; }

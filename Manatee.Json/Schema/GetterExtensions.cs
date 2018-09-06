@@ -7,35 +7,49 @@ namespace Manatee.Json.Schema
 	{
 		public static string Description(this JsonSchema schema)
 		{
-			return schema.OfType<DescriptionKeyword>().FirstOrDefault()?.Value;
+			return schema.Get<DescriptionKeyword>()?.Value;
 		}
 		public static JsonSchema AdditionalItems(this JsonSchema schema)
 		{
-			return schema.OfType<AdditionalItemsKeyword>().FirstOrDefault()?.Value;
+			return schema.Get<AdditionalItemsKeyword>()?.Value;
 		}
 		public static bool ExclusiveMinimumDraft04(this JsonSchema schema)
 		{
-			return schema.OfType<ExclusiveMinimumDraft04Keyword>().FirstOrDefault()?.Value ?? false;
+			return schema.Get<ExclusiveMinimumDraft04Keyword>()?.Value ?? false;
 		}
 		public static bool ExclusiveMaximumDraft04(this JsonSchema schema)
 		{
-			return schema.OfType<ExclusiveMaximumDraft04Keyword>().FirstOrDefault()?.Value ?? false;
+			return schema.Get<ExclusiveMaximumDraft04Keyword>()?.Value ?? false;
 		}
 		public static Dictionary<string, JsonSchema> Properties(this JsonSchema schema)
 		{
-			return schema.OfType<PropertiesKeyword>().FirstOrDefault();
+			return schema.Get<PropertiesKeyword>();
 		}
 		public static Dictionary<string, JsonSchema> PatternProperties(this JsonSchema schema)
 		{
-			return schema.OfType<PatternPropertiesKeyword>().FirstOrDefault();
+			return schema.Get<PatternPropertiesKeyword>();
 		}
 		public static JsonSchema AdditionalProperties(this JsonSchema schema)
 		{
-			return schema.OfType<AdditionalPropertiesKeyword>().FirstOrDefault()?.Value;
+			return schema.Get<AdditionalPropertiesKeyword>()?.Value;
 		}
 		public static List<string> Required(this JsonSchema schema)
 		{
-			return schema.OfType<RequiredKeyword>().FirstOrDefault();
+			return schema.Get<RequiredKeyword>();
+		}
+		public static string Ref(this JsonSchema schema)
+		{
+			return schema.Get<RefKeyword>()?.Reference;
+		}
+		public static JsonSchema RefResolved(this JsonSchema schema)
+		{
+			return schema.Get<RefKeyword>()?.Resolved;
+		}
+
+		public static T Get<T>(this JsonSchema schema)
+			where T : IJsonSchemaKeyword
+		{
+			return schema.OfType<T>().FirstOrDefault();
 		}
 	}
 }
