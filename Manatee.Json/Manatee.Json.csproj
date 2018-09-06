@@ -32,6 +32,10 @@
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Manatee.Json.xml</DocumentationFile>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net45|AnyCPU'">
+	  <NoWarn>1701;1702; IDE0041</NoWarn>
+	</PropertyGroup>
+
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
 		<Reference Include="System.ComponentModel.DataAnnotations" />
 		<Reference Include="System.Net.Http" />

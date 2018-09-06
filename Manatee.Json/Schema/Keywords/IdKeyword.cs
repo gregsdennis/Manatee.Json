@@ -1,8 +1,9 @@
-﻿using Manatee.Json.Serialization;
+﻿using System;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class IdKeyword : IJsonSchemaKeyword
+	public class IdKeyword : IJsonSchemaKeyword, IEquatable<IdKeyword>
 	{
 		public virtual string Name => "$id";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
@@ -29,6 +30,24 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return Value;
+		}
+		public bool Equals(IdKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Value, other.Value);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as IdKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as IdKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return (Value != null ? Value.GetHashCode() : 0);
 		}
 	}
 }

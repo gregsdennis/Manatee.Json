@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class FormatKeyword : IJsonSchemaKeyword
+	public class FormatKeyword : IJsonSchemaKeyword, IEquatable<FormatKeyword>
 	{
 		public virtual string Name => "format";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
@@ -42,6 +43,24 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return Value.Key;
+		}
+		public bool Equals(FormatKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Value, other.Value);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as FormatKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as FormatKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return (Value != null ? Value.GetHashCode() : 0);
 		}
 	}
 }

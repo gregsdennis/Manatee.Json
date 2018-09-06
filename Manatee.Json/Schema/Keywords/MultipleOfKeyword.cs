@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class MultipleOfKeyword : IJsonSchemaKeyword
+	public class MultipleOfKeyword : IJsonSchemaKeyword, IEquatable<MultipleOfKeyword>
 	{
 		public string Name => "multipleOf";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -43,6 +44,24 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return Value;
+		}
+		public bool Equals(MultipleOfKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Value, other.Value);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as MultipleOfKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as MultipleOfKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return (Value != null ? Value.GetHashCode() : 0);
 		}
 	}
 }

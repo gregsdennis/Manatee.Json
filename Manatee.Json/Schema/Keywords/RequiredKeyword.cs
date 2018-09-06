@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class RequiredKeyword : List<string>, IJsonSchemaKeyword
+	public class RequiredKeyword : List<string>, IJsonSchemaKeyword, IEquatable<RequiredKeyword>
 	{
 		public virtual string Name => "required";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
@@ -45,6 +46,24 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return LinqExtensions.ToJson(this);
+		}
+		public bool Equals(RequiredKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return this.ContentsEqual(other);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as RequiredKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as RequiredKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return this.GetCollectionHashCode();
 		}
 	}
 }

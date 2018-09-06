@@ -5,7 +5,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class RefKeyword : IJsonSchemaKeyword
+	public class RefKeyword : IJsonSchemaKeyword, IEquatable<RefKeyword>
 	{
 		public static readonly RefKeyword Root = new RefKeyword("#");
 
@@ -50,6 +50,24 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return Reference;
+		}
+		public bool Equals(RefKeyword other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(Reference, other.Reference);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as RefKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as RefKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return (Reference != null ? Reference.GetHashCode() : 0);
 		}
 
 		private void _ResolveReference(SchemaValidationContext context)

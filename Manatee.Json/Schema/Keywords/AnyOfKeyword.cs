@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class AnyOfKeyword : List<JsonSchema>, IJsonSchemaKeyword
+	public class AnyOfKeyword : List<JsonSchema>, IJsonSchemaKeyword, IEquatable<AnyOfKeyword>
 	{
 		public virtual string Name => "anyOf";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -34,6 +36,24 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return this.Select(serializer.Serialize).ToJson();
+		}
+		public bool Equals(AnyOfKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return this.ContentsEqual(other);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as AnyOfKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as AnyOfKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return this.GetCollectionHashCode();
 		}
 	}
 }

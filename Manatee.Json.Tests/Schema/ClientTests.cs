@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Manatee.Json.Schema;
+using Manatee.Json.Serialization;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -10,6 +11,8 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ClientTests
 	{
+		private static readonly JsonSerializer _serializer = new JsonSerializer();
+
 		[Test]
 		public void Issue15_DeclaredTypeWithDeclaredEnum()
 		{
@@ -20,7 +23,7 @@ namespace Manatee.Json.Tests.Schema
 				.Enum("FeatureCollection");
 
 			var actual = new JsonSchema();
-			actual.FromJson(json, null);
+			actual.FromJson(json, _serializer);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -90,7 +93,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[Test]
-		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
+		public void Issue50_MultipleSchemaInSubFoldersShouldReferenceRelatively()
 		{
 			string path = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue50A.json").AdjustForOS();
 			var schema = JsonSchemaRegistry.Get(path);

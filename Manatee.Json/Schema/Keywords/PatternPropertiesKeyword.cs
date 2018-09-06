@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class PatternPropertiesKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword
+	public class PatternPropertiesKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IEquatable<PatternPropertiesKeyword>
 	{
 		public string Name => "patternProperties";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -50,6 +52,24 @@ namespace Manatee.Json.Schema
 			return this.ToDictionary(kvp => kvp.Key,
 			                         kvp => serializer.Serialize<JsonSchema>(kvp.Value))
 				.ToJson();
+		}
+		public bool Equals(PatternPropertiesKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return this.ContentsEqual(other);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as PatternPropertiesKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as PatternPropertiesKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return this.GetCollectionHashCode();
 		}
 	}
 }

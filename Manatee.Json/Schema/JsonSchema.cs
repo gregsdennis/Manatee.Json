@@ -27,7 +27,7 @@ namespace Manatee.Json.Schema
 			get { return this.OfType<SchemaKeyword>().FirstOrDefault()?.Value; }
 			set { }
 		}
-		public JsonObject OtherData { get; set; }
+		public JsonObject OtherData { get; } = new JsonObject();
 
 		public JsonSchema() { }
 		public JsonSchema(bool value)
@@ -38,12 +38,6 @@ namespace Manatee.Json.Schema
 		// TODO: This should be a SchemaEvaluationResults that reports supported schema versions and other metadata.
 		public SchemaValidationResults ValidateSchema()
 		{
-			if (_inherentValue.HasValue)
-			{
-				if (_inherentValue.Value) return SchemaValidationResults.Valid;
-				return new SchemaValidationResults(new[]{"All instances are invalid for the false schema."});
-			}
-
 			var errors = new List<string>();
 			var supportedVersions = this.Aggregate(JsonSchemaVersion.All, (version, keyword) => version & keyword.SupportedVersions);
 			if (supportedVersions == JsonSchemaVersion.None)
@@ -71,6 +65,12 @@ namespace Manatee.Json.Schema
 		}
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			if (_inherentValue.HasValue)
+			{
+				if (_inherentValue.Value) return SchemaValidationResults.Valid;
+				return new SchemaValidationResults(new[]{"All instances are invalid for the false schema."});
+			}
+
 			// TODO: Verify that $ref can work alongside other keywords (draft-08) and allow it if so.
 			context.Local = this;
 
@@ -92,9 +92,6 @@ namespace Manatee.Json.Schema
 								 var keyword = SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer);
 						         if (keyword == null)
 						         {
-									 if (OtherData == null)
-										 OtherData = new JsonObject();
-
 									 OtherData[kvp.Key] = kvp.Value;
 						         }
 
@@ -127,7 +124,17 @@ namespace Manatee.Json.Schema
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return _inherentValue == other._inherentValue && Equals(DocumentPath, other.DocumentPath);
+
+			var keywordMatch = this.LeftOuterJoin(other,
+			                                      tk => tk.Name,
+			                                      ok => ok.Name,
+			                                      (tk, ok) => new {ThisKeyword = tk, OtherKeyword = ok})
+				.ToList();
+
+			return _inherentValue == other._inherentValue &&
+			       Equals(DocumentPath, other.DocumentPath) &&
+			       Equals(OtherData, other.OtherData) &&
+			       keywordMatch.All(k => Equals(k.ThisKeyword, k.OtherKeyword));
 		}
 		public override bool Equals(object obj)
 		{

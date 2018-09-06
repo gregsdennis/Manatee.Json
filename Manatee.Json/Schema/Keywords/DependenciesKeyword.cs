@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class DependenciesKeyword : List<IJsonSchemaDependency>, IJsonSchemaKeyword
+	public class DependenciesKeyword : List<IJsonSchemaDependency>, IJsonSchemaKeyword, IEquatable<DependenciesKeyword>
 	{
 		public virtual string Name => "dependencies";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -29,6 +31,24 @@ namespace Manatee.Json.Schema
 			return this.ToDictionary(d => d.PropertyName,
 			                         d => d.GetJsonData())
 			           .ToJson();
+		}
+		public bool Equals(DependenciesKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return this.ContentsEqual(other);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as DependenciesKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as DependenciesKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return this.GetCollectionHashCode();
 		}
 	}
 }

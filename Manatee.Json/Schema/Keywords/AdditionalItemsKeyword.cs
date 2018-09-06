@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class AdditionalItemsKeyword : IJsonSchemaKeyword, IResolvePointers
+	public class AdditionalItemsKeyword : IJsonSchemaKeyword, IResolvePointers, IEquatable<AdditionalItemsKeyword>
 	{
 		public string Name => "additionalItems";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -63,6 +64,24 @@ namespace Manatee.Json.Schema
 		JsonSchema IResolvePointers.Resolve(string property)
 		{
 			return Value;
+		}
+		public bool Equals(AdditionalItemsKeyword other)
+		{
+			if (other is null) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(Value, other.Value);
+		}
+		public bool Equals(IJsonSchemaKeyword other)
+		{
+			return Equals(other as AdditionalItemsKeyword);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as AdditionalItemsKeyword);
+		}
+		public override int GetHashCode()
+		{
+			return (Value != null ? Value.GetHashCode() : 0);
 		}
 	}
 }
