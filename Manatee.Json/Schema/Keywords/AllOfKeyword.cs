@@ -32,7 +32,10 @@ namespace Manatee.Json.Schema
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return this.Select(serializer.Serialize).ToJson();
+			var array = this.Select(serializer.Serialize).ToJson();
+			array.EqualityStandard = ArrayEquality.ContentsEqual;
+
+			return array;
 		}
 		public bool Equals(AllOfKeyword other)
 		{

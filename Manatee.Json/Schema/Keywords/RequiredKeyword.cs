@@ -45,7 +45,7 @@ namespace Manatee.Json.Schema
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return LinqExtensions.ToJson(this);
+			return new JsonArray(this.Cast<JsonValue>()){EqualityStandard = ArrayEquality.ContentsEqual};
 		}
 		public bool Equals(RequiredKeyword other)
 		{

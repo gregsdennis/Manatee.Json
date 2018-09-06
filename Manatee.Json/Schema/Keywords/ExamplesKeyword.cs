@@ -27,7 +27,7 @@ namespace Manatee.Json.Schema
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonArray(this);
+			return new JsonArray(this) {EqualityStandard = ArrayEquality.ContentsEqual};
 		}
 		public bool Equals(ExamplesKeyword other)
 		{
