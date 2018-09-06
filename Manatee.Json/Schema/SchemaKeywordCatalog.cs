@@ -44,21 +44,18 @@ namespace Manatee.Json.Schema
 			if (!_cache.TryGetValue(keywordName, out var list) || !list.Any())
 				return null;
 
-			IJsonSchemaKeyword keyword;
+			IJsonSchemaKeyword keyword = null;
 			var specials = list.Where(t => typeof(IJsonSchemaKeywordPlus).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()))
 				.Select(t => (IJsonSchemaKeywordPlus) _resolver.Resolve(t))
 				.ToList();
 			if (specials.Any())
-			{
 				keyword = specials.FirstOrDefault(k => k.Handles(json));
-				if (keyword != null) return keyword;
-			}
 
-			keyword = (IJsonSchemaKeyword) _resolver.Resolve(list.First());
+			if (keyword == null)
+				keyword = (IJsonSchemaKeyword) _resolver.Resolve(list.First());
 			keyword.FromJson(json, serializer);
 
 			return keyword;
-
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
@@ -22,7 +23,8 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.String) return SchemaValidationResults.Valid;
 
-			if (context.Instance.String.Length < Value)
+			var length = new StringInfo(context.Instance.String).LengthInTextElements;
+			if (length < Value)
 			{
 				var message = SchemaErrorMessages.MaxLength.ResolveTokens(new Dictionary<string, object>
 					{

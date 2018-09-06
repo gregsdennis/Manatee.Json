@@ -76,8 +76,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		[TestCaseSource(nameof(TestData04))]
-		//[TestCaseSource(nameof(TestData06))]
-		//[TestCaseSource(nameof(TestData07))]
+		[TestCaseSource(nameof(TestData06))]
+		[TestCaseSource(nameof(TestData07))]
 		//[TestCaseSource(nameof(TestData08))]
 		public void Run(string fileName, JsonValue testJson, JsonValue schemaJson, string testName)
 		{

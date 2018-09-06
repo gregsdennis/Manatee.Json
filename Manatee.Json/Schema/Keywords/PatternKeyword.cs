@@ -7,7 +7,7 @@ namespace Manatee.Json.Schema
 {
 	public class PatternKeyword : IJsonSchemaKeyword
 	{
-		public virtual string Name => "oneOf";
+		public virtual string Name => "pattern";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 		public int ValidationSequence => 1;
 

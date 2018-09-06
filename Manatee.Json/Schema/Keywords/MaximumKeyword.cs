@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = (int) json.Number;
+			Value = json.Number;
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
