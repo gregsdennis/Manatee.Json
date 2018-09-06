@@ -15,4 +15,9 @@ namespace Manatee.Json.Schema
 	{
 		bool Handles(JsonValue value);
 	}
+
+	internal interface IResolvePointers
+	{
+		JsonSchema Resolve(string property);
+	}
 }

@@ -5,7 +5,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class AdditionalItemsKeyword : IJsonSchemaKeyword
+	public class AdditionalItemsKeyword : IJsonSchemaKeyword, IResolvePointers
 	{
 		public string Name => "additionalItems";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -59,6 +59,10 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return serializer.Serialize(Value);
+		}
+		JsonSchema IResolvePointers.Resolve(string property)
+		{
+			return Value;
 		}
 	}
 }

@@ -75,7 +75,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = null;
 		}
 
-		//[TestCaseSource(nameof(TestData04))]
+		[TestCaseSource(nameof(TestData04))]
 		//[TestCaseSource(nameof(TestData06))]
 		//[TestCaseSource(nameof(TestData07))]
 		//[TestCaseSource(nameof(TestData08))]
@@ -100,6 +100,10 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			catch (Exception)
 			{
 				Console.WriteLine(fileName);
+				Console.WriteLine("\nSchema");
+				Console.WriteLine(schemaJson.GetIndentedString());
+				Console.WriteLine("\nTest");
+				Console.WriteLine(testJson.GetIndentedString());
 				throw;
 			}
 		}

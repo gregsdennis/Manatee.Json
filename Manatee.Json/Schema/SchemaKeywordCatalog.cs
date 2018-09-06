@@ -42,7 +42,7 @@ namespace Manatee.Json.Schema
 		internal static IJsonSchemaKeyword Build(string keywordName, JsonValue json, JsonSerializer serializer)
 		{
 			if (!_cache.TryGetValue(keywordName, out var list) || !list.Any())
-				throw new ArgumentException("Keyword not registered", keywordName);
+				return null;
 
 			IJsonSchemaKeyword keyword;
 			var specials = list.Where(t => typeof(IJsonSchemaKeywordPlus).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()))

@@ -3,9 +3,9 @@
 namespace Manatee.Json.Internal
 {
 #if !NET45
-	[CompilerAttributes.GeneratesWarning("This type is experimental.  It may change or be removed completely in future versions.")]
+	[CompilerAttributes.GeneratesWarning("This functionality is experimental.  It may change or be removed completely in future versions.")]
 #endif
-	internal class ExperimentalTypeAttribute : Attribute
+	internal class ExperimentalAttribute : Attribute
 	{
 	}
 

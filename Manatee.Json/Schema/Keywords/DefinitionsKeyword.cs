@@ -4,7 +4,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	public class DefinitionsKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword
+	public class DefinitionsKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IResolvePointers
 	{
 		public string Name => "definitions";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -26,6 +26,10 @@ namespace Manatee.Json.Schema
 			return this.ToDictionary(kvp => kvp.Key,
 			                         kvp => serializer.Serialize(kvp.Value))
 			           .ToJson();
+		}
+		JsonSchema IResolvePointers.Resolve(string property)
+		{
+			return TryGetValue(property, out var schema) ? schema : null;
 		}
 	}
 }

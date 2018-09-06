@@ -6,9 +6,9 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[ExperimentalType]
+	[Experimental]
 	[FeedbackWelcome]
-	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>
+	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>, IResolvePointers
 	{
 		public static readonly JsonSchema Empty = new JsonSchema();
 		public static readonly JsonSchema True = new JsonSchema(true);
@@ -27,6 +27,7 @@ namespace Manatee.Json.Schema
 			get { return this.OfType<SchemaKeyword>().FirstOrDefault()?.Value; }
 			set { }
 		}
+		public JsonObject OtherData { get; set; }
 
 		public JsonSchema() { }
 		public JsonSchema(bool value)
@@ -70,7 +71,12 @@ namespace Manatee.Json.Schema
 		}
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			// TODO: Verify that $ref can work alongside other keywords (draft-08) and allow it if so.
 			context.Local = this;
+
+			var refKeyword = this.OfType<RefKeyword>().FirstOrDefault();
+			if (refKeyword != null) return refKeyword.Validate(context);
+
 			return new SchemaValidationResults(this.OrderBy(k => k.ValidationSequence).Select(k => k.Validate(context)));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
@@ -81,13 +87,36 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
-			AddRange(json.Object.Select(kvp => SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer)));
+			AddRange(json.Object.Select(kvp =>
+					         {
+								 var keyword = SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer);
+						         if (keyword == null)
+						         {
+									 if (OtherData == null)
+										 OtherData = new JsonObject();
+
+									 OtherData[kvp.Key] = kvp.Value;
+						         }
+
+						         return keyword;
+					         })
+				         .Where(k => k != null));
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			if (_inherentValue.HasValue) return _inherentValue;
 
-			return this.Select(k => new KeyValuePair<string, JsonValue>(k.Name, k.ToJson(serializer))).ToJson();
+			var obj = this.Select(k => new KeyValuePair<string, JsonValue>(k.Name, k.ToJson(serializer))).ToJson();
+
+			if (OtherData != null)
+			{
+				foreach (var kvp in OtherData)
+				{
+					obj[kvp.Key] = kvp.Value;
+				}
+			}
+
+			return obj;
 		}
 
 		public static implicit operator JsonSchema(bool value)
@@ -107,6 +136,10 @@ namespace Manatee.Json.Schema
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
+		}
+		public JsonSchema Resolve(string property)
+		{
+			throw new NotImplementedException();
 		}
 		public static bool operator ==(JsonSchema left, JsonSchema right)
 		{

@@ -36,7 +36,7 @@ namespace Manatee.Json.Schema
 
 			return SchemaValidationResults.Valid;
 		}
-		public bool Handles(JsonValue value)
+		bool IJsonSchemaKeywordPlus.Handles(JsonValue value)
 		{
 			return value.Type == JsonValueType.Number;
 		}
