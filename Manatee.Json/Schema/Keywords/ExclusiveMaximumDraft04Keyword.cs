@@ -7,7 +7,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
+	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class ExclusiveMaximumDraft04Keyword : IJsonSchemaKeywordPlus, IEquatable<ExclusiveMaximumDraft04Keyword>
 	{
 		public string Name => "exclusiveMaximum";

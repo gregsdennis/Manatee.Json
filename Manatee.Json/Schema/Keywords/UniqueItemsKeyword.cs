@@ -7,7 +7,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
+	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class UniqueItemsKeyword : IJsonSchemaKeyword, IEquatable<UniqueItemsKeyword>
 	{
 		public virtual string Name => "uniqueItems";

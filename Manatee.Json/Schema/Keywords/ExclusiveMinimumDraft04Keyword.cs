@@ -7,7 +7,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
+	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class ExclusiveMinimumDraft04Keyword : IJsonSchemaKeywordPlus, IEquatable<ExclusiveMinimumDraft04Keyword>
 	{
 		public string Name => "exclusiveMinimum";

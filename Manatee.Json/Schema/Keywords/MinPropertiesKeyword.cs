@@ -6,7 +6,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
+	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class MinPropertiesKeyword : IJsonSchemaKeyword, IEquatable<MinPropertiesKeyword>
 	{
 		public string Name => "minProperties";

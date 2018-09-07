@@ -6,7 +6,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
+	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class TypeKeyword : IJsonSchemaKeyword, IEquatable<TypeKeyword>
 	{
 		public string Name => "type";

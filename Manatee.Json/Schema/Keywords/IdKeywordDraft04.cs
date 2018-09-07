@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
+	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class IdKeywordDraft04 : IdKeyword, IEquatable<IdKeywordDraft04>
 	{
 		public override string Name => "id";

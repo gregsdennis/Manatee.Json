@@ -6,7 +6,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
+	[DebuggerDisplay("Name={Name} Value={Reference}")]
 	public class RefKeyword : IJsonSchemaKeyword, IEquatable<RefKeyword>
 	{
 		public static RefKeyword Root => new RefKeyword("#");

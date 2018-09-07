@@ -71,7 +71,7 @@ namespace Manatee.Json.Schema
 				var schemas = this.Select(serializer.Serialize).ToJson();
 				schemas.EqualityStandard = ArrayEquality.SequenceEqual;
 
-				return !IsArray ? schemas : schemas[0];
+				return schemas;
 			}
 
 			return serializer.Serialize(this[0]);
