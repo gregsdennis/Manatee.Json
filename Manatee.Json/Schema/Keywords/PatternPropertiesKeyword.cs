@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Manatee.Json.Internal;
@@ -7,6 +8,7 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}; Count={Count}")]
 	public class PatternPropertiesKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IEquatable<PatternPropertiesKeyword>
 	{
 		public string Name => "patternProperties";

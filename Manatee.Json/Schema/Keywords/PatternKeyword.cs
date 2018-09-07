@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}")]
 	public class PatternKeyword : IJsonSchemaKeyword, IEquatable<PatternKeyword>
 	{
 		public virtual string Name => "pattern";

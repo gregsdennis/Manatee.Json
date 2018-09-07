@@ -53,14 +53,14 @@ namespace Manatee.Json.Tests.Schema
 
 			var result = schema.Validate(json);
 
-			Console.WriteLine(schema.ToJson(null));
-			var refSchema = schema.Properties()["prop2"].RefResolved();
-			Console.WriteLine(refSchema.ToJson(null));
-			Console.WriteLine(json);
 			foreach (var error in result.Errors)
 			{
 				Console.WriteLine(error);
 			}
+			Console.WriteLine(schema.ToJson(_serializer));
+			var refSchema = schema.Properties()["prop2"].RefResolved();
+			Console.WriteLine(refSchema.ToJson(_serializer));
+			Console.WriteLine(json);
 
 			result.AssertValid();
 		}

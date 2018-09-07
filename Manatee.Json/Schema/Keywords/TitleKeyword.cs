@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}")]
 	public class TitleKeyword : IJsonSchemaKeyword, IEquatable<TitleKeyword>
 	{
 		public string Name => "title";

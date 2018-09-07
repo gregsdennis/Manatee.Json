@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}")]
 	public class RefKeyword : IJsonSchemaKeyword, IEquatable<RefKeyword>
 	{
 		public static RefKeyword Root => new RefKeyword("#");

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}")]
 	public class IdKeyword : IJsonSchemaKeyword, IEquatable<IdKeyword>
 	{
 		public virtual string Name => "$id";
@@ -47,7 +49,7 @@ namespace Manatee.Json.Schema
 		}
 		public override int GetHashCode()
 		{
-			return (Value != null ? Value.GetHashCode() : 0);
+			return Value?.GetHashCode() ?? 0;
 		}
 	}
 }

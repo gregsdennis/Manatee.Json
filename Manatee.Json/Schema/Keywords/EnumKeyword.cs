@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}; Count={Count}")]
 	public class EnumKeyword : List<JsonValue>, IJsonSchemaKeyword, IEquatable<EnumKeyword>
 	{
 		public virtual string Name => "enum";

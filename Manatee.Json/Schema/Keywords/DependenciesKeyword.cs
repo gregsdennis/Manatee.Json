@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}; Count={Count}")]
 	public class DependenciesKeyword : List<IJsonSchemaDependency>, IJsonSchemaKeyword, IEquatable<DependenciesKeyword>
 	{
 		public virtual string Name => "dependencies";
@@ -29,7 +31,7 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return this.ToDictionary(d => d.PropertyName,
-			                         d => d.GetJsonData())
+			                         d => d.ToJson(serializer))
 			           .ToJson();
 		}
 		public bool Equals(DependenciesKeyword other)

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}; Count={Count}")]
 	public class RequiredKeyword : List<string>, IJsonSchemaKeyword, IEquatable<RequiredKeyword>
 	{
 		public virtual string Name => "required";

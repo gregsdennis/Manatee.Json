@@ -1,11 +1,12 @@
 ﻿using System;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
 	/// <summary>
 	/// Creates a dependency that is based on a secondary schema.
 	/// </summary>
-	public class SchemaDependency : IJsonSchemaDependency
+	public class SchemaDependency : IJsonSchemaDependency, IEquatable<SchemaDependency>
 	{
 		private readonly JsonSchema _schema;
 
@@ -51,6 +52,36 @@ namespace Manatee.Json.Schema
 		public JsonValue GetJsonData()
 		{
 			return _schema.ToJson(null);
+		}
+		public bool Equals(SchemaDependency other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(PropertyName, other.PropertyName) &&
+			       Equals(_schema, other._schema);
+		}
+		public bool Equals(IJsonSchemaDependency other)
+		{
+			return Equals(other as SchemaDependency);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as SchemaDependency);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((_schema != null ? _schema.GetHashCode() : 0) * 397) ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
+			}
+		}
+		public void FromJson(JsonValue json, JsonSerializer serializer)
+		{
+			throw new NotImplementedException();
+		}
+		public JsonValue ToJson(JsonSerializer serializer)
+		{
+			return _schema.ToJson(serializer);
 		}
 	}
 }

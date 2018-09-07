@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}")]
 	public class PropertyNamesKeyword : IJsonSchemaKeyword, IEquatable<PropertyNamesKeyword>
 	{
 		public virtual string Name => "propertyNames";

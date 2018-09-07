@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	[DebuggerDisplay("Name={Name}")]
 	public class ElseKeyword : IJsonSchemaKeyword, IEquatable<ElseKeyword>
 	{
 		public virtual string Name => "else";

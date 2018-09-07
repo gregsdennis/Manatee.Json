@@ -94,8 +94,8 @@
 			.Property("anyOf", new JsonSchema().Ref("#/definitions/schemaArray"))
 			.Property("oneOf", new JsonSchema().Ref("#/definitions/schemaArray"))
 			.Property("not", new JsonSchema().RefRoot())
-			//.Dependency("exclusiveMaximum", "maximum")
-			//.Dependency("exclusiveMinimum", "minimum")
+			.Dependency("exclusiveMaximum", "maximum")
+			.Dependency("exclusiveMinimum", "minimum")
 			.Default(new JsonObject());
 	}
 }

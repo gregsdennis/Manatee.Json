@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Internal;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
 	/// <summary>
 	/// Declares a dependency that is based on the presence of other properties in the JSON.
 	/// </summary>
-	public class PropertyDependency : IJsonSchemaDependency
+	public class PropertyDependency : IJsonSchemaDependency, IEquatable<PropertyDependency>
 	{
 		private readonly IEnumerable<string> _dependencies;
 
@@ -54,12 +56,38 @@ namespace Manatee.Json.Schema
 			}
 			return new SchemaValidationResults(errors);
 		}
-		/// <summary>
-		/// Gets the JSON data to be used as the value portion in the dependency list of the schema.
-		/// </summary>
-		public JsonValue GetJsonData()
+		public bool Equals(PropertyDependency other)
 		{
-			return _dependencies.ToJson();
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(PropertyName, other.PropertyName) &&
+			       _dependencies.ContentsEqual(other._dependencies);
+		}
+		public bool Equals(IJsonSchemaDependency other)
+		{
+			return Equals(other as PropertyDependency);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as PropertyDependency);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((_dependencies != null ? _dependencies.GetHashCode() : 0) * 397) ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
+			}
+		}
+		public void FromJson(JsonValue json, JsonSerializer serializer)
+		{
+			throw new NotImplementedException();
+		}
+		public JsonValue ToJson(JsonSerializer serializer)
+		{
+			var array = _dependencies.ToJson();
+			array.Array.EqualityStandard = ArrayEquality.ContentsEqual;
+
+			return array;
 		}
 	}
 }
