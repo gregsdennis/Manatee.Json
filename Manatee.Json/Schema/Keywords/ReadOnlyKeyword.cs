@@ -4,17 +4,17 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
-	public class ElseKeyword : IJsonSchemaKeyword, IEquatable<ElseKeyword>
+	[DebuggerDisplay("Name={Name} Value={Value}")]
+	public class ReadOnlyKeyword : IJsonSchemaKeywordPlus, IEquatable<ReadOnlyKeyword>
 	{
-		public virtual string Name => "else";
+		public string Name => "exclusiveMinimum";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 		public int ValidationSequence => 1;
 
-		public JsonSchema Value { get; private set; }
+		public bool Value { get; private set; }
 
-		public ElseKeyword() { }
-		public ElseKeyword(JsonSchema value)
+		public ReadOnlyKeyword() { }
+		public ReadOnlyKeyword(bool value)
 		{
 			Value = value;
 		}
@@ -23,15 +23,19 @@ namespace Manatee.Json.Schema
 		{
 			return SchemaValidationResults.Valid;
 		}
+		bool IJsonSchemaKeywordPlus.Handles(JsonValue value)
+		{
+			return value.Type == JsonValueType.Boolean;
+		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = serializer.Deserialize<JsonSchema>(json);
+			Value = json.Boolean;
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return serializer.Serialize(Value);
+			return Value;
 		}
-		public bool Equals(ElseKeyword other)
+		public bool Equals(ReadOnlyKeyword other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -39,11 +43,11 @@ namespace Manatee.Json.Schema
 		}
 		public bool Equals(IJsonSchemaKeyword other)
 		{
-			return Equals(other as ElseKeyword);
+			return Equals(other as ReadOnlyKeyword);
 		}
 		public override bool Equals(object obj)
 		{
-			return Equals(obj as ElseKeyword);
+			return Equals(obj as ReadOnlyKeyword);
 		}
 		public override int GetHashCode()
 		{

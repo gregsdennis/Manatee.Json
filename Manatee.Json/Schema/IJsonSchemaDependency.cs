@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the property with the dependency.
 		/// </summary>
 		string PropertyName { get; }
+		JsonSchemaVersion SupportedVersions { get; }
 
 		/// <summary>
 		/// Validates a <see cref="JsonValue"/> against the schema.

@@ -10,7 +10,7 @@ namespace Manatee.Json.Schema
 	public class FormatKeyword : IJsonSchemaKeyword, IEquatable<FormatKeyword>
 	{
 		public virtual string Name => "format";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public virtual JsonSchemaVersion SupportedVersions => Value.SupportedBy;
 		public int ValidationSequence => 1;
 
 		public StringFormat Value { get; private set; }

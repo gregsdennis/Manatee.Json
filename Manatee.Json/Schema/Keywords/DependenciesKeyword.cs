@@ -11,7 +11,7 @@ namespace Manatee.Json.Schema
 	public class DependenciesKeyword : List<IJsonSchemaDependency>, IJsonSchemaKeyword, IEquatable<DependenciesKeyword>
 	{
 		public virtual string Name => "dependencies";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public virtual JsonSchemaVersion SupportedVersions => this.Aggregate(JsonSchemaVersion.All, (current, i) => current & i.SupportedVersions);
 		public int ValidationSequence => 1;
 
 		public SchemaValidationResults Validate(SchemaValidationContext context)

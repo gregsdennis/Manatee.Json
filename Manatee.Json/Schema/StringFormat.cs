@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
 {
@@ -99,7 +100,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public string Key { get; }
 		
-		private JsonSchemaVersion SupportedBy { get; set; }
+		internal JsonSchemaVersion SupportedBy { get; private set; }
 
 		private StringFormat(string key, string regex, bool isCaseSensitive = false)
 		{

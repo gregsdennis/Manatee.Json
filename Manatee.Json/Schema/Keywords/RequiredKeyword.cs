@@ -11,7 +11,9 @@ namespace Manatee.Json.Schema
 	public class RequiredKeyword : List<string>, IJsonSchemaKeyword, IEquatable<RequiredKeyword>
 	{
 		public virtual string Name => "required";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public virtual JsonSchemaVersion SupportedVersions => this.Any()
+			? JsonSchemaVersion.All
+			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 		public int ValidationSequence => 1;
 
 		public RequiredKeyword() { }

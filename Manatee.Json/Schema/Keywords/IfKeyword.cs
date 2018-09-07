@@ -11,7 +11,7 @@ namespace Manatee.Json.Schema
 	public class IfKeyword : IJsonSchemaKeyword, IEquatable<IfKeyword>
 	{
 		public virtual string Name => "if";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 		public int ValidationSequence => 1;
 
 		public JsonSchema Value { get; private set; }

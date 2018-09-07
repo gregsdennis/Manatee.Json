@@ -10,7 +10,7 @@ namespace Manatee.Json.Schema
 	public class EnumKeyword : List<JsonValue>, IJsonSchemaKeyword, IEquatable<EnumKeyword>
 	{
 		public virtual string Name => "enum";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 		public int ValidationSequence => 1;
 
 		public EnumKeyword() { }

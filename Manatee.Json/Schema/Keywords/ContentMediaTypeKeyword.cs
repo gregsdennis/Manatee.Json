@@ -4,17 +4,17 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
-	[DebuggerDisplay("Name={Name}")]
-	public class ElseKeyword : IJsonSchemaKeyword, IEquatable<ElseKeyword>
+	[DebuggerDisplay("Name={Name} Value={Value}")]
+	public class ContentMediaTypeKeyword : IJsonSchemaKeyword, IEquatable<ContentMediaTypeKeyword>
 	{
-		public virtual string Name => "else";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public string Name => "$comment";
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 		public int ValidationSequence => 1;
 
-		public JsonSchema Value { get; private set; }
+		public string Value { get; private set; }
 
-		public ElseKeyword() { }
-		public ElseKeyword(JsonSchema value)
+		public ContentMediaTypeKeyword() { }
+		public ContentMediaTypeKeyword(string value)
 		{
 			Value = value;
 		}
@@ -25,13 +25,13 @@ namespace Manatee.Json.Schema
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = serializer.Deserialize<JsonSchema>(json);
+			Value = json.String;
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return serializer.Serialize(Value);
+			return Value;
 		}
-		public bool Equals(ElseKeyword other)
+		public bool Equals(ContentMediaTypeKeyword other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -39,11 +39,11 @@ namespace Manatee.Json.Schema
 		}
 		public bool Equals(IJsonSchemaKeyword other)
 		{
-			return Equals(other as ElseKeyword);
+			return Equals(other as ContentMediaTypeKeyword);
 		}
 		public override bool Equals(object obj)
 		{
-			return Equals(obj as ElseKeyword);
+			return Equals(obj as ContentMediaTypeKeyword);
 		}
 		public override int GetHashCode()
 		{

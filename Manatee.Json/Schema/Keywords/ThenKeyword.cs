@@ -8,7 +8,7 @@ namespace Manatee.Json.Schema
 	public class ThenKeyword : IJsonSchemaKeyword, IEquatable<ThenKeyword>
 	{
 		public virtual string Name => "then";
-		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 		public int ValidationSequence => 1;
 
 		public JsonSchema Value { get; private set; }

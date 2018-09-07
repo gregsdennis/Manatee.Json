@@ -306,6 +306,18 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
+		public static JsonSchema ReadOnly(this JsonSchema schema, bool isReadOnly)
+		{
+			schema.Add(new ReadOnlyKeyword(isReadOnly));
+
+			return schema;
+		}
+		public static JsonSchema WriteOnly(this JsonSchema schema, bool isWriteOnly)
+		{
+			schema.Add(new WriteOnlyKeyword(isWriteOnly));
+
+			return schema;
+		}
 		public static JsonSchema ExclusiveMinimum(this JsonSchema schema, double minimum)
 		{
 			schema.Add(new ExclusiveMinimumKeyword(minimum));
@@ -327,6 +339,24 @@ namespace Manatee.Json.Schema
 		public static JsonSchema MultipleOf(this JsonSchema schema, double divisor)
 		{
 			schema.Add(new MultipleOfKeyword(divisor));
+
+			return schema;
+		}
+		public static JsonSchema Comment(this JsonSchema schema, string comment)
+		{
+			schema.Add(new CommentKeyword(comment));
+
+			return schema;
+		}
+		public static JsonSchema ContentMediaType(this JsonSchema schema, string comment)
+		{
+			schema.Add(new ContentMediaTypeKeyword(comment));
+
+			return schema;
+		}
+		public static JsonSchema ContentEncoding(this JsonSchema schema, string comment)
+		{
+			schema.Add(new ContentEncodingKeyword(comment));
 
 			return schema;
 		}

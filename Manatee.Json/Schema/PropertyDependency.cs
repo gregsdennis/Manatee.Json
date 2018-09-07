@@ -17,6 +17,9 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the property with the dependency.
 		/// </summary>
 		public string PropertyName { get; }
+		public JsonSchemaVersion SupportedVersions => _dependencies.Any()
+			? JsonSchemaVersion.All
+			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="PropertyDependency"/> class.
