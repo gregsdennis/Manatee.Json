@@ -39,6 +39,15 @@ namespace Manatee.Json.Schema
 				list.Add(typeof(T));
 		}
 
+		public static void Remove<T>()
+			where T : IJsonSchemaKeyword, new()
+		{
+			var keyword = (T) _resolver.Resolve(typeof(T));
+			if (!_cache.TryGetValue(keyword.Name, out var list)) return;
+
+			list.Remove(typeof(T));
+		}
+
 		internal static IJsonSchemaKeyword Build(string keywordName, JsonValue json, JsonSerializer serializer)
 		{
 			if (!_cache.TryGetValue(keywordName, out var list) || !list.Any())
