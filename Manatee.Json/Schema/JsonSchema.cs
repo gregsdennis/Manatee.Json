@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
-using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -79,12 +78,16 @@ namespace Manatee.Json.Schema
 
 			// TODO: Verify that $ref can work alongside other keywords (draft-08) and allow it if so.
 			context.Local = this;
+
 			if (context.BaseUri == null)
 				context.BaseUri = DocumentPath;
 			else if (DocumentPath != null)
 				context.BaseUri = DocumentPath.IsAbsoluteUri
 					? DocumentPath
 					: new Uri(context.BaseUri, DocumentPath);
+
+			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
+				JsonSchemaRegistry.Register(this);
 
 			var refKeyword = this.OfType<RefKeyword>().FirstOrDefault();
 			if (refKeyword != null) return refKeyword.Validate(context);
@@ -145,7 +148,6 @@ namespace Manatee.Json.Schema
 				.ToList();
 
 			return _inherentValue == other._inherentValue &&
-			       Equals(DocumentPath, other.DocumentPath) &&
 			       Equals(OtherData, other.OtherData) &&
 			       keywordMatch.All(k => Equals(k.ThisKeyword, k.OtherKeyword));
 		}

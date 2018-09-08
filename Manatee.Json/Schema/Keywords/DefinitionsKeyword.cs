@@ -39,7 +39,15 @@ namespace Manatee.Json.Schema
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return this.ContentsEqual(other);
+
+			var definitionsMatch = this.LeftOuterJoin(other,
+			                                         tk => tk.Key,
+			                                         ok => ok.Key,
+			                                         (tk, ok) => new { ThisDefinition = tk.Value, OtherDefinition = ok.Value })
+				.ToList();
+
+			return definitionsMatch.All(k => Equals(k.ThisDefinition, k.OtherDefinition));
+
 		}
 		public bool Equals(IJsonSchemaKeyword other)
 		{

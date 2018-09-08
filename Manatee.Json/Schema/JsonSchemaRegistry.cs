@@ -65,10 +65,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Register(JsonSchema schema)
 		{
-			if (string.IsNullOrWhiteSpace(schema.Id)) return;
+			if (schema.DocumentPath == null) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup[schema.DocumentPath.ToString()] = schema;
+				_schemaLookup[schema.DocumentPath.OriginalString] = schema;
 			}
 		}
 
@@ -77,10 +77,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Unregister(JsonSchema schema)
 		{
-			if (string.IsNullOrWhiteSpace(schema.Id)) return;
+			if (schema.DocumentPath == null) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup.TryRemove(schema.Id, out _);
+				_schemaLookup.TryRemove(schema.DocumentPath.OriginalString, out _);
 			}
 		}
 

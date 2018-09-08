@@ -74,9 +74,10 @@ namespace Manatee.Json.Tests.Schema
 				.Schema("http://json-schema.org/draft-04/schema#")
 				.Definition("something", new JsonSchema()
 					            .Type(JsonSchemaType.Object)
+					            .Required("name")
 					            .AllOf(new JsonSchema()
 						                   .Property("name", new JsonSchema().Type(JsonSchemaType.String)))
-					            .Required("name"))
+				)
 				.Type(JsonSchemaType.Array)
 				.Description("An array of somethings.")
 				.Items(new JsonSchema().Ref("#/definitions/something"));
@@ -85,8 +86,8 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.AreEqual(expected, schema);
 
-			var schemaJson = schema.ToJson(null);
-			var expectedJson = expected.ToJson(null);
+			var schemaJson = schema.ToJson(_serializer);
+			var expectedJson = expected.ToJson(_serializer);
 
 			Console.WriteLine(schemaJson);
 			Assert.AreEqual(expectedJson, schemaJson);
