@@ -35,7 +35,7 @@ namespace Manatee.Json.Schema
 		/// <param name="aggregate">A collection of <see cref="SchemaValidationResults"/> to aggregate together.</param>
 		public SchemaValidationResults(IEnumerable<SchemaValidationResults> aggregate)
 		{
-			Errors = aggregate.SelectMany(r => r.Errors).Distinct();
+			Errors = aggregate.SelectMany(r => r.Errors).Distinct().ToList();
 		}
 		internal SchemaValidationResults(IEnumerable<SchemaValidationError> errors = null)
 		{

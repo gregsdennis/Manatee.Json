@@ -21,9 +21,7 @@ namespace Manatee.Json.Schema
 
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return StringFormat.Uri.Validate(Value)
-				       ? SchemaValidationResults.Valid
-				       : new SchemaValidationResults(Name, "should be a valid URI");
+			return SchemaValidationResults.Valid;
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

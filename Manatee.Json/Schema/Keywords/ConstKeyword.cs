@@ -24,12 +24,12 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			return context.Instance == Value
-				       ? SchemaValidationResults.Valid
-				       : new SchemaValidationResults(Name, SchemaErrorMessages.Const.ResolveTokens(new Dictionary<string, object>
+				? SchemaValidationResults.Valid
+				: new SchemaValidationResults(Name, SchemaErrorMessages.Const.ResolveTokens(new Dictionary<string, object>
 					{
 						["expected"] = Value,
 						["value"] = context.Instance
-					   }));
+					}));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

@@ -30,6 +30,7 @@ namespace Manatee.Json.Schema
 				{
 					var newContext = new SchemaValidationContext
 						{
+							BaseUri = context.BaseUri,
 							Instance = array[i],
 							Root = context.Root
 						};
@@ -44,6 +45,7 @@ namespace Manatee.Json.Schema
 					{
 						var newContext = new SchemaValidationContext
 							{
+								BaseUri = context.BaseUri,
 								Instance = jv,
 								Root = context.Root
 							};

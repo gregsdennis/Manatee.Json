@@ -32,26 +32,29 @@ namespace Manatee.Json.Schema
 			var errors = new List<SchemaValidationError>();
 			var array = context.Instance.Array;
 
-			var i = itemsKeyword.Count;
-			if (i < array.Count)
+			if (itemsKeyword.Count < array.Count)
+			{
 				if (Equals(Value, JsonSchema.False))
 				{
 					var message = SchemaErrorMessages.Items.ResolveTokens(new Dictionary<string, object>
 						{
 							["value"] = context.Instance
-					});
+						});
 					errors.Add(new SchemaValidationError(string.Empty, message));
 				}
 				else if (!Equals(Value, JsonSchema.True))
-					errors.AddRange(array.Skip(i).SelectMany(j =>
+				{
+					errors.AddRange(array.Skip(itemsKeyword.Count).SelectMany(j =>
 						{
 							var newContext = new SchemaValidationContext
 								{
+									BaseUri = context.BaseUri,
 									Instance = j,
 									Root = context.Root
 								};
 							return Value.Validate(newContext).Errors;
-						}));
+						}));}
+			}
 
 			return new SchemaValidationResults(errors);
 		}

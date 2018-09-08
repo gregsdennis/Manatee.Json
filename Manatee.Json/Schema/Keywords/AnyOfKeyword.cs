@@ -16,10 +16,11 @@ namespace Manatee.Json.Schema
 
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var results = this.Select(s =>
+			var results = this.Select((s, i) =>
 				{
 					var newContext = new SchemaValidationContext
 						{
+							BaseUri = context.BaseUri,
 							Instance = context.Instance,
 							Root = context.Root
 						};

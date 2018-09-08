@@ -27,6 +27,7 @@ namespace Manatee.Json.Schema
 				context.EvaluatedPropertyNames.Add(property.Key);
 				var newContext = new SchemaValidationContext
 					{
+						BaseUri = context.BaseUri,
 						Instance = obj[property.Key],
 						Root = context.Root
 					};

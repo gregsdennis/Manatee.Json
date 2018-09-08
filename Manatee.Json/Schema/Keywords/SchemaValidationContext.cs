@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Manatee.Json.Schema
 {
@@ -8,5 +9,6 @@ namespace Manatee.Json.Schema
 		public JsonSchema Root { get; set; }
 		public JsonValue Instance { get; set; }
 		public List<string> EvaluatedPropertyNames { get; set; } = new List<string>();
+		public Uri BaseUri { get; set; }
 	}
 }

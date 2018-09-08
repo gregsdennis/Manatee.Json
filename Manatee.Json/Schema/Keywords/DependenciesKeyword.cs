@@ -16,7 +16,10 @@ namespace Manatee.Json.Schema
 
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return new SchemaValidationResults(this.SelectMany(d => d.Validate(context).Errors));
+			return new SchemaValidationResults(this.SelectMany(d =>
+				{
+					return d.Validate(context).Errors;
+				}));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

@@ -28,6 +28,7 @@ namespace Manatee.Json.Schema
 				{
 					var newContext = new SchemaValidationContext
 						{
+							BaseUri = context.BaseUri,
 							Instance = propertyName,
 							Root = context.Root
 						};

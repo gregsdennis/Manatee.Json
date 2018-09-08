@@ -12,6 +12,7 @@ namespace Manatee.Json.Schema
 		public static RefKeyword Root => new RefKeyword("#");
 
 		private JsonSchema _resolvedRoot;
+		private JsonPointer _resolvedFragment;
 
 		public string Name => "$ref";
 		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -38,6 +39,7 @@ namespace Manatee.Json.Schema
 
 			var newContext = new SchemaValidationContext
 				{
+					BaseUri = _resolvedRoot.DocumentPath,
 					Instance = context.Instance,
 					Root = _resolvedRoot ?? context.Root
 				};
@@ -74,49 +76,40 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
-			var root = context.Root;
-			var documentPath = context.Local.DocumentPath;
+			var documentPath = context.BaseUri;
 			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
 			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? documentPath?.OriginalString : referenceParts[0];
-			var fragment = referenceParts.Length > 1 ? referenceParts[1] : string.Empty;
-			var schema = root;
+			_resolvedFragment = referenceParts.Length > 1 ? JsonPointer.Parse(referenceParts[1]) : new JsonPointer();
 			if (!string.IsNullOrWhiteSpace(address))
 			{
-				if (!Uri.TryCreate(address, UriKind.Absolute, out Uri absolute))
-				{
+				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute))
 					address = context.Local.Id + address;
-				}
+
 				if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
 				{
 					var uriFolder = documentPath.OriginalString.EndsWith("/") ? documentPath : documentPath.GetParentUri();
 					absolute = new Uri(uriFolder, address);
 					address = absolute.OriginalString;
 				}
-				schema = JsonSchemaRegistry.Get(address);
-				_resolvedRoot = schema;
+
+				_resolvedRoot = JsonSchemaRegistry.Get(address);
 			}
+			else
+				_resolvedRoot = context.Root;
 
-			//if (schema == null)
-			//{
-			//	Resolved = schema;
-			//	return;
-			//}
-			//if (schema == "#") throw new ArgumentException("Cannot use a root reference as the base schema.");
-
-			_ResolveLocalReference(schema, fragment, string.IsNullOrWhiteSpace(address) ? null : new Uri(address));
+			_ResolveLocalReference();
 		}
-		private void _ResolveLocalReference(JsonSchema root, string path, Uri documentPath)
+		private void _ResolveLocalReference()
 		{
 			var serializer = new JsonSerializer();
-			var pointer = JsonPointer.Parse(path);
-			if (!pointer.Any())
+			if (!_resolvedFragment.Any())
 			{
-				Resolved = root;
+				Resolved = _resolvedRoot;
 				return;
 			}
 
-			var rootJson = root.ToJson(serializer);
-			var target = pointer.Evaluate(rootJson);
+			var rootJson = _resolvedRoot.ToJson(serializer);
+			var target = _resolvedFragment.Evaluate(rootJson);
 			if (target.Error == null)
 				Resolved = serializer.Deserialize<JsonSchema>(target.Result);
 		}

@@ -49,7 +49,7 @@ namespace Manatee.Json.Schema
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return new JsonArray(this.Cast<JsonValue>()){EqualityStandard = ArrayEquality.ContentsEqual};
+			return new JsonArray(this.Select(s => new JsonValue(s))){EqualityStandard = ArrayEquality.ContentsEqual};
 		}
 		public bool Equals(RequiredKeyword other)
 		{

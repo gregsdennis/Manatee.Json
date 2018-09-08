@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -15,8 +16,13 @@ namespace Manatee.Json.Schema
 		public static readonly JsonSchema False = new JsonSchema(false);
 
 		private bool? _inherentValue;
+		private Uri _documentPath;
 
-		public Uri DocumentPath { get; set; }
+		public Uri DocumentPath
+		{
+			get => _documentPath ?? (_documentPath = Id == null ? null : new Uri(Id, UriKind.RelativeOrAbsolute));
+			set => _documentPath = value;
+		}
 		public string Id
 		{
 			get { return this.OfType<IdKeyword>().FirstOrDefault()?.Value; }
@@ -73,11 +79,18 @@ namespace Manatee.Json.Schema
 
 			// TODO: Verify that $ref can work alongside other keywords (draft-08) and allow it if so.
 			context.Local = this;
+			if (context.BaseUri == null)
+				context.BaseUri = DocumentPath;
+			else if (DocumentPath != null)
+				context.BaseUri = DocumentPath.IsAbsoluteUri
+					? DocumentPath
+					: new Uri(context.BaseUri, DocumentPath);
 
 			var refKeyword = this.OfType<RefKeyword>().FirstOrDefault();
 			if (refKeyword != null) return refKeyword.Validate(context);
 
-			return new SchemaValidationResults(this.OrderBy(k => k.ValidationSequence).Select(k => k.Validate(context)));
+			return new SchemaValidationResults(this.OrderBy(k => k.ValidationSequence)
+				                                   .Select(k => k.Validate(context)));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

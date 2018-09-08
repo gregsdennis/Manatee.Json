@@ -43,7 +43,7 @@ namespace Manatee.Json.Schema
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
 				    var schemaValue = JsonValue.Parse(schemaJson);
-					schema = new JsonSchema {DocumentPath = new Uri(uri)};
+					schema = new JsonSchema {DocumentPath = new Uri(uri, UriKind.RelativeOrAbsolute)};
 					schema.FromJson(schemaValue, _serializer);
 
 					var schemaStructureValidation = schema.ValidateSchema();

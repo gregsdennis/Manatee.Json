@@ -32,9 +32,10 @@ namespace Manatee.Json.Schema
 					context.EvaluatedPropertyNames.Add(match);
 					var newContext = new SchemaValidationContext
 						{
+							BaseUri = context.BaseUri,
 							Instance = obj[match],
 							Root = context.Root
-					};
+						};
 					var result = localSchema.Validate(newContext);
 					errors.AddRange(result.Errors.Select(e => new SchemaValidationError(match, e.Message)));
 				}
