@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
 	[Experimental]
 	[FeedbackWelcome]
-	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>, IResolvePointers
+	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>
 	{
 		public static readonly JsonSchema Empty = new JsonSchema();
 		public static readonly JsonSchema True = new JsonSchema(true);
@@ -16,6 +17,7 @@ namespace Manatee.Json.Schema
 
 		private bool? _inherentValue;
 		private Uri _documentPath;
+		private bool _hasRegistered;
 
 		public Uri DocumentPath
 		{
@@ -68,6 +70,32 @@ namespace Manatee.Json.Schema
 					Root = this
 				});
 		}
+		public void RegisterSubschemas(Uri baseUri)
+		{
+			if (_hasRegistered) return;
+			_hasRegistered = true;
+
+			if (Uri.TryCreate(Id, UriKind.Absolute, out var uri))
+			{
+				JsonSchemaRegistry.Register(this);
+				baseUri = uri;
+			}
+
+			foreach (var keyword in this)
+			{
+				keyword.RegisterSubschemas(baseUri);
+			}
+		}
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		{
+			var first = pointer.FirstOrDefault();
+			if (first == null) return this;
+
+			var keyword = this.FirstOrDefault(k => k.Name == first);
+
+			return keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)));
+		}
+
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			if (_inherentValue.HasValue)
@@ -75,6 +103,8 @@ namespace Manatee.Json.Schema
 				if (_inherentValue.Value) return SchemaValidationResults.Valid;
 				return new SchemaValidationResults(new[]{"All instances are invalid for the false schema."});
 			}
+
+			RegisterSubschemas(null);
 
 			// TODO: Verify that $ref can work alongside other keywords (draft-08) and allow it if so.
 			context.Local = this;
@@ -158,10 +188,6 @@ namespace Manatee.Json.Schema
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
-		}
-		public JsonSchema Resolve(string property)
-		{
-			throw new NotImplementedException();
 		}
 		public static bool operator ==(JsonSchema left, JsonSchema right)
 		{

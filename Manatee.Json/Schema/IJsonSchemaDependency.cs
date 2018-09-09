@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -21,5 +22,7 @@ namespace Manatee.Json.Schema
 		/// <param name="root">The root schema serialized to a <see cref="JsonValue"/>.  Used internally for resolving references.</param>
 		/// <returns>The results of the validation.</returns>
 		SchemaValidationResults Validate(SchemaValidationContext context);
+		void RegisterSubschemas(Uri baseUri);
+		JsonSchema ResolveSubschema(JsonPointer pointer);
 	}
 }

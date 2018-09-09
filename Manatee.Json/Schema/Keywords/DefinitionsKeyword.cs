@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
 	[DebuggerDisplay("Name={Name}; Count={Count}")]
-	public class DefinitionsKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IResolvePointers, IEquatable<DefinitionsKeyword>
+	public class DefinitionsKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IEquatable<DefinitionsKeyword>
 	{
 		public string Name => "definitions";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -17,6 +18,22 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			return SchemaValidationResults.Valid;
+		}
+		public void RegisterSubschemas(Uri baseUri)
+		{
+			foreach (var schema in Values)
+			{
+				schema.RegisterSubschemas(baseUri);
+			}
+		}
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		{
+			var first = pointer.FirstOrDefault();
+			if (first == null) return null;
+
+			if (!TryGetValue(first, out var schema)) return null;
+
+			return schema.ResolveSubschema(new JsonPointer(pointer.Skip(1)));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
@@ -29,11 +46,7 @@ namespace Manatee.Json.Schema
 		{
 			return this.ToDictionary(kvp => kvp.Key,
 			                         kvp => serializer.Serialize(kvp.Value))
-			           .ToJson();
-		}
-		JsonSchema IResolvePointers.Resolve(string property)
-		{
-			return TryGetValue(property, out var schema) ? schema : null;
+				.ToJson();
 		}
 		public bool Equals(DefinitionsKeyword other)
 		{

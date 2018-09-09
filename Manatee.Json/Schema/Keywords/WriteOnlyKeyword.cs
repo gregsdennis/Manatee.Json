@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
 	[DebuggerDisplay("Name={Name} Value={Value}")]
-	public class WriteOnlyKeyword : IJsonSchemaKeywordPlus, IEquatable<WriteOnlyKeyword>
+	public class WriteOnlyKeyword : IJsonSchemaKeyword, IEquatable<WriteOnlyKeyword>
 	{
 		public string Name => "exclusiveMinimum";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
@@ -23,9 +24,10 @@ namespace Manatee.Json.Schema
 		{
 			return SchemaValidationResults.Valid;
 		}
-		bool IJsonSchemaKeywordPlus.Handles(JsonValue value)
+		public void RegisterSubschemas(Uri baseUri) { }
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
 		{
-			return value.Type == JsonValueType.Boolean;
+			return null;
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

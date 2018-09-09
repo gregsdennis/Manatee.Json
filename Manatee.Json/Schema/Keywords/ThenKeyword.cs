@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -22,6 +23,14 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			return SchemaValidationResults.Valid;
+		}
+		public void RegisterSubschemas(Uri baseUri)
+		{
+			Value.RegisterSubschemas(baseUri);
+		}
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		{
+			return Value.ResolveSubschema(pointer);
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

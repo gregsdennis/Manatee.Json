@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -47,12 +48,13 @@ namespace Manatee.Json.Schema
 				};
 			return _schema.Validate(newContext);
 		}
-		/// <summary>
-		/// Gets the JSON data to be used as the value portion in the dependency list of the schema.
-		/// </summary>
-		public JsonValue GetJsonData()
+		public void RegisterSubschemas(Uri baseUri)
 		{
-			return _schema.ToJson(null);
+			_schema.RegisterSubschemas(baseUri);
+		}
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		{
+			return _schema.ResolveSubschema(pointer);
 		}
 		public bool Equals(SchemaDependency other)
 		{

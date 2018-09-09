@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
@@ -317,26 +319,39 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue173_ReferencedSchemaInParentFolder()
 		{
-			// this links to the commit after the one that submitted the schema files.
-			// otherwise we have a paradox of trying to know the commit hash before the commit is created.
-			var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/c264db5c75478e0a33269baba7813901829f8244/Manatee.Json.Tests/Files/";
+			try
+			{
+				// this links to the commit after the one that submitted the schema files.
+				// otherwise we have a paradox of trying to know the commit hash before the commit is created.
+				var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/c264db5c75478e0a33269baba7813901829f8244/Manatee.Json.Tests/Files/";
 
-			var schema = JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
+				var schema = JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
 
-			var invalid = new JsonObject
-				{
-					["localProp"] = new JsonArray {150, "hello", 6}
-				};
-			var valid = new JsonObject
-				{
-					["localProp"] = new JsonArray {1, 2, 3, 4}
-				};
+				var invalid = new JsonObject
+					{
+						["localProp"] = new JsonArray {150, "hello", 6}
+					};
+				var valid = new JsonObject
+					{
+						["localProp"] = new JsonArray {1, 2, 3, 4}
+					};
 
-			var result = schema.Validate(invalid);
-			result.AssertInvalid();
+				var result = schema.Validate(invalid);
+				result.AssertInvalid();
 
-			result = schema.Validate(valid);
-			result.AssertValid();
+				result = schema.Validate(valid);
+				result.AssertValid();
+			}
+			catch (WebException)
+			{
+				Assert.Inconclusive();
+			}
+			catch (AggregateException e)
+			{
+				if (e.InnerExceptions.OfType<WebException>().Any())
+					Assert.Inconclusive();
+				throw;
+			}
 		}
 	}
 }

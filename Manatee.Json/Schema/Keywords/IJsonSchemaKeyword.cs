@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -10,15 +11,12 @@ namespace Manatee.Json.Schema
 		int ValidationSequence { get; }
 
 		SchemaValidationResults Validate(SchemaValidationContext context);
+		void RegisterSubschemas(Uri baseUri);
+		JsonSchema ResolveSubschema(JsonPointer pointer);
 	}
 
 	internal interface IJsonSchemaKeywordPlus : IJsonSchemaKeyword
 	{
 		bool Handles(JsonValue value);
-	}
-
-	internal interface IResolvePointers
-	{
-		JsonSchema Resolve(string property);
 	}
 }

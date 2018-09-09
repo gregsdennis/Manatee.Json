@@ -46,7 +46,11 @@ namespace Manatee.Json.Schema
 				};
 			return Resolved.Validate(newContext);
 		}
-
+		public void RegisterSubschemas(Uri baseUri) { }
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		{
+			return null;
+		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			Reference = json.String;
@@ -102,17 +106,12 @@ namespace Manatee.Json.Schema
 		}
 		private void _ResolveLocalReference()
 		{
-			var serializer = new JsonSerializer();
 			if (!_resolvedFragment.Any())
 			{
 				Resolved = _resolvedRoot;
 				return;
 			}
-
-			var rootJson = _resolvedRoot.ToJson(serializer);
-			var target = _resolvedFragment.Evaluate(rootJson);
-			if (target.Error == null)
-				Resolved = serializer.Deserialize<JsonSchema>(target.Result);
+			Resolved = _resolvedRoot.ResolveSubschema(_resolvedFragment);
 		}
 	}
 }

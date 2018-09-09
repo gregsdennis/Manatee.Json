@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
 	[DebuggerDisplay("Name={Name}")]
-	public class AdditionalItemsKeyword : IJsonSchemaKeyword, IResolvePointers, IEquatable<AdditionalItemsKeyword>
+	public class AdditionalItemsKeyword : IJsonSchemaKeyword, IEquatable<AdditionalItemsKeyword>
 	{
 		public string Name => "additionalItems";
 		public virtual JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
@@ -58,6 +59,14 @@ namespace Manatee.Json.Schema
 
 			return new SchemaValidationResults(errors);
 		}
+		public void RegisterSubschemas(Uri baseUri)
+		{
+			Value.RegisterSubschemas(baseUri);
+		}
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		{
+			return Value.ResolveSubschema(pointer);
+		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			Value = serializer.Deserialize<JsonSchema>(json);
@@ -65,10 +74,6 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return serializer.Serialize(Value);
-		}
-		JsonSchema IResolvePointers.Resolve(string property)
-		{
-			return Value;
 		}
 		public bool Equals(AdditionalItemsKeyword other)
 		{

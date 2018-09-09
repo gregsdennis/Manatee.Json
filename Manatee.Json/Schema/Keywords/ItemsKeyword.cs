@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -55,6 +56,22 @@ namespace Manatee.Json.Schema
 			}
 
 			return new SchemaValidationResults(errors);
+		}
+		public void RegisterSubschemas(Uri baseUri)
+		{
+			foreach (var schema in this)
+			{
+				schema.RegisterSubschemas(baseUri);
+			}
+		}
+		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		{
+			var first = pointer.FirstOrDefault();
+			if (first == null) return null;
+
+			if (!int.TryParse(first, out var index) || index < 0 || index >= Count) return null;
+
+			return this[index].ResolveSubschema(new JsonPointer(pointer.Skip(1)));
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
