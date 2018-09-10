@@ -8,6 +8,9 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationResults 
 	{
+		/// <summary>
+		/// Gets whether the validation succeeded.
+		/// </summary>
 		public static readonly SchemaValidationResults Valid = new SchemaValidationResults();
 
 		/// <summary>

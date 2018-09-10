@@ -7,42 +7,68 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	/// <summary>
+	/// Encapsulates and models JSON Schema.
+	/// </summary>
 	[Experimental]
 	[FeedbackWelcome]
 	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>
 	{
+		/// <summary>
+		/// Defines the empty schema.  Analogous to <see cref="True"/>.
+		/// </summary>
 		public static readonly JsonSchema Empty = new JsonSchema();
+		/// <summary>
+		/// Defines the True schema.  Validates all JSON instances.
+		/// </summary>
 		public static readonly JsonSchema True = new JsonSchema(true);
+		/// <summary>
+		/// Defines the False schema.  Validates no JSON instances.
+		/// </summary>
 		public static readonly JsonSchema False = new JsonSchema(false);
 
 		private bool? _inherentValue;
 		private Uri _documentPath;
 		private bool _hasRegistered;
 
+		/// <summary>
+		/// Defines the document path.  If not explicitly provided, it will be derived from the <see cref="Id"/> property.
+		/// </summary>
 		public Uri DocumentPath
 		{
 			get => _documentPath ?? (_documentPath = Id == null ? null : new Uri(Id, UriKind.RelativeOrAbsolute));
 			set => _documentPath = value;
 		}
-		public string Id
-		{
-			get { return this.OfType<IdKeyword>().FirstOrDefault()?.Value; }
-			set { }
-		}
-		public string Schema
-		{
-			get { return this.OfType<SchemaKeyword>().FirstOrDefault()?.Value; }
-			set { }
-		}
-		public JsonObject OtherData { get; } = new JsonObject();
+		/// <summary>
+		/// Gets the <code>$id</code> (or <code>id</code> for draft-04) property value, if declared.
+		/// </summary>
+		public string Id => this.OfType<IdKeyword>().FirstOrDefault()?.Value;
+		/// <summary>
+		/// Gets the <code>$schema</code> property, if declared.
+		/// </summary>
+		public string Schema => this.OfType<SchemaKeyword>().FirstOrDefault()?.Value;
+		/// <summary>
+		/// Gets other data that may be present in the schema but unrelated to any known keywords.
+		/// </summary>
+		public JsonObject OtherData { get; set; } = new JsonObject();
 
+		/// <summary>
+		/// Creates a new instance of the <see cref="JsonSchema"/> class.
+		/// </summary>
 		public JsonSchema() { }
+		/// <summary>
+		/// Creates a new instance of the <see cref="JsonSchema"/> class, explicitly set to a true/false value.
+		/// </summary>
 		public JsonSchema(bool value)
 		{
 			_inherentValue = value;
 		}
 
 		// TODO: This should be a SchemaEvaluationResults that reports supported schema versions and other metadata.
+		/// <summary>
+		/// Validates that the schema object represents a valid schema in accordance with a known meta-schema.
+		/// </summary>
+		/// <returns>Validation results.</returns>
 		public SchemaValidationResults ValidateSchema()
 		{
 			var errors = new List<string>();
@@ -61,7 +87,11 @@ namespace Manatee.Json.Schema
 				       ? new SchemaValidationResults(errors)
 				       : SchemaValidationResults.Valid;
 		}
-
+		/// <summary>
+		/// Provides the validation logic for this keyword.
+		/// </summary>
+		/// <param name="json">The instance to validate.</param>
+		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(JsonValue json)
 		{
 			return Validate(new SchemaValidationContext
@@ -70,6 +100,10 @@ namespace Manatee.Json.Schema
 					Root = this
 				});
 		}
+		/// <summary>
+		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
+		/// </summary>
+		/// <param name="baseUri">The current base URI</param>
 		public void RegisterSubschemas(Uri baseUri)
 		{
 			if (_hasRegistered) return;
@@ -86,6 +120,12 @@ namespace Manatee.Json.Schema
 				keyword.RegisterSubschemas(baseUri);
 			}
 		}
+		/// <summary>
+		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
+		/// </summary>
+		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
+		/// <param name="baseUri">The current base URI.</param>
+		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
 		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			var first = pointer.FirstOrDefault();
@@ -144,6 +184,13 @@ namespace Manatee.Json.Schema
 			return new SchemaValidationResults(this.OrderBy(k => k.ValidationSequence)
 				                                   .Select(k => k.Validate(context)));
 		}
+
+		/// <summary>
+		/// Builds an object from a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			if (json.Type == JsonValueType.Boolean)
@@ -164,6 +211,12 @@ namespace Manatee.Json.Schema
 					         })
 				         .Where(k => k != null));
 		}
+		/// <summary>
+		/// Converts an object to a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			if (_inherentValue.HasValue) return _inherentValue;
@@ -181,10 +234,16 @@ namespace Manatee.Json.Schema
 			return obj;
 		}
 
+		/// <summary>
+		/// Implicitly converts a boolean into a boolean schema.
+		/// </summary>
 		public static implicit operator JsonSchema(bool value)
 		{
 			return value ? True : False;
 		}
+		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+		/// <param name="other">An object to compare with this object.</param>
 		public bool Equals(JsonSchema other)
 		{
 			if (other is null) return false;
@@ -200,18 +259,31 @@ namespace Manatee.Json.Schema
 			       Equals(OtherData, other.OtherData) &&
 			       keywordMatch.All(k => Equals(k.ThisKeyword, k.OtherKeyword));
 		}
+		/// <summary>Determines whether the specified object is equal to the current object.</summary>
+		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+		/// <param name="obj">The object to compare with the current object. </param>
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as JsonSchema);
 		}
+		/// <summary>Serves as the default hash function. </summary>
+		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
 		}
+		/// <summary>
+		/// Overloads the equals operator for <see cref="JsonSchema"/>.
+		/// </summary>
+		/// <returns>true if the two values represent the same schema; false otherwise</returns>
 		public static bool operator ==(JsonSchema left, JsonSchema right)
 		{
 			return Equals(left, right);
 		}
+		/// <summary>
+		/// Overloads the not-equal operator for <see cref="JsonSchema"/>.
+		/// </summary>
+		/// <returns>false if the two values represent the same schema; true otherwise</returns>
 		public static bool operator !=(JsonSchema left, JsonSchema right)
 		{
 			return !Equals(left, right);

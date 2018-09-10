@@ -1,7 +1,13 @@
 ﻿namespace Manatee.Json.Schema
 {
+	/// <summary>
+	/// Defines the official draft meta-schemas.
+	/// </summary>
 	public static partial class MetaSchemas
 	{
+		/// <summary>
+		/// The meta-schema for draft-04.
+		/// </summary>
 		public static readonly JsonSchema Draft04 = new JsonSchema()
 			.IdDraft04("http://json-schema.org/draft-04/schema#")
 			.Schema("http://json-schema.org/draft-04/schema#")

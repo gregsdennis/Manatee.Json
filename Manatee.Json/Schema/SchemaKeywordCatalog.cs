@@ -7,6 +7,9 @@ using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Schema
 {
+	/// <summary>
+	/// Curates a list of all known JSON Schema keywords.
+	/// </summary>
 	public static class SchemaKeywordCatalog
 	{
 		private static readonly Dictionary<string, List<Type>> _cache = new Dictionary<string, List<Type>>();
@@ -26,6 +29,10 @@ namespace Manatee.Json.Schema
 			}
 		}
 
+		/// <summary>
+		/// Adds a new keyword.
+		/// </summary>
+		/// <typeparam name="T">The type of the keyword implementation.</typeparam>
 		public static void Add<T>()
 			where T : IJsonSchemaKeyword, new()
 		{
@@ -38,7 +45,10 @@ namespace Manatee.Json.Schema
 			if (!list.Contains(typeof(T)))
 				list.Add(typeof(T));
 		}
-
+		/// <summary>
+		/// Removes a keyword from use.
+		/// </summary>
+		/// <typeparam name="T">The type of the keyword implementation.</typeparam>
 		public static void Remove<T>()
 			where T : IJsonSchemaKeyword, new()
 		{
