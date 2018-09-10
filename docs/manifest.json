@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.ArrayEquality.html",
-          "hash": "8skKTMTJ9tDiysH6TzyN/w=="
+          "hash": "nrlsI0/96rs5tYq+6IXoAA=="
         }
       },
       "is_incremental": true,
@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.DuplicateKeyBehavior.html",
-          "hash": "rbT4WasNLVEyhPIBk2fZJA=="
+          "hash": "xizSf2zlXsnS1LEtz8ue7A=="
         }
       },
       "is_incremental": true,
@@ -45,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Internal.Uri3986.html",
-          "hash": "GAN5ZJ4TArtVa+802ZRSTg=="
+          "hash": "E4kDupE3QjQXlaiwvHGAdQ=="
         }
       },
       "is_incremental": true,
@@ -69,7 +69,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonArray.html",
-          "hash": "yYp3SJhLzx7Bfp78wWoIaw=="
+          "hash": "PSB4QwsyRerRtAaih9oCfw=="
         }
       },
       "is_incremental": true,
@@ -81,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonArrayExtensions.html",
-          "hash": "I3sLBuVbpRtlqPXAcmUSsg=="
+          "hash": "iGp3J+pTAscufvJQ95iv6A=="
         }
       },
       "is_incremental": true,
@@ -93,7 +93,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonObject.html",
-          "hash": "YaloY5j6Vo9SLfCCwIrqLQ=="
+          "hash": "kKundQ3NAyeDShUkOFzPPA=="
         }
       },
       "is_incremental": true,
@@ -105,7 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonObjectExtensions.html",
-          "hash": "Ji3pHy8nXWLLo8fer699dA=="
+          "hash": "ave/B72/CS1wvyqpWKToZA=="
         }
       },
       "is_incremental": true,
@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonOptions.html",
-          "hash": "nsvMUmjtRhc8LKtky80uqg=="
+          "hash": "B4GARGxckrcBVSJ1xAblcA=="
         }
       },
       "is_incremental": true,
@@ -129,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonSyntaxException.html",
-          "hash": "Ghd8q01rNtVhBqF/22lbuQ=="
+          "hash": "rG1riw66PGnp1f+KRXSuRQ=="
         }
       },
       "is_incremental": true,
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonValue.html",
-          "hash": "og1VkMQ1wdTMSrwhAHEK/A=="
+          "hash": "Ua/d+Y7OMze7Q1KTeaGyAg=="
         }
       },
       "is_incremental": true,
@@ -153,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonValueIncorrectTypeException.html",
-          "hash": "eSorsuXv/dgGoszZpNG8Ow=="
+          "hash": "j5l6Zw7QIn0pHCZrVCEUjQ=="
         }
       },
       "is_incremental": true,
@@ -165,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.JsonValueType.html",
-          "hash": "xcTFh7SabUYWRXpLoSG74Q=="
+          "hash": "mIMEGLQiE0eJPAgv8HzyYw=="
         }
       },
       "is_incremental": true,
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.LinqExtensions.html",
-          "hash": "yyRDPIwi94On0nWOdUNPdg=="
+          "hash": "02Hip4/6jmddz2CmJ3Mvng=="
         }
       },
       "is_incremental": true,
@@ -189,7 +189,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Patch.JsonPatch.html",
-          "hash": "59wu7J5+nTt4thhr0oV0tw=="
+          "hash": "sG8TcCimrveY7FAO3SUDYg=="
         }
       },
       "is_incremental": true,
@@ -201,7 +201,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Patch.JsonPatchAction.html",
-          "hash": "SHpXJb4PEgFLukJCwM2sdA=="
+          "hash": "epIfyr71iDd9AVw7pkxCqA=="
         }
       },
       "is_incremental": true,
@@ -213,7 +213,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Patch.JsonPatchOperation.html",
-          "hash": "hzdZDcCk5Gza/825r53Fbg=="
+          "hash": "9V8wRAB5Wyvy41jk2QskJQ=="
         }
       },
       "is_incremental": true,
@@ -225,7 +225,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Patch.JsonPatchResult.html",
-          "hash": "hYPpCZYmDCGIO/YlUAY/TA=="
+          "hash": "VxzDylhP2eSoG4HafULi7A=="
         }
       },
       "is_incremental": true,
@@ -249,7 +249,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.JsonPath.html",
-          "hash": "/rCQ5yh7FBRuOf2h1AabCg=="
+          "hash": "N3/ZzLofhSEtUFUY8NxrVw=="
         }
       },
       "is_incremental": true,
@@ -261,7 +261,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.JsonPathArray.html",
-          "hash": "BOsxW8bBxzsJqX9FbUz5QA=="
+          "hash": "JI/X2C5OJwYJUaaNkuMgSw=="
         }
       },
       "is_incremental": true,
@@ -273,7 +273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.JsonPathRoot.html",
-          "hash": "awjKoXj/p03sXB7j+qo4tQ=="
+          "hash": "eG1nSbbc7g4kPpyR8ahQ6A=="
         }
       },
       "is_incremental": true,
@@ -285,7 +285,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.JsonPathSyntaxException.html",
-          "hash": "WjDeihnxwNR6qHZOYAXRmg=="
+          "hash": "hRO9eqarj9sLe3HD9FbMzQ=="
         }
       },
       "is_incremental": true,
@@ -297,7 +297,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.JsonPathValue.html",
-          "hash": "DOinkPfp47bhdnE5Kpz3WQ=="
+          "hash": "YmrC57k66eAr3p8qatS46w=="
         }
       },
       "is_incremental": true,
@@ -309,7 +309,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.JsonPathWith.html",
-          "hash": "o6Rd2IcYxSxp6qCHyHpi6Q=="
+          "hash": "i0Y5jkKpvgR9l+fTMqECrQ=="
         }
       },
       "is_incremental": true,
@@ -321,7 +321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.PathExpressionExtensions.html",
-          "hash": "RAXQ7Tcl3fq0EkkVfanxqw=="
+          "hash": "nsXdesu96KgQ4l24rt4L0w=="
         }
       },
       "is_incremental": true,
@@ -333,7 +333,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Path.Slice.html",
-          "hash": "RDGMUzMl1skO9wzIHYloBw=="
+          "hash": "VlDlbtAhdjVs9rMZCQsdsw=="
         }
       },
       "is_incremental": true,
@@ -357,7 +357,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Pointer.JsonPointer.html",
-          "hash": "xMHQpqjFUwuc0OR7SeHEcw=="
+          "hash": "qyRmKkXyAuWNG72D7k4s4g=="
         }
       },
       "is_incremental": true,
@@ -369,7 +369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Pointer.PointerEvaluationResults.html",
-          "hash": "qn/rLKiRbqjc5PNh582TsA=="
+          "hash": "AFF+ZFebBOSTUfXHmgVZiQ=="
         }
       },
       "is_incremental": true,
@@ -393,7 +393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.ReadOnlyException.html",
-          "hash": "NeA/fKxhfkhBRQc0yXlViQ=="
+          "hash": "SZ4lwU9IxCbSmk4AL2cgtw=="
         }
       },
       "is_incremental": true,
@@ -405,7 +405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.AdditionalItems.html",
-          "hash": "uT7HEJLJv52ywx+Y3WO/Qg=="
+          "hash": "9vT/CpRq3ESA2fmqBlwC2w=="
         }
       },
       "is_incremental": true,
@@ -417,7 +417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.AdditionalProperties.html",
-          "hash": "E+THuqsqHLUiQmAbQ0J/qA=="
+          "hash": "lVZ79jk5FqnKAmzj3EMn/Q=="
         }
       },
       "is_incremental": true,
@@ -429,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.ContentEncoding.html",
-          "hash": "teXXS41tyNzLdX3YJ7D+gQ=="
+          "hash": "BXDZ84Pd9IsKBTwLACC4EA=="
         }
       },
       "is_incremental": true,
@@ -441,7 +441,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.EnumSchemaValue.html",
-          "hash": "pG2T4Yz/yUdVUglkmUO+mQ=="
+          "hash": "9Z65y8pW4wPVFv8PvRRJHQ=="
         }
       },
       "is_incremental": true,
@@ -453,7 +453,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.IJsonSchema.html",
-          "hash": "SBFTjbRMzKVw1sLq4mo2gg=="
+          "hash": "y/YIVOv79/EIjxGH1zSCCg=="
         }
       },
       "is_incremental": true,
@@ -489,7 +489,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchema04.html",
-          "hash": "0+y37eENjvTY5MX/DpQyjA=="
+          "hash": "0zn5C3pQdONQiMWECd3bJg=="
         }
       },
       "is_incremental": true,
@@ -501,7 +501,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchema06.html",
-          "hash": "CVAyySQ+avbwIz/HZHSx7A=="
+          "hash": "r7CcF4R4BfzJ1/mMzGobUQ=="
         }
       },
       "is_incremental": true,
@@ -513,10 +513,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchema07.html",
-          "hash": "Yc+HPA6sOX3RCVx66Dyxgw=="
+          "hash": "Dy+Z7EdEZIrteJTcgRxXVA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -525,7 +525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchemaCollection.html",
-          "hash": "FTAsrzkHwX4jCxatU9JACw=="
+          "hash": "NmL8YuxFnsOHkicVx4dpZA=="
         }
       },
       "is_incremental": true,
@@ -537,7 +537,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchemaFactory.html",
-          "hash": "jPSQ+aipOGG/AFu++Ky/OQ=="
+          "hash": "24P8wAF9mvgAm7uMWpqvIw=="
         }
       },
       "is_incremental": true,
@@ -549,10 +549,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchemaOptions.html",
-          "hash": "5eVibSIAAbotDkTFOrGSZw=="
+          "hash": "EZOlmJ0Tz5HcFtpifPiQQQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -561,7 +561,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchemaPropertyValidatorFactory.html",
-          "hash": "EYZCO4uvSoe/bjcDFtK8YQ=="
+          "hash": "2cHYOajYS6kZCe5/qUnP4A=="
         }
       },
       "is_incremental": true,
@@ -573,7 +573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchemaReference.html",
-          "hash": "Ggpmjro+FbibJ8KuCePVUg=="
+          "hash": "tKmPX5+3hNT0anfHmrqXZA=="
         }
       },
       "is_incremental": true,
@@ -585,7 +585,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchemaRegistry.html",
-          "hash": "GuzE4ZirVJF3xCdsfxwABQ=="
+          "hash": "MBmyJvKTldcaiNCIrv/kWw=="
         }
       },
       "is_incremental": true,
@@ -597,7 +597,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.JsonSchemaType.html",
-          "hash": "uqkHj25FqvEPCuBeMywHag=="
+          "hash": "vk+GKm+Pk7h/w7/Hu9EI+w=="
         }
       },
       "is_incremental": true,
@@ -609,7 +609,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.PropertyDependency.html",
-          "hash": "O+EmrmqF10AG4UwfnJZkAw=="
+          "hash": "qj2UGj3LTh5Zn60oD8CO5Q=="
         }
       },
       "is_incremental": true,
@@ -621,7 +621,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.SchemaDependency.html",
-          "hash": "qd6B/rTeod4vFA44Y5FVzA=="
+          "hash": "s3cpt1sdQVsaO5X6rg6Klw=="
         }
       },
       "is_incremental": true,
@@ -633,7 +633,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.SchemaErrorMessages.html",
-          "hash": "DeAttSvHPs7mei4E43MB6g=="
+          "hash": "T6skLO5bekQt9Zj+gnE3BA=="
         }
       },
       "is_incremental": true,
@@ -645,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.SchemaLoadException.html",
-          "hash": "oOUXiD04ciOwD5/qXCGaBA=="
+          "hash": "TQ5qSOC0CwYMgK8KjkfmPQ=="
         }
       },
       "is_incremental": true,
@@ -657,7 +657,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.SchemaValidationError.html",
-          "hash": "g5tTl5AW5V+OdJP44itaTQ=="
+          "hash": "ABjqEpvsNp+ZWUywoRYWvw=="
         }
       },
       "is_incremental": true,
@@ -669,7 +669,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.SchemaValidationResults.html",
-          "hash": "UC3fXvGl/z6ykwiXBR9MkQ=="
+          "hash": "aJgB8o/QCqPgazXO83CL4g=="
         }
       },
       "is_incremental": true,
@@ -681,7 +681,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.StringFormat.html",
-          "hash": "Rrwn4m3pc65eCVZaovhpNg=="
+          "hash": "ukO4hGd/3X/qcrUSSyWsLQ=="
         }
       },
       "is_incremental": true,
@@ -696,7 +696,7 @@
           "hash": "MRh12v7+o0h2L+98iUCr4Q=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -705,7 +705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.AbstractionMap.html",
-          "hash": "rHZvdX0imx2G2LnzVZ99SQ=="
+          "hash": "egajuZUNM+NPFUk7Gkjv0A=="
         }
       },
       "is_incremental": true,
@@ -741,7 +741,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.CustomSerializations.html",
-          "hash": "OrOsff7rviYLFSkSAvNDtA=="
+          "hash": "2eeI2WiMfylZ/mOm+CHnWw=="
         }
       },
       "is_incremental": true,
@@ -753,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.DateTimeSerializationFormat.html",
-          "hash": "qhyGEZai1ovVP3doPH6w6w=="
+          "hash": "wNVaVU7cq2D4HxvQ2KZ4AQ=="
         }
       },
       "is_incremental": true,
@@ -765,7 +765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.EnumSerializationFormat.html",
-          "hash": "XfNgL56jwGxmWQzziIBzfQ=="
+          "hash": "+8HVFeMUpo16S16Ag2ybtA=="
         }
       },
       "is_incremental": true,
@@ -789,7 +789,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.IResolver.html",
-          "hash": "IbPFlZeS9XXO8kglH8o48w=="
+          "hash": "P2f+Id8mJO1/+Y0ibq7YBg=="
         }
       },
       "is_incremental": true,
@@ -801,7 +801,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.InvalidPropertyKeyBehavior.html",
-          "hash": "mePDpQgL7KbA4xsJmnysZg=="
+          "hash": "FmChBag6WHhMEGbo+K/xYA=="
         }
       },
       "is_incremental": true,
@@ -813,7 +813,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonIgnoreAttribute.html",
-          "hash": "SPa+hVd+7qVhz7+YSRcAAg=="
+          "hash": "tcD5Z0fb0N80FDqoBhK6jw=="
         }
       },
       "is_incremental": true,
@@ -825,7 +825,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonMapToAttribute.html",
-          "hash": "6+EnnNJ9SqtNDAzFL4kFvA=="
+          "hash": "9n04cgI9pRsxqnxYx9VxfA=="
         }
       },
       "is_incremental": true,
@@ -837,7 +837,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonSerializationAbstractionMap.html",
-          "hash": "agA8+iOvamFqu19AR0SsYA=="
+          "hash": "hBvgMHi/dO+M/twSNIeBiQ=="
         }
       },
       "is_incremental": true,
@@ -849,7 +849,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonSerializationException.html",
-          "hash": "eEnpWyBUsQaAFtmZ6mk06Q=="
+          "hash": "vWv/MrdIZmAbJ7F4Iz1+0g=="
         }
       },
       "is_incremental": true,
@@ -885,7 +885,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonSerializationTypeRegistry.html",
-          "hash": "Fa4QYIOgYfa+Id8KzuO+3g=="
+          "hash": "DWbie7lQSoz5KN4YRkFh6A=="
         }
       },
       "is_incremental": true,
@@ -897,7 +897,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonSerializer.html",
-          "hash": "aV1J4XAV66XrIPPMZGbdyw=="
+          "hash": "10MxLt4gXs9zWx1HQCBDdQ=="
         }
       },
       "is_incremental": true,
@@ -909,7 +909,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonSerializerOptions.html",
-          "hash": "CPKZ3Oi+srfQrOC9Jdwypg=="
+          "hash": "PalWjnZLOysGFgWpznepmw=="
         }
       },
       "is_incremental": true,
@@ -921,7 +921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonTypeMapException-2.html",
-          "hash": "KO+Lx1fHfPQ04D2ue3o6uQ=="
+          "hash": "4g6Q4GTHb75UC+nQhy9jvw=="
         }
       },
       "is_incremental": true,
@@ -933,7 +933,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.JsonTypeMapException.html",
-          "hash": "wYxP5uOs2MpULxnR0F+46A=="
+          "hash": "ESR+USdtBIurK2OiLIxZ9w=="
         }
       },
       "is_incremental": true,
@@ -945,7 +945,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.MapBaseAbstractionBehavior.html",
-          "hash": "/U7ngEBOGTB3yq7qJlI5Nw=="
+          "hash": "8Izg05O9pbfPU0b8MLaBiA=="
         }
       },
       "is_incremental": true,
@@ -957,7 +957,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.PropertySelectionStrategy.html",
-          "hash": "ufWZaa0c//b8uOtZP48J9A=="
+          "hash": "dr8eCBZr8smIL2PaHQ/G/g=="
         }
       },
       "is_incremental": true,
@@ -969,7 +969,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.SchemaAttribute.html",
-          "hash": "jRck7IxS+Ijpv34xp/MzHQ=="
+          "hash": "OUJKDhhptUsyynyPTJmrPg=="
         }
       },
       "is_incremental": true,
@@ -981,7 +981,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.TypeDoesNotContainPropertyException.html",
-          "hash": "5GrJwMfJHgFSg+TWpPmmWQ=="
+          "hash": "fk0KEc6KlP177I1coQEn2w=="
         }
       },
       "is_incremental": true,
@@ -993,7 +993,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.TypeInstantiationException.html",
-          "hash": "OpabIE8yXmXkPEcB4k6j9g=="
+          "hash": "f1n5Fl1s2mnCa3K0/fVCwA=="
         }
       },
       "is_incremental": true,
@@ -1005,7 +1005,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.TypeNameSerializationBehavior.html",
-          "hash": "z9BzxossLlRxKHF0RbMadA=="
+          "hash": "ikENXwgAoExVESukmxjfqA=="
         }
       },
       "is_incremental": true,
@@ -1017,7 +1017,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.TypeRegistrationException.html",
-          "hash": "Uh5ZoOTirbf6swyod+Tt/A=="
+          "hash": "nUkAOwWZtu2SZ6hqTXIrXQ=="
         }
       },
       "is_incremental": true,
@@ -1041,7 +1041,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Transform.JsonTransformer.html",
-          "hash": "Nt983qKRwZCafVULxEQg2Q=="
+          "hash": "1UtZavHe014RdztdiV5lrg=="
         }
       },
       "is_incremental": true,
@@ -1065,7 +1065,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.XmlExtensions.html",
-          "hash": "rx64V3GX7tJc3GzzWEmEUQ=="
+          "hash": "hUUDN8pHHN2kvN/JxRyIqQ=="
         }
       },
       "is_incremental": true,
@@ -1184,7 +1184,7 @@
       "output": {
         ".html": {
           "relative_path": "release-notes.html",
-          "hash": "8Yytd+AsYM70YZLKRwrWVg=="
+          "hash": "NOICF+1FZyClcLvQOEqNRw=="
         }
       },
       "is_incremental": false,
@@ -1326,17 +1326,17 @@
           "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build"
-        },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build"
         },
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
+          "incrementalPhase": "build"
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         }
       }

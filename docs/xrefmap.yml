@@ -80,13 +80,13 @@ references:
   commentId: M:Manatee.Json.JsonArray.#ctor
   fullName: Manatee.Json.JsonArray.JsonArray()
   nameWithType: JsonArray.JsonArray()
-- uid: Manatee.Json.JsonArray.#ctor(IEnumerable{Manatee.Json.JsonValue})
+- uid: Manatee.Json.JsonArray.#ctor(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})
   name: JsonArray(IEnumerable<JsonValue>)
-  href: api/Manatee.Json.JsonArray.html#Manatee_Json_JsonArray__ctor_IEnumerable_Manatee_Json_JsonValue__
-  commentId: M:Manatee.Json.JsonArray.#ctor(IEnumerable{Manatee.Json.JsonValue})
+  href: api/Manatee.Json.JsonArray.html#Manatee_Json_JsonArray__ctor_System_Collections_Generic_IEnumerable_Manatee_Json_JsonValue__
+  commentId: M:Manatee.Json.JsonArray.#ctor(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})
   name.vb: JsonArray(IEnumerable(Of JsonValue))
-  fullName: Manatee.Json.JsonArray.JsonArray(IEnumerable<Manatee.Json.JsonValue>)
-  fullName.vb: Manatee.Json.JsonArray.JsonArray(IEnumerable(Of Manatee.Json.JsonValue))
+  fullName: Manatee.Json.JsonArray.JsonArray(System.Collections.Generic.IEnumerable<Manatee.Json.JsonValue>)
+  fullName.vb: Manatee.Json.JsonArray.JsonArray(System.Collections.Generic.IEnumerable(Of Manatee.Json.JsonValue))
   nameWithType: JsonArray.JsonArray(IEnumerable<JsonValue>)
   nameWithType.vb: JsonArray.JsonArray(IEnumerable(Of JsonValue))
 - uid: Manatee.Json.JsonArray.#ctor*
@@ -109,13 +109,13 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.JsonArray.Add
   nameWithType: JsonArray.Add
-- uid: Manatee.Json.JsonArray.AddRange(IEnumerable{Manatee.Json.JsonValue})
+- uid: Manatee.Json.JsonArray.AddRange(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})
   name: AddRange(IEnumerable<JsonValue>)
-  href: api/Manatee.Json.JsonArray.html#Manatee_Json_JsonArray_AddRange_IEnumerable_Manatee_Json_JsonValue__
-  commentId: M:Manatee.Json.JsonArray.AddRange(IEnumerable{Manatee.Json.JsonValue})
+  href: api/Manatee.Json.JsonArray.html#Manatee_Json_JsonArray_AddRange_System_Collections_Generic_IEnumerable_Manatee_Json_JsonValue__
+  commentId: M:Manatee.Json.JsonArray.AddRange(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})
   name.vb: AddRange(IEnumerable(Of JsonValue))
-  fullName: Manatee.Json.JsonArray.AddRange(IEnumerable<Manatee.Json.JsonValue>)
-  fullName.vb: Manatee.Json.JsonArray.AddRange(IEnumerable(Of Manatee.Json.JsonValue))
+  fullName: Manatee.Json.JsonArray.AddRange(System.Collections.Generic.IEnumerable<Manatee.Json.JsonValue>)
+  fullName.vb: Manatee.Json.JsonArray.AddRange(System.Collections.Generic.IEnumerable(Of Manatee.Json.JsonValue))
   nameWithType: JsonArray.AddRange(IEnumerable<JsonValue>)
   nameWithType.vb: JsonArray.AddRange(IEnumerable(Of JsonValue))
 - uid: Manatee.Json.JsonArray.AddRange*
@@ -221,13 +221,13 @@ references:
   commentId: M:Manatee.Json.JsonObject.#ctor
   fullName: Manatee.Json.JsonObject.JsonObject()
   nameWithType: JsonObject.JsonObject()
-- uid: Manatee.Json.JsonObject.#ctor(IDictionary{System.String,Manatee.Json.JsonValue})
+- uid: Manatee.Json.JsonObject.#ctor(System.Collections.Generic.IDictionary{System.String,Manatee.Json.JsonValue})
   name: JsonObject(IDictionary<String, JsonValue>)
-  href: api/Manatee.Json.JsonObject.html#Manatee_Json_JsonObject__ctor_IDictionary_System_String_Manatee_Json_JsonValue__
-  commentId: M:Manatee.Json.JsonObject.#ctor(IDictionary{System.String,Manatee.Json.JsonValue})
+  href: api/Manatee.Json.JsonObject.html#Manatee_Json_JsonObject__ctor_System_Collections_Generic_IDictionary_System_String_Manatee_Json_JsonValue__
+  commentId: M:Manatee.Json.JsonObject.#ctor(System.Collections.Generic.IDictionary{System.String,Manatee.Json.JsonValue})
   name.vb: JsonObject(IDictionary(Of String, JsonValue))
-  fullName: Manatee.Json.JsonObject.JsonObject(IDictionary<System.String, Manatee.Json.JsonValue>)
-  fullName.vb: Manatee.Json.JsonObject.JsonObject(IDictionary(Of System.String, Manatee.Json.JsonValue))
+  fullName: Manatee.Json.JsonObject.JsonObject(System.Collections.Generic.IDictionary<System.String, Manatee.Json.JsonValue>)
+  fullName.vb: Manatee.Json.JsonObject.JsonObject(System.Collections.Generic.IDictionary(Of System.String, Manatee.Json.JsonValue))
   nameWithType: JsonObject.JsonObject(IDictionary<String, JsonValue>)
   nameWithType.vb: JsonObject.JsonObject(IDictionary(Of String, JsonValue))
 - uid: Manatee.Json.JsonObject.#ctor*
@@ -724,18 +724,18 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.JsonValue.Inequality
   nameWithType: JsonValue.Inequality
+- uid: Manatee.Json.JsonValue.Parse(System.IO.TextReader)
+  name: Parse(TextReader)
+  href: api/Manatee.Json.JsonValue.html#Manatee_Json_JsonValue_Parse_System_IO_TextReader_
+  commentId: M:Manatee.Json.JsonValue.Parse(System.IO.TextReader)
+  fullName: Manatee.Json.JsonValue.Parse(System.IO.TextReader)
+  nameWithType: JsonValue.Parse(TextReader)
 - uid: Manatee.Json.JsonValue.Parse(System.String)
   name: Parse(String)
   href: api/Manatee.Json.JsonValue.html#Manatee_Json_JsonValue_Parse_System_String_
   commentId: M:Manatee.Json.JsonValue.Parse(System.String)
   fullName: Manatee.Json.JsonValue.Parse(System.String)
   nameWithType: JsonValue.Parse(String)
-- uid: Manatee.Json.JsonValue.Parse(TextReader)
-  name: Parse(TextReader)
-  href: api/Manatee.Json.JsonValue.html#Manatee_Json_JsonValue_Parse_TextReader_
-  commentId: M:Manatee.Json.JsonValue.Parse(TextReader)
-  fullName: Manatee.Json.JsonValue.Parse(TextReader)
-  nameWithType: JsonValue.Parse(TextReader)
 - uid: Manatee.Json.JsonValue.Parse*
   name: Parse
   href: api/Manatee.Json.JsonValue.html#Manatee_Json_JsonValue_Parse_
@@ -743,11 +743,11 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.JsonValue.Parse
   nameWithType: JsonValue.Parse
-- uid: Manatee.Json.JsonValue.ParseAsync(TextReader)
+- uid: Manatee.Json.JsonValue.ParseAsync(System.IO.TextReader)
   name: ParseAsync(TextReader)
-  href: api/Manatee.Json.JsonValue.html#Manatee_Json_JsonValue_ParseAsync_TextReader_
-  commentId: M:Manatee.Json.JsonValue.ParseAsync(TextReader)
-  fullName: Manatee.Json.JsonValue.ParseAsync(TextReader)
+  href: api/Manatee.Json.JsonValue.html#Manatee_Json_JsonValue_ParseAsync_System_IO_TextReader_
+  commentId: M:Manatee.Json.JsonValue.ParseAsync(System.IO.TextReader)
+  fullName: Manatee.Json.JsonValue.ParseAsync(System.IO.TextReader)
   nameWithType: JsonValue.ParseAsync(TextReader)
 - uid: Manatee.Json.JsonValue.ParseAsync*
   name: ParseAsync
@@ -882,15 +882,6 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.LinqExtensions.FromJson
   nameWithType: LinqExtensions.FromJson
-- uid: Manatee.Json.LinqExtensions.FromJson``1(IEnumerable{Manatee.Json.JsonValue},Manatee.Json.Serialization.JsonSerializer)
-  name: FromJson<T>(IEnumerable<JsonValue>, JsonSerializer)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_FromJson__1_IEnumerable_Manatee_Json_JsonValue__Manatee_Json_Serialization_JsonSerializer_
-  commentId: M:Manatee.Json.LinqExtensions.FromJson``1(IEnumerable{Manatee.Json.JsonValue},Manatee.Json.Serialization.JsonSerializer)
-  name.vb: FromJson(Of T)(IEnumerable(Of JsonValue), JsonSerializer)
-  fullName: Manatee.Json.LinqExtensions.FromJson<T>(IEnumerable<Manatee.Json.JsonValue>, Manatee.Json.Serialization.JsonSerializer)
-  fullName.vb: Manatee.Json.LinqExtensions.FromJson(Of T)(IEnumerable(Of Manatee.Json.JsonValue), Manatee.Json.Serialization.JsonSerializer)
-  nameWithType: LinqExtensions.FromJson<T>(IEnumerable<JsonValue>, JsonSerializer)
-  nameWithType.vb: LinqExtensions.FromJson(Of T)(IEnumerable(Of JsonValue), JsonSerializer)
 - uid: Manatee.Json.LinqExtensions.FromJson``1(Manatee.Json.JsonObject,Manatee.Json.Serialization.JsonSerializer)
   name: FromJson<T>(JsonObject, JsonSerializer)
   href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_FromJson__1_Manatee_Json_JsonObject_Manatee_Json_Serialization_JsonSerializer_
@@ -900,94 +891,103 @@ references:
   fullName.vb: Manatee.Json.LinqExtensions.FromJson(Of T)(Manatee.Json.JsonObject, Manatee.Json.Serialization.JsonSerializer)
   nameWithType: LinqExtensions.FromJson<T>(JsonObject, JsonSerializer)
   nameWithType.vb: LinqExtensions.FromJson(Of T)(JsonObject, JsonSerializer)
-- uid: Manatee.Json.LinqExtensions.ToJson(IDictionary{System.String,Manatee.Json.JsonValue})
+- uid: Manatee.Json.LinqExtensions.FromJson``1(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue},Manatee.Json.Serialization.JsonSerializer)
+  name: FromJson<T>(IEnumerable<JsonValue>, JsonSerializer)
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_FromJson__1_System_Collections_Generic_IEnumerable_Manatee_Json_JsonValue__Manatee_Json_Serialization_JsonSerializer_
+  commentId: M:Manatee.Json.LinqExtensions.FromJson``1(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue},Manatee.Json.Serialization.JsonSerializer)
+  name.vb: FromJson(Of T)(IEnumerable(Of JsonValue), JsonSerializer)
+  fullName: Manatee.Json.LinqExtensions.FromJson<T>(System.Collections.Generic.IEnumerable<Manatee.Json.JsonValue>, Manatee.Json.Serialization.JsonSerializer)
+  fullName.vb: Manatee.Json.LinqExtensions.FromJson(Of T)(System.Collections.Generic.IEnumerable(Of Manatee.Json.JsonValue), Manatee.Json.Serialization.JsonSerializer)
+  nameWithType: LinqExtensions.FromJson<T>(IEnumerable<JsonValue>, JsonSerializer)
+  nameWithType.vb: LinqExtensions.FromJson(Of T)(IEnumerable(Of JsonValue), JsonSerializer)
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IDictionary{System.String,Manatee.Json.JsonValue})
   name: ToJson(IDictionary<String, JsonValue>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IDictionary_System_String_Manatee_Json_JsonValue__
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IDictionary{System.String,Manatee.Json.JsonValue})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IDictionary_System_String_Manatee_Json_JsonValue__
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IDictionary{System.String,Manatee.Json.JsonValue})
   name.vb: ToJson(IDictionary(Of String, JsonValue))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IDictionary<System.String, Manatee.Json.JsonValue>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IDictionary(Of System.String, Manatee.Json.JsonValue))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IDictionary<System.String, Manatee.Json.JsonValue>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IDictionary(Of System.String, Manatee.Json.JsonValue))
   nameWithType: LinqExtensions.ToJson(IDictionary<String, JsonValue>)
   nameWithType.vb: LinqExtensions.ToJson(IDictionary(Of String, JsonValue))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{KeyValuePair{System.String,Manatee.Json.JsonValue}})
-  name: ToJson(IEnumerable<KeyValuePair<String, JsonValue>>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_KeyValuePair_System_String_Manatee_Json_JsonValue___
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{KeyValuePair{System.String,Manatee.Json.JsonValue}})
-  name.vb: ToJson(IEnumerable(Of KeyValuePair(Of String, JsonValue)))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<KeyValuePair<System.String, Manatee.Json.JsonValue>>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of KeyValuePair(Of System.String, Manatee.Json.JsonValue)))
-  nameWithType: LinqExtensions.ToJson(IEnumerable<KeyValuePair<String, JsonValue>>)
-  nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of KeyValuePair(Of String, JsonValue)))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{Manatee.Json.JsonArray})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonArray})
   name: ToJson(IEnumerable<JsonArray>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_Manatee_Json_JsonArray__
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{Manatee.Json.JsonArray})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_Manatee_Json_JsonArray__
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonArray})
   name.vb: ToJson(IEnumerable(Of JsonArray))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<Manatee.Json.JsonArray>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of Manatee.Json.JsonArray))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<Manatee.Json.JsonArray>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of Manatee.Json.JsonArray))
   nameWithType: LinqExtensions.ToJson(IEnumerable<JsonArray>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of JsonArray))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{Manatee.Json.JsonObject})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonObject})
   name: ToJson(IEnumerable<JsonObject>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_Manatee_Json_JsonObject__
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{Manatee.Json.JsonObject})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_Manatee_Json_JsonObject__
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonObject})
   name.vb: ToJson(IEnumerable(Of JsonObject))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<Manatee.Json.JsonObject>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of Manatee.Json.JsonObject))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<Manatee.Json.JsonObject>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of Manatee.Json.JsonObject))
   nameWithType: LinqExtensions.ToJson(IEnumerable<JsonObject>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of JsonObject))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{Manatee.Json.JsonValue})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})
   name: ToJson(IEnumerable<JsonValue>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_Manatee_Json_JsonValue__
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{Manatee.Json.JsonValue})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_Manatee_Json_JsonValue__
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{Manatee.Json.JsonValue})
   name.vb: ToJson(IEnumerable(Of JsonValue))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<Manatee.Json.JsonValue>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of Manatee.Json.JsonValue))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<Manatee.Json.JsonValue>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of Manatee.Json.JsonValue))
   nameWithType: LinqExtensions.ToJson(IEnumerable<JsonValue>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of JsonValue))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Boolean})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Boolean})
   name: ToJson(IEnumerable<Boolean>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_System_Boolean__
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Boolean})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Boolean__
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Boolean})
   name.vb: ToJson(IEnumerable(Of Boolean))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<System.Boolean>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of System.Boolean))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<System.Boolean>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of System.Boolean))
   nameWithType: LinqExtensions.ToJson(IEnumerable<Boolean>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of Boolean))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Double})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Manatee.Json.JsonValue}})
+  name: ToJson(IEnumerable<KeyValuePair<String, JsonValue>>)
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair_System_String_Manatee_Json_JsonValue___
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Manatee.Json.JsonValue}})
+  name.vb: ToJson(IEnumerable(Of KeyValuePair(Of String, JsonValue)))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, Manatee.Json.JsonValue>>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of System.Collections.Generic.KeyValuePair(Of System.String, Manatee.Json.JsonValue)))
+  nameWithType: LinqExtensions.ToJson(IEnumerable<KeyValuePair<String, JsonValue>>)
+  nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of KeyValuePair(Of String, JsonValue)))
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Double})
   name: ToJson(IEnumerable<Double>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_System_Double__
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Double})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Double__
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Double})
   name.vb: ToJson(IEnumerable(Of Double))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<System.Double>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of System.Double))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<System.Double>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of System.Double))
   nameWithType: LinqExtensions.ToJson(IEnumerable<Double>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of Double))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Nullable{System.Boolean}})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Nullable{System.Boolean}})
   name: ToJson(IEnumerable<Nullable<Boolean>>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_System_Nullable_System_Boolean___
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Nullable{System.Boolean}})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Nullable_System_Boolean___
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Nullable{System.Boolean}})
   name.vb: ToJson(IEnumerable(Of Nullable(Of Boolean)))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<System.Nullable<System.Boolean>>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of System.Nullable(Of System.Boolean)))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<System.Nullable<System.Boolean>>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of System.Nullable(Of System.Boolean)))
   nameWithType: LinqExtensions.ToJson(IEnumerable<Nullable<Boolean>>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of Nullable(Of Boolean)))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Nullable{System.Double}})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Nullable{System.Double}})
   name: ToJson(IEnumerable<Nullable<Double>>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_System_Nullable_System_Double___
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.Nullable{System.Double}})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Nullable_System_Double___
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Nullable{System.Double}})
   name.vb: ToJson(IEnumerable(Of Nullable(Of Double)))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<System.Nullable<System.Double>>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of System.Nullable(Of System.Double)))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<System.Nullable<System.Double>>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of System.Nullable(Of System.Double)))
   nameWithType: LinqExtensions.ToJson(IEnumerable<Nullable<Double>>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of Nullable(Of Double)))
-- uid: Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.String})
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.String})
   name: ToJson(IEnumerable<String>)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_IEnumerable_System_String__
-  commentId: M:Manatee.Json.LinqExtensions.ToJson(IEnumerable{System.String})
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable{System.String})
   name.vb: ToJson(IEnumerable(Of String))
-  fullName: Manatee.Json.LinqExtensions.ToJson(IEnumerable<System.String>)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(IEnumerable(Of System.String))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable<System.String>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Collections.Generic.IEnumerable(Of System.String))
   nameWithType: LinqExtensions.ToJson(IEnumerable<String>)
   nameWithType.vb: LinqExtensions.ToJson(IEnumerable(Of String))
 - uid: Manatee.Json.LinqExtensions.ToJson*
@@ -997,22 +997,22 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.LinqExtensions.ToJson
   nameWithType: LinqExtensions.ToJson
-- uid: Manatee.Json.LinqExtensions.ToJson``1(IEnumerable{``0},Manatee.Json.Serialization.JsonSerializer)
+- uid: Manatee.Json.LinqExtensions.ToJson``1(System.Collections.Generic.IEnumerable{``0},Manatee.Json.Serialization.JsonSerializer)
   name: ToJson<T>(IEnumerable<T>, JsonSerializer)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson__1_IEnumerable___0__Manatee_Json_Serialization_JsonSerializer_
-  commentId: M:Manatee.Json.LinqExtensions.ToJson``1(IEnumerable{``0},Manatee.Json.Serialization.JsonSerializer)
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson__1_System_Collections_Generic_IEnumerable___0__Manatee_Json_Serialization_JsonSerializer_
+  commentId: M:Manatee.Json.LinqExtensions.ToJson``1(System.Collections.Generic.IEnumerable{``0},Manatee.Json.Serialization.JsonSerializer)
   name.vb: ToJson(Of T)(IEnumerable(Of T), JsonSerializer)
-  fullName: Manatee.Json.LinqExtensions.ToJson<T>(IEnumerable<T>, Manatee.Json.Serialization.JsonSerializer)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(Of T)(IEnumerable(Of T), Manatee.Json.Serialization.JsonSerializer)
+  fullName: Manatee.Json.LinqExtensions.ToJson<T>(System.Collections.Generic.IEnumerable<T>, Manatee.Json.Serialization.JsonSerializer)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(Of T)(System.Collections.Generic.IEnumerable(Of T), Manatee.Json.Serialization.JsonSerializer)
   nameWithType: LinqExtensions.ToJson<T>(IEnumerable<T>, JsonSerializer)
   nameWithType.vb: LinqExtensions.ToJson(Of T)(IEnumerable(Of T), JsonSerializer)
-- uid: Manatee.Json.LinqExtensions.ToJson``1(IEnumerable{KeyValuePair{System.String,``0}},Manatee.Json.Serialization.JsonSerializer)
+- uid: Manatee.Json.LinqExtensions.ToJson``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,``0}},Manatee.Json.Serialization.JsonSerializer)
   name: ToJson<T>(IEnumerable<KeyValuePair<String, T>>, JsonSerializer)
-  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson__1_IEnumerable_KeyValuePair_System_String___0___Manatee_Json_Serialization_JsonSerializer_
-  commentId: M:Manatee.Json.LinqExtensions.ToJson``1(IEnumerable{KeyValuePair{System.String,``0}},Manatee.Json.Serialization.JsonSerializer)
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson__1_System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair_System_String___0___Manatee_Json_Serialization_JsonSerializer_
+  commentId: M:Manatee.Json.LinqExtensions.ToJson``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,``0}},Manatee.Json.Serialization.JsonSerializer)
   name.vb: ToJson(Of T)(IEnumerable(Of KeyValuePair(Of String, T)), JsonSerializer)
-  fullName: Manatee.Json.LinqExtensions.ToJson<T>(IEnumerable<KeyValuePair<System.String, T>>, Manatee.Json.Serialization.JsonSerializer)
-  fullName.vb: Manatee.Json.LinqExtensions.ToJson(Of T)(IEnumerable(Of KeyValuePair(Of System.String, T)), Manatee.Json.Serialization.JsonSerializer)
+  fullName: Manatee.Json.LinqExtensions.ToJson<T>(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, T>>, Manatee.Json.Serialization.JsonSerializer)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(Of T)(System.Collections.Generic.IEnumerable(Of System.Collections.Generic.KeyValuePair(Of System.String, T)), Manatee.Json.Serialization.JsonSerializer)
   nameWithType: LinqExtensions.ToJson<T>(IEnumerable<KeyValuePair<String, T>>, JsonSerializer)
   nameWithType.vb: LinqExtensions.ToJson(Of T)(IEnumerable(Of KeyValuePair(Of String, T)), JsonSerializer)
 - uid: Manatee.Json.Patch
@@ -1846,48 +1846,12 @@ references:
   commentId: T:Manatee.Json.Path.JsonPathWith
   fullName: Manatee.Json.Path.JsonPathWith
   nameWithType: JsonPathWith
-- uid: Manatee.Json.Path.JsonPathWith.Array(Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name: Array(Expression<Func<JsonPathArray, Int32>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Expression_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
-  commentId: M:Manatee.Json.Path.JsonPathWith.Array(Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name.vb: Array(Expression(Of Func(Of JsonPathArray, Int32)))
-  fullName: Manatee.Json.Path.JsonPathWith.Array(Expression<Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Expression(Of Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
-  nameWithType: JsonPathWith.Array(Expression<Func<JsonPathArray, Int32>>)
-  nameWithType.vb: JsonPathWith.Array(Expression(Of Func(Of JsonPathArray, Int32)))
-- uid: Manatee.Json.Path.JsonPathWith.Array(Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name: Array(Expression<Func<JsonPathValue, Boolean>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Expression_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
-  commentId: M:Manatee.Json.Path.JsonPathWith.Array(Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name.vb: Array(Expression(Of Func(Of JsonPathValue, Boolean)))
-  fullName: Manatee.Json.Path.JsonPathWith.Array(Expression<Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Expression(Of Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
-  nameWithType: JsonPathWith.Array(Expression<Func<JsonPathValue, Boolean>>)
-  nameWithType.vb: JsonPathWith.Array(Expression(Of Func(Of JsonPathValue, Boolean)))
 - uid: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath)
   name: Array(JsonPath)
   href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Manatee_Json_Path_JsonPath_
   commentId: M:Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath)
   fullName: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath)
   nameWithType: JsonPathWith.Array(JsonPath)
-- uid: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name: Array(JsonPath, Expression<Func<JsonPathArray, Int32>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Manatee_Json_Path_JsonPath_Expression_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
-  commentId: M:Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name.vb: Array(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
-  fullName: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, Expression<Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, Expression(Of Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
-  nameWithType: JsonPathWith.Array(JsonPath, Expression<Func<JsonPathArray, Int32>>)
-  nameWithType.vb: JsonPathWith.Array(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
-- uid: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name: Array(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Manatee_Json_Path_JsonPath_Expression_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
-  commentId: M:Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name.vb: Array(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
-  fullName: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, Expression<Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, Expression(Of Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
-  nameWithType: JsonPathWith.Array(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
-  nameWithType.vb: JsonPathWith.Array(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
 - uid: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,Manatee.Json.Path.Slice[])
   name: Array(JsonPath, Slice[])
   href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Manatee_Json_Path_JsonPath_Manatee_Json_Path_Slice___
@@ -1897,6 +1861,24 @@ references:
   fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, Manatee.Json.Path.Slice())
   nameWithType: JsonPathWith.Array(JsonPath, Slice[])
   nameWithType.vb: JsonPathWith.Array(JsonPath, Slice())
+- uid: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name: Array(JsonPath, Expression<Func<JsonPathArray, Int32>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Manatee_Json_Path_JsonPath_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
+  commentId: M:Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name.vb: Array(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
+  fullName: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
+  nameWithType: JsonPathWith.Array(JsonPath, Expression<Func<JsonPathArray, Int32>>)
+  nameWithType.vb: JsonPathWith.Array(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
+- uid: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name: Array(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Manatee_Json_Path_JsonPath_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
+  commentId: M:Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name.vb: Array(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
+  fullName: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
+  nameWithType: JsonPathWith.Array(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
+  nameWithType.vb: JsonPathWith.Array(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
 - uid: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.Slice[])
   name: Array(Slice[])
   href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_Manatee_Json_Path_Slice___
@@ -1906,6 +1888,24 @@ references:
   fullName.vb: Manatee.Json.Path.JsonPathWith.Array(Manatee.Json.Path.Slice())
   nameWithType: JsonPathWith.Array(Slice[])
   nameWithType.vb: JsonPathWith.Array(Slice())
+- uid: Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name: Array(Expression<Func<JsonPathArray, Int32>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
+  commentId: M:Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name.vb: Array(Expression(Of Func(Of JsonPathArray, Int32)))
+  fullName: Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
+  nameWithType: JsonPathWith.Array(Expression<Func<JsonPathArray, Int32>>)
+  nameWithType.vb: JsonPathWith.Array(Expression(Of Func(Of JsonPathArray, Int32)))
+- uid: Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name: Array(Expression<Func<JsonPathValue, Boolean>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
+  commentId: M:Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name.vb: Array(Expression(Of Func(Of JsonPathValue, Boolean)))
+  fullName: Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.Array(System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
+  nameWithType: JsonPathWith.Array(Expression<Func<JsonPathValue, Boolean>>)
+  nameWithType.vb: JsonPathWith.Array(Expression(Of Func(Of JsonPathValue, Boolean)))
 - uid: Manatee.Json.Path.JsonPathWith.Array*
   name: Array
   href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_Array_
@@ -1970,42 +1970,6 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Path.JsonPathWith.Search
   nameWithType: JsonPathWith.Search
-- uid: Manatee.Json.Path.JsonPathWith.SearchArray(Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name: SearchArray(Expression<Func<JsonPathArray, Int32>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Expression_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
-  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name.vb: SearchArray(Expression(Of Func(Of JsonPathArray, Int32)))
-  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(Expression<Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Expression(Of Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
-  nameWithType: JsonPathWith.SearchArray(Expression<Func<JsonPathArray, Int32>>)
-  nameWithType.vb: JsonPathWith.SearchArray(Expression(Of Func(Of JsonPathArray, Int32)))
-- uid: Manatee.Json.Path.JsonPathWith.SearchArray(Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name: SearchArray(Expression<Func<JsonPathValue, Boolean>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Expression_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
-  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name.vb: SearchArray(Expression(Of Func(Of JsonPathValue, Boolean)))
-  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(Expression<Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Expression(Of Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
-  nameWithType: JsonPathWith.SearchArray(Expression<Func<JsonPathValue, Boolean>>)
-  nameWithType.vb: JsonPathWith.SearchArray(Expression(Of Func(Of JsonPathValue, Boolean)))
-- uid: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name: SearchArray(JsonPath, Expression<Func<JsonPathArray, Int32>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Manatee_Json_Path_JsonPath_Expression_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
-  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
-  name.vb: SearchArray(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
-  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, Expression<Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, Expression(Of Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
-  nameWithType: JsonPathWith.SearchArray(JsonPath, Expression<Func<JsonPathArray, Int32>>)
-  nameWithType.vb: JsonPathWith.SearchArray(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
-- uid: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name: SearchArray(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
-  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Manatee_Json_Path_JsonPath_Expression_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
-  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,Expression{Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
-  name.vb: SearchArray(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
-  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, Expression<Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
-  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, Expression(Of Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
-  nameWithType: JsonPathWith.SearchArray(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
-  nameWithType.vb: JsonPathWith.SearchArray(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
 - uid: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,Manatee.Json.Path.Slice[])
   name: SearchArray(JsonPath, Slice[])
   href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Manatee_Json_Path_JsonPath_Manatee_Json_Path_Slice___
@@ -2015,6 +1979,24 @@ references:
   fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, Manatee.Json.Path.Slice())
   nameWithType: JsonPathWith.SearchArray(JsonPath, Slice[])
   nameWithType.vb: JsonPathWith.SearchArray(JsonPath, Slice())
+- uid: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name: SearchArray(JsonPath, Expression<Func<JsonPathArray, Int32>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Manatee_Json_Path_JsonPath_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
+  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name.vb: SearchArray(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
+  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
+  nameWithType: JsonPathWith.SearchArray(JsonPath, Expression<Func<JsonPathArray, Int32>>)
+  nameWithType.vb: JsonPathWith.SearchArray(JsonPath, Expression(Of Func(Of JsonPathArray, Int32)))
+- uid: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name: SearchArray(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Manatee_Json_Path_JsonPath_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
+  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath,System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name.vb: SearchArray(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
+  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.JsonPath, System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
+  nameWithType: JsonPathWith.SearchArray(JsonPath, Expression<Func<JsonPathValue, Boolean>>)
+  nameWithType.vb: JsonPathWith.SearchArray(JsonPath, Expression(Of Func(Of JsonPathValue, Boolean)))
 - uid: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.Slice[])
   name: SearchArray(Slice[])
   href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_Manatee_Json_Path_Slice___
@@ -2024,6 +2006,24 @@ references:
   fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(Manatee.Json.Path.Slice())
   nameWithType: JsonPathWith.SearchArray(Slice[])
   nameWithType.vb: JsonPathWith.SearchArray(Slice())
+- uid: Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name: SearchArray(Expression<Func<JsonPathArray, Int32>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathArray_System_Int32___
+  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathArray,System.Int32}})
+  name.vb: SearchArray(Expression(Of Func(Of JsonPathArray, Int32)))
+  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathArray, System.Int32>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathArray, System.Int32)))
+  nameWithType: JsonPathWith.SearchArray(Expression<Func<JsonPathArray, Int32>>)
+  nameWithType.vb: JsonPathWith.SearchArray(Expression(Of Func(Of JsonPathArray, Int32)))
+- uid: Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name: SearchArray(Expression<Func<JsonPathValue, Boolean>>)
+  href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_System_Linq_Expressions_Expression_System_Func_Manatee_Json_Path_JsonPathValue_System_Boolean___
+  commentId: M:Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression{System.Func{Manatee.Json.Path.JsonPathValue,System.Boolean}})
+  name.vb: SearchArray(Expression(Of Func(Of JsonPathValue, Boolean)))
+  fullName: Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression<System.Func<Manatee.Json.Path.JsonPathValue, System.Boolean>>)
+  fullName.vb: Manatee.Json.Path.JsonPathWith.SearchArray(System.Linq.Expressions.Expression(Of System.Func(Of Manatee.Json.Path.JsonPathValue, System.Boolean)))
+  nameWithType: JsonPathWith.SearchArray(Expression<Func<JsonPathValue, Boolean>>)
+  nameWithType.vb: JsonPathWith.SearchArray(Expression(Of Func(Of JsonPathValue, Boolean)))
 - uid: Manatee.Json.Path.JsonPathWith.SearchArray*
   name: SearchArray
   href: api/Manatee.Json.Path.JsonPathWith.html#Manatee_Json_Path_JsonPathWith_SearchArray_
@@ -2243,13 +2243,13 @@ references:
   commentId: M:Manatee.Json.Pointer.JsonPointer.#ctor
   fullName: Manatee.Json.Pointer.JsonPointer.JsonPointer()
   nameWithType: JsonPointer.JsonPointer()
-- uid: Manatee.Json.Pointer.JsonPointer.#ctor(IEnumerable{System.String})
+- uid: Manatee.Json.Pointer.JsonPointer.#ctor(System.Collections.Generic.IEnumerable{System.String})
   name: JsonPointer(IEnumerable<String>)
-  href: api/Manatee.Json.Pointer.JsonPointer.html#Manatee_Json_Pointer_JsonPointer__ctor_IEnumerable_System_String__
-  commentId: M:Manatee.Json.Pointer.JsonPointer.#ctor(IEnumerable{System.String})
+  href: api/Manatee.Json.Pointer.JsonPointer.html#Manatee_Json_Pointer_JsonPointer__ctor_System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Manatee.Json.Pointer.JsonPointer.#ctor(System.Collections.Generic.IEnumerable{System.String})
   name.vb: JsonPointer(IEnumerable(Of String))
-  fullName: Manatee.Json.Pointer.JsonPointer.JsonPointer(IEnumerable<System.String>)
-  fullName.vb: Manatee.Json.Pointer.JsonPointer.JsonPointer(IEnumerable(Of System.String))
+  fullName: Manatee.Json.Pointer.JsonPointer.JsonPointer(System.Collections.Generic.IEnumerable<System.String>)
+  fullName.vb: Manatee.Json.Pointer.JsonPointer.JsonPointer(System.Collections.Generic.IEnumerable(Of System.String))
   nameWithType: JsonPointer.JsonPointer(IEnumerable<String>)
   nameWithType.vb: JsonPointer.JsonPointer(IEnumerable(Of String))
 - uid: Manatee.Json.Pointer.JsonPointer.#ctor*
@@ -4879,17 +4879,17 @@ references:
   commentId: T:Manatee.Json.Schema.JsonSchemaFactory
   fullName: Manatee.Json.Schema.JsonSchemaFactory
   nameWithType: JsonSchemaFactory
-- uid: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,Type,Uri)
+- uid: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,System.Type,System.Uri)
   name: FromJson(JsonValue, Type, Uri)
-  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_FromJson_Manatee_Json_JsonValue_Type_Uri_
-  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,Type,Uri)
-  fullName: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue, Type, Uri)
+  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_FromJson_Manatee_Json_JsonValue_System_Type_System_Uri_
+  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,System.Type,System.Uri)
+  fullName: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue, System.Type, System.Uri)
   nameWithType: JsonSchemaFactory.FromJson(JsonValue, Type, Uri)
-- uid: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,Uri)
+- uid: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,System.Uri)
   name: FromJson(JsonValue, Uri)
-  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_FromJson_Manatee_Json_JsonValue_Uri_
-  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,Uri)
-  fullName: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue, Uri)
+  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_FromJson_Manatee_Json_JsonValue_System_Uri_
+  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue,System.Uri)
+  fullName: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Manatee.Json.JsonValue, System.Uri)
   nameWithType: JsonSchemaFactory.FromJson(JsonValue, Uri)
 - uid: Manatee.Json.Schema.JsonSchemaFactory.FromJson*
   name: FromJson
@@ -4898,13 +4898,13 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.JsonSchemaFactory.FromJson
   nameWithType: JsonSchemaFactory.FromJson
-- uid: Manatee.Json.Schema.JsonSchemaFactory.FromJson``1(Manatee.Json.JsonValue,Uri)
+- uid: Manatee.Json.Schema.JsonSchemaFactory.FromJson``1(Manatee.Json.JsonValue,System.Uri)
   name: FromJson<T>(JsonValue, Uri)
-  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_FromJson__1_Manatee_Json_JsonValue_Uri_
-  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.FromJson``1(Manatee.Json.JsonValue,Uri)
+  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_FromJson__1_Manatee_Json_JsonValue_System_Uri_
+  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.FromJson``1(Manatee.Json.JsonValue,System.Uri)
   name.vb: FromJson(Of T)(JsonValue, Uri)
-  fullName: Manatee.Json.Schema.JsonSchemaFactory.FromJson<T>(Manatee.Json.JsonValue, Uri)
-  fullName.vb: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Of T)(Manatee.Json.JsonValue, Uri)
+  fullName: Manatee.Json.Schema.JsonSchemaFactory.FromJson<T>(Manatee.Json.JsonValue, System.Uri)
+  fullName.vb: Manatee.Json.Schema.JsonSchemaFactory.FromJson(Of T)(Manatee.Json.JsonValue, System.Uri)
   nameWithType: JsonSchemaFactory.FromJson<T>(JsonValue, Uri)
   nameWithType.vb: JsonSchemaFactory.FromJson(Of T)(JsonValue, Uri)
 - uid: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema*
@@ -4914,13 +4914,13 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema
   nameWithType: JsonSchemaFactory.RegisterExtendedSchema
-- uid: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema``1(System.String,Func{``0},``0)
+- uid: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema``1(System.String,System.Func{``0},``0)
   name: RegisterExtendedSchema<T>(String, Func<T>, T)
-  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_RegisterExtendedSchema__1_System_String_Func___0____0_
-  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema``1(System.String,Func{``0},``0)
+  href: api/Manatee.Json.Schema.JsonSchemaFactory.html#Manatee_Json_Schema_JsonSchemaFactory_RegisterExtendedSchema__1_System_String_System_Func___0____0_
+  commentId: M:Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema``1(System.String,System.Func{``0},``0)
   name.vb: RegisterExtendedSchema(Of T)(String, Func(Of T), T)
-  fullName: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema<T>(System.String, Func<T>, T)
-  fullName.vb: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema(Of T)(System.String, Func(Of T), T)
+  fullName: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema<T>(System.String, System.Func<T>, T)
+  fullName.vb: Manatee.Json.Schema.JsonSchemaFactory.RegisterExtendedSchema(Of T)(System.String, System.Func(Of T), T)
   nameWithType: JsonSchemaFactory.RegisterExtendedSchema<T>(String, Func<T>, T)
   nameWithType.vb: JsonSchemaFactory.RegisterExtendedSchema(Of T)(String, Func(Of T), T)
 - uid: Manatee.Json.Schema.JsonSchemaFactory.SetDefaultSchemaVersion*
@@ -5015,11 +5015,11 @@ references:
   commentId: M:Manatee.Json.Schema.JsonSchemaReference.#ctor(System.String,Manatee.Json.Schema.IJsonSchema)
   fullName: Manatee.Json.Schema.JsonSchemaReference.JsonSchemaReference(System.String, Manatee.Json.Schema.IJsonSchema)
   nameWithType: JsonSchemaReference.JsonSchemaReference(String, IJsonSchema)
-- uid: Manatee.Json.Schema.JsonSchemaReference.#ctor(System.String,Type)
+- uid: Manatee.Json.Schema.JsonSchemaReference.#ctor(System.String,System.Type)
   name: JsonSchemaReference(String, Type)
-  href: api/Manatee.Json.Schema.JsonSchemaReference.html#Manatee_Json_Schema_JsonSchemaReference__ctor_System_String_Type_
-  commentId: M:Manatee.Json.Schema.JsonSchemaReference.#ctor(System.String,Type)
-  fullName: Manatee.Json.Schema.JsonSchemaReference.JsonSchemaReference(System.String, Type)
+  href: api/Manatee.Json.Schema.JsonSchemaReference.html#Manatee_Json_Schema_JsonSchemaReference__ctor_System_String_System_Type_
+  commentId: M:Manatee.Json.Schema.JsonSchemaReference.#ctor(System.String,System.Type)
+  fullName: Manatee.Json.Schema.JsonSchemaReference.JsonSchemaReference(System.String, System.Type)
   nameWithType: JsonSchemaReference.JsonSchemaReference(String, Type)
 - uid: Manatee.Json.Schema.JsonSchemaReference.#ctor*
   name: JsonSchemaReference
@@ -5301,13 +5301,13 @@ references:
   commentId: T:Manatee.Json.Schema.PropertyDependency
   fullName: Manatee.Json.Schema.PropertyDependency
   nameWithType: PropertyDependency
-- uid: Manatee.Json.Schema.PropertyDependency.#ctor(System.String,IEnumerable{System.String})
+- uid: Manatee.Json.Schema.PropertyDependency.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})
   name: PropertyDependency(String, IEnumerable<String>)
-  href: api/Manatee.Json.Schema.PropertyDependency.html#Manatee_Json_Schema_PropertyDependency__ctor_System_String_IEnumerable_System_String__
-  commentId: M:Manatee.Json.Schema.PropertyDependency.#ctor(System.String,IEnumerable{System.String})
+  href: api/Manatee.Json.Schema.PropertyDependency.html#Manatee_Json_Schema_PropertyDependency__ctor_System_String_System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Manatee.Json.Schema.PropertyDependency.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})
   name.vb: PropertyDependency(String, IEnumerable(Of String))
-  fullName: Manatee.Json.Schema.PropertyDependency.PropertyDependency(System.String, IEnumerable<System.String>)
-  fullName.vb: Manatee.Json.Schema.PropertyDependency.PropertyDependency(System.String, IEnumerable(Of System.String))
+  fullName: Manatee.Json.Schema.PropertyDependency.PropertyDependency(System.String, System.Collections.Generic.IEnumerable<System.String>)
+  fullName.vb: Manatee.Json.Schema.PropertyDependency.PropertyDependency(System.String, System.Collections.Generic.IEnumerable(Of System.String))
   nameWithType: PropertyDependency.PropertyDependency(String, IEnumerable<String>)
   nameWithType.vb: PropertyDependency.PropertyDependency(String, IEnumerable(Of String))
 - uid: Manatee.Json.Schema.PropertyDependency.#ctor(System.String,System.String,System.String[])
@@ -5856,13 +5856,13 @@ references:
   commentId: T:Manatee.Json.Schema.SchemaValidationResults
   fullName: Manatee.Json.Schema.SchemaValidationResults
   nameWithType: SchemaValidationResults
-- uid: Manatee.Json.Schema.SchemaValidationResults.#ctor(IEnumerable{Manatee.Json.Schema.SchemaValidationResults})
+- uid: Manatee.Json.Schema.SchemaValidationResults.#ctor(System.Collections.Generic.IEnumerable{Manatee.Json.Schema.SchemaValidationResults})
   name: SchemaValidationResults(IEnumerable<SchemaValidationResults>)
-  href: api/Manatee.Json.Schema.SchemaValidationResults.html#Manatee_Json_Schema_SchemaValidationResults__ctor_IEnumerable_Manatee_Json_Schema_SchemaValidationResults__
-  commentId: M:Manatee.Json.Schema.SchemaValidationResults.#ctor(IEnumerable{Manatee.Json.Schema.SchemaValidationResults})
+  href: api/Manatee.Json.Schema.SchemaValidationResults.html#Manatee_Json_Schema_SchemaValidationResults__ctor_System_Collections_Generic_IEnumerable_Manatee_Json_Schema_SchemaValidationResults__
+  commentId: M:Manatee.Json.Schema.SchemaValidationResults.#ctor(System.Collections.Generic.IEnumerable{Manatee.Json.Schema.SchemaValidationResults})
   name.vb: SchemaValidationResults(IEnumerable(Of SchemaValidationResults))
-  fullName: Manatee.Json.Schema.SchemaValidationResults.SchemaValidationResults(IEnumerable<Manatee.Json.Schema.SchemaValidationResults>)
-  fullName.vb: Manatee.Json.Schema.SchemaValidationResults.SchemaValidationResults(IEnumerable(Of Manatee.Json.Schema.SchemaValidationResults))
+  fullName: Manatee.Json.Schema.SchemaValidationResults.SchemaValidationResults(System.Collections.Generic.IEnumerable<Manatee.Json.Schema.SchemaValidationResults>)
+  fullName.vb: Manatee.Json.Schema.SchemaValidationResults.SchemaValidationResults(System.Collections.Generic.IEnumerable(Of Manatee.Json.Schema.SchemaValidationResults))
   nameWithType: SchemaValidationResults.SchemaValidationResults(IEnumerable<SchemaValidationResults>)
   nameWithType.vb: SchemaValidationResults.SchemaValidationResults(IEnumerable(Of SchemaValidationResults))
 - uid: Manatee.Json.Schema.SchemaValidationResults.#ctor(System.String,System.String)
@@ -6041,11 +6041,11 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.AbstractionMap.Default
   nameWithType: AbstractionMap.Default
-- uid: Manatee.Json.Serialization.AbstractionMap.GetMap(Type)
+- uid: Manatee.Json.Serialization.AbstractionMap.GetMap(System.Type)
   name: GetMap(Type)
-  href: api/Manatee.Json.Serialization.AbstractionMap.html#Manatee_Json_Serialization_AbstractionMap_GetMap_Type_
-  commentId: M:Manatee.Json.Serialization.AbstractionMap.GetMap(Type)
-  fullName: Manatee.Json.Serialization.AbstractionMap.GetMap(Type)
+  href: api/Manatee.Json.Serialization.AbstractionMap.html#Manatee_Json_Serialization_AbstractionMap_GetMap_System_Type_
+  commentId: M:Manatee.Json.Serialization.AbstractionMap.GetMap(System.Type)
+  fullName: Manatee.Json.Serialization.AbstractionMap.GetMap(System.Type)
   nameWithType: AbstractionMap.GetMap(Type)
 - uid: Manatee.Json.Serialization.AbstractionMap.GetMap*
   name: GetMap
@@ -6070,11 +6070,11 @@ references:
   fullName.vb: Manatee.Json.Serialization.AbstractionMap.Map(Of TAbstract, TConcrete)(Manatee.Json.Serialization.MapBaseAbstractionBehavior)
   nameWithType: AbstractionMap.Map<TAbstract, TConcrete>(MapBaseAbstractionBehavior)
   nameWithType.vb: AbstractionMap.Map(Of TAbstract, TConcrete)(MapBaseAbstractionBehavior)
-- uid: Manatee.Json.Serialization.AbstractionMap.MapGeneric(Type,Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
+- uid: Manatee.Json.Serialization.AbstractionMap.MapGeneric(System.Type,System.Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
   name: MapGeneric(Type, Type, MapBaseAbstractionBehavior)
-  href: api/Manatee.Json.Serialization.AbstractionMap.html#Manatee_Json_Serialization_AbstractionMap_MapGeneric_Type_Type_Manatee_Json_Serialization_MapBaseAbstractionBehavior_
-  commentId: M:Manatee.Json.Serialization.AbstractionMap.MapGeneric(Type,Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
-  fullName: Manatee.Json.Serialization.AbstractionMap.MapGeneric(Type, Type, Manatee.Json.Serialization.MapBaseAbstractionBehavior)
+  href: api/Manatee.Json.Serialization.AbstractionMap.html#Manatee_Json_Serialization_AbstractionMap_MapGeneric_System_Type_System_Type_Manatee_Json_Serialization_MapBaseAbstractionBehavior_
+  commentId: M:Manatee.Json.Serialization.AbstractionMap.MapGeneric(System.Type,System.Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
+  fullName: Manatee.Json.Serialization.AbstractionMap.MapGeneric(System.Type, System.Type, Manatee.Json.Serialization.MapBaseAbstractionBehavior)
   nameWithType: AbstractionMap.MapGeneric(Type, Type, MapBaseAbstractionBehavior)
 - uid: Manatee.Json.Serialization.AbstractionMap.MapGeneric*
   name: MapGeneric
@@ -6146,11 +6146,11 @@ references:
   fullName.vb: Manatee.Json.Serialization.CustomSerializations.FromJsonDelegate(Of T)
   nameWithType: CustomSerializations.FromJsonDelegate<T>
   nameWithType.vb: CustomSerializations.FromJsonDelegate(Of T)
-- uid: Manatee.Json.Serialization.CustomSerializations.IsRegistered(Type)
+- uid: Manatee.Json.Serialization.CustomSerializations.IsRegistered(System.Type)
   name: IsRegistered(Type)
-  href: api/Manatee.Json.Serialization.CustomSerializations.html#Manatee_Json_Serialization_CustomSerializations_IsRegistered_Type_
-  commentId: M:Manatee.Json.Serialization.CustomSerializations.IsRegistered(Type)
-  fullName: Manatee.Json.Serialization.CustomSerializations.IsRegistered(Type)
+  href: api/Manatee.Json.Serialization.CustomSerializations.html#Manatee_Json_Serialization_CustomSerializations_IsRegistered_System_Type_
+  commentId: M:Manatee.Json.Serialization.CustomSerializations.IsRegistered(System.Type)
+  fullName: Manatee.Json.Serialization.CustomSerializations.IsRegistered(System.Type)
   nameWithType: CustomSerializations.IsRegistered(Type)
 - uid: Manatee.Json.Serialization.CustomSerializations.IsRegistered*
   name: IsRegistered
@@ -6297,11 +6297,11 @@ references:
   commentId: T:Manatee.Json.Serialization.IResolver
   fullName: Manatee.Json.Serialization.IResolver
   nameWithType: IResolver
-- uid: Manatee.Json.Serialization.IResolver.Resolve(Type)
+- uid: Manatee.Json.Serialization.IResolver.Resolve(System.Type)
   name: Resolve(Type)
-  href: api/Manatee.Json.Serialization.IResolver.html#Manatee_Json_Serialization_IResolver_Resolve_Type_
-  commentId: M:Manatee.Json.Serialization.IResolver.Resolve(Type)
-  fullName: Manatee.Json.Serialization.IResolver.Resolve(Type)
+  href: api/Manatee.Json.Serialization.IResolver.html#Manatee_Json_Serialization_IResolver_Resolve_System_Type_
+  commentId: M:Manatee.Json.Serialization.IResolver.Resolve(System.Type)
+  fullName: Manatee.Json.Serialization.IResolver.Resolve(System.Type)
   nameWithType: IResolver.Resolve(Type)
 - uid: Manatee.Json.Serialization.IResolver.Resolve*
   name: Resolve
@@ -6363,11 +6363,11 @@ references:
   commentId: T:Manatee.Json.Serialization.JsonSerializationAbstractionMap
   fullName: Manatee.Json.Serialization.JsonSerializationAbstractionMap
   nameWithType: JsonSerializationAbstractionMap
-- uid: Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap(Type)
+- uid: Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap(System.Type)
   name: GetMap(Type)
-  href: api/Manatee.Json.Serialization.JsonSerializationAbstractionMap.html#Manatee_Json_Serialization_JsonSerializationAbstractionMap_GetMap_Type_
-  commentId: M:Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap(Type)
-  fullName: Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap(Type)
+  href: api/Manatee.Json.Serialization.JsonSerializationAbstractionMap.html#Manatee_Json_Serialization_JsonSerializationAbstractionMap_GetMap_System_Type_
+  commentId: M:Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap(System.Type)
+  fullName: Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap(System.Type)
   nameWithType: JsonSerializationAbstractionMap.GetMap(Type)
 - uid: Manatee.Json.Serialization.JsonSerializationAbstractionMap.GetMap*
   name: GetMap
@@ -6392,11 +6392,11 @@ references:
   fullName.vb: Manatee.Json.Serialization.JsonSerializationAbstractionMap.Map(Of TAbstract, TConcrete)(Manatee.Json.Serialization.MapBaseAbstractionBehavior)
   nameWithType: JsonSerializationAbstractionMap.Map<TAbstract, TConcrete>(MapBaseAbstractionBehavior)
   nameWithType.vb: JsonSerializationAbstractionMap.Map(Of TAbstract, TConcrete)(MapBaseAbstractionBehavior)
-- uid: Manatee.Json.Serialization.JsonSerializationAbstractionMap.MapGeneric(Type,Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
+- uid: Manatee.Json.Serialization.JsonSerializationAbstractionMap.MapGeneric(System.Type,System.Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
   name: MapGeneric(Type, Type, MapBaseAbstractionBehavior)
-  href: api/Manatee.Json.Serialization.JsonSerializationAbstractionMap.html#Manatee_Json_Serialization_JsonSerializationAbstractionMap_MapGeneric_Type_Type_Manatee_Json_Serialization_MapBaseAbstractionBehavior_
-  commentId: M:Manatee.Json.Serialization.JsonSerializationAbstractionMap.MapGeneric(Type,Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
-  fullName: Manatee.Json.Serialization.JsonSerializationAbstractionMap.MapGeneric(Type, Type, Manatee.Json.Serialization.MapBaseAbstractionBehavior)
+  href: api/Manatee.Json.Serialization.JsonSerializationAbstractionMap.html#Manatee_Json_Serialization_JsonSerializationAbstractionMap_MapGeneric_System_Type_System_Type_Manatee_Json_Serialization_MapBaseAbstractionBehavior_
+  commentId: M:Manatee.Json.Serialization.JsonSerializationAbstractionMap.MapGeneric(System.Type,System.Type,Manatee.Json.Serialization.MapBaseAbstractionBehavior)
+  fullName: Manatee.Json.Serialization.JsonSerializationAbstractionMap.MapGeneric(System.Type, System.Type, Manatee.Json.Serialization.MapBaseAbstractionBehavior)
   nameWithType: JsonSerializationAbstractionMap.MapGeneric(Type, Type, MapBaseAbstractionBehavior)
 - uid: Manatee.Json.Serialization.JsonSerializationAbstractionMap.MapGeneric*
   name: MapGeneric
@@ -6427,11 +6427,11 @@ references:
   commentId: T:Manatee.Json.Serialization.JsonSerializationException
   fullName: Manatee.Json.Serialization.JsonSerializationException
   nameWithType: JsonSerializationException
-- uid: Manatee.Json.Serialization.JsonSerializationException.#ctor(System.String,Exception)
+- uid: Manatee.Json.Serialization.JsonSerializationException.#ctor(System.String,System.Exception)
   name: JsonSerializationException(String, Exception)
-  href: api/Manatee.Json.Serialization.JsonSerializationException.html#Manatee_Json_Serialization_JsonSerializationException__ctor_System_String_Exception_
-  commentId: M:Manatee.Json.Serialization.JsonSerializationException.#ctor(System.String,Exception)
-  fullName: Manatee.Json.Serialization.JsonSerializationException.JsonSerializationException(System.String, Exception)
+  href: api/Manatee.Json.Serialization.JsonSerializationException.html#Manatee_Json_Serialization_JsonSerializationException__ctor_System_String_System_Exception_
+  commentId: M:Manatee.Json.Serialization.JsonSerializationException.#ctor(System.String,System.Exception)
+  fullName: Manatee.Json.Serialization.JsonSerializationException.JsonSerializationException(System.String, System.Exception)
   nameWithType: JsonSerializationException.JsonSerializationException(String, Exception)
 - uid: Manatee.Json.Serialization.JsonSerializationException.#ctor*
   name: JsonSerializationException
@@ -6455,11 +6455,11 @@ references:
   fullName.vb: Manatee.Json.Serialization.JsonSerializationTypeRegistry.FromJsonDelegate(Of T)
   nameWithType: JsonSerializationTypeRegistry.FromJsonDelegate<T>
   nameWithType.vb: JsonSerializationTypeRegistry.FromJsonDelegate(Of T)
-- uid: Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered(Type)
+- uid: Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered(System.Type)
   name: IsRegistered(Type)
-  href: api/Manatee.Json.Serialization.JsonSerializationTypeRegistry.html#Manatee_Json_Serialization_JsonSerializationTypeRegistry_IsRegistered_Type_
-  commentId: M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered(Type)
-  fullName: Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered(Type)
+  href: api/Manatee.Json.Serialization.JsonSerializationTypeRegistry.html#Manatee_Json_Serialization_JsonSerializationTypeRegistry_IsRegistered_System_Type_
+  commentId: M:Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered(System.Type)
+  fullName: Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered(System.Type)
   nameWithType: JsonSerializationTypeRegistry.IsRegistered(Type)
 - uid: Manatee.Json.Serialization.JsonSerializationTypeRegistry.IsRegistered*
   name: IsRegistered
@@ -6973,11 +6973,11 @@ references:
   commentId: T:Manatee.Json.Serialization.TypeInstantiationException
   fullName: Manatee.Json.Serialization.TypeInstantiationException
   nameWithType: TypeInstantiationException
-- uid: Manatee.Json.Serialization.TypeInstantiationException.#ctor(Type)
+- uid: Manatee.Json.Serialization.TypeInstantiationException.#ctor(System.Type)
   name: TypeInstantiationException(Type)
-  href: api/Manatee.Json.Serialization.TypeInstantiationException.html#Manatee_Json_Serialization_TypeInstantiationException__ctor_Type_
-  commentId: M:Manatee.Json.Serialization.TypeInstantiationException.#ctor(Type)
-  fullName: Manatee.Json.Serialization.TypeInstantiationException.TypeInstantiationException(Type)
+  href: api/Manatee.Json.Serialization.TypeInstantiationException.html#Manatee_Json_Serialization_TypeInstantiationException__ctor_System_Type_
+  commentId: M:Manatee.Json.Serialization.TypeInstantiationException.#ctor(System.Type)
+  fullName: Manatee.Json.Serialization.TypeInstantiationException.TypeInstantiationException(System.Type)
   nameWithType: TypeInstantiationException.TypeInstantiationException(Type)
 - uid: Manatee.Json.Serialization.TypeInstantiationException.#ctor*
   name: TypeInstantiationException
@@ -7066,20 +7066,20 @@ references:
   commentId: T:Manatee.Json.XmlExtensions
   fullName: Manatee.Json.XmlExtensions
   nameWithType: XmlExtensions
-- uid: Manatee.Json.XmlExtensions.ToJson(IEnumerable{XElement})
+- uid: Manatee.Json.XmlExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})
   name: ToJson(IEnumerable<XElement>)
-  href: api/Manatee.Json.XmlExtensions.html#Manatee_Json_XmlExtensions_ToJson_IEnumerable_XElement__
-  commentId: M:Manatee.Json.XmlExtensions.ToJson(IEnumerable{XElement})
+  href: api/Manatee.Json.XmlExtensions.html#Manatee_Json_XmlExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Xml_Linq_XElement__
+  commentId: M:Manatee.Json.XmlExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})
   name.vb: ToJson(IEnumerable(Of XElement))
-  fullName: Manatee.Json.XmlExtensions.ToJson(IEnumerable<XElement>)
-  fullName.vb: Manatee.Json.XmlExtensions.ToJson(IEnumerable(Of XElement))
+  fullName: Manatee.Json.XmlExtensions.ToJson(System.Collections.Generic.IEnumerable<System.Xml.Linq.XElement>)
+  fullName.vb: Manatee.Json.XmlExtensions.ToJson(System.Collections.Generic.IEnumerable(Of System.Xml.Linq.XElement))
   nameWithType: XmlExtensions.ToJson(IEnumerable<XElement>)
   nameWithType.vb: XmlExtensions.ToJson(IEnumerable(Of XElement))
-- uid: Manatee.Json.XmlExtensions.ToJson(XElement)
+- uid: Manatee.Json.XmlExtensions.ToJson(System.Xml.Linq.XElement)
   name: ToJson(XElement)
-  href: api/Manatee.Json.XmlExtensions.html#Manatee_Json_XmlExtensions_ToJson_XElement_
-  commentId: M:Manatee.Json.XmlExtensions.ToJson(XElement)
-  fullName: Manatee.Json.XmlExtensions.ToJson(XElement)
+  href: api/Manatee.Json.XmlExtensions.html#Manatee_Json_XmlExtensions_ToJson_System_Xml_Linq_XElement_
+  commentId: M:Manatee.Json.XmlExtensions.ToJson(System.Xml.Linq.XElement)
+  fullName: Manatee.Json.XmlExtensions.ToJson(System.Xml.Linq.XElement)
   nameWithType: XmlExtensions.ToJson(XElement)
 - uid: Manatee.Json.XmlExtensions.ToJson*
   name: ToJson

@@ -81,24 +81,48 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">XmlExtensions</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.html">Manatee.Json</a></h6>
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_XmlExtensions_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class XmlExtensions : object</code></pre>
+    <pre><code class="lang-csharp hljs">public static class XmlExtensions</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_XmlExtensions_ToJson_IEnumerable_XElement__.md&amp;value=---%0Auid%3A%20Manatee.Json.XmlExtensions.ToJson(IEnumerable%7BXElement%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_XmlExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Xml_Linq_XElement__.md&amp;value=---%0Auid%3A%20Manatee.Json.XmlExtensions.ToJson(System.Collections.Generic.IEnumerable%7BSystem.Xml.Linq.XElement%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/XmlExtensions.cs/#L138">View Source</a>
   </span>
   <a id="Manatee_Json_XmlExtensions_ToJson_" data-uid="Manatee.Json.XmlExtensions.ToJson*"></a>
-  <h4 id="Manatee_Json_XmlExtensions_ToJson_IEnumerable_XElement__" data-uid="Manatee.Json.XmlExtensions.ToJson(IEnumerable{XElement})">ToJson(IEnumerable&lt;XElement&gt;)</h4>
-  <div class="markdown level1 summary"><p>Converts an <see cref="!:XElement"></see> to a <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a>.</p>
+  <h4 id="Manatee_Json_XmlExtensions_ToJson_System_Collections_Generic_IEnumerable_System_Xml_Linq_XElement__" data-uid="Manatee.Json.XmlExtensions.ToJson(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">ToJson(IEnumerable&lt;XElement&gt;)</h4>
+  <div class="markdown level1 summary"><p>Converts an <span class="xref">System.Xml.Linq.XElement</span> to a <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -116,9 +140,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">XElement</span>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Xml.Linq.XElement</span>&gt;</td>
         <td><span class="parametername">xElements</span></td>
-        <td><p>A collection of <see cref="!:XElement"></see> objects.</p>
+        <td><p>A collection of <span class="xref">System.Xml.Linq.XElement</span> objects.</p>
 </td>
       </tr>
     </tbody>
@@ -134,21 +158,37 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>A single <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> which represents the list of <see cref="!:XElement"></see> objects.</p>
+        <td><p>A single <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> which represents the list of <span class="xref">System.Xml.Linq.XElement</span> objects.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Xml.XmlException</span></td>
+        <td><p>Thrown if an error occurs while attempting to convert an array of elements.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_XmlExtensions_ToJson_XElement_.md&amp;value=---%0Auid%3A%20Manatee.Json.XmlExtensions.ToJson(XElement)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_XmlExtensions_ToJson_System_Xml_Linq_XElement_.md&amp;value=---%0Auid%3A%20Manatee.Json.XmlExtensions.ToJson(System.Xml.Linq.XElement)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/XmlExtensions.cs/#L128">View Source</a>
   </span>
   <a id="Manatee_Json_XmlExtensions_ToJson_" data-uid="Manatee.Json.XmlExtensions.ToJson*"></a>
-  <h4 id="Manatee_Json_XmlExtensions_ToJson_XElement_" data-uid="Manatee.Json.XmlExtensions.ToJson(XElement)">ToJson(XElement)</h4>
-  <div class="markdown level1 summary"><p>Converts an <see cref="!:XElement"></see> to a <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a>.</p>
+  <h4 id="Manatee_Json_XmlExtensions_ToJson_System_Xml_Linq_XElement_" data-uid="Manatee.Json.XmlExtensions.ToJson(System.Xml.Linq.XElement)">ToJson(XElement)</h4>
+  <div class="markdown level1 summary"><p>Converts an <span class="xref">System.Xml.Linq.XElement</span> to a <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -166,9 +206,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">XElement</span></td>
+        <td><span class="xref">System.Xml.Linq.XElement</span></td>
         <td><span class="parametername">xElement</span></td>
-        <td><p>An <see cref="!:XElement"></see>.</p>
+        <td><p>An <span class="xref">System.Xml.Linq.XElement</span>.</p>
 </td>
       </tr>
     </tbody>
@@ -184,7 +224,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the <see cref="!:XElement"></see>.</p>
+        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the <span class="xref">System.Xml.Linq.XElement</span>.</p>
 </td>
       </tr>
     </tbody>
@@ -239,8 +279,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">XElement</span></td>
-        <td><p>An <see cref="!:XElement"></see> representation of the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+        <td><span class="xref">System.Xml.Linq.XElement</span></td>
+        <td><p>An <span class="xref">System.Xml.Linq.XElement</span> representation of the <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
 </td>
       </tr>
     </tbody>
@@ -248,6 +288,22 @@
   <h5 id="Manatee_Json_XmlExtensions_ToXElement_Manatee_Json_JsonValue_System_String__remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>The 'key' parameter may be null only when the underlying JSON is an object which contains a single key/value pair.</p>
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">key</code> is null, empty, or whitespace and <code data-dev-comment-type="paramref" class="paramref">json</code> is not a non-empty <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           

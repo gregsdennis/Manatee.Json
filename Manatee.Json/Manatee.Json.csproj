@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://gregsdennis.github.io/Manatee.Json/</PackageProjectUrl>
     <PackageIconUrl>https://bytebucket.org/gregsdennis/manatee.json/wiki/Resources/Manatee-Json-Logo.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/gregsdennis/Manatee.Json</RepositoryUrl>
-    <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json</PackageTags>
+    <PackageTags>json manatee parser serializer jsonpath jsonschema transform path schema linq-to-json jsonpointer pointer</PackageTags>
     <PackageReleaseNotes>See https://gregsdennis.github.io/Manatee.Json/release-notes.html</PackageReleaseNotes>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
