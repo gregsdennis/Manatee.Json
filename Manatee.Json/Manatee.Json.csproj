@@ -58,4 +58,8 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="CompilerAttributes" Version="1.1.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
+  </ItemGroup>
 </Project>
