@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests.Serialization
 					          .Property("street", new JsonSchema().Type(JsonSchemaType.String)));
 
 			var actual = new JsonSchema();
-			actual.FromJson(json, null);
+			actual.FromJson(json, new JsonSerializer());
 
 			Assert.AreEqual(expected, actual);
 		}

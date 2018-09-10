@@ -81,7 +81,7 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void Basic_Successful()
 		{
-			var serializer = new JsonSerializer();
+			var serializer = new JsonSerializer{Options = {EnumSerializationFormat = EnumSerializationFormat.AsInteger}};
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -549,7 +549,11 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void Fields()
 		{
-			var serializer = new JsonSerializer {Options = {AutoSerializeFields = true}};
+			var serializer = new JsonSerializer {Options =
+				{
+					EnumSerializationFormat = EnumSerializationFormat.AsInteger,
+					AutoSerializeFields = true
+				}};
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
