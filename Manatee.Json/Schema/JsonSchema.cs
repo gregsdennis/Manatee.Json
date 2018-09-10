@@ -86,14 +86,33 @@ namespace Manatee.Json.Schema
 				keyword.RegisterSubschemas(baseUri);
 			}
 		}
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			var first = pointer.FirstOrDefault();
-			if (first == null) return this;
+			if (first == null)
+			{
+				DocumentPath = DocumentPath != null ? new Uri(baseUri, DocumentPath) : baseUri;
+				return this;
+			}
+
+			if (Uri.TryCreate(Id, UriKind.Absolute, out var uri))
+				baseUri = uri;
+			else if (Uri.TryCreate(Id, UriKind.Relative, out uri))
+				baseUri = new Uri(baseUri, uri);
 
 			var keyword = this.FirstOrDefault(k => k.Name == first);
 
-			return keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)));
+			var keywordSchema = keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri);
+			if (keywordSchema != null) return keywordSchema;
+
+			var found = pointer.Evaluate(OtherData);
+			if (found.Result == null) return null;
+
+			var serializer = new JsonSerializer();
+			var foundSchema = serializer.Deserialize<JsonSchema>(found.Result);
+
+			return foundSchema;
+
 		}
 
 		internal SchemaValidationResults Validate(SchemaValidationContext context)

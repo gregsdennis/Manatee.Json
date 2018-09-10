@@ -3,7 +3,7 @@
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines possible values for the draft-07 JSON Schema property <see cref="JsonSchema07.ContentEncoding"/>.
+	/// Defines possible values for the <see cref="ContentEncodingKeyword"/>.
 	/// </summary>
 	public enum ContentEncoding
 	{

@@ -23,6 +23,6 @@ namespace Manatee.Json.Schema
 		/// <returns>The results of the validation.</returns>
 		SchemaValidationResults Validate(SchemaValidationContext context);
 		void RegisterSubschemas(Uri baseUri);
-		JsonSchema ResolveSubschema(JsonPointer pointer);
+		JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri);
 	}
 }

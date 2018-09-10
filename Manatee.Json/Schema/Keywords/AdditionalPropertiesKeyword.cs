@@ -64,9 +64,9 @@ namespace Manatee.Json.Schema
 		{
 			Value.RegisterSubschemas(baseUri);
 		}
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
-			return Value.ResolveSubschema(pointer);
+			return Value.ResolveSubschema(pointer, baseUri);
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

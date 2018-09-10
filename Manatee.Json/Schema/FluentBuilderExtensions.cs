@@ -354,7 +354,7 @@ namespace Manatee.Json.Schema
 
 			return schema;
 		}
-		public static JsonSchema ContentEncoding(this JsonSchema schema, string comment)
+		public static JsonSchema ContentEncoding(this JsonSchema schema, ContentEncoding comment)
 		{
 			schema.Add(new ContentEncodingKeyword(comment));
 

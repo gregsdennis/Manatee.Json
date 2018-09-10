@@ -52,9 +52,9 @@ namespace Manatee.Json.Schema
 		{
 			_schema.RegisterSubschemas(baseUri);
 		}
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
-			return _schema.ResolveSubschema(pointer);
+			return _schema.ResolveSubschema(pointer, baseUri);
 		}
 		public bool Equals(SchemaDependency other)
 		{

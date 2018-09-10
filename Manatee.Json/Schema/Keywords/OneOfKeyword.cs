@@ -51,14 +51,14 @@ namespace Manatee.Json.Schema
 				schema.RegisterSubschemas(baseUri);
 			}
 		}
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			var first = pointer.FirstOrDefault();
 			if (first == null) return null;
 
 			if (!int.TryParse(first, out var index) || index < 0 || index >= Count) return null;
 
-			return this[index].ResolveSubschema(new JsonPointer(pointer.Skip(1)));
+			return this[index].ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri);
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{

@@ -70,7 +70,7 @@ namespace Manatee.Json.Schema
 		{
 			Value.RegisterSubschemas(baseUri);
 		}
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}

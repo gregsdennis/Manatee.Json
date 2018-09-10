@@ -9,7 +9,7 @@ namespace Manatee.Json.Schema
 	public class ContentMediaTypeKeyword : IJsonSchemaKeyword, IEquatable<ContentMediaTypeKeyword>
 	{
 		public string Name => "$comment";
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 		public int ValidationSequence => 1;
 
 		public string Value { get; private set; }
@@ -25,7 +25,7 @@ namespace Manatee.Json.Schema
 			return SchemaValidationResults.Valid;
 		}
 		public void RegisterSubschemas(Uri baseUri) { }
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}

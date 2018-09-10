@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
@@ -47,7 +46,7 @@ namespace Manatee.Json.Schema
 			return Resolved.Validate(newContext);
 		}
 		public void RegisterSubschemas(Uri baseUri) { }
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}
@@ -102,16 +101,17 @@ namespace Manatee.Json.Schema
 			else
 				_resolvedRoot = context.Root;
 
-			_ResolveLocalReference();
+			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri);
 		}
-		private void _ResolveLocalReference()
+		private void _ResolveLocalReference(Uri baseUri)
 		{
 			if (!_resolvedFragment.Any())
 			{
 				Resolved = _resolvedRoot;
 				return;
 			}
-			Resolved = _resolvedRoot.ResolveSubschema(_resolvedFragment);
+
+			Resolved = _resolvedRoot.ResolveSubschema(_resolvedFragment, baseUri);
 		}
 	}
 }

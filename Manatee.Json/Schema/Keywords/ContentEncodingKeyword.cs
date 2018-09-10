@@ -9,13 +9,13 @@ namespace Manatee.Json.Schema
 	public class ContentEncodingKeyword : IJsonSchemaKeyword, IEquatable<ContentEncodingKeyword>
 	{
 		public string Name => "$comment";
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
 		public int ValidationSequence => 1;
 
-		public string Value { get; private set; }
+		public ContentEncoding Value { get; private set; }
 
 		public ContentEncodingKeyword() { }
-		public ContentEncodingKeyword(string value)
+		public ContentEncodingKeyword(ContentEncoding value)
 		{
 			Value = value;
 		}
@@ -25,17 +25,17 @@ namespace Manatee.Json.Schema
 			return SchemaValidationResults.Valid;
 		}
 		public void RegisterSubschemas(Uri baseUri) { }
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = json.String;
+			Value = serializer.Deserialize<ContentEncoding>(json);
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return Value;
+			return serializer.Serialize(Value);
 		}
 		public bool Equals(ContentEncodingKeyword other)
 		{

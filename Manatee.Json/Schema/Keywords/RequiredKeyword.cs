@@ -45,7 +45,7 @@ namespace Manatee.Json.Schema
 			return new SchemaValidationResults(errors);
 		}
 		public void RegisterSubschemas(Uri baseUri) { }
-		public JsonSchema ResolveSubschema(JsonPointer pointer)
+		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}

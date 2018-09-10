@@ -12,7 +12,7 @@ namespace Manatee.Json.Schema
 
 		SchemaValidationResults Validate(SchemaValidationContext context);
 		void RegisterSubschemas(Uri baseUri);
-		JsonSchema ResolveSubschema(JsonPointer pointer);
+		JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri);
 	}
 
 	internal interface IJsonSchemaKeywordPlus : IJsonSchemaKeyword
