@@ -33,6 +33,8 @@
 
 ### Functional changes
 
+- Updated the default enumeration serialization method from using numeric values to using named values.  (See `JsonSerializerOptions.EnumSerializationFormat`.)
+
 # 9.9.4 & 9.9.5
 
 *Released on 23 August, 2018*
