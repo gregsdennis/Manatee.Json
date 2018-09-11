@@ -17,36 +17,36 @@ namespace Manatee.Json.Schema
 		/// Indicates the array type.
 		/// </summary>
 		[Display(Description="array")]
-		Array = 0x01,
+		Array = 1 << 0,
 		/// <summary>
 		/// Indicates the boolean type.
 		/// </summary>
 		[Display(Description="boolean")]
-		Boolean = 0x02,
+		Boolean = 1 << 1,
 		/// <summary>
 		/// Indicates the integer type.
 		/// </summary>
 		[Display(Description="integer")]
-		Integer = 0x04,
+		Integer = 1 << 2,
 		/// <summary>
 		/// Indicates the null type.
 		/// </summary>
 		[Display(Description="null")]
-		Null = 0x08,
+		Null = 1 << 3,
 		/// <summary>
 		/// Indicates the number type.
 		/// </summary>
 		[Display(Description="number")]
-		Number = 0x10,
+		Number = 1 << 4,
 		/// <summary>
 		/// Indicates the object type.
 		/// </summary>
 		[Display(Description="object")]
-		Object = 0x20,
+		Object = 1 << 5,
 		/// <summary>
 		/// Indicates the string type.
 		/// </summary>
 		[Display(Description="string")]
-		String = 0x40
+		String = 1 << 6
 	}
 }

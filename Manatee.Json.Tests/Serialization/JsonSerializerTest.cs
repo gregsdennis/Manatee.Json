@@ -81,7 +81,7 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void Basic_Successful()
 		{
-			var serializer = new JsonSerializer();
+			var serializer = new JsonSerializer{Options = {EnumSerializationFormat = EnumSerializationFormat.AsInteger}};
 			var obj = new ObjectWithBasicProps
 				{
 					StringProp = "stringValue",
@@ -106,7 +106,7 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void BasicWithNamedEnum_Successful()
 		{
-			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsName}};
+			var serializer = new JsonSerializer();
 			var obj = new ObjectWithBasicProps
 				{
 					StringProp = "stringValue",
@@ -443,7 +443,11 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void CustomOptions_SerializesDefaultValues()
 		{
-			var serializer = new JsonSerializer {Options = {EncodeDefaultValues = true}};
+			var serializer = new JsonSerializer {Options =
+				{
+					EnumSerializationFormat = EnumSerializationFormat.AsInteger,
+					EncodeDefaultValues = true
+				}};
 			// DoubleProp remains default
 			var obj = new ObjectWithBasicProps
 				{
@@ -500,7 +504,11 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void Fields()
 		{
-			var serializer = new JsonSerializer {Options = {AutoSerializeFields = true}};
+			var serializer = new JsonSerializer {Options =
+				{
+					EnumSerializationFormat = EnumSerializationFormat.AsInteger,
+					AutoSerializeFields = true
+				}};
 			var obj = new ObjectWithBasicProps
 				{
 					StringProp = "stringValue",
@@ -566,7 +574,11 @@ namespace Manatee.Json.Tests.Serialization
 					MappedProp = 1,
 					StringProp = "string"
 				};
-			var serializer = new JsonSerializer {Options = {TypeNameSerializationBehavior = TypeNameSerializationBehavior.Auto}};
+			var serializer = new JsonSerializer {Options =
+				{
+					EnumSerializationFormat = EnumSerializationFormat.AsInteger,
+					TypeNameSerializationBehavior = TypeNameSerializationBehavior.Auto
+				}};
 			var actual = serializer.Serialize<object>(obj);
 			Assert.AreEqual(expected, actual);
 		}
@@ -592,7 +604,7 @@ namespace Manatee.Json.Tests.Serialization
 					MappedProp = 1,
 					StringProp = "string"
 				};
-			var serializer = new JsonSerializer();
+			var serializer = new JsonSerializer{Options = {EnumSerializationFormat = EnumSerializationFormat.AsInteger}};
 			var actual = serializer.Serialize<object>(obj);
 			Assert.AreEqual(expected, actual);
 		}

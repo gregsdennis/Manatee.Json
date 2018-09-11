@@ -37,20 +37,13 @@ namespace Manatee.Json.Tests.Serialization
 		[Schema(nameof(Definition))]
 		public class DefinedByProperty
 		{
-			public static IJsonSchema Definition =>
-				new JsonSchema06
-					{
-						Schema = JsonSchema06.MetaSchema.Schema,
-						Properties = new Dictionary<string, IJsonSchema>
-							{
-								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
-								["MyInt"] = new JsonSchema06
-									{
-										Type = JsonSchemaType.Integer,
-										Minimum = 10
-									}
-							}
-					};
+			public static JsonSchema Definition =>
+				new JsonSchema()
+					.Schema(MetaSchemas.Draft06.Id)
+					.Property("MyString", new JsonSchema().Type(JsonSchemaType.String))
+					.Property("MyInt", new JsonSchema()
+						          .Type(JsonSchemaType.Integer)
+						          .Minimum(10));
 
 			public string MyString { get; set; }
 			public int MyInt { get; set; }
@@ -60,45 +53,6 @@ namespace Manatee.Json.Tests.Serialization
 				return Equals(obj as DefinedByProperty);
 			}
 			protected bool Equals(DefinedByProperty other)
-			{
-				if (ReferenceEquals(this, other)) return true;
-				return string.Equals(MyString, other.MyString) && MyInt == other.MyInt;
-			}
-			public override int GetHashCode()
-			{
-				unchecked
-				{
-					return ((MyString != null ? MyString.GetHashCode() : 0) * 397) ^ MyInt;
-				}
-			}
-		}
-
-		[Schema(nameof(Definition))]
-		public class DefinedByConcreteProperty
-		{
-			public static JsonSchema06 Definition =>
-				new JsonSchema06
-					{
-						Schema = JsonSchema06.MetaSchema.Schema,
-						Properties = new Dictionary<string, IJsonSchema>
-							{
-								["MyString"] = new JsonSchema06 {Type = JsonSchemaType.String},
-								["MyInt"] = new JsonSchema06
-									{
-										Type = JsonSchemaType.Integer,
-										Minimum = 10
-									}
-							}
-					};
-
-			public string MyString { get; set; }
-			public int MyInt { get; set; }
-
-			public override bool Equals(object obj)
-			{
-				return Equals(obj as DefinedByConcreteProperty);
-			}
-			protected bool Equals(DefinedByConcreteProperty other)
 			{
 				if (ReferenceEquals(this, other)) return true;
 				return string.Equals(MyString, other.MyString) && MyInt == other.MyInt;
@@ -197,25 +151,6 @@ namespace Manatee.Json.Tests.Serialization
 				};
 
 			var actual = new JsonSerializer().Deserialize<DefinedByProperty>(json);
-
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void SchemaInConcretePropertyPasses()
-		{
-			var json = new JsonObject
-				{
-					["MyString"] = "some string",
-					["MyInt"] = 15
-				};
-			var expected = new DefinedByConcreteProperty
-			{
-					MyString = "some string",
-					MyInt = 15
-				};
-
-			var actual = new JsonSerializer().Deserialize<DefinedByConcreteProperty>(json);
 
 			Assert.AreEqual(expected, actual);
 		}

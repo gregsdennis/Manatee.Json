@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Manatee.Json.Patch;
+﻿using Manatee.Json.Patch;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 
@@ -7,19 +6,14 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 {
     public class JsonPatchTest : IJsonSerializable
     {
-        public static readonly IJsonSchema Schema = new JsonSchema04
-            {
-                Type = JsonSchemaType.Object,
-                Properties = new Dictionary<string, IJsonSchema>
-                    {
-                        ["doc"] = JsonSchema04.Empty,
-                        ["expected"] = JsonSchema04.Empty,
-                        ["patch"] = new JsonSchemaReference(JsonPatch.Schema.Id, typeof(JsonSchema04)),
-                        ["comment"] = new JsonSchema04 {Type = JsonSchemaType.String},
-                        ["error"] = new JsonSchema04 {Type = JsonSchemaType.String},
-                        ["disabled"] = new JsonSchema04 {Type = JsonSchemaType.Boolean}
-                    }
-            };
+	    public static readonly JsonSchema Schema = new JsonSchema()
+		    .Type(JsonSchemaType.Object)
+		    .Property("doc", JsonSchema.Empty)
+		    .Property("expected", JsonSchema.Empty)
+		    .Property("patch", new JsonSchema().Ref(JsonPatch.Schema.Id))
+		    .Property("comment", new JsonSchema().Type(JsonSchemaType.String))
+		    .Property("error", new JsonSchema().Type(JsonSchemaType.String))
+		    .Property("disabled", new JsonSchema().Type(JsonSchemaType.Boolean));
         
         public JsonValue Doc { get; set; }
         public JsonValue ExpectedValue { get; set; }

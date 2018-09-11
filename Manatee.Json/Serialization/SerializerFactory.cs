@@ -25,14 +25,14 @@ namespace Manatee.Json.Serialization
 		static SerializerFactory()
 		{
 			_serializers = typeof(ISerializer).GetTypeInfo()
-			                                  .Assembly
-			                                  .DefinedTypes
-			                                  .Where(t => t.ImplementedInterfaces.Contains(typeof(ISerializer)) &&
-			                                              t.IsClass && !t.IsAbstract)
-			                                  .Except(_dependentSerializers)
-			                                  .Select(t => Activator.CreateInstance(t.AsType()))
-			                                  .Cast<ISerializer>()
-			                                  .ToList();
+											  .Assembly
+											  .DefinedTypes
+											  .Where(t => t.ImplementedInterfaces.Contains(typeof(ISerializer)) &&
+														  t.IsClass && !t.IsAbstract)
+											  .Except(_dependentSerializers)
+											  .Select(t => Activator.CreateInstance(t.AsType()))
+											  .Cast<ISerializer>()
+											  .ToList();
 			_autoSerializer = _serializers.OfType<ITypeSerializer>().FirstOrDefault();
 			_orderedSerializers = _serializers.OrderBy(s => (s as IPrioritizedSerializer)?.Priority ?? 0);
 		}

@@ -10,17 +10,17 @@ namespace Manatee.Json.Tests.Schema
 		public static void AssertInvalid(this SchemaValidationResults results)
 		{
 			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			Assert.AreEqual(false, results.IsValid);
 
 			Console.WriteLine(string.Join(Environment.NewLine, results.Errors));
 		}
 		public static void AssertValid(this SchemaValidationResults results)
 		{
-			if (!results.Valid)
+			if (!results.IsValid)
 				Console.WriteLine(string.Join(Environment.NewLine, results.Errors));
 			
 			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.Valid);
+			Assert.AreEqual(true, results.IsValid);
 		}
 	}
 }

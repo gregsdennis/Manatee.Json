@@ -9,9 +9,14 @@ namespace Manatee.Json.Schema
 	public class SchemaValidationResults 
 	{
 		/// <summary>
+		/// Gets whether the validation succeeded.
+		/// </summary>
+		public static readonly SchemaValidationResults Valid = new SchemaValidationResults();
+
+		/// <summary>
 		/// Gets whether the validation was successful.
 		/// </summary>
-		public bool Valid => !Errors.Any();
+		public bool IsValid => !Errors.Any();
 
 		/// <summary>
 		/// Gets a collection of any errors which may have occurred during validation.
@@ -33,11 +38,15 @@ namespace Manatee.Json.Schema
 		/// <param name="aggregate">A collection of <see cref="SchemaValidationResults"/> to aggregate together.</param>
 		public SchemaValidationResults(IEnumerable<SchemaValidationResults> aggregate)
 		{
-			Errors = aggregate.SelectMany(r => r.Errors).Distinct();
+			Errors = aggregate.SelectMany(r => r.Errors).Distinct().ToList();
 		}
 		internal SchemaValidationResults(IEnumerable<SchemaValidationError> errors = null)
 		{
 			Errors = errors?.Distinct() ?? Enumerable.Empty<SchemaValidationError>();
+		}
+		internal SchemaValidationResults(IEnumerable<string> errors)
+		{
+			Errors = errors?.Select(e => new SchemaValidationError(null, e));
 		}
 	}
 }

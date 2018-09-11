@@ -9,7 +9,7 @@ namespace Manatee.Json.Tests.Path
 	public class ClientTests
 	{
 		[Test]
-		public void Issue16_PathIntolerantOfUndscoresInPropertyNames()
+		public void Issue16_PathIntolerantOfUnderscoresInPropertyNames()
 		{
 			var expected = JsonPathWith.Name("properties").Name("id_person");
 
@@ -24,7 +24,7 @@ namespace Manatee.Json.Tests.Path
 			var text = "{\"id\": \"http://localhost/json-schemas/address.json\"}";
 			var json = JsonValue.Parse(text);
 
-			var results = JsonSchema04.MetaSchema.Validate(json);
+			var results = MetaSchemas.Draft04.Validate(json);
 
 			results.AssertValid();
 		}

@@ -11,14 +11,12 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new JsonSchema04 {Type = JsonSchemaType.Null};
-				yield return new JsonSchema06 {Type = JsonSchemaType.Null};
-				yield return new JsonSchema07 { Type = JsonSchemaType.Null};
+				yield return new JsonSchema().Type(JsonSchemaType.Null);
 			}
 		}
 		
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnNonNull(IJsonSchema schema)
+		public void ValidateReturnsErrorOnNonNull(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -27,7 +25,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsValidOnNull(IJsonSchema schema)
+		public void ValidateReturnsValidOnNull(JsonSchema schema)
 		{
 			var json = JsonValue.Null;
 

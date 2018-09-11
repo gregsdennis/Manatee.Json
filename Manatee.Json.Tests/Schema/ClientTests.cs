@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
@@ -11,23 +13,19 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ClientTests
 	{
+		private static readonly JsonSerializer _serializer = new JsonSerializer();
+
 		[Test]
 		public void Issue15_DeclaredTypeWithDeclaredEnum()
 		{
-			JsonSchemaFactory.SetDefaultSchemaVersion<JsonSchema04>();
-
 			var text = "{\"type\":\"string\",\"enum\":[\"FeatureCollection\"]}";
 			var json = JsonValue.Parse(text);
-			var expected = new JsonSchema04
-			{
-				Type = JsonSchemaType.String,
-				Enum = new List<EnumSchemaValue>
-						{
-							new EnumSchemaValue("FeatureCollection")
-						}
-			};
+			var expected = new JsonSchema()
+				.Type(JsonSchemaType.String)
+				.Enum("FeatureCollection");
 
-			var actual = JsonSchemaFactory.FromJson(json);
+			var actual = new JsonSchema();
+			actual.FromJson(json, _serializer);
 
 			Assert.AreEqual(expected, actual);
 		}
@@ -57,14 +55,14 @@ namespace Manatee.Json.Tests.Schema
 
 			var result = schema.Validate(json);
 
-			Console.WriteLine(schema.ToJson(null));
-			var refSchema = ((JsonSchemaReference)((JsonSchema04)schema).Properties["prop2"]).Resolved;
-			Console.WriteLine(refSchema.ToJson(null));
-			Console.WriteLine(json);
 			foreach (var error in result.Errors)
 			{
 				Console.WriteLine(error);
 			}
+			Console.WriteLine(schema.ToJson(_serializer));
+			var refSchema = schema.Properties()["prop2"].RefResolved();
+			Console.WriteLine(refSchema.ToJson(_serializer));
+			Console.WriteLine(json);
 
 			result.AssertValid();
 		}
@@ -73,46 +71,32 @@ namespace Manatee.Json.Tests.Schema
 		public void Issue49_RequiredAndAllOfInSingleSchema()
 		{
 			var fileName = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\issue49.json").AdjustForOS();
-			var expected = new JsonSchema04
-			{
-				Title = "JSON schema for Something",
-				Schema = "http://json-schema.org/draft-04/schema#",
-				Definitions = new Dictionary<string, IJsonSchema>
-				{
-					["something"] = new JsonSchema04
-					{
-						Type = JsonSchemaType.Object,
-						AllOf = new[]
-										{
-											new JsonSchema04
-												{
-													Properties = new Dictionary<string, IJsonSchema>
-														{
-															["name"] = new JsonSchema04 {Type = JsonSchemaType.String}
-														}
-												}
-										},
-						Required = new List<string> { "name" }
-					}
-				},
-				Type = JsonSchemaType.Array,
-				Description = "An array of somethings.",
-				Items = new JsonSchemaReference("#/definitions/something", typeof(JsonSchema04))
-			};
+			var expected = new JsonSchema()
+				.Title("JSON schema for Something")
+				.Schema("http://json-schema.org/draft-04/schema#")
+				.Definition("something", new JsonSchema()
+					            .Type(JsonSchemaType.Object)
+					            .Required("name")
+					            .AllOf(new JsonSchema()
+						                   .Property("name", new JsonSchema().Type(JsonSchemaType.String)))
+				)
+				.Type(JsonSchemaType.Array)
+				.Description("An array of somethings.")
+				.Items(new JsonSchema().Ref("#/definitions/something"));
 
 			var schema = JsonSchemaRegistry.Get(fileName);
 
 			Assert.AreEqual(expected, schema);
 
-			var schemaJson = schema.ToJson(null);
-			var expectedJson = expected.ToJson(null);
+			var schemaJson = schema.ToJson(_serializer);
+			var expectedJson = expected.ToJson(_serializer);
 
 			Console.WriteLine(schemaJson);
 			Assert.AreEqual(expectedJson, schemaJson);
 		}
 
 		[Test]
-		public void Issue50_MulitpleSchemaInSubFoldersShouldReferenceRelatively()
+		public void Issue50_MultipleSchemaInSubFoldersShouldReferenceRelatively()
 		{
 			string path = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, @"Files\Issue50A.json").AdjustForOS();
 			var schema = JsonSchemaRegistry.Get(path);
@@ -198,112 +182,38 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue141_ExamplesInSchema()
 		{
-			var schema = new JsonSchema06
-			{
-				Schema = JsonSchema06.MetaSchema.Id,
-				Type = JsonSchemaType.Object,
-				Properties = new Dictionary<string, IJsonSchema>
-				{
-					["test"] = new JsonSchema06
-					{
-						Id = "/properties/test",
-						Type = JsonSchemaType.String,
-						Title = "Test property",
-						Description = "Test property",
-						Default = "",
-						Examples = new JsonArray { "any string" }
-					}
-				}
-			};
+			var schema = new JsonSchema()
+				.Schema(MetaSchemas.Draft06.Id)
+				.Type(JsonSchemaType.Object)
+				.Property("test", new JsonSchema()
+					          .Id("/properties/test")
+					          .Type(JsonSchemaType.String)
+					          .Title("Test property")
+					          .Description("Test property")
+					          .Default("")
+					          .Examples("any string"));
 			var json = new JsonObject { ["test"] = "a valid string" };
 
 			var results = schema.Validate(json);
 
 			Console.WriteLine(string.Join("\n", results.Errors));
 
-			Assert.IsTrue(results.Valid);
-		}
-
-		public static IEnumerable Issue167TestCaseSource1
-		{
-			get
-			{
-				yield return new JsonSchema04
-					{
-						Properties = new Dictionary<string, IJsonSchema>
-							{
-								["xyz"] = new JsonSchema04
-									{
-										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, IJsonSchema>
-											{
-												["A"] = new JsonSchema04 {Type = JsonSchemaType.String},
-												["B"] = new JsonSchema04 {Type = JsonSchemaType.Integer},
-												["C"] = new JsonSchema04 {Type = JsonSchemaType.Number},
-											},
-										Required = new[] {"A"},
-										AdditionalProperties = AdditionalProperties.False,
-										OneOf = new IJsonSchema[]
-											{
-												new JsonSchema04 {Required = new[] {"B"}},
-												new JsonSchema04 {Required = new[] {"C"}}
-											}
-									}
-							}
-					};
-				yield return new JsonSchema06
-					{
-						Properties = new Dictionary<string, IJsonSchema>
-							{
-								["xyz"] = new JsonSchema06
-									{
-										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, IJsonSchema>
-											{
-												["A"] = new JsonSchema06 {Type = JsonSchemaType.String},
-												["B"] = new JsonSchema06 {Type = JsonSchemaType.Integer},
-												["C"] = new JsonSchema06 {Type = JsonSchemaType.Number},
-											},
-										Required = new[] {"A"},
-										AdditionalProperties = (JsonSchema06)false,
-										OneOf = new IJsonSchema[]
-											{
-												new JsonSchema06 {Required = new[] {"B"}},
-												new JsonSchema06 {Required = new[] {"C"}}
-											}
-									}
-							}
-					};
-				yield return new JsonSchema07
-					{
-						Properties = new Dictionary<string, IJsonSchema>
-							{
-								["xyz"] = new JsonSchema07
-									{
-										Type = JsonSchemaType.Object,
-										Properties = new Dictionary<string, IJsonSchema>
-											{
-												["A"] = new JsonSchema07 { Type = JsonSchemaType.String },
-												["B"] = new JsonSchema07 { Type = JsonSchemaType.Integer },
-												["C"] = new JsonSchema07 { Type = JsonSchemaType.Number },
-											},
-										Required = new[] { "A" },
-										AdditionalProperties = (JsonSchema07)false,
-										OneOf = new IJsonSchema[]
-											{
-												new JsonSchema07 {Required = new[] {"B"}},
-												new JsonSchema07 {Required = new[] {"C"}}
-											}
-									}
-							}
-					};
-			}
+			Assert.IsTrue(results.IsValid);
 		}
 
 		[Test]
-		[TestCaseSource(nameof(Issue167TestCaseSource1))]
-		public void Issue167_OneOfWithRequiredShouldFailValidation(IJsonSchema schema)
+		public void Issue167_OneOfWithRequiredShouldFailValidation()
 		{
+			var schema = new JsonSchema()
+				.Property("xyz", new JsonSchema()
+					          .Type(JsonSchemaType.Object)
+					          .Property("A", new JsonSchema().Type(JsonSchemaType.String))
+					          .Property("B", new JsonSchema().Type(JsonSchemaType.Integer))
+					          .Property("C", new JsonSchema().Type(JsonSchemaType.Number))
+					          .Required("A")
+					          .AdditionalProperties(false)
+					          .OneOf(new JsonSchema().Required("B"),
+					                 new JsonSchema().Required("C")));
 			var json = new JsonObject
 				{
 					["xyz"] = new JsonObject
@@ -314,7 +224,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 			Console.WriteLine(string.Join("\n", results.Errors));
 		}
 
@@ -376,97 +286,72 @@ namespace Manatee.Json.Tests.Schema
 		[TestCaseSource(nameof(Issue167TestCaseSource2))]
 		public void Issue167_PropertyNamesWithPropertylessRequired(JsonObject json, bool isValid)
 		{
-			var schema = new JsonSchema06
-				{
-					Schema = JsonSchema06.MetaSchema.Id,
-					Definitions = new Dictionary<string, IJsonSchema>
-						{
-							["fields"] = new JsonSchema06
-								{
-									Type = JsonSchemaType.Object,
-									Properties = new Dictionary<string, IJsonSchema>
-										{
-											["field1"] = new JsonSchema06 {Type = JsonSchemaType.String},
-											["field2"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
-										}
-								},
-							["xyzBaseFieldNames"] = new JsonSchema06
-								{
-									Enum = new EnumSchemaValue[] {"field1", "field2"}
-								},
-							["worldwide"] = new JsonSchema06
-								{
-									AllOf = new IJsonSchema[]
-										{
-											new JsonSchemaReference("#/definitions/fields", typeof(JsonSchema06)),
-											new JsonSchema06 {Required = new[] {"field1"}},
-											new JsonSchema06
-												{
-													Properties = new Dictionary<string, IJsonSchema>
-														{
-															["A"] = new JsonSchema06 {Type = JsonSchemaType.String},
-															["B"] = new JsonSchema06 {Type = JsonSchemaType.Integer}
-														},
-													OneOf = new IJsonSchema[]
-														{
-															new JsonSchema06 {Required = new[] {"A"}},
-															new JsonSchema06 {Required = new[] {"B"}},
-														}
-												},
-											new JsonSchema06
-												{
-													PropertyNames = new JsonSchema06
-														{
-															AnyOf = new IJsonSchema[]
-																{
-																	new JsonSchemaReference("#/definitions/xyzBaseFieldNames", typeof(JsonSchema06)),
-																	new JsonSchema06
-																		{
-																			Enum = new EnumSchemaValue[] {"A", "B"}
-																		}
-																}
-														}
-												}
-										}
-								}
-						},
-					Type = JsonSchemaType.Object,
-					Properties = new Dictionary<string, IJsonSchema>
-						{
-							["xyz"] = new JsonSchemaReference("#/definitions/worldwide", typeof(JsonSchema06))
-						},
-					AdditionalProperties = JsonSchema06.False,
-					Required = new[] {"xyz"}
-				};
+			var schema = new JsonSchema()
+				.Schema(MetaSchemas.Draft06.Id)
+				.Definition("fields", new JsonSchema()
+					            .Type(JsonSchemaType.Object)
+					            .Property("field1", new JsonSchema().Type(JsonSchemaType.String))
+					            .Property("field2", new JsonSchema().Type(JsonSchemaType.Integer)))
+				.Definition("xyzBaseFieldNames", new JsonSchema()
+					            .Enum("field1", "field2"))
+				.Definition("worldwide", new JsonSchema()
+					            .AllOf(new JsonSchema().Ref("#/definitions/fields"),
+					                   new JsonSchema().Required("field1"),
+					                   new JsonSchema()
+						                   .Property("A", new JsonSchema().Type(JsonSchemaType.String))
+						                   .Property("B", new JsonSchema().Type(JsonSchemaType.Integer))
+						                   .OneOf(new JsonSchema().Required("A"),
+						                          new JsonSchema().Required("B")),
+					                   new JsonSchema()
+						                   .PropertyNames(new JsonSchema()
+							                                  .AnyOf(new JsonSchema().Ref("#/definitions/xyzBaseFieldNames"),
+							                                         new JsonSchema().Enum("A", "B")))))
+				.Type(JsonSchemaType.Object)
+				.Property("xyz", new JsonSchema().Ref("#/definitions/worldwide"))
+				.AdditionalProperties(false)
+				.Required("xyz");
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(isValid, results.Valid);
+			Assert.AreEqual(isValid, results.IsValid);
 		}
 
 		[Test]
 		public void Issue173_ReferencedSchemaInParentFolder()
 		{
-			// this links to the commit after the one that submitted the schema files.
-			// otherwise we have a paradox of trying to know the commit hash before the commit is created.
-			var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/c264db5c75478e0a33269baba7813901829f8244/Manatee.Json.Tests/Files/";
+			try
+			{
+				// this links to the commit after the one that submitted the schema files.
+				// otherwise we have a paradox of trying to know the commit hash before the commit is created.
+				var baseUri = "https://raw.githubusercontent.com/gregsdennis/Manatee.Json/c264db5c75478e0a33269baba7813901829f8244/Manatee.Json.Tests/Files/";
 
-			var schema = (JsonSchema07) JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
+				var schema = JsonSchemaRegistry.Get($"{baseUri}Issue173/BaseSchema.json");
 
-			var invalid = new JsonObject
-				{
-					["localProp"] = new JsonArray {150, "hello", 6}
-				};
-			var valid = new JsonObject
-				{
-					["localProp"] = new JsonArray {1, 2, 3, 4}
-				};
+				var invalid = new JsonObject
+					{
+						["localProp"] = new JsonArray {150, "hello", 6}
+					};
+				var valid = new JsonObject
+					{
+						["localProp"] = new JsonArray {1, 2, 3, 4}
+					};
 
-			var result = schema.Validate(invalid);
-			result.AssertInvalid();
+				var result = schema.Validate(invalid);
+				result.AssertInvalid();
 
-			result = schema.Validate(valid);
-			result.AssertValid();
+				result = schema.Validate(valid);
+				result.AssertValid();
+			}
+			catch (WebException)
+			{
+				Assert.Inconclusive();
+			}
+			catch (AggregateException e)
+			{
+				if (e.InnerExceptions.OfType<WebException>().Any())
+					Assert.Inconclusive();
+				throw;
+			}
 		}
 	}
 }

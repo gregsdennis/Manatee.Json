@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Concurrent;
 using Manatee.Json.Patch;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -10,23 +10,32 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaRegistry
 	{
-		private static readonly Dictionary<string, IJsonSchema> _schemaLookup;
+		// TODO: opportunity to refine the caching of resolved schemas:
+		private class RegisteredSchema
+		{
+			public string BaseUri { get; set; }
+			public ConcurrentDictionary<string, JsonSchema> LocalReferences { get; } = new ConcurrentDictionary<string, JsonSchema>();
+		}
+
+		private static readonly ConcurrentDictionary<string, JsonSchema> _schemaLookup;
+		private static readonly JsonSerializer _serializer;
 
 		/// <summary>
 		/// Initializes the <see cref="JsonSchemaRegistry"/> class.
 		/// </summary>
 		static JsonSchemaRegistry()
 		{
-			_schemaLookup = new Dictionary<string, IJsonSchema>();
+			_schemaLookup = new ConcurrentDictionary<string, JsonSchema>();
+			_serializer = new JsonSerializer();
 			Clear();
 		}
 
 		/// <summary>
 		/// Downloads and registers a schema at the specified URI.
 		/// </summary>
-		public static IJsonSchema Get(string uri)
+		public static JsonSchema Get(string uri)
 		{
-			IJsonSchema schema;
+			JsonSchema schema;
 			lock (_schemaLookup)
 			{
 				uri = uri.TrimEnd('#');
@@ -34,34 +43,13 @@ namespace Manatee.Json.Schema
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
 				    var schemaValue = JsonValue.Parse(schemaJson);
-					schema = JsonSchemaFactory.FromJson(schemaValue, new Uri(uri));
+					schema = new JsonSchema {DocumentPath = new Uri(uri, UriKind.RelativeOrAbsolute)};
+					schema.FromJson(schemaValue, _serializer);
 
-					var metaSchemas = new IJsonSchema[]
-						{
-							JsonSchema07.MetaSchema,
-							JsonSchema06.MetaSchema,
-							JsonSchema04.MetaSchema
-						};
-
-					SchemaValidationResults validation = null;
-					if (schema.Schema != null)
+					var schemaStructureValidation = schema.ValidateSchema();
+					if (!schemaStructureValidation.IsValid)
 					{
-						var bySchema = metaSchemas.FirstOrDefault(s => s.Id == schema.Schema);
-						if (bySchema != null)
-							validation = bySchema.Validate(schemaValue);
-					}
-					else
-					{
-						foreach (var metaSchema in metaSchemas)
-						{
-							validation = metaSchema.Validate(schemaValue);
-							if (validation.Valid) break;
-						}
-					}
-
-					if (validation != null && !validation.Valid)
-					{
-						var errors = string.Join(Environment.NewLine, validation.Errors.Select(e => e.Message));
+						var errors = string.Join(Environment.NewLine, schemaStructureValidation.Errors);
 						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 					}
 
@@ -75,24 +63,24 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Explicitly registers an existing schema.
 		/// </summary>
-		public static void Register(IJsonSchema schema)
+		public static void Register(JsonSchema schema)
 		{
-			if (string.IsNullOrWhiteSpace(schema.Id)) return;
+			if (schema.DocumentPath == null) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup[schema.DocumentPath.ToString()] = schema;
+				_schemaLookup[schema.DocumentPath.OriginalString] = schema;
 			}
 		}
 
 		/// <summary>
 		/// Removes a schema from the registry.
 		/// </summary>
-		public static void Unregister(IJsonSchema schema)
+		public static void Unregister(JsonSchema schema)
 		{
-			if (string.IsNullOrWhiteSpace(schema.Id)) return;
+			if (schema.DocumentPath == null) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup.Remove(schema.Id);
+				_schemaLookup.TryRemove(schema.DocumentPath.OriginalString, out _);
 			}
 		}
 
@@ -104,7 +92,7 @@ namespace Manatee.Json.Schema
 			if (string.IsNullOrWhiteSpace(uri)) return;
 			lock (_schemaLookup)
 			{
-				_schemaLookup.Remove(uri);
+				_schemaLookup.TryRemove(uri, out _);
 			}
 		}
 
@@ -113,15 +101,18 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Clear()
 		{
-			var draft04Uri = JsonSchema04.MetaSchema.Id.Split('#')[0];
-			var draft06Uri = JsonSchema06.MetaSchema.Id.Split('#')[0];
-			var draft07Uri = JsonSchema07.MetaSchema.Id.Split('#')[0];
+			var draft04Uri = MetaSchemas.Draft04.Id.Split('#')[0];
+			var draft06Uri = MetaSchemas.Draft06.Id.Split('#')[0];
+			var draft07Uri = MetaSchemas.Draft07.Id.Split('#')[0];
+			//var draft08Uri = MetaSchemas.Draft08.Id.Split('#')[0];
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
-				_schemaLookup[draft04Uri] = JsonSchema04.MetaSchema;
-				_schemaLookup[draft06Uri] = JsonSchema06.MetaSchema;
-				_schemaLookup[draft07Uri] = JsonSchema07.MetaSchema;
+				_schemaLookup.Clear();
+				_schemaLookup[draft04Uri] = MetaSchemas.Draft04;
+				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
+				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
+				//_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

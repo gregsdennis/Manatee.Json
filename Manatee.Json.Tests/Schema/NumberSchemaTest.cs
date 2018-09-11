@@ -12,13 +12,11 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new JsonSchema04 {Type = JsonSchemaType.Number};
-				yield return new JsonSchema06 {Type = JsonSchemaType.Number};
-				yield return new JsonSchema07 { Type = JsonSchemaType.Number};
+				yield return new JsonSchema().Type(JsonSchemaType.Number);
 			}
 		}
 		[TestCaseSource(nameof(TypeData))]
-		public void ValidateReturnsErrorOnNonNumber(IJsonSchema schema)
+		public void ValidateReturnsErrorOnNonNumber(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -31,13 +29,11 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, Minimum = 5});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Number, Minimum = 5});
+				yield return new JsonSchema().Type(JsonSchemaType.Number).Minimum(5);
 			}
 		}
 		[TestCaseSource(nameof(MinimumData))]
-		public void ValidateReturnsErrorOnLessThanMinimum(IJsonSchema schema)
+		public void ValidateReturnsErrorOnLessThanMinimum(JsonSchema schema)
 		{
 			var json = (JsonValue) 4;
 
@@ -46,7 +42,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MinimumData))]
-		public void ValidateReturnsValidOnMoreThanMinimum(IJsonSchema schema)
+		public void ValidateReturnsValidOnMoreThanMinimum(JsonSchema schema)
 		{
 			var json = (JsonValue) 10;
 
@@ -58,7 +54,10 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsErrorOnEqualsExclusiveMinimum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5, ExclusiveMinimum = true};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.Minimum(5)
+				.ExclusiveMinimumDraft04(true);
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -68,7 +67,10 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsValidOnMoreThanExclusiveMinimum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Minimum = 5, ExclusiveMinimum = true};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.Minimum(5)
+				.ExclusiveMinimumDraft04(true);
 			var json = (JsonValue) 10;
 
 			var results = schema.Validate(json);
@@ -76,9 +78,11 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[Test]
-		public void Draft06_ValidateReturnsErrorOnEqualsExclusiveMinimum()
+		public void ValidateReturnsErrorOnEqualsExclusiveMinimum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.ExclusiveMinimum(5);
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -86,29 +90,11 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[Test]
-		public void Draft06_ValidateReturnsValidOnMoreThanExclusiveMinimum()
+		public void ValidateReturnsValidOnMoreThanExclusiveMinimum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
-			var json = (JsonValue) 10;
-
-			var results = schema.Validate(json);
-
-			results.AssertValid();
-		}
-		[Test]
-		public void Draft07_ValidateReturnsErrorOnEqualsExclusiveMinimum()
-		{
-			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
-			var json = (JsonValue) 5;
-
-			var results = schema.Validate(json);
-
-			results.AssertInvalid();
-		}
-		[Test]
-		public void Draft07_ValidateReturnsValidOnMoreThanExclusiveMinimum()
-		{
-			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMinimum = 5};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.ExclusiveMinimum(5);
 			var json = (JsonValue) 10;
 
 			var results = schema.Validate(json);
@@ -120,13 +106,11 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 5});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Number, Maximum = 5});
+				yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Number).Maximum(5));
 			}
 		}
 		[TestCaseSource(nameof(MaximumData))]
-		public void ValidateReturnsErrorOnMoreThanMaximum(IJsonSchema schema)
+		public void ValidateReturnsErrorOnMoreThanMaximum(JsonSchema schema)
 		{
 			var json = (JsonValue) 10;
 
@@ -135,7 +119,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[TestCaseSource(nameof(MaximumData))]
-		public void ValidateReturnsValidOnLessThanMaximum(IJsonSchema schema)
+		public void ValidateReturnsValidOnLessThanMaximum(JsonSchema schema)
 		{
 			var json = (JsonValue) 3;
 
@@ -147,7 +131,10 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsErrorOnEqualsExclusiveMaximum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 5, ExclusiveMaximum = true};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.Maximum(5)
+				.ExclusiveMaximumDraft04(true);
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -157,7 +144,10 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Draft04_ValidateReturnsValidOnLessThanExclusiveMaximum()
 		{
-			var schema = new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 5, ExclusiveMaximum = true};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.Maximum(5)
+				.ExclusiveMaximumDraft04(true);
 			var json = (JsonValue) 3;
 
 			var results = schema.Validate(json);
@@ -165,9 +155,11 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[Test]
-		public void Draft06_ValidateReturnsErrorOnEqualsExclusiveMaximum()
+		public void ValidateReturnsErrorOnEqualsExclusiveMaximum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.ExclusiveMaximum(5);
 			var json = (JsonValue) 5;
 
 			var results = schema.Validate(json);
@@ -175,29 +167,11 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertInvalid();
 		}
 		[Test]
-		public void Draft06_ValidateReturnsValidOnLessThanExclusiveMaximum()
+		public void ValidateReturnsValidOnLessThanExclusiveMaximum()
 		{
-			var schema = new JsonSchema06 {Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
-			var json = (JsonValue) 3;
-
-			var results = schema.Validate(json);
-
-			results.AssertValid();
-		}
-		[Test]
-		public void Draft07_ValidateReturnsErrorOnEqualsExclusiveMaximum()
-		{
-			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
-			var json = (JsonValue) 5;
-
-			var results = schema.Validate(json);
-
-			results.AssertInvalid();
-		}
-		[Test]
-		public void Draft07_ValidateReturnsValidOnLessThanExclusiveMaximum()
-		{
-			var schema = new JsonSchema07 { Type = JsonSchemaType.Number, ExclusiveMaximum = 5};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Number)
+				.ExclusiveMaximum(5);
 			var json = (JsonValue) 3;
 
 			var results = schema.Validate(json);
@@ -209,13 +183,11 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Number, MultipleOf = 7.5});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Number, MultipleOf = 7.5});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Number, MultipleOf = 7.5});
+				yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Number).MultipleOf(7.5));
 			}
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsValidOnMultipleOf_Positive(IJsonSchema schema)
+		public void ValidateReturnsValidOnMultipleOf_Positive(JsonSchema schema)
 		{
 			var json = (JsonValue) 7.5;
 
@@ -224,7 +196,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsValidOnMultipleOf_Negative(IJsonSchema schema)
+		public void ValidateReturnsValidOnMultipleOf_Negative(JsonSchema schema)
 		{
 			var json = (JsonValue) (-7.5);
 
@@ -233,7 +205,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsValidOnMultipleOf_Zero(IJsonSchema schema)
+		public void ValidateReturnsValidOnMultipleOf_Zero(JsonSchema schema)
 		{
 			var json = (JsonValue) 0;
 
@@ -242,14 +214,14 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[TestCaseSource(nameof(MultipleOfData))]
-		public void ValidateReturnsInvalicOnMultipleOf(IJsonSchema schema)
+		public void ValidateReturnsInvalidOnMultipleOf(JsonSchema schema)
 		{
 			var json = (JsonValue) 16;
 
 			var results = schema.Validate(json);
 
 			Assert.AreEqual(1, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			Assert.AreEqual(false, results.IsValid);
 		}
 	}
 }
