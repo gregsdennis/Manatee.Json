@@ -10,15 +10,14 @@
 
 ([#132](https://github.com/gregsdennis/Manatee.Json/issues/132)) Changed parsing and schema errors to use JSON Pointers to indicate the locations of errors instead of JSON Paths.  The reasoning behind this is JSON Path is a query syntax that can return multiple values, whereas JSON Pointer was specifically designed to represent a single path resulting in a single value.
 
+([#175](https://github.com/gregsdennis/Manatee.Json/issues/175)) In preparation for JSON Schema draft-08, the JSON Schema implementation has been overhauled.  The key takeaways from this work are:
+
+- The schema drafts are no longer represented by multiple classes, but rather a single `JsonSchema` class that is capable of modeling all of the drafts.
+- The `JsonSchema` type does not expose keywords as properties, but is a container of keyword implementations.  This allows for easier extension.
+
 ## Changes
 
-### New members
-
-- `JsonPointer SchemaValidationError.Property { get; }`
-
-### Removed members
-
-- `string SchemaValidationError.PropertyName { get; }`
+*In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.*
 
 ### New types
 

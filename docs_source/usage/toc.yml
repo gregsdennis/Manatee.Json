@@ -4,6 +4,8 @@
   href: serialization.md
 - name: JSON Schema
   href: schema.md
+- name: JSON Schema (Pre-v10)
+  href: schema-v9.md
 - name: JSON Patch
   href: patch.md
 - name: JSON Path
