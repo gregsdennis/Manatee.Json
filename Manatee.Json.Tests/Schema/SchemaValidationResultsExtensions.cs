@@ -9,18 +9,25 @@ namespace Manatee.Json.Tests.Schema
 	{
 		private static readonly JsonSerializer _serializer = new JsonSerializer();
 
-		public static void AssertInvalid(this SchemaValidationResults results)
+		public static void AssertInvalid(this SchemaValidationResults results, SchemaValidationResults expected = null)
 		{
-			Assert.AreEqual(false, results.IsValid);
+			Console.WriteLine("expected:\n{0}", _serializer.Serialize(expected).GetIndentedString());
+			Console.WriteLine("actual:\n{0}", _serializer.Serialize(results).GetIndentedString());
 
-			Console.WriteLine(string.Join(Environment.NewLine, _serializer.Serialize(results)));
+			if (expected == null)
+				Assert.IsFalse(results.IsValid);
+			else
+				Assert.AreEqual(expected, results);
 		}
-		public static void AssertValid(this SchemaValidationResults results)
+		public static void AssertValid(this SchemaValidationResults results, SchemaValidationResults expected = null)
 		{
-			if (!results.IsValid)
-				Console.WriteLine(string.Join(Environment.NewLine, _serializer.Serialize(results)));
-			
-			Assert.AreEqual(true, results.IsValid);
+			Console.WriteLine("expected:\n{0}", _serializer.Serialize(expected).GetIndentedString());
+			Console.WriteLine("actual:\n{0}", _serializer.Serialize(results).GetIndentedString());
+
+			if (expected == null)
+				Assert.IsTrue(results.IsValid);
+			else
+				Assert.AreEqual(expected, results);
 		}
 	}
 }

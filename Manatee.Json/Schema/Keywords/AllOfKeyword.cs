@@ -50,7 +50,7 @@ namespace Manatee.Json.Schema
 					return result;
 				}).ToList();
 
-			var results = new SchemaValidationResults(Name, context) { NestedResults = nestedResults };
+			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
 
 			if (nestedResults.Any(r => !r.IsValid))
 			{

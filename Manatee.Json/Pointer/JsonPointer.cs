@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Pointer
@@ -9,7 +12,8 @@ namespace Manatee.Json.Pointer
 	/// <summary>
 	/// Represents a JSON Pointer.
 	/// </summary>
-	public class JsonPointer : List<string>, IJsonSerializable
+	[DebuggerDisplay("{ToString()}")]
+	public class JsonPointer : List<string>, IJsonSerializable, IEquatable<JsonPointer>
 	{
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
@@ -84,19 +88,21 @@ namespace Manatee.Json.Pointer
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return _usesHash
-				? $"#/{string.Join("/", this)}"
-				: $"/{string.Join("/", this)}";
+			var asString = _usesHash
+				? $"#/{string.Join("/", this.Select(_Escape))}"
+				: $"/{string.Join("/", this.Select(_Escape))}";
+
+			return asString.TrimEnd('/');
 		}
 
 		public JsonPointer Clone()
 		{
-			return new JsonPointer(this);
+			return new JsonPointer(this){_usesHash = _usesHash};
 		}
 
 		public JsonPointer CloneAndAppend(params string[] append)
 		{
-			var clone = new JsonPointer(this);
+			var clone = new JsonPointer(this){_usesHash = _usesHash};
 			clone.AddRange(append);
 
 			return clone;
@@ -123,10 +129,16 @@ namespace Manatee.Json.Pointer
 				       : value;
 		}
 
+		private static string _Escape(string reference)
+		{
+			return reference.Replace("~", "~0")
+				.Replace("/", "~1");
+		}
+
 		private static string _Unescape(string reference)
 		{
 			var unescaped = reference.Replace("~1", "/")
-			                         .Replace("~0", "~");
+				.Replace("~0", "~");
 			var matches = _generalEscapePattern.Matches(unescaped);
 			foreach (Match match in matches)
 			{
@@ -157,6 +169,26 @@ namespace Manatee.Json.Pointer
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return ToString();
+		}
+		public bool Equals(JsonPointer other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return _usesHash == other._usesHash &&
+			       this.SequenceEqual(other);
+		}
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as JsonPointer);
+		}
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = _usesHash.GetHashCode();
+				hashCode = (hashCode * 397) ^ this.GetCollectionHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

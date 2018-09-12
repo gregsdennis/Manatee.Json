@@ -190,6 +190,8 @@ namespace Manatee.Json.Schema
 			if (nestedResults.Any(r => !r.IsValid))
 				results.IsValid = false;
 
+			results.NestedResults = nestedResults;
+
 			return results;
 		}
 

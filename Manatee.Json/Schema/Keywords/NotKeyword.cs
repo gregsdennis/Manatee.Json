@@ -50,7 +50,7 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var results = new SchemaValidationResults(Name, context) {InvertNestedResults = true};
+			var results = new SchemaValidationResults(Name, context);
 
 			var newContext = new SchemaValidationContext
 				{
