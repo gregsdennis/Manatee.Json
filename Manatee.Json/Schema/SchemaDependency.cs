@@ -59,7 +59,11 @@ namespace Manatee.Json.Schema
 			var nestedResult = _schema.Validate(newContext);
 
 			if (!nestedResult.IsValid)
+			{
+				results.IsValid = false;
+				results.ErroredKeyword = $"dependencies.{PropertyName}";
 				results.NestedResults.Add(nestedResult);
+			}
 
 			return results;
 		}

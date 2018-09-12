@@ -63,6 +63,7 @@ namespace Manatee.Json.Schema
 			
 			if (context.Instance.Number >= keyword.Value)
 			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
 				results.AdditionalInfo["expected"] = keyword.Value;
 				results.AdditionalInfo["isExclusive"] = Value;

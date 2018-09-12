@@ -78,8 +78,11 @@ namespace Manatee.Json.Schema
 
 			var matchedIndices = nestedResults.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
 
-			if (matchedIndices.Any())
+			if (!matchedIndices.Any())
+			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
+			}
 			else
 				results.AdditionalInfo["matchedIndices"] = matchedIndices;
 

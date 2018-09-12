@@ -66,6 +66,8 @@ namespace Manatee.Json.Schema
 					throw new SchemaReferenceNotFoundException(context.RelativeLocation);
 			}
 
+			var results = new SchemaValidationResults(Name, context);
+
 			var newContext = new SchemaValidationContext
 				{
 					BaseUri = _resolvedRoot.DocumentPath,
@@ -75,7 +77,15 @@ namespace Manatee.Json.Schema
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
 				};
-			return Resolved.Validate(newContext);
+			var nestedResults = Resolved.Validate(newContext);
+
+			if (!nestedResults.IsValid)
+			{
+				results.IsValid = false;
+				results.ErroredKeyword = Name;
+			}
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

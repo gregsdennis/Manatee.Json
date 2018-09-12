@@ -52,6 +52,7 @@ namespace Manatee.Json.Schema
 			var results = new SchemaValidationResults(Name, context);
 			if (!Contains(context.Instance))
 			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
 			}
 

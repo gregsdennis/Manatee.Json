@@ -59,7 +59,7 @@ namespace Manatee.Json.Schema
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
-					};
+						};
 					nestedResults.Add(this[i].Validate(newContext));
 					i++;
 				}
@@ -77,10 +77,16 @@ namespace Manatee.Json.Schema
 								BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 								RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
-						};
+							};
 						return this[0].Validate(newContext);
 					});
 				nestedResults.AddRange(itemValidations);
+			}
+
+			if (nestedResults.Any(r => !r.IsValid))
+			{
+				results.IsValid = false;
+				results.ErroredKeyword = Name;
 			}
 
 			results.NestedResults.AddRange(nestedResults);

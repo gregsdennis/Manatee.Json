@@ -54,7 +54,10 @@ namespace Manatee.Json.Schema
 
 			var validCount = nestedResults.Count(r => r.IsValid);
 			if (validCount != 1)
+			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
+			}
 
 			results.NestedResults.AddRange(nestedResults);
 

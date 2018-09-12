@@ -57,6 +57,7 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Type != JsonValueType.Array) return results;
 			if (context.Instance.Array.Distinct().Count() != context.Instance.Array.Count)
 			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
 				results.AdditionalInfo["value"] = context.Instance;
 			}

@@ -59,9 +59,13 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Type != JsonValueType.Object) return results;
 			if (context.Instance.Object.ContainsKey(PropertyName))
 			{
-				var missingProperties = _dependencies.Except(context.Instance.Object.Keys);
-				results.ErroredKeyword = $"dependencies.{PropertyName}";
-				results.AdditionalInfo["missingProperties"] = missingProperties.ToJson();
+				var missingProperties = _dependencies.Except(context.Instance.Object.Keys).ToList();
+				if (missingProperties.Any())
+				{
+					results.IsValid = false;
+					results.ErroredKeyword = $"dependencies.{PropertyName}";
+					results.AdditionalInfo["missingProperties"] = missingProperties.ToJson();
+				}
 			}
 
 			return results;

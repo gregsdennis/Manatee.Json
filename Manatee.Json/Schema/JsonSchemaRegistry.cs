@@ -41,7 +41,7 @@ namespace Manatee.Json.Schema
 					schema.FromJson(schemaValue, _serializer);
 
 					var structureErrors = schema.ValidateSchema();
-					if (!structureErrors.Any())
+					if (structureErrors.Any())
 					{
 						var errors = string.Join(Environment.NewLine, structureErrors);
 						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");

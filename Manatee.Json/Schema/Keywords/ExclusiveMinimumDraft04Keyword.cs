@@ -56,13 +56,14 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Number) return results;
 
-			var keyword = context.Local.Get<MaximumKeyword>();
+			var keyword = context.Local.Get<MinimumKeyword>();
 			if (keyword == null) return results;
 
 			if (!Value) return results;
 
 			if (context.Instance.Number <= keyword.Value)
 			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
 				results.AdditionalInfo["expected"] = keyword.Value;
 				results.AdditionalInfo["isExclusive"] = Value;

@@ -55,6 +55,7 @@ namespace Manatee.Json.Schema
 
 			return new SchemaValidationResults(Name, context)
 				{
+					IsValid = false,
 					ErroredKeyword = Name,
 					AdditionalInfo =
 						{

@@ -192,7 +192,7 @@ namespace Manatee.Json.Tests.Schema
 					          .Description("Test property")
 					          .Default("")
 					          .Examples("any string"));
-			var json = new JsonObject { ["test"] = "a valid string" };
+			var json = new JsonObject {["test"] = "a valid string"};
 
 			var results = schema.Validate(json);
 

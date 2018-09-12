@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 			var array = context.Instance.Array;
 
 			if (itemsKeyword.Count < array.Count)
-				nestedResults.AddRange(array.Skip(itemsKeyword.Count).SelectMany((jv, i) =>
+				nestedResults.AddRange(array.Skip(itemsKeyword.Count).Select((jv, i) =>
 					{
 						var newContext = new SchemaValidationContext
 							{
@@ -72,13 +72,16 @@ namespace Manatee.Json.Schema
 								RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 							};
-						return Value.Validate(newContext).NestedResults;
+						return Value.Validate(newContext);
 					}));
 
 			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
 
 			if (nestedResults.Any(r => !r.IsValid))
+			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
+			}
 
 			return results;
 		}

@@ -59,8 +59,11 @@ namespace Manatee.Json.Schema
 				{
 					BaseUri = context.BaseUri,
 					Instance = context.Instance,
-					Root = context.Root
-				};
+					Root = context.Root,
+					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+					InstanceLocation = context.InstanceLocation
+			};
 
 			var ifResults = Value.Validate(newContext);
 
@@ -70,9 +73,19 @@ namespace Manatee.Json.Schema
 
 				var results = new SchemaValidationResults(Name, context);
 
+				newContext = new SchemaValidationContext
+					{
+						BaseUri = context.BaseUri,
+						Instance = context.Instance,
+						Root = context.Root,
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(then.Name),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(then.Name),
+						InstanceLocation = context.InstanceLocation
+					};
 				var thenResults = then.Value.Validate(newContext);
 				if (!thenResults.IsValid)
 				{
+					results.IsValid = false;
 					results.ErroredKeyword = then.Name;
 					results.NestedResults.Add(thenResults);
 				}
@@ -85,16 +98,26 @@ namespace Manatee.Json.Schema
 
 				var results = new SchemaValidationResults(Name, context);
 
+				newContext = new SchemaValidationContext
+					{
+						BaseUri = context.BaseUri,
+						Instance = context.Instance,
+						Root = context.Root,
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(@else.Name),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(@else.Name),
+						InstanceLocation = context.InstanceLocation
+					};
 				var elseResults = @else.Value.Validate(newContext);
 				if (!elseResults.IsValid)
 				{
+					results.IsValid = false;
 					results.ErroredKeyword = @else.Name;
 					results.NestedResults.Add(elseResults);
 				}
 
 				return results;
 			}
-	}
+		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
 		/// </summary>

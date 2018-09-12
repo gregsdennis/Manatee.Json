@@ -65,6 +65,7 @@ namespace Manatee.Json.Schema
 
 			if (!Value.IsMatch(context.Instance.String))
 			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
 				results.AdditionalInfo["pattern"] = Value.ToString();
 			}

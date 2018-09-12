@@ -2,15 +2,18 @@
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Pointer
 {
 	/// <summary>
 	/// Represents a JSON Pointer.
 	/// </summary>
-	public class JsonPointer : List<string>
+	public class JsonPointer : List<string>, IJsonSerializable
 	{
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
+
+		private bool _usesHash;
 
 		/// <summary>
 		/// Creates a new <see cref="JsonPointer"/> instance.
@@ -20,12 +23,18 @@ namespace Manatee.Json.Pointer
 		/// Creates a new <see cref="JsonPointer"/> instance.
 		/// </summary>
 		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
-		public JsonPointer(params string[] source) : this((IEnumerable<string>)source) { }
+		public JsonPointer(params string[] source)
+			: this((IEnumerable<string>) source) { }
 		/// <summary>
 		/// Creates a new <see cref="JsonPointer"/> instance.
 		/// </summary>
 		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
-		public JsonPointer(IEnumerable<string> source) : base(source) { }
+		public JsonPointer(IEnumerable<string> source)
+			: base(source.SkipWhile(s => s == "#"))
+		{
+			_usesHash = source.FirstOrDefault() == "#";
+
+		}
 
 		/// <summary>
 		/// Parses a string containing a JSON Pointer.
@@ -34,7 +43,20 @@ namespace Manatee.Json.Pointer
 		/// <returns>A <see cref="JsonPointer"/> instance.</returns>
 		public static JsonPointer Parse(string source)
 		{
-			return new JsonPointer(source.Split('/').Skip(1).SkipWhile(s => s == "#").Select(_Unescape));
+			var pointer = new JsonPointer();
+
+			var parts = source.Split('/');
+			if (parts.Length == 0) return pointer;
+
+
+			if (parts[0] == "#")
+				pointer._usesHash = true;
+			else
+				parts = parts.Skip(1).ToArray();
+
+			pointer.AddRange(parts.SkipWhile(s => s == "#").Select(_Unescape));
+
+			return pointer;
 		}
 
 		/// <summary>
@@ -62,7 +84,9 @@ namespace Manatee.Json.Pointer
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return "/" + string.Join("/", this);
+			return _usesHash
+				? $"#/{string.Join("/", this)}"
+				: $"/{string.Join("/", this)}";
 		}
 
 		public JsonPointer Clone()
@@ -111,6 +135,28 @@ namespace Manatee.Json.Pointer
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}
 			return unescaped;
+		}
+
+		/// <summary>
+		/// Builds an object from a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		public void FromJson(JsonValue json, JsonSerializer serializer)
+		{
+			AddRange(json.String.Split('/').Skip(1).SkipWhile(s => s == "#").Select(_Unescape));
+		}
+
+		/// <summary>
+		/// Converts an object to a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
+		public JsonValue ToJson(JsonSerializer serializer)
+		{
+			return ToString();
 		}
 	}
 }

@@ -161,7 +161,7 @@ namespace Manatee.Json.Schema
 			if (_inherentValue.HasValue)
 			{
 				if (_inherentValue.Value) return new SchemaValidationResults(context);
-				return new SchemaValidationResults(context){ErroredKeyword = "false"};
+				return new SchemaValidationResults(context){IsValid = false};
 			}
 
 			RegisterSubschemas(null);
@@ -182,11 +182,15 @@ namespace Manatee.Json.Schema
 			var refKeyword = this.OfType<RefKeyword>().FirstOrDefault();
 			if (refKeyword != null) return refKeyword.Validate(context);
 
-			return new SchemaValidationResults(context)
-				{
-					NestedResults = this.OrderBy(k => k.ValidationSequence)
-						.Select(k => k.Validate(context)).ToList()
-				};
+			var results = new SchemaValidationResults(context);
+
+			var nestedResults = this.OrderBy(k => k.ValidationSequence)
+				.Select(k => k.Validate(context)).ToList();
+
+			if (nestedResults.Any(r => !r.IsValid))
+				results.IsValid = false;
+
+			return results;
 		}
 
 		/// <summary>

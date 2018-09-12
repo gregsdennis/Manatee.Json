@@ -63,6 +63,7 @@ namespace Manatee.Json.Schema
 			if (!format.Validate(context.Instance.String))
 				return new SchemaValidationResults(Name, context)
 					{
+						IsValid = false,
 						ErroredKeyword = Name,
 						AdditionalInfo = {["format"] = format.Key}
 					};

@@ -59,6 +59,7 @@ namespace Manatee.Json.Schema
 			var length = new StringInfo(context.Instance.String).LengthInTextElements;
 			if (length < Value)
 			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
 				results.AdditionalInfo["expected"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.String.Length;

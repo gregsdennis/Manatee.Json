@@ -50,6 +50,8 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			var results = new SchemaValidationResults(Name, context) {InvertNestedResults = true};
+
 			var newContext = new SchemaValidationContext
 				{
 					BaseUri = context.BaseUri,
@@ -59,10 +61,14 @@ namespace Manatee.Json.Schema
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
 			};
-			var results = Value.Validate(newContext);
+			var nestedResults = Value.Validate(newContext);
 			context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
-			if (results.IsValid)
+
+			if (nestedResults.IsValid)
+			{
+				results.IsValid = false;
 				results.ErroredKeyword = Name;
+			}
 
 			return results;
 		}
