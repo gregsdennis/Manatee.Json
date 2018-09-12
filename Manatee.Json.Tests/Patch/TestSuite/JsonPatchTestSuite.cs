@@ -54,7 +54,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 				var schemaValidation = JsonPatchTest.Schema.Validate(testJson);
 				if (!schemaValidation.IsValid)
 				{
-					foreach (var error in schemaValidation.Errors)
+					foreach (var error in schemaValidation.NestedResults)
 					{
 						Console.WriteLine(error);
 					}

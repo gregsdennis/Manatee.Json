@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Manatee.Json.Internal;
-using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
 {

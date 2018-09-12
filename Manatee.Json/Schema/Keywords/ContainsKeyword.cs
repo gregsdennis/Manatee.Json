@@ -56,26 +56,34 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
 
-			var results = context.Instance.Array.Select(jv =>
+			var nestedResults = context.Instance.Array.Select((jv, i) =>
 				{
 					var newContext = new SchemaValidationContext
 						{
 							BaseUri = context.BaseUri,
 							Instance = jv,
-							Root = context.Root
-						};
+							Root = context.Root,
+							// TODO: potential performance improvement
+							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
+					};
 					var result = Value.Validate(newContext);
 					return result;
 				}).ToList();
-			if (results.Any(r => r.IsValid)) return new SchemaValidationResults();
 
-			return new SchemaValidationResults(Name, SchemaErrorMessages.Contains.ResolveTokens(new Dictionary<string, object>
-				{
-					["expected"] = Value,
-					["value"] = context.Instance
-				}));
+			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
+
+			var matchedIndices = nestedResults.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
+
+			if (matchedIndices.Any())
+				results.ErroredKeyword = Name;
+			else
+				results.AdditionalInfo["matchedIndices"] = matchedIndices;
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

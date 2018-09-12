@@ -63,14 +63,17 @@ namespace Manatee.Json.Schema
 			{
 				_ResolveReference(context);
 				if (Resolved == null)
-					return new SchemaValidationResults(null, $"Could not find referenced schema: {Reference}");
+					throw new SchemaReferenceNotFoundException(context.RelativeLocation);
 			}
 
 			var newContext = new SchemaValidationContext
 				{
 					BaseUri = _resolvedRoot.DocumentPath,
 					Instance = context.Instance,
-					Root = _resolvedRoot ?? context.Root
+					Root = _resolvedRoot ?? context.Root,
+					BaseRelativeLocation = _resolvedFragment,
+					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+					InstanceLocation = context.InstanceLocation
 				};
 			return Resolved.Validate(newContext);
 		}

@@ -34,10 +34,12 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+			var results = new SchemaValidationResults(Name, context);
+
+			if (context.Instance.Type != JsonValueType.Object) return results;
 
 			var obj = context.Instance.Object;
-			var errors = new List<SchemaValidationError>();
+			var nestedResults = new List<SchemaValidationResults>();
 			foreach (var property in this)
 			{
 				if (!obj.ContainsKey(property.Key)) continue;
@@ -47,13 +49,22 @@ namespace Manatee.Json.Schema
 					{
 						BaseUri = context.BaseUri,
 						Instance = obj[property.Key],
-						Root = context.Root
-					};
+						Root = context.Root,
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, property.Key),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, property.Key),
+						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key)
+				};
 				var result = property.Value.Validate(newContext);
 				if (result != null && !result.IsValid)
-					errors.AddRange(result.Errors.Select(e => e.PrependPropertySegment(property.Key)));
+					nestedResults.Add(result);
 			}
-			return new SchemaValidationResults(errors);
+
+			if (nestedResults.Any(r => !r.IsValid))
+				results.ErroredKeyword = Name;
+
+			results.NestedResults.AddRange(nestedResults);
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

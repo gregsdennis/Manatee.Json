@@ -40,11 +40,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				var results = schema.Validate(json);
 				if (!results.IsValid)
-				{
 					throw new JsonSerializationException($"JSON did not pass schema defined by type '{typeof(T)}'.\n" +
-														 "Errors:\n" +
-														 string.Join("    \n", results.Errors.Select(e => e.Message)));
-				}
+					                                     "Errors:\n" +
+					                                     serializer.Serialize(results));
 			}
 
 			return _innerSerializer.Deserialize<T>(json, serializer);
@@ -75,11 +73,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 
 			if (schema == null)
-			{
 				throw new JsonSerializationException($"The value '{attribute.Source}' could not be translated into a valid schema. " +
-													 $"This value should represent either a public static property on the {typeInfo.Name} type " +
-													 $"or a file with this name should exist at the execution path.", exception);
-			}
+				                                     $"This value should represent either a public static property on the {typeInfo.Name} type " +
+				                                     $"or a file with this name should exist at the execution path.", exception);
 
 			return schema;
 		}

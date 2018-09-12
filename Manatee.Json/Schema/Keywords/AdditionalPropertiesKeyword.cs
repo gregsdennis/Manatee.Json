@@ -52,40 +52,33 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Object) return new SchemaValidationResults(Name, context);
 
 			var obj = context.Instance.Object;
 			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
 
-			var errors = new List<SchemaValidationError>();
+			var nestedResults = new List<SchemaValidationResults>();
 
-			if (Equals(Value, JsonSchema.False) && toEvaluate.Any())
-				errors.AddRange(toEvaluate.Keys.Select(k =>
-					{
-						var message = SchemaErrorMessages.AdditionalProperties_False.ResolveTokens(new Dictionary<string, object>
-							{
-								["property"] = k,
-								["value"] = context.Instance
-						});
-						return new SchemaValidationError(k, message);
-					}));
-			else
+			foreach (var kvp in toEvaluate)
 			{
-				foreach (var key in toEvaluate.Keys)
-				{
-					var newContext = new SchemaValidationContext
-						{
-							BaseUri = context.BaseUri,
-							
-							Instance = toEvaluate[key],
-							Root = context.Root
-						};
-					var extraErrors = Value.Validate(newContext).Errors;
-					errors.AddRange(extraErrors.Select(e => e.PrependPropertySegment(key)));
-				}
+				var newContext = new SchemaValidationContext
+					{
+						BaseUri = context.BaseUri,
+						Instance = kvp.Value,
+						Root = context.Root,
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key)
+					};
+				nestedResults.Add(Value.Validate(newContext));
 			}
 
-			return new SchemaValidationResults(errors);
+			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
+
+			if (nestedResults.Any(r => !r.IsValid))
+				results.ErroredKeyword = Name;
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

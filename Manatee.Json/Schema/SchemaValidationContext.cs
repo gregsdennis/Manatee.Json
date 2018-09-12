@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
 {
@@ -28,5 +29,8 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the base URI at this point in the validation.
 		/// </summary>
 		public Uri BaseUri { get; set; }
+		public JsonPointer InstanceLocation { get; set; }
+		public JsonPointer RelativeLocation { get; set; }
+		public JsonPointer BaseRelativeLocation { get; set; }
 	}
 }

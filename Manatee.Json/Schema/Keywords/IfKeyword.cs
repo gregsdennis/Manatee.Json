@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -55,7 +53,7 @@ namespace Manatee.Json.Schema
 			var then = context.Local.Get<ThenKeyword>();
 			var @else = context.Local.Get<ElseKeyword>();
 
-			if (then == null && @else == null) return SchemaValidationResults.Valid;
+			if (then == null && @else == null) return SchemaValidationResults.Null;
 
 			var newContext = new SchemaValidationContext
 				{
@@ -68,31 +66,35 @@ namespace Manatee.Json.Schema
 
 			if (ifResults.IsValid)
 			{
-				if (then == null) return SchemaValidationResults.Valid;
+				if (then == null) return SchemaValidationResults.Null;
+
+				var results = new SchemaValidationResults(Name, context);
 
 				var thenResults = then.Value.Validate(newContext);
-				if (thenResults.IsValid) return SchemaValidationResults.Valid;
+				if (!thenResults.IsValid)
+				{
+					results.ErroredKeyword = then.Name;
+					results.NestedResults.Add(thenResults);
+				}
 
-				var message = SchemaErrorMessages.Then.ResolveTokens(new Dictionary<string, object>
-					{
-						["value"] = context.Instance
-					});
-				return new SchemaValidationResults("then", message);
+				return results;
 			}
 			else
 			{
-				if (@else == null) return SchemaValidationResults.Valid;
+				if (@else == null) return SchemaValidationResults.Null;
+
+				var results = new SchemaValidationResults(Name, context);
 
 				var elseResults = @else.Value.Validate(newContext);
-				if (elseResults.IsValid) return SchemaValidationResults.Valid;
+				if (!elseResults.IsValid)
+				{
+					results.ErroredKeyword = @else.Name;
+					results.NestedResults.Add(elseResults);
+				}
 
-				var message = SchemaErrorMessages.Else.ResolveTokens(new Dictionary<string, object>
-					{
-						["value"] = context.Instance
-					});
-				return new SchemaValidationResults("else", message);
+				return results;
 			}
-		}
+	}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
 		/// </summary>

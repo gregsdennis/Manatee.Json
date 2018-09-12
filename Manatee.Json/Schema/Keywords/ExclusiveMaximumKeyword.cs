@@ -52,21 +52,18 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Number) return SchemaValidationResults.Valid;
+			var results = new SchemaValidationResults(Name, context);
+
+			if (context.Instance.Type != JsonValueType.Number) return results;
 
 			if (context.Instance.Number >= Value)
 			{
-				var message = SchemaErrorMessages.ExclusiveMaximum.ResolveTokens(new Dictionary<string, object>
-					{
-						["expected"] = Value,
-						["actual"] = context.Instance.Number,
-						["value"] = context.Instance
-				});
-
-				return new SchemaValidationResults(Name, message);
+				results.ErroredKeyword = Name;
+				results.AdditionalInfo["expected"] = Value;
+				results.AdditionalInfo["actual"] = context.Instance;
 			}
 
-			return SchemaValidationResults.Valid;
+			return results;
 		}
 		bool IJsonSchemaKeywordPlus.Handles(JsonValue value)
 		{

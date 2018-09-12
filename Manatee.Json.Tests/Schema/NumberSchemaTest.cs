@@ -220,7 +220,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(1, results.Errors.Count());
+			Assert.AreEqual(1, results.NestedResults.Count());
 			Assert.AreEqual(false, results.IsValid);
 		}
 	}

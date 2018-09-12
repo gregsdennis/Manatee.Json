@@ -49,7 +49,7 @@ namespace Manatee.Json.Pointer
 			foreach (var segment in this)
 			{
 				upTo.Add(segment);
-				current = _EvaulateSegment(current, segment);
+				current = _EvaluateSegment(current, segment);
 				if (current == null)
 					return new PointerEvaluationResults($"No value found at '{upTo}'");
 			}
@@ -65,7 +65,20 @@ namespace Manatee.Json.Pointer
 			return "/" + string.Join("/", this);
 		}
 
-		private static JsonValue _EvaulateSegment(JsonValue current, string segment)
+		public JsonPointer Clone()
+		{
+			return new JsonPointer(this);
+		}
+
+		public JsonPointer CloneAndAppend(params string[] append)
+		{
+			var clone = new JsonPointer(this);
+			clone.AddRange(append);
+
+			return clone;
+		}
+
+		private static JsonValue _EvaluateSegment(JsonValue current, string segment)
 		{
 			if (current.Type == JsonValueType.Array)
 			{

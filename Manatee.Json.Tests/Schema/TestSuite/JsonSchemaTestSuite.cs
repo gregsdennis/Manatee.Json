@@ -93,7 +93,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				var results = schema.Validate(test.Data);
 
 				if (test.Valid != results.IsValid)
-					Console.WriteLine(string.Join("\n", results.Errors));
+					Console.WriteLine(string.Join("\n", _serializer.Serialize(results).GetIndentedString()));
 				Assert.AreEqual(test.Valid, results.IsValid);
 
 			}

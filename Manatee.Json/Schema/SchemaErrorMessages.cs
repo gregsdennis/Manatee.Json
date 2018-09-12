@@ -221,4 +221,9 @@
 		/// </remarks>
 		public static string UniqueItems { get; set; } = "Expected unique items; Duplicates were found.";
 	}
+
+	public static class SchemaErrorCodes
+	{
+		public const string BadFormat = "badFormat";
+	}
 }

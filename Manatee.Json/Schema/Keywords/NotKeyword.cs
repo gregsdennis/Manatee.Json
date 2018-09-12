@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
@@ -55,20 +54,17 @@ namespace Manatee.Json.Schema
 				{
 					BaseUri = context.BaseUri,
 					Instance = context.Instance,
-					Root = context.Root
-				};
+					Root = context.Root,
+					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+					InstanceLocation = context.InstanceLocation
+			};
 			var results = Value.Validate(newContext);
 			context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 			if (results.IsValid)
-			{
-				var message = SchemaErrorMessages.Not.ResolveTokens(new Dictionary<string, object>
-					{
-						["value"] = context.Instance
-				});
-				return new SchemaValidationResults(string.Empty, message);
-			}
+				results.ErroredKeyword = Name;
 
-			return SchemaValidationResults.Valid;
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

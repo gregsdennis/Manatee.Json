@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Manatee.Json.Schema;
+﻿using Manatee.Json.Schema;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -17,7 +16,6 @@ namespace Manatee.Json.Tests.Schema
 			var results = schema.Validate(json);
 
 			Assert.IsFalse(results.IsValid);
-			Assert.AreEqual("Expected: 5; Actual: 6", results.Errors.First().Message);
 		}
 
 		[Test]

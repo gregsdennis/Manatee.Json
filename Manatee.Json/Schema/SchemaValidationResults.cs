@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
 {
@@ -8,45 +10,36 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationResults 
 	{
-		/// <summary>
-		/// Gets whether the validation succeeded.
-		/// </summary>
-		public static readonly SchemaValidationResults Valid = new SchemaValidationResults();
+		public static SchemaValidationResults Null { get; } = new SchemaValidationResults();
 
 		/// <summary>
 		/// Gets whether the validation was successful.
 		/// </summary>
-		public bool IsValid => !Errors.Any();
+		public bool IsValid => ErroredKeyword == null && NestedResults.All(r => r.IsValid);
 
-		/// <summary>
-		/// Gets a collection of any errors which may have occurred during validation.
-		/// </summary>
-		public IEnumerable<SchemaValidationError> Errors { get; }
+		public JsonPointer RelativeLocation { get; set; }
+		public Uri AbsoluteLocation { get; set; }
+		public JsonPointer InstanceLocation { get; set; }
+		public JsonValue AnnotationValue { get; set; }
+		public string ErroredKeyword { get; set; }
+		public JsonObject AdditionalInfo { get; set; } = new JsonObject();
 
-		/// <summary>
-		/// Creates an instance of <see cref="SchemaValidationResults"/>.
-		/// </summary>
-		/// <param name="propertyName">The name of the property that failed.</param>
-		/// <param name="message">A message explaining the error.</param>
-		public SchemaValidationResults(string propertyName, string message)
+		public List<SchemaValidationResults> NestedResults { get; set; } = new List<SchemaValidationResults>();
+
+		private SchemaValidationResults() { }
+		internal SchemaValidationResults(SchemaValidationContext context)
 		{
-			Errors = new[] {new SchemaValidationError(propertyName, message)};
+			InstanceLocation = context.InstanceLocation.Clone();
+			if (context.BaseUri != null)
+				AbsoluteLocation = new Uri(context.BaseUri, context.BaseRelativeLocation.ToString());
+			RelativeLocation = context.RelativeLocation;
 		}
-		/// <summary>
-		/// Creates an instance of <see cref="SchemaValidationResults"/>.
-		/// </summary>
-		/// <param name="aggregate">A collection of <see cref="SchemaValidationResults"/> to aggregate together.</param>
-		public SchemaValidationResults(IEnumerable<SchemaValidationResults> aggregate)
+		public SchemaValidationResults(string keyword, SchemaValidationContext context)
 		{
-			Errors = aggregate.SelectMany(r => r.Errors).Distinct().ToList();
-		}
-		internal SchemaValidationResults(IEnumerable<SchemaValidationError> errors = null)
-		{
-			Errors = errors?.Distinct() ?? Enumerable.Empty<SchemaValidationError>();
-		}
-		internal SchemaValidationResults(IEnumerable<string> errors)
-		{
-			Errors = errors?.Select(e => new SchemaValidationError(null, e));
+			InstanceLocation = context.InstanceLocation.Clone();
+			if (context.BaseUri != null)
+				AbsoluteLocation = new Uri(context.BaseUri, context.BaseRelativeLocation.CloneAndAppend(keyword).ToString());
+			RelativeLocation = context.RelativeLocation.CloneAndAppend(keyword);
 		}
 	}
 }

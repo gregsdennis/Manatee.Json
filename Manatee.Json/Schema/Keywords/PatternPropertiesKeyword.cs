@@ -35,9 +35,11 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+			var results = new SchemaValidationResults(Name, context);
 
-			var errors = new List<SchemaValidationError>();
+			if (context.Instance.Type != JsonValueType.Object) return results;
+
+			var nestedResults = new List<SchemaValidationResults>();
 			var obj = context.Instance.Object;
 
 			foreach (var patternProperty in this)
@@ -52,14 +54,22 @@ namespace Manatee.Json.Schema
 						{
 							BaseUri = context.BaseUri,
 							Instance = obj[match],
-							Root = context.Root
-						};
+							Root = context.Root,
+							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, patternProperty.Key),
+							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key),
+							InstanceLocation = context.InstanceLocation.CloneAndAppend(match)
+					};
 					var result = localSchema.Validate(newContext);
-					errors.AddRange(result.Errors.Select(e => new SchemaValidationError(match, e.Message)));
+					nestedResults.Add(result);
 				}
 			}
 
-			return new SchemaValidationResults(errors);
+			if (nestedResults.Any(r => !r.IsValid))
+				results.ErroredKeyword = Name;
+
+			results.NestedResults.AddRange(nestedResults);
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

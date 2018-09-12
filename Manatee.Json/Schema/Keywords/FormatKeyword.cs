@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
@@ -51,21 +50,24 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (!JsonSchemaOptions.ValidateFormat) return SchemaValidationResults.Valid;
-			if (context.Instance.Type != JsonValueType.String) return SchemaValidationResults.Valid;
+			var valid = new SchemaValidationResults(Name, context)
+				{
+					AnnotationValue = Value.Key
+				};
+
+
+			if (!JsonSchemaOptions.ValidateFormat) return valid;
+			if (context.Instance.Type != JsonValueType.String) return valid;
 
 			var format = Value;
 			if (!format.Validate(context.Instance.String))
-			{
-				var message = SchemaErrorMessages.Format.ResolveTokens(new Dictionary<string, object>
+				return new SchemaValidationResults(Name, context)
 					{
-						["format"] = format.Key,
-						["value"] = context.Instance
-				});
-				return new SchemaValidationResults(string.Empty, message);
-			}
+						ErroredKeyword = Name,
+						AdditionalInfo = {["format"] = format.Key}
+					};
 
-			return new SchemaValidationResults();
+			return valid;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

@@ -39,9 +39,11 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
+			var results = new SchemaValidationResults(Name, context);
 
-			var errors = new List<SchemaValidationError>();
+			if (context.Instance.Type != JsonValueType.Array) return results;
+
+			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
 			if (IsArray)
 			{
@@ -53,29 +55,37 @@ namespace Manatee.Json.Schema
 						{
 							BaseUri = context.BaseUri,
 							Instance = array[i],
-							Root = context.Root
-						};
-					errors.AddRange(this[i].Validate(newContext).Errors);
+							Root = context.Root,
+							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
+							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
+							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
+					};
+					nestedResults.Add(this[i].Validate(newContext));
 					i++;
 				}
 			}
 			else
 			{
 				// have single schema: validate all against this
-				var itemValidations = array.Select(jv =>
+				var itemValidations = array.Select((jv, i) =>
 					{
 						var newContext = new SchemaValidationContext
 							{
 								BaseUri = context.BaseUri,
 								Instance = jv,
-								Root = context.Root
-							};
+								Root = context.Root,
+								BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+								RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
+						};
 						return this[0].Validate(newContext);
 					});
-				errors.AddRange(itemValidations.SelectMany((v, i) => v.Errors.Select(e => e.PrependPropertySegment($"{i}"))));
+				nestedResults.AddRange(itemValidations);
 			}
 
-			return new SchemaValidationResults(errors);
+			results.NestedResults.AddRange(nestedResults);
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var result = schema.Validate(json);
 
-			foreach (var error in result.Errors)
+			foreach (var error in result.NestedResults)
 			{
 				Console.WriteLine(error);
 			}
@@ -196,7 +196,7 @@ namespace Manatee.Json.Tests.Schema
 
 			var results = schema.Validate(json);
 
-			Console.WriteLine(string.Join("\n", results.Errors));
+			Console.WriteLine(string.Join("\n", results.NestedResults));
 
 			Assert.IsTrue(results.IsValid);
 		}
@@ -225,7 +225,7 @@ namespace Manatee.Json.Tests.Schema
 			var results = schema.Validate(json);
 
 			Assert.IsFalse(results.IsValid);
-			Console.WriteLine(string.Join("\n", results.Errors));
+			Console.WriteLine(string.Join("\n", results.NestedResults));
 		}
 
 		public static IEnumerable Issue167TestCaseSource2
