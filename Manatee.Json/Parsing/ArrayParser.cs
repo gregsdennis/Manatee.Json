@@ -16,10 +16,9 @@ namespace Manatee.Json.Parsing
 		{
 			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '[');
 
-			value = null;
-
 			bool complete = false;
 			var array = new JsonArray();
+			value = array;
 			var length = source.Length;
 			index++;
 			while (index < length)
@@ -54,17 +53,15 @@ namespace Manatee.Json.Parsing
 			if (!complete)
 				return "Unterminated array (missing ']')";
 
-			value = array;
 			return null;
 		}
 		public string TryParse(TextReader stream, out JsonValue value)
 		{
 			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
 
-			value = null;
-
 			bool complete = false;
 			var array = new JsonArray();
+			value = array;
 			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '[' or ','
@@ -98,7 +95,6 @@ namespace Manatee.Json.Parsing
 			if (!complete)
 				return "Unterminated array (missing ']')";
 
-			value = array;
 			return null;
 		}
 		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
@@ -172,10 +168,8 @@ namespace Manatee.Json.Parsing
 				errorMessage = "Unterminated array (missing ']')";
 			}
 
-			JsonValue value = errorMessage == null ? array : null;
-
 			SmallBufferCache.Release(scratch);
-			return (errorMessage, value);
+			return (errorMessage, array);
 		}
 	}
 }
