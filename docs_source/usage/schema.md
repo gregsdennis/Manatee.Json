@@ -294,9 +294,11 @@ The default output format is the condensed hierarchy, but this can be configured
 
 ## Registering well-known schemas
 
-```csharp
-throw new NotImplementedException();
-```
+It may be the case that you want to register a common schema.  Manatee.Json automatically does this for any schema that presents an `$id` (or `id` for draft-04 schemas) that is an absolute URI.
+
+The registry is used as a minimal caching mechanism so that schemas that have to be loaded from disk or downloaded from the internet or a network path only have to be loaded once.
+
+You can also manually register schemas.  To do this, use the `JsonSchemaRegistry.Register(JsonSchema)` static method.  Conversely, to unregister a schema, you can use the `JsonSchemaRegistry.Unregister(JsonSchema)` static method.
 
 ## Extending schemas
 
@@ -331,6 +333,38 @@ If your keyword does not contain a schema as part of its value, then this method
 #### `ResolveSubschema(JsonPointer, Uri)`
 
 This method is called during `$ref` resolution.  If your keyword doesn't contain a schema, just return null.  Otherwise, simply pass the call onto `JsonSchema`'s corresponding `ResolveSubschema(JsonPointer, Uri)` method.
+
+#### `Validate(JsonSchemaContext)`
+
+This is the guts of the keyword, where all of the actual validation takes place.
+
+##### The validation context
+
+The context fulfills two purposes: provide all of the required validation information to the keyword, and provide all of the location information needed to report any annotations and errors.  Below is a breakdown of all of the properties on the context and their roles in validation.
+
+- `Local` - This property indicates the local schema that is being validated.  It's automatically set by the `JsonSchema` class, so you don't ever need to set this or modify it.
+- `Root` - This is the root schema.  This is set at the beginning of the validation process and should never be updated.
+- `Instance` - This is the instance being validated *at the current level*.  This may be a nested value inside the original instance.
+- `InstanceLocation` - This is the location of the `Instance` property within the original instance.
+- `EvaluatedPropertyNames` - This is a list of property names that have been validated by either your keyword or by subschemas.  You will need to add any properties your keyword processes as well as any properties in the contexts you send to subschemas to this list.
+- `RelativeLocation` - This is the location of the current subschema with respect to the root schema.  It will contain `$ref` segments for any references that have been processed.
+- `BaseUri` - This is the current base URI.  It will change throughout the validation process as subschemas declare `$id` or `id` keywords.
+- `BaseRelativeLocation` - This is the location of the current subschema relative to the `BaseUri`.
+
+If your keyword contains a nested schema, it's important that you create a new context based on the properties in the context that was given to your keyword.  Changing the existing context will affect the validation of sibling or cousin keywords.  Some of the context properties will have to be modified based on how your keyword behaves.
+
+First, you'll always want to append your keyword name to the `RelativeLocation` and `BaseRelativeLocation` pointers.  There may be additional segments that you'll want to append. (The `items` keyword does this when it contains an array of subschemas.)
+
+Secondly, if the subschemas apply to the same instance that your keyword was given (like the `*Of` or `if`/`then`/`else` keywords), you'll want to leave the `InstanceLocation` alone, copying it as-is to the new context.  However, if your keyword processes an instance property or array item (like the `items` keyword), you'll need to append that property name or array index appropriately.
+
+##### Building a result
+
+The result object is defined by a current proposal for draft-08 which seeks to standardize the output produced by a schema.  Manatee.Json builds the verbose hierarchy format then condenses it according to the `JsonSchemaOptions.OutputFormat` static property.  The location properties are taken care of simply by passing the context into the constructor.  You'll need to set the validation-oriented ones yourself.
+
+- `IsValid` - This property defaults to `true`, so you'll need to set it to false when validation fails.
+- `AnnotationValue` - If your keyword generates annotations, set this property when the validation passes.
+- `AdditionalInfo` - This is just a `JsonObject` that you can use to pass any other pertinent information.
+- `NestedResults` - If your keyword has one or more subschemas, this property is for the validation results that they produce.
 
 ### Add your keyword to the catalog
 
