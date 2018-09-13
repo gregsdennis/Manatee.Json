@@ -20,9 +20,10 @@ namespace Manatee.Json.Tests
 			yield return ("\"a string\"", new JsonValue("a string"), null);
 			yield return ("[false,42,\"a string\"]", new JsonValue(new JsonArray { false, 42, "a string" }), null);
 			yield return ("{\"bool\":false,\"int\":42,\"string\":\"a string\"}", new JsonValue(new JsonObject { { "bool", false }, { "int", 42 }, { "string", "a string" } }), null);
+			yield return ("{\"bool\":false,\"array\":[false, 4a, null],\"string\":\"a string\"}", null, "Expected ',', ']', or '}'. Path: '/array/1'");
 			yield return ("null", JsonValue.Null, null);
-			yield return ("nulf", null, "Value not recognized: 'nulf'. Path: '$'");
-			yield return ("invalid data", null, "Cannot determine type. Path: '$'");
+			yield return ("nulf", null, "Value not recognized: 'nulf'. Path: '/'");
+			yield return ("invalid data", null, "Cannot determine type. Path: '/'");
 			yield return ("\"An \\\"escaped quote with\\\" spaces\"", new JsonValue("An \"escaped quote with\" spaces"), null);
 			yield return ("\"An \\\\escaped\\\\ solidus\"", new JsonValue("An \\escaped\\ solidus"), null);
 			yield return ("\"An \\/escaped/ reverse solidus\"", new JsonValue("An /escaped/ reverse solidus"), null);
@@ -34,9 +35,9 @@ namespace Manatee.Json.Tests
 			yield return ("\"An \\u25A0escaped\\u25A0 hex value\"", new JsonValue("An " + (char)0x25A0 + "escaped" + (char)0x25A0 + " hex value"), null);
 			yield return ("\"\\uD83D\\uDCA9\"", new JsonValue(char.ConvertFromUtf32(0x1F4A9)), null);
 			yield return ("\"\\uD83D\\uDCA9\\uD83D\\uDCA9\"", new JsonValue(char.ConvertFromUtf32(0x1F4A9) + char.ConvertFromUtf32(0x1F4A9)), null);
-			yield return ("\"An \\rescaped\\a carriage return\"", null, "Invalid escape sequence: '\\a'. Path: '$'");
+			yield return ("\"An \\rescaped\\a carriage return\"", null, "Invalid escape sequence: '\\a'. Path: '/'");
 			yield return ("\"some text\\\\\"", new JsonValue("some text\\"), null);
-			yield return ("\"\\uA000\\uA000\"", null, "Invalid UTF-32 code point. Path: '$'");
+			yield return ("\"\\uA000\\uA000\"", null, "Invalid UTF-32 code point. Path: '/'");
 		}
 
 		public static IEnumerable TestData => _GetData()
@@ -97,6 +98,7 @@ namespace Manatee.Json.Tests
 				{
 					JsonValue.Parse(reader);
 				}
+				Assert.Fail("Expected an exception.");
 			}
 			catch (JsonSyntaxException e)
 			{
