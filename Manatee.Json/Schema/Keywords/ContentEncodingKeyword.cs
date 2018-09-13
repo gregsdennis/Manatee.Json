@@ -28,7 +28,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// The content encoding type for this keyword.
 		/// </summary>
-		public ContentEncoding Value { get; private set; }
+		public string Value { get; private set; }
 
 		/// <summary>
 		/// Used for deserialization.
@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Creates an instance of the <see cref="ContentEncodingKeyword"/>.
 		/// </summary>
-		public ContentEncodingKeyword(ContentEncoding value)
+		public ContentEncodingKeyword(string value)
 		{
 			Value = value;
 		}
@@ -78,7 +78,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = serializer.Deserialize<ContentEncoding>(json);
+			Value = json.String;
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -88,7 +88,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return serializer.Serialize(Value);
+			return Value;
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>

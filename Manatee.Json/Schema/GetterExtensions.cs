@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the value for the <code>contentEncoding</code> keyword, if present.
 		/// </summary>
-		public static ContentEncoding? ContentEncoding(this JsonSchema schema)
+		public static string ContentEncoding(this JsonSchema schema)
 		{
 			return schema.Get<ContentEncodingKeyword>()?.Value;
 		}
