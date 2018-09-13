@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 			if (!nestedResult.IsValid)
 			{
 				results.IsValid = false;
-				results.ErroredKeyword = $"dependencies.{PropertyName}";
+				results.Keyword = $"dependencies.{PropertyName}";
 				results.NestedResults.Add(nestedResult);
 			}
 

@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 			if (nestedResults.All(r => !r.IsValid))
 			{
 				results.IsValid = false;
-				results.ErroredKeyword = Name;
+				results.Keyword = Name;
 			}
 
 			results.NestedResults.AddRange(nestedResults);

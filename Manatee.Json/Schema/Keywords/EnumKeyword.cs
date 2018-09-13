@@ -53,7 +53,7 @@ namespace Manatee.Json.Schema
 			if (!Contains(context.Instance))
 			{
 				results.IsValid = false;
-				results.ErroredKeyword = Name;
+				results.Keyword = Name;
 			}
 
 			return results;

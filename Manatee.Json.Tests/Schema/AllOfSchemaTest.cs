@@ -27,7 +27,7 @@ namespace Manatee.Json.Tests.Schema
 							new SchemaValidationResults
 								{
 									IsValid = false,
-									ErroredKeyword = "allOf",
+									Keyword = "allOf",
 									RelativeLocation = JsonPointer.Parse("#/allOf"),
 									InstanceLocation = JsonPointer.Parse("#"),
 									NestedResults =
@@ -42,7 +42,7 @@ namespace Manatee.Json.Tests.Schema
 															new SchemaValidationResults
 																{
 																	IsValid = false,
-																	ErroredKeyword = "type",
+																	Keyword = "type",
 																	RelativeLocation = JsonPointer.Parse("#/allOf/0/type"),
 																	InstanceLocation = JsonPointer.Parse("#"),
 																	AdditionalInfo =
@@ -63,7 +63,7 @@ namespace Manatee.Json.Tests.Schema
 															new SchemaValidationResults
 																{
 																	IsValid = false,
-																	ErroredKeyword = "type",
+																	Keyword = "type",
 																	RelativeLocation = JsonPointer.Parse("#/allOf/1/type"),
 																	InstanceLocation = JsonPointer.Parse("#"),
 																	AdditionalInfo =

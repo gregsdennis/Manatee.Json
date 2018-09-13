@@ -82,7 +82,7 @@ namespace Manatee.Json.Schema
 			if (!nestedResults.IsValid)
 			{
 				results.IsValid = false;
-				results.ErroredKeyword = Name;
+				results.Keyword = Name;
 			}
 
 			return results;

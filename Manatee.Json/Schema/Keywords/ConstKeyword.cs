@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 			return new SchemaValidationResults(Name, context)
 				{
 					IsValid = false,
-					ErroredKeyword = Name,
+					Keyword = Name,
 					AdditionalInfo =
 						{
 							["expected"] = Value

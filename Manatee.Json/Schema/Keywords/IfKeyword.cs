@@ -86,7 +86,7 @@ namespace Manatee.Json.Schema
 				if (!thenResults.IsValid)
 				{
 					results.IsValid = false;
-					results.ErroredKeyword = then.Name;
+					results.Keyword = then.Name;
 					results.NestedResults.Add(thenResults);
 				}
 
@@ -111,7 +111,7 @@ namespace Manatee.Json.Schema
 				if (!elseResults.IsValid)
 				{
 					results.IsValid = false;
-					results.ErroredKeyword = @else.Name;
+					results.Keyword = @else.Name;
 					results.NestedResults.Add(elseResults);
 				}
 

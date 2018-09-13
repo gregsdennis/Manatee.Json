@@ -81,7 +81,7 @@ namespace Manatee.Json.Schema
 			if (!matchedIndices.Any())
 			{
 				results.IsValid = false;
-				results.ErroredKeyword = Name;
+				results.Keyword = Name;
 			}
 			else
 				results.AdditionalInfo["matchedIndices"] = matchedIndices;

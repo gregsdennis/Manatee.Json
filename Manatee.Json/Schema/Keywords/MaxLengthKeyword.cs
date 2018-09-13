@@ -60,7 +60,7 @@ namespace Manatee.Json.Schema
 			if (length > Value)
 			{
 				results.IsValid = false;
-				results.ErroredKeyword = Name;
+				results.Keyword = Name;
 				results.AdditionalInfo["expected"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.String.Length;
 			}
