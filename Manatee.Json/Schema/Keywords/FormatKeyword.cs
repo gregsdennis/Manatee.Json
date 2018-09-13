@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 				};
 
 
-			if (!JsonSchemaOptions.ValidateFormat) return valid;
+			if (!JsonSchemaOptions.ValidateFormatKeyword) return valid;
 			if (context.Instance.Type != JsonValueType.String) return valid;
 
 			var format = Value;

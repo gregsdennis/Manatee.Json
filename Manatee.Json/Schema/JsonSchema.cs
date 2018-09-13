@@ -92,7 +92,7 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(JsonValue json)
 		{
-			return Validate(new SchemaValidationContext
+			var results = Validate(new SchemaValidationContext
 				{
 					Instance = json,
 					Root = this,
@@ -100,6 +100,27 @@ namespace Manatee.Json.Schema
 					RelativeLocation = new JsonPointer("#"),
 					InstanceLocation = new JsonPointer("#")
 				});
+
+			switch (JsonSchemaOptions.OutputFormat)
+			{
+				case SchemaValidationOutputFormat.Basic:
+					results.AdditionalInfo = new JsonObject();
+					results.RelativeLocation = null;
+					results.AbsoluteLocation = null;
+					results.InstanceLocation = null;
+					results.NestedResults = new List<SchemaValidationResults>();
+					break;
+				case SchemaValidationOutputFormat.List:
+					results = results.Flatten();
+					break;
+				case SchemaValidationOutputFormat.Hierarchy:
+					results = results.Condense();
+					break;
+				case SchemaValidationOutputFormat.VerboseHierarchy:
+					break;
+			}
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
