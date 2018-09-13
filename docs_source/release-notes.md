@@ -15,9 +15,13 @@
 - The schema drafts are no longer represented by multiple classes, but rather a single `JsonSchema` class that is capable of modeling all of the drafts.
 - The `JsonSchema` type does not expose keywords as properties, but is a container of keyword implementations.  This allows for easier extension.
 
+([#132](https://github.com/gregsdennis/Manatee.Json/issues/132)) Updated parsing errors to report locations using JSON Pointer instead of JSON Path.  This is more appropriate since pointers identify a single location whereas paths are technically queries that can match multiple locations.
+
 ## Changes
 
 *In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.*
+
+- `JsonSyntaxException` - `string Path` property replaced by `JsonPointer Location` property.
 
 ### New types
 
