@@ -95,11 +95,18 @@ namespace Manatee.Json.Pointer
 			return asString.TrimEnd('/');
 		}
 
+		/// <summary>
+		/// Creates a copy of the pointer.
+		/// </summary>
 		public JsonPointer Clone()
 		{
 			return new JsonPointer(this){_usesHash = _usesHash};
 		}
 
+		/// <summary>
+		/// Creates a copy of the pointer and appends new segments.
+		/// </summary>
+		/// <param name="append">The segments to append.</param>
 		public JsonPointer CloneAndAppend(params string[] append)
 		{
 			var clone = new JsonPointer(this){_usesHash = _usesHash};
@@ -170,6 +177,9 @@ namespace Manatee.Json.Pointer
 		{
 			return ToString();
 		}
+		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+		/// <param name="other">An object to compare with this object.</param>
 		public bool Equals(JsonPointer other)
 		{
 			if (ReferenceEquals(null, other)) return false;
@@ -177,10 +187,15 @@ namespace Manatee.Json.Pointer
 			return _usesHash == other._usesHash &&
 			       this.SequenceEqual(other);
 		}
+		/// <summary>Determines whether the specified object is equal to the current object.</summary>
+		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+		/// <param name="obj">The object to compare with the current object. </param>
 		public override bool Equals(object obj)
 		{
 			return Equals(obj as JsonPointer);
 		}
+		/// <summary>Serves as the default hash function. </summary>
+		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
 			unchecked

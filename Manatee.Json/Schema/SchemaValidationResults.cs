@@ -12,20 +12,43 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationResults : IJsonSerializable, IEquatable<SchemaValidationResults>
 	{
+		/// <summary>
+		/// Gets a value to return for no results.  Only used when a keyword should not produce any output, such as <code>$id</code>.
+		/// </summary>
 		public static SchemaValidationResults Null { get; } = new SchemaValidationResults();
 
 		/// <summary>
-		/// Gets whether the validation was successful.  Defaults to true.
+		/// Gets or sets whether the validation was successful.  Defaults to true.
 		/// </summary>
 		public bool IsValid { get; set; } = true;
+		/// <summary>
+		/// Gets or sets the location of the keyword relative to the original schema root.  This will include any <code>$ref</code> segments.
+		/// </summary>
 		public JsonPointer RelativeLocation { get; set; }
+		/// <summary>
+		/// Gets or sets the absolute location of the keyword.  This is a direct reference after all <code>$ref</code> keywords have been resolved.
+		/// </summary>
 		public Uri AbsoluteLocation { get; set; }
+		/// <summary>
+		/// Gets or sets the location within the instance.
+		/// </summary>
 		public JsonPointer InstanceLocation { get; set; }
+		/// <summary>
+		/// Gets or sets an annotation value.
+		/// </summary>
 		public JsonValue AnnotationValue { get; set; }
+		/// <summary>
+		/// Gets or sets the keyword.
+		/// </summary>
 		// TODO: Set this for annotation-generating keywords, too
 		public string Keyword { get; set; }
+		/// <summary>
+		/// Gets or sets any additional information regarding the validation.
+		/// </summary>
 		public JsonObject AdditionalInfo { get; set; } = new JsonObject();
-
+		/// <summary>
+		/// Gets or sets any results of nested schemas.
+		/// </summary>
 		public List<SchemaValidationResults> NestedResults { get; set; } = new List<SchemaValidationResults>();
 
 		internal SchemaValidationResults() { }
@@ -36,6 +59,11 @@ namespace Manatee.Json.Schema
 				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation.ToString(), UriKind.RelativeOrAbsolute);
 			RelativeLocation = context.RelativeLocation;
 		}
+		/// <summary>
+		/// Creates a new instance of the <see cref="SchemaValidationResults"/> class.
+		/// </summary>
+		/// <param name="keyword">The name of the keyword producing the result.</param>
+		/// <param name="context">The current validation context when the result is produced.</param>
 		public SchemaValidationResults(string keyword, SchemaValidationContext context)
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
@@ -44,7 +72,9 @@ namespace Manatee.Json.Schema
 			RelativeLocation = context.RelativeLocation.CloneAndAppend(keyword);
 		}
 
-		// TODO: clone and return
+		/// <summary>
+		/// Creates a condensed copy of the result.
+		/// </summary>
 		public SchemaValidationResults Condense()
 		{
 			var children = NestedResults.Select(r => r.Condense()).ToList();
@@ -61,7 +91,9 @@ namespace Manatee.Json.Schema
 			return copy;
 		}
 
-		// TODO: clone and return
+		/// <summary>
+		/// Creates a flattened copy of the result.
+		/// </summary>
 		public SchemaValidationResults Flatten()
 		{
 			var condensed = Condense();
@@ -104,7 +136,23 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			throw new NotImplementedException();
+			var obj = json.Object;
+			IsValid = obj["valid"].Boolean;
+			var relativeLocation = obj.TryGetString("keywordLocation");
+			if (relativeLocation != null)
+				RelativeLocation = JsonPointer.Parse(relativeLocation);
+			var absoluteLocation = obj.TryGetString("absoluteKeywordLocation");
+			if (absoluteLocation != null)
+				AbsoluteLocation = new Uri(absoluteLocation);
+			var instanceLocation = obj.TryGetString("instanceLocation");
+			if (instanceLocation != null)
+				InstanceLocation = JsonPointer.Parse(instanceLocation);
+			Keyword = obj.TryGetString("keyword");
+			AnnotationValue = obj.TryGetString("annotation");
+			var nested = obj.TryGetArray("annotations") ?? obj.TryGetArray("errors");
+			if (nested != null)
+				NestedResults = nested.Select(serializer.Deserialize<SchemaValidationResults>).ToList();
+			AdditionalInfo = obj.TryGetObject("additionalInfo");
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
