@@ -2,7 +2,7 @@
 
 *Released on XXXXXXXXXXXXXXXXXXXXXXXXXX*
 
-<span id="feature">feature</span>
+<span id="break">breaking change</span> <span id="feature">feature</span>
 
 ## Summary
 
