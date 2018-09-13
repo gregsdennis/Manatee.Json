@@ -92,7 +92,7 @@ namespace Manatee.Json.Pointer
 				? $"#/{string.Join("/", this.Select(_Escape))}"
 				: $"/{string.Join("/", this.Select(_Escape))}";
 
-			return asString.TrimEnd('/');
+			return asString == "/" ? asString : asString.TrimEnd('/');
 		}
 
 		/// <summary>

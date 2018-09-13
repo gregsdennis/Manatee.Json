@@ -151,9 +151,152 @@ In the above example, the following would be reported:
 - `shortJson` failed because the value of `"myProperty"` was too short.
 - `nonObject` also passed validation because `properties` and `required` ignore non-object JSON.
 
+### Validation results
+
+Planned for JSON Schema draft-08 is a standardized format for validation output in order to support cross-platform and cross-implementation compatibility.  The format is described in [this GitHub issue](https://github.com/json-schema-org/json-schema-spec/issues/643).  This includes support for both errors and annotation collection.
+
+In summary, there are four levels of verbosity for output: Basic, List, Hierarchy, and Verbose Hierarchy.
+
+Basic will simply return a boolean value indicating a pass/fail result.  All other formats include JSON Pointers and URIs to indicate the source of the errors or annotations that were produced.
+
+A list output reduces all of the errors to a flat list.
+
+The hierarchical views mirror the structure of the schema.  The verbose one copies this structure exactly, whereas the standard hierarchy will condense the results where possible.
+
+The default output format is the condensed hierarchy, but this can be configured via the `JsonSchemaOptions.OutputFormat` static property.
+
+***NOTE** It's only possible to translate from a more detailed to a less detailed format.*
+
+#### Examples of output
+
+##### Verbose Hierarchy
+
+```json
+{
+  "valid" : false,
+  "keywordLocation" : "#",
+  "instanceLocation" : "#",
+  "errors" : [
+      {
+        "valid" : false,
+        "keywordLocation" : "#/allOf",
+        "instanceLocation" : "#",
+        "keyword" : "allOf",
+        "errors" : [
+            {
+              "valid" : false,
+              "keywordLocation" : "#/allOf/0",
+              "instanceLocation" : "#",
+              "errors" : [
+                  {
+                    "valid" : false,
+                    "keywordLocation" : "#/allOf/0/type",
+                    "instanceLocation" : "#",
+                    "keyword" : "type",
+                    "additionalInfo" : {
+                        "expected" : "array",
+                        "actual" : "object"
+                      }
+                  }
+                ]
+            },
+            {
+              "valid" : false,
+              "keywordLocation" : "#/allOf/1",
+              "instanceLocation" : "#",
+              "errors" : [
+                  {
+                    "valid" : false,
+                    "keywordLocation" : "#/allOf/1/type",
+                    "instanceLocation" : "#",
+                    "keyword" : "type",
+                    "additionalInfo" : {
+                        "expected" : "number",
+                        "actual" : "object"
+                      }
+                  }
+                ]
+            }
+          ]
+      }
+    ]
+}
+```
+
+##### Condensed Hierarchy
+
+```json
+{
+  "valid" : false,
+  "keywordLocation" : "#/allOf",
+  "instanceLocation" : "#",
+  "keyword" : "allOf",
+  "errors" : [
+      {
+        "valid" : false,
+        "keywordLocation" : "#/allOf/0/type",
+        "instanceLocation" : "#",
+        "keyword" : "type",
+        "additionalInfo" : {
+            "expected" : "array",
+            "actual" : "object"
+          }
+      },
+      {
+        "valid" : false,
+        "keywordLocation" : "#/allOf/1/type",
+        "instanceLocation" : "#",
+        "keyword" : "type",
+        "additionalInfo" : {
+            "expected" : "number",
+            "actual" : "object"
+          }
+      }
+    ]
+}
+```
+
+##### Flat List
+
+```json
+{
+  "valid" : false,
+  "errors" : [
+      {
+        "valid" : false,
+        "keywordLocation" : "#/allOf",
+        "instanceLocation" : "#",
+        "keyword" : "allOf"
+      },
+      {
+        "valid" : false,
+        "keywordLocation" : "#/allOf/0/type",
+        "instanceLocation" : "#",
+        "keyword" : "type",
+        "additionalInfo" : {
+            "expected" : "array",
+            "actual" : "object"
+          }
+      },
+      {
+        "valid" : false,
+        "keywordLocation" : "#/allOf/1/type",
+        "instanceLocation" : "#",
+        "keyword" : "type",
+        "additionalInfo" : {
+            "expected" : "number",
+            "actual" : "object"
+          }
+      }
+    ]
+}
+```
+
 ## Registering well-known schemas
 
-
+```csharp
+throw new NotImplementedException();
+```
 
 ## Extending schemas
 
