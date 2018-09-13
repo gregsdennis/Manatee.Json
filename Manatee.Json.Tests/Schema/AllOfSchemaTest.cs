@@ -11,6 +11,8 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnAnyInvalid()
 		{
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.VerboseHierarchy;
+
 			var schema = new JsonSchema()
 				.AllOf(new JsonSchema().Type(JsonSchemaType.Array),
 				       new JsonSchema().Type(JsonSchemaType.Number));
