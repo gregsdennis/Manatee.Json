@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -13,12 +14,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return typeof(IJsonSerializable).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var serializable = (IJsonSerializable) obj;
 			return serializable.ToJson(serializer);
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			var value = (IJsonSerializable)serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			value.FromJson(json, serializer);

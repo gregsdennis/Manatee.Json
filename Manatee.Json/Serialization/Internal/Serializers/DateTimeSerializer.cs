@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -13,7 +14,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return type == typeof(DateTime);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var dt = (DateTime) (object) obj;
 			if (serializer.Options == null)
@@ -32,7 +33,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			if (serializer.Options == null)
 				return (T)(object) DateTime.Parse(json.String);

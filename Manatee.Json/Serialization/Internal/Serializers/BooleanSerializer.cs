@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -12,11 +13,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return type == typeof(bool);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			return (bool) (object) obj;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			return (T) (object) json.Boolean;
 		}

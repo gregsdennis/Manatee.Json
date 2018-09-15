@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -17,7 +18,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var json = new JsonObject();
 			var type = typeof (T);
@@ -47,12 +48,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_ConstructJsonObject(json, map, serializer.Options);
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			var obj = (object) serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			var type = obj.GetType();
 			var propertyList = ReflectionCache.GetMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
-			var map = _DeserializeValues(obj, json, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);
+			var map = _DeserializeValues(obj, json, root, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);
 			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(type, json);
 			_AssignObjectProperties(ref obj, map);
@@ -143,7 +144,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	            json.Add(name, memberMap[memberInfo]);
 	        }
 	    }
-	    private static Dictionary<SerializationInfo, object> _DeserializeValues<T>(T obj, JsonValue json, JsonSerializer serializer, IEnumerable<SerializationInfo> members, bool ignoreCase)
+	    private static Dictionary<SerializationInfo, object> _DeserializeValues<T>(T obj, JsonValue json, JsonValue root, JsonSerializer serializer, IEnumerable<SerializationInfo> members,
+	                                                                               bool ignoreCase)
 		{
 			var dict = new Dictionary<SerializationInfo, object>();
 			foreach (var memberInfo in members)
@@ -164,7 +166,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					var valueObj = deserialize(serializer, value);
 					if (value.Type == JsonValueType.Object && value.Object.ContainsKey(Constants.RefKey))
 					{
-						var guid = new Guid(value.Object[Constants.RefKey].String);
+						var pointer = JsonPointer.Parse(value.Object[Constants.RefKey].String);
+						var resolved = pointer.Evaluate(root);
 						var pair = serializer.SerializationMap[guid];
 						if (pair.DeserializationIsComplete)
 							dict.Add(memberInfo, valueObj);

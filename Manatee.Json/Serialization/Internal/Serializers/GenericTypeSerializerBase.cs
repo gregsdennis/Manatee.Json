@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -21,7 +22,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public abstract bool Handles(Type type, JsonSerializerOptions options, JsonValue json);
 
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var typeArguments = GetTypeArguments(obj.GetType());
 			var toJson = _encodeMethod;
@@ -31,7 +32,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return (JsonValue) toJson.Invoke(null, new object[] {obj, serializer});
 		}
 
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			var typeArguments = GetTypeArguments(typeof(T));
 			var fromJson = _decodeMethod;

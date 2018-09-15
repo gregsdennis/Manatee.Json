@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
@@ -12,12 +13,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return type == typeof(JsonSchema);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var schema = (JsonSchema) (object) obj;
 			return schema.ToJson(serializer);
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			var schema = new JsonSchema();
 			schema.FromJson(json, serializer);

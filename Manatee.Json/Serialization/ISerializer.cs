@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization
 {
@@ -25,16 +26,18 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		/// <typeparam name="T">The type of the value to serialize.</typeparam>
 		/// <param name="obj">The value to serialize.</param>
+		/// <param name="location">The location within the object. Used to track references.</param>
 		/// <param name="serializer">The primary serializer instance.  Provided for nested object serialization.</param>
 		/// <returns>A <see cref="JsonValue"/> that represents the value.</returns>
-		JsonValue Serialize<T>(T obj, JsonSerializer serializer);
+		JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer);
 		/// <summary>
 		/// Deserializes a <see cref="JsonValue"/> into a value.
 		/// </summary>
 		/// <typeparam name="T">The type to be deserialized.</typeparam>
 		/// <param name="json">The JSON data to deserialize.</param>
+		/// <param name="root">The root of the serialization.  Used for reference resolution.</param>
 		/// <param name="serializer">The primary serializer instance.  Provided for nested object serialization.</param>
 		/// <returns>The typed value represented by the JSON data.</returns>
-		T Deserialize<T>(JsonValue json, JsonSerializer serializer);
+		T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer);
 	}
 }

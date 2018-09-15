@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -15,12 +16,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       (options.EnumSerializationFormat == EnumSerializationFormat.AsInteger ||		// used during serialization
 			        json?.Type == JsonValueType.Number);										// used during deserialization
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var value = Convert.ToInt32(obj);
 			return value;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			var value = (int) json.Number;
 			return (T) Enum.ToObject(typeof (T), value);

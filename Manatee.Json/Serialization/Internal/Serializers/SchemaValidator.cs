@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
@@ -28,11 +29,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
-			return _innerSerializer.Serialize(obj, serializer);
+			return _innerSerializer.Serialize(obj, location, serializer);
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			var typeInfo = typeof(T).GetTypeInfo();
 			var schema = _GetSchema(typeInfo);
@@ -45,7 +46,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					                                     serializer.Serialize(results));
 			}
 
-			return _innerSerializer.Deserialize<T>(json, serializer);
+			return _innerSerializer.Deserialize<T>(json, root, serializer);
 		}
 		private static JsonSchema _GetSchema(TypeInfo typeInfo)
 		{

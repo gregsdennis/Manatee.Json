@@ -1,4 +1,5 @@
 using System;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -13,12 +14,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return type == typeof(Guid);
 		}
 
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var guid = (Guid) (object) obj;
 			return guid.ToString();
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			return json.Type == JsonValueType.String ? (T) (object) new Guid(json.String) : default(T);
 		}

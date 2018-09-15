@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -26,7 +27,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       (options.EnumSerializationFormat == EnumSerializationFormat.AsName ||	// used during serialization
 			        json?.Type == JsonValueType.String);									// used during deserialiaztion
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
 		{
 			var type = _GetType<T>();
 			_EnsureDescriptions(type);
@@ -39,7 +40,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var enumValue = serializer.Options.SerializationNameTransform(obj.ToString());
 			return enumValue;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
 		{
 			var type = _GetType<T>();
 			_EnsureDescriptions(type);

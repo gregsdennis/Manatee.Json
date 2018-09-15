@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Manatee.Json.Pointer;
 using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
@@ -38,14 +38,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			_callCount++;
-			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), this);
-			var json = serializer.Serialize<T>(obj, this);
-			if (--_callCount == 0)
-			{
-				SerializationMap.Clear();
-			}
-			return json;
+			return Serialize(obj, new JsonPointer());
 		}
 		/// <summary>
 		/// Serializes the public static properties of a type to a JSON structure.
@@ -79,14 +72,7 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public T Deserialize<T>(JsonValue json)
 		{
-			_callCount++;
-			var serializer = SerializerFactory.GetSerializer(typeof(T), this, json);
-			var obj = serializer.Deserialize<T>(json, this);
-			if (--_callCount == 0)
-			{
-				SerializationMap.Clear();
-			}
-			return obj;
+			return Deserialize<T>(json, json);
 		}
 		/// <summary>
 		/// Deserializes a JSON structure to the public static properties of a type.
@@ -101,5 +87,30 @@ namespace Manatee.Json.Serialization
 			var serializer = SerializerFactory.GetTypeSerializer();
 			serializer.DeserializeType<T>(json, this);
 		}
+
+		internal JsonValue Serialize<T>(T obj, JsonPointer location)
+		{
+			_callCount++;
+			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), this);
+			var json = serializer.Serialize(obj, location, this);
+			if (--_callCount == 0)
+			{
+				SerializationMap.Clear();
+			}
+			return json;
+		}
+
+		internal T Deserialize<T>(JsonValue json, JsonValue root)
+		{
+			_callCount++;
+			var serializer = SerializerFactory.GetSerializer(typeof(T), this, json);
+			var obj = serializer.Deserialize<T>(json, root, this);
+			if (--_callCount == 0)
+			{
+				SerializationMap.Clear();
+			}
+			return obj;
+		}
+
 	}
 }
