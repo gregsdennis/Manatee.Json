@@ -37,5 +37,12 @@ namespace Manatee.Json.Internal
 					(l, r) => new { lft = l.l, rght = r })
 				.Select(o => result.Invoke(o.lft, o.rght));
 		}
+
+		public static IEnumerable<int> IndexesWhere<T>(this IEnumerable<T> items, Func<T, bool> predicate)
+		{
+			return items.Select((item, i) => new {Item = item, Index = i})
+				.Where(i => predicate(i.Item))
+				.Select(i => i.Index);
+		}
 	}
 }

@@ -69,7 +69,7 @@ namespace Manatee.Json.Schema
 		/// Validates that the schema object represents a valid schema in accordance with a known meta-schema.
 		/// </summary>
 		/// <returns>Validation results.</returns>
-		public SchemaValidationResults ValidateSchema()
+		public List<string> ValidateSchema()
 		{
 			var errors = new List<string>();
 			var supportedVersions = this.Aggregate(JsonSchemaVersion.All, (version, keyword) => version & keyword.SupportedVersions);
@@ -83,9 +83,7 @@ namespace Manatee.Json.Schema
 			if (duplicateKeywords.Any())
 				errors.Add($"The following keywords have been entered more than once: {string.Join(", ", duplicateKeywords)}");
 
-			return errors.Any()
-				       ? new SchemaValidationResults(errors)
-				       : SchemaValidationResults.Valid;
+			return errors;
 		}
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -94,11 +92,35 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(JsonValue json)
 		{
-			return Validate(new SchemaValidationContext
+			var results = Validate(new SchemaValidationContext
 				{
 					Instance = json,
-					Root = this
+					Root = this,
+					BaseRelativeLocation = new JsonPointer("#"),
+					RelativeLocation = new JsonPointer("#"),
+					InstanceLocation = new JsonPointer("#")
 				});
+
+			switch (JsonSchemaOptions.OutputFormat)
+			{
+				case SchemaValidationOutputFormat.Basic:
+					results.AdditionalInfo = new JsonObject();
+					results.RelativeLocation = null;
+					results.AbsoluteLocation = null;
+					results.InstanceLocation = null;
+					results.NestedResults = new List<SchemaValidationResults>();
+					break;
+				case SchemaValidationOutputFormat.List:
+					results = results.Flatten();
+					break;
+				case SchemaValidationOutputFormat.Hierarchy:
+					results = results.Condense();
+					break;
+				case SchemaValidationOutputFormat.VerboseHierarchy:
+					break;
+			}
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
@@ -159,8 +181,8 @@ namespace Manatee.Json.Schema
 		{
 			if (_inherentValue.HasValue)
 			{
-				if (_inherentValue.Value) return SchemaValidationResults.Valid;
-				return new SchemaValidationResults(new[]{"All instances are invalid for the false schema."});
+				if (_inherentValue.Value) return new SchemaValidationResults(context);
+				return new SchemaValidationResults(context){IsValid = false};
 			}
 
 			RegisterSubschemas(null);
@@ -181,8 +203,17 @@ namespace Manatee.Json.Schema
 			var refKeyword = this.OfType<RefKeyword>().FirstOrDefault();
 			if (refKeyword != null) return refKeyword.Validate(context);
 
-			return new SchemaValidationResults(this.OrderBy(k => k.ValidationSequence)
-				                                   .Select(k => k.Validate(context)));
+			var results = new SchemaValidationResults(context);
+
+			var nestedResults = this.OrderBy(k => k.ValidationSequence)
+				.Select(k => k.Validate(context)).ToList();
+
+			if (nestedResults.Any(r => !r.IsValid))
+				results.IsValid = false;
+
+			results.NestedResults = nestedResults;
+
+			return results;
 		}
 
 		/// <summary>

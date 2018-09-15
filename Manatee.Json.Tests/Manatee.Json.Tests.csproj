@@ -112,6 +112,7 @@
     <Compile Include="Schema\TestSuite\JsonSchemaTestSuite.cs" />
     <Compile Include="Schema\TestSuite\SchemaTest.cs" />
     <Compile Include="Schema\TestSuite\SchemaTestSet.cs" />
+    <Compile Include="Schema\ValidationResultsTests.cs" />
     <Compile Include="Serialization\ClientTests.cs" />
     <Compile Include="Serialization\ConcurrencyTests.cs" />
     <Compile Include="Serialization\JsonDeserializerTest.cs" />

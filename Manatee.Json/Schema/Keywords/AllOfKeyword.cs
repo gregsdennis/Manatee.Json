@@ -34,18 +34,31 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return new SchemaValidationResults(this.Select((s, i) =>
+			var nestedResults = this.Select((s, i) =>
 				{
 					var newContext = new SchemaValidationContext
 						{
 							BaseUri = context.BaseUri,
 							Instance = context.Instance,
-							Root = context.Root
-						};
+							Root = context.Root,
+							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
+							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
+							InstanceLocation = context.InstanceLocation
+					};
 					var result = s.Validate(newContext);
 					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 					return result;
-				}));
+				}).ToList();
+
+			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
+
+			if (nestedResults.Any(r => !r.IsValid))
+			{
+				results.IsValid = false;
+				results.Keyword = Name;
+			}
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

@@ -51,21 +51,19 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Number) return SchemaValidationResults.Valid;
+			var results = new SchemaValidationResults(Name, context);
+
+			if (context.Instance.Type != JsonValueType.Number) return results;
 
 			if ((decimal)context.Instance.Number % (decimal?) Value != 0)
 			{
-				var message = SchemaErrorMessages.MultipleOf.ResolveTokens(new Dictionary<string, object>
-					{
-						["multipleOf"] = Value,
-						["actual"] = context.Instance.Number % Value,
-						["value"] = context.Instance
-				});
-
-				return new SchemaValidationResults(Name, message);
+				results.IsValid = false;
+				results.Keyword = Name;
+				results.AdditionalInfo["multipleOf"] = Value;
+				results.AdditionalInfo["actual"] = context.Instance.Number % Value;
 			}
 
-			return SchemaValidationResults.Valid;
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

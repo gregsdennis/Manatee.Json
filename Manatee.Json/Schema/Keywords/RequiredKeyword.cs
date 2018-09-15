@@ -52,24 +52,26 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Object) return SchemaValidationResults.Valid;
+			var results = new SchemaValidationResults(Name, context);
 
-			var errors = new List<SchemaValidationError>();
+			if (context.Instance.Type != JsonValueType.Object) return results;
+
+			var missingProperties = new List<string>();
 			var obj = context.Instance.Object;
 			foreach (var propertyName in this)
 			{
 				if (!obj.ContainsKey(propertyName))
-				{
-					var message = SchemaErrorMessages.Required.ResolveTokens(new Dictionary<string, object>
-						{
-							["property"] = propertyName,
-							["value"] = context.Instance
-					});
-					errors.Add(new SchemaValidationError(propertyName, message));
-				}
+					missingProperties.Add(propertyName);
 			}
 
-			return new SchemaValidationResults(errors);
+			if (missingProperties.Any())
+			{
+				results.IsValid = false;
+				results.Keyword = Name;
+				results.AdditionalInfo["missing"] = missingProperties.ToJson();
+			}
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using Manatee.Json.Patch;
 using Manatee.Json.Serialization;
 
@@ -10,13 +11,6 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaRegistry
 	{
-		// TODO: opportunity to refine the caching of resolved schemas:
-		private class RegisteredSchema
-		{
-			public string BaseUri { get; set; }
-			public ConcurrentDictionary<string, JsonSchema> LocalReferences { get; } = new ConcurrentDictionary<string, JsonSchema>();
-		}
-
 		private static readonly ConcurrentDictionary<string, JsonSchema> _schemaLookup;
 		private static readonly JsonSerializer _serializer;
 
@@ -46,11 +40,11 @@ namespace Manatee.Json.Schema
 					schema = new JsonSchema {DocumentPath = new Uri(uri, UriKind.RelativeOrAbsolute)};
 					schema.FromJson(schemaValue, _serializer);
 
-					var schemaStructureValidation = schema.ValidateSchema();
-					if (!schemaStructureValidation.IsValid)
+					var structureErrors = schema.ValidateSchema();
+					if (structureErrors.Any())
 					{
-						var errors = string.Join(Environment.NewLine, schemaStructureValidation.Errors);
-						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+						var errors = string.Join(Environment.NewLine, structureErrors);
+						throw new SchemaLoadException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 					}
 
 					_schemaLookup[uri] = schema;

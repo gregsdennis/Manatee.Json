@@ -1,16 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Manatee.Json.Internal;
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Pointer
 {
 	/// <summary>
 	/// Represents a JSON Pointer.
 	/// </summary>
-	public class JsonPointer : List<string>
+	[DebuggerDisplay("{ToString()}")]
+	public class JsonPointer : List<string>, IJsonSerializable, IEquatable<JsonPointer>
 	{
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
+
+		private bool _usesHash;
 
 		/// <summary>
 		/// Creates a new <see cref="JsonPointer"/> instance.
@@ -20,12 +27,18 @@ namespace Manatee.Json.Pointer
 		/// Creates a new <see cref="JsonPointer"/> instance.
 		/// </summary>
 		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
-		public JsonPointer(params string[] source) : this((IEnumerable<string>)source) { }
+		public JsonPointer(params string[] source)
+			: this((IEnumerable<string>) source) { }
 		/// <summary>
 		/// Creates a new <see cref="JsonPointer"/> instance.
 		/// </summary>
 		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
-		public JsonPointer(IEnumerable<string> source) : base(source) { }
+		public JsonPointer(IEnumerable<string> source)
+			: base(source.SkipWhile(s => s == "#"))
+		{
+			_usesHash = source.FirstOrDefault() == "#";
+
+		}
 
 		/// <summary>
 		/// Parses a string containing a JSON Pointer.
@@ -34,7 +47,20 @@ namespace Manatee.Json.Pointer
 		/// <returns>A <see cref="JsonPointer"/> instance.</returns>
 		public static JsonPointer Parse(string source)
 		{
-			return new JsonPointer(source.Split('/').Skip(1).SkipWhile(s => s == "#").Select(_Unescape));
+			var pointer = new JsonPointer();
+
+			var parts = source.Split('/');
+			if (parts.Length == 0) return pointer;
+
+
+			if (parts[0] == "#")
+				pointer._usesHash = true;
+			else
+				parts = parts.Skip(1).ToArray();
+
+			pointer.AddRange(parts.SkipWhile(s => s == "#").Select(_Unescape));
+
+			return pointer;
 		}
 
 		/// <summary>
@@ -49,7 +75,7 @@ namespace Manatee.Json.Pointer
 			foreach (var segment in this)
 			{
 				upTo.Add(segment);
-				current = _EvaulateSegment(current, segment);
+				current = _EvaluateSegment(current, segment);
 				if (current == null)
 					return new PointerEvaluationResults($"No value found at '{upTo}'");
 			}
@@ -62,10 +88,34 @@ namespace Manatee.Json.Pointer
 		/// <filterpriority>2</filterpriority>
 		public override string ToString()
 		{
-			return "/" + string.Join("/", this);
+			var asString = _usesHash
+				? $"#/{string.Join("/", this.Select(_Escape))}"
+				: $"/{string.Join("/", this.Select(_Escape))}";
+
+			return asString == "/" ? asString : asString.TrimEnd('/');
 		}
 
-		private static JsonValue _EvaulateSegment(JsonValue current, string segment)
+		/// <summary>
+		/// Creates a copy of the pointer.
+		/// </summary>
+		public JsonPointer Clone()
+		{
+			return new JsonPointer(this){_usesHash = _usesHash};
+		}
+
+		/// <summary>
+		/// Creates a copy of the pointer and appends new segments.
+		/// </summary>
+		/// <param name="append">The segments to append.</param>
+		public JsonPointer CloneAndAppend(params string[] append)
+		{
+			var clone = new JsonPointer(this){_usesHash = _usesHash};
+			clone.AddRange(append);
+
+			return clone;
+		}
+
+		private static JsonValue _EvaluateSegment(JsonValue current, string segment)
 		{
 			if (current.Type == JsonValueType.Array)
 			{
@@ -86,10 +136,16 @@ namespace Manatee.Json.Pointer
 				       : value;
 		}
 
+		private static string _Escape(string reference)
+		{
+			return reference.Replace("~", "~0")
+				.Replace("/", "~1");
+		}
+
 		private static string _Unescape(string reference)
 		{
 			var unescaped = reference.Replace("~1", "/")
-			                         .Replace("~0", "~");
+				.Replace("~0", "~");
 			var matches = _generalEscapePattern.Matches(unescaped);
 			foreach (Match match in matches)
 			{
@@ -98,6 +154,56 @@ namespace Manatee.Json.Pointer
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}
 			return unescaped;
+		}
+
+		/// <summary>
+		/// Builds an object from a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="json">The <see cref="JsonValue"/> representation of the object.</param>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		public void FromJson(JsonValue json, JsonSerializer serializer)
+		{
+			AddRange(json.String.Split('/').Skip(1).SkipWhile(s => s == "#").Select(_Unescape));
+		}
+
+		/// <summary>
+		/// Converts an object to a <see cref="JsonValue"/>.
+		/// </summary>
+		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional
+		/// serialization of values.</param>
+		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
+		public JsonValue ToJson(JsonSerializer serializer)
+		{
+			return ToString();
+		}
+		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public bool Equals(JsonPointer other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return _usesHash == other._usesHash &&
+			       this.SequenceEqual(other);
+		}
+		/// <summary>Determines whether the specified object is equal to the current object.</summary>
+		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+		/// <param name="obj">The object to compare with the current object. </param>
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as JsonPointer);
+		}
+		/// <summary>Serves as the default hash function. </summary>
+		/// <returns>A hash code for the current object.</returns>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = _usesHash.GetHashCode();
+				hashCode = (hashCode * 397) ^ this.GetCollectionHashCode();
+				return hashCode;
+			}
 		}
 	}
 }

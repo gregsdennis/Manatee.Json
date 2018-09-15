@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
 {
@@ -28,5 +29,17 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the base URI at this point in the validation.
 		/// </summary>
 		public Uri BaseUri { get; set; }
+		/// <summary>
+		/// Gets or sets the current instance location.
+		/// </summary>
+		public JsonPointer InstanceLocation { get; set; }
+		/// <summary>
+		/// Gets or sets the current schema keyword location relative to the original schema root.
+		/// </summary>
+		public JsonPointer RelativeLocation { get; set; }
+		/// <summary>
+		/// Gets or sets the current schema location relative to the current base URI (<see cref="BaseUri"/>).
+		/// </summary>
+		public JsonPointer BaseRelativeLocation { get; set; }
 	}
 }

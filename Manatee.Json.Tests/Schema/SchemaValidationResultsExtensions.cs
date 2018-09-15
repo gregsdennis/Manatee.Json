@@ -1,26 +1,33 @@
 ﻿using System;
-using System.Linq;
 using Manatee.Json.Schema;
+using Manatee.Json.Serialization;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
 	public static class SchemaValidationResultsExtensions
 	{
-		public static void AssertInvalid(this SchemaValidationResults results)
-		{
-			Assert.AreNotEqual(0, results.Errors.Count());
-			Assert.AreEqual(false, results.IsValid);
+		private static readonly JsonSerializer _serializer = new JsonSerializer();
 
-			Console.WriteLine(string.Join(Environment.NewLine, results.Errors));
-		}
-		public static void AssertValid(this SchemaValidationResults results)
+		public static void AssertInvalid(this SchemaValidationResults results, SchemaValidationResults expected = null)
 		{
-			if (!results.IsValid)
-				Console.WriteLine(string.Join(Environment.NewLine, results.Errors));
-			
-			Assert.AreEqual(0, results.Errors.Count());
-			Assert.AreEqual(true, results.IsValid);
+			Console.WriteLine("expected:\n{0}", _serializer.Serialize(expected).GetIndentedString());
+			Console.WriteLine("actual:\n{0}", _serializer.Serialize(results).GetIndentedString());
+
+			if (expected == null)
+				Assert.IsFalse(results.IsValid);
+			else
+				Assert.AreEqual(expected, results);
+		}
+		public static void AssertValid(this SchemaValidationResults results, SchemaValidationResults expected = null)
+		{
+			Console.WriteLine("expected:\n{0}", _serializer.Serialize(expected).GetIndentedString());
+			Console.WriteLine("actual:\n{0}", _serializer.Serialize(results).GetIndentedString());
+
+			if (expected == null)
+				Assert.IsTrue(results.IsValid);
+			else
+				Assert.AreEqual(expected, results);
 		}
 	}
 }

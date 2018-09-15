@@ -91,18 +91,18 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Add a <code>contentEncoding</code> keyword to the schema.
 		/// </summary>
-		public static JsonSchema ContentEncoding(this JsonSchema schema, ContentEncoding comment)
+		public static JsonSchema ContentEncoding(this JsonSchema schema, string encoding)
 		{
-			schema.Add(new ContentEncodingKeyword(comment));
+			schema.Add(new ContentEncodingKeyword(encoding));
 
 			return schema;
 		}
 		/// <summary>
 		/// Add a <code>contentMediaType</code> keyword to the schema.
 		/// </summary>
-		public static JsonSchema ContentMediaType(this JsonSchema schema, string comment)
+		public static JsonSchema ContentMediaType(this JsonSchema schema, string mediaType)
 		{
-			schema.Add(new ContentMediaTypeKeyword(comment));
+			schema.Add(new ContentMediaTypeKeyword(mediaType));
 
 			return schema;
 		}

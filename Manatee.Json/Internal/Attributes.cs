@@ -17,7 +17,7 @@ namespace Manatee.Json.Internal
 	}
 
 #if !NET45
-	[CompilerAttributes.GeneratesMessage("Feedback is welcome on the Manatee Slack workspace (https://manateeopensource.slack.com/)")]
+	[CompilerAttributes.GeneratesWarning("Feedback is welcome on the Manatee Slack workspace (https://manateeopensource.slack.com/)")]
 #endif
 	internal class FeedbackWelcomeAttribute : Attribute
 	{

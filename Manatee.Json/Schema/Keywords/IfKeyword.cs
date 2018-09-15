@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -55,42 +53,69 @@ namespace Manatee.Json.Schema
 			var then = context.Local.Get<ThenKeyword>();
 			var @else = context.Local.Get<ElseKeyword>();
 
-			if (then == null && @else == null) return SchemaValidationResults.Valid;
+			if (then == null && @else == null) return SchemaValidationResults.Null;
 
 			var newContext = new SchemaValidationContext
 				{
 					BaseUri = context.BaseUri,
 					Instance = context.Instance,
-					Root = context.Root
-				};
+					Root = context.Root,
+					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+					InstanceLocation = context.InstanceLocation
+			};
 
 			var ifResults = Value.Validate(newContext);
 
 			if (ifResults.IsValid)
 			{
-				if (then == null) return SchemaValidationResults.Valid;
+				if (then == null) return SchemaValidationResults.Null;
 
-				var thenResults = then.Value.Validate(newContext);
-				if (thenResults.IsValid) return SchemaValidationResults.Valid;
+				var results = new SchemaValidationResults(Name, context);
 
-				var message = SchemaErrorMessages.Then.ResolveTokens(new Dictionary<string, object>
+				newContext = new SchemaValidationContext
 					{
-						["value"] = context.Instance
-					});
-				return new SchemaValidationResults("then", message);
+						BaseUri = context.BaseUri,
+						Instance = context.Instance,
+						Root = context.Root,
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(then.Name),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(then.Name),
+						InstanceLocation = context.InstanceLocation
+					};
+				var thenResults = then.Value.Validate(newContext);
+				if (!thenResults.IsValid)
+				{
+					results.IsValid = false;
+					results.Keyword = then.Name;
+					results.NestedResults.Add(thenResults);
+				}
+
+				return results;
 			}
 			else
 			{
-				if (@else == null) return SchemaValidationResults.Valid;
+				if (@else == null) return SchemaValidationResults.Null;
 
-				var elseResults = @else.Value.Validate(newContext);
-				if (elseResults.IsValid) return SchemaValidationResults.Valid;
+				var results = new SchemaValidationResults(Name, context);
 
-				var message = SchemaErrorMessages.Else.ResolveTokens(new Dictionary<string, object>
+				newContext = new SchemaValidationContext
 					{
-						["value"] = context.Instance
-					});
-				return new SchemaValidationResults("else", message);
+						BaseUri = context.BaseUri,
+						Instance = context.Instance,
+						Root = context.Root,
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(@else.Name),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(@else.Name),
+						InstanceLocation = context.InstanceLocation
+					};
+				var elseResults = @else.Value.Validate(newContext);
+				if (!elseResults.IsValid)
+				{
+					results.IsValid = false;
+					results.Keyword = @else.Name;
+					results.NestedResults.Add(elseResults);
+				}
+
+				return results;
 			}
 		}
 		/// <summary>

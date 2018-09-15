@@ -52,39 +52,41 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Array) return SchemaValidationResults.Valid;
+			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
 
 			var itemsKeyword = context.Local.Get<ItemsKeyword>();
-			if (itemsKeyword == null || !itemsKeyword.IsArray) return SchemaValidationResults.Valid;
+			if (itemsKeyword == null || !itemsKeyword.IsArray) return new SchemaValidationResults(Name, context);
 
-			var errors = new List<SchemaValidationError>();
+			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
 
 			if (itemsKeyword.Count < array.Count)
 			{
-				if (Equals(Value, JsonSchema.False))
-				{
-					var message = SchemaErrorMessages.Items.ResolveTokens(new Dictionary<string, object>
-						{
-							["value"] = context.Instance
-						});
-					errors.Add(new SchemaValidationError(string.Empty, message));
-				}
-				else if (!Equals(Value, JsonSchema.True))
-				{
-					errors.AddRange(array.Skip(itemsKeyword.Count).SelectMany(j =>
-						{
-							var newContext = new SchemaValidationContext
-								{
-									BaseUri = context.BaseUri,
-									Instance = j,
-									Root = context.Root
-								};
-							return Value.Validate(newContext).Errors;
-						}));}
+				nestedResults.AddRange(array.Skip(itemsKeyword.Count).Select((jv, i) =>
+					{
+						var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+						var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
+						var newContext = new SchemaValidationContext
+							{
+								BaseUri = context.BaseUri,
+								Instance = jv,
+								Root = context.Root,
+								BaseRelativeLocation = baseRelativeLocation,
+								RelativeLocation = relativeLocation,
+								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
+							};
+						return Value.Validate(newContext);
+					}));}
+
+			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
+
+			if (nestedResults.Any(r => !r.IsValid))
+			{
+				results.IsValid = false;
+				results.Keyword = Name;
 			}
 
-			return new SchemaValidationResults(errors);
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
