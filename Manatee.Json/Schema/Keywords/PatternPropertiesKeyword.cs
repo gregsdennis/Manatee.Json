@@ -47,6 +47,8 @@ namespace Manatee.Json.Schema
 				var pattern = new Regex(patternProperty.Key);
 				var localSchema = patternProperty.Value;
 				var matches = obj.Keys.Where(k => pattern.IsMatch(k));
+				var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, patternProperty.Key);
+				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
 				foreach (var match in matches)
 				{
 					context.EvaluatedPropertyNames.Add(match);
@@ -55,8 +57,8 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = obj[match],
 							Root = context.Root,
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, patternProperty.Key),
-							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key),
+							BaseRelativeLocation = baseRelativeLocation,
+							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(match)
 					};
 					var result = localSchema.Validate(newContext);

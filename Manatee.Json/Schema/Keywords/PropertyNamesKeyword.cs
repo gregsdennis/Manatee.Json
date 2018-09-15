@@ -55,6 +55,8 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object) return results;
 
+			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 			var nestedResults = context.Instance.Object.Keys.Select(propertyName =>
 				{
 					var newContext = new SchemaValidationContext
@@ -62,8 +64,8 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = propertyName,
 							Root = context.Root,
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
-							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+							BaseRelativeLocation = baseRelativeLocation,
+							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(propertyName)
 						};
 					var result = Value.Validate(newContext);

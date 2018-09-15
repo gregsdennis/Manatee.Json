@@ -36,6 +36,8 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
+			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 			var nestedResults = this.Select(d =>
 				{
 					var newContext = new SchemaValidationContext
@@ -43,8 +45,8 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = context.Instance,
 							Root = context.Root,
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
-							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+							BaseRelativeLocation = baseRelativeLocation,
+							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation
 						};
 					return d.Validate(newContext);

@@ -44,7 +44,7 @@ namespace Manatee.Json.Schema
 					if (structureErrors.Any())
 					{
 						var errors = string.Join(Environment.NewLine, structureErrors);
-						throw new ArgumentException($"The given path does not contain a valid schema.  Errors: \n{errors}");
+						throw new SchemaLoadException($"The given path does not contain a valid schema.  Errors: \n{errors}");
 					}
 
 					_schemaLookup[uri] = schema;
