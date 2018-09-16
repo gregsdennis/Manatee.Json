@@ -80,25 +80,14 @@
       <h4><a class="xref" href="Manatee.Json.Serialization.AbstractionMap.html">AbstractionMap</a></h4>
       <section><p>Provides an interface to map abstract and interface types to concrete types for object instantiation during deserialization.</p>
 </section>
-      <h4><a class="xref" href="Manatee.Json.Serialization.CustomSerializations.html">CustomSerializations</a></h4>
-      <section><p>Manages methods for serializing object types which do not implement <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a> and cannot be automatically serialized.</p>
-</section>
       <h4><a class="xref" href="Manatee.Json.Serialization.JsonIgnoreAttribute.html">JsonIgnoreAttribute</a></h4>
       <section><p>Applied to properties to indicate that they are not to be serialized.</p>
 </section>
       <h4><a class="xref" href="Manatee.Json.Serialization.JsonMapToAttribute.html">JsonMapToAttribute</a></h4>
       <section><p>Allows the user to specify how a property is mapped during serialization.</p>
 </section>
-      <h4><a class="xref" href="Manatee.Json.Serialization.JsonSerializationAbstractionMap.html">JsonSerializationAbstractionMap</a></h4>
-      <section><p>Provides an interface to map abstract and interface types to
-concrete types for object instantiation during deserialization.</p>
-</section>
       <h4><a class="xref" href="Manatee.Json.Serialization.JsonSerializationException.html">JsonSerializationException</a></h4>
       <section><p>Thrown when an error occurs during serialization or deserialization.</p>
-</section>
-      <h4><a class="xref" href="Manatee.Json.Serialization.JsonSerializationTypeRegistry.html">JsonSerializationTypeRegistry</a></h4>
-      <section><p>Manages methods for serializing object types which do not implement <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a> and
-cannot be automatically serialized.</p>
 </section>
       <h4><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></h4>
       <section><p>Serializes and deserializes objects and types to and from JSON structures.</p>
@@ -115,16 +104,15 @@ cannot be automatically serialized.</p>
       <h4><a class="xref" href="Manatee.Json.Serialization.SchemaAttribute.html">SchemaAttribute</a></h4>
       <section><p>Indicates that a type should be validated by a JSON Schema before deserializing.</p>
 </section>
+      <h4><a class="xref" href="Manatee.Json.Serialization.SerializerFactory.html">SerializerFactory</a></h4>
+      <section><p>Provides access to custom serializers.</p>
+</section>
       <h4><a class="xref" href="Manatee.Json.Serialization.TypeDoesNotContainPropertyException.html">TypeDoesNotContainPropertyException</a></h4>
       <section><p>Optionally thrown when deserializing and the JSON structure contains property names
 which are not valid for the type requested.</p>
 </section>
       <h4><a class="xref" href="Manatee.Json.Serialization.TypeInstantiationException.html">TypeInstantiationException</a></h4>
       <section><p>Thrown when a type cannot be instantiated.</p>
-</section>
-      <h4><a class="xref" href="Manatee.Json.Serialization.TypeRegistrationException.html">TypeRegistrationException</a></h4>
-      <section><p>Thrown when <a class="xref" href="Manatee.Json.Serialization.CustomSerializations.html#Manatee_Json_Serialization_CustomSerializations_RegisterType__1_Manatee_Json_Serialization_CustomSerializations_ToJsonDelegate___0__Manatee_Json_Serialization_CustomSerializations_FromJsonDelegate___0__">RegisterType&lt;T&gt;(CustomSerializations.ToJsonDelegate&lt;T&gt;, CustomSerializations.FromJsonDelegate&lt;T&gt;)</a>
-is passed one method and a null.</p>
 </section>
     <h3 id="interfaces">Interfaces
   </h3>
@@ -133,6 +121,9 @@ is passed one method and a null.</p>
 </section>
       <h4><a class="xref" href="Manatee.Json.Serialization.IResolver.html">IResolver</a></h4>
       <section><p>Defines methods required to resolved instances for deserialization.</p>
+</section>
+      <h4><a class="xref" href="Manatee.Json.Serialization.ISerializer.html">ISerializer</a></h4>
+      <section><p>Defines a custom serializer.</p>
 </section>
     <h3 id="enums">Enums
   </h3>
@@ -154,20 +145,6 @@ contains invalid property keys.</p>
 </section>
       <h4><a class="xref" href="Manatee.Json.Serialization.TypeNameSerializationBehavior.html">TypeNameSerializationBehavior</a></h4>
       <section><p>Enumerates serialization behaviors for saving type names.</p>
-</section>
-    <h3 id="delegates">Delegates
-  </h3>
-      <h4><a class="xref" href="Manatee.Json.Serialization.CustomSerializations.FromJsonDelegate-1.html">CustomSerializations.FromJsonDelegate&lt;T&gt;</a></h4>
-      <section><p>Declares the required signature for a deserializer method.</p>
-</section>
-      <h4><a class="xref" href="Manatee.Json.Serialization.CustomSerializations.ToJsonDelegate-1.html">CustomSerializations.ToJsonDelegate&lt;T&gt;</a></h4>
-      <section><p>Declares the required signature for a serializer method.</p>
-</section>
-      <h4><a class="xref" href="Manatee.Json.Serialization.JsonSerializationTypeRegistry.FromJsonDelegate-1.html">JsonSerializationTypeRegistry.FromJsonDelegate&lt;T&gt;</a></h4>
-      <section><p>Declares the required signature for a deserializer method.</p>
-</section>
-      <h4><a class="xref" href="Manatee.Json.Serialization.JsonSerializationTypeRegistry.ToJsonDelegate-1.html">JsonSerializationTypeRegistry.ToJsonDelegate&lt;T&gt;</a></h4>
-      <section><p>Declares the required signature for a serializer method.</p>
 </section>
 </article>
           </div>

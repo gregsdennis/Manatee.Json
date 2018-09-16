@@ -1,0 +1,1519 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class JsonSchema
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class JsonSchema
+   ">
+    <meta name="generator" content="docfx 2.36.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg site-icon" src="../siteicon.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Manatee.Json.Schema.JsonSchema">
+  
+  
+  <h1 id="Manatee_Json_Schema_JsonSchema" data-uid="Manatee.Json.Schema.JsonSchema" class="text-break">Class JsonSchema
+  </h1>
+  <div class="markdown level0 summary"><p>Encapsulates and models JSON Schema.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a>&gt;</div>
+    <div class="level2"><span class="xref">JsonSchema</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyCollection</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a>&gt;</div>
+    <div><span class="xref">System.Collections.IList</span></div>
+    <div><span class="xref">System.Collections.ICollection</span></div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+    <div><a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a></div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a>&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.get_Item(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.set_Item(System.Int32, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Add(Manatee.Json.Schema.IJsonSchemaKeyword)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.AddRange(System.Collections.Generic.IEnumerable&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.AsReadOnly()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.BinarySearch(Manatee.Json.Schema.IJsonSchemaKeyword)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.BinarySearch(Manatee.Json.Schema.IJsonSchemaKeyword, System.Collections.Generic.IComparer&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.BinarySearch(System.Int32, System.Int32, Manatee.Json.Schema.IJsonSchemaKeyword, System.Collections.Generic.IComparer&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Clear()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Contains(Manatee.Json.Schema.IJsonSchemaKeyword)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.ConvertAll&lt;TOutput&gt;(System.Converter&lt;Manatee.Json.Schema.IJsonSchemaKeyword, TOutput&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.CopyTo(Manatee.Json.Schema.IJsonSchemaKeyword[])</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.CopyTo(Manatee.Json.Schema.IJsonSchemaKeyword[], System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.CopyTo(System.Int32, Manatee.Json.Schema.IJsonSchemaKeyword[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Exists(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Find(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindAll(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindIndex(System.Int32, System.Int32, System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindIndex(System.Int32, System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindIndex(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindLast(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindLastIndex(System.Int32, System.Int32, System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindLastIndex(System.Int32, System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.FindLastIndex(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.ForEach(System.Action&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.GetRange(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.IndexOf(Manatee.Json.Schema.IJsonSchemaKeyword)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.IndexOf(Manatee.Json.Schema.IJsonSchemaKeyword, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.IndexOf(Manatee.Json.Schema.IJsonSchemaKeyword, System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Insert(System.Int32, Manatee.Json.Schema.IJsonSchemaKeyword)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.InsertRange(System.Int32, System.Collections.Generic.IEnumerable&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.LastIndexOf(Manatee.Json.Schema.IJsonSchemaKeyword)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.LastIndexOf(Manatee.Json.Schema.IJsonSchemaKeyword, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.LastIndexOf(Manatee.Json.Schema.IJsonSchemaKeyword, System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Remove(Manatee.Json.Schema.IJsonSchemaKeyword)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.RemoveAll(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.RemoveAt(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.RemoveRange(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Reverse()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Reverse(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Sort()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Sort(System.Collections.Generic.IComparer&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Sort(System.Comparison&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Sort(System.Int32, System.Int32, System.Collections.Generic.IComparer&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.Generic.IEnumerable&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.ICollection.CopyTo(System.Array, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IEnumerable.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.Add(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.Contains(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.IndexOf(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.Insert(System.Int32, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.Remove(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.ToArray()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.TrimExcess()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.TrueForAll(System.Predicate&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Capacity</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Count</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.Item[System.Int32]</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.Generic.ICollection&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.IsReadOnly</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.ICollection.IsSynchronized</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.ICollection.SyncRoot</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.IsFixedSize</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.IsReadOnly</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;Manatee.Json.Schema.IJsonSchemaKeyword&gt;.System.Collections.IList.Item[System.Int32]</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.Schema.html">Manatee.Json.Schema</a></h6>
+  <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
+  <h5 id="Manatee_Json_Schema_JsonSchema_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class JsonSchema : List&lt;IJsonSchemaKeyword&gt;, IList&lt;IJsonSchemaKeyword&gt;, ICollection&lt;IJsonSchemaKeyword&gt;, IReadOnlyList&lt;IJsonSchemaKeyword&gt;, IReadOnlyCollection&lt;IJsonSchemaKeyword&gt;, IEnumerable&lt;IJsonSchemaKeyword&gt;, IList, ICollection, IEnumerable, IJsonSerializable, IEquatable&lt;JsonSchema&gt;</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema__ctor.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L58">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema__ctor_" data-uid="Manatee.Json.Schema.JsonSchema.#ctor*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema__ctor" data-uid="Manatee.Json.Schema.JsonSchema.#ctor">JsonSchema()</h4>
+  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonSchema()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema__ctor_System_Boolean_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.%23ctor(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L62">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema__ctor_" data-uid="Manatee.Json.Schema.JsonSchema.#ctor*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema__ctor_System_Boolean_" data-uid="Manatee.Json.Schema.JsonSchema.#ctor(System.Boolean)">JsonSchema(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a> class, explicitly set to a true/false value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonSchema(bool value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_Empty.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.Empty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L20">View Source</a>
+  </span>
+  <h4 id="Manatee_Json_Schema_JsonSchema_Empty" data-uid="Manatee.Json.Schema.JsonSchema.Empty">Empty</h4>
+  <div class="markdown level1 summary"><p>Defines the empty schema.  Analogous to <a class="xref" href="Manatee.Json.Schema.JsonSchema.html#Manatee_Json_Schema_JsonSchema_True">True</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly JsonSchema Empty</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_False.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.False%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L28">View Source</a>
+  </span>
+  <h4 id="Manatee_Json_Schema_JsonSchema_False" data-uid="Manatee.Json.Schema.JsonSchema.False">False</h4>
+  <div class="markdown level1 summary"><p>Defines the False schema.  Validates no JSON instances.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly JsonSchema False</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_True.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.True%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L24">View Source</a>
+  </span>
+  <h4 id="Manatee_Json_Schema_JsonSchema_True" data-uid="Manatee.Json.Schema.JsonSchema.True">True</h4>
+  <div class="markdown level1 summary"><p>Defines the True schema.  Validates all JSON instances.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly JsonSchema True</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_DocumentPath.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.DocumentPath%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L37">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_DocumentPath_" data-uid="Manatee.Json.Schema.JsonSchema.DocumentPath*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_DocumentPath" data-uid="Manatee.Json.Schema.JsonSchema.DocumentPath">DocumentPath</h4>
+  <div class="markdown level1 summary"><p>Defines the document path.  If not explicitly provided, it will be derived from the <a class="xref" href="Manatee.Json.Schema.JsonSchema.html#Manatee_Json_Schema_JsonSchema_Id">Id</a> property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Uri DocumentPath { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Uri</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_Id.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.Id%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L45">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_Id_" data-uid="Manatee.Json.Schema.JsonSchema.Id*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_Id" data-uid="Manatee.Json.Schema.JsonSchema.Id">Id</h4>
+  <div class="markdown level1 summary"><p>Gets the <pre><code>$id</code></pre> (or <pre><code>id</code></pre> for draft-04) property value, if declared.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Id { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_OtherData.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.OtherData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L53">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_OtherData_" data-uid="Manatee.Json.Schema.JsonSchema.OtherData*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_OtherData" data-uid="Manatee.Json.Schema.JsonSchema.OtherData">OtherData</h4>
+  <div class="markdown level1 summary"><p>Gets other data that may be present in the schema but unrelated to any known keywords.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonObject OtherData { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_Schema.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.Schema%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L49">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_Schema_" data-uid="Manatee.Json.Schema.JsonSchema.Schema*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_Schema" data-uid="Manatee.Json.Schema.JsonSchema.Schema">Schema</h4>
+  <div class="markdown level1 summary"><p>Gets the <pre><code>$schema</code></pre> property, if declared.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Schema { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_Equals_Manatee_Json_Schema_JsonSchema_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.Equals(Manatee.Json.Schema.JsonSchema)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L278">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_Equals_" data-uid="Manatee.Json.Schema.JsonSchema.Equals*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_Equals_Manatee_Json_Schema_JsonSchema_" data-uid="Manatee.Json.Schema.JsonSchema.Equals(Manatee.Json.Schema.JsonSchema)">Equals(JsonSchema)</h4>
+  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(JsonSchema other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>An object to compare with this object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the current object is equal to the <code data-dev-comment-type="paramref" class="paramref">other</code> parameter; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L296">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_Equals_" data-uid="Manatee.Json.Schema.JsonSchema.Equals*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_Equals_System_Object_" data-uid="Manatee.Json.Schema.JsonSchema.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the specified object is equal to the current object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>The object to compare with the current object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the specified object  is equal to the current object; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.FromJson(Manatee.Json.JsonValue%2CManatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L225">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_FromJson_" data-uid="Manatee.Json.Schema.JsonSchema.FromJson*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Schema.JsonSchema.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)">FromJson(JsonValue, JsonSerializer)</h4>
+  <div class="markdown level1 summary"><p>Builds an object from a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FromJson(JsonValue json, JsonSerializer serializer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
+        <td><span class="parametername">serializer</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
+serialization of values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_GetHashCode.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L302">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_GetHashCode_" data-uid="Manatee.Json.Schema.JsonSchema.GetHashCode*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_GetHashCode" data-uid="Manatee.Json.Schema.JsonSchema.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Serves as the default hash function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>A hash code for the current object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_RegisterSubschemas_System_Uri_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L129">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_RegisterSubschemas_" data-uid="Manatee.Json.Schema.JsonSchema.RegisterSubschemas*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_RegisterSubschemas_System_Uri_" data-uid="Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri)">RegisterSubschemas(Uri)</h4>
+  <div class="markdown level1 summary"><p>Used register any subschemas during validation.  Enables look-forward compatibility with <pre><code>$ref</code></pre> keywords.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RegisterSubschemas(Uri baseUri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Uri</span></td>
+        <td><span class="parametername">baseUri</span></td>
+        <td><p>The current base URI</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.ResolveSubschema(Manatee.Json.Pointer.JsonPointer%2CSystem.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L151">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_ResolveSubschema_" data-uid="Manatee.Json.Schema.JsonSchema.ResolveSubschema*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_" data-uid="Manatee.Json.Schema.JsonSchema.ResolveSubschema(Manatee.Json.Pointer.JsonPointer,System.Uri)">ResolveSubschema(JsonPointer, Uri)</h4>
+  <div class="markdown level1 summary"><p>Resolves any subschemas during resolution of a <pre><code>$ref</code></pre> during validation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a></td>
+        <td><span class="parametername">pointer</span></td>
+        <td><p>A <a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a> to the target schema.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Uri</span></td>
+        <td><span class="parametername">baseUri</span></td>
+        <td><p>The current base URI.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><p>The referenced schema, if it exists; otherwise null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_ToJson_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.ToJson(Manatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L251">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_ToJson_" data-uid="Manatee.Json.Schema.JsonSchema.ToJson*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_ToJson_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Schema.JsonSchema.ToJson(Manatee.Json.Serialization.JsonSerializer)">ToJson(JsonSerializer)</h4>
+  <div class="markdown level1 summary"><p>Converts an object to a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue ToJson(JsonSerializer serializer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
+        <td><span class="parametername">serializer</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
+serialization of values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_Validate_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.Validate(Manatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L93">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_Validate_" data-uid="Manatee.Json.Schema.JsonSchema.Validate*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_Validate_Manatee_Json_JsonValue_" data-uid="Manatee.Json.Schema.JsonSchema.Validate(Manatee.Json.JsonValue)">Validate(JsonValue)</h4>
+  <div class="markdown level1 summary"><p>Provides the validation logic for this keyword.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SchemaValidationResults Validate(JsonValue json)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The instance to validate.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.SchemaValidationResults.html">SchemaValidationResults</a></td>
+        <td><p>Results object containing a final result and any errors that may have been found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_ValidateSchema.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.ValidateSchema%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L72">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_ValidateSchema_" data-uid="Manatee.Json.Schema.JsonSchema.ValidateSchema*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_ValidateSchema" data-uid="Manatee.Json.Schema.JsonSchema.ValidateSchema">ValidateSchema()</h4>
+  <div class="markdown level1 summary"><p>Validates that the schema object represents a valid schema in accordance with a known meta-schema.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;string&gt; ValidateSchema()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>Validation results.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_op_Equality_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.op_Equality(Manatee.Json.Schema.JsonSchema%2CManatee.Json.Schema.JsonSchema)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L310">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_op_Equality_" data-uid="Manatee.Json.Schema.JsonSchema.op_Equality*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_op_Equality_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_" data-uid="Manatee.Json.Schema.JsonSchema.op_Equality(Manatee.Json.Schema.JsonSchema,Manatee.Json.Schema.JsonSchema)">Equality(JsonSchema, JsonSchema)</h4>
+  <div class="markdown level1 summary"><p>Overloads the equals operator for <a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(JsonSchema left, JsonSchema right)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><span class="parametername">left</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><span class="parametername">right</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the two values represent the same schema; false otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_op_Implicit_System_Boolean__Manatee_Json_Schema_JsonSchema.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.op_Implicit(System.Boolean)~Manatee.Json.Schema.JsonSchema%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L271">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_op_Implicit_" data-uid="Manatee.Json.Schema.JsonSchema.op_Implicit*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_op_Implicit_System_Boolean__Manatee_Json_Schema_JsonSchema" data-uid="Manatee.Json.Schema.JsonSchema.op_Implicit(System.Boolean)~Manatee.Json.Schema.JsonSchema">Implicit(Boolean to JsonSchema)</h4>
+  <div class="markdown level1 summary"><p>Implicitly converts a boolean into a boolean schema.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator JsonSchema(bool value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema_op_Inequality_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema.op_Inequality(Manatee.Json.Schema.JsonSchema%2CManatee.Json.Schema.JsonSchema)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L318">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchema_op_Inequality_" data-uid="Manatee.Json.Schema.JsonSchema.op_Inequality*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchema_op_Inequality_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_" data-uid="Manatee.Json.Schema.JsonSchema.op_Inequality(Manatee.Json.Schema.JsonSchema,Manatee.Json.Schema.JsonSchema)">Inequality(JsonSchema, JsonSchema)</h4>
+  <div class="markdown level1 summary"><p>Overloads the not-equal operator for <a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(JsonSchema left, JsonSchema right)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><span class="parametername">left</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><span class="parametername">right</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>false if the two values represent the same schema; true otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IList&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyList&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyCollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IList</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.ICollection</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a>
+  </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson__1_System_Collections_Generic_IEnumerable___0__Manatee_Json_Serialization_JsonSerializer_">LinqExtensions.ToJson&lt;T&gt;(IEnumerable&lt;T&gt;, JsonSerializer)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_AdditionalItems_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.AdditionalItems(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_AdditionalProperties_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.AdditionalProperties(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_AllOf_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema___">FluentBuilderExtensions.AllOf(JsonSchema, JsonSchema[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_AnyOf_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema___">FluentBuilderExtensions.AnyOf(JsonSchema, JsonSchema[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Comment_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.Comment(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Const_Manatee_Json_Schema_JsonSchema_Manatee_Json_JsonValue_">FluentBuilderExtensions.Const(JsonSchema, JsonValue)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Contains_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.Contains(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_ContentEncoding_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.ContentEncoding(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_ContentMediaType_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.ContentMediaType(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Default_Manatee_Json_Schema_JsonSchema_Manatee_Json_JsonValue_">FluentBuilderExtensions.Default(JsonSchema, JsonValue)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Definition_Manatee_Json_Schema_JsonSchema_System_String_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.Definition(JsonSchema, String, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Dependency_Manatee_Json_Schema_JsonSchema_System_String_System_String___">FluentBuilderExtensions.Dependency(JsonSchema, String, String[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Dependency_Manatee_Json_Schema_JsonSchema_System_String_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.Dependency(JsonSchema, String, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Description_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.Description(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Else_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.Else(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Enum_Manatee_Json_Schema_JsonSchema_Manatee_Json_JsonValue___">FluentBuilderExtensions.Enum(JsonSchema, JsonValue[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Examples_Manatee_Json_Schema_JsonSchema_Manatee_Json_JsonValue___">FluentBuilderExtensions.Examples(JsonSchema, JsonValue[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_ExclusiveMaximum_Manatee_Json_Schema_JsonSchema_System_Double_">FluentBuilderExtensions.ExclusiveMaximum(JsonSchema, Double)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_ExclusiveMaximumDraft04_Manatee_Json_Schema_JsonSchema_System_Boolean_">FluentBuilderExtensions.ExclusiveMaximumDraft04(JsonSchema, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_ExclusiveMinimum_Manatee_Json_Schema_JsonSchema_System_Double_">FluentBuilderExtensions.ExclusiveMinimum(JsonSchema, Double)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_ExclusiveMinimumDraft04_Manatee_Json_Schema_JsonSchema_System_Boolean_">FluentBuilderExtensions.ExclusiveMinimumDraft04(JsonSchema, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Format_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_StringFormat_">FluentBuilderExtensions.Format(JsonSchema, StringFormat)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Id_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.Id(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_IdDraft04_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.IdDraft04(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_If_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.If(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Items_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema___">FluentBuilderExtensions.Items(JsonSchema, JsonSchema[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Maximum_Manatee_Json_Schema_JsonSchema_System_Double_">FluentBuilderExtensions.Maximum(JsonSchema, Double)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_MaxItems_Manatee_Json_Schema_JsonSchema_System_UInt32_">FluentBuilderExtensions.MaxItems(JsonSchema, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_MaxLength_Manatee_Json_Schema_JsonSchema_System_UInt32_">FluentBuilderExtensions.MaxLength(JsonSchema, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_MaxProperties_Manatee_Json_Schema_JsonSchema_System_UInt32_">FluentBuilderExtensions.MaxProperties(JsonSchema, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Minimum_Manatee_Json_Schema_JsonSchema_System_Double_">FluentBuilderExtensions.Minimum(JsonSchema, Double)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_MinItems_Manatee_Json_Schema_JsonSchema_System_UInt32_">FluentBuilderExtensions.MinItems(JsonSchema, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_MinLength_Manatee_Json_Schema_JsonSchema_System_UInt32_">FluentBuilderExtensions.MinLength(JsonSchema, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_MinProperties_Manatee_Json_Schema_JsonSchema_System_UInt32_">FluentBuilderExtensions.MinProperties(JsonSchema, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_MultipleOf_Manatee_Json_Schema_JsonSchema_System_Double_">FluentBuilderExtensions.MultipleOf(JsonSchema, Double)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Not_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.Not(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_OneOf_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema___">FluentBuilderExtensions.OneOf(JsonSchema, JsonSchema[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Pattern_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.Pattern(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Pattern_Manatee_Json_Schema_JsonSchema_System_Text_RegularExpressions_Regex_">FluentBuilderExtensions.Pattern(JsonSchema, Regex)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_PatternProperty_Manatee_Json_Schema_JsonSchema_System_String_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.PatternProperty(JsonSchema, String, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Property_Manatee_Json_Schema_JsonSchema_System_String_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.Property(JsonSchema, String, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_PropertyNames_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.PropertyNames(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_ReadOnly_Manatee_Json_Schema_JsonSchema_System_Boolean_">FluentBuilderExtensions.ReadOnly(JsonSchema, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Ref_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.Ref(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_RefRoot_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.RefRoot(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Required_Manatee_Json_Schema_JsonSchema_System_String___">FluentBuilderExtensions.Required(JsonSchema, String[])</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Schema_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.Schema(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Then_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchema_">FluentBuilderExtensions.Then(JsonSchema, JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Title_Manatee_Json_Schema_JsonSchema_System_String_">FluentBuilderExtensions.Title(JsonSchema, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_Type_Manatee_Json_Schema_JsonSchema_Manatee_Json_Schema_JsonSchemaType_">FluentBuilderExtensions.Type(JsonSchema, JsonSchemaType)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_UniqueItems_Manatee_Json_Schema_JsonSchema_System_Boolean_">FluentBuilderExtensions.UniqueItems(JsonSchema, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.FluentBuilderExtensions.html#Manatee_Json_Schema_FluentBuilderExtensions_WriteOnly_Manatee_Json_Schema_JsonSchema_System_Boolean_">FluentBuilderExtensions.WriteOnly(JsonSchema, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_AdditionalItems_Manatee_Json_Schema_JsonSchema_">GetterExtensions.AdditionalItems(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_AdditionalProperties_Manatee_Json_Schema_JsonSchema_">GetterExtensions.AdditionalProperties(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_AllOf_Manatee_Json_Schema_JsonSchema_">GetterExtensions.AllOf(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_AnyOf_Manatee_Json_Schema_JsonSchema_">GetterExtensions.AnyOf(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Comment_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Comment(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Const_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Const(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Contains_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Contains(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_ContentEncoding_Manatee_Json_Schema_JsonSchema_">GetterExtensions.ContentEncoding(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_ContentMediaType_Manatee_Json_Schema_JsonSchema_">GetterExtensions.ContentMediaType(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Default_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Default(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Definitions_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Definitions(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Description_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Description(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Else_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Else(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Enum_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Enum(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Examples_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Examples(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_ExclusiveMaximum_Manatee_Json_Schema_JsonSchema_">GetterExtensions.ExclusiveMaximum(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_ExclusiveMaximumDraft04_Manatee_Json_Schema_JsonSchema_">GetterExtensions.ExclusiveMaximumDraft04(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_ExclusiveMinimum_Manatee_Json_Schema_JsonSchema_">GetterExtensions.ExclusiveMinimum(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_ExclusiveMinimumDraft04_Manatee_Json_Schema_JsonSchema_">GetterExtensions.ExclusiveMinimumDraft04(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Format_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Format(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Id_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Id(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Items_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Items(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Maximum_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Maximum(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_MaxItems_Manatee_Json_Schema_JsonSchema_">GetterExtensions.MaxItems(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_MaxLength_Manatee_Json_Schema_JsonSchema_">GetterExtensions.MaxLength(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_MaxProperties_Manatee_Json_Schema_JsonSchema_">GetterExtensions.MaxProperties(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Minimum_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Minimum(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_MinItems_Manatee_Json_Schema_JsonSchema_">GetterExtensions.MinItems(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_MinLength_Manatee_Json_Schema_JsonSchema_">GetterExtensions.MinLength(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_MinProperties_Manatee_Json_Schema_JsonSchema_">GetterExtensions.MinProperties(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_MultipleOf_Manatee_Json_Schema_JsonSchema_">GetterExtensions.MultipleOf(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Not_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Not(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_OneOf_Manatee_Json_Schema_JsonSchema_">GetterExtensions.OneOf(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Pattern_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Pattern(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_PatternProperties_Manatee_Json_Schema_JsonSchema_">GetterExtensions.PatternProperties(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Properties_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Properties(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_PropertyNames_Manatee_Json_Schema_JsonSchema_">GetterExtensions.PropertyNames(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_ReadOnly_Manatee_Json_Schema_JsonSchema_">GetterExtensions.ReadOnly(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Ref_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Ref(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_RefResolved_Manatee_Json_Schema_JsonSchema_">GetterExtensions.RefResolved(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Required_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Required(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Schema_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Schema(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Then_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Then(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Title_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Title(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_UniqueItems_Manatee_Json_Schema_JsonSchema_">GetterExtensions.UniqueItems(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_WriteOnly_Manatee_Json_Schema_JsonSchema_">GetterExtensions.WriteOnly(JsonSchema)</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Schema.GetterExtensions.html#Manatee_Json_Schema_GetterExtensions_Get__1_Manatee_Json_Schema_JsonSchema_">GetterExtensions.Get&lt;T&gt;(JsonSchema)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_JsonSchema.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchema%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/JsonSchema.cs/#L13" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
