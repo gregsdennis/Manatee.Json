@@ -385,3 +385,36 @@ public static JsonSchema Description(this JsonSchema schema, string description)
     return schema;
 }
 ```
+
+## Further customization
+
+Aside from making new keywords, Manatee.Json can also be customized in a few other ways.
+
+### Static options
+
+The `JsonSchemaOptions` class gives you a few configuration points that likely won't change at runtime.
+
+- `Download` - This function property is the mechanism by which `JsonSchemaRepository` downloads unregistered schemas.  By default, it knows to use `HttpClient` for *http:* endpoints and `System.IO.File` for file paths.  If you need more functionality (for instance if your schema is buried inside an FTP share), override this with a new function that can read from your endpoint.
+- `ValidateFormatKeyword` - This defines whether a schema will attempt to apply string format validation based on the value of a `format` keyword.  This is enabled by default.  See below for more information on string format validation.
+- `OutputFormat` - You read about output formats above.  This is the property that controls it all.  By default, a collapsed hierarchy is returned.
+
+### String format validation
+
+The `format` keyword has been around a while.  It's available in all of the drafts supported by Manatee.Json.  Although this keyword is techincally classified as an annotation, the specification does allow (the word used is "SHOULD") that implementation provide some level of validation on it so long as that validation may be configured on and off.
+
+Manatee.Json makes a valiant attempt at validating a few of them.  These are hardcoded as static properties on the `StringFormat` class.  Out of the box, these are available:
+
+- `date-time`
+- `email`
+- `hostname`
+- `ipv4`
+- `ipv6`
+- `regex`
+- `uri`
+- `uri-reference`
+
+I'm not going to claim that the validation on any of these is perfect, but it will likely suffice for most applications.  In the (rare) event that it doesn't support your needs, they are completely overridable.
+
+All of the static properties can be set to new instances.  When creating a new instance, it it automatically registered internally (for deserialization purposes) and any lookup by string will result in the newest instance for that key.
+
+In the same way, entirely new formats can be created to make them available to Manatee.Json.
