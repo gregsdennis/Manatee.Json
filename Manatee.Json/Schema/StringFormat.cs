@@ -8,108 +8,116 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines various string formatting types used for StringSchema validation.
 	/// </summary>
+	/// <remarks>
+	/// Any of these may be overridden by creating a new instance with the same key.
+	/// </remarks>
 	public class StringFormat
 	{
 		/// <summary>
-		/// Defines a date/time format via <see cref="DateTime.TryParse(string, out DateTime)"/>
+		/// Defines a date/time format.
 		/// </summary>
-		public static readonly StringFormat DateTime = new StringFormat("date-time", s =>
-			{
-				DateTime date;
-				return System.DateTime.TryParse(s, out date);
-			})
-			{
-				SupportedBy = JsonSchemaVersion.All
-			};
+		public static StringFormat DateTime { get; set; }
 		/// <summary>
 		/// Defines an email address format.
 		/// </summary>
 		/// <remarks>
 		/// From http://www.regular-expressions.info/email.html
 		/// </remarks>
-		public static readonly StringFormat Email = new StringFormat("email", "^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])$")
-			{
-				SupportedBy = JsonSchemaVersion.All
-			};
+		public static StringFormat Email { get; set; }
 		// from [lost the link, sorry]
 		/// <summary>
 		/// Defines a host name format.
 		/// </summary>
-		public static readonly StringFormat HostName = new StringFormat("hostname", "^(?!.{255,})([a-zA-Z0-9-]{0,63}\\.)*([a-zA-Z0-9-]{0,63})$")
-			{
-				SupportedBy = JsonSchemaVersion.All
-			};
+		public static StringFormat HostName { get; set; }
 		// from [lost the link, sorry]
 		/// <summary>
 		/// Defines an IPV4 address format.
 		/// </summary>
-		public static readonly StringFormat Ipv4 = new StringFormat("ipv4", "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
-			{
-				SupportedBy = JsonSchemaVersion.All
-			};
+		public static StringFormat Ipv4 { get; set; }
 		// from [lost the link, sorry]
 		/// <summary>
 		/// Defines an IPV6 format.
 		/// </summary>
-		public static readonly StringFormat Ipv6 = new StringFormat("ipv6", "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
-			{
-				SupportedBy = JsonSchemaVersion.All
-			};
+		public static StringFormat Ipv6 { get; set; }
 		/// <summary>
 		/// Defines a regular expression format.
 		/// </summary>
-		public static readonly StringFormat Regex = new StringFormat("regex", null, true)
-			{
-				SupportedBy = JsonSchemaVersion.All
-			};
+		public static StringFormat Regex { get; set; }
 		/// <summary>
 		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>.
 		/// </summary>
 		/// <remarks>For draft-06 schema, only use this for absolute URIs.</remarks>
-		public static readonly StringFormat Uri = new StringFormat("uri", s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute))
-			{
-				SupportedBy = JsonSchemaVersion.All
-			};
+		public static StringFormat Uri { get; set; }
 		/// <summary>
 		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
 		/// </summary>
-		public static readonly StringFormat UriReference = new StringFormat("uri-reference", Uri3986.IsValid)
-			{
-				SupportedBy = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08
-			};
+		public static StringFormat UriReference { get; set; }
 
-		private static readonly Dictionary<string, StringFormat> _lookup = new Dictionary<string, StringFormat>
-				{
-					{DateTime.Key, DateTime},
-					{Email.Key, Email},
-					{HostName.Key, HostName},
-					{Ipv4.Key, Ipv4},
-					{Ipv6.Key, Ipv6},
-					{Regex.Key, Regex},
-					{Uri.Key, Uri},
-					{UriReference.Key, UriReference}
-				};
-
-		private readonly Regex _validationRule;
-		private readonly Func<string, bool> _validate;
+		private static readonly Dictionary<string, StringFormat> _lookup;
 
 		/// <summary>
 		/// A string key which specifies this string format.
 		/// </summary>
 		public string Key { get; }
 		
-		internal JsonSchemaVersion SupportedBy { get; private set; }
+		/// <summary>
+		/// Gets
+		/// </summary>
+		public JsonSchemaVersion SupportedBy { get; }
 
-		private StringFormat(string key, string regex, bool isCaseSensitive = false)
+		/// <summary>
+		/// If created with a regular expression, this gets the regular expression.
+		/// </summary>
+		public Regex ValidationRegex { get; }
+
+		/// <summary>
+		/// If created with a validation function, this gets the function.
+		/// </summary>
+		public Func<string, bool> ValidationFunction { get; }
+
+		static StringFormat()
 		{
-			Key = key;
-			if (regex != null)
-				_validationRule = new Regex(regex, isCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+			_lookup = new Dictionary<string, StringFormat>();
+
+			DateTime = new StringFormat("date-time", JsonSchemaVersion.All, s => System.DateTime.TryParse(s, out _));
+			Email = new StringFormat("email", JsonSchemaVersion.All,
+			                         "^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])$");
+			HostName = new StringFormat("hostname", JsonSchemaVersion.All, "^(?!.{255,})([a-zA-Z0-9-]{0,63}\\.)*([a-zA-Z0-9-]{0,63})$");
+			Ipv4 = new StringFormat("ipv4", JsonSchemaVersion.All, "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+			Ipv6 = new StringFormat("ipv6", JsonSchemaVersion.All, "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$");
+			Regex = new StringFormat("regex", JsonSchemaVersion.All, null, true);
+			UriReference = new StringFormat("uri-reference", JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08, Uri3986.IsValid);
+			Uri = new StringFormat("uri", JsonSchemaVersion.All, s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
 		}
-		private StringFormat(string key, Func<string, bool> validate)
+		/// <summary>
+		/// Creates a new <see cref="StringFormat"/> instance using a regular expression.
+		/// </summary>
+		/// <param name="key">The name of the format.  This is the value that will appear in the schema.</param>
+		/// <param name="supportedBy">The schema drafts supported by this keyword.</param>
+		/// <param name="regex">The validation regular expression.</param>
+		/// <param name="isCaseSensitive">Whether the regular expression is to be processed as case-sensitive.</param>
+		public StringFormat(string key, JsonSchemaVersion supportedBy, string regex, bool isCaseSensitive = false)
 		{
-			_validate = validate;
 			Key = key;
+			SupportedBy = supportedBy;
+			if (regex != null)
+				ValidationRegex = new Regex(regex, isCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
+
+			_lookup.Add(key, this);
+		}
+		/// <summary>
+		/// Creates a new <see cref="StringFormat"/> instance using a validation function.
+		/// </summary>
+		/// <param name="key">The name of the format.  This is the value that will appear in the schema.</param>
+		/// <param name="supportedBy">The schema drafts supported by this keyword.</param>
+		/// <param name="validate">The function by which the string is validated.</param>
+		public StringFormat(string key, JsonSchemaVersion supportedBy, Func<string, bool> validate)
+		{
+			ValidationFunction = validate;
+			Key = key;
+			SupportedBy = supportedBy;
+
+			_lookup.Add(key, this);
 		}
 
 		/// <summary>
@@ -119,11 +127,11 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the value is valid, otherwise false.</returns>
 		public bool Validate(string value)
 		{
-			if (_validationRule == null)
+			if (ValidationRegex == null)
 			{
-				return _validate == null || _validate(value);
+				return ValidationFunction == null || ValidationFunction(value);
 			}
-			return _validationRule.IsMatch(value);
+			return ValidationRegex.IsMatch(value);
 		}
 
 		/// <summary>
@@ -136,12 +144,6 @@ namespace Manatee.Json.Schema
 			return formatKey != null && _lookup.ContainsKey(formatKey)
 				       ? _lookup[formatKey]
 				       : null;
-		}
-
-		internal void ValidateForDraft(JsonSchemaVersion version)
-		{
-			if (!SupportedBy.HasFlag(version))
-				throw new InvalidOperationException($"Format '{Key}' is not supported by {version}");
 		}
 	}
 }

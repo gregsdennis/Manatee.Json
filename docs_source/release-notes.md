@@ -1,6 +1,7 @@
 # 10.0.0
 
-*Released on XXXXXXXXXXXXXXXXXXXXXXXXXX*
+*Preview <del>2</del> 3 released on 17 Sep, 2018*
+*Preview 1 released on 16 Sep, 2018*
 
 <span id="break">breaking change</span> <span id="feature">feature</span>
 
@@ -18,6 +19,8 @@
 ([#112](https://github.com/gregsdennis/Manatee.Json/issues/112)) Another change intended to support JSON Schem draft-08 is a [standardized output format](https://github.com/json-schema-org/json-schema-spec/issues/643).  The validation results have been restructured to conform to this proposal.
 
 ([#132](https://github.com/gregsdennis/Manatee.Json/issues/132)) Updated parsing errors to report locations using JSON Pointer instead of JSON Path.  This is more appropriate since pointers identify a single location whereas paths are technically queries that can match multiple locations.
+
+([#177](https://github.com/gregsdennis/Manatee.Json/issues/177)) Opened up the `StringFormat` class (schema `format` keyword) for extension and customization.
 
 ## Changes
 
