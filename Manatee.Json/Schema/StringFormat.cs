@@ -16,53 +16,44 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines a date/time format.
 		/// </summary>
-		public static StringFormat DateTime { get; set; } =
-			new StringFormat("date-time", JsonSchemaVersion.All, s => System.DateTime.TryParse(s, out _));
+		public static StringFormat DateTime { get; set; }
 		/// <summary>
 		/// Defines an email address format.
 		/// </summary>
 		/// <remarks>
 		/// From http://www.regular-expressions.info/email.html
 		/// </remarks>
-		public static StringFormat Email { get; set; } =
-			new StringFormat("email", JsonSchemaVersion.All,
-			                 "^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])$");
+		public static StringFormat Email { get; set; }
 		// from [lost the link, sorry]
 		/// <summary>
 		/// Defines a host name format.
 		/// </summary>
-		public static StringFormat HostName { get; set; } =
-			new StringFormat("hostname", JsonSchemaVersion.All, "^(?!.{255,})([a-zA-Z0-9-]{0,63}\\.)*([a-zA-Z0-9-]{0,63})$");
+		public static StringFormat HostName { get; set; }
 		// from [lost the link, sorry]
 		/// <summary>
 		/// Defines an IPV4 address format.
 		/// </summary>
-		public static StringFormat Ipv4 { get; set; } =
-			new StringFormat("ipv4", JsonSchemaVersion.All, "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+		public static StringFormat Ipv4 { get; set; }
 		// from [lost the link, sorry]
 		/// <summary>
 		/// Defines an IPV6 format.
 		/// </summary>
-		public static StringFormat Ipv6 { get; set; } =
-			new StringFormat("ipv6", JsonSchemaVersion.All, "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$");
+		public static StringFormat Ipv6 { get; set; }
 		/// <summary>
 		/// Defines a regular expression format.
 		/// </summary>
-		public static StringFormat Regex { get; set; } =
-			new StringFormat("regex", JsonSchemaVersion.All, null, true);
+		public static StringFormat Regex { get; set; }
 		/// <summary>
 		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>.
 		/// </summary>
 		/// <remarks>For draft-06 schema, only use this for absolute URIs.</remarks>
-		public static StringFormat Uri { get; set; } =
-			new StringFormat("uri", JsonSchemaVersion.All, s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
+		public static StringFormat Uri { get; set; }
 		/// <summary>
 		/// Defines a URI format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
 		/// </summary>
-		public static StringFormat UriReference { get; set; } =
-			new StringFormat("uri-reference", JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08, Uri3986.IsValid);
+		public static StringFormat UriReference { get; set; }
 
-		private static readonly Dictionary<string, StringFormat> _lookup = new Dictionary<string, StringFormat>();
+		private static readonly Dictionary<string, StringFormat> _lookup;
 
 		/// <summary>
 		/// A string key which specifies this string format.
@@ -84,6 +75,20 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public Func<string, bool> ValidationFunction { get; }
 
+		static StringFormat()
+		{
+			_lookup = new Dictionary<string, StringFormat>();
+
+			DateTime = new StringFormat("date-time", JsonSchemaVersion.All, s => System.DateTime.TryParse(s, out _));
+			Email = new StringFormat("email", JsonSchemaVersion.All,
+			                         "^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])$");
+			HostName = new StringFormat("hostname", JsonSchemaVersion.All, "^(?!.{255,})([a-zA-Z0-9-]{0,63}\\.)*([a-zA-Z0-9-]{0,63})$");
+			Ipv4 = new StringFormat("ipv4", JsonSchemaVersion.All, "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+			Ipv6 = new StringFormat("ipv6", JsonSchemaVersion.All, "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$");
+			Regex = new StringFormat("regex", JsonSchemaVersion.All, null, true);
+			UriReference = new StringFormat("uri-reference", JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08, Uri3986.IsValid);
+			Uri = new StringFormat("uri", JsonSchemaVersion.All, s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
+		}
 		/// <summary>
 		/// Creates a new <see cref="StringFormat"/> instance using a regular expression.
 		/// </summary>
