@@ -13,81 +13,41 @@ namespace Manatee.Json.Patch
 		/// <summary>
 		/// Provides a schema that can be used to validate JSON Patch documents before deserialization.
 		/// </summary>
-		public static readonly JsonSchema04 Schema = new JsonSchema04
-			{
-				Title = "JSON schema for JSONPatch files",
-				Id = "http://json.schemastore.org/json-patch#",
-				Schema = JsonSchema04.MetaSchema.Id,
-				Type = JsonSchemaType.Array,
-				Items = new JsonSchemaReference("#/definitions/operation", typeof(JsonSchema04)),
-				Definitions = new Dictionary<string, IJsonSchema>
-					{
-						["operation"] = new JsonSchema04
-							{
-								Type = JsonSchemaType.Object,
-								Required = new List<string> {"op", "path"},
-								AllOf = new[] {new JsonSchemaReference("#/definitions/path", typeof(JsonSchema04))},
-								OneOf = new[]
-									{
-										new JsonSchema04
-											{
-												Properties = new Dictionary<string, IJsonSchema>
-													{
-														["op"] = new JsonSchema04
-															{
-																Description = "The operation to perform.",
-																Type = JsonSchemaType.String,
-																Enum = new List<EnumSchemaValue> {"add", "replace", "test"}
-															},
-														["value"] = new JsonSchema04 {Description = "The value to add, replace or test."}
-													},
-												Required = new[] {"value"}
-											},
-										new JsonSchema04
-											{
-												Properties = new Dictionary<string, IJsonSchema>
-													{
-														["op"] = new JsonSchema04
-															{
-																Description = "The operation to perform.",
-																Type = JsonSchemaType.String,
-																Enum = new List<EnumSchemaValue> {"remove"}
-															}
-													}
-											},
-										new JsonSchema04
-											{
-												Properties = new Dictionary<string, IJsonSchema>
-													{
-														["op"] = new JsonSchema04
-															{
-																Description = "The operation to perform.",
-																Type = JsonSchemaType.String,
-																Enum = new List<EnumSchemaValue> {"move", "copy"}
-															},
-														["from"] = new JsonSchema04
-															{
-																Description = "A JSON Pointer path pointing to the location to move/copy from.",
-																Type = JsonSchemaType.String
-															},
-													},
-												Required = new[] {"from"}
-											}
-									}
-							},
-						["path"] = new JsonSchema04
-							{
-								Properties = new Dictionary<string, IJsonSchema>
-									{
-										["path"] = new JsonSchema04
-											{
-												Description = "A JSON Pointer path.",
-												Type = JsonSchemaType.String
-											}
-									}
-							}
-					}
-			};
+		public static readonly JsonSchema Schema = new JsonSchema()
+			.Title("JSON schema for JSONPatch files")
+			.Id("http://json.schemastore.org/json-patch#")
+			.Schema(MetaSchemas.Draft04.Id)
+			.Type(JsonSchemaType.Array)
+			.Items(new JsonSchema().Ref("#/definitions/operation"))
+			.Definition("operation", new JsonSchema()
+				            .Type(JsonSchemaType.Object)
+				            .Required("op", "path")
+				            .AllOf(new JsonSchema().Ref("#/definitions/path"))
+				            .OneOf(new JsonSchema()
+					                   .Property("op", new JsonSchema()
+						                             .Description("The operation to perform")
+						                             .Type(JsonSchemaType.String)
+						                             .Enum("add", "replace", "test"))
+					                   .Property("value", new JsonSchema()
+						                             .Description("The value to add, replace or test."))
+					                   .Required("value"),
+				                   new JsonSchema()
+					                   .Property("op", new JsonSchema()
+						                             .Description("The operation to perform")
+						                             .Type(JsonSchemaType.String)
+						                             .Enum("remove")),
+				                   new JsonSchema()
+					                   .Property("op", new JsonSchema()
+						                             .Description("The operation to perform")
+						                             .Type(JsonSchemaType.String)
+						                             .Enum("move", "copy"))
+					                   .Property("from", new JsonSchema()
+						                             .Description("A JSON Pointer path pointing to the location to move/copy from."))
+					                   .Required("from")))
+			.Definition("path", new JsonSchema()
+				            .Property("path", new JsonSchema()
+					                      .Description("A JSON Pointer path.")
+					                      .Type(JsonSchemaType.String)));
 		
 		/// <summary>
 		/// Attempts to apply the patch to a JSON instance.

@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Schema;
+﻿using System.Collections;
+using Manatee.Json.Schema;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -6,59 +7,34 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class JsonSchemaTypeTest
 	{
-		[Test]
-		public void Draft04_PrimitiveSchemaSucceeds()
+		public static IEnumerable TestCases
 		{
-			var json = new JsonObject {{"type", "integer"}};
-
-			var results = JsonSchema04.MetaSchema.Validate(json);
-
-			Assert.IsTrue(results.Valid);
+			get
+			{
+				yield return new TestCaseData(MetaSchemas.Draft04) {TestName = nameof(MetaSchemas.Draft04)};
+				yield return new TestCaseData(MetaSchemas.Draft06) {TestName = nameof(MetaSchemas.Draft06)};
+				yield return new TestCaseData(MetaSchemas.Draft07) {TestName = nameof(MetaSchemas.Draft07)};
+				//yield return new TestCaseData(MetaSchemas.Draft08) {TestName = nameof(MetaSchemas.Draft08)};
+			}
 		}
-		[Test]
-		public void Draft04_NonPrimitiveStringSchemaFails()
+
+		[TestCaseSource(nameof(TestCases))]
+		public void PrimitiveSchemaSucceeds(JsonSchema metaSchema)
 		{
-			var json = new JsonObject {{"type", "other"}};
+			var customSchema = new JsonObject {{"type", "integer"}};
 
-			var results = JsonSchema04.MetaSchema.Validate(json);
+			var results = metaSchema.Validate(customSchema);
 
-			Assert.IsFalse(results.Valid);
+			Assert.IsTrue(results.IsValid);
 		}
-		[Test]
-		public void Draft06_PrimitiveSchemaSucceeds()
+		[TestCaseSource(nameof(TestCases))]
+		public void NonPrimitiveStringSchemaFails(JsonSchema metaSchema)
 		{
-			var json = new JsonObject {{"type", "integer"}};
+			var customSchema = new JsonObject {{"type", "other"}};
 
-			var results = JsonSchema06.MetaSchema.Validate(json);
+			var results = metaSchema.Validate(customSchema);
 
-			Assert.IsTrue(results.Valid);
-		}
-		[Test]
-		public void Draft06_NonPrimitiveStringSchemaFails()
-		{
-			var json = new JsonObject {{"type", "other"}};
-
-			var results = JsonSchema06.MetaSchema.Validate(json);
-
-			Assert.IsFalse(results.Valid);
-		}
-		[Test]
-		public void Draft07_PrimitiveSchemaSucceeds()
-		{
-			var json = new JsonObject {{"type", "integer"}};
-
-			var results = JsonSchema07.MetaSchema.Validate(json);
-
-			Assert.IsTrue(results.Valid);
-		}
-		[Test]
-		public void Draft07_NonPrimitiveStringSchemaFails()
-		{
-			var json = new JsonObject {{"type", "other"}};
-
-			var results = JsonSchema07.MetaSchema.Validate(json);
-
-			Assert.IsFalse(results.Valid);
+			Assert.IsFalse(results.IsValid);
 		}
 	}
 }

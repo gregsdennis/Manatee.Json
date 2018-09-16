@@ -2,11 +2,16 @@
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	[Obsolete("Need to replace this with extensible serializer.")]
-	internal class UriSerializer : ISerializer
+	internal class UriSerializer : IPrioritizedSerializer
 	{
+		public int Priority => -10;
+
 		public bool ShouldMaintainReferences => false;
 
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		{
+			return type == typeof(Uri);
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var uri = obj as Uri;

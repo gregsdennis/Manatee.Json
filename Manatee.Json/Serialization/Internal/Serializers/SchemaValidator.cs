@@ -12,8 +12,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class SchemaValidator : ISerializer
 	{
-		private static readonly ConcurrentDictionary<TypeInfo, IJsonSchema> _schemas
-			= new ConcurrentDictionary<TypeInfo, IJsonSchema>();
+		private static readonly ConcurrentDictionary<TypeInfo, JsonSchema> _schemas
+			= new ConcurrentDictionary<TypeInfo, JsonSchema>();
 
 		private readonly ISerializer _innerSerializer;
 
@@ -24,6 +24,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		{
+			return true;
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			return _innerSerializer.Serialize(obj, serializer);
@@ -35,28 +39,26 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (schema != null)
 			{
 				var results = schema.Validate(json);
-				if (!results.Valid)
-				{
+				if (!results.IsValid)
 					throw new JsonSerializationException($"JSON did not pass schema defined by type '{typeof(T)}'.\n" +
-														 "Errors:\n" +
-														 string.Join("    \n", results.Errors.Select(e => e.Message)));
-				}
+					                                     "Errors:\n" +
+					                                     serializer.Serialize(results));
 			}
 
 			return _innerSerializer.Deserialize<T>(json, serializer);
 		}
-		private static IJsonSchema _GetSchema(TypeInfo typeInfo)
+		private static JsonSchema _GetSchema(TypeInfo typeInfo)
 		{
 			return _schemas.GetOrAdd(typeInfo, _GetSchemaSlow);
 		}
-		private static IJsonSchema _GetSchemaSlow(TypeInfo typeInfo)
+		private static JsonSchema _GetSchemaSlow(TypeInfo typeInfo)
 		{
 			var attribute = typeInfo.GetCustomAttribute<SchemaAttribute>();
 			if (attribute == null)
 				return null;
 
 			Exception exception = null;
-			IJsonSchema schema = null;
+			JsonSchema schema = null;
 			try
 			{
 				schema = _GetPropertySchema(typeInfo, attribute) ?? _GetFileSchema(attribute);
@@ -71,24 +73,22 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 
 			if (schema == null)
-			{
 				throw new JsonSerializationException($"The value '{attribute.Source}' could not be translated into a valid schema. " +
-													 $"This value should represent either a public static property on the {typeInfo.Name} type " +
-													 $"or a file with this name should exist at the execution path.", exception);
-			}
+				                                     $"This value should represent either a public static property on the {typeInfo.Name} type " +
+				                                     $"or a file with this name should exist at the execution path.", exception);
 
 			return schema;
 		}
-		private static IJsonSchema _GetPropertySchema(TypeInfo typeInfo, SchemaAttribute attribute)
+		private static JsonSchema _GetPropertySchema(TypeInfo typeInfo, SchemaAttribute attribute)
 		{
 			var propertyName = attribute.Source;
 			var property = typeInfo.GetAllProperties()
-			                       .FirstOrDefault(p => typeof(IJsonSchema).GetTypeInfo().IsAssignableFrom(p.PropertyType.GetTypeInfo()) &&
+			                       .FirstOrDefault(p => typeof(JsonSchema).GetTypeInfo().IsAssignableFrom(p.PropertyType.GetTypeInfo()) &&
 			                                            p.GetMethod.IsStatic && p.Name == propertyName);
-			var schema = (IJsonSchema) property?.GetMethod.Invoke(null, new object[] { });
+			var schema = (JsonSchema) property?.GetMethod.Invoke(null, new object[] { });
 			return schema;
 		}
-		private static IJsonSchema _GetFileSchema(SchemaAttribute attribute)
+		private static JsonSchema _GetFileSchema(SchemaAttribute attribute)
 		{
 			var uri = attribute.Source;
 			if (!Uri.TryCreate(uri, UriKind.Absolute, out _))

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -12,6 +13,7 @@ namespace Manatee.Json.Internal
 		{
 			return items.Where(i => i != null);
 		}
+
 		public static bool ContentsEqual<T>(this IEnumerable<T> a, IEnumerable<T> b)
 		{
 			if (a == null && b != null) return false;
@@ -21,6 +23,26 @@ namespace Manatee.Json.Internal
 			var listA = a.ToList();
 			var listB = b.ToList();
 			return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
+		}
+
+		public static IEnumerable<TResult> LeftOuterJoin<TLeft, TRight, TKey, TResult>(this IEnumerable<TLeft> left,
+		                                                                               IEnumerable<TRight> right,
+		                                                                               Func<TLeft, TKey> leftKey,
+		                                                                               Func<TRight, TKey> rightKey,
+		                                                                               Func<TLeft, TRight, TResult> result)
+		{
+			return left.GroupJoin(right, leftKey, rightKey, (l, r) => new { l, r })
+				.SelectMany(
+					o => o.r.DefaultIfEmpty(),
+					(l, r) => new { lft = l.l, rght = r })
+				.Select(o => result.Invoke(o.lft, o.rght));
+		}
+
+		public static IEnumerable<int> IndexesWhere<T>(this IEnumerable<T> items, Func<T, bool> predicate)
+		{
+			return items.Select((item, i) => new {Item = item, Index = i})
+				.Where(i => predicate(i.Item))
+				.Select(i => i.Index);
 		}
 	}
 }

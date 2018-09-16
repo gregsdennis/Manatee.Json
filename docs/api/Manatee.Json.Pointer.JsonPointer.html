@@ -92,6 +92,8 @@
     <div><span class="xref">System.Collections.IList</span></div>
     <div><span class="xref">System.Collections.ICollection</span></div>
     <div><span class="xref">System.Collections.IEnumerable</span></div>
+    <div><a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a></div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -291,13 +293,7 @@
       <span class="xref">System.Collections.Generic.List&lt;System.String&gt;.System.Collections.IList.Item[System.Int32]</span>
     </div>
     <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
       <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
     </div>
     <div>
       <span class="xref">System.Object.GetType()</span>
@@ -313,16 +309,16 @@
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_Pointer_JsonPointer_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class JsonPointer : List&lt;string&gt;, IList&lt;string&gt;, ICollection&lt;string&gt;, IReadOnlyList&lt;string&gt;, IReadOnlyCollection&lt;string&gt;, IEnumerable&lt;string&gt;, IList, ICollection, IEnumerable</code></pre>
+    <pre><code class="lang-csharp hljs">public class JsonPointer : List&lt;string&gt;, IList&lt;string&gt;, ICollection&lt;string&gt;, IReadOnlyList&lt;string&gt;, IReadOnlyCollection&lt;string&gt;, IEnumerable&lt;string&gt;, IList, ICollection, IEnumerable, IJsonSerializable, IEquatable&lt;JsonPointer&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer__ctor.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer__ctor.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Pointer/JsonPointer.cs/#L18">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L25">View Source</a>
   </span>
   <a id="Manatee_Json_Pointer_JsonPointer__ctor_" data-uid="Manatee.Json.Pointer.JsonPointer.#ctor*"></a>
   <h4 id="Manatee_Json_Pointer_JsonPointer__ctor" data-uid="Manatee.Json.Pointer.JsonPointer.#ctor">JsonPointer()</h4>
@@ -335,10 +331,10 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer__ctor_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.%23ctor(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer__ctor_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.%23ctor(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Pointer/JsonPointer.cs/#L23">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L36">View Source</a>
   </span>
   <a id="Manatee_Json_Pointer_JsonPointer__ctor_" data-uid="Manatee.Json.Pointer.JsonPointer.#ctor*"></a>
   <h4 id="Manatee_Json_Pointer_JsonPointer__ctor_System_Collections_Generic_IEnumerable_System_String__" data-uid="Manatee.Json.Pointer.JsonPointer.#ctor(System.Collections.Generic.IEnumerable{System.String})">JsonPointer(IEnumerable&lt;String&gt;)</h4>
@@ -367,14 +363,230 @@
       </tr>
     </tbody>
   </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer__ctor_System_String___.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.%23ctor(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L30">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer__ctor_" data-uid="Manatee.Json.Pointer.JsonPointer.#ctor*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer__ctor_System_String___" data-uid="Manatee.Json.Pointer.JsonPointer.#ctor(System.String[])">JsonPointer(String[])</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a> instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonPointer(params string[] source)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">source</span></td>
+        <td><p>A collection of strings representing the segments of the pointer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_Evaluate_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.Evaluate(Manatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_Clone.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Pointer/JsonPointer.cs/#L40">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L101">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer_Clone_" data-uid="Manatee.Json.Pointer.JsonPointer.Clone*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer_Clone" data-uid="Manatee.Json.Pointer.JsonPointer.Clone">Clone()</h4>
+  <div class="markdown level1 summary"><p>Creates a copy of the pointer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonPointer Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_CloneAndAppend_System_String___.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.CloneAndAppend(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L110">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer_CloneAndAppend_" data-uid="Manatee.Json.Pointer.JsonPointer.CloneAndAppend*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer_CloneAndAppend_System_String___" data-uid="Manatee.Json.Pointer.JsonPointer.CloneAndAppend(System.String[])">CloneAndAppend(String[])</h4>
+  <div class="markdown level1 summary"><p>Creates a copy of the pointer and appends new segments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonPointer CloneAndAppend(params string[] append)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">append</span></td>
+        <td><p>The segments to append.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_Equals_Manatee_Json_Pointer_JsonPointer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.Equals(Manatee.Json.Pointer.JsonPointer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L183">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer_Equals_" data-uid="Manatee.Json.Pointer.JsonPointer.Equals*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer_Equals_Manatee_Json_Pointer_JsonPointer_" data-uid="Manatee.Json.Pointer.JsonPointer.Equals(Manatee.Json.Pointer.JsonPointer)">Equals(JsonPointer)</h4>
+  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(JsonPointer other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>An object to compare with this object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the current object is equal to the <code data-dev-comment-type="paramref" class="paramref">other</code> parameter; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L193">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer_Equals_" data-uid="Manatee.Json.Pointer.JsonPointer.Equals*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer_Equals_System_Object_" data-uid="Manatee.Json.Pointer.JsonPointer.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the specified object is equal to the current object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>The object to compare with the current object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the specified object  is equal to the current object; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_Evaluate_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.Evaluate(Manatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L71">View Source</a>
   </span>
   <a id="Manatee_Json_Pointer_JsonPointer_Evaluate_" data-uid="Manatee.Json.Pointer.JsonPointer.Evaluate*"></a>
   <h4 id="Manatee_Json_Pointer_JsonPointer_Evaluate_Manatee_Json_JsonValue_" data-uid="Manatee.Json.Pointer.JsonPointer.Evaluate(Manatee.Json.JsonValue)">Evaluate(JsonValue)</h4>
@@ -421,10 +633,85 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_Parse_System_String_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.Parse(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.FromJson(Manatee.Json.JsonValue%2CManatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Pointer/JsonPointer.cs/#L30">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L165">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer_FromJson_" data-uid="Manatee.Json.Pointer.JsonPointer.FromJson*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Pointer.JsonPointer.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)">FromJson(JsonValue, JsonSerializer)</h4>
+  <div class="markdown level1 summary"><p>Builds an object from a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FromJson(JsonValue json, JsonSerializer serializer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><span class="parametername">json</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
+        <td><span class="parametername">serializer</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
+serialization of values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_GetHashCode.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L199">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer_GetHashCode_" data-uid="Manatee.Json.Pointer.JsonPointer.GetHashCode*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer_GetHashCode" data-uid="Manatee.Json.Pointer.JsonPointer.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Serves as the default hash function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>A hash code for the current object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_Parse_System_String_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.Parse(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L48">View Source</a>
   </span>
   <a id="Manatee_Json_Pointer_JsonPointer_Parse_" data-uid="Manatee.Json.Pointer.JsonPointer.Parse*"></a>
   <h4 id="Manatee_Json_Pointer_JsonPointer_Parse_System_String_" data-uid="Manatee.Json.Pointer.JsonPointer.Parse(System.String)">Parse(String)</h4>
@@ -471,10 +758,61 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_ToString.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_ToJson_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.ToJson(Manatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Pointer/JsonPointer.cs/#L58">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L176">View Source</a>
+  </span>
+  <a id="Manatee_Json_Pointer_JsonPointer_ToJson_" data-uid="Manatee.Json.Pointer.JsonPointer.ToJson*"></a>
+  <h4 id="Manatee_Json_Pointer_JsonPointer_ToJson_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Pointer.JsonPointer.ToJson(Manatee.Json.Serialization.JsonSerializer)">ToJson(JsonSerializer)</h4>
+  <div class="markdown level1 summary"><p>Converts an object to a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue ToJson(JsonSerializer serializer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
+        <td><span class="parametername">serializer</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
+serialization of values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
+        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer_ToString.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L89">View Source</a>
   </span>
   <a id="Manatee_Json_Pointer_JsonPointer_ToString_" data-uid="Manatee.Json.Pointer.JsonPointer.ToString*"></a>
   <h4 id="Manatee_Json_Pointer_JsonPointer_ToString" data-uid="Manatee.Json.Pointer.JsonPointer.ToString">ToString()</h4>
@@ -528,6 +866,12 @@
   <div>
       <span class="xref">System.Collections.IEnumerable</span>
   </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a>
+  </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Collections_Generic_IEnumerable_System_String__">LinqExtensions.ToJson(IEnumerable&lt;String&gt;)</a>
@@ -540,10 +884,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Pointer_JsonPointer.md&amp;value=---%0Auid%3A%20Manatee.Json.Pointer.JsonPointer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Pointer/JsonPointer.cs/#L11" class="contribution-link">View Source</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Pointer/JsonPointer.cs/#L15" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

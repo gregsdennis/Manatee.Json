@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using Manatee.Json.Schema;
 using NUnit.Framework;
 
@@ -12,14 +11,12 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new TestCaseData(new JsonSchema04 {Type = JsonSchemaType.Boolean});
-				yield return new TestCaseData(new JsonSchema06 {Type = JsonSchemaType.Boolean});
-				yield return new TestCaseData(new JsonSchema07 { Type = JsonSchemaType.Boolean});
+				yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Boolean));
 			}
 		} 
 		
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnNonBoolean(IJsonSchema schema)
+		public void ValidateReturnsErrorOnNonBoolean(JsonSchema schema)
 		{
 			var json = new JsonObject();
 
@@ -29,7 +26,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsValidOnBoolean(IJsonSchema schema)
+		public void ValidateReturnsValidOnBoolean(JsonSchema schema)
 		{
 			var json = (JsonValue) false;
 

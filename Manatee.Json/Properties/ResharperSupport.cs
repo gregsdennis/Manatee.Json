@@ -34,4 +34,9 @@ namespace JetBrains.Annotations
 		/// </summary>
 		public string FormatParameterName { get; private set; }
 	}
+	/// <summary>
+	/// Indicates that parameter is regular expression pattern.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Parameter)]
+	internal sealed class RegexPatternAttribute : Attribute { }
 }

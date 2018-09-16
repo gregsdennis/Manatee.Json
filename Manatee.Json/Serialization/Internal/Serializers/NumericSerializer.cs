@@ -1,11 +1,18 @@
 ﻿using System;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class NumericSerializer : ISerializer
+	internal class NumericSerializer : IPrioritizedSerializer
 	{
+		public int Priority => -10;
+
 		public bool ShouldMaintainReferences => false;
 
+		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		{
+			return type.IsNumericType();
+		}
 		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
 		{
 			var value = Convert.ToDouble(obj);

@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>9.9.4 &amp; 9.9.5 </title>
+    <title>10.0.0 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="9.9.4 &amp; 9.9.5 ">
+    <meta name="title" content="10.0.0 ">
     <meta name="generator" content="docfx 2.36.1.0">
     
     <link rel="shortcut icon" href="favicon.ico">
@@ -60,21 +60,57 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="994--995">9.9.4 &amp; 9.9.5</h1>
+<h1 id="1000">10.0.0</h1>
 
+<p><em>Preview <del>2</del> 3 released on 17 Sep, 2018</em>
+<em>Preview 1 released on 16 Sep, 2018</em></p>
+<p><span id="break">breaking change</span> <span id="feature">feature</span></p>
+<h2 id="summary">Summary</h2>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/147">#147</a>) Updated how custom serialization is handled.  Rather than registering independent methods (<code>CustomSerializations</code>), custom sub-serializer implementations that each handle specific scenarios can be registered.  Each implementation specifies whether it can handle the (de)serialization based on the expected type, the serializer options, and (for deserialization, specifically) the JSON value.  It will also specify whether it should maintain referential integrity.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/132">#132</a>) Changed parsing and schema errors to use JSON Pointers to indicate the locations of errors instead of JSON Paths.  The reasoning behind this is JSON Path is a query syntax that can return multiple values, whereas JSON Pointer was specifically designed to represent a single path resulting in a single value.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/175">#175</a> Part 1) In preparation for JSON Schema draft-08, the JSON Schema implementation has been overhauled.  The key takeaways from this work are:</p>
+<ul>
+<li>The schema drafts are no longer represented by multiple classes, but rather a single <code>JsonSchema</code> class that is capable of modeling all of the drafts.</li>
+<li>The <code>JsonSchema</code> type does not expose keywords as properties, but is a container of keyword implementations.  This allows for easier extension.</li>
+</ul>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/112">#112</a>) Another change intended to support JSON Schem draft-08 is a <a href="https://github.com/json-schema-org/json-schema-spec/issues/643">standardized output format</a>.  The validation results have been restructured to conform to this proposal.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/132">#132</a>) Updated parsing errors to report locations using JSON Pointer instead of JSON Path.  This is more appropriate since pointers identify a single location whereas paths are technically queries that can match multiple locations.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/177">#177</a>) Opened up the <code>StringFormat</code> class (schema <code>format</code> keyword) for extension and customization.</p>
+<h2 id="changes">Changes</h2>
+<p><em>In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.</em></p>
+<ul>
+<li><code>JsonSyntaxException</code> - <code>string Path</code> property replaced by <code>JsonPointer Location</code> property.</li>
+</ul>
+<h3 id="new-types">New types</h3>
+<ul>
+<li><code>SerializerFactory</code></li>
+<li><code>ISerializer</code></li>
+</ul>
+<h3 id="removed-types">Removed types</h3>
+<ul>
+<li><code>CustomSerializations</code></li>
+<li><code>JsonSerializationAbstractionMap</code> (previously obsolete)</li>
+<li><code>JsonSerializationTypeRegistry</code> (previously obsolete)</li>
+<li><code>TypeRegistrationException</code></li>
+</ul>
+<h3 id="functional-changes">Functional changes</h3>
+<ul>
+<li>Updated the default enumeration serialization method from using numeric values to using named values.  (See <code>JsonSerializerOptions.EnumSerializationFormat</code>.)</li>
+</ul>
+<h1 id="994--995">9.9.4 &amp; 9.9.5</h1>
 <p><em>Released on 23 August, 2018</em></p>
 <p><span id="patch">patch</span></p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/179">#179</a>) Fixed concurrency issue that may occur while auto-serializing a single object type for the first time on two threads simultaneously.</p>
 <h1 id="993">9.9.3</h1>
-<p><em>Released on 13 July, 2018</em></p>
+<p><em>Released on 12 Jul, 2018</em></p>
 <p><span id="patch">patch</span></p>
 <p>Fixed bug where attempting to download schemas behind <code>https</code> links would throw the least helpful of exceptions: a message-less <code>Exception</code>.</p>
 <h1 id="992">9.9.2</h1>
-<p><em>Released on 13 July, 2018</em></p>
+<p><em>Released on 8 Jun, 2018</em></p>
 <p><span id="patch">patch</span> <span id="spec">spec</span></p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/170">#170</a>) <a href="http://json-schema.org/">JSON-Schema.org</a> updated the meta-schemas for all drafts to be more inline with the specifications.  This update matches those changes.</p>
 <h1 id="991">9.9.1</h1>
-<p><em>Released on 13 June, 2018</em></p>
+<p><em>Released on 13 Jun, 2018</em></p>
 <p><span id="patch">patch</span></p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/167">#167</a>) JSON Schema: <code>required</code> is only processed when <code>properties</code> is present.</p>
 <h1 id="990">9.9.0</h1>
@@ -89,7 +125,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/release-notes.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/docs_source/release-notes.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

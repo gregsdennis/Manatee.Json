@@ -12,24 +12,21 @@ namespace Manatee.Json.Tests.Schema
 		{
 			get
 			{
-				yield return new JsonSchema04 {Type = JsonSchemaType.Number, Maximum = 10};
-				yield return new JsonSchema06 {Type = JsonSchemaType.Number, Maximum = 10};
-				yield return new JsonSchema07 { Type = JsonSchemaType.Number, Maximum = 10};
+				yield return new JsonSchema().Type(JsonSchemaType.Number).Maximum(10);
 			}
 		} 
 		
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsErrorOnInvalid(IJsonSchema schema)
+		public void ValidateReturnsErrorOnInvalid(JsonSchema schema)
 		{
 			var json = new JsonArray();
 
 			var results = schema.Validate(json);
 
-			Assert.AreEqual(1, results.Errors.Count());
-			Assert.AreEqual(false, results.Valid);
+			Assert.AreEqual(false, results.IsValid);
 		}
 		[TestCaseSource(nameof(TestData))]
-		public void ValidateReturnsValid(IJsonSchema schema)
+		public void ValidateReturnsValid(JsonSchema schema)
 		{
 			var json = (JsonValue) 5;
 

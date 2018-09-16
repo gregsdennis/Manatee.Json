@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Annotations;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json
 {
@@ -9,12 +10,11 @@ namespace Manatee.Json
 	/// </summary>
 	public class JsonSyntaxException : Exception
 	{
-		private readonly string _path;
 
 		/// <summary>
-		/// Gets the path up to the point at which the error was found.
+		/// Gets a JSON Pointer to the location at which the error was found.
 		/// </summary>
-		public string Path => $"${_path}";
+		public JsonPointer Location { get; }
 
 		/// <summary>
 		/// Gets a message that describes the current exception.
@@ -22,33 +22,42 @@ namespace Manatee.Json
 		/// <returns>
 		/// The error message that explains the reason for the exception, or an empty string("").
 		/// </returns>
-		public override string Message => $"{base.Message} Path: '{Path}'";
+		public override string Message => $"{base.Message} Path: '{Location}'";
 
 		[StringFormatMethod("format")]
 		internal JsonSyntaxException(string message, JsonValue value)
 			: base(message)
 		{
-			_path = _BuildPath(value);
+			Location = _BuildPointer(value);
 		}
 
-		private static string _BuildPath(JsonValue value)
+		private static JsonPointer _BuildPointer(JsonValue value)
 		{
-			if (value == null) return string.Empty;
+			var pointer = new JsonPointer();
+
+			if (value == null) return pointer;
+
 			switch (value.Type)
 			{
 				case JsonValueType.Object:
-					if (!value.Object.Any()) return string.Empty;
+					if (!value.Object.Any()) return pointer;
+
 					var pair = value.Object.Last();
 					var key = pair.Key;
-					return $".{key}{_BuildPath(pair.Value)}";
+					pointer.Add(key);
+					pointer.AddRange(_BuildPointer(pair.Value));
+					break;
 				case JsonValueType.Array:
-					if (!value.Array.Any()) return string.Empty;
+					if (!value.Array.Any()) return pointer;
+
 					var item = value.Array.Last();
 					var index = value.Array.Count - 1;
-					return $"[{index}]{_BuildPath(item)}";
-				default:
-					return string.Empty;
+					pointer.Add(index.ToString());
+					pointer.AddRange(_BuildPointer(item));
+					break;
 			}
+
+			return pointer;
 		}
 	}
 }

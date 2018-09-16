@@ -10,7 +10,6 @@ namespace Manatee.Json.Serialization
 	{
 		private int _callCount;
 		private JsonSerializerOptions _options;
-		private CustomSerializations _customSerializations;
 		private AbstractionMap _abstractionMap;
 
 		/// <summary>
@@ -20,14 +19,6 @@ namespace Manatee.Json.Serialization
 		{
 			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
 			set { _options = value; }
-		}
-		/// <summary>
-		/// Gets or sets the set of custom serializations supported by this serializer. 
-		/// </summary>
-		public CustomSerializations CustomSerializations
-		{
-			get { return _customSerializations ?? (_customSerializations = new CustomSerializations(CustomSerializations.Default)); }
-			set { _customSerializations = value; }
 		}
 		/// <summary>
 		/// Gets or sets the abstraction map used by this serializer.
@@ -49,7 +40,7 @@ namespace Manatee.Json.Serialization
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), this);
-			var json = serializer.Serialize(obj, this);
+			var json = serializer.Serialize<T>(obj, this);
 			if (--_callCount == 0)
 			{
 				SerializationMap.Clear();
@@ -63,7 +54,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the type.</returns>
 		public JsonValue SerializeType<T>()
 		{
-			var serializer = SerializerFactory.GetTypeSerializer<T>(Options);
+			var serializer = SerializerFactory.GetTypeSerializer();
 			var json = serializer.SerializeType<T>(this);
 			SerializationMap.Clear();
 			return json;
@@ -107,7 +98,7 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public void DeserializeType<T>(JsonValue json)
 		{
-			var serializer = SerializerFactory.GetTypeSerializer<T>(Options);
+			var serializer = SerializerFactory.GetTypeSerializer();
 			serializer.DeserializeType<T>(json, this);
 		}
 	}

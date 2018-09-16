@@ -84,17 +84,14 @@
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="Manatee.Json.Schema.IJsonSchemaDependency.html">IJsonSchemaDependency</a></div>
+    <div><a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a></div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaDependency.html">IJsonSchemaDependency</a>&gt;</div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.SchemaDependency.html">SchemaDependency</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
       <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
     </div>
     <div>
       <span class="xref">System.Object.GetType()</span>
@@ -113,25 +110,25 @@
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_Schema_SchemaDependency_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SchemaDependency : IJsonSchemaDependency</code></pre>
+    <pre><code class="lang-csharp hljs">public class SchemaDependency : IJsonSchemaDependency, IJsonSerializable, IEquatable&lt;IJsonSchemaDependency&gt;, IEquatable&lt;SchemaDependency&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency__ctor_System_String_Manatee_Json_Schema_IJsonSchema_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.%23ctor(System.String%2CManatee.Json.Schema.IJsonSchema)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency__ctor_System_String_Manatee_Json_Schema_JsonSchema_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.%23ctor(System.String%2CManatee.Json.Schema.JsonSchema)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/SchemaDependency.cs/#L22">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L28">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_SchemaDependency__ctor_" data-uid="Manatee.Json.Schema.SchemaDependency.#ctor*"></a>
-  <h4 id="Manatee_Json_Schema_SchemaDependency__ctor_System_String_Manatee_Json_Schema_IJsonSchema_" data-uid="Manatee.Json.Schema.SchemaDependency.#ctor(System.String,Manatee.Json.Schema.IJsonSchema)">SchemaDependency(String, IJsonSchema)</h4>
+  <h4 id="Manatee_Json_Schema_SchemaDependency__ctor_System_String_Manatee_Json_Schema_JsonSchema_" data-uid="Manatee.Json.Schema.SchemaDependency.#ctor(System.String,Manatee.Json.Schema.JsonSchema)">SchemaDependency(String, JsonSchema)</h4>
   <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="Manatee.Json.Schema.SchemaDependency.html">SchemaDependency</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SchemaDependency(string propertyName, IJsonSchema schema)</code></pre>
+    <pre><code class="lang-csharp hljs">public SchemaDependency(string propertyName, JsonSchema schema)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -150,7 +147,7 @@
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="Manatee.Json.Schema.IJsonSchema.html">IJsonSchema</a></td>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
         <td><span class="parametername">schema</span></td>
         <td><p>The schema which must be validated.</p>
 </td>
@@ -161,10 +158,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_PropertyName.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.PropertyName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_PropertyName.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.PropertyName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/SchemaDependency.cs/#L15">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L17">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_SchemaDependency_PropertyName_" data-uid="Manatee.Json.Schema.SchemaDependency.PropertyName*"></a>
   <h4 id="Manatee_Json_Schema_SchemaDependency_PropertyName" data-uid="Manatee.Json.Schema.SchemaDependency.PropertyName">PropertyName</h4>
@@ -190,24 +187,73 @@
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_GetJsonData.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.GetJsonData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_SupportedVersions.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.SupportedVersions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/SchemaDependency.cs/#L46">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L21">View Source</a>
   </span>
-  <a id="Manatee_Json_Schema_SchemaDependency_GetJsonData_" data-uid="Manatee.Json.Schema.SchemaDependency.GetJsonData*"></a>
-  <h4 id="Manatee_Json_Schema_SchemaDependency_GetJsonData" data-uid="Manatee.Json.Schema.SchemaDependency.GetJsonData">GetJsonData()</h4>
-  <div class="markdown level1 summary"><p>Gets the JSON data to be used as the value portion in the dependency list of the schema.</p>
+  <a id="Manatee_Json_Schema_SchemaDependency_SupportedVersions_" data-uid="Manatee.Json.Schema.SchemaDependency.SupportedVersions*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_SupportedVersions" data-uid="Manatee.Json.Schema.SchemaDependency.SupportedVersions">SupportedVersions</h4>
+  <div class="markdown level1 summary"><p>Gets the versions (drafts) of JSON Schema which support this keyword.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public JsonValue GetJsonData()</code></pre>
+    <pre><code class="lang-csharp hljs">public JsonSchemaVersion SupportedVersions { get; }</code></pre>
   </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchemaVersion.html">JsonSchemaVersion</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_Equals_Manatee_Json_Schema_IJsonSchemaDependency_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.Equals(Manatee.Json.Schema.IJsonSchemaDependency)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L108">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_Equals_" data-uid="Manatee.Json.Schema.SchemaDependency.Equals*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_Equals_Manatee_Json_Schema_IJsonSchemaDependency_" data-uid="Manatee.Json.Schema.SchemaDependency.Equals(Manatee.Json.Schema.IJsonSchemaDependency)">Equals(IJsonSchemaDependency)</h4>
+  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(IJsonSchemaDependency other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.IJsonSchemaDependency.html">IJsonSchemaDependency</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>An object to compare with this object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -218,26 +264,129 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td></td>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the current object is equal to the <code data-dev-comment-type="paramref" class="paramref">other</code> parameter; otherwise, false.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_Validate_Manatee_Json_JsonValue_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.Validate(Manatee.Json.JsonValue%2CManatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_Equals_Manatee_Json_Schema_SchemaDependency_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.Equals(Manatee.Json.Schema.SchemaDependency)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/SchemaDependency.cs/#L37">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L98">View Source</a>
   </span>
-  <a id="Manatee_Json_Schema_SchemaDependency_Validate_" data-uid="Manatee.Json.Schema.SchemaDependency.Validate*"></a>
-  <h4 id="Manatee_Json_Schema_SchemaDependency_Validate_Manatee_Json_JsonValue_Manatee_Json_JsonValue_" data-uid="Manatee.Json.Schema.SchemaDependency.Validate(Manatee.Json.JsonValue,Manatee.Json.JsonValue)">Validate(JsonValue, JsonValue)</h4>
-  <div class="markdown level1 summary"><p>Validates a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> against the schema.</p>
+  <a id="Manatee_Json_Schema_SchemaDependency_Equals_" data-uid="Manatee.Json.Schema.SchemaDependency.Equals*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_Equals_Manatee_Json_Schema_SchemaDependency_" data-uid="Manatee.Json.Schema.SchemaDependency.Equals(Manatee.Json.Schema.SchemaDependency)">Equals(SchemaDependency)</h4>
+  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SchemaValidationResults Validate(JsonValue json, JsonValue root = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Equals(SchemaDependency other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.SchemaDependency.html">SchemaDependency</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>An object to compare with this object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the current object is equal to the <code data-dev-comment-type="paramref" class="paramref">other</code> parameter; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L115">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_Equals_" data-uid="Manatee.Json.Schema.SchemaDependency.Equals*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_Equals_System_Object_" data-uid="Manatee.Json.Schema.SchemaDependency.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the specified object is equal to the current object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>The object to compare with the current object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the specified object  is equal to the current object; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.FromJson(Manatee.Json.JsonValue%2CManatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L134">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_FromJson_" data-uid="Manatee.Json.Schema.SchemaDependency.FromJson*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Schema.SchemaDependency.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)">FromJson(JsonValue, JsonSerializer)</h4>
+  <div class="markdown level1 summary"><p>Builds an object from a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FromJson(JsonValue json, JsonSerializer serializer)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -252,13 +401,223 @@
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
         <td><span class="parametername">json</span></td>
-        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></p>
+        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
 </td>
       </tr>
       <tr>
+        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
+        <td><span class="parametername">serializer</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
+serialization of values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_GetHashCode.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L121">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_GetHashCode_" data-uid="Manatee.Json.Schema.SchemaDependency.GetHashCode*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_GetHashCode" data-uid="Manatee.Json.Schema.SchemaDependency.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Serves as the default hash function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>A hash code for the current object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_RegisterSubschemas_System_Uri_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L77">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_RegisterSubschemas_" data-uid="Manatee.Json.Schema.SchemaDependency.RegisterSubschemas*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_RegisterSubschemas_System_Uri_" data-uid="Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri)">RegisterSubschemas(Uri)</h4>
+  <div class="markdown level1 summary"><p>Used register any subschemas during validation.  Enables look-forward compatibility with <pre><code>$ref</code></pre> keywords.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RegisterSubschemas(Uri baseUri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Uri</span></td>
+        <td><span class="parametername">baseUri</span></td>
+        <td><p>The current base URI</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.ResolveSubschema(Manatee.Json.Pointer.JsonPointer%2CSystem.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L91">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_ResolveSubschema_" data-uid="Manatee.Json.Schema.SchemaDependency.ResolveSubschema*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_" data-uid="Manatee.Json.Schema.SchemaDependency.ResolveSubschema(Manatee.Json.Pointer.JsonPointer,System.Uri)">ResolveSubschema(JsonPointer, Uri)</h4>
+  <div class="markdown level1 summary"><p>Resolves any subschemas during resolution of a <pre><code>$ref</code></pre> during validation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a></td>
+        <td><span class="parametername">pointer</span></td>
+        <td><p>A <a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a> to the target schema.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Uri</span></td>
+        <td><span class="parametername">baseUri</span></td>
+        <td><p>The current base URI.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><p>The referenced schema, if it exists; otherwise null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_ToJson_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.ToJson(Manatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L144">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_ToJson_" data-uid="Manatee.Json.Schema.SchemaDependency.ToJson*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_ToJson_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Schema.SchemaDependency.ToJson(Manatee.Json.Serialization.JsonSerializer)">ToJson(JsonSerializer)</h4>
+  <div class="markdown level1 summary"><p>Converts an object to a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public JsonValue ToJson(JsonSerializer serializer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
+        <td><span class="parametername">serializer</span></td>
+        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
+serialization of values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><span class="parametername">root</span></td>
-        <td><p>The root schema serialized to a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.  Used internally for resolving references.</p>
+        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency_Validate_Manatee_Json_Schema_SchemaValidationContext_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency.Validate(Manatee.Json.Schema.SchemaValidationContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L42">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_SchemaDependency_Validate_" data-uid="Manatee.Json.Schema.SchemaDependency.Validate*"></a>
+  <h4 id="Manatee_Json_Schema_SchemaDependency_Validate_Manatee_Json_Schema_SchemaValidationContext_" data-uid="Manatee.Json.Schema.SchemaDependency.Validate(Manatee.Json.Schema.SchemaValidationContext)">Validate(SchemaValidationContext)</h4>
+  <div class="markdown level1 summary"><p>Provides the validation logic for this dependency.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SchemaValidationResults Validate(SchemaValidationContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.SchemaValidationContext.html">SchemaValidationContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The context object.</p>
 </td>
       </tr>
     </tbody>
@@ -274,7 +633,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.Schema.SchemaValidationResults.html">SchemaValidationResults</a></td>
-        <td><p>The results of the validation.</p>
+        <td><p>Results object containing a final result and any errors that may have been found.</p>
 </td>
       </tr>
     </tbody>
@@ -282,6 +641,15 @@
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="Manatee.Json.Schema.IJsonSchemaDependency.html">IJsonSchemaDependency</a>
+  </div>
+  <div>
+      <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a>
+  </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
   </div>
 </article>
           </div>
@@ -291,10 +659,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/new/release/10.0.0/apiSpec/new?filename=Manatee_Json_Schema_SchemaDependency.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.SchemaDependency%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/SchemaDependency.cs/#L8" class="contribution-link">View Source</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/Manatee.Json/Schema/SchemaDependency.cs/#L10" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
