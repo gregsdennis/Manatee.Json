@@ -136,12 +136,7 @@ var numberResults = schema.Validate(numberJson);
 var nonObjectResults = schame.Validate(nonObject);
 ```
 
-> **IMPORTANT** You may have noticed that the second parameter is not used.  This parameter is used internally for validating subschema and resolving references and should not be used explicitly.
-
-The various results objects are of type `SchemaValidationResults`, which has two properties:
-
-- IsValid - Indicates if the tested JSON value is valid,
-- Errors - A collection of errors found while validating.  Each error lists a JSONPath to the problem element and a message which describes the issue.
+The various results objects are of type `SchemaValidationResults`.  More information about the results object can be found in the next section.
 
 In the above example, the following would be reported:
 

@@ -167,14 +167,7 @@ var stringResults = schema.Validate(stringJson);
 var numberResults = schema.Validate(numberJson);
 var nonObjectResults = schame.Validate(nonObject);
 </code></pre>
-<blockquote>
-<p><strong>IMPORTANT</strong> You may have noticed that the second parameter is not used.  This parameter is used internally for validating subschema and resolving references and should not be used explicitly.</p>
-</blockquote>
-<p>The various results objects are of type <code>SchemaValidationResults</code>, which has two properties:</p>
-<ul>
-<li>IsValid - Indicates if the tested JSON value is valid,</li>
-<li>Errors - A collection of errors found while validating.  Each error lists a JSONPath to the problem element and a message which describes the issue.</li>
-</ul>
+<p>The various results objects are of type <code>SchemaValidationResults</code>.  More information about the results object can be found in the next section.</p>
 <p>In the above example, the following would be reported:</p>
 <ul>
 <li><code>emptyJson</code> and <code>numberJson</code> failed because <code>&quot;myProperty&quot;</code> was not found.</li>
@@ -400,7 +393,7 @@ var nonObjectResults = schame.Validate(nonObject);
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/docs_source/usage/schema.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/schema.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

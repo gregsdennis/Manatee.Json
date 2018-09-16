@@ -1,6 +1,7 @@
 # 10.0.0
 
 *Preview <del>2</del> 3 released on 17 Sep, 2018*
+
 *Preview 1 released on 16 Sep, 2018*
 
 <span id="break">breaking change</span> <span id="feature">feature</span>
