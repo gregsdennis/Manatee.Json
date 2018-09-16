@@ -13087,16 +13087,52 @@ references:
   commentId: T:Manatee.Json.Schema.StringFormat
   fullName: Manatee.Json.Schema.StringFormat
   nameWithType: StringFormat
+- uid: Manatee.Json.Schema.StringFormat.#ctor(System.String,Manatee.Json.Schema.JsonSchemaVersion,System.Func{System.String,System.Boolean})
+  name: StringFormat(String, JsonSchemaVersion, Func<String, Boolean>)
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat__ctor_System_String_Manatee_Json_Schema_JsonSchemaVersion_System_Func_System_String_System_Boolean__
+  commentId: M:Manatee.Json.Schema.StringFormat.#ctor(System.String,Manatee.Json.Schema.JsonSchemaVersion,System.Func{System.String,System.Boolean})
+  name.vb: StringFormat(String, JsonSchemaVersion, Func(Of String, Boolean))
+  fullName: Manatee.Json.Schema.StringFormat.StringFormat(System.String, Manatee.Json.Schema.JsonSchemaVersion, System.Func<System.String, System.Boolean>)
+  fullName.vb: Manatee.Json.Schema.StringFormat.StringFormat(System.String, Manatee.Json.Schema.JsonSchemaVersion, System.Func(Of System.String, System.Boolean))
+  nameWithType: StringFormat.StringFormat(String, JsonSchemaVersion, Func<String, Boolean>)
+  nameWithType.vb: StringFormat.StringFormat(String, JsonSchemaVersion, Func(Of String, Boolean))
+- uid: Manatee.Json.Schema.StringFormat.#ctor(System.String,Manatee.Json.Schema.JsonSchemaVersion,System.String,System.Boolean)
+  name: StringFormat(String, JsonSchemaVersion, String, Boolean)
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat__ctor_System_String_Manatee_Json_Schema_JsonSchemaVersion_System_String_System_Boolean_
+  commentId: M:Manatee.Json.Schema.StringFormat.#ctor(System.String,Manatee.Json.Schema.JsonSchemaVersion,System.String,System.Boolean)
+  fullName: Manatee.Json.Schema.StringFormat.StringFormat(System.String, Manatee.Json.Schema.JsonSchemaVersion, System.String, System.Boolean)
+  nameWithType: StringFormat.StringFormat(String, JsonSchemaVersion, String, Boolean)
+- uid: Manatee.Json.Schema.StringFormat.#ctor*
+  name: StringFormat
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat__ctor_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.#ctor
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.StringFormat.StringFormat
+  nameWithType: StringFormat.StringFormat
 - uid: Manatee.Json.Schema.StringFormat.DateTime
   name: DateTime
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_DateTime
-  commentId: F:Manatee.Json.Schema.StringFormat.DateTime
+  commentId: P:Manatee.Json.Schema.StringFormat.DateTime
+  fullName: Manatee.Json.Schema.StringFormat.DateTime
+  nameWithType: StringFormat.DateTime
+- uid: Manatee.Json.Schema.StringFormat.DateTime*
+  name: DateTime
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_DateTime_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.DateTime
+  isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.DateTime
   nameWithType: StringFormat.DateTime
 - uid: Manatee.Json.Schema.StringFormat.Email
   name: Email
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Email
-  commentId: F:Manatee.Json.Schema.StringFormat.Email
+  commentId: P:Manatee.Json.Schema.StringFormat.Email
+  fullName: Manatee.Json.Schema.StringFormat.Email
+  nameWithType: StringFormat.Email
+- uid: Manatee.Json.Schema.StringFormat.Email*
+  name: Email
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Email_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.Email
+  isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.Email
   nameWithType: StringFormat.Email
 - uid: Manatee.Json.Schema.StringFormat.GetFormat(System.String)
@@ -13115,19 +13151,40 @@ references:
 - uid: Manatee.Json.Schema.StringFormat.HostName
   name: HostName
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_HostName
-  commentId: F:Manatee.Json.Schema.StringFormat.HostName
+  commentId: P:Manatee.Json.Schema.StringFormat.HostName
+  fullName: Manatee.Json.Schema.StringFormat.HostName
+  nameWithType: StringFormat.HostName
+- uid: Manatee.Json.Schema.StringFormat.HostName*
+  name: HostName
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_HostName_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.HostName
+  isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.HostName
   nameWithType: StringFormat.HostName
 - uid: Manatee.Json.Schema.StringFormat.Ipv4
   name: Ipv4
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Ipv4
-  commentId: F:Manatee.Json.Schema.StringFormat.Ipv4
+  commentId: P:Manatee.Json.Schema.StringFormat.Ipv4
+  fullName: Manatee.Json.Schema.StringFormat.Ipv4
+  nameWithType: StringFormat.Ipv4
+- uid: Manatee.Json.Schema.StringFormat.Ipv4*
+  name: Ipv4
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Ipv4_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.Ipv4
+  isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.Ipv4
   nameWithType: StringFormat.Ipv4
 - uid: Manatee.Json.Schema.StringFormat.Ipv6
   name: Ipv6
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Ipv6
-  commentId: F:Manatee.Json.Schema.StringFormat.Ipv6
+  commentId: P:Manatee.Json.Schema.StringFormat.Ipv6
+  fullName: Manatee.Json.Schema.StringFormat.Ipv6
+  nameWithType: StringFormat.Ipv6
+- uid: Manatee.Json.Schema.StringFormat.Ipv6*
+  name: Ipv6
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Ipv6_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.Ipv6
+  isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.Ipv6
   nameWithType: StringFormat.Ipv6
 - uid: Manatee.Json.Schema.StringFormat.Key
@@ -13146,19 +13203,53 @@ references:
 - uid: Manatee.Json.Schema.StringFormat.Regex
   name: Regex
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Regex
-  commentId: F:Manatee.Json.Schema.StringFormat.Regex
+  commentId: P:Manatee.Json.Schema.StringFormat.Regex
   fullName: Manatee.Json.Schema.StringFormat.Regex
   nameWithType: StringFormat.Regex
+- uid: Manatee.Json.Schema.StringFormat.Regex*
+  name: Regex
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Regex_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.Regex
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.StringFormat.Regex
+  nameWithType: StringFormat.Regex
+- uid: Manatee.Json.Schema.StringFormat.SupportedBy
+  name: SupportedBy
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_SupportedBy
+  commentId: P:Manatee.Json.Schema.StringFormat.SupportedBy
+  fullName: Manatee.Json.Schema.StringFormat.SupportedBy
+  nameWithType: StringFormat.SupportedBy
+- uid: Manatee.Json.Schema.StringFormat.SupportedBy*
+  name: SupportedBy
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_SupportedBy_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.SupportedBy
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.StringFormat.SupportedBy
+  nameWithType: StringFormat.SupportedBy
 - uid: Manatee.Json.Schema.StringFormat.Uri
   name: Uri
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Uri
-  commentId: F:Manatee.Json.Schema.StringFormat.Uri
+  commentId: P:Manatee.Json.Schema.StringFormat.Uri
+  fullName: Manatee.Json.Schema.StringFormat.Uri
+  nameWithType: StringFormat.Uri
+- uid: Manatee.Json.Schema.StringFormat.Uri*
+  name: Uri
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_Uri_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.Uri
+  isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.Uri
   nameWithType: StringFormat.Uri
 - uid: Manatee.Json.Schema.StringFormat.UriReference
   name: UriReference
   href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_UriReference
-  commentId: F:Manatee.Json.Schema.StringFormat.UriReference
+  commentId: P:Manatee.Json.Schema.StringFormat.UriReference
+  fullName: Manatee.Json.Schema.StringFormat.UriReference
+  nameWithType: StringFormat.UriReference
+- uid: Manatee.Json.Schema.StringFormat.UriReference*
+  name: UriReference
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_UriReference_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.UriReference
+  isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.UriReference
   nameWithType: StringFormat.UriReference
 - uid: Manatee.Json.Schema.StringFormat.Validate(System.String)
@@ -13174,6 +13265,32 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.StringFormat.Validate
   nameWithType: StringFormat.Validate
+- uid: Manatee.Json.Schema.StringFormat.ValidationFunction
+  name: ValidationFunction
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_ValidationFunction
+  commentId: P:Manatee.Json.Schema.StringFormat.ValidationFunction
+  fullName: Manatee.Json.Schema.StringFormat.ValidationFunction
+  nameWithType: StringFormat.ValidationFunction
+- uid: Manatee.Json.Schema.StringFormat.ValidationFunction*
+  name: ValidationFunction
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_ValidationFunction_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.ValidationFunction
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.StringFormat.ValidationFunction
+  nameWithType: StringFormat.ValidationFunction
+- uid: Manatee.Json.Schema.StringFormat.ValidationRegex
+  name: ValidationRegex
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_ValidationRegex
+  commentId: P:Manatee.Json.Schema.StringFormat.ValidationRegex
+  fullName: Manatee.Json.Schema.StringFormat.ValidationRegex
+  nameWithType: StringFormat.ValidationRegex
+- uid: Manatee.Json.Schema.StringFormat.ValidationRegex*
+  name: ValidationRegex
+  href: api/Manatee.Json.Schema.StringFormat.html#Manatee_Json_Schema_StringFormat_ValidationRegex_
+  commentId: Overload:Manatee.Json.Schema.StringFormat.ValidationRegex
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.StringFormat.ValidationRegex
+  nameWithType: StringFormat.ValidationRegex
 - uid: Manatee.Json.Schema.ThenKeyword
   name: ThenKeyword
   href: api/Manatee.Json.Schema.ThenKeyword.html

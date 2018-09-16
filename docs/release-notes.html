@@ -62,7 +62,8 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="1000">10.0.0</h1>
 
-<p><em>Released on XXXXXXXXXXXXXXXXXXXXXXXXXX</em></p>
+<p><em>Preview <del>2</del> 3 released on 17 Sep, 2018</em>
+<em>Preview 1 released on 16 Sep, 2018</em></p>
 <p><span id="break">breaking change</span> <span id="feature">feature</span></p>
 <h2 id="summary">Summary</h2>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/147">#147</a>) Updated how custom serialization is handled.  Rather than registering independent methods (<code>CustomSerializations</code>), custom sub-serializer implementations that each handle specific scenarios can be registered.  Each implementation specifies whether it can handle the (de)serialization based on the expected type, the serializer options, and (for deserialization, specifically) the JSON value.  It will also specify whether it should maintain referential integrity.</p>
@@ -74,6 +75,7 @@
 </ul>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/112">#112</a>) Another change intended to support JSON Schem draft-08 is a <a href="https://github.com/json-schema-org/json-schema-spec/issues/643">standardized output format</a>.  The validation results have been restructured to conform to this proposal.</p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/132">#132</a>) Updated parsing errors to report locations using JSON Pointer instead of JSON Path.  This is more appropriate since pointers identify a single location whereas paths are technically queries that can match multiple locations.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/177">#177</a>) Opened up the <code>StringFormat</code> class (schema <code>format</code> keyword) for extension and customization.</p>
 <h2 id="changes">Changes</h2>
 <p><em>In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.</em></p>
 <ul>
