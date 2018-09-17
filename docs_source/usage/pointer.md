@@ -76,3 +76,7 @@ var results = pointer.Evaluate(sample);
 This will return a PointerEvaluationResults object with `results.Value` equal to the JsonValue `0`.
 
 In the case a path does not exist, the `results.Error` property will contain the path as far as the first segment that was missing.  For example, the path `foo/0/notFound/dn` would return an error with the path `foo/0/notFound`.
+
+### Additional support
+
+In addition to the syntax described above, this implementation is `#`-tolerant to support the URI fragment pointers used by the `$ref` keywords in JSON Schema.  `JsonPointer.Parse()` will remember whether a `#` was used and will include it when stringifying it.  The `#` will *not* be included as a segment in the path, however.

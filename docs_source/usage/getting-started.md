@@ -123,7 +123,7 @@ There are two methods that create output:  `ToString()`, which simply outputs th
 
 ## Handling Errors
 
-While parsing JSON data (through either the `JsonObject` constructor or `JsonValue.Parse()`), errors may occur.  These errors will be reported by throwing a `JsonSyntaxException`.  This exception exposes a Path property which contains a path to the error in [JSONPath syntax](path.html).  The messaging has been designed to direct the user directly to the error.
+While parsing JSON data (through either the `JsonObject` constructor or `JsonValue.Parse()`), errors may occur.  These errors will be reported by throwing a `JsonSyntaxException`.  This exception exposes a `Location` property which contains a path to the error in [JSON Pointer syntax](pointer.html).  The messaging has been designed to direct the user directly to the error.
 
 Here are a few examples:
 
@@ -150,6 +150,6 @@ Here are a few examples:
     </tr>
 </table>
 
-As shown, the error message will give information as to what went wrong and where the error occurred.  The location is given in [JSONPath](http://goessner.net/articles/JsonPath/) notation.  In the last example, the key could not be determined from the input, so it gave the last-recognized key.
+As shown, the error message will give information as to what went wrong and where the error occurred.  The location is given in [JSON Pointer](https://tools.ietf.org/html/rfc6901) notation.  In the last example, the key could not be determined from the input, so it gave the last-recognized key.
 
 `JsonValue.Parse()` will fail quickly at the first error.

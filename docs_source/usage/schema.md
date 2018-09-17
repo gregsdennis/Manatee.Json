@@ -102,13 +102,13 @@ To ensure that this is the case, call the `ValidateSchema()` method.  This will 
 
 ```json 
 {
-    "properties":{
-        "myProperty":{
-            "type":"string",
-            "minLength":10
-        }
-    },
-    "required":["myProperty"]
+  "properties":{
+    "myProperty":{
+      "type":"string",
+      "minLength":10
+    }
+  },
+  "required":["myProperty"]
 }
 
 {}
@@ -121,7 +121,7 @@ To ensure that this is the case, call the `ValidateSchema()` method.  This will 
 To validate these, all we have to do is pass these into our schema's `Validate(JsonValue)` method.
 
 ```csharp
-var schema = new JsonSchema(); // defines the schema we have listed above.
+var schema = GetSchema(); // defines the schema we created above.
 var emptyJson = new JsonObject();
 var booleanJson = new JsonObject { {"myProperty", false} };
 var stringJson = new JsonObject { {"myProperty", "some string"} };
