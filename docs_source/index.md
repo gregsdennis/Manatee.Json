@@ -77,15 +77,16 @@ Manatee.Json also:
     - Draft 7
     - Native object model
     - Customizable JSON Schema validation errors
+    - User-defined keywords
 - Supports [JSONPath](http://goessner.net/articles/JsonPath/)
     - Native object model
     - Compile-time checking
 - Supports [JsonPatch](http://jsonpatch.com/) (with object model)
+- Supports [JSON Pointer](https://tools.ietf.org/html/rfc6901) (with object model)
 - Is fully LINQ-compatible
 - Converts between JSON and XML
-- Reports parsing errors using JSONPath to identify location
+- Reports parsing errors using JSON Pointer to identify location
 - Supports streamed parsing
-- Customizable JSON Schema validation errors
 - Is fully open-source under the MIT license
 
 Serialization features:
