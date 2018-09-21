@@ -19,8 +19,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			if (Equals(context.Source, context.InferredType.Default()) &&
-			    !context.RootSerializer.Options.EncodeDefaultValues) return JsonValue.Null;
+			if (Equals(context.Source, context.RequestedType.Default()) &&
+			    !context.RootSerializer.Options.EncodeDefaultValues)
+				return JsonValue.Null;
+
 			return _innerSerializer.Serialize(context);
 		}
 		public object Deserialize(SerializationContext context)

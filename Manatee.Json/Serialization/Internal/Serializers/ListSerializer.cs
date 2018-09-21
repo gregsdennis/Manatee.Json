@@ -17,7 +17,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var array = new JsonValue[list.Count];
 			for (int i = 0; i < array.Length; i++)
 			{
-				array[i] = context.RootSerializer.Serialize(list[i]);
+				var newContext = new SerializationContext
+					{
+						RootSerializer = context.RootSerializer,
+						JsonRoot = context.JsonRoot,
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = list[i]?.GetType() ?? typeof(T),
+						RequestedType = typeof(T),
+						Source = list[i]
+					};
+
+				array[i] = context.RootSerializer.Serialize(newContext);
 			}
 			return new JsonArray(array);
 		}
@@ -27,7 +37,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var list = new List<T>(array.Count);
 			for (int i = 0; i < array.Count; i++)
 			{
-				list.Add(context.RootSerializer.Deserialize<T>(array[i]));
+				var newContext = new SerializationContext
+					{
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = typeof(T),
+						RequestedType = typeof(T),
+						LocalValue = array[i],
+						RootSerializer = context.RootSerializer,
+						JsonRoot = context.JsonRoot
+					};
+				list.Add((T) context.RootSerializer.Deserialize(newContext));
 			}
 			return list;
 		}

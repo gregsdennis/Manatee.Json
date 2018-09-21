@@ -15,8 +15,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static JsonValue _Encode(SerializationContext context)
 		{
 			var dict = (IDictionary<string, object>)context.Source;
-			return dict.ToDictionary(kvp => kvp.Key, kvp => context.RootSerializer.Serialize<dynamic>(kvp.Value))
-			           .ToJson();
+			return dict.ToDictionary(kvp => kvp.Key, kvp =>
+					{
+						var newContext = new SerializationContext
+							{
+								RootSerializer = context.RootSerializer,
+								JsonRoot = context.JsonRoot,
+								CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
+								InferredType = kvp.Value?.GetType() ?? typeof(object),
+								RequestedType = typeof(object),
+								Source = kvp.Value
+							};
+
+						return context.RootSerializer.Serialize(newContext);
+					}).ToJson();
 		}
 		private static ExpandoObject _Decode(SerializationContext context)
 		{

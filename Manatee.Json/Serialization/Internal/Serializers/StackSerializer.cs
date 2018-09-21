@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,7 +18,18 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var values = new JsonValue[stack.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[i] = context.RootSerializer.Serialize(stack.ElementAt(i));
+				var element = stack.ElementAt(i);
+				var newContext = new SerializationContext
+					{
+						RootSerializer = context.RootSerializer,
+						JsonRoot = context.JsonRoot,
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = element?.GetType() ?? typeof(T),
+						RequestedType = typeof(T),
+						Source = element
+				};
+
+				values[i] = context.RootSerializer.Serialize(newContext);
 			}
 			return new JsonArray(values);
 		}
@@ -29,7 +39,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var values = new T[array.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[i] = context.RootSerializer.Deserialize<T>(array[i]);
+				var newContext = new SerializationContext
+					{
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = typeof(T),
+						RequestedType = typeof(T),
+						LocalValue = array[i],
+						RootSerializer = context.RootSerializer,
+						JsonRoot = context.JsonRoot
+					};
+				values[i] = (T)context.RootSerializer.Deserialize(newContext);
 			}
 			return new Stack<T>(values);
 		}

@@ -36,8 +36,8 @@ namespace Manatee.Json.Serialization
 	public class SerializationContext
 	{
 		public JsonSerializer RootSerializer { get; set; }
-		public Type RequestedType { get; set; }
 		public Type InferredType { get; set; }
+		public Type RequestedType { get; set; }
 		public JsonPointer CurrentLocation { get; set; }
 		public JsonValue JsonRoot { get; set; }
 		public JsonValue LocalValue { get; set; }

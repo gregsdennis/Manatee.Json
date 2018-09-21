@@ -31,7 +31,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);
 			var attributes = type.GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
-			if (attributes.Any()) return _BuildFlagsValues(context.Source, context.RootSerializer.Options);
+			if (attributes.Any()) return _BuildFlagsValues(context.InferredType, context.Source, context.RootSerializer.Options);
 
 			var entry = _descriptions[type].FirstOrDefault(d => Equals(d.Value, context.Source));
 			if (entry != null) return entry.String;
@@ -81,9 +81,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var attributes = memInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
 			return attributes.Any() ? ((DisplayAttribute) attributes.First()).Description : name;
 		}
-		private static string _BuildFlagsValues<T>(T obj, JsonSerializerOptions options)
+		private static string _BuildFlagsValues(Type type, object obj, JsonSerializerOptions options)
 		{
-			var descriptions = _descriptions[typeof (T)];
+			var descriptions = _descriptions[type];
 			var value = Convert.ToInt64(obj);
 			var index = descriptions.Count - 1;
 			var names = new List<string>();

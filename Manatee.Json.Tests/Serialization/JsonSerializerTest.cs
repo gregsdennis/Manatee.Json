@@ -481,25 +481,30 @@ namespace Manatee.Json.Tests.Serialization
 				};
 			var obj2 = new ObjectWithExtendedProps
 				{
-					StringProp = "stringValue",
-					IntProp = 42,
+					StringProp = "stringValue2",
+					IntProp = 43,
 					BoolProp = true,
 					LoopProperty = obj
 				};
 			obj.LoopProperty = obj2;
 
+			JsonValue expected = new JsonObject
+				{
+					["StringProp"] = "stringValue",
+					["IntProp"] = 42,
+					["BoolProp"] = true,
+					["LoopProperty"] = new JsonObject
+						{
+							["StringProp"] = "stringValue2",
+							["IntProp"] = 43,
+							["BoolProp"] = true,
+							["LoopProperty"] = new JsonObject {["$ref"] = "#"}
+						}
+				};
+
 			var actual = serializer.Serialize(obj);
 
-			Assert.IsNotNull(actual);
-			Assert.AreEqual(JsonValueType.Object, actual.Type);
-			Assert.IsTrue(actual.Object.ContainsKey("#Def"));
-			Assert.IsTrue(actual.Object.ContainsKey("LoopProperty"));
-			Assert.AreEqual(JsonValueType.Object, actual.Object["LoopProperty"].Type);
-			Assert.IsTrue(actual.Object["LoopProperty"].Object.ContainsKey("LoopProperty"));
-			Assert.AreEqual(JsonValueType.Object, actual.Object["LoopProperty"].Object["LoopProperty"].Type);
-			Assert.IsTrue(actual.Object["LoopProperty"].Object["LoopProperty"].Object.ContainsKey("#Ref"));
-			Assert.AreEqual(actual.Object["#Def"], actual.Object["LoopProperty"].Object["LoopProperty"].Object["#Ref"]);
-			Assert.AreEqual(0, serializer.SerializationMap.Count);
+			Assert.AreEqual(expected, actual);
 		}
 		[Test]
 		public void Fields()

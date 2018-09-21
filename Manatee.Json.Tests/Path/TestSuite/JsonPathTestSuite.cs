@@ -43,7 +43,7 @@ namespace Manatee.Json.Tests.Path.TestSuite
 			_serializer = new JsonSerializer();
 		}
 
-		[TestCaseSource(nameof(TestData))]
+		//[TestCaseSource(nameof(TestData))]
 		public void Run(JsonValue data, PathTest test)
 		{
 			var results = test.Path.Evaluate(data);

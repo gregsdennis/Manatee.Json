@@ -39,7 +39,15 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			return Serialize(obj?.GetType() ?? typeof(T), obj);
+			var context = new SerializationContext
+				{
+					InferredType = obj?.GetType() ?? typeof(T),
+					RequestedType = typeof(T),
+					RootSerializer = this,
+					CurrentLocation = new JsonPointer("#"),
+					Source = obj
+				};
+			return Serialize(context);
 		}
 		/// <summary>
 		/// Serializes an object to a JSON structure.
@@ -49,15 +57,20 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize(Type type, object obj)
 		{
-			_callCount++;
 			var context = new SerializationContext
 				{
 					InferredType = type,
 					RequestedType = type,
 					RootSerializer = this,
-					CurrentLocation = new JsonPointer(),
+					CurrentLocation = new JsonPointer("#"),
 					Source = obj
 				};
+			return Serialize(context);
+		}
+
+		internal JsonValue Serialize(SerializationContext context)
+		{
+			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
 			var json = serializer.Serialize(context);
 			if (--_callCount == 0)
@@ -111,16 +124,22 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public object Deserialize(Type type, JsonValue json)
 		{
-			_callCount++;
 			var context = new SerializationContext
 				{
 					InferredType = type,
 					RequestedType = type,
 					RootSerializer = this,
-					CurrentLocation = new JsonPointer(),
+					CurrentLocation = new JsonPointer("#"),
 					JsonRoot = json,
 					LocalValue = json
 				};
+
+			return Deserialize(context);
+		}
+
+		internal object Deserialize(SerializationContext context)
+		{
+			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
 			var obj = serializer.Deserialize(context);
 			if (--_callCount == 0)
@@ -129,6 +148,7 @@ namespace Manatee.Json.Serialization
 			}
 			return obj;
 		}
+
 		/// <summary>
 		/// Deserializes a JSON structure to the public static properties of a type.
 		/// </summary>

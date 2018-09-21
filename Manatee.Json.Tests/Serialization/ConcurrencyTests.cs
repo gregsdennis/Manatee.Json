@@ -17,11 +17,6 @@ namespace Manatee.Json.Tests.Serialization
 			public string Value2 { get; set; }
 		}
 
-		private static Task _RunConcurrently(Action action1, Action action2)
-		{
-			return Task.WhenAll(Task.Run(action1), Task.Run(action2));
-		}
-
 		private static Task<T[]> _RunConcurrently<T>(Func<T> action1, Func<T> action2)
 		{
 			return Task.WhenAll(Task.Run(action1), Task.Run(action2));

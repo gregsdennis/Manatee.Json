@@ -32,7 +32,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					var result = new ExpandoObject() as IDictionary<string, object>;
 					foreach (var kvp in context.LocalValue.Object)
 					{
-						result[kvp.Key] = context.RootSerializer.Deserialize<object>(kvp.Value);
+						var newContext = new SerializationContext
+							{
+								CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
+								InferredType = typeof(object),
+								RequestedType = typeof(object),
+								LocalValue = kvp.Value,
+								RootSerializer = context.RootSerializer,
+								JsonRoot = context.JsonRoot
+							};
+						result[kvp.Key] = context.RootSerializer.Deserialize(newContext);
 					}
 					return result;
 				case JsonValueType.Null:
