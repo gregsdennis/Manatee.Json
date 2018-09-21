@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Pointer;
+﻿using System;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
@@ -38,11 +39,21 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
+			return Serialize(obj?.GetType() ?? typeof(T), obj);
+		}
+		/// <summary>
+		/// Serializes an object to a JSON structure.
+		/// </summary>
+		/// <param name="type">The type of the object to serialize.</param>
+		/// <param name="obj">The object to serialize.</param>
+		/// <returns>The JSON representation of the object.</returns>
+		public JsonValue Serialize(Type type, object obj)
+		{
 			_callCount++;
-			var context = new SerializationContext<T>
+			var context = new SerializationContext
 				{
-					InferredType = obj?.GetType() ?? typeof(T),
-					RequestedType = typeof(T),
+					InferredType = type,
+					RequestedType = type,
 					RootSerializer = this,
 					CurrentLocation = new JsonPointer(),
 					Source = obj
@@ -87,17 +98,31 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public T Deserialize<T>(JsonValue json)
 		{
+			return (T) Deserialize(typeof(T), json);
+		}
+		/// <summary>
+		/// Deserializes a JSON structure to an object of the appropriate type.
+		/// </summary>
+		/// <param name="type">The type of the object that the JSON structure represents.</param>
+		/// <param name="json">The JSON representation of the object.</param>
+		/// <returns>The deserialized object.</returns>
+		/// <exception cref="TypeDoesNotContainPropertyException">Optionally thrown during automatic
+		/// deserialization when the JSON contains a property which is not defined by the requested
+		/// type.</exception>
+		public object Deserialize(Type type, JsonValue json)
+		{
 			_callCount++;
-			var context = new SerializationContext<JsonValue>
+			var context = new SerializationContext
 				{
-					InferredType = typeof(T),
-					RequestedType = typeof(T),
+					InferredType = type,
+					RequestedType = type,
 					RootSerializer = this,
 					CurrentLocation = new JsonPointer(),
-					Source = json
+					JsonRoot = json,
+					LocalValue = json
 				};
 			var serializer = SerializerFactory.GetSerializer(context);
-			var obj = serializer.Deserialize<T>(context);
+			var obj = serializer.Deserialize(context);
 			if (--_callCount == 0)
 			{
 				SerializationMap.Clear();

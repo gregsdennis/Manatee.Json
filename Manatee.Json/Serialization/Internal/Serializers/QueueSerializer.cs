@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,21 +12,22 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Queue<>);
 		}
 
-		private static JsonValue _Encode<T>(Queue<T> queue, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext context)
 		{
+			var queue = (Queue<T>) context.Source;
 			var array = new JsonArray();
 			for (int i = 0; i < queue.Count; i++)
 			{
-				array.Add(serializer.Serialize(queue.ElementAt(i)));
+				array.Add(context.RootSerializer.Serialize(queue.ElementAt(i)));
 			}
 			return array;
 		}
-		private static Queue<T> _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static Queue<T> _Decode<T>(SerializationContext context)
 		{
 			var queue = new Queue<T>();
-			for (int i = 0; i < json.Array.Count; i++)
+			for (int i = 0; i < context.LocalValue.Array.Count; i++)
 			{
-				queue.Enqueue(serializer.Deserialize<T>(json.Array[i]));
+				queue.Enqueue(context.RootSerializer.Deserialize<T>(context.LocalValue.Array[i]));
 			}
 			return queue;
 		}

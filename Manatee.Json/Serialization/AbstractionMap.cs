@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization.Internal;
 
@@ -122,24 +123,29 @@ namespace Manatee.Json.Serialization
 			return type;
 		}
 
-		internal T CreateInstance<T>(JsonValue json, IResolver resolver)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal object CreateInstance(SerializationContext context)
 		{
-			var typeInfo = typeof(T).GetTypeInfo();
-			var resolveSlow = typeInfo.IsAbstract || typeInfo.IsInterface || typeInfo.IsGenericType;
-			return resolveSlow
-				       ? _ResolveSlow<T>(json, resolver)
-				       : resolver.Resolve<T>();
+			return CreateInstance(context.InferredType, context.LocalValue, context.RootSerializer.Options.Resolver);
 		}
 
-		private T _ResolveSlow<T>(JsonValue json, IResolver resolver)
+		internal object CreateInstance(Type type, JsonValue json, IResolver resolver)
+		{
+			var typeInfo = type.GetTypeInfo();
+			var resolveSlow = typeInfo.IsAbstract || typeInfo.IsInterface || typeInfo.IsGenericType;
+			return resolveSlow
+				       ? _ResolveSlow(type, json, resolver)
+				       : resolver.Resolve(type);
+		}
+
+		private object _ResolveSlow(Type type, JsonValue json, IResolver resolver)
 		{
 			if (json != null && json.Type == JsonValueType.Object && json.Object.ContainsKey(Constants.TypeKey))
 			{
 				var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
-				return (T)resolver.Resolve(concrete);
+				return resolver.Resolve(concrete);
 			}
 
-			var type = typeof(T);
 			if (!_registry.TryGetValue(type, out Type tConcrete))
 			{
 				if (type.GetTypeInfo().IsGenericType)
@@ -150,14 +156,14 @@ namespace Manatee.Json.Serialization
 			if (tConcrete != null)
 			{
 				if (tConcrete.GetTypeInfo().IsGenericTypeDefinition)
-					tConcrete = tConcrete.MakeGenericType(typeof(T).GetTypeArguments());
-				return (T)resolver.Resolve(tConcrete);
+					tConcrete = tConcrete.MakeGenericType(type.GetTypeArguments());
+				return resolver.Resolve(tConcrete);
 			}
 
 			if (type.GetTypeInfo().IsInterface)
-				return TypeGenerator.Generate<T>();
+				return TypeGenerator.Generate(type);
 
-			return resolver.Resolve<T>();
+			return resolver.Resolve(type);
 		}
 
 		private void _MapTypes(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior)

@@ -15,14 +15,15 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			        context.InferredType.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>)));
 		}
 
-		private static JsonValue _Encode<TKey, TValue>(SerializationContext<Dictionary<TKey, TValue>> context)
+		private static JsonValue _Encode<TKey, TValue>(SerializationContext context)
 		{
+			var dict = (Dictionary<TKey, TValue>) context.Source;
 			var existingOption = context.RootSerializer.Options.EncodeDefaultValues;
 			var useDefaultValue = existingOption || typeof(TValue).GetTypeInfo().IsValueType;
 			if (typeof(TKey) == typeof(string))
 			{
 				var output = new Dictionary<string, JsonValue>();
-				foreach (var kvp in context.Source)
+				foreach (var kvp in dict)
 				{
 					var value = _SerializeDefaultValue(context.RootSerializer, kvp.Value, useDefaultValue, existingOption);
 					output.Add((string)(object)kvp.Key, value);
@@ -32,9 +33,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 
 			if (typeof(Enum).GetTypeInfo().IsAssignableFrom(typeof(TKey).GetTypeInfo()))
-				return _EncodeEnumKeyDictionary(context.Source, context.RootSerializer, useDefaultValue, existingOption);
+				return _EncodeEnumKeyDictionary(dict, context.RootSerializer, useDefaultValue, existingOption);
 
-			return _EncodeDictionary(context.Source, context.RootSerializer, useDefaultValue, existingOption);
+			return _EncodeDictionary(dict, context.RootSerializer, useDefaultValue, existingOption);
 		}
 		private static JsonValue _EncodeDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, JsonSerializer serializer, bool useDefaultValue, bool existingOption)
 		{
@@ -69,17 +70,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return output.ToJson();
 		}
-		private static Dictionary<TKey, TValue> _Decode<TKey, TValue>(JsonValue json, JsonSerializer serializer)
+
+		private static Dictionary<TKey, TValue> _Decode<TKey, TValue>(SerializationContext context)
 		{
+			var json = context.LocalValue;
+
 			if (typeof(TKey) == typeof(string))
 				return json.Object.ToDictionary(kvp => (TKey)(object)kvp.Key,
-												kvp => serializer.Deserialize<TValue>(kvp.Value));
+												kvp => context.RootSerializer.Deserialize<TValue>(kvp.Value));
 
 			if (typeof(Enum).GetTypeInfo().IsAssignableFrom(typeof(TKey).GetTypeInfo()))
-				return _DecodeEnumDictionary<TKey, TValue>(json, serializer);
+				return _DecodeEnumDictionary<TKey, TValue>(json, context.RootSerializer);
 
-			return json.Array.ToDictionary(jv => serializer.Deserialize<TKey>(jv.Object["Key"]),
-			                               jv => serializer.Deserialize<TValue>(jv.Object["Value"]));
+			return json.Array.ToDictionary(jv => context.RootSerializer.Deserialize<TKey>(jv.Object["Key"]),
+			                               jv => context.RootSerializer.Deserialize<TValue>(jv.Object["Value"]));
 		}
 		private static Dictionary<TKey, TValue> _DecodeEnumDictionary<TKey, TValue>(JsonValue json, JsonSerializer serializer)
 		{

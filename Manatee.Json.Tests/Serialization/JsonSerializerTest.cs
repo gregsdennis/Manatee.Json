@@ -255,14 +255,14 @@ namespace Manatee.Json.Tests.Serialization
 					{
 						"AbstractProp", new JsonObject
 							{
-								{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+								{"$type", typeof (DerivedClass).AssemblyQualifiedName},
 								{"SomeProp", 42}
 							}
 					},
 					{
 						"InterfaceProp", new JsonObject
 							{
-								{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+								{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
 								{"RequiredProp", "test comparable"}
 							}
 					}
@@ -281,7 +281,7 @@ namespace Manatee.Json.Tests.Serialization
 				};
 			JsonValue expected = new JsonObject
 				{
-					{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+					{"$type", typeof (DerivedClass).AssemblyQualifiedName},
 					{"SomeProp", 42},
 					{"NewProp", "test"}
 				};
@@ -296,7 +296,7 @@ namespace Manatee.Json.Tests.Serialization
 			IInterface obj = new ImplementationClass {RequiredProp = "test"};
 			JsonValue expected = new JsonObject
 				{
-					{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+					{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
 					{"RequiredProp", "test"}
 				};
 
@@ -556,7 +556,7 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			JsonValue expected = new JsonObject
 				{
-					{"#Type", typeof(ObjectWithBasicProps).AssemblyQualifiedName},
+					{"$type", typeof(ObjectWithBasicProps).AssemblyQualifiedName},
 					{"StringProp", "string"},
 					{"IntProp", 5},
 					{"DoubleProp", 10},

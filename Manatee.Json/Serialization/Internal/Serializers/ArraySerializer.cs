@@ -14,18 +14,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return new[] { type.GetElementType() };
 		}
 
-		private static JsonValue _Encode<T>(SerializationContext<T[]> context)
+		private static JsonValue _Encode<T>(SerializationContext context)
 		{
-			var values = new JsonValue[context.Source.Length];
-			for (int i = 0; i < context.Source.Length; i++)
+			var array = (T[]) context.Source;
+			var values = new JsonValue[array.Length];
+			for (int i = 0; i < array.Length; i++)
 			{
-				values[i] = context.RootSerializer.Serialize(context.Source[i]);
+				values[i] = context.RootSerializer.Serialize(array[i]);
 			}
 			return new JsonArray(values);
 		}
-		private static T[] _Decode<T>(SerializationContext<JsonValue> context)
+		private static T[] _Decode<T>(SerializationContext context)
 		{
-			var array = context.Source.Array;
+			var array = context.LocalValue.Array;
 			var values = new T[array.Count];
 			for (int i = 0; i < array.Count; i++)
 			{

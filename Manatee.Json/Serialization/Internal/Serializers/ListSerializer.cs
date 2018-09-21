@@ -11,22 +11,23 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition() == typeof(List<>);
 		}
 
-		private static JsonValue _Encode<T>(SerializationContext<List<T>> context)
+		private static JsonValue _Encode<T>(SerializationContext context)
 		{
-			var array = new JsonValue[context.Source.Count];
-			for (int ii = 0; ii < array.Length; ++ii)
+			var list = (List<T>) context.Source;
+			var array = new JsonValue[list.Count];
+			for (int i = 0; i < array.Length; i++)
 			{
-				array[ii] = context.RootSerializer.Serialize(context.Source[ii]);
+				array[i] = context.RootSerializer.Serialize(list[i]);
 			}
 			return new JsonArray(array);
 		}
-		private static List<T> _Decode<T>(SerializationContext<JsonValue> context)
+		private static List<T> _Decode<T>(SerializationContext context)
 		{
-			var array = context.Source.Array;
+			var array = context.LocalValue.Array;
 			var list = new List<T>(array.Count);
-			for (int ii = 0; ii < array.Count; ++ii)
+			for (int i = 0; i < array.Count; i++)
 			{
-				list.Add(context.RootSerializer.Deserialize<T>(array[ii]));
+				list.Add(context.RootSerializer.Deserialize<T>(array[i]));
 			}
 			return list;
 		}

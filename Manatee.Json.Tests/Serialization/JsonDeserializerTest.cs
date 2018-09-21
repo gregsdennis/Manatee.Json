@@ -162,14 +162,14 @@ namespace Manatee.Json.Tests.Serialization
 					{
 						"AbstractProp", new JsonObject
 							{
-								{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+								{"$type", typeof (DerivedClass).AssemblyQualifiedName},
 								{"SomeProp", 42}
 							}
 					},
 					{
 						"InterfaceProp", new JsonObject
 							{
-								{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+								{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
 								{"RequiredProp", "test"}
 							}
 					}
@@ -207,7 +207,7 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
-					{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+					{"$type", typeof (DerivedClass).AssemblyQualifiedName},
 					{"SomeProp", 42},
 					{"NewProp", "test"}
 				};
@@ -245,7 +245,7 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			JsonValue json = new JsonObject
 				{
-					{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+					{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
 					{"RequiredProp", "test"}
 				};
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};

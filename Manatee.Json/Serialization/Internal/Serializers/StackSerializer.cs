@@ -13,18 +13,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Stack<>);
 		}
 
-		private static JsonValue _Encode<T>(SerializationContext<Stack<T>> context)
+		private static JsonValue _Encode<T>(SerializationContext context)
 		{
-			var values = new JsonValue[context.Source.Count];
+			var stack = (Stack<T>) context.Source;
+			var values = new JsonValue[stack.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[i] = context.RootSerializer.Serialize(context.Source.ElementAt(i));
+				values[i] = context.RootSerializer.Serialize(stack.ElementAt(i));
 			}
 			return new JsonArray(values);
 		}
-		private static Stack<T> _Decode<T>(SerializationContext<JsonValue> context)
+		private static Stack<T> _Decode<T>(SerializationContext context)
 		{
-			var array = context.Source.Array;
+			var array = context.LocalValue.Array;
 			var values = new T[array.Count];
 			for (int i = 0; i < values.Length; i++)
 			{

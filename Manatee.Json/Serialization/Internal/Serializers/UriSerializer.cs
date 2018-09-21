@@ -12,15 +12,15 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return context.InferredType == typeof(Uri);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
 			var uri = context.Source as Uri;
 
 			return uri?.OriginalString;
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			return (T) (object) new Uri(context.Source.String);
+			return context.LocalValue == null ? null : new Uri(context.LocalValue.String);
 		}
 	}
 }

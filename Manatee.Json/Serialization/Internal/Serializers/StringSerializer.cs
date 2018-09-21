@@ -10,13 +10,13 @@
 		{
 			return context.InferredType == typeof(string);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
 			return context.Source as string;
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			return (T) (object)context.Source.String;
+			return context.LocalValue.String;
 		}
 	}
 }

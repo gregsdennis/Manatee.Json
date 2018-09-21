@@ -24,9 +24,8 @@ namespace Manatee.Json.Serialization.Internal
 			_cache = new Dictionary<Type, TypeInfo>();
 		}
 
-		public static T Generate<T>()
+		public static object Generate(Type type)
 		{
-			var type = typeof (T);
 			if (!_cache.TryGetValue(type, out TypeInfo concreteType))
 			{
 				var typeInfo = type.GetTypeInfo();
@@ -43,13 +42,13 @@ namespace Manatee.Json.Serialization.Internal
 													$"to assembly '{assembly.FullName}'.");
 				}
 				var typeBuilder = _CreateTypeBuilder(type);
-				_ImplementProperties<T>(typeBuilder);
-				_ImplementMethods<T>(typeBuilder);
-				_ImplementEvents<T>(typeBuilder);
+				_ImplementProperties(type, typeBuilder);
+				_ImplementMethods(type, typeBuilder);
+				_ImplementEvents(type, typeBuilder);
 				concreteType = typeBuilder.CreateTypeInfo();
 				_cache.Add(type, concreteType);
 			}
-			return (T) _ConstructInstance(concreteType.AsType());
+			return _ConstructInstance(concreteType.AsType());
 		}
 
 		private static TypeBuilder _CreateTypeBuilder(Type type)
@@ -62,9 +61,8 @@ namespace Manatee.Json.Serialization.Internal
 			typeBuilder.AddInterfaceImplementation(type);
 			return typeBuilder;
 		}
-		private static void _ImplementProperties<T>(TypeBuilder builder)
+		private static void _ImplementProperties(Type interfaceType, TypeBuilder builder)
 		{
-			var interfaceType = typeof (T);
 			var properties = _GetAllProperties(interfaceType);
 			foreach (var propertyInfo in properties)
 			{
@@ -109,9 +107,8 @@ namespace Manatee.Json.Serialization.Internal
 				builder.DefineMethodOverride(methodBuilder, propertyInfo.SetMethod);
 			}
 		}
-		private static void _ImplementMethods<T>(TypeBuilder builder)
+		private static void _ImplementMethods(Type interfaceType, TypeBuilder builder)
 		{
-			var interfaceType = typeof(T);
 			var methods = _GetAllMethods(interfaceType);
 			foreach (var methodInfo in methods)
 			{
@@ -155,9 +152,8 @@ namespace Manatee.Json.Serialization.Internal
 			il.Emit(OpCodes.Ldloc_0);
 			il.Emit(OpCodes.Ret);
 		}
-		private static void _ImplementEvents<T>(TypeBuilder builder)
+		private static void _ImplementEvents(Type interfaceType, TypeBuilder builder)
 		{
-			var interfaceType = typeof(T);
 			var events = _GetAllEvents(interfaceType);
 			foreach (var eventInfo in events)
 			{

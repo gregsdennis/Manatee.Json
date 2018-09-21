@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -14,9 +13,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return context.InferredType == typeof(DateTime);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var dt = (DateTime) (object) context.Source;
+			var dt = (DateTime) context.Source;
 			if (context.RootSerializer.Options == null)
 				return dt.ToString();
 			switch (context.RootSerializer.Options.DateTimeSerializationFormat)
@@ -33,20 +32,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
 			if (context.RootSerializer.Options == null)
-				return (T)(object) DateTime.Parse(context.Source.String);
+				return DateTime.Parse(context.LocalValue.String);
 			switch (context.RootSerializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.Iso8601:
-					return (T)(object)DateTime.Parse(context.Source.String);
+					return DateTime.Parse(context.LocalValue.String);
 				case DateTimeSerializationFormat.JavaConstructor:
-					return (T)(object)new DateTime(long.Parse(context.Source.String.Substring(6, context.Source.String.Length - 8)) * TimeSpan.TicksPerMillisecond);
+					return new DateTime(long.Parse(context.LocalValue.String.Substring(6, context.LocalValue.String.Length - 8)) * TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Milliseconds:
-					return (T)(object)new DateTime((long)context.Source.Number * TimeSpan.TicksPerMillisecond);
+					return new DateTime((long)context.LocalValue.Number * TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Custom:
-					return (T)(object)DateTime.ParseExact(context.Source.String, context.RootSerializer.Options.CustomDateTimeSerializationFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
+					return DateTime.ParseExact(context.LocalValue.String, context.RootSerializer.Options.CustomDateTimeSerializationFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

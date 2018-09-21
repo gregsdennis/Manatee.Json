@@ -12,25 +12,25 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return context.InferredType == typeof(object);
 		}
 
-		private static JsonValue _Encode(SerializationContext<object> context)
+		private static JsonValue _Encode(SerializationContext context)
 		{
 			throw new NotImplementedException();
 		}
-		private static object _Decode(SerializationContext<JsonValue> context)
+		private static object _Decode(SerializationContext context)
 		{
-			switch (context.Source.Type)
+			switch (context.LocalValue.Type)
 			{
 				case JsonValueType.Number:
-					return context.Source.Number;
+					return context.LocalValue.Number;
 				case JsonValueType.String:
-					return context.Source.String;
+					return context.LocalValue.String;
 				case JsonValueType.Boolean:
-					return context.Source.Boolean;
+					return context.LocalValue.Boolean;
 				case JsonValueType.Array:
-					return context.Source.Array.Select(context.RootSerializer.Deserialize<object>).ToList();
+					return context.LocalValue.Array.Select(context.RootSerializer.Deserialize<object>).ToList();
 				case JsonValueType.Object:
 					var result = new ExpandoObject() as IDictionary<string, object>;
-					foreach (var kvp in context.Source.Object)
+					foreach (var kvp in context.LocalValue.Object)
 					{
 						result[kvp.Key] = context.RootSerializer.Deserialize<object>(kvp.Value);
 					}

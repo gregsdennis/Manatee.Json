@@ -22,18 +22,15 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Serializes a value.
 		/// </summary>
-		/// <typeparam name="T">The type of the value to serialize.</typeparam>
 		/// <param name="context"></param>
 		/// <returns>A <see cref="JsonValue"/> that represents the value.</returns>
-		JsonValue Serialize<T>(SerializationContext<T> context);
+		JsonValue Serialize(SerializationContext context);
 		/// <summary>
 		/// Deserializes a <see cref="JsonValue"/> into a value.
 		/// </summary>
-		/// <typeparam name="T">The type to be deserialized.</typeparam>
 		/// <param name="context"></param>
-		/// <param name="root">The root of the serialization.  Used for reference resolution.</param>
 		/// <returns>The typed value represented by the JSON data.</returns>
-		T Deserialize<T>(SerializationContext<JsonValue> context);
+		object Deserialize(SerializationContext context);
 	}
 
 	public class SerializationContext
@@ -43,10 +40,7 @@ namespace Manatee.Json.Serialization
 		public Type InferredType { get; set; }
 		public JsonPointer CurrentLocation { get; set; }
 		public JsonValue JsonRoot { get; set; }
-	}
-
-	public class SerializationContext<T> : SerializationContext
-	{
-		public T Source { get; set; }
+		public JsonValue LocalValue { get; set; }
+		public object Source { get; set; }
 	}
 }

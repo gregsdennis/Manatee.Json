@@ -17,10 +17,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
 			var json = new JsonObject();
-			var type = typeof (T);
+			var type = context.InferredType;
 			var objectType = context.Source.GetType();
 			bool typeKeyAdded = false;
 			if (context.RootSerializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never &&
@@ -47,16 +47,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_ConstructJsonObject(json, map, serializer.Options);
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			var obj = (object)context.RootSerializer.AbstractionMap.CreateInstance<T>(context.Source, context.RootSerializer.Options.Resolver);
+			var json = context.LocalValue;
+			var obj = context.RootSerializer.AbstractionMap.CreateInstance(context);
 			var type = obj.GetType();
 			var propertyList = ReflectionCache.GetMembers(type, context.RootSerializer.Options.PropertySelectionStrategy, context.RootSerializer.Options.AutoSerializeFields);
-			var map = _DeserializeValues<object>(context.Source, context.RootSerializer, propertyList, !context.RootSerializer.Options.CaseSensitiveDeserialization);
-			if ((context.Source.Object.Count > 0) && (context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
-				throw new TypeDoesNotContainPropertyException(type, context.Source);
+			var map = _DeserializeValues(json, context.RootSerializer, propertyList, !context.RootSerializer.Options.CaseSensitiveDeserialization);
+			if ((json.Object.Count > 0) && (context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
+				throw new TypeDoesNotContainPropertyException(type, json);
 			_AssignObjectProperties(ref obj, map);
-			return (T) obj;
+			return obj;
 		}
 		public void DeserializeType<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -68,7 +69,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			object obj = null;
 			_AssignObjectProperties(ref obj, map);
 		}
-		private static Dictionary<SerializationInfo, JsonValue> _SerializeValues<T>(T obj, JsonSerializer serializer, IEnumerable<SerializationInfo> properties)
+		private static Dictionary<SerializationInfo, JsonValue> _SerializeValues<T>(T obj, JsonSerializer serializer,
+		                                                                            IEnumerable<SerializationInfo> properties)
 		{
 			var dict = new Dictionary<SerializationInfo, JsonValue>();
 			foreach (var property in properties)
@@ -91,21 +93,18 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				}
 				var json = JsonValue.Null;
 				if (value != null)
-				{
-					var serialize = SerializerCache.GetSerializeMethod(type);
-					json = (JsonValue)serialize(serializer, value);
-				}
-				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
+					json = serializer.Serialize(typeof(T), value);
+
+				if (json == JsonValue.Null && !serializer.Options.EncodeDefaultValues) continue;
 				if (serializer.Options.IncludeContentSample && json.Type == JsonValueType.Array)
-				{
 					_AddSample(type, json.Array, serializer);
-				}
 
 				dict.Add(property, json);
 			}
 			return dict;
 		}
-		private static Dictionary<SerializationInfo, JsonValue> _SerializeTypeValues(JsonSerializer serializer, IEnumerable<SerializationInfo> properties)
+		private static Dictionary<SerializationInfo, JsonValue> _SerializeTypeValues(JsonSerializer serializer, 
+		                                                                             IEnumerable<SerializationInfo> properties)
 		{
 			var dict = new Dictionary<SerializationInfo, JsonValue>();
 			foreach (var memberInfo in properties)
@@ -126,9 +125,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					if (value == null) continue;
 					type = fieldInfo.FieldType;
 				}
-				var serialize = SerializerCache.GetSerializeMethod(type);
-				var json = (JsonValue)serialize(serializer, value);
-				if ((json == JsonValue.Null) && !serializer.Options.EncodeDefaultValues) continue;
+				var json = serializer.Serialize(type, value);
+				if (json == JsonValue.Null && !serializer.Options.EncodeDefaultValues) continue;
 				dict.Add(memberInfo, json);
 			}
 			return dict;
@@ -143,8 +141,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	            json.Add(name, memberMap[memberInfo]);
 	        }
 	    }
-		private static Dictionary<SerializationInfo, object> _DeserializeValues<T>(JsonValue json, JsonSerializer serializer, IEnumerable<SerializationInfo> members,
-		                                                                           bool ignoreCase)
+		private static Dictionary<SerializationInfo, object> _DeserializeValues(JsonValue json, JsonSerializer serializer,
+		                                                                        IEnumerable<SerializationInfo> members,
+		                                                                        bool ignoreCase)
 		{
 			var dict = new Dictionary<SerializationInfo, object>();
 			foreach (var memberInfo in members)
@@ -157,19 +156,21 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (_TryGetKeyValue(json, name, ignoreCase, out var value) &&
 				    visited.Add(name))
 				{
-					Func<JsonSerializer, JsonValue, object> deserialize;
+					Type type;
 					if (memberInfo.MemberInfo is PropertyInfo info)
-						deserialize = SerializerCache.GetDeserializeMethod(info.PropertyType);
+						type = info.PropertyType;
 					else
-						deserialize = SerializerCache.GetDeserializeMethod(((FieldInfo) memberInfo.MemberInfo).FieldType);
-					var valueObj = deserialize(serializer, value);
+						type = ((FieldInfo) memberInfo.MemberInfo).FieldType;
+					var valueObj = serializer.Deserialize(type, value);
 					dict.Add(memberInfo, valueObj);
 				}
 			}
 
 			return dict;
 		}
-		private static Dictionary<SerializationInfo, object> _DeserializeTypeValues(JsonValue json, JsonSerializer serializer, IEnumerable<SerializationInfo> members, bool ignoreCase)
+		private static Dictionary<SerializationInfo, object> _DeserializeTypeValues(JsonValue json, JsonSerializer serializer,
+		                                                                            IEnumerable<SerializationInfo> members,
+		                                                                            bool ignoreCase)
 		{
 			var dict = new Dictionary<SerializationInfo, object>();
 			foreach (var memberInfo in members)
@@ -179,12 +180,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var visited = new HashSet<string>(ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
 				if (_TryGetKeyValue(json, name, ignoreCase, out var value) && visited.Add(name))
 				{
-					Func<JsonSerializer, JsonValue, object> deserialize;
+					Type type;
 					if (memberInfo.MemberInfo is PropertyInfo info)
-						deserialize = SerializerCache.GetDeserializeMethod(info.PropertyType);
+						type = info.PropertyType;
 					else
-						deserialize = SerializerCache.GetDeserializeMethod(((FieldInfo) memberInfo.MemberInfo).FieldType);
-					var valueObj = deserialize(serializer, value);
+						type = ((FieldInfo) memberInfo.MemberInfo).FieldType;
+					var valueObj = serializer.Deserialize(type, value);
 					dict.Add(memberInfo, valueObj);
 				}
 			}
@@ -254,8 +255,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var elementType = _GetElementType(type);
 			var buildMethod = TemplateGenerator.GetBuildMethod(elementType);
 			var value = buildMethod.Invoke(null, new object[] {serializer.Options});
-			var serialize = SerializerCache.GetSerializeMethod(elementType);
-			json.Add((JsonValue)serialize(serializer, value));
+			json.Add(serializer.Serialize(elementType, value));
 		}
 		private static Type _GetElementType(Type collectionType)
 		{

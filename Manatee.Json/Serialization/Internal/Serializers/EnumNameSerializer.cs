@@ -22,15 +22,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool Handles(SerializationContext context)
 		{
-			var json = (context as SerializationContext<JsonValue>)?.Source;
-
 			return context.InferredType.GetTypeInfo().IsEnum &&
 			       (context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName || // used during serialization
-			        json?.Type == JsonValueType.String); // used during deserialization
+			        context.LocalValue?.Type == JsonValueType.String); // used during deserialization
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var type = _GetType<T>();
+			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);
 			var attributes = type.GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
 			if (attributes.Any()) return _BuildFlagsValues(context.Source, context.RootSerializer.Options);
@@ -41,25 +39,24 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var enumValue = context.RootSerializer.Options.SerializationNameTransform(context.Source.ToString());
 			return enumValue;
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			var type = _GetType<T>();
+			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);
 			var options = context.RootSerializer.Options.CaseSensitiveDeserialization
 							  ? StringComparison.OrdinalIgnoreCase
 							  : StringComparison.Ordinal;
-			var entry = _descriptions[type].FirstOrDefault(d => string.Equals(d.String, context.Source.String, options));
+			var entry = _descriptions[type].FirstOrDefault(d => string.Equals(d.String, context.LocalValue.String, options));
 			if (entry == null)
 			{
-				var enumValue = context.RootSerializer.Options.DeserializationNameTransform(context.Source.String);
-				return (T) Enum.Parse(type, enumValue, !context.RootSerializer.Options.CaseSensitiveDeserialization);
+				var enumValue = context.RootSerializer.Options.DeserializationNameTransform(context.LocalValue.String);
+				return Enum.Parse(type, enumValue, !context.RootSerializer.Options.CaseSensitiveDeserialization);
 			}
-			return (T) entry.Value;
+			return entry.Value;
 		}
 
-		private static Type _GetType<T>()
+		private static Type _GetType(Type type)
 		{
-			var type = typeof(T);
 			var typeInfo = type.GetTypeInfo();
 			if (typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(Nullable<>))
 				type = typeInfo.GenericTypeArguments[0];

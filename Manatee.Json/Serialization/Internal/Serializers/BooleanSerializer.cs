@@ -10,13 +10,13 @@
 		{
 			return context.InferredType == typeof(bool);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			return (bool) (object)context.Source;
+			return (bool) context.Source;
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			return (T) (object)context.Source.Boolean;
+			return context.LocalValue.Boolean;
 		}
 	}
 }

@@ -12,13 +12,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return context.InferredType == typeof(ExpandoObject);
 		}
 
-		private static JsonValue _Encode(ExpandoObject input, JsonSerializer serializer)
+		private static JsonValue _Encode(SerializationContext context)
 		{
-			var dict = (IDictionary<string, object>) input;
-			return dict.ToDictionary(kvp => kvp.Key, kvp => serializer.Serialize<dynamic>(kvp.Value))
+			var dict = (IDictionary<string, object>)context.Source;
+			return dict.ToDictionary(kvp => kvp.Key, kvp => context.RootSerializer.Serialize<dynamic>(kvp.Value))
 			           .ToJson();
 		}
-		private static ExpandoObject _Decode(JsonValue json, JsonSerializer serializer)
+		private static ExpandoObject _Decode(SerializationContext context)
 		{
 			throw new NotImplementedException();
 		}

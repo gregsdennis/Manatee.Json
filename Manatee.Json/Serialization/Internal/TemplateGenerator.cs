@@ -65,7 +65,7 @@ namespace Manatee.Json.Serialization.Internal
 			}
 			else
 			{
-				instance = serializer.AbstractionMap.CreateInstance<T>(null, options.Resolver);
+				instance = (T) serializer.AbstractionMap.CreateInstance(typeof(T), null, options.Resolver);
 				_FillProperties(instance, options);
 				if (options.AutoSerializeFields)
 					_FillFields(instance, options);

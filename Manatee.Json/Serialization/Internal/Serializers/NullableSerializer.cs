@@ -11,22 +11,25 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
-		private static JsonValue _Encode<T>(SerializationContext<T?> context)
+		private static JsonValue _Encode<T>(SerializationContext context)
 			where T : struct
 		{
-			if (!context.Source.HasValue) return JsonValue.Null;
+			var nullable = (T?) context.Source;
+			if (!nullable.HasValue) return JsonValue.Null;
+
 			var encodeDefaultValues = context.RootSerializer.Options.EncodeDefaultValues;
-			context.RootSerializer.Options.EncodeDefaultValues = Equals(context.Source.Value, default (T));
-			var json = context.RootSerializer.Serialize(context.Source.Value);
+			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
+			var json = context.RootSerializer.Serialize(nullable.Value);
 			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;
+
 			return json;
 		}
-		private static T? _Decode<T>(SerializationContext<JsonValue> context)
+		private static T? _Decode<T>(SerializationContext context)
 			where T : struct
 		{
-			if (context.Source == JsonValue.Null)
-				return null;
-			T? nullable = context.RootSerializer.Deserialize<T>(context.Source);
+			if (context.LocalValue == JsonValue.Null) return null;
+
+			T? nullable = context.RootSerializer.Deserialize<T>(context.LocalValue);
 			return nullable;
 		}
 	}

@@ -26,24 +26,24 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
 			return _innerSerializer.Serialize(context);
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			var typeInfo = typeof(T).GetTypeInfo();
+			var typeInfo = context.InferredType.GetTypeInfo();
 			var schema = _GetSchema(typeInfo);
 			if (schema != null)
 			{
-				var results = schema.Validate(context.Source);
+				var results = schema.Validate(context.LocalValue);
 				if (!results.IsValid)
-					throw new JsonSerializationException($"JSON did not pass schema defined by type '{typeof(T)}'.\n" +
+					throw new JsonSerializationException($"JSON did not pass schema defined by type '{context.InferredType}'.\n" +
 					                                     "Errors:\n" +
 														 context.RootSerializer.Serialize(results));
 			}
 
-			return _innerSerializer.Deserialize<T>(context);
+			return _innerSerializer.Deserialize(context);
 		}
 		private static JsonSchema _GetSchema(TypeInfo typeInfo)
 		{

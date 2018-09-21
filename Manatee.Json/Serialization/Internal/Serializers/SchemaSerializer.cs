@@ -11,16 +11,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return context.InferredType == typeof(JsonSchema);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var schema = (JsonSchema) (object)context.Source;
+			var schema = (JsonSchema) context.Source;
 			return schema.ToJson(context.RootSerializer);
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
 			var schema = new JsonSchema();
-			schema.FromJson(context.Source, context.RootSerializer);
-			return (T) (object) schema;
+			schema.FromJson(context.LocalValue, context.RootSerializer);
+			return schema;
 		}
 	}
 }

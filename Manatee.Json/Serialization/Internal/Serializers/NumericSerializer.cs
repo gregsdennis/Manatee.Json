@@ -13,15 +13,15 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return context.InferredType.IsNumericType();
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
 			var value = Convert.ToDouble(context.Source);
 			return value;
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			var value = context.Source.Number;
-			return (T) Convert.ChangeType(value, typeof (T));
+			var value = context.LocalValue.Number;
+			return Convert.ChangeType(value, context.InferredType);
 		}
 	}
 }

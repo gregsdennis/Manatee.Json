@@ -12,17 +12,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return context.InferredType == typeof(TimeSpan);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var ts = (TimeSpan) (object)context.Source;
+			var ts = (TimeSpan) context.Source;
 
 			return ts.ToString();
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context)
+		public object Deserialize(SerializationContext context)
 		{
-			return context.Source.Type == JsonValueType.String
-				? (T) (object) TimeSpan.Parse(context.Source.String)
-				: default(T);
+			return context.LocalValue.Type == JsonValueType.String
+				? TimeSpan.Parse(context.LocalValue.String)
+				: default(TimeSpan);
 		}
 	}
 }

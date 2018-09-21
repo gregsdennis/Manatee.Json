@@ -55,5 +55,10 @@ namespace Manatee.Json.Internal
 			       value == typeof(long) ||
 			       value == typeof(ulong);
 		}
+
+		public static object Default(this Type type)
+		{
+			return type.GetTypeInfo().IsValueType ? Activator.CreateInstance(type) : null;
+		}
 	}
 }
