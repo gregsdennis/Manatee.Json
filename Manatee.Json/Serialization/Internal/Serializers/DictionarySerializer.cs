@@ -155,7 +155,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Key"),
 								              InferredType = key.GetType() ?? typeof(TValue),
 								              RequestedType = typeof(TValue),
-								              Source = key
+								              LocalValue = key
 							              };
 
 						              return (TKey) context.RootSerializer.Deserialize(newContext);
@@ -170,7 +170,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Value"),
 								              InferredType = key.GetType() ?? typeof(TValue),
 								              RequestedType = typeof(TValue),
-								              Source = key
+								              LocalValue = key
 							              };
 						              return (TValue) context.RootSerializer.Deserialize(newContext);
 					              });

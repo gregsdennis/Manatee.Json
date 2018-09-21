@@ -185,7 +185,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 							InferredType = type,
 							RequestedType = type,
 							JsonRoot = context.JsonRoot,
-							Source = value,
+							LocalValue = value,
 							RootSerializer = context.RootSerializer
 						};
 					var valueObj = context.RootSerializer.Deserialize(newContext);
