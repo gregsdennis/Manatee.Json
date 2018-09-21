@@ -5,27 +5,28 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class NullableSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+			return context.InferredType.GetTypeInfo().IsGenericType &&
+			       context.InferredType.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
-		private static JsonValue _Encode<T>(T? nullable, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext<T?> context)
 			where T : struct
 		{
-			if (!nullable.HasValue) return JsonValue.Null;
-			var encodeDefaultValues = serializer.Options.EncodeDefaultValues;
-			serializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
-			var json = serializer.Serialize(nullable.Value);
-			serializer.Options.EncodeDefaultValues = encodeDefaultValues;
+			if (!context.Source.HasValue) return JsonValue.Null;
+			var encodeDefaultValues = context.RootSerializer.Options.EncodeDefaultValues;
+			context.RootSerializer.Options.EncodeDefaultValues = Equals(context.Source.Value, default (T));
+			var json = context.RootSerializer.Serialize(context.Source.Value);
+			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;
 			return json;
 		}
-		private static T? _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static T? _Decode<T>(SerializationContext<JsonValue> context)
 			where T : struct
 		{
-			if (json == JsonValue.Null)
+			if (context.Source == JsonValue.Null)
 				return null;
-			T? nullable = serializer.Deserialize<T>(json);
+			T? nullable = context.RootSerializer.Deserialize<T>(context.Source);
 			return nullable;
 		}
 	}

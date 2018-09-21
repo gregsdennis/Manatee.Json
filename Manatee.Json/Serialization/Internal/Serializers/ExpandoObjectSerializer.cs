@@ -7,9 +7,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ExpandoObjectSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type == typeof(ExpandoObject);
+			return context.InferredType == typeof(ExpandoObject);
 		}
 
 		private static JsonValue _Encode(ExpandoObject input, JsonSerializer serializer)

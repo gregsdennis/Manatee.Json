@@ -14,20 +14,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
-		public bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public bool Handles(SerializationContext context)
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
+		public JsonValue Serialize<T>(SerializationContext<T> context)
 		{
-			if (Equals(obj, default(T)) && !serializer.Options.EncodeDefaultValues) return JsonValue.Null;
-			return _innerSerializer.Serialize(context, location);
+			if (Equals(context.Source, default(T)) && !context.RootSerializer.Options.EncodeDefaultValues) return JsonValue.Null;
+			return _innerSerializer.Serialize(context);
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
+		public T Deserialize<T>(SerializationContext<JsonValue> context)
 		{
-			return json.Type == JsonValueType.Null
+			return context.Source.Type == JsonValueType.Null
 				       ? default(T)
-				       : _innerSerializer.Deserialize<T>(context, root);
+				       : _innerSerializer.Deserialize<T>(context);
 		}
 	}
 }

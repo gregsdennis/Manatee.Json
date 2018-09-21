@@ -7,32 +7,32 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ObjectSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type == typeof(object);
+			return context.InferredType == typeof(object);
 		}
 
-		private static JsonValue _Encode(object input, JsonSerializer serializer)
+		private static JsonValue _Encode(SerializationContext<object> context)
 		{
 			throw new NotImplementedException();
 		}
-		private static object _Decode(JsonValue json, JsonSerializer serializer)
+		private static object _Decode(SerializationContext<JsonValue> context)
 		{
-			switch (json.Type)
+			switch (context.Source.Type)
 			{
 				case JsonValueType.Number:
-					return json.Number;
+					return context.Source.Number;
 				case JsonValueType.String:
-					return json.String;
+					return context.Source.String;
 				case JsonValueType.Boolean:
-					return json.Boolean;
+					return context.Source.Boolean;
 				case JsonValueType.Array:
-					return json.Array.Select(serializer.Deserialize<object>).ToList();
+					return context.Source.Array.Select(context.RootSerializer.Deserialize<object>).ToList();
 				case JsonValueType.Object:
 					var result = new ExpandoObject() as IDictionary<string, object>;
-					foreach (var kvp in json.Object)
+					foreach (var kvp in context.Source.Object)
 					{
-						result[kvp.Key] = serializer.Deserialize<object>(kvp.Value);
+						result[kvp.Key] = context.RootSerializer.Deserialize<object>(kvp.Value);
 					}
 					return result;
 				case JsonValueType.Null:

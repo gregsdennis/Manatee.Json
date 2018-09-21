@@ -1,5 +1,4 @@
 using System;
-using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -9,19 +8,21 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(TimeSpan);
+			return context.InferredType == typeof(TimeSpan);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
+		public JsonValue Serialize<T>(SerializationContext<T> context)
 		{
-			var ts = (TimeSpan) (object) obj;
+			var ts = (TimeSpan) (object)context.Source;
 
 			return ts.ToString();
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
+		public T Deserialize<T>(SerializationContext<JsonValue> context)
 		{
-			return json.Type == JsonValueType.String ? (T) (object) TimeSpan.Parse(json.String) : default(T);
+			return context.Source.Type == JsonValueType.String
+				? (T) (object) TimeSpan.Parse(context.Source.String)
+				: default(T);
 		}
 	}
 }

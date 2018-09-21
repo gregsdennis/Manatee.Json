@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using Manatee.Json.Pointer;
+﻿using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -10,19 +8,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => true;
 
-		public bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public bool Handles(SerializationContext context)
 		{
-			return typeof(IJsonSerializable).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
+			return typeof(IJsonSerializable).GetTypeInfo().IsAssignableFrom(context.InferredType.GetTypeInfo());
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
+		public JsonValue Serialize<T>(SerializationContext<T> context)
 		{
-			var serializable = (IJsonSerializable) obj;
-			return serializable.ToJson(serializer);
+			var serializable = (IJsonSerializable)context.Source;
+			return serializable.ToJson(context.RootSerializer);
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
+		public T Deserialize<T>(SerializationContext<JsonValue> context)
 		{
-			var value = (IJsonSerializable)serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
-			value.FromJson(json, serializer);
+			var value = (IJsonSerializable)context.RootSerializer.AbstractionMap.CreateInstance<T>(context.Source, context.RootSerializer.Options.Resolver);
+			value.FromJson(context.Source, context.RootSerializer);
 			return (T) value;
 		}
 	}

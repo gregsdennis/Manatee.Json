@@ -4,9 +4,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ArraySerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.IsArray;
+			return context.InferredType.IsArray;
 		}
 
 		protected override Type[] GetTypeArguments(Type type)
@@ -14,22 +14,22 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return new[] { type.GetElementType() };
 		}
 
-		private static JsonValue _Encode<T>(T[] array, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext<T[]> context)
 		{
-			var values = new JsonValue[array.Length];
-			for (int i = 0; i < array.Length; i++)
+			var values = new JsonValue[context.Source.Length];
+			for (int i = 0; i < context.Source.Length; i++)
 			{
-				values[i] = serializer.Serialize(array[i]);
+				values[i] = context.RootSerializer.Serialize(context.Source[i]);
 			}
 			return new JsonArray(values);
 		}
-		private static T[] _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static T[] _Decode<T>(SerializationContext<JsonValue> context)
 		{
-			var array = json.Array;
+			var array = context.Source.Array;
 			var values = new T[array.Count];
 			for (int i = 0; i < array.Count; i++)
 			{
-				values[i] = serializer.Deserialize<T>(array[i]);
+				values[i] = context.RootSerializer.Deserialize<T>(array[i]);
 			}
 			return values;
 		}

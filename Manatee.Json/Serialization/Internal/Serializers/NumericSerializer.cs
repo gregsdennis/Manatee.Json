@@ -1,6 +1,5 @@
 ﻿using System;
 using Manatee.Json.Internal;
-using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -10,18 +9,18 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public bool Handles(SerializationContext context)
 		{
-			return type.IsNumericType();
+			return context.InferredType.IsNumericType();
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
+		public JsonValue Serialize<T>(SerializationContext<T> context)
 		{
-			var value = Convert.ToDouble(obj);
+			var value = Convert.ToDouble(context.Source);
 			return value;
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
+		public T Deserialize<T>(SerializationContext<JsonValue> context)
 		{
-			var value = json.Number;
+			var value = context.Source.Number;
 			return (T) Convert.ChangeType(value, typeof (T));
 		}
 	}

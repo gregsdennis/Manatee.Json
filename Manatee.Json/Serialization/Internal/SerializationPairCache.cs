@@ -5,6 +5,7 @@ namespace Manatee.Json.Serialization.Internal
 	internal class SerializationPairCache
 	{
 		private readonly IDictionary<object, SerializationReference> _objMap = new Dictionary<object, SerializationReference>();
+		private readonly IDictionary<string, SerializationReference> _refMap = new Dictionary<string, SerializationReference>();
 
 		public int Count => _objMap.Count;
 
@@ -12,6 +13,8 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			if (value.Object != null)
 				_objMap.Add(value.Object, value);
+			if (value.Reference != null)
+				_refMap.Add(value.Reference.ToString(), value);
 		}
 
 		public void Clear()
@@ -24,10 +27,9 @@ namespace Manatee.Json.Serialization.Internal
 			return _objMap.TryGetValue(obj, out pair);
 		}
 
-		public void Update(SerializationReference pair, object obj)
+		public bool TryGetPair(string location, out SerializationReference pair)
 		{
-			pair.Object = obj;
-			_objMap.Add(obj, pair);
+			return _refMap.TryGetValue(location, out pair);
 		}
 	}
 }

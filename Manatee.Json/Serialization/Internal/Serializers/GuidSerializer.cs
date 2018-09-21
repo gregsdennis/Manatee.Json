@@ -1,5 +1,4 @@
 using System;
-using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -9,19 +8,21 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(Guid);
+			return context.InferredType == typeof(Guid);
 		}
 
-		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
+		public JsonValue Serialize<T>(SerializationContext<T> context)
 		{
-			var guid = (Guid) (object) obj;
+			var guid = (Guid) (object)context.Source;
 			return guid.ToString();
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
+		public T Deserialize<T>(SerializationContext<JsonValue> context)
 		{
-			return json.Type == JsonValueType.String ? (T) (object) new Guid(json.String) : default(T);
+			return context.Source.Type == JsonValueType.String
+				? (T) (object) new Guid(context.Source.String)
+				: default(T);
 		}
 	}
 }

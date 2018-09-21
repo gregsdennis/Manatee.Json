@@ -8,23 +8,23 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class DictionarySerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType &&
-			       (type.GetGenericTypeDefinition() == typeof(Dictionary<,>) ||
-			        type.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>)));
+			return context.InferredType.GetTypeInfo().IsGenericType &&
+			       (context.InferredType.GetGenericTypeDefinition() == typeof(Dictionary<,>) ||
+			        context.InferredType.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>)));
 		}
 
-		private static JsonValue _Encode<TKey, TValue>(Dictionary<TKey, TValue> dict, JsonSerializer serializer)
+		private static JsonValue _Encode<TKey, TValue>(SerializationContext<Dictionary<TKey, TValue>> context)
 		{
-			var existingOption = serializer.Options.EncodeDefaultValues;
+			var existingOption = context.RootSerializer.Options.EncodeDefaultValues;
 			var useDefaultValue = existingOption || typeof(TValue).GetTypeInfo().IsValueType;
 			if (typeof(TKey) == typeof(string))
 			{
 				var output = new Dictionary<string, JsonValue>();
-				foreach (var kvp in dict)
+				foreach (var kvp in context.Source)
 				{
-					var value = _SerializeDefaultValue(serializer, kvp.Value, useDefaultValue, existingOption);
+					var value = _SerializeDefaultValue(context.RootSerializer, kvp.Value, useDefaultValue, existingOption);
 					output.Add((string)(object)kvp.Key, value);
 				}
 
@@ -32,9 +32,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 
 			if (typeof(Enum).GetTypeInfo().IsAssignableFrom(typeof(TKey).GetTypeInfo()))
-				return _EncodeEnumKeyDictionary(dict, serializer, useDefaultValue, existingOption);
+				return _EncodeEnumKeyDictionary(context.Source, context.RootSerializer, useDefaultValue, existingOption);
 
-			return _EncodeDictionary(dict, serializer, useDefaultValue, existingOption);
+			return _EncodeDictionary(context.Source, context.RootSerializer, useDefaultValue, existingOption);
 		}
 		private static JsonValue _EncodeDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, JsonSerializer serializer, bool useDefaultValue, bool existingOption)
 		{

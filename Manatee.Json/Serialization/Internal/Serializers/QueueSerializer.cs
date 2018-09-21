@@ -7,9 +7,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class QueueSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Queue<>);
+			return context.InferredType.GetTypeInfo().IsGenericType &&
+			       context.InferredType.GetGenericTypeDefinition() == typeof(Queue<>);
 		}
 
 		private static JsonValue _Encode<T>(Queue<T> queue, JsonSerializer serializer)

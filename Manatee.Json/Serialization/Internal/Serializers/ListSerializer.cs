@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -6,27 +5,28 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ListSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>);
+			return context.InferredType.GetTypeInfo().IsGenericType && 
+			       context.InferredType.GetGenericTypeDefinition() == typeof(List<>);
 		}
 
-		private static JsonValue _Encode<T>(List<T> list, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext<List<T>> context)
 		{
-			var array = new JsonValue[list.Count];
+			var array = new JsonValue[context.Source.Count];
 			for (int ii = 0; ii < array.Length; ++ii)
 			{
-				array[ii] = serializer.Serialize(list[ii]);
+				array[ii] = context.RootSerializer.Serialize(context.Source[ii]);
 			}
 			return new JsonArray(array);
 		}
-		private static List<T> _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static List<T> _Decode<T>(SerializationContext<JsonValue> context)
 		{
-			var array = json.Array;
+			var array = context.Source.Array;
 			var list = new List<T>(array.Count);
 			for (int ii = 0; ii < array.Count; ++ii)
 			{
-				list.Add(serializer.Deserialize<T>(array[ii]));
+				list.Add(context.RootSerializer.Deserialize<T>(array[ii]));
 			}
 			return list;
 		}

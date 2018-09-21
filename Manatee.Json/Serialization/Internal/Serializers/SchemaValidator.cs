@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Manatee.Json.Internal;
-using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
@@ -25,28 +22,28 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
-		public bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public bool Handles(SerializationContext context)
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
+		public JsonValue Serialize<T>(SerializationContext<T> context)
 		{
-			return _innerSerializer.Serialize(context, location);
+			return _innerSerializer.Serialize(context);
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
+		public T Deserialize<T>(SerializationContext<JsonValue> context)
 		{
 			var typeInfo = typeof(T).GetTypeInfo();
 			var schema = _GetSchema(typeInfo);
 			if (schema != null)
 			{
-				var results = schema.Validate(json);
+				var results = schema.Validate(context.Source);
 				if (!results.IsValid)
 					throw new JsonSerializationException($"JSON did not pass schema defined by type '{typeof(T)}'.\n" +
 					                                     "Errors:\n" +
-					                                     serializer.Serialize(results));
+														 context.RootSerializer.Serialize(results));
 			}
 
-			return _innerSerializer.Deserialize<T>(context, root);
+			return _innerSerializer.Deserialize<T>(context);
 		}
 		private static JsonSchema _GetSchema(TypeInfo typeInfo)
 		{

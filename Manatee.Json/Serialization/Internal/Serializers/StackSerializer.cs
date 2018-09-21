@@ -7,27 +7,28 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class StackSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Stack<>);
+			return context.InferredType.GetTypeInfo().IsGenericType && 
+			       context.InferredType.GetGenericTypeDefinition() == typeof(Stack<>);
 		}
 
-		private static JsonValue _Encode<T>(Stack<T> stack, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext<Stack<T>> context)
 		{
-			var values = new JsonValue[stack.Count];
+			var values = new JsonValue[context.Source.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[i] = serializer.Serialize(stack.ElementAt(i));
+				values[i] = context.RootSerializer.Serialize(context.Source.ElementAt(i));
 			}
 			return new JsonArray(values);
 		}
-		private static Stack<T> _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static Stack<T> _Decode<T>(SerializationContext<JsonValue> context)
 		{
-			var array = json.Array;
+			var array = context.Source.Array;
 			var values = new T[array.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[i] = serializer.Deserialize<T>(array[i]);
+				values[i] = context.RootSerializer.Deserialize<T>(array[i]);
 			}
 			return new Stack<T>(values);
 		}

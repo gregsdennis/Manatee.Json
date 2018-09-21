@@ -1,6 +1,4 @@
-﻿using System;
-using Manatee.Json.Pointer;
-using Manatee.Json.Schema;
+﻿using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -9,19 +7,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public bool ShouldMaintainReferences => false;
 		public int Priority => -10;
 
-		public bool Handles(SerializationContext context, JsonSerializerOptions options)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(JsonSchema);
+			return context.InferredType == typeof(JsonSchema);
 		}
-		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
+		public JsonValue Serialize<T>(SerializationContext<T> context)
 		{
-			var schema = (JsonSchema) (object) obj;
-			return schema.ToJson(serializer);
+			var schema = (JsonSchema) (object)context.Source;
+			return schema.ToJson(context.RootSerializer);
 		}
-		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
+		public T Deserialize<T>(SerializationContext<JsonValue> context)
 		{
 			var schema = new JsonSchema();
-			schema.FromJson(json, serializer);
+			schema.FromJson(context.Source, context.RootSerializer);
 			return (T) (object) schema;
 		}
 	}
