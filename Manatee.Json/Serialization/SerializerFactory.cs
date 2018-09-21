@@ -58,12 +58,12 @@ namespace Manatee.Json.Serialization
 			_serializers.Remove(serializer);
 		}
 
-		internal static ISerializer GetSerializer(Type typeToSerialize, JsonSerializer serializer, JsonValue json = null)
+		internal static ISerializer GetSerializer(SerializationContext context)
 		{
-			typeToSerialize = serializer.AbstractionMap.GetMap(typeToSerialize);
-			var theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(typeToSerialize, serializer.Options, json));
+			context.InferredType = context.RootSerializer.AbstractionMap.GetMap(context.InferredType);
+			var theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
 
-			return _BuildSerializer(theChosenOne, typeToSerialize.GetTypeInfo());
+			return _BuildSerializer(theChosenOne, context.InferredType.GetTypeInfo());
 		}
 		internal static ITypeSerializer GetTypeSerializer()
 		{

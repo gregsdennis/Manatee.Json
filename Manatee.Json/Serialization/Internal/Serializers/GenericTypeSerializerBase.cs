@@ -20,9 +20,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode");
 		}
 
-		public abstract bool Handles(Type type, JsonSerializerOptions options, JsonValue json);
+		public abstract bool Handles(SerializationContext context, JsonSerializerOptions options);
 
-		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
+		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
 		{
 			var typeArguments = GetTypeArguments(obj.GetType());
 			var toJson = _encodeMethod;
@@ -32,7 +32,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return (JsonValue) toJson.Invoke(null, new object[] {obj, serializer});
 		}
 
-		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
+		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
 		{
 			var typeArguments = GetTypeArguments(typeof(T));
 			var fromJson = _decodeMethod;

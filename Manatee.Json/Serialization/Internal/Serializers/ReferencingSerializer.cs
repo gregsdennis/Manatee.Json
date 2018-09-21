@@ -14,11 +14,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context, JsonSerializerOptions options)
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
+		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
 		{
 			if (serializer.SerializationMap.TryGetPair(obj, out var pair))
 			{
@@ -29,12 +29,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			guid = Guid.NewGuid();
 			pair = new SerializationReference {Object = obj};
 			serializer.SerializationMap.Add(guid, pair);
-			pair.Json = _innerSerializer.Serialize(obj, location, serializer);
+			pair.Json = _innerSerializer.Serialize(context, location);
 			if (pair.UsageCount != 0)
 				pair.Json.Object.Add(Constants.DefKey, guid.ToString());
 			return pair.Json;
 		}
-		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
+		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
 		{
 			if (json.Type == JsonValueType.Object)
 			{
@@ -46,7 +46,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					jsonObj.Remove(Constants.DefKey);
 					pair = new SerializationReference {Json = json};
 					serializer.SerializationMap.Add(guid, pair);
-					serializer.SerializationMap.Update(pair, _innerSerializer.Deserialize<T>(json, root, serializer));
+					serializer.SerializationMap.Update(pair, _innerSerializer.Deserialize<T>(context, root));
 					pair.DeserializationIsComplete = true;
 					pair.Reconcile();
 					return (T) pair.Object;
@@ -58,7 +58,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					return (T) pair.Object;
 				}
 			}
-			return _innerSerializer.Deserialize<T>(json, root, serializer);
+			return _innerSerializer.Deserialize<T>(context, root);
 		}
 	}
 }

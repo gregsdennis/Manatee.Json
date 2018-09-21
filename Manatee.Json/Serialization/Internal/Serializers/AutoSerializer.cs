@@ -14,11 +14,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => true;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context, JsonSerializerOptions options)
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
+		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
 		{
 			var json = new JsonObject();
 			var type = typeof (T);
@@ -48,7 +48,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_ConstructJsonObject(json, map, serializer.Options);
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
-		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
+		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
 		{
 			var obj = (object) serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
 			var type = obj.GetType();

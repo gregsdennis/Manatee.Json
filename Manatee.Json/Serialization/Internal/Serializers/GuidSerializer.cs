@@ -9,17 +9,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context, JsonSerializerOptions options)
 		{
 			return type == typeof(Guid);
 		}
 
-		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
+		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
 		{
 			var guid = (Guid) (object) obj;
 			return guid.ToString();
 		}
-		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
+		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
 		{
 			return json.Type == JsonValueType.String ? (T) (object) new Guid(json.String) : default(T);
 		}

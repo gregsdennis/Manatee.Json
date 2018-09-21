@@ -21,13 +21,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context, JsonSerializerOptions options)
 		{
 			return type.GetTypeInfo().IsEnum &&
 			       (options.EnumSerializationFormat == EnumSerializationFormat.AsName ||	// used during serialization
 			        json?.Type == JsonValueType.String);									// used during deserialiaztion
 		}
-		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
+		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
 		{
 			var type = _GetType<T>();
 			_EnsureDescriptions(type);
@@ -40,7 +40,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var enumValue = serializer.Options.SerializationNameTransform(obj.ToString());
 			return enumValue;
 		}
-		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
+		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
 		{
 			var type = _GetType<T>();
 			_EnsureDescriptions(type);

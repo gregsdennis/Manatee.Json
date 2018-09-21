@@ -7,7 +7,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class StackSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public override bool Handles(SerializationContext context, JsonSerializerOptions options)
 		{
 			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Stack<>);
 		}

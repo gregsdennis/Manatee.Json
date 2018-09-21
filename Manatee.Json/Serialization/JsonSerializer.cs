@@ -38,7 +38,22 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			return Serialize(obj, new JsonPointer());
+			_callCount++;
+			var context = new SerializationContext<T>
+				{
+					InferredType = obj?.GetType() ?? typeof(T),
+					RequestedType = typeof(T),
+					RootSerializer = this,
+					CurrentLocation = new JsonPointer(),
+					Source = obj
+				};
+			var serializer = SerializerFactory.GetSerializer(context);
+			var json = serializer.Serialize(context);
+			if (--_callCount == 0)
+			{
+				SerializationMap.Clear();
+			}
+			return json;
 		}
 		/// <summary>
 		/// Serializes the public static properties of a type to a JSON structure.
@@ -72,7 +87,22 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public T Deserialize<T>(JsonValue json)
 		{
-			return Deserialize<T>(json, json);
+			_callCount++;
+			var context = new SerializationContext<JsonValue>
+				{
+					InferredType = typeof(T),
+					RequestedType = typeof(T),
+					RootSerializer = this,
+					CurrentLocation = new JsonPointer(),
+					Source = json
+				};
+			var serializer = SerializerFactory.GetSerializer(context);
+			var obj = serializer.Deserialize<T>(context);
+			if (--_callCount == 0)
+			{
+				SerializationMap.Clear();
+			}
+			return obj;
 		}
 		/// <summary>
 		/// Deserializes a JSON structure to the public static properties of a type.
@@ -87,30 +117,5 @@ namespace Manatee.Json.Serialization
 			var serializer = SerializerFactory.GetTypeSerializer();
 			serializer.DeserializeType<T>(json, this);
 		}
-
-		internal JsonValue Serialize<T>(T obj, JsonPointer location)
-		{
-			_callCount++;
-			var serializer = SerializerFactory.GetSerializer(obj?.GetType() ?? typeof(T), this);
-			var json = serializer.Serialize(obj, location, this);
-			if (--_callCount == 0)
-			{
-				SerializationMap.Clear();
-			}
-			return json;
-		}
-
-		internal T Deserialize<T>(JsonValue json, JsonValue root)
-		{
-			_callCount++;
-			var serializer = SerializerFactory.GetSerializer(typeof(T), this, json);
-			var obj = serializer.Deserialize<T>(json, root, this);
-			if (--_callCount == 0)
-			{
-				SerializationMap.Clear();
-			}
-			return obj;
-		}
-
 	}
 }

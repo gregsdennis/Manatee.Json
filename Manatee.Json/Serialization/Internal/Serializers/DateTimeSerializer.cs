@@ -10,11 +10,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context, JsonSerializerOptions options)
 		{
 			return type == typeof(DateTime);
 		}
-		public JsonValue Serialize<T>(T obj, JsonPointer location, JsonSerializer serializer)
+		public JsonValue Serialize<T>(SerializationContext<T> context, JsonPointer location)
 		{
 			var dt = (DateTime) (object) obj;
 			if (serializer.Options == null)
@@ -33,7 +33,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public T Deserialize<T>(JsonValue json, JsonValue root, JsonSerializer serializer)
+		public T Deserialize<T>(SerializationContext<JsonValue> context, JsonValue root)
 		{
 			if (serializer.Options == null)
 				return (T)(object) DateTime.Parse(json.String);
