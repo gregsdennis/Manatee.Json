@@ -148,9 +148,10 @@ namespace Manatee.Json.Serialization
 
 			if (!_registry.TryGetValue(type, out Type tConcrete))
 			{
+				Type typeToLookup = type;
 				if (type.GetTypeInfo().IsGenericType)
-					type = type.GetGenericTypeDefinition();
-				_registry.TryGetValue(type, out tConcrete);
+					typeToLookup = type.GetGenericTypeDefinition();
+				_registry.TryGetValue(typeToLookup, out tConcrete);
 			}
 
 			if (tConcrete != null)

@@ -45,7 +45,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						RootSerializer = context.RootSerializer,
 						JsonRoot = context.JsonRoot,
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = array[i]?.GetType() ?? typeof(T),
+						InferredType = typeof(T),
 						RequestedType = typeof(T),
 						LocalValue = array[i]
 					};
