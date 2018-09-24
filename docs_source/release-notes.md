@@ -19,9 +19,9 @@
 
 ([#112](https://github.com/gregsdennis/Manatee.Json/issues/112)) Another change intended to support JSON Schem draft-08 is a [standardized output format](https://github.com/json-schema-org/json-schema-spec/issues/643).  The validation results have been restructured to conform to this proposal.
 
-([#132](https://github.com/gregsdennis/Manatee.Json/issues/132)) Updated parsing errors to report locations using JSON Pointer instead of JSON Path.  This is more appropriate since pointers identify a single location whereas paths are technically queries that can match multiple locations.
-
 ([#177](https://github.com/gregsdennis/Manatee.Json/issues/177)) Opened up the `StringFormat` class (schema `format` keyword) for extension and customization.
+
+([#177](https://github.com/gregsdennis/Manatee.Json/issues/177)) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous `#Def` and `#Ref` tags.  Now you will see something more like `{"$ref":"#/property1/array/3/data"}` in the serialized JSON for references.
 
 ### Changes
 
