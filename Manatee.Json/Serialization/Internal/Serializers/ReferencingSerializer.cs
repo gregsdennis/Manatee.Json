@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Pointer;
+﻿using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -20,12 +21,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public JsonValue Serialize(SerializationContext context)
 		{
 			if (context.RootSerializer.SerializationMap.TryGetPair(context.Source, out var pair))
-				return new JsonObject {{Constants.RefKey, pair.Reference.ToString()}};
+				return new JsonObject {{Constants.RefKey, pair.Source.ToString()}};
 
 			context.RootSerializer.SerializationMap.Add(new SerializationReference
 				{
 					Object = context.Source,
-					Reference = context.CurrentLocation
+					Source = context.CurrentLocation
 				});
 
 			return _innerSerializer.Serialize(context);
@@ -38,18 +39,23 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (jsonObj.TryGetValue(Constants.RefKey, out var reference))
 				{
 					var location = JsonPointer.Parse(reference.String);
-					if (context.RootSerializer.SerializationMap.TryGetPair(location, out var pair))
-						return pair.Object;
+					context.RootSerializer.SerializationMap.AddReference(location, context.CurrentLocation);
+					return context.InferredType.Default();
 				}
 			}
 
-			context.RootSerializer.SerializationMap.Add(new SerializationReference
+			var pair = new SerializationReference
 				{
-					Json = context.LocalValue,
-					Reference = context.CurrentLocation
-				});
+					Source = context.CurrentLocation
+				};
+			context.RootSerializer.SerializationMap.Add(pair);
 
-			return _innerSerializer.Deserialize(context);
+			var obj = _innerSerializer.Deserialize(context);
+
+			pair.Object = obj;
+			pair.DeserializationIsComplete = true;
+
+			return obj;
 		}
 	}
 }

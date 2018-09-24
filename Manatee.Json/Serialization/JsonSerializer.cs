@@ -59,7 +59,7 @@ namespace Manatee.Json.Serialization
 		{
 			var context = new SerializationContext
 				{
-					InferredType = type,
+					InferredType = obj?.GetType() ?? type,
 					RequestedType = type,
 					RootSerializer = this,
 					CurrentLocation = new JsonPointer("#"),
@@ -144,7 +144,7 @@ namespace Manatee.Json.Serialization
 			var obj = serializer.Deserialize(context);
 			if (--_callCount == 0)
 			{
-				SerializationMap.Clear();
+				SerializationMap.Complete(obj);
 			}
 			return obj;
 		}

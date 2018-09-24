@@ -496,15 +496,14 @@ namespace Manatee.Json.Tests.Serialization
 					{
 						"LoopProperty", new JsonObject
 							{
-								{"LoopProperty", new JsonObject {{"#Ref", "f3a2993b-9b0c-4296-872e-95a9210295f4"}}},
+								{"LoopProperty", new JsonObject {{"$ref", "#"}}},
 								{"StringProp", "stringValueB"},
 								{"IntProp", 6},
 								{"BoolProp", true}
 							}
 					},
 					{"StringProp", "stringValueA"},
-					{"IntProp", 42},
-					{"#Def", "f3a2993b-9b0c-4296-872e-95a9210295f4"}
+					{"IntProp", 42}
 				};
 			var expected = new ObjectWithExtendedProps
 				{
