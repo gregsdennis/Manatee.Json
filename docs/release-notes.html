@@ -74,9 +74,9 @@
 <li>The <code>JsonSchema</code> type does not expose keywords as properties, but is a container of keyword implementations.  This allows for easier extension.</li>
 </ul>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/112">#112</a>) Another change intended to support JSON Schem draft-08 is a <a href="https://github.com/json-schema-org/json-schema-spec/issues/643">standardized output format</a>.  The validation results have been restructured to conform to this proposal.</p>
-<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/132">#132</a>) Updated parsing errors to report locations using JSON Pointer instead of JSON Path.  This is more appropriate since pointers identify a single location whereas paths are technically queries that can match multiple locations.</p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/177">#177</a>) Opened up the <code>StringFormat</code> class (schema <code>format</code> keyword) for extension and customization.</p>
-<h2 id="changes">Changes</h2>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/177">#177</a>) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous <code>#Def</code> and <code>#Ref</code> tags.  Now you will see something more like <code>{&quot;$ref&quot;:&quot;#/property1/array/3/data&quot;}</code> in the serialized JSON for references.</p>
+<h3 id="changes">Changes</h3>
 <p><em>In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.</em></p>
 <ul>
 <li><code>JsonSyntaxException</code> - <code>string Path</code> property replaced by <code>JsonPointer Location</code> property.</li>

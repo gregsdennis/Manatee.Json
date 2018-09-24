@@ -137,13 +137,13 @@ var mySchema = serializer.Deserialize&lt;JsonSchema&gt;(json);
 <h3 id="validating-instances">Validating instances</h3>
 <p><code>JsonSchema</code> exposes a <code>Validate(JsonValue)</code> method which is used to validate incoming JSON values.  Let's begin with the schema from above and a few JSON objects:</p>
 <pre><code class="lang-json">{
-    &quot;properties&quot;:{
-        &quot;myProperty&quot;:{
-            &quot;type&quot;:&quot;string&quot;,
-            &quot;minLength&quot;:10
-        }
-    },
-    &quot;required&quot;:[&quot;myProperty&quot;]
+  &quot;properties&quot;:{
+    &quot;myProperty&quot;:{
+      &quot;type&quot;:&quot;string&quot;,
+      &quot;minLength&quot;:10
+    }
+  },
+  &quot;required&quot;:[&quot;myProperty&quot;]
 }
 
 {}
@@ -153,7 +153,7 @@ var mySchema = serializer.Deserialize&lt;JsonSchema&gt;(json);
 &quot;nonObject&quot;
 </code></pre>
 <p>To validate these, all we have to do is pass these into our schema's <code>Validate(JsonValue)</code> method.</p>
-<pre><code class="lang-csharp">var schema = new JsonSchema(); // defines the schema we have listed above.
+<pre><code class="lang-csharp">var schema = GetSchema(); // defines the schema we created above.
 var emptyJson = new JsonObject();
 var booleanJson = new JsonObject { {&quot;myProperty&quot;, false} };
 var stringJson = new JsonObject { {&quot;myProperty&quot;, &quot;some string&quot;} };

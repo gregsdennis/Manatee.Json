@@ -159,7 +159,7 @@ var onlyStrings = json.Select(jkv =&gt; jkv.Value.Type == JsonValueType.String).
 <h2 id="getting-json-output">Getting JSON Output</h2>
 <p>There are two methods that create output:  <code>ToString()</code>, which simply outputs the most concise JSON (single line, no white spacing), and <code>GetIndentedString()</code>, which outputs a multiline, indented string.</p>
 <h2 id="handling-errors">Handling Errors</h2>
-<p>While parsing JSON data (through either the <code>JsonObject</code> constructor or <code>JsonValue.Parse()</code>), errors may occur.  These errors will be reported by throwing a <code>JsonSyntaxException</code>.  This exception exposes a Path property which contains a path to the error in <a href="path.html">JSONPath syntax</a>.  The messaging has been designed to direct the user directly to the error.</p>
+<p>While parsing JSON data (through either the <code>JsonObject</code> constructor or <code>JsonValue.Parse()</code>), errors may occur.  These errors will be reported by throwing a <code>JsonSyntaxException</code>.  This exception exposes a <code>Location</code> property which contains a path to the error in <a href="pointer.html">JSON Pointer syntax</a>.  The messaging has been designed to direct the user directly to the error.</p>
 <p>Here are a few examples:</p>
 <table>
     <tr>
@@ -183,7 +183,7 @@ var onlyStrings = json.Select(jkv =&gt; jkv.Value.Type == JsonValueType.String).
         <td>Expected key. Path: '$.first'</td>
     </tr>
 </table>
-<p>As shown, the error message will give information as to what went wrong and where the error occurred.  The location is given in <a href="http://goessner.net/articles/JsonPath/">JSONPath</a> notation.  In the last example, the key could not be determined from the input, so it gave the last-recognized key.</p>
+<p>As shown, the error message will give information as to what went wrong and where the error occurred.  The location is given in <a href="https://tools.ietf.org/html/rfc6901">JSON Pointer</a> notation.  In the last example, the key could not be determined from the input, so it gave the last-recognized key.</p>
 <p><code>JsonValue.Parse()</code> will fail quickly at the first error.</p>
 </article>
           </div>
@@ -193,7 +193,7 @@ var onlyStrings = json.Select(jkv =&gt; jkv.Value.Type == JsonValueType.String).
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/docs_source/usage/getting-started.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/getting-started.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

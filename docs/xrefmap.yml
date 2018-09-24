@@ -14425,6 +14425,12 @@ references:
   commentId: T:Manatee.Json.Serialization.ISerializer
   fullName: Manatee.Json.Serialization.ISerializer
   nameWithType: ISerializer
+- uid: Manatee.Json.Serialization.ISerializer.Deserialize(Manatee.Json.Serialization.SerializationContext)
+  name: Deserialize(SerializationContext)
+  href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Deserialize_Manatee_Json_Serialization_SerializationContext_
+  commentId: M:Manatee.Json.Serialization.ISerializer.Deserialize(Manatee.Json.Serialization.SerializationContext)
+  fullName: Manatee.Json.Serialization.ISerializer.Deserialize(Manatee.Json.Serialization.SerializationContext)
+  nameWithType: ISerializer.Deserialize(SerializationContext)
 - uid: Manatee.Json.Serialization.ISerializer.Deserialize*
   name: Deserialize
   href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Deserialize_
@@ -14432,21 +14438,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.ISerializer.Deserialize
   nameWithType: ISerializer.Deserialize
-- uid: Manatee.Json.Serialization.ISerializer.Deserialize``1(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
-  name: Deserialize<T>(JsonValue, JsonSerializer)
-  href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Deserialize__1_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_
-  commentId: M:Manatee.Json.Serialization.ISerializer.Deserialize``1(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
-  name.vb: Deserialize(Of T)(JsonValue, JsonSerializer)
-  fullName: Manatee.Json.Serialization.ISerializer.Deserialize<T>(Manatee.Json.JsonValue, Manatee.Json.Serialization.JsonSerializer)
-  fullName.vb: Manatee.Json.Serialization.ISerializer.Deserialize(Of T)(Manatee.Json.JsonValue, Manatee.Json.Serialization.JsonSerializer)
-  nameWithType: ISerializer.Deserialize<T>(JsonValue, JsonSerializer)
-  nameWithType.vb: ISerializer.Deserialize(Of T)(JsonValue, JsonSerializer)
-- uid: Manatee.Json.Serialization.ISerializer.Handles(System.Type,Manatee.Json.Serialization.JsonSerializerOptions,Manatee.Json.JsonValue)
-  name: Handles(Type, JsonSerializerOptions, JsonValue)
-  href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Handles_System_Type_Manatee_Json_Serialization_JsonSerializerOptions_Manatee_Json_JsonValue_
-  commentId: M:Manatee.Json.Serialization.ISerializer.Handles(System.Type,Manatee.Json.Serialization.JsonSerializerOptions,Manatee.Json.JsonValue)
-  fullName: Manatee.Json.Serialization.ISerializer.Handles(System.Type, Manatee.Json.Serialization.JsonSerializerOptions, Manatee.Json.JsonValue)
-  nameWithType: ISerializer.Handles(Type, JsonSerializerOptions, JsonValue)
+- uid: Manatee.Json.Serialization.ISerializer.Handles(Manatee.Json.Serialization.SerializationContext)
+  name: Handles(SerializationContext)
+  href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Handles_Manatee_Json_Serialization_SerializationContext_
+  commentId: M:Manatee.Json.Serialization.ISerializer.Handles(Manatee.Json.Serialization.SerializationContext)
+  fullName: Manatee.Json.Serialization.ISerializer.Handles(Manatee.Json.Serialization.SerializationContext)
+  nameWithType: ISerializer.Handles(SerializationContext)
 - uid: Manatee.Json.Serialization.ISerializer.Handles*
   name: Handles
   href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Handles_
@@ -14454,6 +14451,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.ISerializer.Handles
   nameWithType: ISerializer.Handles
+- uid: Manatee.Json.Serialization.ISerializer.Serialize(Manatee.Json.Serialization.SerializationContext)
+  name: Serialize(SerializationContext)
+  href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Serialize_Manatee_Json_Serialization_SerializationContext_
+  commentId: M:Manatee.Json.Serialization.ISerializer.Serialize(Manatee.Json.Serialization.SerializationContext)
+  fullName: Manatee.Json.Serialization.ISerializer.Serialize(Manatee.Json.Serialization.SerializationContext)
+  nameWithType: ISerializer.Serialize(SerializationContext)
 - uid: Manatee.Json.Serialization.ISerializer.Serialize*
   name: Serialize
   href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Serialize_
@@ -14461,15 +14464,6 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.ISerializer.Serialize
   nameWithType: ISerializer.Serialize
-- uid: Manatee.Json.Serialization.ISerializer.Serialize``1(``0,Manatee.Json.Serialization.JsonSerializer)
-  name: Serialize<T>(T, JsonSerializer)
-  href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_Serialize__1___0_Manatee_Json_Serialization_JsonSerializer_
-  commentId: M:Manatee.Json.Serialization.ISerializer.Serialize``1(``0,Manatee.Json.Serialization.JsonSerializer)
-  name.vb: Serialize(Of T)(T, JsonSerializer)
-  fullName: Manatee.Json.Serialization.ISerializer.Serialize<T>(T, Manatee.Json.Serialization.JsonSerializer)
-  fullName.vb: Manatee.Json.Serialization.ISerializer.Serialize(Of T)(T, Manatee.Json.Serialization.JsonSerializer)
-  nameWithType: ISerializer.Serialize<T>(T, JsonSerializer)
-  nameWithType.vb: ISerializer.Serialize(Of T)(T, JsonSerializer)
 - uid: Manatee.Json.Serialization.ISerializer.ShouldMaintainReferences
   name: ShouldMaintainReferences
   href: api/Manatee.Json.Serialization.ISerializer.html#Manatee_Json_Serialization_ISerializer_ShouldMaintainReferences
@@ -14559,6 +14553,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.JsonSerializer.AbstractionMap
   nameWithType: JsonSerializer.AbstractionMap
+- uid: Manatee.Json.Serialization.JsonSerializer.Deserialize(System.Type,Manatee.Json.JsonValue)
+  name: Deserialize(Type, JsonValue)
+  href: api/Manatee.Json.Serialization.JsonSerializer.html#Manatee_Json_Serialization_JsonSerializer_Deserialize_System_Type_Manatee_Json_JsonValue_
+  commentId: M:Manatee.Json.Serialization.JsonSerializer.Deserialize(System.Type,Manatee.Json.JsonValue)
+  fullName: Manatee.Json.Serialization.JsonSerializer.Deserialize(System.Type, Manatee.Json.JsonValue)
+  nameWithType: JsonSerializer.Deserialize(Type, JsonValue)
 - uid: Manatee.Json.Serialization.JsonSerializer.Deserialize*
   name: Deserialize
   href: api/Manatee.Json.Serialization.JsonSerializer.html#Manatee_Json_Serialization_JsonSerializer_Deserialize_
@@ -14620,6 +14620,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.JsonSerializer.Options
   nameWithType: JsonSerializer.Options
+- uid: Manatee.Json.Serialization.JsonSerializer.Serialize(System.Type,System.Object)
+  name: Serialize(Type, Object)
+  href: api/Manatee.Json.Serialization.JsonSerializer.html#Manatee_Json_Serialization_JsonSerializer_Serialize_System_Type_System_Object_
+  commentId: M:Manatee.Json.Serialization.JsonSerializer.Serialize(System.Type,System.Object)
+  fullName: Manatee.Json.Serialization.JsonSerializer.Serialize(System.Type, System.Object)
+  nameWithType: JsonSerializer.Serialize(Type, Object)
 - uid: Manatee.Json.Serialization.JsonSerializer.Serialize*
   name: Serialize
   href: api/Manatee.Json.Serialization.JsonSerializer.html#Manatee_Json_Serialization_JsonSerializer_Serialize_
@@ -14960,6 +14966,116 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.SchemaAttribute.Source
   nameWithType: SchemaAttribute.Source
+- uid: Manatee.Json.Serialization.SerializationContext
+  name: SerializationContext
+  href: api/Manatee.Json.Serialization.SerializationContext.html
+  commentId: T:Manatee.Json.Serialization.SerializationContext
+  fullName: Manatee.Json.Serialization.SerializationContext
+  nameWithType: SerializationContext
+- uid: Manatee.Json.Serialization.SerializationContext.#ctor(Manatee.Json.Serialization.SerializationContext)
+  name: SerializationContext(SerializationContext)
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext__ctor_Manatee_Json_Serialization_SerializationContext_
+  commentId: M:Manatee.Json.Serialization.SerializationContext.#ctor(Manatee.Json.Serialization.SerializationContext)
+  fullName: Manatee.Json.Serialization.SerializationContext.SerializationContext(Manatee.Json.Serialization.SerializationContext)
+  nameWithType: SerializationContext.SerializationContext(SerializationContext)
+- uid: Manatee.Json.Serialization.SerializationContext.#ctor*
+  name: SerializationContext
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext__ctor_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.#ctor
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.SerializationContext
+  nameWithType: SerializationContext.SerializationContext
+- uid: Manatee.Json.Serialization.SerializationContext.CurrentLocation
+  name: CurrentLocation
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_CurrentLocation
+  commentId: P:Manatee.Json.Serialization.SerializationContext.CurrentLocation
+  fullName: Manatee.Json.Serialization.SerializationContext.CurrentLocation
+  nameWithType: SerializationContext.CurrentLocation
+- uid: Manatee.Json.Serialization.SerializationContext.CurrentLocation*
+  name: CurrentLocation
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_CurrentLocation_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.CurrentLocation
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.CurrentLocation
+  nameWithType: SerializationContext.CurrentLocation
+- uid: Manatee.Json.Serialization.SerializationContext.InferredType
+  name: InferredType
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_InferredType
+  commentId: P:Manatee.Json.Serialization.SerializationContext.InferredType
+  fullName: Manatee.Json.Serialization.SerializationContext.InferredType
+  nameWithType: SerializationContext.InferredType
+- uid: Manatee.Json.Serialization.SerializationContext.InferredType*
+  name: InferredType
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_InferredType_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.InferredType
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.InferredType
+  nameWithType: SerializationContext.InferredType
+- uid: Manatee.Json.Serialization.SerializationContext.JsonRoot
+  name: JsonRoot
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_JsonRoot
+  commentId: P:Manatee.Json.Serialization.SerializationContext.JsonRoot
+  fullName: Manatee.Json.Serialization.SerializationContext.JsonRoot
+  nameWithType: SerializationContext.JsonRoot
+- uid: Manatee.Json.Serialization.SerializationContext.JsonRoot*
+  name: JsonRoot
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_JsonRoot_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.JsonRoot
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.JsonRoot
+  nameWithType: SerializationContext.JsonRoot
+- uid: Manatee.Json.Serialization.SerializationContext.LocalValue
+  name: LocalValue
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_LocalValue
+  commentId: P:Manatee.Json.Serialization.SerializationContext.LocalValue
+  fullName: Manatee.Json.Serialization.SerializationContext.LocalValue
+  nameWithType: SerializationContext.LocalValue
+- uid: Manatee.Json.Serialization.SerializationContext.LocalValue*
+  name: LocalValue
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_LocalValue_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.LocalValue
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.LocalValue
+  nameWithType: SerializationContext.LocalValue
+- uid: Manatee.Json.Serialization.SerializationContext.RequestedType
+  name: RequestedType
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_RequestedType
+  commentId: P:Manatee.Json.Serialization.SerializationContext.RequestedType
+  fullName: Manatee.Json.Serialization.SerializationContext.RequestedType
+  nameWithType: SerializationContext.RequestedType
+- uid: Manatee.Json.Serialization.SerializationContext.RequestedType*
+  name: RequestedType
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_RequestedType_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.RequestedType
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.RequestedType
+  nameWithType: SerializationContext.RequestedType
+- uid: Manatee.Json.Serialization.SerializationContext.RootSerializer
+  name: RootSerializer
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_RootSerializer
+  commentId: P:Manatee.Json.Serialization.SerializationContext.RootSerializer
+  fullName: Manatee.Json.Serialization.SerializationContext.RootSerializer
+  nameWithType: SerializationContext.RootSerializer
+- uid: Manatee.Json.Serialization.SerializationContext.RootSerializer*
+  name: RootSerializer
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_RootSerializer_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.RootSerializer
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.RootSerializer
+  nameWithType: SerializationContext.RootSerializer
+- uid: Manatee.Json.Serialization.SerializationContext.Source
+  name: Source
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_Source
+  commentId: P:Manatee.Json.Serialization.SerializationContext.Source
+  fullName: Manatee.Json.Serialization.SerializationContext.Source
+  nameWithType: SerializationContext.Source
+- uid: Manatee.Json.Serialization.SerializationContext.Source*
+  name: Source
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_Source_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.Source
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.Source
+  nameWithType: SerializationContext.Source
 - uid: Manatee.Json.Serialization.SerializerFactory
   name: SerializerFactory
   href: api/Manatee.Json.Serialization.SerializerFactory.html
@@ -15039,6 +15155,12 @@ references:
   commentId: M:Manatee.Json.Serialization.TypeInstantiationException.#ctor(System.Type)
   fullName: Manatee.Json.Serialization.TypeInstantiationException.TypeInstantiationException(System.Type)
   nameWithType: TypeInstantiationException.TypeInstantiationException(Type)
+- uid: Manatee.Json.Serialization.TypeInstantiationException.#ctor(System.Type,System.Exception)
+  name: TypeInstantiationException(Type, Exception)
+  href: api/Manatee.Json.Serialization.TypeInstantiationException.html#Manatee_Json_Serialization_TypeInstantiationException__ctor_System_Type_System_Exception_
+  commentId: M:Manatee.Json.Serialization.TypeInstantiationException.#ctor(System.Type,System.Exception)
+  fullName: Manatee.Json.Serialization.TypeInstantiationException.TypeInstantiationException(System.Type, System.Exception)
+  nameWithType: TypeInstantiationException.TypeInstantiationException(Type, Exception)
 - uid: Manatee.Json.Serialization.TypeInstantiationException.#ctor*
   name: TypeInstantiationException
   href: api/Manatee.Json.Serialization.TypeInstantiationException.html#Manatee_Json_Serialization_TypeInstantiationException__ctor_

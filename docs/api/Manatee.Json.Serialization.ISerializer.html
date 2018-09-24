@@ -89,7 +89,7 @@
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer_ShouldMaintainReferences.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer.ShouldMaintainReferences%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L13">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L15">View Source</a>
   </span>
   <a id="Manatee_Json_Serialization_ISerializer_ShouldMaintainReferences_" data-uid="Manatee.Json.Serialization.ISerializer.ShouldMaintainReferences*"></a>
   <h4 id="Manatee_Json_Serialization_ISerializer_ShouldMaintainReferences" data-uid="Manatee.Json.Serialization.ISerializer.ShouldMaintainReferences">ShouldMaintainReferences</h4>
@@ -119,19 +119,19 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer_Deserialize__1_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer.Deserialize%60%601(Manatee.Json.JsonValue%2CManatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer_Deserialize_Manatee_Json_Serialization_SerializationContext_.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer.Deserialize(Manatee.Json.Serialization.SerializationContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L38">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L34">View Source</a>
   </span>
   <a id="Manatee_Json_Serialization_ISerializer_Deserialize_" data-uid="Manatee.Json.Serialization.ISerializer.Deserialize*"></a>
-  <h4 id="Manatee_Json_Serialization_ISerializer_Deserialize__1_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Serialization.ISerializer.Deserialize``1(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)">Deserialize&lt;T&gt;(JsonValue, JsonSerializer)</h4>
+  <h4 id="Manatee_Json_Serialization_ISerializer_Deserialize_Manatee_Json_Serialization_SerializationContext_" data-uid="Manatee.Json.Serialization.ISerializer.Deserialize(Manatee.Json.Serialization.SerializationContext)">Deserialize(SerializationContext)</h4>
   <div class="markdown level1 summary"><p>Deserializes a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> into a value.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">T Deserialize&lt;T&gt;(JsonValue json, JsonSerializer serializer)</code></pre>
+    <pre><code class="lang-csharp hljs">object Deserialize(SerializationContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -144,16 +144,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><span class="parametername">json</span></td>
-        <td><p>The JSON data to deserialize.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
-        <td><span class="parametername">serializer</span></td>
-        <td><p>The primary serializer instance.  Provided for nested object serialization.</p>
-</td>
+        <td><a class="xref" href="Manatee.Json.Serialization.SerializationContext.html">SerializationContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -167,43 +160,27 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
+        <td><span class="xref">System.Object</span></td>
         <td><p>The typed value represented by the JSON data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td><p>The type to be deserialized.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer_Handles_System_Type_Manatee_Json_Serialization_JsonSerializerOptions_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer.Handles(System.Type%2CManatee.Json.Serialization.JsonSerializerOptions%2CManatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer_Handles_Manatee_Json_Serialization_SerializationContext_.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer.Handles(Manatee.Json.Serialization.SerializationContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L22">View Source</a>
   </span>
   <a id="Manatee_Json_Serialization_ISerializer_Handles_" data-uid="Manatee.Json.Serialization.ISerializer.Handles*"></a>
-  <h4 id="Manatee_Json_Serialization_ISerializer_Handles_System_Type_Manatee_Json_Serialization_JsonSerializerOptions_Manatee_Json_JsonValue_" data-uid="Manatee.Json.Serialization.ISerializer.Handles(System.Type,Manatee.Json.Serialization.JsonSerializerOptions,Manatee.Json.JsonValue)">Handles(Type, JsonSerializerOptions, JsonValue)</h4>
+  <h4 id="Manatee_Json_Serialization_ISerializer_Handles_Manatee_Json_Serialization_SerializationContext_" data-uid="Manatee.Json.Serialization.ISerializer.Handles(Manatee.Json.Serialization.SerializationContext)">Handles(SerializationContext)</h4>
   <div class="markdown level1 summary"><p>Determines whether the serializer handles a specific type or JSON value given the current options.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">bool Handles(Type type, JsonSerializerOptions options, JsonValue json)</code></pre>
+    <pre><code class="lang-csharp hljs">bool Handles(SerializationContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -216,22 +193,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Type</span></td>
-        <td><span class="parametername">type</span></td>
-        <td><p>The requested object type.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializerOptions.html">JsonSerializerOptions</a></td>
-        <td><span class="parametername">options</span></td>
-        <td><p>The serializer options.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><span class="parametername">json</span></td>
-        <td><p>The JSON instance being deserialized.</p>
-</td>
+        <td><a class="xref" href="Manatee.Json.Serialization.SerializationContext.html">SerializationContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -253,19 +217,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer_Serialize__1___0_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer.Serialize%60%601(%60%600%2CManatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer_Serialize_Manatee_Json_Serialization_SerializationContext_.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer.Serialize(Manatee.Json.Serialization.SerializationContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L30">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L28">View Source</a>
   </span>
   <a id="Manatee_Json_Serialization_ISerializer_Serialize_" data-uid="Manatee.Json.Serialization.ISerializer.Serialize*"></a>
-  <h4 id="Manatee_Json_Serialization_ISerializer_Serialize__1___0_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Serialization.ISerializer.Serialize``1(``0,Manatee.Json.Serialization.JsonSerializer)">Serialize&lt;T&gt;(T, JsonSerializer)</h4>
+  <h4 id="Manatee_Json_Serialization_ISerializer_Serialize_Manatee_Json_Serialization_SerializationContext_" data-uid="Manatee.Json.Serialization.ISerializer.Serialize(Manatee.Json.Serialization.SerializationContext)">Serialize(SerializationContext)</h4>
   <div class="markdown level1 summary"><p>Serializes a value.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">JsonValue Serialize&lt;T&gt;(T obj, JsonSerializer serializer)</code></pre>
+    <pre><code class="lang-csharp hljs">JsonValue Serialize(SerializationContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -278,16 +242,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">obj</span></td>
-        <td><p>The value to serialize.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
-        <td><span class="parametername">serializer</span></td>
-        <td><p>The primary serializer instance.  Provided for nested object serialization.</p>
-</td>
+        <td><a class="xref" href="Manatee.Json.Serialization.SerializationContext.html">SerializationContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -307,22 +264,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td><p>The type of the value to serialize.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
 </article>
           </div>
           
@@ -334,7 +275,7 @@
                     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Serialization_ISerializer.md&amp;value=---%0Auid%3A%20Manatee.Json.Serialization.ISerializer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L8" class="contribution-link">View Source</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Serialization/ISerializer.cs/#L10" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
