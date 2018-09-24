@@ -1,6 +1,6 @@
 # JSON Schema (Pre-v10)
 
-> ***<p style="color:#FF0000">This documentation only applies to Manatee.Json versions 9 and earlier.  To work with JSON Schema in Manatee.Json version 10, please refer to the [latest JSON Schema page](schema.html).</p>***
+> ***<div style="color:#FF0000">This documentation only applies to Manatee.Json versions 9 and earlier.  To work with JSON Schema in Manatee.Json version 10, please refer to the [latest JSON Schema page](schema.html).</div>***
 
 The occasion may arise when you wish to validate that a JSON object is in the correct form (has the appropriate keys and the right types of values).  Enter JSON Schema.  Much like XML Schema with XML, JSON Schema defines a pattern for JSON data.  A JSON Schema validator can verify that a given JSON object meets the requirements as defined by the JSON Schema.  This validation can come in handy as a precursor step before deserializing.
 
@@ -402,7 +402,7 @@ var schema = new JsonSchema07
     }
 ```
 
-> **NOTE** We need to tell the `JsonSchemaReference` class what version of schema we'd like constructed if the schema doesn't itself declare a version.
+***NOTE** We need to tell the `JsonSchemaReference` class what version of schema we'd like constructed if the schema doesn't itself declare a version.*
 
 The declaration is very similar to the schema itself.  Defining a new type is typically done when that type is used for several properties.  In the above example, it is somewhat unnecessary.
 
@@ -537,7 +537,7 @@ The key here to remember is that `Properties` only validates when the JSON is an
 
 That covers all of the basics for defining and building schema directly.  As expected, schema can also be downloaded and deserialized.  This will be covered in the *Schema Serialization* section below.
 
-> **Note:** On occasion, an object may have a property which is of the same type.  In order to declare this kind of property, you should use the static property `Root` defined on the appropriate schema class.  This will instruct the reference to validate the property against the root schema.
+***NOTE** On occasion, an object may have a property which is of the same type.  In order to declare this kind of property, you should use the static property `Root` defined on the appropriate schema class.  This will instruct the reference to validate the property against the root schema.*
 
 ## Validation
 
@@ -586,7 +586,7 @@ var numberResults = schema.Validate(numberJson);
 var nonObjectResults = schame.Validate(nonObject);
 ```
 
-> **IMPORTANT** You may have noticed that the second parameter is not used.  This parameter is used internally for validating subschema and resolving references and should not be used explicitly.
+***IMPORTANT** You may have noticed that the second parameter is not used.  This parameter is used internally for validating subschema and resolving references and should not be used explicitly.*
 
 The various results objects are of type `SchemaValidationResults`, which has two properties:
 
@@ -611,7 +611,7 @@ var json = schema.ToJson(null);
 
 This can also be done through a `JsonSerializer` instance, of course.  The serializer will yield the same results.
 
-> **Note:** The `null` passed into the `ToJson()` method indicates that a serializer instance is not required to serialize the schema classes.
+***NOTE** The `null` passed into the `ToJson()` method indicates that a serializer instance is not required to serialize the schema classes.*
 
 For deserialization, you will need to go through the `JsonSchemaFactory.FromJson()` static method.  Simply pass your JSON in, and you get the appropriate JSON schema out.
 
@@ -656,7 +656,7 @@ var schema = JsonSchemaFactory.FromJson(json);
 
 To determine the schema version, use `JsonSchemaFactory.SetDefaultSchemaVersion<T>()` and pass in either `JsonSchema04`, `JsonSchema06`, or `JsonSchema07`.  This will instruct the system to create instances of this type when deserializing and dereferencing schemata.
 
-> **NOTE** This method will throw an exception if any type outside of these two are used.
+***NOTE** This method will throw an exception if any type outside of these two are used.*
 
 Somewhat related to schema serialization is the ability to download schema directly.  When you need to do this, it is suggested that you use the `JsonSchemaRegistry.Get()` static method.  Just pass in a URI, and it will download and deserialize the schema automatically.  The benefit to using this method is that the class will also cache the schema for future use.  If there are any references to that URI, it will simply return this schema rather than downloading and deserializing again. 
 
@@ -666,7 +666,7 @@ This static class also exposes additional methods which allow you to manage the 
 - `Unregister(JsonSchema)` - Removes the schema from the cache.
 - `Unregister(string)` - Removes a schema registered to the specified URI from the cache.
 
-> **NOTE** To register a schema, it must have a valid `id`.
+***NOTE** To register a schema, it must have a valid `id`.*
 
 ## Final Notes
 

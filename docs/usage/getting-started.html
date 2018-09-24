@@ -108,9 +108,7 @@
 <p>The <code>JsonValue</code> class is a container class for all of the JSON types.  In order for everything to remain strongly typed, the class exposes a property for each JSON type.  To implement the JSON null value, the static member <code>JsonValue.Null</code> was created.</p>
 <p>The <code>JsonObject</code> class is implemented as <code>Dictionary&lt;string, JsonValue&gt;</code>.  As such it can be navigated and manipulated as any other dictionary instance would be.</p>
 <p>Similarly to the <code>JsonObject</code> class, the <code>JsonArray</code> class is implemented as <code>List&lt;JsonValue&gt;</code>, which can be navigated and manipulated directly as a list instance.</p>
-<blockquote>
-<p><strong>NOTE</strong> Because of <code>JsonObject</code>'s and <code>JsonArray</code>'s inheritance structure, they are fully LINQ-compatible!</p>
-</blockquote>
+<p><em><strong>NOTE</strong> Because of <code>JsonObject</code>'s and <code>JsonArray</code>'s inheritance structure, they are fully LINQ-compatible!</em></p>
 <p>Each of these three classes override the <code>ToString()</code> method to correctly output in a JSON format.</p>
 <p>Implicit casts from <code>JsonObject</code>, <code>JsonArray</code>, <code>string</code>, <code>double</code>, and <code>bool</code> were created in <code>JsonValue</code> to simplify coding and readability.  Also, comparison operators were overridden for the <code>JsonValue</code> class.  You can read more on these casts and operators below.</p>
 <p>All of the extended JSON functionality supported by this library has dedicated object models, where applicable.</p>

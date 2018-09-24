@@ -84,7 +84,7 @@
 <li>Draft-07</li>
 </ul>
 <p><em>Draft-08 is currently in progress and due out soon!</em></p>
-<p>Manatee.Json supports draft-04 and above.</p>
+<p>Manatee.Json supports draft-04 and later.</p>
 <h3 id="meta-schemas">Meta-schemas</h3>
 <p>Each draft defines a meta-schema.  This is a special JSON Schema that describes all of the keywords available for that draft.  They are intended to be used to validate other schemas.  Usually, a schema will declare the draft it should adhere to using the <code>$schema</code> keyword.</p>
 <p>Manatee.Json declares the meta-schemas for draft-04, draft-06, and draft-07 as members of the <code>MetaSchemas</code> static class.</p>
@@ -129,7 +129,7 @@ var mySchema = serializer.Deserialize&lt;JsonSchema&gt;(json);
         .MinLength(10))
     .Required(&quot;myProperty&quot;);
 </code></pre>
-<p><em><strong>NOTE</strong> The meta-schemas mentioned above are declared using the inline syntax.  I've found it to be easier than by instantiating keywords explicitly.</em></p>
+<p><em><strong>NOTE</strong> The meta-schemas mentioned above are declared using the fluent syntax.</em></p>
 <h2 id="validation--annotations">Validation &amp; annotations</h2>
 <h3 id="validating-the-schema-itself">Validating the schema itself</h3>
 <p>Because the <code>JsonSchema</code> class will accept any keyword, and some keywords are only supported by specific drafts, it may be important to ensure that the schema that's created is valid against one of the drafts.</p>

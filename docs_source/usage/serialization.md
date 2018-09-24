@@ -73,7 +73,7 @@ the resulting JSON would look like this:
 
 When the serializer encounters the reference key, it looks up the pointer and provides the same instance that was deserialized at that location.
 
-> **NOTE** Due to the nature of value types (structs), maintaining references is not enabled for them.
+***NOTE** Due to the nature of value types (structs), maintaining references is not enabled for them.*
 
 ## IJsonSerializable
 
@@ -86,7 +86,7 @@ This interface has been created to allow objects to define their own serializati
 
 At minimum, the `FromJson()` method should correctly deserialize the output from the `ToJson()` method.
 
-> **NOTE** The serializer cannot prevent default values from appearing in the JSON structure when these methods are used since your implementation is providing the JSON.
+***NOTE** The serializer cannot prevent default values from appearing in the JSON structure when these methods are used since your implementation is providing the JSON.*
 
 ## ISerializer
 

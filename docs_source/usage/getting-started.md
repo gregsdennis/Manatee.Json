@@ -47,7 +47,7 @@ The `JsonObject` class is implemented as `Dictionary<string, JsonValue>`.  As su
 
 Similarly to the `JsonObject` class, the `JsonArray` class is implemented as `List<JsonValue>`, which can be navigated and manipulated directly as a list instance.
 
-> **NOTE** Because of `JsonObject`'s and `JsonArray`'s inheritance structure, they are fully LINQ-compatible!
+***NOTE** Because of `JsonObject`'s and `JsonArray`'s inheritance structure, they are fully LINQ-compatible!*
 
 Each of these three classes override the `ToString()` method to correctly output in a JSON format.
 

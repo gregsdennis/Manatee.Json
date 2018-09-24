@@ -27,7 +27,7 @@ These operators can be chained together to create very complex paths.
 
 The results returned from evaluating a path is a JSON array containing the matching values, if any.
 
-> **NOTE** Although Mr. Goessner's post states that `false` should be returned for an empty result set, he does allow for an empty array to be optionally returned.  Manatee.Json takes this approach since client code will be simpler when a single return type is always expected.
+***NOTE** Although Mr. Goessner's post states that `false` should be returned for an empty result set, he does allow for an empty array to be optionally returned.  Manatee.Json takes this approach since client code will be simpler when a single return type is always expected.*
 
 ## JavaScript Expression support in JsonPath
 
@@ -39,13 +39,13 @@ The expression inside `?()` must evaluate to a boolean.  This expression will be
 
 Inside a search expression, the array or current value may be referenced using the `@` operator.  This functions the same as the root operator `$` but targets the array or current value instead.  However, the `$` operator can still be used to back-reference the root as well.
 
-> **NOTE**  Since the `()` operator does not iterate through the array, the target of the `@` operator is the array itself rather than an item contained within it.
+***NOTE**  Since the `()` operator does not iterate through the array, the target of the `@` operator is the array itself rather than an item contained within it.*
 
 ## Building a JSONPath with Manatee.Json
 
 To represent JSONPaths, Manatee.Json exposes the `JsonPath` object.  To create a `JsonPath` object, the `JsonPathWith` static class has been provided.  This class has static and extension methods which can be used to create any sort of path desired.  Below is a listing of the available methods.  All of these methods are available as extension methods as well, which allows them to be chained together.
 
-> **NOTE**  The extension methods return a new `JsonPath` instance rather than modifying the passed instance.  This behavior emulates that of Linq extension methods.
+***NOTE**  The extension methods return a new `JsonPath` instance rather than modifying the passed instance.  This behavior emulates that of Linq extension methods.*
 
 - `Name()` - Adds `.*`.
 - `Name(string)` - Adds a `.` operator and a key.
@@ -62,7 +62,7 @@ To represent JSONPaths, Manatee.Json exposes the `JsonPath` object.  To create a
 - `SearchArray(Expression<Func<JsonArray, int>>)` - Adds `..[()]` with a function which takes a `JsonArray` and returns an `int`.
 - `SearchArray(Expression<Func<JsonValue, bool>>)` - Adds `..[?()]` with a function which takes a `JsonValue` and returns a `bool`.
 
-> **TIP** There is an implicit conversion from `int` to `Slice` so that you can pass just individual indexes into the `Array(params Slice[])` and `SearchArray(params Slice[])` methods.  This means that individual indexes mixed with slices are supported.  For example `JsonPathWith.Array(1, new Slice(3, 5))` will construct the path `$[1,3:5]`.
+***TIP** There is an implicit conversion from `int` to `Slice` so that you can pass just individual indexes into the `Array(params Slice[])` and `SearchArray(params Slice[])` methods.  This means that individual indexes mixed with slices are supported.  For example `JsonPathWith.Array(1, new Slice(3, 5))` will construct the path `$[1,3:5]`.*
 
 You may have noticed that a few of these take Linq Expressions as their argument.  This is to facilitate easy creation of JSONPath expression arguments in a way familiar to .Net developers.  It also provides compile-time checking on the expressions.
 
@@ -78,7 +78,7 @@ Two static classes have been created to aid in the creation of these expressions
 - `IndexOf(JsonValue)` - If the value is an array, returns the index of the indicated value if it is found; otherwise -1.
     - This can be useful when attempting to ascertain whether an array contains a specific value:  `.IndexOf() != -1` can be used like a `Contains()`.
 
-> **NOTE** All of these extension methods can be considered `null`-proof.  That is, they will handle the case where they are called on a `null` object without throwing an exception.
+***NOTE** All of these extension methods can be considered `null`-proof.  That is, they will handle the case where they are called on a `null` object without throwing an exception.*
 
 The above methods allow you to build paths on the value passed into the expression (either a JsonValue or JsonArray).  If you'd like to build a path on the root object within an expression, use the `JsonPathRoot` static class to start the path.  (These non-extension methods are specifically purposed for referencing the root.  This is why they're segregated into a separate class.)
 
@@ -130,9 +130,9 @@ var path = JsonPathWith.Search("book").Array(v => v.Name("price") + 1 < price);
 
 As the field updates, the path evaluation will change accordingly.
 
-> **IMPORTANT** While you may use local and instance fields *in your expressions*, the extension methods currently only support literal arguments.  Passing fields, properties, or method calls into these methods will throw a `NotSupportedException`.
+***IMPORTANT** While you may use local and instance fields *in your expressions*, the extension methods currently only support literal arguments.  Passing fields, properties, or method calls into these methods will throw a `NotSupportedException`.*
 
-> **IMPORTANT** The methods contained within `PathExpressionExtensions` and `JsonPathRoot` will throw a `InvalidOperationException` if called outside of the context of one of the `JsonPathWith` methods.
+***IMPORTANT** The methods contained within `PathExpressionExtensions` and `JsonPathRoot` will throw a `InvalidOperationException` if called outside of the context of one of the `JsonPathWith` methods.*
 
 ## Parsing
 
@@ -144,4 +144,4 @@ The return is the `JsonPath` instance.  It's really that simple.  The benefit of
 
 Evaluating JSONPaths is easy.  The `JsonPath` class exposes the `Evaluate(JsonValue)` method.  This method will return a `JsonArray` containing all matches (or empty if there were none).
 
-> **NOTE** The return deviates slightly from Mr. Groessner's implementation in that an empty array is returned when there are no matches, as opposed to a `false` value.
+***NOTE** The return deviates slightly from Mr. Groessner's implementation in that an empty array is returned when there are no matches, as opposed to a `false` value.*

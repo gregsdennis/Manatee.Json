@@ -19,7 +19,7 @@ There are currently four active drafts of the JSON Schema specification:
 
 *Draft-08 is currently in progress and due out soon!*
 
-Manatee.Json supports draft-04 and above.
+Manatee.Json supports draft-04 and later.
 
 ### Meta-schemas
 
@@ -86,7 +86,7 @@ var schema = new JsonSchema()
     .Required("myProperty");
 ```
 
-***NOTE** The meta-schemas mentioned above are declared using the inline syntax.  I've found it to be easier than by instantiating keywords explicitly.*
+***NOTE** The meta-schemas mentioned above are declared using the fluent syntax.*
 
 ## Validation & annotations
 

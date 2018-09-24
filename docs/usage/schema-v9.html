@@ -70,7 +70,7 @@
 <h1 id="json-schema-pre-v10">JSON Schema (Pre-v10)</h1>
 
 <blockquote>
-<p><em><strong><p style="color:#FF0000">This documentation only applies to Manatee.Json versions 9 and earlier.  To work with JSON Schema in Manatee.Json version 10, please refer to the <a href="schema.html">latest JSON Schema page</a>.</p></strong></em></p>
+<p><em><strong><div style="color:#FF0000">This documentation only applies to Manatee.Json versions 9 and earlier.  To work with JSON Schema in Manatee.Json version 10, please refer to the <a href="schema.html">latest JSON Schema page</a>.</div></strong></em></p>
 </blockquote>
 <p>The occasion may arise when you wish to validate that a JSON object is in the correct form (has the appropriate keys and the right types of values).  Enter JSON Schema.  Much like XML Schema with XML, JSON Schema defines a pattern for JSON data.  A JSON Schema validator can verify that a given JSON object meets the requirements as defined by the JSON Schema.  This validation can come in handy as a precursor step before deserializing.</p>
 <p>More information about JSON Schema can be found at <a href="http://json-schema.org">json-schema.org</a>.</p>
@@ -433,9 +433,7 @@ For draft 4, this is represented in JSON as the `id` property; for draft 6, this
             }
     }
 </code></pre>
-<blockquote>
-<p><strong>NOTE</strong> We need to tell the <code>JsonSchemaReference</code> class what version of schema we'd like constructed if the schema doesn't itself declare a version.</p>
-</blockquote>
+<p><em><strong>NOTE</strong> We need to tell the <code>JsonSchemaReference</code> class what version of schema we'd like constructed if the schema doesn't itself declare a version.</em></p>
 <p>The declaration is very similar to the schema itself.  Defining a new type is typically done when that type is used for several properties.  In the above example, it is somewhat unnecessary.</p>
 <p>External references are a useful way to organize complex type hierarchies; they allow a type defined in one schema to be referenced in another schema. For example, the following are all valid syntax:</p>
 <ul>
@@ -546,9 +544,7 @@ var schema = new JsonSchema
 </code></pre>
 <p>The key here to remember is that <code>Properties</code> only validates when the JSON is an object, and <code>Pattern</code> only validates when the JSON is a string.  Otherwise, these are ignored.  The <code>Type</code> property ensures that it fails for anything except strings or objects.</p>
 <p>That covers all of the basics for defining and building schema directly.  As expected, schema can also be downloaded and deserialized.  This will be covered in the <em>Schema Serialization</em> section below.</p>
-<blockquote>
-<p><strong>Note:</strong> On occasion, an object may have a property which is of the same type.  In order to declare this kind of property, you should use the static property <code>Root</code> defined on the appropriate schema class.  This will instruct the reference to validate the property against the root schema.</p>
-</blockquote>
+<p><em><strong>NOTE</strong> On occasion, an object may have a property which is of the same type.  In order to declare this kind of property, you should use the static property <code>Root</code> defined on the appropriate schema class.  This will instruct the reference to validate the property against the root schema.</em></p>
 <h2 id="validation">Validation</h2>
 <p>The purpose of JSON Schema is to validate that a JSON value meets certain criteria.  Let's take a look at how Manatee.Json schema objects provide this service.</p>
 <p>Every schema object is required to implement the <code>IJsonSchema</code> interface.  This interface defines a single method:</p>
@@ -585,9 +581,7 @@ var stringResults = schema.Validate(stringJson);
 var numberResults = schema.Validate(numberJson);
 var nonObjectResults = schame.Validate(nonObject);
 </code></pre>
-<blockquote>
-<p><strong>IMPORTANT</strong> You may have noticed that the second parameter is not used.  This parameter is used internally for validating subschema and resolving references and should not be used explicitly.</p>
-</blockquote>
+<p><em><strong>IMPORTANT</strong> You may have noticed that the second parameter is not used.  This parameter is used internally for validating subschema and resolving references and should not be used explicitly.</em></p>
 <p>The various results objects are of type <code>SchemaValidationResults</code>, which has two properties:</p>
 <ul>
 <li>IsValid - Indicates if the tested JSON value is valid,</li>
@@ -606,9 +600,7 @@ var nonObjectResults = schame.Validate(nonObject);
 var json = schema.ToJson(null);
 </code></pre>
 <p>This can also be done through a <code>JsonSerializer</code> instance, of course.  The serializer will yield the same results.</p>
-<blockquote>
-<p><strong>Note:</strong> The <code>null</code> passed into the <code>ToJson()</code> method indicates that a serializer instance is not required to serialize the schema classes.</p>
-</blockquote>
+<p><em><strong>NOTE</strong> The <code>null</code> passed into the <code>ToJson()</code> method indicates that a serializer instance is not required to serialize the schema classes.</em></p>
 <p>For deserialization, you will need to go through the <code>JsonSchemaFactory.FromJson()</code> static method.  Simply pass your JSON in, and you get the appropriate JSON schema out.</p>
 <pre><code class="lang-csharp">var json = GetSchemaJson();
 var schema = JsonSchemaFactory.FromJson(json);
@@ -639,9 +631,7 @@ var schema = JsonSchemaFactory.FromJson(json);
 <h2 id="schema-version-selection">Schema Version Selection</h2>
 <p><code>JsonSchemaFactory</code> will make a best guess when deserializing schemata, but many times, both drafts may work for a given schema.  In these cases a default implementation must be used.</p>
 <p>To determine the schema version, use <code>JsonSchemaFactory.SetDefaultSchemaVersion&lt;T&gt;()</code> and pass in either <code>JsonSchema04</code>, <code>JsonSchema06</code>, or <code>JsonSchema07</code>.  This will instruct the system to create instances of this type when deserializing and dereferencing schemata.</p>
-<blockquote>
-<p><strong>NOTE</strong> This method will throw an exception if any type outside of these two are used.</p>
-</blockquote>
+<p><em><strong>NOTE</strong> This method will throw an exception if any type outside of these two are used.</em></p>
 <p>Somewhat related to schema serialization is the ability to download schema directly.  When you need to do this, it is suggested that you use the <code>JsonSchemaRegistry.Get()</code> static method.  Just pass in a URI, and it will download and deserialize the schema automatically.  The benefit to using this method is that the class will also cache the schema for future use.  If there are any references to that URI, it will simply return this schema rather than downloading and deserializing again.</p>
 <p>This static class also exposes additional methods which allow you to manage the cache of schemata.</p>
 <ul>
@@ -649,9 +639,7 @@ var schema = JsonSchemaFactory.FromJson(json);
 <li><code>Unregister(JsonSchema)</code> - Removes the schema from the cache.</li>
 <li><code>Unregister(string)</code> - Removes a schema registered to the specified URI from the cache.</li>
 </ul>
-<blockquote>
-<p><strong>NOTE</strong> To register a schema, it must have a valid <code>id</code>.</p>
-</blockquote>
+<p><em><strong>NOTE</strong> To register a schema, it must have a valid <code>id</code>.</em></p>
 <h2 id="final-notes">Final Notes</h2>
 <p>Manatee.Json's schema implementation has been designed using the latest two drafts of JSON Schema: draft 4 and draft 6.  Included with these schemas are self-validating schema (metaschema) which serve as a basis for all other schema.  This means that any schema you create must pass validation by this base schema.  Furthermore, both schema classes define their metaschema and the empty schema as static properties.</p>
 <p>As drafts 6 and 7 support booleans as valid schema, implicit casts have been created from <code>bool</code> to <code>JsonSchema06</code> and <code>JsonSchema07</code>.  These are translated to the static properties <code>True</code> and <code>False</code> on their respective types.  These casts will not work implicitly when assigning to a property of type <code>IJsonSchema</code>; an explicit cast will be required.</p>
@@ -663,7 +651,7 @@ var schema = JsonSchemaFactory.FromJson(json);
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/release/10.0.0/docs_source/usage/schema-v9.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/schema-v9.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
