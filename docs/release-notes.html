@@ -76,7 +76,7 @@
 </ul>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/112">#112</a>) Another change intended to support JSON Schem draft-08 is a <a href="https://github.com/json-schema-org/json-schema-spec/issues/643">standardized output format</a>.  The validation results have been restructured to conform to this proposal.</p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/177">#177</a>) Opened up the <code>StringFormat</code> class (schema <code>format</code> keyword) for extension and customization.</p>
-<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/177">#177</a>) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous <code>#Def</code> and <code>#Ref</code> tags.  Now you will see something more like <code>{&quot;$ref&quot;:&quot;#/property1/array/3/data&quot;}</code> in the serialized JSON for references.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/152">#152</a>) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous <code>#Def</code> and <code>#Ref</code> tags.  Now you will see something more like <code>{&quot;$ref&quot;:&quot;#/property1/array/3/data&quot;}</code> in the serialized JSON for references.</p>
 <h3 id="changes">Changes</h3>
 <p><em>In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.</em></p>
 <ul>
