@@ -17,10 +17,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var dict = (IDictionary<string, object>)context.Source;
 			return dict.ToDictionary(kvp => kvp.Key, kvp =>
 					{
-						var newContext = new SerializationContext
-							{
-								RootSerializer = context.RootSerializer,
-								JsonRoot = context.JsonRoot,
+						var newContext = new SerializationContext(context)
+						{
 								CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
 								InferredType = kvp.Value?.GetType() ?? typeof(object),
 								RequestedType = typeof(object),

@@ -25,10 +25,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var output = new Dictionary<string, JsonValue>();
 				foreach (var kvp in dict)
 				{
-					var newContext = new SerializationContext
-						{
-							RootSerializer = context.RootSerializer,
-							JsonRoot = context.JsonRoot,
+					var newContext = new SerializationContext(context)
+					{
 							CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key.ToString()),
 							InferredType = kvp.Value?.GetType() ?? typeof(TValue),
 							RequestedType = typeof(TValue),
@@ -52,20 +50,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			int i = 0;
 			foreach (var item in dict)
 			{
-				var newContext = new SerializationContext
-					{
-						RootSerializer = context.RootSerializer,
-						JsonRoot = context.JsonRoot,
+				var newContext = new SerializationContext(context)
+				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Key"),
 						InferredType = item.Key.GetType(),
 						RequestedType = typeof(TKey),
 						Source = item.Key
 					};
 				var key = serializer.Serialize(newContext);
-				newContext = new SerializationContext
-					{
-						RootSerializer = context.RootSerializer,
-						JsonRoot = context.JsonRoot,
+				newContext = new SerializationContext(context)
+				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Value"),
 						InferredType = item.Value.GetType(),
 						RequestedType = typeof(TValue),
@@ -91,20 +85,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			int i = 0;
 			foreach (var kvp in dict)
 			{
-				var newContext = new SerializationContext
-					{
-						RootSerializer = context.RootSerializer,
-						JsonRoot = context.JsonRoot,
+				var newContext = new SerializationContext(context)
+				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Key"),
 						InferredType = kvp.Key.GetType(),
 						RequestedType = typeof(TKey),
 						Source = kvp.Key
 					};
 				var key = serializer.Options.SerializationNameTransform(_SerializeDefaultValue(newContext, true, existingOption).String);
-				newContext = new SerializationContext
-					{
-						RootSerializer = context.RootSerializer,
-						JsonRoot = context.JsonRoot,
+				newContext = new SerializationContext(context)
+				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(key),
 						InferredType = kvp.Value.GetType(),
 						RequestedType = typeof(TValue),
@@ -128,10 +118,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				return json.Object.ToDictionary(kvp => (TKey)(object)kvp.Key,
 												kvp =>
 													{
-														var newContext = new SerializationContext
-															{
-																RootSerializer = context.RootSerializer,
-																JsonRoot = context.JsonRoot,
+														var newContext = new SerializationContext(context)
+														{
 																CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key.ToString()),
 																InferredType = typeof(TValue),
 																RequestedType = typeof(TValue),
@@ -148,10 +136,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				.ToDictionary(jv =>
 					              {
 						              var key = jv.Value.Object["Key"];
-						              var newContext = new SerializationContext
-							              {
-								              RootSerializer = context.RootSerializer,
-								              JsonRoot = context.JsonRoot,
+						              var newContext = new SerializationContext(context)
+									  {
 								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Key"),
 								              InferredType = typeof(TValue),
 								              RequestedType = typeof(TValue),
@@ -163,10 +149,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				              jv =>
 					              {
 						              var key = jv.Value.Object["Key"];
-						              var newContext = new SerializationContext
-							              {
-								              RootSerializer = context.RootSerializer,
-								              JsonRoot = context.JsonRoot,
+						              var newContext = new SerializationContext(context)
+									  {
 								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Value"),
 								              InferredType = typeof(TValue),
 								              RequestedType = typeof(TValue),
@@ -187,20 +171,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var i = 0;
 			foreach (var kvp in context.LocalValue.Object)
 			{
-				var newContext = new SerializationContext
-					{
-						RootSerializer = context.RootSerializer,
-						JsonRoot = context.JsonRoot,
+				var newContext = new SerializationContext(context)
+				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Key"),
 						InferredType = typeof(TKey),
 						RequestedType = typeof(TKey),
 						LocalValue = serializer.Options.DeserializationNameTransform(kvp.Key)
 				};
 				var key = (TKey) serializer.Deserialize(newContext);
-				newContext = new SerializationContext
-					{
-						RootSerializer = context.RootSerializer,
-						JsonRoot = context.JsonRoot,
+				newContext = new SerializationContext(context)
+				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
 						InferredType = typeof(TValue),
 						RequestedType = typeof(TValue),

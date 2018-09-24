@@ -20,10 +20,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			if (context.RootSerializer.SerializationMap.TryGetPair(context.Source, out var pair))
+			if (context.SerializationMap.TryGetPair(context.Source, out var pair))
 				return new JsonObject {{Constants.RefKey, pair.Source.ToString()}};
 
-			context.RootSerializer.SerializationMap.Add(new SerializationReference
+			context.SerializationMap.Add(new SerializationReference
 				{
 					Object = context.Source,
 					Source = context.CurrentLocation
@@ -39,7 +39,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (jsonObj.TryGetValue(Constants.RefKey, out var reference))
 				{
 					var location = JsonPointer.Parse(reference.String);
-					context.RootSerializer.SerializationMap.AddReference(location, context.CurrentLocation);
+					context.SerializationMap.AddReference(location, context.CurrentLocation);
 					return context.InferredType.Default();
 				}
 			}
@@ -48,7 +48,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				{
 					Source = context.CurrentLocation
 				};
-			context.RootSerializer.SerializationMap.Add(pair);
+			context.SerializationMap.Add(pair);
 
 			var obj = _innerSerializer.Deserialize(context);
 

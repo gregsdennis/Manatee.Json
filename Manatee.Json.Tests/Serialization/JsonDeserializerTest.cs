@@ -527,7 +527,6 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected.LoopProperty.StringProp, actual.LoopProperty.StringProp);
 			Assert.IsNotNull(actual.LoopProperty.LoopProperty);
 			Assert.AreSame(actual, actual.LoopProperty.LoopProperty);
-			Assert.AreEqual(0, serializer.SerializationMap.Count);
 		}
 #if !IOS
 		[Test]

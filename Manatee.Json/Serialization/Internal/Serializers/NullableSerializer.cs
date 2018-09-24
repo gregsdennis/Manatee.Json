@@ -19,14 +19,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			var encodeDefaultValues = context.RootSerializer.Options.EncodeDefaultValues;
 			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
-			var newContext = new SerializationContext
-				{
+			var newContext = new SerializationContext(context)
+			{
 					CurrentLocation = context.CurrentLocation.Clone(),
 					InferredType = typeof(T),
 					RequestedType = typeof(T),
-					JsonRoot = context.JsonRoot,
-					LocalValue = context.LocalValue,
-					RootSerializer = context.RootSerializer
+					LocalValue = context.LocalValue
 				};
 			var json = context.RootSerializer.Serialize(newContext);
 			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;
@@ -38,14 +36,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			if (context.LocalValue == JsonValue.Null) return null;
 
-			var newContext = new SerializationContext
-				{
+			var newContext = new SerializationContext(context)
+			{
 					CurrentLocation = context.CurrentLocation.Clone(),
 					InferredType = typeof(T),
 					RequestedType = typeof(T),
-					JsonRoot = context.JsonRoot,
-					LocalValue = context.LocalValue,
-					RootSerializer = context.RootSerializer
+					LocalValue = context.LocalValue
 				};
 
 			return (T) context.RootSerializer.Deserialize(newContext);

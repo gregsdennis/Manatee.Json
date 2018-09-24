@@ -1,5 +1,6 @@
 ﻿using System;
 using Manatee.Json.Pointer;
+using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
@@ -35,12 +36,28 @@ namespace Manatee.Json.Serialization
 
 	public class SerializationContext
 	{
-		public JsonSerializer RootSerializer { get; set; }
 		public Type InferredType { get; set; }
 		public Type RequestedType { get; set; }
 		public JsonPointer CurrentLocation { get; set; }
-		public JsonValue JsonRoot { get; set; }
 		public JsonValue LocalValue { get; set; }
 		public object Source { get; set; }
+
+		public JsonValue JsonRoot { get; }
+		public JsonSerializer RootSerializer { get; }
+
+		internal SerializationReferenceCache SerializationMap { get; }
+
+		public SerializationContext(SerializationContext other)
+		{
+			SerializationMap = other.SerializationMap;
+			RootSerializer = other.RootSerializer;
+			JsonRoot = other.JsonRoot;
+		}
+		internal SerializationContext(JsonSerializer rootSerializer, JsonValue jsonRoot = null)
+		{
+			SerializationMap = new SerializationReferenceCache();
+			RootSerializer = rootSerializer;
+			JsonRoot = jsonRoot;
+		}
 	}
 }

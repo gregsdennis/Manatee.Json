@@ -29,7 +29,6 @@ namespace Manatee.Json.Serialization
 			get { return _abstractionMap ?? (_abstractionMap = new AbstractionMap(AbstractionMap.Default)); }
 			set { _abstractionMap = value; }
 		}
-		internal SerializationPairCache SerializationMap { get; } = new SerializationPairCache();
 
 		/// <summary>
 		/// Serializes an object to a JSON structure.
@@ -39,11 +38,10 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			var context = new SerializationContext
+			var context = new SerializationContext(this)
 				{
 					InferredType = obj?.GetType() ?? typeof(T),
 					RequestedType = typeof(T),
-					RootSerializer = this,
 					CurrentLocation = new JsonPointer("#"),
 					Source = obj
 				};
@@ -57,11 +55,10 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize(Type type, object obj)
 		{
-			var context = new SerializationContext
+			var context = new SerializationContext(this)
 				{
 					InferredType = obj?.GetType() ?? type,
 					RequestedType = type,
-					RootSerializer = this,
 					CurrentLocation = new JsonPointer("#"),
 					Source = obj
 				};
@@ -75,7 +72,7 @@ namespace Manatee.Json.Serialization
 			var json = serializer.Serialize(context);
 			if (--_callCount == 0)
 			{
-				SerializationMap.Clear();
+				context.SerializationMap.Clear();
 			}
 			return json;
 		}
@@ -88,7 +85,6 @@ namespace Manatee.Json.Serialization
 		{
 			var serializer = SerializerFactory.GetTypeSerializer();
 			var json = serializer.SerializeType<T>(this);
-			SerializationMap.Clear();
 			return json;
 		}
 		/// <summary>
@@ -124,13 +120,11 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public object Deserialize(Type type, JsonValue json)
 		{
-			var context = new SerializationContext
+			var context = new SerializationContext(this, json)
 				{
 					InferredType = type,
 					RequestedType = type,
-					RootSerializer = this,
 					CurrentLocation = new JsonPointer("#"),
-					JsonRoot = json,
 					LocalValue = json
 				};
 
@@ -144,7 +138,7 @@ namespace Manatee.Json.Serialization
 			var obj = serializer.Deserialize(context);
 			if (--_callCount == 0)
 			{
-				SerializationMap.Complete(obj);
+				context.SerializationMap.Complete(obj);
 			}
 			return obj;
 		}

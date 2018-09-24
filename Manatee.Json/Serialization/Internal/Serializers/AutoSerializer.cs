@@ -99,14 +99,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (value != null)
 				{
 					var newLocation = context.CurrentLocation.CloneAndAppend(property.SerializationName);
-					var newContext = new SerializationContext
-						{
+					var newContext = new SerializationContext(context)
+					{
 							CurrentLocation = newLocation,
 							InferredType = type,
 							RequestedType = type,
-							JsonRoot = context.JsonRoot,
-							Source = value,
-							RootSerializer = context.RootSerializer
+							Source = value
 						};
 					json = serializer.Serialize(newContext);
 				}
@@ -179,14 +177,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					else
 						type = ((FieldInfo) memberInfo.MemberInfo).FieldType;
 					var newLocation = context.CurrentLocation.CloneAndAppend(memberInfo.SerializationName);
-					var newContext = new SerializationContext
+					var newContext = new SerializationContext(context)
 						{
 							CurrentLocation = newLocation,
 							InferredType = type,
 							RequestedType = type,
-							JsonRoot = context.JsonRoot,
 							LocalValue = value,
-							RootSerializer = context.RootSerializer
 						};
 					var valueObj = context.RootSerializer.Deserialize(newContext);
 					dict.Add(memberInfo, valueObj);
