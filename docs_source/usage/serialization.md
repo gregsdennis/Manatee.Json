@@ -1,6 +1,6 @@
 # Serialization
 
-The primary objective of every other JSON library that I have found is serialization; that is, converting an object into a JSON-formatted string.  The problem with existing implementations is that they gloss over the part about building the JSON structure, which hides the actual structure from the library consumer.  To contrast this behavior, Manatee.Json neatly defines and exposes the underlying structure to the consumer.  The main benefit of this approach is that the consumer can browse and even edit the JSON structure before serializing it to a string or deserializing it into a model.
+The primary objective of every other JSON library that I have found is serialization; that is, converting an object into a JSON-formatted string.  The problem with existing implementations is that they gloss over the part about building the JSON structure, which hides the actual structure from the library consumer.  To contrast this behavior, Manatee.Json neatly defines and exposes the underlying structure to the consumer.  The main benefit of this approach is that the consumer can browse, analyze, validate, and even edit the JSON structure before serializing it to a string or deserializing it into a model.
 
 The process of serializing an object checks for certain cases.  These cases are listed in order of descending priority.
 
@@ -8,11 +8,11 @@ The process of serializing an object checks for certain cases.  These cases are 
     - This ensures that each object is only serialized once and to maintain reference trees when deserializing.  Further attempts to serialize the object will place a reference marker.  The deserialization process will key on this marker to maintain object references.
 2. Is the object a (JSON) primitive type or an enumeration?
     - Strings, numeric values, and booleans are considered primitive types for JSON.  Serialization of other types requires more information.
-    - Enumerations are optionally serialized to their numeric value or to their string representation.
+    - Enumerations are optionally serialized to their string representation (default) or to their numeric value.
 3. Does the object implement `IJsonSerializable`?
     - By implementing `IJsonSerializable`, an object expresses that it has a preferred format for JSON serialization.  The serializer respects this preference.
-4. Does a pair of converter methods exist for the object’s type?
-    - For types that do not implement `IJsonSerializable`, are not primitive, and will not be auto-serialized (see next point) as desired, a public registry exists that manages pairs of methods which convert those types to and from the JSON structure.
+4. Does a custom serializer exist for the object’s type?
+    - For types that do not implement `IJsonSerializable`, are not primitive, and will not be auto-serialized as desired, you can create a custom serializer which will provide the conversion.
 5. Attempt to auto-serialize.
     - If none of the conditions above are met, the serializer will attempt to de/serialize the object based on a best-guess and a few other rules.
     - If this fails, `JsonValue.Null` is returned for serialization, and the type’s default value is returned for deserialization.
@@ -21,7 +21,7 @@ Furthermore, to reduce the size of the serialized data, any object whose value i
 
 ## Maintaining References
 
-Object references will be tracked by the serializer.  This is performed by an object cache that tracks every object that is serialized through a single call to the serializer.  This means that if the same object is referenced by multiple properties in the hierarchy, a reference marker (GUID) is created for those properties in the JSON representation, and the original object will receive a define marker with the same GUID.
+Object references will be tracked by the serializer.  This is performed by an object cache that tracks every object that is serialized through a single call to the serializer.  This means that if the same object is referenced by multiple properties in the hierarchy, a reference marker (JSON Pointer) is created for those properties in the JSON representation which points to the location within the JSON document that defines the data.
 
 With these markers, the deserialization process can properly reconstruct the object tree as it existed prior to serialization.
 
@@ -59,20 +59,19 @@ the resulting JSON would look like this:
     "Name" : "Alex",
     "Children" : [
         {
-            "#Def" : "1ef15b13-7063-4894-8a1c-5793f4957763",
             "Name" : "Joe"
         },
         {
             "Name" : "Sue"
         },
         {
-            "#Ref" : "1ef15b13-7063-4894-8a1c-5793f4957763"
+            "$ref" : "#/Children/0"
         }
     ]
 }
 ```
 
-When the serializer encounters the reference key, it knows to look up that GUID and insert the corresponding object.
+When the serializer encounters the reference key, it looks up the pointer and provides the same instance that was deserialized at that location.
 
 > **NOTE** Due to the nature of value types (structs), maintaining references is not enabled for them.
 
@@ -87,13 +86,13 @@ This interface has been created to allow objects to define their own serializati
 
 At minimum, the `FromJson()` method should correctly deserialize the output from the `ToJson()` method.
 
-> **NOTE** The serializer cannot prevent default values from appearing in the JSON structure when these methods are used.
+> **NOTE** The serializer cannot prevent default values from appearing in the JSON structure when these methods are used since your implementation is providing the JSON.
 
-## JsonSerializationTypeRegistry
+## ISerializer
 
-This class has been implemented as a work-around for those objects which are not controlled by the client and will not be auto-serialized properly or as desired.  Many explicit types, such as `DateTime`, and generic types, such as `Nullable<T>`, are examples of these.
+This interface is provided as another mechanism for creating custom serializations.  It's most helpful for types which are not controlled by the client and will not be auto-serialized properly or as desired.  The interface defines methods for whether the object can be handled, serialization, and deserialization as well as a property to declare whether references should be maintained.
 
-Some common explicit types are automatically registered.  These include:
+Some common types are included out of the box.  These include:
 
 - `System.DateTime`
 - `System.TimeSpan`
@@ -101,66 +100,59 @@ Some common explicit types are automatically registered.  These include:
 - `System.Uri`
 - *more to come as they are requested*
 
-To register explicit types such as these, first two methods must be implemented: one that converts to a `JsonValue`, and one that converts back from a `JsonValue` to an instance of the type.  Then a call is made to the `RegisterType<T>()` method.  For example, registering the `System.Drawing.Point` object could be implemented as follows:
+The first step to creating a custom serialization is to implement the `ISerializer` interface. For example, the `System.Drawing.Point` object could be implemented as follows:
 
 ```csharp
-public static class Program
+public class PointSerializer : ISerializer
 {
-    JsonSerializer _serializer = new JsonSerializer();
+    public bool ShouldMaintainReferences => false;
 
-    public void Main()
+    static JsonValue Serialize(SerializationContext context)
     {
-        JsonSerializationTypeRegistry.RegisterType(PointToJson, JsonToPoint);
-        var json = _serializer.Serialize(new Point(5, 6));
+        return new JsonObject {{"x", p.x}, {"y", p.y}};
     }
 
-    static JsonValue PointToJson(Point p, JsonSerializer serializer)
-    {
-        return new JsonObject { {"x", p.x}, {"y", p.y} };
-    }
-
-    static Point JsonToPoint(JsonValue p, JsonSerializer serializer)
+    static object Deserialize(SerializationContext context)
     {
         return new Point(json.Object["x"].Number, json.Object["y"].Number);
     }
 }
 ```
 
-At any time, the serialization methods for a type can be changed by calling the `RegisterType<T>()` method with a new method pair.  This means, for example, that if the default encoding for `DateTime` is not preferred for the application, the behavior can be overridden by registering new methods.  In this way, serialization is completely customizable.
+Once you have the interface implemented you'll need to register an instance with the `SerializerFactory` static class.
+
+```csharp
+SerializerFactory.AddSerializer(new PointSerializer());
+```
+
+***NOTE** You can only add one instance of your serializer.*
+
+At any time, you can remove your serializer by calling the `SerializerFactory.Remove<T>()` method.
 
 Some generic types are automatically registered.  These include:
 
 - `Nullable<T>`
-- `T[]` *(not a generic, but included)*
+- `T[]` *(not a generic, but included anyway)*
 - `List<T>`
 - `Dictionary<TKey, TValue>`
 - `Queue<T>`
 - `Stack<T>`
 - *more to come as they are requested*
 
-> **NOTE** The default behavior for serializing a `Dictionary<TKey, TValue>` yields a `JsonArray` of `JsonObjects`, each containing “Key” and “Value” items.  This is done because the JSON object structure only supports strings as keys, and TKey may not be representable as a string.
+The default behavior for serializing a `Dictionary<TKey, TValue>` yields a `JsonArray` of `JsonObjects`, each containing “Key” and “Value” items.  This is done because the JSON object structure only supports strings as keys, and TKey may not be representable as a string.  There is special consideration for when `TKey` is a string or an enumeration type.
 
-For generic types that are not listed above, simply call `RegisterType<T>()` on the explicitly-defined type.  For instance, if a generic class `MyGenericClass<T>` exists, and a you need to register a `MyGenericClass<int>`, create the required conversion methods and call `RegisterType<MyGenericClass<int>>()`.
-
-To unregister a type, simply call `RegisterType<T>()` and pass nulls for both methods.  If only one method is null, an exception is thrown.  This works for both explicit types and explicitly-defined generic types.
-
-- `RegisterType<int>(null, null)`
-- `RegisterType<List<int>>(null, null)`
-
-This approach can be likened to implementing `IJsonSerializable` on third-party types.  The ideal solution would be to create one or more static classes which contain these conversion methods, then make a single call to a static method to register them all.  Once registered, they remain in memory throughout the life of the application or until they are unregistered.
+This approach can be likened to implementing `IJsonSerializable` on third-party types.  Once registered, they remain in memory throughout the life of the application or until they are unregistered.
 
 ## Auto-serialization
 
 The serializer can automatically serialize most types.  There are some notes to consider, however:
 
-- All of the properties to serialize must be implemented with public getters and setters,
-    - For instance, the `DateTime` object cannot be automatically serialized because it exposes no public properties that have both public getters and public setters.
-- Properties of interface or abstract class types can be serialized, but the value’s type will be explicitly listed in the serialization.
-    - Serialization of properties of these types will result in a `JsonObject` with an additional key:  `“#Type”`.  This is used to indicate the serialized value’s assembly-qualified type name.
+- For round-trip serialization, all of the properties to serialize must be implemented with public getters and setters. For instance, the `DateTime` object cannot be automatically serialized because it exposes no public properties that have both public getters and public setters.  You can, however, opt to serialize read-only properties, but they will not be deserializable.
+- Properties of interface or abstract class types can be serialized, but the value’s type will be explicitly listed in the serialization. Serialization of properties of these types will result in a `JsonObject` with an additional key, `“$type”`, to indicate the serialized value’s assembly-qualified type name.
 - Any property marked with the `JsonIgnore` attribute will not be serialized.
-- Any property marked with the `JsonMapTo` attribute will be serialized to the supplied key, not to the property name.  This can be used to support non-property-friendly keys within JSON objects.
+- Any property marked with the `JsonMapTo` attribute will be serialized to the supplied key, not to the property name.  This can be used to support non-property-friendly keys within JSON objects.  Be wary, though, about mapping properties to `$ref` and `$type` keys since these carry special meaning with Manatee.Json serialization.
 
-Any type that does not implement `IJsonSerializable` and cannot be properly auto-serialized will need to be registered, or else it will be ignored by the serializer. 
+Any type that does not implement `IJsonSerializable`, does not have a custom serializer registered, and cannot be properly auto-serialized will need to be registered, or else it will be ignored by the serializer. 
 
 ## Type Serialization
 
@@ -185,7 +177,7 @@ If so desired, JSON can be validated by a JSON Schema before deserialization of 
 - by URI (on the web or in a remote or local file) or
 - on the class as a public static property
 
-To enable validation, place the `SchemaAttribute` on the type definition.
+To enable validation, place the `SchemaAttribute` on the type definition.  You can use either the ID of the schema
 
 ```csharp
 [Schema("http://json-schema.org/geo")]
@@ -196,25 +188,22 @@ public class Geo
 }
 ```
 
-or
+or you can statically declare it inline and provide the name of the property
 
 ```csharp
 [Schema(nameof(Schema))]
 public class Geo
 {
-    public static IJsonSchema Schema =>
-        new JsonSchema06
-        {
-            Id = "http://json-schema.org/geo",
-            Schema = "http://json-schema.org/draft-06/schema#",
-            Description = "A geographical coordinate",
-            Type = JsonSchemaType.Object,
-            Definitions = new Dictionary<string, IJsonSchema>
-            {
-                ["Longitude"] = new JsonSchema06 { Type = JsonSchemaType.Number },
-                ["Latitude"] = new JsonSchema06 { Type = JsonSchemaType.Number }
-            }
-        }
+    public static JsonSchema Schema =>
+        new JsonSchema()
+            .Id("http://json-schema.org/geo")
+            .Schema("http://json-schema.org/draft-06/schema#")
+            .Description("A geographical coordinate")
+            .Type(JsonSchemaType.Object)
+            .Property("Longitude", new JsonSchema()
+                .Type(JsonSchemaType.Number))
+            .Property("Latitude", new JsonSchema()
+                .Type(JsonSchemaType.Number));
 
     public double Longitude { get; set; }
     public double Latitude { get; set; }
@@ -225,27 +214,27 @@ public class Geo
 
 The serializer has the ability to automatically deserialize abstract class and interface types.  There are two mechanisms through which this is performed.
 
-- `JsonSerializationAbstractionMap`
+- `AbstractionMap`
 - Auto-generation of interface types (JIT type creation)
 
-The `JsonSerializationAbstractionMap` static class maps an abstraction type to an implementation of that abstraction.  During deserialization the registered implementation type will be instantiated and returned, having been casted to the abstraction type requested.
+The `AbstractionMap` class (exposed via the serializer's `AbstractionMap` property as well as a singleton `Default` property on the same class) maps an abstraction type to an implementation of that abstraction.  During deserialization the registered implementation type will be instantiated and returned, having been casted to the abstraction type requested.
 
 To create a mapping between an abstraction and its implementation, simply call the `Map<TAbstract, TConcrete>()` method.  At any time the mapping can be removed by using the `RemoveMapping<TAbstract>()` method.
 
 ```csharp
 // To create a map:
-JsonSerializationAbstractionMap.Map<IEnumerable, Array>();
+AbstractionMap.Default.Map<IEnumerable, Array>();
 // To remove the map:
-JsonSerializationAbstractionMap.RemoveMapping<IEnumerable>();
+AbstractionMap.Default.RemoveMapping<IEnumerable>();
 ```
 
-You can also map an open generic abstract or interface type, like `IEnumerable<T>,` to an open generic concrete type, like `List<T>`.  This will tell the serializer to use `List<T>` whenever `IEnumerable<T>` is requested.
+***NOTE** Every serializer maintains its own abstraction map that is initialized using the settings from the default.  This way each serializer can be customized to operate differently, if needed.*
+
+You can also map an open generic abstract or interface type, like `IEnumerable<T>,` to an open generic concrete type, like `List<T>`.  The follwoing will tell the serializer to use `List<T>` whenever `IEnumerable<T>` is requested.
 
 ```csharp
-JsonSerializationAbstractionMap.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
+AbstractionMap.Default.MapGeneric(typeof(IEnumerable<>), typeof(List<>));
 ```
-
-> **NOTE** For this example, you must still register the specific `List<T>` types using the `JsonSerializationTypeRegistry` methods mentioned above.
 
 The other mechanism, type generation, should only be used when a compile-time solution is not possible.  If the requested type is an interface, the system has the ability to dynamically create a type which implements that interface.  If relying on this feature, please note the following:
 
@@ -254,25 +243,25 @@ The other mechanism, type generation, should only be used when a compile-time so
 - Methods with return values will only return the default value for the return type.
 - Events will not be raised, although they can be subscribed to.
 
-The generated types are, for all intents and purposes, dummy classes.
+The generated types are, for all intents and purposes, dummy classes (POCOs).
 
 ## Object Resolution
 
-The serializer must (obviously) create instances of objects in order to deserialize to them.  This is achieved via a configurable resolver.
+The serializer needs to be able to create instances of objects in order to deserialize to them.  This is achieved via a configurable resolver.
 
 The default resolver can be replaced with any DI container you wish to use.
 
-The default resolver uses reflection to discover constructors on a type and chooses one in order to attempt to create and instance, passing in default values for any of the parameters.  This may result in an exception being thrown that the instance cannot be created.  
+The default resolver uses reflection to discover constructors on a type and chooses one in order to attempt to create an instance, passing in default values for any of the parameters.  This may result in an exception being thrown that the instance cannot be created.  
 
 One example is `Guid`.  The simplest constructor for this type takes a string, but throws an exception if the string is null.  Unfortunately, this is precisely what the default resolver tries to do.
 
 To combat this, a simple resolver decorator can be created that properly resolves `Guid`s, but passes other types on to the default resolver.
 
 ```csharp
-class ResolverDecorator : IResolver
+class GuidResolverDecorator : IResolver
 {
     private IResolver _innerResolver;
-    public ResolverDecorator(IResolver innerResolver)
+    public GuidResolverDecorator(IResolver innerResolver)
     {
         _innerResolver = innerResolver;
     }
@@ -294,7 +283,7 @@ class ResolverDecorator : IResolver
 This can then be set in the serializer options (see below):
 
 ```csharp
-serializer.Options.Resolver = new ResolverDecorator(serializer.Options.Resolver);
+serializer.Options.Resolver = new GuidResolverDecorator(serializer.Options.Resolver);
 ```
 
 ## Serialization Options
