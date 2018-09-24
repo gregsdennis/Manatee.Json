@@ -51,18 +51,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return members;
 		}
 
-		private static IEnumerable<SerializationInfo> _GetProperties(ReflectionInfo info, PropertySelectionStrategy propertyTypes, List<SerializationInfo> properties)
+		private static void _GetProperties(ReflectionInfo info, PropertySelectionStrategy propertyTypes, List<SerializationInfo> properties)
 		{
 			if (propertyTypes.HasFlag(PropertySelectionStrategy.ReadWriteOnly))
 				properties.AddRange(info.ReadWriteProperties);
 			if (propertyTypes.HasFlag(PropertySelectionStrategy.ReadOnly))
 				properties.AddRange(info.ReadOnlyProperties);
-			return properties;
 		}
-		private static IEnumerable<SerializationInfo> _GetFields(ReflectionInfo info, List<SerializationInfo> fields)
+		private static void _GetFields(ReflectionInfo info, List<SerializationInfo> fields)
 		{
 			fields.AddRange(info.Fields);
-			return fields;
 		}
 		private static ReflectionInfo _InitializeInstanceCache(Type type)
 		{

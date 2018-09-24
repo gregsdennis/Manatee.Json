@@ -1,4 +1,6 @@
 ﻿using System;
+using Manatee.Json.Pointer;
+using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
@@ -15,26 +17,47 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Determines whether the serializer handles a specific type or JSON value given the current options.
 		/// </summary>
-		/// <param name="type">The requested object type.</param>
-		/// <param name="options">The serializer options.</param>
-		/// <param name="json">The JSON instance being deserialized.</param>
+		/// <param name="context"></param>
 		/// <returns>true if the serializer is up to the task; false otherwise.</returns>
-		bool Handles(Type type, JsonSerializerOptions options, JsonValue json);
+		bool Handles(SerializationContext context);
 		/// <summary>
 		/// Serializes a value.
 		/// </summary>
-		/// <typeparam name="T">The type of the value to serialize.</typeparam>
-		/// <param name="obj">The value to serialize.</param>
-		/// <param name="serializer">The primary serializer instance.  Provided for nested object serialization.</param>
+		/// <param name="context"></param>
 		/// <returns>A <see cref="JsonValue"/> that represents the value.</returns>
-		JsonValue Serialize<T>(T obj, JsonSerializer serializer);
+		JsonValue Serialize(SerializationContext context);
 		/// <summary>
 		/// Deserializes a <see cref="JsonValue"/> into a value.
 		/// </summary>
-		/// <typeparam name="T">The type to be deserialized.</typeparam>
-		/// <param name="json">The JSON data to deserialize.</param>
-		/// <param name="serializer">The primary serializer instance.  Provided for nested object serialization.</param>
+		/// <param name="context"></param>
 		/// <returns>The typed value represented by the JSON data.</returns>
-		T Deserialize<T>(JsonValue json, JsonSerializer serializer);
+		object Deserialize(SerializationContext context);
+	}
+
+	public class SerializationContext
+	{
+		public Type InferredType { get; set; }
+		public Type RequestedType { get; set; }
+		public JsonPointer CurrentLocation { get; set; }
+		public JsonValue LocalValue { get; set; }
+		public object Source { get; set; }
+
+		public JsonValue JsonRoot { get; }
+		public JsonSerializer RootSerializer { get; }
+
+		internal SerializationReferenceCache SerializationMap { get; }
+
+		public SerializationContext(SerializationContext other)
+		{
+			SerializationMap = other.SerializationMap;
+			RootSerializer = other.RootSerializer;
+			JsonRoot = other.JsonRoot;
+		}
+		internal SerializationContext(JsonSerializer rootSerializer, JsonValue jsonRoot = null)
+		{
+			SerializationMap = new SerializationReferenceCache();
+			RootSerializer = rootSerializer;
+			JsonRoot = jsonRoot;
+		}
 	}
 }

@@ -162,14 +162,14 @@ namespace Manatee.Json.Tests.Serialization
 					{
 						"AbstractProp", new JsonObject
 							{
-								{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+								{"$type", typeof (DerivedClass).AssemblyQualifiedName},
 								{"SomeProp", 42}
 							}
 					},
 					{
 						"InterfaceProp", new JsonObject
 							{
-								{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+								{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
 								{"RequiredProp", "test"}
 							}
 					}
@@ -207,7 +207,7 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
-					{"#Type", typeof (DerivedClass).AssemblyQualifiedName},
+					{"$type", typeof (DerivedClass).AssemblyQualifiedName},
 					{"SomeProp", 42},
 					{"NewProp", "test"}
 				};
@@ -245,7 +245,7 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			JsonValue json = new JsonObject
 				{
-					{"#Type", typeof (ImplementationClass).AssemblyQualifiedName},
+					{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
 					{"RequiredProp", "test"}
 				};
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
@@ -496,15 +496,14 @@ namespace Manatee.Json.Tests.Serialization
 					{
 						"LoopProperty", new JsonObject
 							{
-								{"LoopProperty", new JsonObject {{"#Ref", "f3a2993b-9b0c-4296-872e-95a9210295f4"}}},
+								{"LoopProperty", new JsonObject {{"$ref", "#"}}},
 								{"StringProp", "stringValueB"},
 								{"IntProp", 6},
 								{"BoolProp", true}
 							}
 					},
 					{"StringProp", "stringValueA"},
-					{"IntProp", 42},
-					{"#Def", "f3a2993b-9b0c-4296-872e-95a9210295f4"}
+					{"IntProp", 42}
 				};
 			var expected = new ObjectWithExtendedProps
 				{
@@ -528,7 +527,6 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected.LoopProperty.StringProp, actual.LoopProperty.StringProp);
 			Assert.IsNotNull(actual.LoopProperty.LoopProperty);
 			Assert.AreSame(actual, actual.LoopProperty.LoopProperty);
-			Assert.AreEqual(0, serializer.SerializationMap.Count);
 		}
 #if !IOS
 		[Test]

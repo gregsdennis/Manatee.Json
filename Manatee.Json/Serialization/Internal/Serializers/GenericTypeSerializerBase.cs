@@ -19,26 +19,26 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode");
 		}
 
-		public abstract bool Handles(Type type, JsonSerializerOptions options, JsonValue json);
+		public abstract bool Handles(SerializationContext context);
 
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var typeArguments = GetTypeArguments(obj.GetType());
+			var typeArguments = GetTypeArguments(context.Source.GetType());
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
 
-			return (JsonValue) toJson.Invoke(null, new object[] {obj, serializer});
+			return (JsonValue) toJson.Invoke(null, new object[] {context});
 		}
 
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			var typeArguments = GetTypeArguments(typeof(T));
+			var typeArguments = GetTypeArguments(context.InferredType);
 			var fromJson = _decodeMethod;
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
 
-			return (T) fromJson.Invoke(null, new object[] {json, serializer});
+			return fromJson.Invoke(null, new object[] {context});
 		}
 
 		protected virtual Type[] GetTypeArguments(Type type)

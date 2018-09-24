@@ -7,18 +7,28 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ExpandoObjectSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public override bool Handles(SerializationContext context)
 		{
-			return type == typeof(ExpandoObject);
+			return context.InferredType == typeof(ExpandoObject);
 		}
 
-		private static JsonValue _Encode(ExpandoObject input, JsonSerializer serializer)
+		private static JsonValue _Encode(SerializationContext context)
 		{
-			var dict = (IDictionary<string, object>) input;
-			return dict.ToDictionary(kvp => kvp.Key, kvp => serializer.Serialize<dynamic>(kvp.Value))
-			           .ToJson();
+			var dict = (IDictionary<string, object>)context.Source;
+			return dict.ToDictionary(kvp => kvp.Key, kvp =>
+					{
+						var newContext = new SerializationContext(context)
+						{
+								CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
+								InferredType = kvp.Value?.GetType() ?? typeof(object),
+								RequestedType = typeof(object),
+								Source = kvp.Value
+							};
+
+						return context.RootSerializer.Serialize(newContext);
+					}).ToJson();
 		}
-		private static ExpandoObject _Decode(JsonValue json, JsonSerializer serializer)
+		private static ExpandoObject _Decode(SerializationContext context)
 		{
 			throw new NotImplementedException();
 		}

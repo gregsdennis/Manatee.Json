@@ -40,9 +40,9 @@ namespace Manatee.Json.Serialization.Internal
 
 				return Activator.CreateInstance(type);
 			}
-			catch
+			catch (Exception e)
 			{
-				throw new TypeInstantiationException(type);
+				throw new TypeInstantiationException(type, e);
 			}
 		}
 	}

@@ -14,5 +14,13 @@ namespace Manatee.Json.Serialization
 		public TypeInstantiationException(Type type)
 			: base($"Manatee.Json cannot create an instance of type '{type}' through the default resolver." +
 			       " You may need to implement your own IResolver to instantiate this type."){}
+		/// <summary>
+		/// Creates a new instance of the <see cref="TypeInstantiationException"/> class.
+		/// </summary>
+		/// <param name="type">The type which could not be instantiated.</param>
+		/// <param name="innerException">An exception which caused this to be thrown.</param>
+		public TypeInstantiationException(Type type, Exception innerException)
+			: base($"Manatee.Json cannot create an instance of type '{type}' through the default resolver." +
+			       " You may need to implement your own IResolver to instantiate this type.", innerException){}
 	}
 }

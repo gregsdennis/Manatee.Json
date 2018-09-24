@@ -1,5 +1,4 @@
-﻿using System;
-using Manatee.Json.Schema;
+﻿using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -8,20 +7,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public bool ShouldMaintainReferences => false;
 		public int Priority => -10;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(JsonSchema);
+			return context.InferredType == typeof(JsonSchema);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var schema = (JsonSchema) (object) obj;
-			return schema.ToJson(serializer);
+			var schema = (JsonSchema) context.Source;
+			return schema.ToJson(context.RootSerializer);
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
 			var schema = new JsonSchema();
-			schema.FromJson(json, serializer);
-			return (T) (object) schema;
+			schema.FromJson(context.LocalValue, context.RootSerializer);
+			return schema;
 		}
 	}
 }

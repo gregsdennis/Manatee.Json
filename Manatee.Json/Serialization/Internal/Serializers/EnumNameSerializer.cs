@@ -20,44 +20,43 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsEnum &&
-			       (options.EnumSerializationFormat == EnumSerializationFormat.AsName ||	// used during serialization
-			        json?.Type == JsonValueType.String);									// used during deserialiaztion
+			return context.InferredType.GetTypeInfo().IsEnum &&
+			       (context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName || // used during serialization
+			        context.LocalValue?.Type == JsonValueType.String); // used during deserialization
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var type = _GetType<T>();
+			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);
 			var attributes = type.GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
-			if (attributes.Any()) return _BuildFlagsValues(obj, serializer.Options);
+			if (attributes.Any()) return _BuildFlagsValues(context.InferredType, context.Source, context.RootSerializer.Options);
 
-			var entry = _descriptions[type].FirstOrDefault(d => Equals(d.Value, obj));
+			var entry = _descriptions[type].FirstOrDefault(d => Equals(d.Value, context.Source));
 			if (entry != null) return entry.String;
 
-			var enumValue = serializer.Options.SerializationNameTransform(obj.ToString());
+			var enumValue = context.RootSerializer.Options.SerializationNameTransform(context.Source.ToString());
 			return enumValue;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			var type = _GetType<T>();
+			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);
-			var options = serializer.Options.CaseSensitiveDeserialization
+			var options = context.RootSerializer.Options.CaseSensitiveDeserialization
 							  ? StringComparison.OrdinalIgnoreCase
 							  : StringComparison.Ordinal;
-			var entry = _descriptions[type].FirstOrDefault(d => string.Equals(d.String, json.String, options));
+			var entry = _descriptions[type].FirstOrDefault(d => string.Equals(d.String, context.LocalValue.String, options));
 			if (entry == null)
 			{
-				var enumValue = serializer.Options.DeserializationNameTransform(json.String);
-				return (T) Enum.Parse(type, enumValue, !serializer.Options.CaseSensitiveDeserialization);
+				var enumValue = context.RootSerializer.Options.DeserializationNameTransform(context.LocalValue.String);
+				return Enum.Parse(type, enumValue, !context.RootSerializer.Options.CaseSensitiveDeserialization);
 			}
-			return (T) entry.Value;
+			return entry.Value;
 		}
 
-		private static Type _GetType<T>()
+		private static Type _GetType(Type type)
 		{
-			var type = typeof(T);
 			var typeInfo = type.GetTypeInfo();
 			if (typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(Nullable<>))
 				type = typeInfo.GenericTypeArguments[0];
@@ -82,9 +81,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var attributes = memInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
 			return attributes.Any() ? ((DisplayAttribute) attributes.First()).Description : name;
 		}
-		private static string _BuildFlagsValues<T>(T obj, JsonSerializerOptions options)
+		private static string _BuildFlagsValues(Type type, object obj, JsonSerializerOptions options)
 		{
-			var descriptions = _descriptions[typeof (T)];
+			var descriptions = _descriptions[type];
 			var value = Convert.ToInt64(obj);
 			var index = descriptions.Count - 1;
 			var names = new List<string>();

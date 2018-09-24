@@ -9,19 +9,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type.IsNumericType();
+			return context.InferredType.IsNumericType();
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var value = Convert.ToDouble(obj);
+			var value = Convert.ToDouble(context.Source);
 			return value;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			var value = json.Number;
-			return (T) Convert.ChangeType(value, typeof (T));
+			var value = context.LocalValue.Number;
+			return Convert.ChangeType(value, context.InferredType);
 		}
 	}
 }

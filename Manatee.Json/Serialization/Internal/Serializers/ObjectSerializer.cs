@@ -7,32 +7,50 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ObjectSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public override bool Handles(SerializationContext context)
 		{
-			return type == typeof(object);
+			return context.InferredType == typeof(object);
 		}
 
-		private static JsonValue _Encode(object input, JsonSerializer serializer)
+		private static JsonValue _Encode(SerializationContext context)
 		{
 			throw new NotImplementedException();
 		}
-		private static object _Decode(JsonValue json, JsonSerializer serializer)
+		private static object _Decode(SerializationContext context)
 		{
-			switch (json.Type)
+			switch (context.LocalValue.Type)
 			{
 				case JsonValueType.Number:
-					return json.Number;
+					return context.LocalValue.Number;
 				case JsonValueType.String:
-					return json.String;
+					return context.LocalValue.String;
 				case JsonValueType.Boolean:
-					return json.Boolean;
+					return context.LocalValue.Boolean;
 				case JsonValueType.Array:
-					return json.Array.Select(serializer.Deserialize<object>).ToList();
+					return context.LocalValue.Array.Select((value, i) =>
+						{
+							var newContext = new SerializationContext(context)
+							{
+									CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+									InferredType = typeof(object),
+									RequestedType = typeof(object),
+									LocalValue = value
+								};
+
+							return context.RootSerializer.Deserialize(newContext);
+						}).ToList();
 				case JsonValueType.Object:
 					var result = new ExpandoObject() as IDictionary<string, object>;
-					foreach (var kvp in json.Object)
+					foreach (var kvp in context.LocalValue.Object)
 					{
-						result[kvp.Key] = serializer.Deserialize<object>(kvp.Value);
+						var newContext = new SerializationContext(context)
+						{
+								CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
+								InferredType = typeof(object),
+								RequestedType = typeof(object),
+								LocalValue = kvp.Value
+							};
+						result[kvp.Key] = context.RootSerializer.Deserialize(newContext);
 					}
 					return result;
 				case JsonValueType.Null:

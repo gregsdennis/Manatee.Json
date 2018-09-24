@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Manatee.Json.Serialization.Internal.Serializers
+﻿namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class BooleanSerializer : IPrioritizedSerializer
 	{
@@ -8,17 +6,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(bool);
+			return context.InferredType == typeof(bool);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			return (bool) (object) obj;
+			return (bool) context.Source;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			return (T) (object) json.Boolean;
+			return context.LocalValue.Boolean;
 		}
 	}
 }

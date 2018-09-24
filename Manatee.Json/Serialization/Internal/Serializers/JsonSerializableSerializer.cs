@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -9,20 +8,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => true;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return typeof(IJsonSerializable).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
+			return typeof(IJsonSerializable).GetTypeInfo().IsAssignableFrom(context.InferredType.GetTypeInfo());
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var serializable = (IJsonSerializable) obj;
-			return serializable.ToJson(serializer);
+			var serializable = (IJsonSerializable)context.Source;
+			return serializable.ToJson(context.RootSerializer);
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			var value = (IJsonSerializable)serializer.AbstractionMap.CreateInstance<T>(json, serializer.Options.Resolver);
-			value.FromJson(json, serializer);
-			return (T) value;
+			var value = (IJsonSerializable)context.RootSerializer.AbstractionMap.CreateInstance(context);
+			value.FromJson(context.LocalValue, context.RootSerializer);
+			return value;
 		}
 	}
 }

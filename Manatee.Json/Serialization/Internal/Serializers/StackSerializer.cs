@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,27 +6,45 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class StackSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Stack<>);
+			return context.InferredType.GetTypeInfo().IsGenericType && 
+			       context.InferredType.GetGenericTypeDefinition() == typeof(Stack<>);
 		}
 
-		private static JsonValue _Encode<T>(Stack<T> stack, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext context)
 		{
+			var stack = (Stack<T>) context.Source;
 			var values = new JsonValue[stack.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[i] = serializer.Serialize(stack.ElementAt(i));
+				var element = stack.ElementAt(i);
+				var newContext = new SerializationContext(context)
+				{
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = element?.GetType() ?? typeof(T),
+						RequestedType = typeof(T),
+						Source = element
+				};
+
+				values[i] = context.RootSerializer.Serialize(newContext);
 			}
 			return new JsonArray(values);
 		}
-		private static Stack<T> _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static Stack<T> _Decode<T>(SerializationContext context)
 		{
-			var array = json.Array;
+			var array = context.LocalValue.Array;
 			var values = new T[array.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				values[i] = serializer.Deserialize<T>(array[i]);
+				var newContext = new SerializationContext(context)
+				{
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = typeof(T),
+						RequestedType = typeof(T),
+						LocalValue = array[i]
+					};
+				values[i] = (T)context.RootSerializer.Deserialize(newContext);
 			}
 			return new Stack<T>(values);
 		}

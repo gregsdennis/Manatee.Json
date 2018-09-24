@@ -8,19 +8,21 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(TimeSpan);
+			return context.InferredType == typeof(TimeSpan);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var ts = (TimeSpan) (object) obj;
+			var ts = (TimeSpan) context.Source;
 
 			return ts.ToString();
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			return json.Type == JsonValueType.String ? (T) (object) TimeSpan.Parse(json.String) : default(T);
+			return context.LocalValue.Type == JsonValueType.String
+				? TimeSpan.Parse(context.LocalValue.String)
+				: default(TimeSpan);
 		}
 	}
 }

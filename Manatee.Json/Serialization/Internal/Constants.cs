@@ -2,8 +2,7 @@
 {
 	internal static class Constants
 	{
-		public const string TypeKey = "#Type";
-		public const string RefKey = "#Ref";
-		public const string DefKey = "#Def";
+		public const string TypeKey = "$type";
+		public const string RefKey = "$ref";
 	}
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Manatee.Json.Serialization.Internal.Serializers
+﻿namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class StringSerializer : IPrioritizedSerializer
 	{
@@ -8,17 +6,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(string);
+			return context.InferredType == typeof(string);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			return obj as string;
+			return context.Source as string;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			return (T) (object) json.String;
+			return context.LocalValue.String;
 		}
 	}
 }

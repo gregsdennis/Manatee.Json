@@ -5,28 +5,46 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class NullableSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+			return context.InferredType.GetTypeInfo().IsGenericType &&
+			       context.InferredType.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
-		private static JsonValue _Encode<T>(T? nullable, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext context)
 			where T : struct
 		{
+			var nullable = (T?) context.Source;
 			if (!nullable.HasValue) return JsonValue.Null;
-			var encodeDefaultValues = serializer.Options.EncodeDefaultValues;
-			serializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
-			var json = serializer.Serialize(nullable.Value);
-			serializer.Options.EncodeDefaultValues = encodeDefaultValues;
+
+			var encodeDefaultValues = context.RootSerializer.Options.EncodeDefaultValues;
+			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
+			var newContext = new SerializationContext(context)
+			{
+					CurrentLocation = context.CurrentLocation.Clone(),
+					InferredType = typeof(T),
+					RequestedType = typeof(T),
+					LocalValue = context.LocalValue
+				};
+			var json = context.RootSerializer.Serialize(newContext);
+			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;
+
 			return json;
 		}
-		private static T? _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static T? _Decode<T>(SerializationContext context)
 			where T : struct
 		{
-			if (json == JsonValue.Null)
-				return null;
-			T? nullable = serializer.Deserialize<T>(json);
-			return nullable;
+			if (context.LocalValue == JsonValue.Null) return null;
+
+			var newContext = new SerializationContext(context)
+			{
+					CurrentLocation = context.CurrentLocation.Clone(),
+					InferredType = typeof(T),
+					RequestedType = typeof(T),
+					LocalValue = context.LocalValue
+				};
+
+			return (T) context.RootSerializer.Deserialize(newContext);
 		}
 	}
 }

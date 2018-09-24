@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Manatee.Json.Internal;
+using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -13,51 +14,48 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			if (serializer.SerializationMap.TryGetPair(obj, out var guid, out var pair))
+			if (context.SerializationMap.TryGetPair(context.Source, out var pair))
+				return new JsonObject {{Constants.RefKey, pair.Source.ToString()}};
+
+			context.SerializationMap.Add(new SerializationReference
+				{
+					Object = context.Source,
+					Source = context.CurrentLocation
+				});
+
+			return _innerSerializer.Serialize(context);
+		}
+		public object Deserialize(SerializationContext context)
+		{
+			if (context.LocalValue.Type == JsonValueType.Object)
 			{
-				pair.UsageCount++;
-				return new JsonObject {{Constants.RefKey, guid.ToString()}};
+				var jsonObj = context.LocalValue.Object;
+				if (jsonObj.TryGetValue(Constants.RefKey, out var reference))
+				{
+					var location = JsonPointer.Parse(reference.String);
+					context.SerializationMap.AddReference(location, context.CurrentLocation);
+					return context.InferredType.Default();
+				}
 			}
 
-			guid = Guid.NewGuid();
-			pair = new SerializationPair {Object = obj};
-			serializer.SerializationMap.Add(guid, pair);
-			pair.Json = _innerSerializer.Serialize(obj, serializer);
-			if (pair.UsageCount != 0)
-				pair.Json.Object.Add(Constants.DefKey, guid.ToString());
-			return pair.Json;
-		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
-		{
-			if (json.Type == JsonValueType.Object)
-			{
-				var jsonObj = json.Object;
-				SerializationPair pair;
-				if (jsonObj.ContainsKey(Constants.DefKey))
+			var pair = new SerializationReference
 				{
-					var guid = new Guid(jsonObj[Constants.DefKey].String);
-					jsonObj.Remove(Constants.DefKey);
-					pair = new SerializationPair {Json = json};
-					serializer.SerializationMap.Add(guid, pair);
-					serializer.SerializationMap.Update(pair, _innerSerializer.Deserialize<T>(json, serializer));
-					pair.DeserializationIsComplete = true;
-					pair.Reconcile();
-					return (T) pair.Object;
-				}
-				if (jsonObj.ContainsKey(Constants.RefKey))
-				{
-					var guid = new Guid(jsonObj[Constants.RefKey].String);
-					pair = serializer.SerializationMap[guid];
-					return (T) pair.Object;
-				}
-			}
-			return _innerSerializer.Deserialize<T>(json, serializer);
+					Source = context.CurrentLocation
+				};
+			context.SerializationMap.Add(pair);
+
+			var obj = _innerSerializer.Deserialize(context);
+
+			pair.Object = obj;
+			pair.DeserializationIsComplete = true;
+
+			return obj;
 		}
 	}
 }

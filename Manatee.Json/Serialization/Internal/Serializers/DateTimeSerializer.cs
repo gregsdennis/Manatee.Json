@@ -9,16 +9,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(DateTime);
+			return context.InferredType == typeof(DateTime);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var dt = (DateTime) (object) obj;
-			if (serializer.Options == null)
+			var dt = (DateTime) context.Source;
+			if (context.RootSerializer.Options == null)
 				return dt.ToString();
-			switch (serializer.Options.DateTimeSerializationFormat)
+			switch (context.RootSerializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.Iso8601:
 					return dt.ToString("s");
@@ -27,25 +27,25 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				case DateTimeSerializationFormat.Milliseconds:
 					return dt.Ticks / TimeSpan.TicksPerMillisecond;
 				case DateTimeSerializationFormat.Custom:
-					return dt.ToString(serializer.Options.CustomDateTimeSerializationFormat);
+					return dt.ToString(context.RootSerializer.Options.CustomDateTimeSerializationFormat);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			if (serializer.Options == null)
-				return (T)(object) DateTime.Parse(json.String);
-			switch (serializer.Options.DateTimeSerializationFormat)
+			if (context.RootSerializer.Options == null)
+				return DateTime.Parse(context.LocalValue.String);
+			switch (context.RootSerializer.Options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.Iso8601:
-					return (T)(object)DateTime.Parse(json.String);
+					return DateTime.Parse(context.LocalValue.String);
 				case DateTimeSerializationFormat.JavaConstructor:
-					return (T)(object)new DateTime(long.Parse(json.String.Substring(6, json.String.Length - 8)) * TimeSpan.TicksPerMillisecond);
+					return new DateTime(long.Parse(context.LocalValue.String.Substring(6, context.LocalValue.String.Length - 8)) * TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Milliseconds:
-					return (T)(object)new DateTime((long)json.Number * TimeSpan.TicksPerMillisecond);
+					return new DateTime((long)context.LocalValue.Number * TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Custom:
-					return (T)(object)DateTime.ParseExact(json.String, serializer.Options.CustomDateTimeSerializationFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
+					return DateTime.ParseExact(context.LocalValue.String, context.RootSerializer.Options.CustomDateTimeSerializationFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

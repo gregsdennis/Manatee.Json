@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -6,27 +5,44 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ListSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public override bool Handles(SerializationContext context)
 		{
-			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>);
+			return context.InferredType.GetTypeInfo().IsGenericType && 
+			       context.InferredType.GetGenericTypeDefinition() == typeof(List<>);
 		}
 
-		private static JsonValue _Encode<T>(List<T> list, JsonSerializer serializer)
+		private static JsonValue _Encode<T>(SerializationContext context)
 		{
+			var list = (List<T>) context.Source;
 			var array = new JsonValue[list.Count];
-			for (int ii = 0; ii < array.Length; ++ii)
+			for (int i = 0; i < array.Length; i++)
 			{
-				array[ii] = serializer.Serialize(list[ii]);
+				var newContext = new SerializationContext(context)
+				{
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = list[i]?.GetType() ?? typeof(T),
+						RequestedType = typeof(T),
+						Source = list[i]
+					};
+
+				array[i] = context.RootSerializer.Serialize(newContext);
 			}
 			return new JsonArray(array);
 		}
-		private static List<T> _Decode<T>(JsonValue json, JsonSerializer serializer)
+		private static List<T> _Decode<T>(SerializationContext context)
 		{
-			var array = json.Array;
+			var array = context.LocalValue.Array;
 			var list = new List<T>(array.Count);
-			for (int ii = 0; ii < array.Count; ++ii)
+			for (int i = 0; i < array.Count; i++)
 			{
-				list.Add(serializer.Deserialize<T>(array[ii]));
+				var newContext = new SerializationContext(context)
+				{
+						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+						InferredType = typeof(T),
+						RequestedType = typeof(T),
+						LocalValue = array[i]
+					};
+				list.Add((T) context.RootSerializer.Deserialize(newContext));
 			}
 			return list;
 		}

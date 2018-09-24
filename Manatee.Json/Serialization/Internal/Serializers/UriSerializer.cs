@@ -8,19 +8,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
-			return type == typeof(Uri);
+			return context.InferredType == typeof(Uri);
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			var uri = obj as Uri;
+			var uri = context.Source as Uri;
 
 			return uri?.OriginalString;
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			return (T) (object) new Uri(json.String);
+			return context.LocalValue == null ? null : new Uri(context.LocalValue.String);
 		}
 	}
 }

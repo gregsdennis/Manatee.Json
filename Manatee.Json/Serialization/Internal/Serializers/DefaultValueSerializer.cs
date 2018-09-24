@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
@@ -13,20 +13,23 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
-		public bool Handles(Type type, JsonSerializerOptions options, JsonValue json)
+		public bool Handles(SerializationContext context)
 		{
 			return true;
 		}
-		public JsonValue Serialize<T>(T obj, JsonSerializer serializer)
+		public JsonValue Serialize(SerializationContext context)
 		{
-			if (Equals(obj, default(T)) && !serializer.Options.EncodeDefaultValues) return JsonValue.Null;
-			return _innerSerializer.Serialize(obj, serializer);
+			if (Equals(context.Source, context.RequestedType.Default()) &&
+			    !context.RootSerializer.Options.EncodeDefaultValues)
+				return JsonValue.Null;
+
+			return _innerSerializer.Serialize(context);
 		}
-		public T Deserialize<T>(JsonValue json, JsonSerializer serializer)
+		public object Deserialize(SerializationContext context)
 		{
-			return json.Type == JsonValueType.Null
-				       ? default(T)
-				       : _innerSerializer.Deserialize<T>(json, serializer);
+			return context.LocalValue.Type == JsonValueType.Null
+				       ? context.InferredType.Default()
+				       : _innerSerializer.Deserialize(context);
 		}
 	}
 }

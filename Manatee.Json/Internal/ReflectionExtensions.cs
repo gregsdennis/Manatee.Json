@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Manatee.Json.Pointer;
+using Manatee.Json.Serialization;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Internal
 {
@@ -54,6 +57,68 @@ namespace Manatee.Json.Internal
 			       value == typeof(byte) ||
 			       value == typeof(long) ||
 			       value == typeof(ulong);
+		}
+
+		public static object Default(this Type type)
+		{
+			return type.GetTypeInfo().IsValueType ? Activator.CreateInstance(type) : null;
+		}
+
+		public static void SetMember(this object obj, JsonPointer pointer, object value)
+		{
+			if (obj == null) return;
+			if (pointer.Count == 0)
+				throw new ArgumentException("Pointer must have at least one segment.");
+
+			SerializationInfo member;
+			var segment = pointer[0];
+			if (int.TryParse(segment, out var index))
+			{
+				member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, false)
+					.Single(m => m.MemberInfo is PropertyInfo pi && pi.GetIndexParameters().Length == 1);
+				if (member == null) return;
+
+				var indexer = (PropertyInfo) member.MemberInfo;
+				if (pointer.Count == 1)
+				{
+					indexer.SetValue(obj, value, new object[] {index});
+					return;
+				}
+
+				var local = indexer.GetValue(obj, new object[] { index });
+				SetMember(local, new JsonPointer(pointer.Skip(1)), value);
+				return;
+			}
+
+			member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, true)
+				.Single(m => m.SerializationName == segment);
+			if (member == null) return;
+
+			if (member.MemberInfo is PropertyInfo asProperty)
+			{
+				if (pointer.Count == 1)
+				{
+					asProperty.SetValue(obj, value);
+					return;
+				}
+
+				var local = asProperty.GetValue(obj);
+				SetMember(local, new JsonPointer(pointer.Skip(1)), value);
+				return;
+			}
+
+			if (member.MemberInfo is FieldInfo asField)
+			{
+				if (pointer.Count == 1)
+				{
+					asField.SetValue(obj, value);
+					return;
+				}
+
+				var local = asField.GetValue(obj);
+				SetMember(local, new JsonPointer(pointer.Skip(1)), value);
+				return;
+			}
 		}
 	}
 }
