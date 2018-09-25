@@ -89,6 +89,8 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnAllValid()
 		{
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.VerboseHierarchy;
+
 			var schema = new JsonSchema()
 				.AllOf(new JsonSchema()
 					       .Type(JsonSchemaType.Number)
@@ -111,6 +113,7 @@ namespace Manatee.Json.Tests.Schema
 									IsValid = true,
 									RelativeLocation = JsonPointer.Parse("#/allOf"),
 									InstanceLocation = JsonPointer.Parse("#"),
+									Keyword = "allOf",
 									NestedResults =
 										{
 											new SchemaValidationResults
@@ -124,13 +127,15 @@ namespace Manatee.Json.Tests.Schema
 																{
 																	IsValid = true,
 																	RelativeLocation = JsonPointer.Parse("#/allOf/0/type"),
-																	InstanceLocation = JsonPointer.Parse("#")
+																	InstanceLocation = JsonPointer.Parse("#"),
+																	Keyword = "type"
 																},
 															new SchemaValidationResults
 																{
 																	IsValid = true,
 																	RelativeLocation = JsonPointer.Parse("#/allOf/0/minimum"),
-																	InstanceLocation = JsonPointer.Parse("#")
+																	InstanceLocation = JsonPointer.Parse("#"),
+																	Keyword = "minimum"
 																}
 														}
 												},
@@ -145,13 +150,15 @@ namespace Manatee.Json.Tests.Schema
 																{
 																	IsValid = true,
 																	RelativeLocation = JsonPointer.Parse("#/allOf/1/type"),
-																	InstanceLocation = JsonPointer.Parse("#")
+																	InstanceLocation = JsonPointer.Parse("#"),
+																	Keyword = "type"
 																},
 															new SchemaValidationResults
 																{
 																	IsValid = true,
 																	RelativeLocation = JsonPointer.Parse("#/allOf/1/maximum"),
-																	InstanceLocation = JsonPointer.Parse("#")
+																	InstanceLocation = JsonPointer.Parse("#"),
+																	Keyword = "maximum"
 																}
 														}
 												}
