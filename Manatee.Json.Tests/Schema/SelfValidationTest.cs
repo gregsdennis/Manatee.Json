@@ -38,7 +38,6 @@ namespace Manatee.Json.Tests.Schema
 		{
 			try
 			{
-				// TODO: Catch web exceptions and assert inconclusive.
 				var localSchemaJson = schema.ToJson(_serializer);
 
 				var onlineSchemaText = JsonSchemaOptions.Download(schema.Id);

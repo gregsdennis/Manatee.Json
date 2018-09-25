@@ -4,7 +4,6 @@ using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
 {
-	// TODO: Convert this to test all of the schema generations
 	[TestFixture]
 	public class ObjectSchemaTest
 	{

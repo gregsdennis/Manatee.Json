@@ -56,6 +56,7 @@ namespace Manatee.Json.Schema
 			{
 				results.IsValid = false;
 				results.Keyword = Name;
+				results.NestedResults = nestedResults;
 			}
 
 			return results;

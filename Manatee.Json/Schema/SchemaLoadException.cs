@@ -7,6 +7,11 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaLoadException : Exception
 	{
-		internal SchemaLoadException(string message) : base(message) { }
+		public MetaSchemaValidationResults MetaValidation { get; }
+
+		internal SchemaLoadException(string message, MetaSchemaValidationResults metaValidation) : base(message)
+		{
+			MetaValidation = metaValidation;
+		}
 	}
 }

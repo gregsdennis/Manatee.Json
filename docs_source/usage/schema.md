@@ -96,6 +96,10 @@ Because the `JsonSchema` class will accept any keyword, and some keywords are on
 
 To ensure that this is the case, call the `ValidateSchema()` method.  This will analyze all of the keywords and report on whether they are all compatible.
 
+```csharp
+throw new NotImplementedException("Add stuff here about the meta-validation results.");
+```
+
 ### Validating instances
 
 `JsonSchema` exposes a `Validate(JsonValue)` method which is used to validate incoming JSON values.  Let's begin with the schema from above and a few JSON objects:

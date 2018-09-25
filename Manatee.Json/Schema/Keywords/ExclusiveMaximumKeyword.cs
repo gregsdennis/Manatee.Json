@@ -36,7 +36,6 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		[DeserializationUseOnly]
 		public ExclusiveMaximumKeyword() { }
-		// TODO: ensure ctor comments use correct class
 		/// <summary>
 		/// Creates an instance of the <see cref="ExclusiveMaximumKeyword"/>.
 		/// </summary>

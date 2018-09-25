@@ -97,8 +97,11 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				Assert.AreEqual(test.Valid, results.IsValid);
 
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				if (e is SchemaLoadException sle)
+					Console.WriteLine(sle.MetaValidation.ToJson(new JsonSerializer()).GetIndentedString());
+
 				Console.WriteLine(fileName);
 				Console.WriteLine("\nSchema");
 				Console.WriteLine(schemaJson.GetIndentedString());

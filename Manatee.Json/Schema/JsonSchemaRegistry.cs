@@ -41,11 +41,8 @@ namespace Manatee.Json.Schema
 					schema.FromJson(schemaValue, _serializer);
 
 					var structureErrors = schema.ValidateSchema();
-					if (structureErrors.Any())
-					{
-						var errors = string.Join(Environment.NewLine, structureErrors);
-						throw new SchemaLoadException($"The given path does not contain a valid schema.  Errors: \n{errors}");
-					}
+					if (!structureErrors.IsValid)
+						throw new SchemaLoadException("The given path does not contain a valid schema.", structureErrors);
 
 					_schemaLookup[uri] = schema;
 				}

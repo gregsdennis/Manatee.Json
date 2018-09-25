@@ -42,11 +42,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the <code>$id</code> (or <code>id</code> for draft-04) property value, if declared.
 		/// </summary>
-		public string Id => this.OfType<IdKeyword>().FirstOrDefault()?.Value;
+		public string Id => this.Get<IdKeyword>()?.Value;
 		/// <summary>
 		/// Gets the <code>$schema</code> property, if declared.
 		/// </summary>
-		public string Schema => this.OfType<SchemaKeyword>().FirstOrDefault()?.Value;
+		public string Schema => this.Get<SchemaKeyword>()?.Value;
 		/// <summary>
 		/// Gets other data that may be present in the schema but unrelated to any known keywords.
 		/// </summary>
@@ -64,26 +64,71 @@ namespace Manatee.Json.Schema
 			_inherentValue = value;
 		}
 
-		// TODO: This should be a SchemaEvaluationResults that reports supported schema versions and other metadata.
 		/// <summary>
 		/// Validates that the schema object represents a valid schema in accordance with a known meta-schema.
 		/// </summary>
 		/// <returns>Validation results.</returns>
-		public List<string> ValidateSchema()
+		public MetaSchemaValidationResults ValidateSchema()
 		{
-			var errors = new List<string>();
-			var supportedVersions = this.Aggregate(JsonSchemaVersion.All, (version, keyword) => version & keyword.SupportedVersions);
+			var results = new MetaSchemaValidationResults();
+
+			JsonSchemaVersion startVersion;
+			if (Schema == MetaSchemas.Draft04.Id)
+				startVersion = JsonSchemaVersion.Draft04;
+			else if (Schema == MetaSchemas.Draft06.Id)
+				startVersion = JsonSchemaVersion.Draft06;
+			else if (Schema == MetaSchemas.Draft07.Id)
+				startVersion = JsonSchemaVersion.Draft07;
+			else
+			{
+				startVersion = JsonSchemaVersion.All;
+				if (!string.IsNullOrEmpty(Schema))
+				{
+					var metaSchema = JsonSchemaRegistry.Get(Schema);
+					if (metaSchema != null)
+					{
+						var metaValidation = metaSchema.Validate(ToJson(new JsonSerializer()));
+						results.MetaSchemaValidations[Schema] = metaValidation;
+					}
+				}
+			}
+
+			var supportedVersions = this.Aggregate(startVersion, (version, keyword) => version & keyword.SupportedVersions);
 			if (supportedVersions == JsonSchemaVersion.None)
-				errors.Add("The provided keywords do not support a common schema version.");
+				results.OtherErrors.Add("The provided keywords do not support a common schema version.");
+			else
+			{
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft04))
+				{
+					var metaValidation = MetaSchemas.Draft04.Validate(ToJson(new JsonSerializer()));
+					results.MetaSchemaValidations[MetaSchemas.Draft04.Id] = metaValidation;
+					if (metaValidation.IsValid)
+						results.SupportedVersions |= JsonSchemaVersion.Draft04;
+				}
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft06))
+				{
+					var metaValidation = MetaSchemas.Draft06.Validate(ToJson(new JsonSerializer()));
+					results.MetaSchemaValidations[MetaSchemas.Draft06.Id] = metaValidation;
+					if (metaValidation.IsValid)
+						results.SupportedVersions |= JsonSchemaVersion.Draft06;
+				}
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft07))
+				{
+					var metaValidation = MetaSchemas.Draft07.Validate(ToJson(new JsonSerializer()));
+					results.MetaSchemaValidations[MetaSchemas.Draft07.Id] = metaValidation;
+					if (metaValidation.IsValid)
+						results.SupportedVersions |= JsonSchemaVersion.Draft07;
+				}
+			}
 
 			var duplicateKeywords = this.GroupBy(k => k.Name)
 			                            .Where(g => g.Count() > 1)
 			                            .Select(g => g.Key)
 			                            .ToList();
 			if (duplicateKeywords.Any())
-				errors.Add($"The following keywords have been entered more than once: {string.Join(", ", duplicateKeywords)}");
+				results.OtherErrors.Add($"The following keywords have been entered more than once: {string.Join(", ", duplicateKeywords)}");
 
-			return errors;
+			return results;
 		}
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -196,6 +241,9 @@ namespace Manatee.Json.Schema
 				context.BaseUri = DocumentPath.IsAbsoluteUri
 					? DocumentPath
 					: new Uri(context.BaseUri, DocumentPath);
+
+			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
+				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
 			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
 				JsonSchemaRegistry.Register(this);

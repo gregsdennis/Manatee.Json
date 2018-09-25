@@ -40,7 +40,6 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the keyword.
 		/// </summary>
-		// TODO: Set this for annotation-generating keywords, too
 		public string Keyword { get; set; }
 		/// <summary>
 		/// Gets or sets any additional information regarding the validation.
@@ -68,8 +67,9 @@ namespace Manatee.Json.Schema
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
 			if (context.BaseUri != null)
-				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation.ToString(), UriKind.RelativeOrAbsolute);
+				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation.CloneAndAppend(keyword).ToString(), UriKind.RelativeOrAbsolute);
 			RelativeLocation = context.RelativeLocation.CloneAndAppend(keyword);
+			Keyword = keyword;
 		}
 
 		/// <summary>
@@ -84,6 +84,10 @@ namespace Manatee.Json.Schema
 			copy.NestedResults = children;
 
 			if (copy.AnnotationValue != null) return copy;
+
+			if (copy.NestedResults.Any(r => !r.IsValid))
+				copy.NestedResults = copy.NestedResults.Where(r => !r.IsValid).ToList();
+
 			if (copy.NestedResults.Count != 1) return copy;
 
 			copy._CopyDataFrom(copy.NestedResults[0]);
