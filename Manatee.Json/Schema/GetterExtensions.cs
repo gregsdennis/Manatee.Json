@@ -340,6 +340,5 @@ namespace Manatee.Json.Schema
 		{
 			return schema.OfType<T>().FirstOrDefault();
 		}
-		// TODO: ensure all keywords are here
 	}
 }

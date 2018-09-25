@@ -67,7 +67,6 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = jv,
 							Root = context.Root,
-							// TODO: potential performance improvement
 							BaseRelativeLocation = baseRelativeLocation,
 							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())

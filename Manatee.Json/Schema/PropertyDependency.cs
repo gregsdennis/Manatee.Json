@@ -63,7 +63,7 @@ namespace Manatee.Json.Schema
 				if (missingProperties.Any())
 				{
 					results.IsValid = false;
-					results.Keyword = $"dependencies.{PropertyName}";
+					results.Keyword = $"dependencies/{PropertyName}";
 					results.AdditionalInfo["missingProperties"] = missingProperties.ToJson();
 				}
 			}
