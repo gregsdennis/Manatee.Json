@@ -128,7 +128,6 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static T FromJson&lt;T&gt;(this JsonObject json, JsonSerializer serializer)
-
     where T : IJsonSerializable, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -202,7 +201,6 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; FromJson&lt;T&gt;(this IEnumerable&lt;JsonValue&gt; json, JsonSerializer serializer)
-
     where T : IJsonSerializable, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -776,7 +774,6 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static JsonValue ToJson&lt;T&gt;(this IEnumerable&lt;T&gt; list, JsonSerializer serializer)
-
     where T : IJsonSerializable</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -849,7 +846,6 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static JsonObject ToJson&lt;T&gt;(this IEnumerable&lt;KeyValuePair&lt;string, T&gt;&gt; results, JsonSerializer serializer)
-
     where T : IJsonSerializable</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>

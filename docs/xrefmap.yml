@@ -9371,6 +9371,90 @@ references:
   commentId: F:Manatee.Json.Schema.MetaSchemas.Draft07
   fullName: Manatee.Json.Schema.MetaSchemas.Draft07
   nameWithType: MetaSchemas.Draft07
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults
+  name: MetaSchemaValidationResults
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html
+  commentId: T:Manatee.Json.Schema.MetaSchemaValidationResults
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults
+  nameWithType: MetaSchemaValidationResults
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
+  name: FromJson(JsonValue, JsonSerializer)
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_
+  commentId: M:Manatee.Json.Schema.MetaSchemaValidationResults.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.FromJson(Manatee.Json.JsonValue, Manatee.Json.Serialization.JsonSerializer)
+  nameWithType: MetaSchemaValidationResults.FromJson(JsonValue, JsonSerializer)
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.FromJson*
+  name: FromJson
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_FromJson_
+  commentId: Overload:Manatee.Json.Schema.MetaSchemaValidationResults.FromJson
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.FromJson
+  nameWithType: MetaSchemaValidationResults.FromJson
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.IsValid
+  name: IsValid
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_IsValid
+  commentId: P:Manatee.Json.Schema.MetaSchemaValidationResults.IsValid
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.IsValid
+  nameWithType: MetaSchemaValidationResults.IsValid
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.IsValid*
+  name: IsValid
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_IsValid_
+  commentId: Overload:Manatee.Json.Schema.MetaSchemaValidationResults.IsValid
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.IsValid
+  nameWithType: MetaSchemaValidationResults.IsValid
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.MetaSchemaValidations
+  name: MetaSchemaValidations
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_MetaSchemaValidations
+  commentId: P:Manatee.Json.Schema.MetaSchemaValidationResults.MetaSchemaValidations
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.MetaSchemaValidations
+  nameWithType: MetaSchemaValidationResults.MetaSchemaValidations
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.MetaSchemaValidations*
+  name: MetaSchemaValidations
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_MetaSchemaValidations_
+  commentId: Overload:Manatee.Json.Schema.MetaSchemaValidationResults.MetaSchemaValidations
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.MetaSchemaValidations
+  nameWithType: MetaSchemaValidationResults.MetaSchemaValidations
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.OtherErrors
+  name: OtherErrors
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_OtherErrors
+  commentId: P:Manatee.Json.Schema.MetaSchemaValidationResults.OtherErrors
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.OtherErrors
+  nameWithType: MetaSchemaValidationResults.OtherErrors
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.OtherErrors*
+  name: OtherErrors
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_OtherErrors_
+  commentId: Overload:Manatee.Json.Schema.MetaSchemaValidationResults.OtherErrors
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.OtherErrors
+  nameWithType: MetaSchemaValidationResults.OtherErrors
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.SupportedVersions
+  name: SupportedVersions
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_SupportedVersions
+  commentId: P:Manatee.Json.Schema.MetaSchemaValidationResults.SupportedVersions
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.SupportedVersions
+  nameWithType: MetaSchemaValidationResults.SupportedVersions
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.SupportedVersions*
+  name: SupportedVersions
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_SupportedVersions_
+  commentId: Overload:Manatee.Json.Schema.MetaSchemaValidationResults.SupportedVersions
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.SupportedVersions
+  nameWithType: MetaSchemaValidationResults.SupportedVersions
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.ToJson(Manatee.Json.Serialization.JsonSerializer)
+  name: ToJson(JsonSerializer)
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_ToJson_Manatee_Json_Serialization_JsonSerializer_
+  commentId: M:Manatee.Json.Schema.MetaSchemaValidationResults.ToJson(Manatee.Json.Serialization.JsonSerializer)
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.ToJson(Manatee.Json.Serialization.JsonSerializer)
+  nameWithType: MetaSchemaValidationResults.ToJson(JsonSerializer)
+- uid: Manatee.Json.Schema.MetaSchemaValidationResults.ToJson*
+  name: ToJson
+  href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html#Manatee_Json_Schema_MetaSchemaValidationResults_ToJson_
+  commentId: Overload:Manatee.Json.Schema.MetaSchemaValidationResults.ToJson
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.MetaSchemaValidationResults.ToJson
+  nameWithType: MetaSchemaValidationResults.ToJson
 - uid: Manatee.Json.Schema.MinimumKeyword
   name: MinimumKeyword
   href: api/Manatee.Json.Schema.MinimumKeyword.html
@@ -12689,6 +12773,19 @@ references:
   commentId: T:Manatee.Json.Schema.SchemaLoadException
   fullName: Manatee.Json.Schema.SchemaLoadException
   nameWithType: SchemaLoadException
+- uid: Manatee.Json.Schema.SchemaLoadException.MetaValidation
+  name: MetaValidation
+  href: api/Manatee.Json.Schema.SchemaLoadException.html#Manatee_Json_Schema_SchemaLoadException_MetaValidation
+  commentId: P:Manatee.Json.Schema.SchemaLoadException.MetaValidation
+  fullName: Manatee.Json.Schema.SchemaLoadException.MetaValidation
+  nameWithType: SchemaLoadException.MetaValidation
+- uid: Manatee.Json.Schema.SchemaLoadException.MetaValidation*
+  name: MetaValidation
+  href: api/Manatee.Json.Schema.SchemaLoadException.html#Manatee_Json_Schema_SchemaLoadException_MetaValidation_
+  commentId: Overload:Manatee.Json.Schema.SchemaLoadException.MetaValidation
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.SchemaLoadException.MetaValidation
+  nameWithType: SchemaLoadException.MetaValidation
 - uid: Manatee.Json.Schema.SchemaReferenceNotFoundException
   name: SchemaReferenceNotFoundException
   href: api/Manatee.Json.Schema.SchemaReferenceNotFoundException.html

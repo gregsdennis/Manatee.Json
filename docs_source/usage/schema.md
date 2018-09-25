@@ -96,9 +96,12 @@ Because the `JsonSchema` class will accept any keyword, and some keywords are on
 
 To ensure that this is the case, call the `ValidateSchema()` method.  This will analyze all of the keywords and report on whether they are all compatible.
 
-```csharp
-throw new NotImplementedException("Add stuff here about the meta-validation results.");
-```
+The results object is an instance of `MetaSchemaValidationResults` which exposes the following properties:
+
+- `IsValid` simply indicates a pass/fail
+- `SupportedVersions` indicates the JSON Schema draft versions that this schema passes.
+- `MetaSchemaValidations` is a dictionary, keyed by schema ID strings, that contains validation results for those schemas.  Typically the keys will be the IDs of the draft meta-schemas, but could be the ID of any schema.
+- `OtherErrors` is a list of strings to support other errors that may result outside of those produced by meta-schema validations.
 
 ### Validating instances
 

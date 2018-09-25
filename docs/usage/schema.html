@@ -134,6 +134,13 @@ var mySchema = serializer.Deserialize&lt;JsonSchema&gt;(json);
 <h3 id="validating-the-schema-itself">Validating the schema itself</h3>
 <p>Because the <code>JsonSchema</code> class will accept any keyword, and some keywords are only supported by specific drafts, it may be important to ensure that the schema that's created is valid against one of the drafts.</p>
 <p>To ensure that this is the case, call the <code>ValidateSchema()</code> method.  This will analyze all of the keywords and report on whether they are all compatible.</p>
+<p>The results object is an instance of <code>MetaSchemaValidationResults</code> which exposes the following properties:</p>
+<ul>
+<li><code>IsValid</code> simply indicates a pass/fail</li>
+<li><code>SupportedVersions</code> indicates the JSON Schema draft versions that this schema passes.</li>
+<li><code>MetaSchemaValidations</code> is a dictionary, keyed by schema ID strings, that contains validation results for those schemas.  Typically the keys will be the IDs of the draft meta-schemas, but could be the ID of any schema.</li>
+<li><code>OtherErrors</code> is a list of strings to support other errors that may result outside of those produced by meta-schema validations.</li>
+</ul>
 <h3 id="validating-instances">Validating instances</h3>
 <p><code>JsonSchema</code> exposes a <code>Validate(JsonValue)</code> method which is used to validate incoming JSON values.  Let's begin with the schema from above and a few JSON objects:</p>
 <pre><code class="lang-json">{
