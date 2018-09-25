@@ -1,3 +1,5 @@
 # JSON Patch
 
-TODO
+```csharp
+throw new NotImplementedException("Add something, dude... seriously.");
+```
