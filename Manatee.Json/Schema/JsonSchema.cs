@@ -242,6 +242,9 @@ namespace Manatee.Json.Schema
 					? DocumentPath
 					: new Uri(context.BaseUri, DocumentPath);
 
+			if (context.BaseUri.OriginalString.EndsWith("#"))
+				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
+
 			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
 				JsonSchemaRegistry.Register(this);
 
