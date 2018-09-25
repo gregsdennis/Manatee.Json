@@ -27,6 +27,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			var schema = new JsonSchema()
 				.ExclusiveMaximumDraft04(false)
+				.Maximum(10)
 				.Contains(new JsonSchema());
 
 			var results = schema.ValidateSchema();
