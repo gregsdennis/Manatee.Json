@@ -6,13 +6,13 @@
 	public static class JsonOptions
 	{
 		/// <summary>
-		/// Determines the indention character to use when calling <see cref="JsonValue.GetIndentedString(int)"/>.
+		/// Determines the indention string to use when calling <see cref="JsonValue.GetIndentedString(int)"/>.
 		/// The default is a single tab.
 		/// </summary>
-		public static char PrettyPrintIndentChar { get; set; } = '\t';
+		public static string PrettyPrintIndent { get; set; } = "\t";
 		/// <summary>
 		/// Defines the how duplicate keys are handled for <see cref="JsonObject"/>s.
-		/// The default is <see cref="DuplicateKeyBehavior.Throw"/>.
+		/// The default is <see cref="Manatee.Json.DuplicateKeyBehavior.Throw"/>.
 		/// </summary>
 		public static DuplicateKeyBehavior DuplicateKeyBehavior { get; set; }
 		internal static bool AllowTrailingCommas { get; set; }

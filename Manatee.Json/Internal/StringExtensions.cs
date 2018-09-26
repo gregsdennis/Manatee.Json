@@ -24,63 +24,6 @@ namespace Manatee.Json.Internal
 		                                                          .ToArray();
 		private static readonly Regex _generalEscapePattern = new Regex("%(?<Value>[0-9A-F]{2})", RegexOptions.IgnoreCase);
 
-		public static string EvaluateEscapeSequences(this string source, out string result)
-		{
-			var i = 0;
-			while (i < source.Length)
-			{
-				var length = 1;
-				if (source[i] == '\\')
-					switch (source[i + 1])
-					{
-						case '"':
-						case '/':
-						case '\\':
-							source = source.Remove(i, 1);
-							break;
-						case 'b':
-							source = source.Substring(0, i) + '\b' + source.Substring(i + length + 1);
-							break;
-						case 'f':
-							source = source.Substring(0, i) + '\f' + source.Substring(i + length + 1);
-							break;
-						case 'n':
-							source = source.Substring(0, i) + '\n' + source.Substring(i + length + 1);
-							break;
-						case 'r':
-							source = source.Substring(0, i) + '\r' + source.Substring(i + length + 1);
-							break;
-						case 't':
-							source = source.Substring(0, i) + '\t' + source.Substring(i + length + 1);
-							break;
-						case 'u':
-							length = 6;
-							var hex = int.Parse(source.Substring(i + 2, 4), NumberStyles.HexNumber);
-							if (source.Substring(i + 6, 2) == "\\u")
-							{
-								var hex2 = int.Parse(source.Substring(i + 8, 4), NumberStyles.HexNumber);
-								hex = CalculateUtf32(hex, hex2);
-								length += 6;
-							}
-							if (hex.IsValidUtf32CodePoint())
-								source = source.Substring(0, i) + char.ConvertFromUtf32(hex) + source.Substring(i + length);
-							else
-							{
-								result = null;
-								return "Invalid UTF-32 code point.";
-							}
-							length = 2; // unicode pairs are 2 chars in .Net strings.
-							break;
-						default:
-							result = source;
-							return $"Invalid escape sequence: '\\{source[i + 1]}'.";
-					}
-				i += length;
-			}
-			result = source;
-			return null;
-		}
-
 		public static int CalculateUtf32(int hex, int hex2)
 		{
 			return (hex - 0xD800) * 0x400 + (hex2 - 0xDC00) % 0x400 + 0x10000;
@@ -256,6 +199,14 @@ namespace Manatee.Json.Internal
 			var charsRead = await stream.ReadBlockAsync(buffer, offset, count);
 
 			return count == charsRead;
+		}
+
+		// Source: https://gunnarpeipman.com/csharp/string-repeat/
+		public static string Repeat(this string s, int n)
+		{
+			return new StringBuilder(s.Length * n)
+				.Insert(0, s, n)
+				.ToString();
 		}
 	}
 }

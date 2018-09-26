@@ -1,5 +1,7 @@
 # 10.0.0
 
+*Preview 6 released on 26 Sep, 2018*
+
 *Preview 5 released on 25 Sep, 2018*
 
 *Preview 4 released on 24 Sep, 2018*
@@ -27,11 +29,12 @@
 
 ([#152](https://github.com/gregsdennis/Manatee.Json/issues/152)) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous `#Def` and `#Ref` tags.  Now you will see something more like `{"$ref":"#/property1/array/3/data"}` in the serialized JSON for references.
 
-### Changes
-
 *In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.*
 
+### Changes
+
 - `JsonSyntaxException` - `string Path` property replaced by `JsonPointer Location` property.
+- `JsonOptions.PrettyPrintIndent` - Updated from `char` to `string` to support indentations like multiple spaces.
 
 ### New types
 

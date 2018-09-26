@@ -60,8 +60,8 @@ namespace Manatee.Json
 				return;
 			}
 
-			string tab0 = string.Empty.PadLeft(indentLevel, JsonOptions.PrettyPrintIndentChar),
-				   tab1 = string.Empty.PadLeft(indentLevel + 1, JsonOptions.PrettyPrintIndentChar);
+			string tab0 = JsonOptions.PrettyPrintIndent.Repeat(indentLevel),
+			       tab1 = tab0 + JsonOptions.PrettyPrintIndent;
 
 			builder.Append("{\n");
 			bool comma = false;
