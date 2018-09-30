@@ -421,19 +421,19 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.JsonOptions.DuplicateKeyBehavior
   nameWithType: JsonOptions.DuplicateKeyBehavior
-- uid: Manatee.Json.JsonOptions.PrettyPrintIndentChar
-  name: PrettyPrintIndentChar
-  href: api/Manatee.Json.JsonOptions.html#Manatee_Json_JsonOptions_PrettyPrintIndentChar
-  commentId: P:Manatee.Json.JsonOptions.PrettyPrintIndentChar
-  fullName: Manatee.Json.JsonOptions.PrettyPrintIndentChar
-  nameWithType: JsonOptions.PrettyPrintIndentChar
-- uid: Manatee.Json.JsonOptions.PrettyPrintIndentChar*
-  name: PrettyPrintIndentChar
-  href: api/Manatee.Json.JsonOptions.html#Manatee_Json_JsonOptions_PrettyPrintIndentChar_
-  commentId: Overload:Manatee.Json.JsonOptions.PrettyPrintIndentChar
+- uid: Manatee.Json.JsonOptions.PrettyPrintIndent
+  name: PrettyPrintIndent
+  href: api/Manatee.Json.JsonOptions.html#Manatee_Json_JsonOptions_PrettyPrintIndent
+  commentId: P:Manatee.Json.JsonOptions.PrettyPrintIndent
+  fullName: Manatee.Json.JsonOptions.PrettyPrintIndent
+  nameWithType: JsonOptions.PrettyPrintIndent
+- uid: Manatee.Json.JsonOptions.PrettyPrintIndent*
+  name: PrettyPrintIndent
+  href: api/Manatee.Json.JsonOptions.html#Manatee_Json_JsonOptions_PrettyPrintIndent_
+  commentId: Overload:Manatee.Json.JsonOptions.PrettyPrintIndent
   isSpec: "True"
-  fullName: Manatee.Json.JsonOptions.PrettyPrintIndentChar
-  nameWithType: JsonOptions.PrettyPrintIndentChar
+  fullName: Manatee.Json.JsonOptions.PrettyPrintIndent
+  nameWithType: JsonOptions.PrettyPrintIndent
 - uid: Manatee.Json.JsonOptions.ThrowOnIncorrectTypeAccess
   name: ThrowOnIncorrectTypeAccess
   href: api/Manatee.Json.JsonOptions.html#Manatee_Json_JsonOptions_ThrowOnIncorrectTypeAccess

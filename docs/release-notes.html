@@ -62,10 +62,7 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="1000">10.0.0</h1>
 
-<p><em>Preview 5 released on 25 Sep, 2018</em></p>
-<p><em>Preview 4 released on 24 Sep, 2018</em></p>
-<p><em>Preview <del>2</del> 3 released on 17 Sep, 2018</em></p>
-<p><em>Preview 1 released on 16 Sep, 2018</em></p>
+<p><em>Released on 30 Sep, 2018</em></p>
 <p><span id="break">breaking change</span> <span id="feature">feature</span></p>
 <h2 id="summary">Summary</h2>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/147">#147</a>) Updated how custom serialization is handled.  Rather than registering independent methods (<code>CustomSerializations</code>), custom sub-serializer implementations that each handle specific scenarios can be registered.  Each implementation specifies whether it can handle the (de)serialization based on the expected type, the serializer options, and (for deserialization, specifically) the JSON value.  It will also specify whether it should maintain referential integrity.</p>
@@ -77,11 +74,12 @@
 </ul>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/112">#112</a>) Another change intended to support JSON Schem draft-08 is a <a href="https://github.com/json-schema-org/json-schema-spec/issues/643">standardized output format</a>.  The validation results have been restructured to conform to this proposal.</p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/177">#177</a>) Opened up the <code>StringFormat</code> class (schema <code>format</code> keyword) for extension and customization.</p>
-<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/152">#152</a>) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous <code>#Def</code> and <code>#Ref</code> tags.  Now you will see something more like <code>{&quot;$ref&quot;:&quot;#/property1/array/3/data&quot;}</code> in the serialized JSON for references.</p>
-<h3 id="changes">Changes</h3>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/152">#152</a>) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous <code>#Def</code> and <code>#Ref</code> tags.  Now you will see something more like <code>{&quot;$ref&quot;:&quot;#/property1/array/3/data&quot;}</code> in the serialized JSON for references.  The idea of the <code>#Def</code> tag has been removed.</p>
 <p><em>In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.</em></p>
+<h3 id="changes">Changes</h3>
 <ul>
 <li><code>JsonSyntaxException</code> - <code>string Path</code> property replaced by <code>JsonPointer Location</code> property.</li>
+<li><code>JsonOptions.PrettyPrintIndent</code> - Updated from <code>char</code> to <code>string</code> to support indentations like multiple spaces.</li>
 </ul>
 <h3 id="new-types">New types</h3>
 <ul>

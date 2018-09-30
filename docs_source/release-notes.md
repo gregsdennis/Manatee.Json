@@ -1,14 +1,6 @@
 # 10.0.0
 
-*Preview 6 released on 26 Sep, 2018*
-
-*Preview 5 released on 25 Sep, 2018*
-
-*Preview 4 released on 24 Sep, 2018*
-
-*Preview <del>2</del> 3 released on 17 Sep, 2018*
-
-*Preview 1 released on 16 Sep, 2018*
+*Released on 30 Sep, 2018*
 
 <span id="break">breaking change</span> <span id="feature">feature</span>
 
@@ -27,7 +19,7 @@
 
 ([#177](https://github.com/gregsdennis/Manatee.Json/issues/177)) Opened up the `StringFormat` class (schema `format` keyword) for extension and customization.
 
-([#152](https://github.com/gregsdennis/Manatee.Json/issues/152)) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous `#Def` and `#Ref` tags.  Now you will see something more like `{"$ref":"#/property1/array/3/data"}` in the serialized JSON for references.
+([#152](https://github.com/gregsdennis/Manatee.Json/issues/152)) Updated referential integrity for serialization to use JSON Pointers that point elsewhere in the structure instead of the previous `#Def` and `#Ref` tags.  Now you will see something more like `{"$ref":"#/property1/array/3/data"}` in the serialized JSON for references.  The idea of the `#Def` tag has been removed.
 
 *In addition to the below listings, the entire JSON Schema implementation has been overhauled.  Please see the JSON Schema documentation for details.*
 
