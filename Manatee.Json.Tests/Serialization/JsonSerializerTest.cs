@@ -617,6 +617,7 @@ namespace Manatee.Json.Tests.Serialization
 		public void GreedySerializationDisabled()
 		{
 			JsonValue expected = new JsonObject();
+
 			var obj = new ObjectWithBasicProps
 				{
 					BoolProp = true,
