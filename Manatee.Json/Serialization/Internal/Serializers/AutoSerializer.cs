@@ -36,7 +36,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var propertyList = ReflectionCache.GetMembers(type, context.RootSerializer.Options.PropertySelectionStrategy, context.RootSerializer.Options.AutoSerializeFields);
 			var map = _SerializeValues(context, propertyList);
 			_ConstructJsonObject(json, map, context.RootSerializer.Options);
-			return json.Count == 0 ? JsonValue.Null : json;
+			return json;
+			//return json.Count == 0 ? JsonValue.Null : json;
 		}
 		public JsonValue SerializeType<T>(JsonSerializer serializer)
 		{

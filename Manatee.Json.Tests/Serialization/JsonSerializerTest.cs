@@ -616,7 +616,8 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void GreedySerializationDisabled()
 		{
-			var expected = JsonValue.Null;
+			JsonValue expected = new JsonObject();
+
 			var obj = new ObjectWithBasicProps
 				{
 					BoolProp = true,
@@ -929,6 +930,30 @@ namespace Manatee.Json.Tests.Serialization
 			var json = serializer.Serialize(target);
 
 			Assert.AreEqual(expected, json);
+		}
+
+		[Test]
+		public void SerializeNullableStructAsPropertyOfClass()
+		{
+			var serializer = new JsonSerializer();
+			var target = new Container { Value = new Mass { Value = 5 } };
+			JsonValue expected = new JsonObject { ["Value"] = new JsonObject { ["Value"] = 5 } };
+
+			var actual = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void SerializeNullableStructAsPropertyOfClassNull()
+		{
+			var serializer = new JsonSerializer();
+			var target = new Container {Value = null};
+			JsonValue expected = new JsonObject();
+
+			var actual = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }
