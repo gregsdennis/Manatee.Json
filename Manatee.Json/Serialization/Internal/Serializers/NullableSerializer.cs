@@ -24,7 +24,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					CurrentLocation = context.CurrentLocation.Clone(),
 					InferredType = typeof(T),
 					RequestedType = typeof(T),
-					LocalValue = context.LocalValue
+					LocalValue = context.LocalValue,
+					Source = nullable.Value
 				};
 			var json = context.RootSerializer.Serialize(newContext);
 			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;

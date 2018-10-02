@@ -11,6 +11,7 @@ using Manatee.Json.Patch;
 using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
+using Manatee.Json.Tests.Test_References;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
@@ -23,10 +24,13 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			var baseUri = new Uri("/properties/test", UriKind.RelativeOrAbsolute);
-			var relative = "#/a/b";
+			var serializer = new JsonSerializer();
+			var target = new Container {Value = new Mass {Value = 5}};
+			JsonValue expected = new JsonObject {["Value"] = new JsonObject {["Value"] = 5}};
 
-			var uri = new Uri(baseUri, relative);
+			var actual = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }

@@ -930,5 +930,29 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, json);
 		}
+
+		[Test]
+		public void DeserializeNullableStructAsPropertyOfClass()
+		{
+			var serializer = new JsonSerializer();
+			var expected = new Container { Value = new Mass { Value = 5 } };
+			JsonValue target = new JsonObject { ["Value"] = new JsonObject { ["Value"] = 5 } };
+
+			var actual = serializer.Deserialize<Container>(target);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void DeserializeNullableStructAsPropertyOfClassNull()
+		{
+			var serializer = new JsonSerializer();
+			var expected = new Container { Value = null };
+			JsonValue target = new JsonObject { ["Value"] = null };
+
+			var actual = serializer.Deserialize<Container>(target);
+
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }
