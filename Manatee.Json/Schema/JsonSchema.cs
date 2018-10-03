@@ -10,8 +10,6 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Encapsulates and models JSON Schema.
 	/// </summary>
-	[Experimental]
-	[FeedbackWelcome]
 	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>
 	{
 		/// <summary>

@@ -1,3 +1,11 @@
+# 10.0.2
+
+*Released on 4 Oct, 2018*
+
+<span id="patch">patch</span>
+
+Removed compiler warnings for using `JsonSchema`.
+
 # 10.0.1
 
 *Released on 3 Oct, 2018*
@@ -7,6 +15,7 @@
 Fixed issue where a class with a nullable struct fails to serialize.
 
 Fixed issue where a non-null object with all properties as default values would be serialized to `null` then summarily removed from the serialization output.  This is bad because null is different than a non-null default object.
+
 # 10.0.0
 
 *Released on 30 Sep, 2018*
