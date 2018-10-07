@@ -1,14 +1,19 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ListSerializer : GenericTypeSerializerBase
 	{
+		public override int Priority => -9;
+
 		public override bool Handles(SerializationContext context)
 		{
-			return context.InferredType.GetTypeInfo().IsGenericType && 
-			       context.InferredType.GetGenericTypeDefinition() == typeof(List<>);
+			return context.InferredType.GetTypeInfo().IsGenericType &&
+			       context.InferredType.InheritsFrom(typeof(IEnumerable));
 		}
 
 		private static JsonValue _Encode<T>(SerializationContext context)
@@ -45,6 +50,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				list.Add((T) context.RootSerializer.Deserialize(newContext));
 			}
 			return list;
+		}
+
+		protected override void PrepSource(SerializationContext context)
+		{
+			context.Source = (context.Source as IEnumerable).Cast<object>().ToList();
 		}
 	}
 }

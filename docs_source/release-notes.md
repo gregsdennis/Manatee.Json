@@ -1,3 +1,13 @@
+# 10.0.3
+
+*Released on 8 Oct, 2018*
+
+<span id="patch">patch</span>
+
+Fixed issue with serialization of non-enumerated `IEnumerable<T>` types like `.Where()` and `.Select()` queries.
+
+Added missing XML comments on some types.
+
 # 10.0.2
 
 *Released on 4 Oct, 2018*

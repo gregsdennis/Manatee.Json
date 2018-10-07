@@ -955,5 +955,34 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, actual);
 		}
+
+		[Test]
+		public void SerializeEnumerable_Where()
+		{
+			var enumerable = Enumerable.Range(1, 20).Where(i => i % 3 == 0);
+
+			var target = new {Enumerable = enumerable};
+			JsonValue expected = new JsonObject {["Enumerable"] = new JsonArray {3, 6, 9, 12, 15, 18}};
+
+			var serializer = new JsonSerializer {Options = {PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite}};
+			var actual = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void SerializeEnumerable_Select()
+		{
+			var enumerable = Enumerable.Range(1, 20).Where(i => i % 3 == 0).Select(i => i.ToString());
+
+			var target = new {Enumerable = enumerable};
+			JsonValue expected = new JsonObject {["Enumerable"] = new JsonArray {"3", "6", "9", "12", "15", "18"}};
+
+
+			var serializer = new JsonSerializer {Options = {PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite}};
+			var actual = serializer.Serialize(target);
+
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }

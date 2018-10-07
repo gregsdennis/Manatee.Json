@@ -1,8 +1,4 @@
-﻿using System;
-using Manatee.Json.Pointer;
-using Manatee.Json.Serialization.Internal;
-
-namespace Manatee.Json.Serialization
+﻿namespace Manatee.Json.Serialization
 {
 	/// <summary>
 	/// Defines a custom serializer.
@@ -32,32 +28,5 @@ namespace Manatee.Json.Serialization
 		/// <param name="context"></param>
 		/// <returns>The typed value represented by the JSON data.</returns>
 		object Deserialize(SerializationContext context);
-	}
-
-	public class SerializationContext
-	{
-		public Type InferredType { get; set; }
-		public Type RequestedType { get; set; }
-		public JsonPointer CurrentLocation { get; set; }
-		public JsonValue LocalValue { get; set; }
-		public object Source { get; set; }
-
-		public JsonValue JsonRoot { get; }
-		public JsonSerializer RootSerializer { get; }
-
-		internal SerializationReferenceCache SerializationMap { get; }
-
-		public SerializationContext(SerializationContext other)
-		{
-			SerializationMap = other.SerializationMap;
-			RootSerializer = other.RootSerializer;
-			JsonRoot = other.JsonRoot;
-		}
-		internal SerializationContext(JsonSerializer rootSerializer, JsonValue jsonRoot = null)
-		{
-			SerializationMap = new SerializationReferenceCache();
-			RootSerializer = rootSerializer;
-			JsonRoot = jsonRoot;
-		}
 	}
 }

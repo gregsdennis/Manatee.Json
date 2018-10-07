@@ -15,8 +15,14 @@ namespace Manatee.Json.Internal
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
 			if (tDerived._IsSubtypeOf(tBase)) return true;
-			var interfaces = tDerived.GetTypeInfo().ImplementedInterfaces.Select(i => IntrospectionExtensions.GetTypeInfo(i).IsGenericType ? i.GetGenericTypeDefinition() : i);
+			var interfaces = tDerived.GetTypeInfo().ImplementedInterfaces.SelectMany(_GetAllInterfaces);
 			return interfaces.Contains(tBase);
+		}
+		private static IEnumerable<Type> _GetAllInterfaces(Type type)
+		{
+			if (type.GetTypeInfo().IsGenericType)
+				yield return type.GetGenericTypeDefinition();
+			yield return type;
 		}
 		private static bool _IsSubtypeOf(this Type tDerived, Type tBase)
 		{
@@ -48,7 +54,8 @@ namespace Manatee.Json.Internal
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNumericType(this Type value)
 		{
-			return value == typeof(double) ||
+			return value == typeof(decimal) ||
+			       value == typeof(double) ||
 			       value == typeof(float) ||
 			       value == typeof(int) ||
 			       value == typeof(uint) ||

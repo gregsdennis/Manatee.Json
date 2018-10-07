@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.LinqExtensions.html",
-          "hash": "nWjKUPRQIcTQUewMrqSgvQ=="
+          "hash": "02Hip4/6jmddz2CmJ3Mvng=="
         }
       },
       "is_incremental": false,
@@ -669,7 +669,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.GetterExtensions.html",
-          "hash": "ckEYpJUF7xqpMWuRAp/R4g=="
+          "hash": "VXMeKsMM0zHdFH4DyzqiWw=="
         }
       },
       "is_incremental": false,
@@ -1101,7 +1101,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.SchemaKeywordCatalog.html",
-          "hash": "zEF83EY4m8mj5QwpKNGeZw=="
+          "hash": "rrFTsfRxEv8K33WJinL7Xg=="
         }
       },
       "is_incremental": false,
@@ -1113,7 +1113,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.SchemaLoadException.html",
-          "hash": "QKG+6zO3cp+YRyltSd5vtw=="
+          "hash": "/D93Cqs1a02wHzjSL1TEKg=="
         }
       },
       "is_incremental": false,
@@ -1257,7 +1257,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.AbstractionMap.html",
-          "hash": "REnHBur9uQrNl7BghnxTPQ=="
+          "hash": "A8nnLDO1Hx99BBwO7iCzxQ=="
         }
       },
       "is_incremental": false,
@@ -1272,7 +1272,7 @@
           "hash": "wNVaVU7cq2D4HxvQ2KZ4AQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1284,7 +1284,7 @@
           "hash": "+8HVFeMUpo16S16Ag2ybtA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1308,7 +1308,7 @@
           "hash": "P2f+Id8mJO1/+Y0ibq7YBg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1317,7 +1317,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.ISerializer.html",
-          "hash": "wOPJtYHY/8Tkk6VvII+3Nw=="
+          "hash": "7YAZ7IiqXeeOdQPmt/tdkw=="
         }
       },
       "is_incremental": false,
@@ -1332,7 +1332,7 @@
           "hash": "FmChBag6WHhMEGbo+K/xYA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1392,7 +1392,7 @@
           "hash": "9ALyrsrouwYXuZdUKwRrUw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1428,7 +1428,7 @@
           "hash": "8Izg05O9pbfPU0b8MLaBiA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1440,7 +1440,7 @@
           "hash": "dr8eCBZr8smIL2PaHQ/G/g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1461,7 +1461,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.SerializationContext.html",
-          "hash": "baSyPKL8Al8qS/1czM3C9Q=="
+          "hash": "zdG/JE2xPwjivvAL6+XEHg=="
         }
       },
       "is_incremental": false,
@@ -1473,7 +1473,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.SerializerFactory.html",
-          "hash": "GnlQHjJU9dBJjdctZriWAQ=="
+          "hash": "N1ywRyyVesOgQD9iZG5s4Q=="
         }
       },
       "is_incremental": false,
@@ -1512,7 +1512,7 @@
           "hash": "ikENXwgAoExVESukmxjfqA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1521,7 +1521,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Serialization.html",
-          "hash": "bb8/0085SdFvzlQjA8wC1g=="
+          "hash": "k6EgZAi5vjUG03kcJrOxyw=="
         }
       },
       "is_incremental": false,
@@ -1676,7 +1676,7 @@
       "output": {
         ".html": {
           "relative_path": "release-notes.html",
-          "hash": "wMi3a8SxgEyiE+gccVki4Q=="
+          "hash": "MEhz24nX6fMQfBNL3VasqA=="
         }
       },
       "is_incremental": false,
@@ -1831,11 +1831,6 @@
         "incrementalPhase": "build"
       },
       "processors": {
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build"
-        },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -1847,6 +1842,11 @@
         },
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
+          "incrementalPhase": "build"
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         }
       }

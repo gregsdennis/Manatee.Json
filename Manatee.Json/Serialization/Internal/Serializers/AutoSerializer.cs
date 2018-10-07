@@ -103,7 +103,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					var newContext = new SerializationContext(context)
 					{
 							CurrentLocation = newLocation,
-							InferredType = type,
+							InferredType = value.GetType(),
 							RequestedType = type,
 							Source = value
 						};

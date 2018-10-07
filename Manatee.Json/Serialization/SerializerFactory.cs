@@ -63,6 +63,16 @@ namespace Manatee.Json.Serialization
 			context.InferredType = context.RootSerializer.AbstractionMap.GetMap(context.InferredType);
 			var theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
 
+			if (theChosenOne is AutoSerializer && context.RequestedType != typeof(object))
+			{
+				var type = context.InferredType;
+				context.InferredType = context.RootSerializer.AbstractionMap.GetMap(context.RequestedType);
+				theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
+
+				if (theChosenOne is AutoSerializer)
+					context.InferredType = type;
+			}
+
 			return _BuildSerializer(theChosenOne, context.InferredType.GetTypeInfo());
 		}
 		internal static ITypeSerializer GetTypeSerializer()
