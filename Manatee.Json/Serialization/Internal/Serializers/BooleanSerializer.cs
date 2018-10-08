@@ -2,7 +2,7 @@
 {
 	internal class BooleanSerializer : IPrioritizedSerializer
 	{
-		public int Priority => -10;
+		public int Priority => 1;
 
 		public bool ShouldMaintainReferences => false;
 

@@ -2,7 +2,7 @@
 {
 	internal class StringSerializer : IPrioritizedSerializer
 	{
-		public int Priority => -10;
+		public int Priority => 2;
 
 		public bool ShouldMaintainReferences => false;
 

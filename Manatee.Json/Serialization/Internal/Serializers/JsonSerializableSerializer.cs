@@ -4,7 +4,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class JsonSerializableSerializer : IPrioritizedSerializer
 	{
-		public int Priority => -9;
+		public int Priority => 2;
 
 		public bool ShouldMaintainReferences => true;
 
