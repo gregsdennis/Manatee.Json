@@ -1,3 +1,13 @@
+# 10.0.4
+
+*Released on 8 Oct, 2018*
+
+<span id="patch">patch</span>
+
+User-defined serialization should have priority over built-in ones.
+
+Enum deserialization should be smarter about detecting numeric or string formatting.
+
 # 10.0.3
 
 *Released on 8 Oct, 2018*

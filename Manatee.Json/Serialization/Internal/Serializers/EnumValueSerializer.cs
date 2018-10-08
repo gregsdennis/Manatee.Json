@@ -5,15 +5,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class EnumValueSerializer : IPrioritizedSerializer
 	{
-		public int Priority => -10;
+		public int Priority => 2;
 
 		public bool ShouldMaintainReferences => false;
 
 		public bool Handles(SerializationContext context)
 		{
+			var serializing = context.LocalValue == null;
 			return context.InferredType.GetTypeInfo().IsEnum &&
-			       (context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsInteger || // used during serialization
-			        context.LocalValue?.Type == JsonValueType.Number); // used during deserialization
+			       ((serializing && context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsInteger) || // used during serialization
+			        (!serializing && context.LocalValue?.Type == JsonValueType.Number)); // used during deserialization
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{

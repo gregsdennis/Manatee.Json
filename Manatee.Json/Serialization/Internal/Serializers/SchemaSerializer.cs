@@ -5,7 +5,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	internal class SchemaSerializer : IPrioritizedSerializer
 	{
 		public bool ShouldMaintainReferences => false;
-		public int Priority => -10;
+		public int Priority => 1;
 
 		public bool Handles(SerializationContext context)
 		{

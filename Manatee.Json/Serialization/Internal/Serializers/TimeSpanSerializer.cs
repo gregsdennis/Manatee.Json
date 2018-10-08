@@ -4,7 +4,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class TimeSpanSerializer : IPrioritizedSerializer
 	{
-		public int Priority => -10;
+		public int Priority => 2;
 
 		public bool ShouldMaintainReferences => false;
 

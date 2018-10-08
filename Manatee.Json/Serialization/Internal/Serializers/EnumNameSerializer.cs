@@ -16,15 +16,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		private static readonly Dictionary<Type, List<Description>> _descriptions = new Dictionary<Type,List<Description>>();
 
-		public int Priority => -10;
+		public int Priority => 2;
 
 		public bool ShouldMaintainReferences => false;
 
 		public bool Handles(SerializationContext context)
 		{
+			var serializing = context.LocalValue == null;
 			return context.InferredType.GetTypeInfo().IsEnum &&
-			       (context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName || // used during serialization
-			        context.LocalValue?.Type == JsonValueType.String); // used during deserialization
+			       ((serializing && context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName) || // used during serialization
+			        (!serializing && context.LocalValue?.Type == JsonValueType.String)); // used during deserialization
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{

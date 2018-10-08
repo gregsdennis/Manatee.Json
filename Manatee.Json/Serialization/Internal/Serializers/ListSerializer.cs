@@ -8,7 +8,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ListSerializer : GenericTypeSerializerBase
 	{
-		public override int Priority => -9;
+		public override int Priority => 3;
 
 		public override bool Handles(SerializationContext context)
 		{
