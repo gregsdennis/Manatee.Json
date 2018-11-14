@@ -75,6 +75,8 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public Func<string, bool> ValidationFunction { get; }
 
+		internal bool IsKnown { get; set; }
+
 		static StringFormat()
 		{
 			_lookup = new Dictionary<string, StringFormat>();
@@ -142,8 +144,8 @@ namespace Manatee.Json.Schema
 		public static StringFormat GetFormat(string formatKey)
 		{
 			return formatKey != null && _lookup.ContainsKey(formatKey)
-				       ? _lookup[formatKey]
-				       : null;
+				? _lookup[formatKey]
+				: new StringFormat(formatKey, JsonSchemaVersion.None, s => false) {IsKnown = false};
 		}
 	}
 }
