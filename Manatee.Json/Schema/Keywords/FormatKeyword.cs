@@ -64,8 +64,11 @@ namespace Manatee.Json.Schema
 				return new SchemaValidationResults(Name, context)
 					{
 						IsValid = false,
-						Keyword = Name,
-						AdditionalInfo = {["format"] = format.Key}
+						AdditionalInfo =
+							{
+								["format"] = format.Key,
+								["isKnownFormat"] = format.IsKnown
+							}
 					};
 
 			return valid;

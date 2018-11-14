@@ -85,6 +85,8 @@ namespace Manatee.Json.Schema
 				results.Keyword = Name;
 			}
 
+			results.NestedResults.Add(nestedResults);
+
 			return results;
 		}
 		/// <summary>
