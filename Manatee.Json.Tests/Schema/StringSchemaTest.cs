@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Schema;
+﻿using Manatee.Json.Pointer;
+using Manatee.Json.Schema;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -205,6 +206,29 @@ namespace Manatee.Json.Tests.Schema
 			var results = schema.Validate(json);
 
 			results.AssertValid();
+		}
+		[Test]
+		public void ValidateReturnsInvalidOnUnknownFormat()
+		{
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
+			var json = (JsonValue) "32";
+			var expected = new SchemaValidationResults
+				{
+					IsValid = false,
+					RelativeLocation = JsonPointer.Parse("#/format"),
+					InstanceLocation = JsonPointer.Parse("#"),
+					Keyword = "format",
+					AdditionalInfo = new JsonObject
+						{
+							["format"] = "Int32",
+							["isKnownFormat"] = false
+						}
+				};
+
+			var results = schema.Validate(json);
+
+			results.AssertInvalid(expected);
 		}
 		[Test]
 		public void ValidateReturnsErrorOnPatternNonMatch()
