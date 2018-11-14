@@ -353,5 +353,42 @@ namespace Manatee.Json.Tests.Schema
 				throw;
 			}
 		}
+
+		[Test]
+		public void Issue194_refNoIntuitiveErrorMessage()
+		{
+			var serializer = new JsonSerializer();
+
+			// please review following validation code after creating type is done
+
+			var schemaJson = new JsonObject();
+			//schemaJson.Add("$schema", "http://json-schema.org/draft-04/schema#");
+			schemaJson.Add("$ref", "#/definitions/apredefinedtype");
+			schemaJson.Add("definitions", JsonValue.Parse(
+				               @"{
+								""apredefinedtype"": {
+									""type"": ""object"",
+									""properties"": {
+										""prop1"": {
+											""enum"": [
+												""ændring"",
+												""test""
+											],
+											""type"": ""string""
+										}
+									},
+									""required"": [""prop1""]
+									}
+								}"
+			               ));
+
+
+			var actual = new JsonSchema();
+			actual.FromJson(schemaJson, serializer);
+			var jObject = JsonValue.Parse("{\"prop11\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}");
+			var messages = actual.Validate(jObject);
+
+			messages.AssertValid();
+		}
 	}
 }
