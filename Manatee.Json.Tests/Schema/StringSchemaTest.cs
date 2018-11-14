@@ -210,6 +210,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsInvalidOnUnknownFormat()
 		{
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
 			var json = (JsonValue) "32";
 			var expected = new SchemaValidationResults
