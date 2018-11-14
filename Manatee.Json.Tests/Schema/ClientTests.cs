@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
@@ -357,38 +358,33 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue194_refNoIntuitiveErrorMessage()
 		{
-			var serializer = new JsonSerializer();
+			var actual = new JsonSchema()
+				.Ref("#/definitions/apredefinedtype")
+				.Definition("apredefinedtype", new JsonSchema()
+					            .Type(JsonSchemaType.Object)
+					            .Property("prop1", new JsonSchema().Enum("ændring", "test"))
+					            .Required("prop1"));
+			var jObject = new JsonObject
+			{
+				["prop11"] = "ændring",
+				["prop2"] = new JsonObject { ["prop3"] = "ændring" }
+			};
+			var expected = new SchemaValidationResults
+				{
+					IsValid = false,
+					RelativeLocation = JsonPointer.Parse("#/$ref/required"),
+					InstanceLocation = JsonPointer.Parse("#"),
+					Keyword = "required",
+					AdditionalInfo = new JsonObject
+						{
+							["missing"] = new JsonArray {"prop1"}
 
-			// please review following validation code after creating type is done
+						}
+				};
 
-			var schemaJson = new JsonObject();
-			//schemaJson.Add("$schema", "http://json-schema.org/draft-04/schema#");
-			schemaJson.Add("$ref", "#/definitions/apredefinedtype");
-			schemaJson.Add("definitions", JsonValue.Parse(
-				               @"{
-								""apredefinedtype"": {
-									""type"": ""object"",
-									""properties"": {
-										""prop1"": {
-											""enum"": [
-												""ændring"",
-												""test""
-											],
-											""type"": ""string""
-										}
-									},
-									""required"": [""prop1""]
-									}
-								}"
-			               ));
-
-
-			var actual = new JsonSchema();
-			actual.FromJson(schemaJson, serializer);
-			var jObject = JsonValue.Parse("{\"prop11\": \"ændring\", \"prop2\": {\"prop3\": \"ændring\"}}");
 			var messages = actual.Validate(jObject);
 
-			messages.AssertValid();
+			messages.AssertInvalid(expected);
 		}
 	}
 }
