@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
+using Manatee.Json.Serialization;
+
 #if !NET45
 using System.Net.Http;
 #endif
@@ -28,6 +29,13 @@ namespace Manatee.Json.Schema
 		/// Gets or sets whether the "format" schema keyword should be validated.  The default is true.
 		/// </summary>
 		public static bool ValidateFormatKeyword { get; set; } = true;
+
+		/// <summary>
+		/// Gets or sets whether unknown string formats are permitted.  If disabled and an unknown format
+		/// is found, the system will throw a <see cref="JsonSerializationException"/> while loading the schema.
+		/// The default is true.
+		/// </summary>
+		public static bool AllowUnknownFormats { get; set; } = true;
 
 		/// <summary>
 		/// Gets or sets the output verbosity.  The default is <see cref="SchemaValidationOutputFormat.Hierarchy"/>.

@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 					BaseUri = _resolvedRoot.DocumentPath,
 					Instance = context.Instance,
 					Root = _resolvedRoot ?? context.Root,
-					BaseRelativeLocation = _resolvedFragment,
+					BaseRelativeLocation = _resolvedFragment.WithHash(),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
 				};

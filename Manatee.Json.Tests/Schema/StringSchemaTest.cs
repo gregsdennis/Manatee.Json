@@ -1,5 +1,7 @@
-﻿using Manatee.Json.Pointer;
+﻿using System.Collections.Generic;
+using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
+using Manatee.Json.Serialization;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests.Schema
@@ -208,11 +210,67 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[Test]
-		public void ValidateReturnsInvalidOnUnknownFormat()
+		public void ValidateReturnsValidOnUnknownFormat()
 		{
 			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
 			var json = (JsonValue) "32";
+			var expected = new SchemaValidationResults
+				{
+					IsValid = true,
+					RelativeLocation = JsonPointer.Parse("#"),
+					InstanceLocation = JsonPointer.Parse("#"),
+					NestedResults = new List<SchemaValidationResults>
+						{
+							new SchemaValidationResults
+								{
+									IsValid = true,
+									RelativeLocation = JsonPointer.Parse("#/type"),
+									InstanceLocation = JsonPointer.Parse("#"),
+									Keyword = "type"
+								},
+							new SchemaValidationResults
+								{
+									IsValid = true,
+									RelativeLocation = JsonPointer.Parse("#/format"),
+									InstanceLocation = JsonPointer.Parse("#"),
+									Keyword = "format",
+									AnnotationValue = "Int32"
+								}
+						}
+				};
+
+			var results = schema.Validate(json);
+
+			results.AssertValid(expected);
+		}
+		[Test]
+		public void DeserializeThrowsOnUnknownFormat()
+		{
+			JsonSchemaOptions.AllowUnknownFormats = false;
+			var serializer = new JsonSerializer();
+			var schemaJson = new JsonObject
+				{
+					["type"] = "string",
+					["format"] = "Int32"
+				};
+
+			try
+			{
+				Assert.Throws<JsonSerializationException>(() => serializer.Deserialize<JsonSchema>(schemaJson));
+			}
+			finally
+			{
+				JsonSchemaOptions.AllowUnknownFormats = true;
+			}
+		}
+		[Test]
+		public void ValidateReturnsInvalidOnUnknownFormat()
+		{
+			JsonSchemaOptions.AllowUnknownFormats = false;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
+			var json = (JsonValue)"32";
 			var expected = new SchemaValidationResults
 				{
 					IsValid = false,
@@ -226,9 +284,16 @@ namespace Manatee.Json.Tests.Schema
 						}
 				};
 
-			var results = schema.Validate(json);
+			try
+			{
+				var results = schema.Validate(json);
 
-			results.AssertInvalid(expected);
+				results.AssertInvalid(expected);
+			}
+			finally
+			{
+				JsonSchemaOptions.AllowUnknownFormats = true;
+			}
 		}
 		[Test]
 		public void ValidateReturnsErrorOnPatternNonMatch()
