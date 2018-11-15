@@ -73,7 +73,7 @@ var sample = new JsonObject { /* example from above */ };
 var results = pointer.Evaluate(sample);
 ```
 
-This will return a PointerEvaluationResults object with `results.Value` equal to the JsonValue `0`.
+This will return a `PointerEvaluationResults` object with `results.Value` equal to the JSON value `0`.
 
 In the case a path does not exist, the `results.Error` property will contain the path as far as the first segment that was missing.  For example, the path `foo/0/notFound/dn` would return an error with the path `foo/0/notFound`.
 

@@ -120,7 +120,7 @@
 <pre><code class="lang-csharp">var sample = new JsonObject { /* example from above */ };
 var results = pointer.Evaluate(sample);
 </code></pre>
-<p>This will return a PointerEvaluationResults object with <code>results.Value</code> equal to the JsonValue <code>0</code>.</p>
+<p>This will return a <code>PointerEvaluationResults</code> object with <code>results.Value</code> equal to the JSON value <code>0</code>.</p>
 <p>In the case a path does not exist, the <code>results.Error</code> property will contain the path as far as the first segment that was missing.  For example, the path <code>foo/0/notFound/dn</code> would return an error with the path <code>foo/0/notFound</code>.</p>
 <h3 id="additional-support">Additional support</h3>
 <p>In addition to the syntax described above, this implementation is <code>#</code>-tolerant to support the URI fragment pointers used by the <code>$ref</code> keywords in JSON Schema.  <code>JsonPointer.Parse()</code> will remember whether a <code>#</code> was used and will include it when stringifying it.  The <code>#</code> will <em>not</em> be included as a segment in the path, however.</p>
