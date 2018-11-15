@@ -8428,6 +8428,19 @@ references:
   commentId: T:Manatee.Json.Schema.JsonSchemaOptions
   fullName: Manatee.Json.Schema.JsonSchemaOptions
   nameWithType: JsonSchemaOptions
+- uid: Manatee.Json.Schema.JsonSchemaOptions.AllowUnknownFormats
+  name: AllowUnknownFormats
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_AllowUnknownFormats
+  commentId: P:Manatee.Json.Schema.JsonSchemaOptions.AllowUnknownFormats
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.AllowUnknownFormats
+  nameWithType: JsonSchemaOptions.AllowUnknownFormats
+- uid: Manatee.Json.Schema.JsonSchemaOptions.AllowUnknownFormats*
+  name: AllowUnknownFormats
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_AllowUnknownFormats_
+  commentId: Overload:Manatee.Json.Schema.JsonSchemaOptions.AllowUnknownFormats
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.AllowUnknownFormats
+  nameWithType: JsonSchemaOptions.AllowUnknownFormats
 - uid: Manatee.Json.Schema.JsonSchemaOptions.Download
   name: Download
   href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_Download

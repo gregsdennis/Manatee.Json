@@ -374,7 +374,13 @@ var nonObjectResults = schame.Validate(nonObject);
 <ul>
 <li><code>Download</code> - This function property is the mechanism by which <code>JsonSchemaRepository</code> downloads unregistered schemas.  By default, it knows to use <code>HttpClient</code> for <em>http:</em> endpoints and <code>System.IO.File</code> for file paths.  If you need more functionality (for instance if your schema is buried inside an FTP share), override this with a new function that can read from your endpoint.</li>
 <li><code>ValidateFormatKeyword</code> - This defines whether a schema will attempt to apply string format validation based on the value of a <code>format</code> keyword.  This is enabled by default.  See below for more information on string format validation.</li>
-<li><code>OutputFormat</code> - You read about output formats above.  This is the property that controls it all.  By default, a collapsed hierarchy is returned.</li>
+<li><code>AllowUnknownFormats</code> - This specifies whether the system will allow unknown string formats.  It is enabled by default.  If <code>ValidateFormatKeyword</code> is disabled, this option has no effect.  There are two effect of disabling this option,
+<ul>
+<li>Validations by schemas with unknown string formats will always return invalid.  This impacts schemas explicitly built in code.</li>
+<li>If a schema with an unknown string format is deserialized (loaded from an external source), a <code>JsonSerializationException</code> will be thrown.</li>
+</ul>
+</li>
+<li><code>OutputFormat</code> - You already read about output formats above.  This is the property that controls it all.  By default, a collapsed hierarchy is returned.</li>
 </ul>
 <h3 id="string-format-validation">String format validation</h3>
 <p>The <code>format</code> keyword has been around a while.  It's available in all of the drafts supported by Manatee.Json.  Although this keyword is techincally classified as an annotation, the specification does allow (the word used is &quot;SHOULD&quot;) that implementation provide some level of validation on it so long as that validation may be configured on and off.</p>
