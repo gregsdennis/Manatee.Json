@@ -4,7 +4,7 @@
 
 <span id="patch">patch</span>
 
-([#193](https://github.com/gregsdennis/Manatee.Json/issues/193)) Invalid string formats were not being included in the schema validation= result data when the format was not recognized.  It would just fail.  Now the result object will contain a new `isKnownFormat` key in the `AdditionalInfo` property to indicate whether the specified keyword was recognized.
+([#193](https://github.com/gregsdennis/Manatee.Json/issues/193)) Invalid string formats were not being included in the schema validation result data when the format was not recognized.  It would just fail.  Now the result object will contain a new `isKnownFormat` key in the `AdditionalInfo` property to indicate whether the specified keyword was recognized.
 
 ([#194](https://github.com/gregsdennis/Manatee.Json/issues/194)) Schema validations that occurred through `$ref` keywords were not being reported at all.  Instead the report would state that the error occurred at the `$ref`, but would give no further information.
 
