@@ -1,3 +1,11 @@
+# 10.1.0
+
+*Released on 16 Nov, 2018*
+
+<span id="patch">patch</span>
+
+Expanded on the fixes from 10.0.5 and added the `JsonSchemaOptions.AllowUnknownFormats` static property to control behavior when unknown string formats are encountered.
+
 # 10.0.5
 
 *Released on 15 Nov, 2018*

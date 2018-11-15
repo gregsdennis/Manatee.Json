@@ -398,7 +398,10 @@ The `JsonSchemaOptions` class gives you a few configuration points that likely w
 
 - `Download` - This function property is the mechanism by which `JsonSchemaRepository` downloads unregistered schemas.  By default, it knows to use `HttpClient` for *http:* endpoints and `System.IO.File` for file paths.  If you need more functionality (for instance if your schema is buried inside an FTP share), override this with a new function that can read from your endpoint.
 - `ValidateFormatKeyword` - This defines whether a schema will attempt to apply string format validation based on the value of a `format` keyword.  This is enabled by default.  See below for more information on string format validation.
-- `OutputFormat` - You read about output formats above.  This is the property that controls it all.  By default, a collapsed hierarchy is returned.
+- `AllowUnknownFormats` - This specifies whether the system will allow unknown string formats.  It is enabled by default.  If `ValidateFormatKeyword` is disabled, this option has no effect.  There are two effect of disabling this option,
+  - Validations by schemas with unknown string formats will always return invalid.  This impacts schemas explicitly built in code.
+  - If a schema with an unknown string format is deserialized (loaded from an external source), a `JsonSerializationException` will be thrown.
+- `OutputFormat` - You already read about output formats above.  This is the property that controls it all.  By default, a collapsed hierarchy is returned.
 
 ### String format validation
 
