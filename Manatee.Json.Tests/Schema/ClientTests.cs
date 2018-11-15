@@ -360,6 +360,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
 			var actual = new JsonSchema()
+				.Id("http://myschema.org/test194")
 				.Ref("#/definitions/apredefinedtype")
 				.Definition("apredefinedtype", new JsonSchema()
 					            .Type(JsonSchemaType.Object)
@@ -374,6 +375,7 @@ namespace Manatee.Json.Tests.Schema
 				{
 					IsValid = false,
 					RelativeLocation = JsonPointer.Parse("#/$ref/required"),
+					AbsoluteLocation = new Uri("http://myschema.org/test194#/definitions/apredefinedtype/required"),
 					InstanceLocation = JsonPointer.Parse("#"),
 					Keyword = "required",
 					AdditionalInfo = new JsonObject

@@ -145,7 +145,7 @@ namespace Manatee.Json.Schema
 		{
 			return formatKey != null && _lookup.ContainsKey(formatKey)
 				? _lookup[formatKey]
-				: new StringFormat(formatKey, JsonSchemaVersion.None, s => false) {IsKnown = false};
+				: new StringFormat(formatKey, JsonSchemaVersion.None, s => JsonSchemaOptions.AllowUnknownFormats) {IsKnown = false};
 		}
 	}
 }

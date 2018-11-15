@@ -115,6 +115,11 @@ namespace Manatee.Json.Pointer
 			return clone;
 		}
 
+		internal JsonPointer WithHash()
+		{
+			return new JsonPointer(this) {_usesHash = true};
+		}
+
 		private static JsonValue _EvaluateSegment(JsonValue current, string segment)
 		{
 			if (current.Type == JsonValueType.Array)
