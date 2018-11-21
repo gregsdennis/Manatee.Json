@@ -1,8 +1,16 @@
+# 10.1.1
+
+*Released on 21 Nov, 2018*
+
+<span id="patch">patch</span>
+
+BUG FIX: Generic collections typed with abstract and interface types were not saving the instance type for the items.
+
 # 10.1.0
 
 *Released on 16 Nov, 2018*
 
-<span id="patch">patch</span>
+<span id="feature">feature</span> <span id="patch">patch</span>
 
 Expanded on the fixes from 10.0.5 and added the `JsonSchemaOptions.AllowUnknownFormats` static property to control behavior when unknown string formats are encountered.
 

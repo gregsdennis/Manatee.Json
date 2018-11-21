@@ -54,6 +54,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		protected override void PrepSource(SerializationContext context)
 		{
+			var sourceType = context.Source.GetType();
+			if (sourceType.GetTypeInfo().IsGenericType &&
+			    sourceType.GetGenericTypeDefinition().InheritsFrom(typeof(List<>))) return;
+
 			context.Source = (context.Source as IEnumerable).Cast<object>().ToList();
 		}
 	}

@@ -14,6 +14,7 @@ namespace Manatee.Json.Internal
 		// Note: These methods assume that if a generic type is passed, the type is open.
 		public static bool InheritsFrom(this Type tDerived, Type tBase)
 		{
+			if (tDerived == tBase) return true;
 			if (tDerived._IsSubtypeOf(tBase)) return true;
 			var interfaces = tDerived.GetTypeInfo().ImplementedInterfaces.SelectMany(_GetAllInterfaces);
 			return interfaces.Contains(tBase);

@@ -271,6 +271,31 @@ namespace Manatee.Json.Tests.Serialization
 			Assert.AreEqual(expected, actual);
 		}
 		[Test]
+		public void AbstractListItems_Successful()
+		{
+			var serializer = new JsonSerializer();
+			var arr = new List<AbstractClass>
+				{
+					new DerivedClass {SomeProp = 42},
+					new DerivedClass {SomeProp = 5}
+				};
+			JsonValue expected = new JsonArray
+				{
+					new JsonObject
+						{
+							{"$type", typeof(DerivedClass).AssemblyQualifiedName},
+							{"SomeProp", 42}
+						},
+					new JsonObject
+						{
+							{"$type", typeof(DerivedClass).AssemblyQualifiedName},
+							{"SomeProp", 5}
+						}
+				};
+			var actual = serializer.Serialize(arr);
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
 		public void AbstractClass_Successful()
 		{
 			var serializer = new JsonSerializer();

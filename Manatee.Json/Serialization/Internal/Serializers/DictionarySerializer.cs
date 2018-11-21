@@ -11,8 +11,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public override bool Handles(SerializationContext context)
 		{
 			return context.InferredType.GetTypeInfo().IsGenericType &&
-			       (context.InferredType.GetGenericTypeDefinition() == typeof(Dictionary<,>) ||
-			        context.InferredType.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>)));
+			       context.InferredType.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>));
 		}
 
 		private static JsonValue _Encode<TKey, TValue>(SerializationContext context)
