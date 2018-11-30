@@ -116,15 +116,32 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a single definition to the <code>definitions</code> keyword.
+		/// Add a single definition to the <code>$def</code> keyword.
 		/// </summary>
-		public static JsonSchema Definition(this JsonSchema schema, string name, JsonSchema definition)
+		public static JsonSchema Def(this JsonSchema schema, string name, JsonSchema definition)
 		{
 			var keyword = schema.OfType<DefsKeyword>().FirstOrDefault();
 
 			if (keyword == null)
 			{
 				keyword = new DefsKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(name, definition);
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a single definition to the <code>definitions</code> keyword.
+		/// </summary>
+		public static JsonSchema Definition(this JsonSchema schema, string name, JsonSchema definition)
+		{
+			var keyword = schema.OfType<DefinitionsKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DefinitionsKeyword();
 				schema.Add(keyword);
 			}
 
@@ -465,6 +482,24 @@ namespace Manatee.Json.Schema
 		public static JsonSchema ReadOnly(this JsonSchema schema, bool isReadOnly)
 		{
 			schema.Add(new ReadOnlyKeyword(isReadOnly));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>$recursiveAnchor</code> keyword to the schema with the only supported value: <code>true</code>.
+		/// </summary>
+		public static JsonSchema RecursiveAnchor(this JsonSchema schema)
+		{
+			schema.Add(new RecursiveAnchorKeyword());
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>$recursiveRef</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema RecursiveRef(this JsonSchema schema, string reference)
+		{
+			schema.Add(new RecursiveRefKeyword(reference));
 
 			return schema;
 		}

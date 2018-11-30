@@ -80,11 +80,18 @@ namespace Manatee.Json.Schema
 			return schema.Get<DefaultKeyword>()?.Value;
 		}
 		/// <summary>
+		/// Gets the value for the <code>$defs</code> keyword, if present.
+		/// </summary>
+		public static Dictionary<string, JsonSchema> Defs(this JsonSchema schema)
+		{
+			return schema.Get<DefsKeyword>();
+		}
+		/// <summary>
 		/// Gets the value for the <code>definitions</code> keyword, if present.
 		/// </summary>
 		public static Dictionary<string, JsonSchema> Definitions(this JsonSchema schema)
 		{
-			return schema.Get<DefsKeyword>();
+			return schema.Get<DefinitionsKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the <code>description</code> keyword, if present.
@@ -274,6 +281,20 @@ namespace Manatee.Json.Schema
 		public static bool ReadOnly(this JsonSchema schema)
 		{
 			return schema.Get<ReadOnlyKeyword>()?.Value ?? false;
+		}
+		/// <summary>
+		/// Gets the value for the <code>$recursiveAnchor</code> keyword, if present.
+		/// </summary>
+		public static bool? RecursiveAnchor(this JsonSchema schema)
+		{
+			return schema.Get<RecursiveAnchorKeyword>()?.Value;
+		}
+		/// <summary>
+		/// Gets the value for the <code>recursiveRef</code> keyword, if present.
+		/// </summary>
+		public static string RecursiveRef(this JsonSchema schema)
+		{
+			return schema.Get<RecursiveRefKeyword>()?.Reference;
 		}
 		/// <summary>
 		/// Gets the value for the <code>$ref</code> keyword, if present.
