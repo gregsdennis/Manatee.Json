@@ -18,6 +18,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonSchema Root { get; set; }
 		/// <summary>
+		/// Gets or sets the recursive root.
+		/// </summary>
+		public Stack<JsonSchema> RecursiveRoot { get; } = new Stack<JsonSchema>();
+		/// <summary>
 		/// Gets or sets the instance being validated.
 		/// </summary>
 		public JsonValue Instance { get; set; }

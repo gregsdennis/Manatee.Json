@@ -84,7 +84,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Dictionary<string, JsonSchema> Definitions(this JsonSchema schema)
 		{
-			return schema.Get<DefinitionsKeyword>();
+			return schema.Get<DefsKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the <code>description</code> keyword, if present.

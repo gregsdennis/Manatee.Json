@@ -120,11 +120,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static JsonSchema Definition(this JsonSchema schema, string name, JsonSchema definition)
 		{
-			var keyword = schema.OfType<DefinitionsKeyword>().FirstOrDefault();
+			var keyword = schema.OfType<DefsKeyword>().FirstOrDefault();
 
 			if (keyword == null)
 			{
-				keyword = new DefinitionsKeyword();
+				keyword = new DefsKeyword();
 				schema.Add(keyword);
 			}
 
