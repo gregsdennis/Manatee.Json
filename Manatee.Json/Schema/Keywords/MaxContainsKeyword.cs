@@ -5,6 +5,9 @@ using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
+	/// <summary>
+	/// Defines the <code>maxContains</code> JSON Schema keyword.
+	/// </summary>
 	public class MaxContainsKeyword : IJsonSchemaKeyword, IEquatable<MaxContainsKeyword>
 	{
 		/// <summary>

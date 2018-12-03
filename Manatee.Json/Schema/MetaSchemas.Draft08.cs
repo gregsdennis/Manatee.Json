@@ -2,6 +2,9 @@
 {
 	public static partial class MetaSchemas
 	{
+		/// <summary>
+		/// The meta-schema for draft-08.
+		/// </summary>
 		public static readonly JsonSchema Draft08 =
 			new JsonSchema()
 				.Schema("http://json-schema.org/draft-08/schema#")

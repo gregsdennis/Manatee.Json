@@ -49,7 +49,13 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the current schema location relative to the current base URI (<see cref="BaseUri"/>).
 		/// </summary>
 		public JsonPointer BaseRelativeLocation { get; set; }
-
+		/// <summary>
+		/// Miscellaneous data.  Useful for communicating results between keywords.
+		/// </summary>
+		/// <remarks>
+		/// Use <see cref="IJsonSchemaKeyword.ValidationSequence"/> to ensure that keywords are
+		/// processed in the correct order so that the communication occurs properly.
+		/// </remarks>
 		public Dictionary<string, object> Misc { get; } = new Dictionary<string, object>();
 	}
 }
