@@ -152,7 +152,7 @@ namespace Manatee.Json.Schema
 		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
-			return Reference != null ? Reference.GetHashCode() : 0;
+			return Reference?.GetHashCode() ?? 0;
 		}
 
 		private void _ResolveReference(SchemaValidationContext context)
@@ -163,7 +163,9 @@ namespace Manatee.Json.Schema
 			_resolvedFragment = referenceParts.Length > 1 ? JsonPointer.Parse(referenceParts[1]) : new JsonPointer();
 			if (!string.IsNullOrWhiteSpace(address))
 			{
-				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute))
+				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute) &&
+				    (JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
+				     context.Root.SupportedVersions == JsonSchemaVersion.Draft08))
 					address = context.Local.Id + address;
 
 				if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))

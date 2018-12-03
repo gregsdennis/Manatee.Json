@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using Manatee.Json.Patch;
 using Manatee.Json.Serialization;
 
@@ -95,7 +94,7 @@ namespace Manatee.Json.Schema
 			var draft04Uri = MetaSchemas.Draft04.Id.Split('#')[0];
 			var draft06Uri = MetaSchemas.Draft06.Id.Split('#')[0];
 			var draft07Uri = MetaSchemas.Draft07.Id.Split('#')[0];
-			//var draft08Uri = MetaSchemas.Draft08.Id.Split('#')[0];
+			var draft08Uri = MetaSchemas.Draft08.Id.Split('#')[0];
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
@@ -103,7 +102,7 @@ namespace Manatee.Json.Schema
 				_schemaLookup[draft04Uri] = MetaSchemas.Draft04;
 				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
 				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
-				//_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
+				_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

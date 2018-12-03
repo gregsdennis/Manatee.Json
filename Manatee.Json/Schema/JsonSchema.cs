@@ -28,13 +28,15 @@ namespace Manatee.Json.Schema
 		private bool? _inherentValue;
 		private Uri _documentPath;
 		private bool _hasRegistered;
+		private bool _hasValidated;
+		private JsonSchemaVersion _supportedVersions;
 
 		/// <summary>
 		/// Defines the document path.  If not explicitly provided, it will be derived from the <see cref="Id"/> property.
 		/// </summary>
 		public Uri DocumentPath
 		{
-			get => _documentPath ?? (_documentPath = Id == null ? null : new Uri(Id, UriKind.RelativeOrAbsolute));
+			get => _documentPath ?? (_documentPath = _BuildDocumentPath());
 			set => _documentPath = value;
 		}
 		/// <summary>
@@ -45,6 +47,18 @@ namespace Manatee.Json.Schema
 		/// Gets the <code>$schema</code> property, if declared.
 		/// </summary>
 		public string Schema => this.Get<SchemaKeyword>()?.Value;
+		/// <summary>
+		/// 
+		/// </summary>
+		public JsonSchemaVersion SupportedVersions
+		{
+			get
+			{
+				if (!_hasValidated)
+					ValidateSchema();
+				return _supportedVersions;
+			}
+		}
 		/// <summary>
 		/// Gets other data that may be present in the schema but unrelated to any known keywords.
 		/// </summary>
@@ -80,13 +94,14 @@ namespace Manatee.Json.Schema
 			else
 			{
 				startVersion = JsonSchemaVersion.All;
-				if (!string.IsNullOrEmpty(Schema))
+				var schemaDeclaration = Schema;
+				if (!string.IsNullOrEmpty(schemaDeclaration))
 				{
-					var metaSchema = JsonSchemaRegistry.Get(Schema);
+					var metaSchema = JsonSchemaRegistry.Get(schemaDeclaration);
 					if (metaSchema != null)
 					{
 						var metaValidation = metaSchema.Validate(ToJson(new JsonSerializer()));
-						results.MetaSchemaValidations[Schema] = metaValidation;
+						results.MetaSchemaValidations[schemaDeclaration] = metaValidation;
 					}
 				}
 			}
@@ -117,7 +132,16 @@ namespace Manatee.Json.Schema
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft08))
+				{
+					var metaValidation = MetaSchemas.Draft08.Validate(ToJson(new JsonSerializer()));
+					results.MetaSchemaValidations[MetaSchemas.Draft08.Id] = metaValidation;
+					if (metaValidation.IsValid)
+						results.SupportedVersions |= JsonSchemaVersion.Draft08;
+				}
 			}
+
+			_supportedVersions = supportedVersions;
 
 			var duplicateKeywords = this.GroupBy(k => k.Name)
 			                            .Where(g => g.Count() > 1)
@@ -125,6 +149,8 @@ namespace Manatee.Json.Schema
 			                            .ToList();
 			if (duplicateKeywords.Any())
 				results.OtherErrors.Add($"The following keywords have been entered more than once: {string.Join(", ", duplicateKeywords)}");
+
+			_hasValidated = true;
 
 			return results;
 		}
@@ -230,15 +256,23 @@ namespace Manatee.Json.Schema
 
 			RegisterSubschemas(null);
 
-			// TODO: Verify that $ref can work alongside other keywords (draft-08) and allow it if so.
 			context.Local = this;
 
-			if (context.BaseUri == null)
-				context.BaseUri = DocumentPath;
-			else if (DocumentPath != null)
-				context.BaseUri = DocumentPath.IsAbsoluteUri
-					? DocumentPath
-					: new Uri(context.BaseUri, DocumentPath);
+			var refKeyword = this.Get<RefKeyword>();
+			if (refKeyword == null ||
+			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
+			    SupportedVersions == JsonSchemaVersion.Draft08)
+			{
+				if (context.BaseUri == null)
+					context.BaseUri = DocumentPath;
+				else if (DocumentPath != null)
+				{
+					if (DocumentPath.IsAbsoluteUri)
+						context.BaseUri = DocumentPath;
+					else
+						context.BaseUri = new Uri(context.BaseUri, DocumentPath);
+				}
+			}
 
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
@@ -246,7 +280,6 @@ namespace Manatee.Json.Schema
 			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
 				JsonSchemaRegistry.Register(this);
 
-			var refKeyword = this.OfType<RefKeyword>().FirstOrDefault();
 			if (refKeyword != null) return refKeyword.Validate(context);
 
 			var results = new SchemaValidationResults(context);
@@ -260,6 +293,13 @@ namespace Manatee.Json.Schema
 			results.NestedResults = nestedResults;
 
 			return results;
+		}
+
+		private Uri _BuildDocumentPath()
+		{
+			return Id != null
+				? new Uri(Id, UriKind.RelativeOrAbsolute)
+				: null;
 		}
 
 		/// <summary>
