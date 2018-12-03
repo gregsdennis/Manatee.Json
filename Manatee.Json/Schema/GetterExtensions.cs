@@ -171,6 +171,13 @@ namespace Manatee.Json.Schema
 			return schema.Get<ItemsKeyword>();
 		}
 		/// <summary>
+		/// Gets the value for the <code>maxContains</code> keyword, if present.
+		/// </summary>
+		public static double? MaxContains(this JsonSchema schema)
+		{
+			return schema.Get<MaxContainsKeyword>()?.Value;
+		}
+		/// <summary>
 		/// Gets the value for the <code>maximum</code> keyword, if present.
 		/// </summary>
 		public static double? Maximum(this JsonSchema schema)
@@ -197,6 +204,13 @@ namespace Manatee.Json.Schema
 		public static double? MaxProperties(this JsonSchema schema)
 		{
 			return schema.Get<MaxPropertiesKeyword>()?.Value;
+		}
+		/// <summary>
+		/// Gets the value for the <code>minContains</code> keyword, if present.
+		/// </summary>
+		public static double? MinContains(this JsonSchema schema)
+		{
+			return schema.Get<MinContainsKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the <code>minimum</code> keyword, if present.

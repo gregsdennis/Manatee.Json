@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
@@ -11,6 +12,13 @@ namespace Manatee.Json.Schema
 		public int ValidationSequence => 0;
 
 		public bool Value { get; set; }
+
+		[DeserializationUseOnly]
+		public RecursiveAnchorKeyword() { }
+		public RecursiveAnchorKeyword(bool value)
+		{
+			Value = value;
+		}
 
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{

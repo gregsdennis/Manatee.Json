@@ -78,6 +78,7 @@ namespace Manatee.Json.Schema
 			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
 
 			var matchedIndices = nestedResults.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
+			context.Misc["containsCount"] = matchedIndices.Count;
 
 			if (!matchedIndices.Any())
 			{

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
@@ -309,6 +310,15 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add a <code>maxContains</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema MaxContains(this JsonSchema schema, uint count)
+		{
+			schema.Add(new MaxContainsKeyword(count));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a <code>maximum</code> keyword to the schema.
 		/// </summary>
 		public static JsonSchema Maximum(this JsonSchema schema, double maximum)
@@ -341,6 +351,15 @@ namespace Manatee.Json.Schema
 		public static JsonSchema MaxProperties(this JsonSchema schema, uint count)
 		{
 			schema.Add(new MaxPropertiesKeyword(count));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>minContains</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema MinContains(this JsonSchema schema, uint count)
+		{
+			schema.Add(new MinContainsKeyword(count));
 
 			return schema;
 		}
@@ -486,11 +505,11 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$recursiveAnchor</code> keyword to the schema with the only supported value: <code>true</code>.
+		/// Add a <code>$recursiveAnchor</code> keyword to the schema.  The only supported value is <code>true</code>.
 		/// </summary>
-		public static JsonSchema RecursiveAnchor(this JsonSchema schema)
+		public static JsonSchema RecursiveAnchor(this JsonSchema schema, bool value)
 		{
-			schema.Add(new RecursiveAnchorKeyword());
+			schema.Add(new RecursiveAnchorKeyword(value));
 
 			return schema;
 		}
@@ -500,6 +519,15 @@ namespace Manatee.Json.Schema
 		public static JsonSchema RecursiveRef(this JsonSchema schema, string reference)
 		{
 			schema.Add(new RecursiveRefKeyword(reference));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>$recursiveRef</code> that points to the root (<code>#</code>) keyword to the schema.
+		/// </summary>
+		public static JsonSchema RecursiveRefRoot(this JsonSchema schema)
+		{
+			schema.Add(new RecursiveRefKeyword("#"));
 
 			return schema;
 		}

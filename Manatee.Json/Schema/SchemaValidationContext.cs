@@ -49,5 +49,7 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the current schema location relative to the current base URI (<see cref="BaseUri"/>).
 		/// </summary>
 		public JsonPointer BaseRelativeLocation { get; set; }
+
+		public Dictionary<string, object> Misc { get; } = new Dictionary<string, object>();
 	}
 }

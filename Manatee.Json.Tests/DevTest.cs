@@ -18,13 +18,14 @@ namespace Manatee.Json.Tests
 {
 	[TestFixture]
 	// TODO: Add categories to exclude this test.
-	[Ignore("This test fixture for development purposes only.")]
+	//[Ignore("This test fixture for development purposes only.")]
 	public class DevTest
 	{
 		[Test]
 		public void Test()
 		{
-			Console.WriteLine(JsonPatch.Schema.ToJson(new JsonSerializer()).GetIndentedString());
+			var serializer = new JsonSerializer();
+			Console.WriteLine(serializer.Serialize(MetaSchemas.Draft08).GetIndentedString());
 		}
 	}
 }
