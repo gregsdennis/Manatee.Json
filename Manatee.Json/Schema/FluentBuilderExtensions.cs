@@ -168,6 +168,23 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add a property-based dependency to the <code>dependencies</code> keyword.
+		/// </summary>
+		public static JsonSchema DependentRequired(this JsonSchema schema, string name, params string[] dependencies)
+		{
+			var keyword = schema.OfType<DependentRequiredKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DependentRequiredKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(new PropertyDependency(name, dependencies));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a schema-based dependency to the <code>dependencies</code> keyword.
 		/// </summary>
 		public static JsonSchema Dependency(this JsonSchema schema, string name, JsonSchema dependency)
@@ -177,6 +194,23 @@ namespace Manatee.Json.Schema
 			if (keyword == null)
 			{
 				keyword = new DependenciesKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(new SchemaDependency(name, dependency));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a schema-based dependency to the <code>dependencies</code> keyword.
+		/// </summary>
+		public static JsonSchema DependentSchema(this JsonSchema schema, string name, JsonSchema dependency)
+		{
+			var keyword = schema.OfType<DependentSchemasKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DependentSchemasKeyword();
 				schema.Add(keyword);
 			}
 
