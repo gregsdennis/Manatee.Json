@@ -9,15 +9,15 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>unevaluatedProperties</code> JSON Schema keyword.
+	/// Defines the <code>unevaluatedItems</code> JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}")]
-	public class UnevaluatedPropertiesKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedPropertiesKeyword>
+	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>
 	{
 		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
-		public string Name => "unevaluatedProperties";
+		public string Name => "unevaluatedItems";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
@@ -25,7 +25,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
-		public int ValidationSequence => int.MaxValue;
+		public int ValidationSequence => 2;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -36,11 +36,11 @@ namespace Manatee.Json.Schema
 		/// Used for deserialization.
 		/// </summary>
 		[DeserializationUseOnly]
-		public UnevaluatedPropertiesKeyword() { }
+		public UnevaluatedItemsKeyword() { }
 		/// <summary>
-		/// Creates an instance of the <see cref="UnevaluatedPropertiesKeyword"/>.
+		/// Creates an instance of the <see cref="UnevaluatedItemsKeyword"/>.
 		/// </summary>
-		public UnevaluatedPropertiesKeyword(JsonSchema value)
+		public UnevaluatedItemsKeyword(JsonSchema value)
 		{
 			Value = value;
 		}
@@ -52,25 +52,34 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Object) return new SchemaValidationResults(Name, context);
+			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
 
-			var obj = context.Instance.Object;
-			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key));
+			var itemsKeyword = context.Local.Get<ItemsKeyword>();
+			if (itemsKeyword == null || !itemsKeyword.IsArray) return new SchemaValidationResults(Name, context);
 
 			var nestedResults = new List<SchemaValidationResults>();
+			var array = context.Instance.Array;
 
-			foreach (var kvp in toEvaluate)
+			if (context.LastEvaluatedIndex < array.Count)
 			{
-				var newContext = new SchemaValidationContext
+				nestedResults.AddRange(array.Skip(context.LastEvaluatedIndex).Select((jv, i) =>
 					{
-						BaseUri = context.BaseUri,
-						Instance = kvp.Value,
-						Root = context.Root,
-						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
-						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
-						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key)
-					};
-				nestedResults.Add(Value.Validate(newContext));
+						var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+						var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
+						var newContext = new SchemaValidationContext
+							{
+								BaseUri = context.BaseUri,
+								Instance = jv,
+								Root = context.Root,
+								BaseRelativeLocation = baseRelativeLocation,
+								RelativeLocation = relativeLocation,
+								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
+							};
+						var localResults = Value.Validate(newContext);
+						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						return localResults;
+					}));
 			}
 
 			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
@@ -119,12 +128,12 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return Value.ToJson(serializer);
+			return serializer.Serialize(Value);
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <param name="other">An object to compare with this object.</param>
 		/// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
-		public bool Equals(UnevaluatedPropertiesKeyword other)
+		public bool Equals(UnevaluatedItemsKeyword other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -135,14 +144,14 @@ namespace Manatee.Json.Schema
 		/// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
 		public bool Equals(IJsonSchemaKeyword other)
 		{
-			return Equals(other as UnevaluatedPropertiesKeyword);
+			return Equals(other as UnevaluatedItemsKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <param name="obj">The object to compare with the current object.</param>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		public override bool Equals(object obj)
 		{
-			return Equals(obj as UnevaluatedPropertiesKeyword);
+			return Equals(obj as UnevaluatedItemsKeyword);
 		}
 		/// <summary>Serves as the default hash function.</summary>
 		/// <returns>A hash code for the current object.</returns>

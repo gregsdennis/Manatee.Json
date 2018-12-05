@@ -25,7 +25,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
-		public int ValidationSequence => 1;
+		public int ValidationSequence => 2;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -60,9 +60,9 @@ namespace Manatee.Json.Schema
 			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
 
-			if (itemsKeyword.Count < array.Count)
+			if (context.LocalTierLastEvaluatedIndex < array.Count)
 			{
-				nestedResults.AddRange(array.Skip(itemsKeyword.Count).Select((jv, i) =>
+				nestedResults.AddRange(array.Skip(context.LocalTierLastEvaluatedIndex).Select((jv, i) =>
 					{
 						var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 						var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -75,8 +75,12 @@ namespace Manatee.Json.Schema
 								RelativeLocation = relativeLocation,
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 							};
-						return Value.Validate(newContext);
-					}));}
+						var localResults = Value.Validate(newContext);
+						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						return localResults;
+					}));
+			}
 
 			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
 

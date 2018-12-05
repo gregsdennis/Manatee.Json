@@ -30,9 +30,17 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public List<string> EvaluatedPropertyNames { get; } = new List<string>();
 		/// <summary>
-		/// Gets a list of property names that have been evaluated in this validation pass.
+		/// Gets a list of property names that have been evaluated on the current tier of this validation pass.
 		/// </summary>
 		public List<string> LocallyEvaluatedPropertyNames { get; } = new List<string>();
+		/// <summary>
+		/// Gets the last array index that has been evaluated in this validation pass.
+		/// </summary>
+		public int LastEvaluatedIndex { get; set; }
+		/// <summary>
+		/// Gets the last array index that has been evaluated on the current tier of this validation pass.
+		/// </summary>
+		public int LocalTierLastEvaluatedIndex { get; set; }
 		/// <summary>
 		/// Gets or sets the base URI at this point in the validation.
 		/// </summary>

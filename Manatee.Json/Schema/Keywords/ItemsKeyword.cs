@@ -62,6 +62,8 @@ namespace Manatee.Json.Schema
 						};
 					nestedResults.Add(this[i].Validate(newContext));
 					i++;
+					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 				}
 			}
 			else
@@ -80,7 +82,10 @@ namespace Manatee.Json.Schema
 								RelativeLocation = relativeLocation,
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 							};
-						return this[0].Validate(newContext);
+						var localResults = this[0].Validate(newContext);
+						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						return localResults;
 					});
 				nestedResults.AddRange(itemValidations);
 			}

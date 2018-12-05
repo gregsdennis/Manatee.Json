@@ -50,7 +50,7 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return new SchemaValidationResults(context)
+			return new SchemaValidationResults(Name, context)
 				{
 					AnnotationValue = Value
 				};
