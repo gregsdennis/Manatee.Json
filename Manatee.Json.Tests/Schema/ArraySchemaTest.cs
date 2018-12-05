@@ -145,5 +145,53 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid();
 		}
+
+		[Test]
+		public void ValidateReturnsValidOnValidUnevaluatedItem()
+		{
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Array)
+				.AllOf(new JsonSchema()
+					       .Item(new JsonSchema().Type(JsonSchemaType.String))
+						   .Item(new JsonSchema().Type(JsonSchemaType.Number)))
+				.UnevaluatedItems(new JsonSchema().Type(JsonSchemaType.Boolean));
+			var json = new JsonArray {"value", 5.5, false, true};
+
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
+		[Test]
+		public void ValidateReturnsErrorOnInvalidAdditionalItemWithNestedItems()
+		{
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Array)
+				.Item(true)
+				.AllOf(new JsonSchema()
+					       .Item(new JsonSchema().Type(JsonSchemaType.String))
+					       .Item(new JsonSchema().Type(JsonSchemaType.Number)))
+				.AdditionalItems(new JsonSchema().Type(JsonSchemaType.Boolean));
+			var json = new JsonArray {"value", 5.5, false, true};
+
+			var results = schema.Validate(json);
+
+			results.AssertInvalid();
+		}
+		[Test]
+		public void ValidateReturnsErrorOnInvalidUnevaluatedItem()
+		{
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Array)
+				.AllOf(new JsonSchema()
+					       .Item(new JsonSchema().Type(JsonSchemaType.String))
+					       .Item(new JsonSchema().Type(JsonSchemaType.Number)))
+				.UnevaluatedItems(new JsonSchema().Type(JsonSchemaType.Boolean));
+			var json = new JsonArray {"value", 5.5, false, "invalid"};
+
+			var results = schema.Validate(json);
+
+			results.AssertInvalid();
+		}
+
 	}
 }

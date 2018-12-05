@@ -25,7 +25,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
-		public int ValidationSequence => 2;
+		public int ValidationSequence => int.MaxValue;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -53,9 +53,6 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
-
-			var itemsKeyword = context.Local.Get<ItemsKeyword>();
-			if (itemsKeyword == null || !itemsKeyword.IsArray) return new SchemaValidationResults(Name, context);
 
 			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;

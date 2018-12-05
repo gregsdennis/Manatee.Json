@@ -30,7 +30,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets whether this keyword represents a single schema or an array of schemas.
 		/// </summary>
-		public bool IsArray { get; private set; }
+		public bool IsArray { get; set; }
 
 		/// <summary>
 		/// Provides the validation logic for this keyword.

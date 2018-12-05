@@ -329,13 +329,41 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Add an <code>items</code> keyword to the schema.
 		/// </summary>
+		public static JsonSchema Item(this JsonSchema schema, JsonSchema definition)
+		{
+			var keyword = schema.OfType<ItemsKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new ItemsKeyword {IsArray = true};
+				schema.Add(keyword);
+			}
+
+			keyword.Add(definition);
+
+			return schema;
+		}
+		/// <summary>
+		/// Add an <code>items</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema Items(this JsonSchema schema, JsonSchema definition)
+		{
+			var keyword = new ItemsKeyword {definition};
+			schema.Add(keyword);
+
+			return schema;
+		}
+		/// <summary>
+		/// (Obsolete) Add an <code>items</code> keyword to the schema.
+		/// </summary>
+		[Obsolete("This method cannot consider a single-item array value.  Use multiple calls to Item() instead.")]
 		public static JsonSchema Items(this JsonSchema schema, params JsonSchema[] definitions)
 		{
 			var keyword = schema.OfType<ItemsKeyword>().FirstOrDefault();
 
 			if (keyword == null)
 			{
-				keyword = new ItemsKeyword();
+				keyword = new ItemsKeyword {IsArray = true};
 				schema.Add(keyword);
 			}
 
@@ -625,6 +653,15 @@ namespace Manatee.Json.Schema
 		public static JsonSchema Type(this JsonSchema schema, JsonSchemaType type)
 		{
 			schema.Add(new TypeKeyword(type));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add an <code>unevaluatedItems</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema UnevaluatedItems(this JsonSchema schema, JsonSchema otherSchema)
+		{
+			schema.Add(new UnevaluatedItemsKeyword(otherSchema));
 
 			return schema;
 		}
