@@ -6,7 +6,7 @@
 		/// The meta-schema for draft-08.
 		/// </summary>
 		public static readonly JsonSchema Draft08 =
-			new JsonSchema()
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft08}
 				.Schema("http://json-schema.org/draft-08/schema#")
 				.Id("http://json-schema.org/draft-08/schema#")
 				.RecursiveAnchor(true)

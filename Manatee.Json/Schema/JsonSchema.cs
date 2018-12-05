@@ -58,6 +58,11 @@ namespace Manatee.Json.Schema
 					ValidateSchema();
 				return _supportedVersions;
 			}
+			internal set
+			{
+				_supportedVersions = value;
+				_hasValidated = true;
+			}
 		}
 		/// <summary>
 		/// Gets other data that may be present in the schema but unrelated to any known keywords.

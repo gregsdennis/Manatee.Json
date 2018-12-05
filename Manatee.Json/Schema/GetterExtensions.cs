@@ -353,6 +353,13 @@ namespace Manatee.Json.Schema
 			return schema.Get<TitleKeyword>()?.Value;
 		}
 		/// <summary>
+		/// Gets the value for the <code>unevaluatedProperties</code> keyword, if present.
+		/// </summary>
+		public static JsonSchema UnevaluatedProperties(this JsonSchema schema)
+		{
+			return schema.Get<UnevaluatedPropertiesKeyword>()?.Value;
+		}
+		/// <summary>
 		/// Gets the value for the <code>uniqueItems</code> keyword, if present.
 		/// </summary>
 		public static bool UniqueItems(this JsonSchema schema)

@@ -6,7 +6,7 @@
 		/// The meta-schema for draft-046.
 		/// </summary>
 		public static readonly JsonSchema Draft06 =
-			new JsonSchema()
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft06}
 				.Schema("http://json-schema.org/draft-06/schema#")
 				.Id("http://json-schema.org/draft-06/schema#")
 				.Title("Core schema meta-schema")

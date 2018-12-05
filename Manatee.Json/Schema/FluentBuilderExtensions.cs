@@ -629,6 +629,15 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add an <code>unevaluatedProperties</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema UnevaluatedProperties(this JsonSchema schema, JsonSchema otherSchema)
+		{
+			schema.Add(new UnevaluatedPropertiesKeyword(otherSchema));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a <code>uniqueItems</code> keyword to the schema.
 		/// </summary>
 		public static JsonSchema UniqueItems(this JsonSchema schema, bool unique)
