@@ -26,6 +26,10 @@ namespace Manatee.Json.Schema
 		/// are several keywords which must be evaluated in a specific order.
 		/// </implementationNotes>
 		public int ValidationSequence => 0;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Core;
 
 		/// <summary>
 		/// The boolean value for this keyword.

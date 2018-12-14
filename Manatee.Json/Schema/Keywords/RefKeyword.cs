@@ -28,6 +28,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 0;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Core;
 
 		/// <summary>
 		/// Gets the reference value for this keyword.
@@ -164,8 +168,8 @@ namespace Manatee.Json.Schema
 			if (!string.IsNullOrWhiteSpace(address))
 			{
 				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute) &&
-				    (JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
-				     context.Root.SupportedVersions == JsonSchemaVersion.Draft08))
+					(JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
+					 context.Root.SupportedVersions == JsonSchemaVersion.Draft08))
 					address = context.Local.Id + address;
 
 				if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))

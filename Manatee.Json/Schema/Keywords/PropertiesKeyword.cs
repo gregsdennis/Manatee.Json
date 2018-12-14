@@ -26,6 +26,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Assertion;
 
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -118,8 +122,8 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return this.ToDictionary(kvp => kvp.Key,
-			                         kvp => serializer.Serialize(kvp.Value))
-			           .ToJson();
+									 kvp => serializer.Serialize(kvp.Value))
+					   .ToJson();
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
@@ -130,9 +134,9 @@ namespace Manatee.Json.Schema
 			if (ReferenceEquals(this, other)) return true;
 
 			var propertiesMatch = this.LeftOuterJoin(other,
-			                                      tk => tk.Key,
-			                                      ok => ok.Key,
-			                                      (tk, ok) => new { ThisProperty = tk.Value, OtherProperty = ok.Value })
+												  tk => tk.Key,
+												  ok => ok.Key,
+												  (tk, ok) => new { ThisProperty = tk.Value, OtherProperty = ok.Value })
 				.ToList();
 
 			return propertiesMatch.All(k => Equals(k.ThisProperty, k.OtherProperty));

@@ -684,6 +684,41 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add a single property requirement to the <code>properties</code> keyword.
+		/// </summary>
+		public static JsonSchema Vocabulary(this JsonSchema schema, string id, bool required)
+		{
+			var keyword = schema.OfType<VocabularyKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new VocabularyKeyword();
+				schema.Add(keyword);
+			}
+
+			var vocabulary = SchemaKeywordCatalog.GetVocabulary(id) ?? new SchemaVocabulary(id);
+			keyword[vocabulary] = required;
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a single property requirement to the <code>properties</code> keyword.
+		/// </summary>
+		public static JsonSchema Vocabulary(this JsonSchema schema, SchemaVocabulary vocabulary, bool required)
+		{
+			var keyword = schema.OfType<VocabularyKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new VocabularyKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword[vocabulary] = required;
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a <code>writeOnly</code> keyword to the schema.
 		/// </summary>
 		public static JsonSchema WriteOnly(this JsonSchema schema, bool isWriteOnly)

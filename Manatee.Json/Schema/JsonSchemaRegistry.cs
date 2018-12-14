@@ -103,6 +103,10 @@ namespace Manatee.Json.Schema
 				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
 				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
 				_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
+				_schemaLookup[MetaSchemas.Draft08Core.Id] = MetaSchemas.Draft08Core;
+				_schemaLookup[MetaSchemas.Draft08Annotation.Id] = MetaSchemas.Draft08Annotation;
+				_schemaLookup[MetaSchemas.Draft08Applicator.Id] = MetaSchemas.Draft08Applicator;
+				_schemaLookup[MetaSchemas.Draft08Assertion.Id] = MetaSchemas.Draft08Assertion;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

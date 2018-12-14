@@ -374,6 +374,13 @@ namespace Manatee.Json.Schema
 			return schema.Get<UniqueItemsKeyword>()?.Value ?? false;
 		}
 		/// <summary>
+		/// Gets the value for the <code>uniqueItems</code> keyword, if present.
+		/// </summary>
+		public static Dictionary<SchemaVocabulary, bool> Vocabulary(this JsonSchema schema)
+		{
+			return schema.Get<VocabularyKeyword>();
+		}
+		/// <summary>
 		/// Gets the value for the <code>writeOnly</code> keyword, if present.
 		/// </summary>
 		public static bool WriteOnly(this JsonSchema schema)

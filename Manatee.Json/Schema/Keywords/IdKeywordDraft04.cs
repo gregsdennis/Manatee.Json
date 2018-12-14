@@ -18,6 +18,10 @@ namespace Manatee.Json.Schema
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
 		public override JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft04;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public override SchemaVocabulary Vocabulary => SchemaVocabularies.PreDraft08;
 
 		/// <summary>
 		/// Used for deserialization.

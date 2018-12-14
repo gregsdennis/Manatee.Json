@@ -14,12 +14,13 @@ namespace Manatee.Json.Schema
 	{
 		private static readonly Dictionary<string, List<Type>> _cache = new Dictionary<string, List<Type>>();
 		private static readonly ConstructorResolver _resolver = new ConstructorResolver();
+		private static readonly Dictionary<string, SchemaVocabulary> _vocabularies = new Dictionary<string, SchemaVocabulary>();
 
 		static SchemaKeywordCatalog()
 		{
 			var keywordTypes = typeof(IJsonSchemaKeyword).GetTypeInfo().Assembly.DefinedTypes
 				.Where(t => typeof(IJsonSchemaKeyword).GetTypeInfo().IsAssignableFrom(t) &&
-				            !t.IsAbstract)
+							!t.IsAbstract)
 				.Select(ti => ti.AsType());
 			var method = typeof(SchemaKeywordCatalog).GetTypeInfo().DeclaredMethods
 				.Single(m => m.Name == nameof(Add));
@@ -44,6 +45,14 @@ namespace Manatee.Json.Schema
 			}
 			if (!list.Contains(typeof(T)))
 				list.Add(typeof(T));
+			if (!_vocabularies.TryGetValue(keyword.Vocabulary.Id, out var vocabulary))
+			{
+				vocabulary = keyword.Vocabulary;
+				_vocabularies[keyword.Vocabulary.Id] = vocabulary;
+			}
+
+			if (!vocabulary.DefinedKeywords.Contains(typeof(T)))
+				vocabulary.DefinedKeywords.Add(typeof(T));
 		}
 		/// <summary>
 		/// Removes a keyword from use.
@@ -56,6 +65,13 @@ namespace Manatee.Json.Schema
 			if (!_cache.TryGetValue(keyword.Name, out var list)) return;
 
 			list.Remove(typeof(T));
+
+			if (_vocabularies.TryGetValue(keyword.Vocabulary.Id, out var vocabulary))
+			{
+				vocabulary.DefinedKeywords.Remove(typeof(T));
+				if (!vocabulary.DefinedKeywords.Any())
+					_vocabularies.Remove(vocabulary.Id);
+			}
 		}
 
 		internal static IJsonSchemaKeyword Build(string keywordName, JsonValue json, JsonSerializer serializer)
@@ -75,6 +91,12 @@ namespace Manatee.Json.Schema
 			keyword.FromJson(json, serializer);
 
 			return keyword;
+		}
+
+		internal static SchemaVocabulary GetVocabulary(string id)
+		{
+			return _vocabularies.TryGetValue(id, out var vocabulary) ? vocabulary : null;
+
 		}
 	}
 }

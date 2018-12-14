@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -6,20 +7,18 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>maxContains</code> JSON Schema keyword.
+	/// Defines the <code>$vocabulary</code> JSON Schema keyword.
 	/// </summary>
-	public class MaxContainsKeyword : IJsonSchemaKeyword, IEquatable<MaxContainsKeyword>
+	public class VocabularyKeyword : Dictionary<SchemaVocabulary, bool>, IJsonSchemaKeyword, IEquatable<VocabularyKeyword>
 	{
 		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
-		public string Name => "maxContains";
-
+		public string Name => "$vocabulary";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
 		public JsonSchemaVersion SupportedVersions => JsonSchemaVersion.Draft08;
-
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
@@ -27,29 +26,11 @@ namespace Manatee.Json.Schema
 		/// May be duplicated across different keywords.  This property comes into play when there
 		/// are several keywords which must be evaluated in a specific order.
 		/// </implementationNotes>
-		public int ValidationSequence => 2;
+		public int ValidationSequence => 0;
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public SchemaVocabulary Vocabulary => SchemaVocabularies.Assertion;
-
-		/// <summary>
-		/// The numeric value for this keyword.
-		/// </summary>
-		public uint Value { get; set; }
-
-		/// <summary>
-		/// Used for deserialization.
-		/// </summary>
-		[DeserializationUseOnly]
-		public MaxContainsKeyword() { }
-		/// <summary>
-		/// Creates an instance of the <see cref="MaxContainsKeyword"/>.
-		/// </summary>
-		public MaxContainsKeyword(uint value)
-		{
-			Value = value;
-		}
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Core;
 
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
@@ -59,7 +40,11 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = (uint) json.Number;
+			foreach (var kvp in json.Object)
+			{
+				var vocabulary = SchemaKeywordCatalog.GetVocabulary(kvp.Key) ?? new SchemaVocabulary(kvp.Key);
+				this[vocabulary] = kvp.Value.Boolean;
+			}
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -69,36 +54,43 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return Value;
+			var json = new JsonObject();
+			foreach (var kvp in this)
+			{
+				json[kvp.Key.Id] = kvp.Value;
+			}
+
+			return json;
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
 		public bool Equals(IJsonSchemaKeyword other)
 		{
-			return Equals(other as MaxContainsKeyword);
+			return Equals(other as VocabularyKeyword);
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(MaxContainsKeyword other)
+		public bool Equals(VocabularyKeyword other)
 		{
-			if (ReferenceEquals(null, other)) return false;
+			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return Value == other.Value;
+
+			return other.ContentsEqual(this);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
 		public override bool Equals(object obj)
 		{
-			return Equals(obj as MaxContainsKeyword);
+			return Equals(obj as VocabularyKeyword);
 		}
 		/// <summary>Serves as the default hash function. </summary>
 		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
-			return (int) Value;
+			return this.GetCollectionHashCode();
 		}
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -107,21 +99,7 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var results = new SchemaValidationResults(Name, context);
-
-			if (context.Instance.Type != JsonValueType.Array) return results;
-			if (!context.Misc.TryGetValue("containsCount", out var value)) return results;
-
-			var containsCount = (int) value;
-
-			if (containsCount > Value)
-			{
-				results.IsValid = false;
-				results.AdditionalInfo["contains"] = containsCount;
-				results.AdditionalInfo["maxContains"] = Value;
-			}
-
-			return results;
+			throw new NotImplementedException();
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

@@ -16,8 +16,12 @@ namespace Manatee.Json.Schema
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
 		public override JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft04 |
-		                                                               JsonSchemaVersion.Draft06 |
-		                                                               JsonSchemaVersion.Draft07;
+																	   JsonSchemaVersion.Draft06 |
+																	   JsonSchemaVersion.Draft07;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public override SchemaVocabulary Vocabulary => SchemaVocabularies.PreDraft08;
 
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
