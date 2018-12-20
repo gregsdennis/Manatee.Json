@@ -218,26 +218,10 @@ namespace Manatee.Json.Tests.Schema
 			var expected = new SchemaValidationResults
 				{
 					IsValid = true,
-					RelativeLocation = JsonPointer.Parse("#"),
+					RelativeLocation = JsonPointer.Parse("#/format"),
 					InstanceLocation = JsonPointer.Parse("#"),
-					NestedResults = new List<SchemaValidationResults>
-						{
-							new SchemaValidationResults
-								{
-									IsValid = true,
-									RelativeLocation = JsonPointer.Parse("#/type"),
-									InstanceLocation = JsonPointer.Parse("#"),
-									Keyword = "type"
-								},
-							new SchemaValidationResults
-								{
-									IsValid = true,
-									RelativeLocation = JsonPointer.Parse("#/format"),
-									InstanceLocation = JsonPointer.Parse("#"),
-									Keyword = "format",
-									AnnotationValue = "Int32"
-								}
-						}
+					Keyword = "format",
+					AnnotationValue = "Int32"
 				};
 
 			var results = schema.Validate(json);
