@@ -27,7 +27,7 @@ namespace Manatee.Json.Parsing
 			var index = 0;
 			var errorMessage = Parse(source, ref index, out JsonValue value);
 			if (errorMessage != null)
-				throw new JsonSyntaxException(errorMessage, value);
+				throw new JsonSyntaxException(source, errorMessage, value);
 			return value;
 		}
 		public static JsonValue Parse(TextReader stream)

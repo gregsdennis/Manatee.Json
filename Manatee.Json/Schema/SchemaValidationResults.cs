@@ -50,6 +50,8 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public List<SchemaValidationResults> NestedResults { get; set; } = new List<SchemaValidationResults>();
 
+		internal bool RecursionDetected { get; set; }
+
 		internal SchemaValidationResults() { }
 		internal SchemaValidationResults(SchemaValidationContext context)
 		{
@@ -77,7 +79,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public SchemaValidationResults Condense()
 		{
-			var children = NestedResults.Select(r => r.Condense()).ToList();
+			var children = NestedResults.Where(r => r.RelativeLocation != null && !r.RecursionDetected)
+				.Select(r => r.Condense())
+				.Where(r => (!IsValid && !r.IsValid) || (IsValid && r.AnnotationValue != null) || r.NestedResults.Any())
+				.Distinct()
+				.ToList();
 
 			var copy = new SchemaValidationResults();
 			copy._CopyDataFrom(this);
@@ -85,8 +91,7 @@ namespace Manatee.Json.Schema
 
 			if (copy.AnnotationValue != null) return copy;
 
-			if (copy.NestedResults.Any(r => !r.IsValid))
-				copy.NestedResults = copy.NestedResults.Where(r => !r.IsValid).ToList();
+			copy.NestedResults = copy.NestedResults.Where(r => r.IsValid == copy.IsValid).ToList();
 
 			if (copy.NestedResults.Count != 1) return copy;
 

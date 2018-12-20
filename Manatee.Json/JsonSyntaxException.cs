@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using JetBrains.Annotations;
 using Manatee.Json.Pointer;
 
 namespace Manatee.Json
@@ -10,6 +9,7 @@ namespace Manatee.Json
 	/// </summary>
 	public class JsonSyntaxException : Exception
 	{
+		public string Source { get; }
 
 		/// <summary>
 		/// Gets a JSON Pointer to the location at which the error was found.
@@ -24,10 +24,16 @@ namespace Manatee.Json
 		/// </returns>
 		public override string Message => $"{base.Message} Path: '{Location}'";
 
-		[StringFormatMethod("format")]
 		internal JsonSyntaxException(string message, JsonValue value)
 			: base(message)
 		{
+			Location = _BuildPointer(value);
+		}
+
+		internal JsonSyntaxException(string source, string message, JsonValue value)
+			: base(message)
+		{
+			Source = source;
 			Location = _BuildPointer(value);
 		}
 

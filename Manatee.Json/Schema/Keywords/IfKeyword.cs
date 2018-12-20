@@ -64,10 +64,11 @@ namespace Manatee.Json.Schema
 					BaseUri = context.BaseUri,
 					Instance = context.Instance,
 					Root = context.Root,
+					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
-			};
+				};
 
 			var ifResults = Value.Validate(newContext);
 
@@ -82,6 +83,7 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = context.Instance,
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(then.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(then.Name),
 						InstanceLocation = context.InstanceLocation
@@ -107,6 +109,7 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = context.Instance,
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(@else.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(@else.Name),
 						InstanceLocation = context.InstanceLocation

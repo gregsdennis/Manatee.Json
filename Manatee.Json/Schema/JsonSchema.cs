@@ -137,13 +137,13 @@ namespace Manatee.Json.Schema
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
-				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft08))
-				{
-					var metaValidation = MetaSchemas.Draft08.Validate(ToJson(new JsonSerializer()));
-					results.MetaSchemaValidations[MetaSchemas.Draft08.Id] = metaValidation;
-					if (metaValidation.IsValid)
-						results.SupportedVersions |= JsonSchemaVersion.Draft08;
-				}
+				//if (supportedVersions.HasFlag(JsonSchemaVersion.Draft08))
+				//{
+				//	var metaValidation = MetaSchemas.Draft08.Validate(ToJson(new JsonSerializer()));
+				//	results.MetaSchemaValidations[MetaSchemas.Draft08.Id] = metaValidation;
+				//	if (metaValidation.IsValid)
+				//		results.SupportedVersions |= JsonSchemaVersion.Draft08;
+				//}
 			}
 
 			_supportedVersions = supportedVersions;

@@ -68,6 +68,7 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = propertyName,
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = baseRelativeLocation,
 							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(propertyName)

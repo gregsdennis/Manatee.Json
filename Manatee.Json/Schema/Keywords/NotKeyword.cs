@@ -61,10 +61,11 @@ namespace Manatee.Json.Schema
 					BaseUri = context.BaseUri,
 					Instance = context.Instance,
 					Root = context.Root,
+					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
-			};
+				};
 			var nestedResults = Value.Validate(newContext);
 			context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 			context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);

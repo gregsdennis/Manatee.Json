@@ -25,7 +25,7 @@ namespace Manatee.Json.Schema
 		/// May be duplicated across different keywords.  This property comes into play when there
 		/// are several keywords which must be evaluated in a specific order.
 		/// </implementationNotes>
-		public int ValidationSequence => 0;
+		public int ValidationSequence => int.MinValue;
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
@@ -56,7 +56,8 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			context.RecursiveRoot.Push(context.Local);
+			if (context.RecursiveAnchor == null)
+				context.RecursiveAnchor = context.Local;
 			
 			return SchemaValidationResults.Null;
 		}

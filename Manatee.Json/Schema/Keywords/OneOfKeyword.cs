@@ -45,6 +45,7 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = context.Instance,
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation
@@ -63,8 +64,6 @@ namespace Manatee.Json.Schema
 				results.IsValid = false;
 				results.Keyword = Name;
 			}
-
-			results.NestedResults.AddRange(nestedResults);
 
 			return results;
 		}

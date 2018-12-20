@@ -70,6 +70,7 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = kvp.Value,
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key)

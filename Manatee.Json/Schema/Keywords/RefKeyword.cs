@@ -77,6 +77,7 @@ namespace Manatee.Json.Schema
 					BaseUri = _resolvedRoot.DocumentPath,
 					Instance = context.Instance,
 					Root = _resolvedRoot ?? context.Root,
+					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = _resolvedFragment.WithHash(),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation

@@ -55,12 +55,13 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = obj[property.Key],
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, property.Key),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, property.Key),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key)
-				};
+					};
 				var result = property.Value.Validate(newContext);
-				if (result != null && !result.IsValid)
+				if (result != null)
 					nestedResults.Add(result);
 			}
 

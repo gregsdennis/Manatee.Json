@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -15,6 +16,7 @@ namespace Manatee.Json.Schema
 	{
 		private JsonSchema _resolvedRoot;
 		private JsonPointer _resolvedFragment;
+		private List<JsonPointer> _validatingLocations = new List<JsonPointer>();
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -63,6 +65,13 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			if (_validatingLocations.Any(l => Equals(l, context.InstanceLocation)))
+				return new SchemaValidationResults(Name, context)
+					{
+						RecursionDetected = true,
+						AnnotationValue = "Detected recursive loop. Processing halted on this branch."
+					};
+
 			if (Resolved == null)
 			{
 				_ResolveReference(context);
@@ -77,11 +86,15 @@ namespace Manatee.Json.Schema
 					BaseUri = _resolvedRoot.DocumentPath,
 					Instance = context.Instance,
 					Root = _resolvedRoot ?? context.Root,
+					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = _resolvedFragment.WithHash(),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
 				};
+
+			_validatingLocations.Add(context.InstanceLocation);
 			var nestedResults = Resolved.Validate(newContext);
+			_validatingLocations.Remove(context.InstanceLocation);
 
 			if (!nestedResults.IsValid)
 			{
@@ -161,28 +174,34 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
-			var documentPath = context.BaseUri;
-			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
+			if (context.RecursiveAnchor != null && context.Local.Get<RecursiveAnchorKeyword>() != null)
+				_resolvedRoot = context.RecursiveAnchor;
+
+			var documentPath = _resolvedRoot?.DocumentPath ?? context.BaseUri;
+			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
 			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? documentPath?.OriginalString : referenceParts[0];
 			_resolvedFragment = referenceParts.Length > 1 ? JsonPointer.Parse(referenceParts[1]) : new JsonPointer();
-			if (!string.IsNullOrWhiteSpace(address))
+			if (_resolvedRoot == null)
 			{
-				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute))
-					address = context.Local.Id + address;
-
-				if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
+				if (!string.IsNullOrWhiteSpace(address))
 				{
-					var uriFolder = documentPath.OriginalString.EndsWith("/") ? documentPath : documentPath.GetParentUri();
-					absolute = new Uri(uriFolder, address);
-					address = absolute.OriginalString;
-				}
+					if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute))
+						address = context.Local.Id + address;
 
-				_resolvedRoot = JsonSchemaRegistry.Get(address);
+					if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
+					{
+						var uriFolder = documentPath.OriginalString.EndsWith("/") ? documentPath : documentPath.GetParentUri();
+						absolute = new Uri(uriFolder, address);
+						address = absolute.OriginalString;
+					}
+
+					_resolvedRoot = JsonSchemaRegistry.Get(address);
+				}
+				else
+				{
+					_resolvedRoot = context.Root;
+				}
 			}
-			else
-				_resolvedRoot = context.RecursiveRoot.Any()
-					? context.RecursiveRoot.Peek()
-					: context.Root;
 
 			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri);
 		}
