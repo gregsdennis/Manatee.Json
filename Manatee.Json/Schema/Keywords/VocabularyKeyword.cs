@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -99,7 +100,39 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			throw new NotImplementedException();
+			var nestedResults = new List<SchemaValidationResults>();
+
+			foreach (var kvp in this)
+			{
+				var vocabulary = kvp.Key;
+				var required = kvp.Value;
+				if (vocabulary.MetaSchemaId != null)
+				{
+					var newContext = new SchemaValidationContext
+						{
+							BaseUri = context.BaseUri,
+							Instance = context.Instance,
+							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
+							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, vocabulary.Id),
+							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, vocabulary.Id),
+							InstanceLocation = context.InstanceLocation
+						};
+					var metaSchema = JsonSchemaRegistry.Get(vocabulary.MetaSchemaId);
+					if (metaSchema != null)
+						metaSchema.Validate(newContext);
+					else if (required)
+						nestedResults.Add(new SchemaValidationResults(newContext));
+				}
+			}
+
+			var results = new SchemaValidationResults(Name, context)
+				{
+					NestedResults = nestedResults,
+					IsValid = nestedResults.All(r => r.IsValid)
+				};
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

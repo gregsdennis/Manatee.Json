@@ -57,13 +57,11 @@ namespace Manatee.Json.Schema
 					return result;
 				}).ToList();
 
-			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
-
-			if (nestedResults.Any(r => !r.IsValid))
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
+			var results = new SchemaValidationResults(Name, context)
+				{
+					NestedResults = nestedResults,
+					IsValid = nestedResults.All(r => r.IsValid)
+				};
 
 			return results;
 		}

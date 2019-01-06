@@ -71,7 +71,6 @@ namespace Manatee.Json.Schema
 			if (missingProperties.Any())
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
 				results.AdditionalInfo["missing"] = missingProperties.ToJson();
 			}
 

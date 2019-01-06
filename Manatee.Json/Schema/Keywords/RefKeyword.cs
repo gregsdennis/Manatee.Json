@@ -84,12 +84,7 @@ namespace Manatee.Json.Schema
 				};
 			var nestedResults = Resolved.Validate(newContext);
 
-			if (!nestedResults.IsValid)
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
-
+			results.IsValid = nestedResults.IsValid;
 			results.NestedResults.Add(nestedResults);
 
 			return results;

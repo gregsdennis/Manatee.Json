@@ -96,12 +96,7 @@ namespace Manatee.Json.Schema
 			var nestedResults = Resolved.Validate(newContext);
 			_validatingLocations.Remove(context.InstanceLocation);
 
-			if (!nestedResults.IsValid)
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
-
+			results.IsValid = nestedResults.IsValid;
 			results.NestedResults.Add(nestedResults);
 
 			return results;

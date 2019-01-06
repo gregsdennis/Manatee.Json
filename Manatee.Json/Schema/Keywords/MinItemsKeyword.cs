@@ -62,7 +62,6 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Array.Count < Value)
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
 				results.AdditionalInfo["expected"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Array.Count;
 			}

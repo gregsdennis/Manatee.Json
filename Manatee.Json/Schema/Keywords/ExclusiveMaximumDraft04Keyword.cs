@@ -66,7 +66,6 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Number >= keyword.Value)
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
 				results.AdditionalInfo["expected"] = keyword.Value;
 				results.AdditionalInfo["isExclusive"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance;

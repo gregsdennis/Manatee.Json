@@ -84,7 +84,6 @@ namespace Manatee.Json.Tests.Schema
 			var source = new JsonSchema()
 				.Id("http://schema.org/source")
 				.RecursiveAnchor(true)
-				.Title("source")
 				.OneOf(new JsonSchema()
 					       .Property("nested", new JsonSchema()
 						                 .Ref("http://schema.org/middle"))
@@ -95,17 +94,15 @@ namespace Manatee.Json.Tests.Schema
 
 			var middle = new JsonSchema()
 				.Id("http://schema.org/middle")
-				.Title("middle")
 				.OneOf(new JsonSchema()
 					       .Ref("http://schema.org/target"),
 				       new JsonSchema()
-					       .Property("test", false)
-					       .Required("test"));
+					       .Property("middle", false)
+					       .Required("middle"));
 
 			var target = new JsonSchema()
 				.Id("http://schema.org/target")
 				.RecursiveAnchor(true)
-				.Title("target")
 				.AllOf(new JsonSchema().RecursiveRefRoot());
 
 			JsonSchemaRegistry.Register(source);

@@ -62,7 +62,6 @@ namespace Manatee.Json.Schema
 			if ((decimal)context.Instance.Number % (decimal?) Value != 0)
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
 				results.AdditionalInfo["multipleOf"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Number % Value;
 			}

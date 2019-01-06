@@ -6,6 +6,11 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Represents a draft-08 schema vocabulary.
 	/// </summary>
+	/// <remarks>
+	/// Currently a vocabulary is merely a link between the vocabulary ID and the meta-schema ID.
+	/// In the future, as vocabularies are better defined, there may be a data format for them.
+	/// As the feature develops in JSON Schema, it will be developed within this library.
+	/// </remarks>
 	public class SchemaVocabulary
 	{
 		/// <summary>

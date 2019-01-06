@@ -93,7 +93,6 @@ namespace Manatee.Json.Schema
 			if (!valid)
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
 				results.AdditionalInfo["expected"] = Value.ToJson();
 				results.AdditionalInfo["actual"] = context.Instance.Type.ToString().ToLower();
 			}

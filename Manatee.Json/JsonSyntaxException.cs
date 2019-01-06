@@ -9,7 +9,10 @@ namespace Manatee.Json
 	/// </summary>
 	public class JsonSyntaxException : Exception
 	{
-		public string Source { get; }
+		/// <summary>
+		/// Gets the JSON source string.
+		/// </summary>
+		public new string Source { get; }
 
 		/// <summary>
 		/// Gets a JSON Pointer to the location at which the error was found.

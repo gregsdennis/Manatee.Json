@@ -72,12 +72,7 @@ namespace Manatee.Json.Schema
 				}
 			}
 
-			if (nestedResults.Any(r => !r.IsValid))
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
-
+			results.IsValid = nestedResults.All(r => r.IsValid);
 			results.NestedResults.AddRange(nestedResults);
 
 			return results;
