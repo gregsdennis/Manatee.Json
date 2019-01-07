@@ -122,7 +122,7 @@ namespace Manatee.Json.Schema
 					if (metaSchema != null)
 						metaSchema.Validate(newContext);
 					else if (required)
-						nestedResults.Add(new SchemaValidationResults(newContext));
+						nestedResults.Add(new SchemaValidationResults(Name, newContext));
 				}
 			}
 

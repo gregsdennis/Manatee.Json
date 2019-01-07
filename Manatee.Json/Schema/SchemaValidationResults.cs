@@ -177,7 +177,9 @@ namespace Manatee.Json.Schema
 			{
 				var relativeLocation = RelativeLocation.ToString();
 				obj["keywordLocation"] = relativeLocation;
-				if (AbsoluteLocation != null && (AbsoluteLocation.Fragment != relativeLocation || RelativeLocation.Contains("$ref")))
+				if (AbsoluteLocation != null && (AbsoluteLocation.Fragment != relativeLocation ||
+				                                 RelativeLocation.Contains("$ref") ||
+				                                 RelativeLocation.Contains("$recursiveRef")))
 					obj["absoluteKeywordLocation"] = AbsoluteLocation.OriginalString;
 			}
 			if (InstanceLocation != null)
