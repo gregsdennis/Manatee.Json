@@ -21,6 +21,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 		public bool ExpectsError { get; set; }
 		public string Comment { get; set; }
 		public JsonPatch Patch { get; set; }
+		public bool Disabled { get; set; }
 		
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
@@ -33,6 +34,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 				HasExpectedValue = false;
 			ExpectsError = !string.IsNullOrWhiteSpace(obj.TryGetString("error"));
 			Patch = serializer.Deserialize<JsonPatch>(obj["patch"]);
+			Disabled = obj.TryGetBoolean("disabled") ?? false;
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
