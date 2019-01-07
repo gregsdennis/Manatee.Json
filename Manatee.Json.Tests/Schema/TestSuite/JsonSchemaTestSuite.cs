@@ -79,7 +79,16 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestCaseSource(nameof(AllTestData))]
 		public void Run(string fileName, JsonValue testJson, JsonValue schemaJson, string testName)
 		{
-			_Run(fileName, testJson, schemaJson);
+			var outputFormat = JsonSchemaOptions.OutputFormat;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
+			try
+			{
+				_Run(fileName, testJson, schemaJson);
+			}
+			finally
+			{
+				JsonSchemaOptions.OutputFormat = outputFormat;
+			}
 		}
 
 		private static void _Run(string fileName, JsonValue testJson, JsonValue schemaJson)

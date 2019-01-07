@@ -38,9 +38,9 @@ namespace Manatee.Json.Schema
 		public static bool AllowUnknownFormats { get; set; } = true;
 
 		/// <summary>
-		/// Gets or sets the output verbosity.  The default is <see cref="SchemaValidationOutputFormat.Hierarchy"/>.
+		/// Gets or sets the output verbosity.  The default is <see cref="SchemaValidationOutputFormat.Detailed"/>.
 		/// </summary>
-		public static SchemaValidationOutputFormat OutputFormat { get; set; } = SchemaValidationOutputFormat.Hierarchy;
+		public static SchemaValidationOutputFormat OutputFormat { get; set; } = SchemaValidationOutputFormat.Detailed;
 
 		/// <summary>
 		/// Determines how <code>$ref</code> keywords are resolved when adjacent to an <code>$id</code> keyword

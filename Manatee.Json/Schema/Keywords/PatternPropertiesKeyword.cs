@@ -68,6 +68,11 @@ namespace Manatee.Json.Schema
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(match)
 					};
 					var result = localSchema.Validate(newContext);
+					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !result.IsValid)
+					{
+						results.IsValid = false;
+						return results;
+					}
 					nestedResults.Add(result);
 				}
 			}

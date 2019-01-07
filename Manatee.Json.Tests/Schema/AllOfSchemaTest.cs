@@ -11,7 +11,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnAnyInvalid()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.VerboseHierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 
 			var schema = new JsonSchema()
 				.AllOf(new JsonSchema().Type(JsonSchemaType.Array),
@@ -89,7 +89,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnAllValid()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.VerboseHierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 
 			var schema = new JsonSchema()
 				.AllOf(new JsonSchema()

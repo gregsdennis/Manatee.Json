@@ -65,7 +65,14 @@ namespace Manatee.Json.Schema
 			foreach (var propertyName in this)
 			{
 				if (!obj.ContainsKey(propertyName))
+				{
+					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					{
+						results.IsValid = false;
+						return results;
+					}
 					missingProperties.Add(propertyName);
+				}
 			}
 
 			if (missingProperties.Any())

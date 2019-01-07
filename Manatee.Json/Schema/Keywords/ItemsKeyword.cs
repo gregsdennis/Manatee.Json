@@ -65,11 +65,20 @@ namespace Manatee.Json.Schema
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 						};
+					var localResults = this[i].Validate(newContext);
+					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
+					{
+						results.IsValid = false;
+						return results;
+					}
 					nestedResults.Add(this[i].Validate(newContext));
 					i++;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 				}
+
+				results.IsValid = JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag || nestedResults.All(r => r.IsValid);
+				results.NestedResults.AddRange(nestedResults);
 			}
 			else
 			{
@@ -92,12 +101,15 @@ namespace Manatee.Json.Schema
 						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 						return localResults;
 					});
-				nestedResults.AddRange(itemValidations);
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					results.IsValid = itemValidations.All(r => r.IsValid);
+				else
+				{
+					nestedResults.AddRange(itemValidations);
+					results.IsValid = nestedResults.All(r => r.IsValid);
+					results.NestedResults.AddRange(nestedResults);
+				}
 			}
-
-			results.IsValid = nestedResults.All(r => r.IsValid);
-
-			results.NestedResults.AddRange(nestedResults);
 
 			return results;
 		}

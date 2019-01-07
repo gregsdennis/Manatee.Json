@@ -54,13 +54,35 @@ namespace Manatee.Json.Schema
 					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 					context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
 					return result;
-				}).ToList();
+				});
 
-			var results = new SchemaValidationResults(Name, context)
+			SchemaValidationResults results;
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+			{
+				results = new SchemaValidationResults(Name, context);
+				var foundValid = false;
+				foreach (var result in nestedResults)
 				{
-					NestedResults = nestedResults,
-					IsValid = nestedResults.Count(r => r.IsValid) == 1
-				};
+					if (result.IsValid)
+						if (foundValid)
+						{
+							results.IsValid = false;
+							return results;
+						}
+					foundValid |= result.IsValid;
+				}
+
+				results.IsValid = foundValid;
+			}
+			else
+			{
+				var resultsList = nestedResults.ToList();
+				results = new SchemaValidationResults(Name, context)
+					{
+						NestedResults = resultsList,
+						IsValid = resultsList.Count(r => r.IsValid) == 1
+					};
+			}
 
 			return results;
 		}

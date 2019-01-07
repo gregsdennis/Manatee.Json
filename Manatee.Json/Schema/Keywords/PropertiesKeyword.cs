@@ -61,8 +61,12 @@ namespace Manatee.Json.Schema
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key)
 					};
 				var result = property.Value.Validate(newContext);
-				if (result != null)
-					nestedResults.Add(result);
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !result.IsValid)
+				{
+					results.IsValid = false;
+					return results;
+				}
+				nestedResults.Add(result);
 			}
 
 			results.IsValid = nestedResults.All(r => r.IsValid);

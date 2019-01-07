@@ -78,20 +78,32 @@ namespace Manatee.Json.Schema
 					};
 					var result = Value.Validate(newContext);
 					return result;
-				}).ToList();
+				});
 
-			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
-
-			var matchedIndices = nestedResults.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
-			context.Misc["containsCount"] = matchedIndices.Count;
-
-			if (!matchedIndices.Any())
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
+			SchemaValidationResults results;
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag &&
+			    context.Local.Get<MinContainsKeyword>() == null &&
+			    context.Local.Get<MaxContainsKeyword>() == null)
+				results = new SchemaValidationResults(Name, context)
+					{
+						IsValid = nestedResults.Any(r => r.IsValid)
+					};
 			else
-				results.AdditionalInfo["matchedIndices"] = matchedIndices;
+			{
+				var resultsList = nestedResults.ToList();
+				results = new SchemaValidationResults(Name, context) {NestedResults = resultsList};
+
+				var matchedIndices = resultsList.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
+				context.Misc["containsCount"] = matchedIndices.Count;
+
+				if (!matchedIndices.Any())
+				{
+					results.IsValid = false;
+					results.Keyword = Name;
+				}
+				else
+					results.AdditionalInfo["matchedIndices"] = matchedIndices;
+			}
 
 			return results;
 		}

@@ -358,7 +358,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue194_refNoIntuitiveErrorMessage()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var actual = new JsonSchema()
 				.Id("http://myschema.org/test194")
 				.Ref("#/definitions/apredefinedtype")

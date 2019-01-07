@@ -177,20 +177,20 @@ namespace Manatee.Json.Schema
 
 			switch (JsonSchemaOptions.OutputFormat)
 			{
-				case SchemaValidationOutputFormat.Basic:
+				case SchemaValidationOutputFormat.Flag:
 					results.AdditionalInfo = new JsonObject();
 					results.RelativeLocation = null;
 					results.AbsoluteLocation = null;
 					results.InstanceLocation = null;
 					results.NestedResults = new List<SchemaValidationResults>();
 					break;
-				case SchemaValidationOutputFormat.List:
+				case SchemaValidationOutputFormat.Basic:
 					results = results.Flatten();
 					break;
-				case SchemaValidationOutputFormat.Hierarchy:
+				case SchemaValidationOutputFormat.Detailed:
 					results = results.Condense();
 					break;
-				case SchemaValidationOutputFormat.VerboseHierarchy:
+				case SchemaValidationOutputFormat.Verbose:
 					break;
 			}
 

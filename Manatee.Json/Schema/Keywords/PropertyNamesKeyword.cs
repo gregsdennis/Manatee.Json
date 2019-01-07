@@ -76,10 +76,16 @@ namespace Manatee.Json.Schema
 					var result = Value.Validate(newContext);
 
 					return result;
-				}).ToList();
+				});
 
-			results.IsValid = nestedResults.All(r => r.IsValid);
-			results.NestedResults.AddRange(nestedResults);
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				results.IsValid = nestedResults.All(r => r.IsValid);
+			else
+			{
+				var resultsList = nestedResults.ToList();
+				results.NestedResults = resultsList;
+				results.IsValid = resultsList.All(r => r.IsValid);
+			}
 
 			return results;
 		}

@@ -212,7 +212,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnUnknownFormat()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
 			var json = (JsonValue) "32";
 			var expected = new SchemaValidationResults
@@ -252,7 +252,7 @@ namespace Manatee.Json.Tests.Schema
 		public void ValidateReturnsInvalidOnUnknownFormat()
 		{
 			JsonSchemaOptions.AllowUnknownFormats = false;
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
 			var json = (JsonValue)"32";
 			var expected = new SchemaValidationResults
