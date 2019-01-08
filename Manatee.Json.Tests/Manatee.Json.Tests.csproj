@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E74B7538-5E17-43C7-925B-33784945312E}</ProjectGuid>
+    <ProjectGuid>{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Manatee.Json.Tests</RootNamespace>
