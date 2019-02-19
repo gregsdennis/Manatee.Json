@@ -10,7 +10,7 @@
 
 <a href="http://www.jetbrains.com/resharper"><img src="http://i61.tinypic.com/15qvwj7.jpg" alt="ReSharper" title="ReSharper"></a>
 
-**Documentation for this library can be found [here]](https://gregsdennis.github.io/Manatee.Json).**
+**Documentation for this library can be found [here](https://gregsdennis.github.io/Manatee.Json).**
 
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
