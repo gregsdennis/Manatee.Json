@@ -20,7 +20,7 @@ namespace Manatee.Json.Serialization
 				typeof(SchemaValidator).GetTypeInfo(),
 				typeof(DefaultValueSerializer).GetTypeInfo()
 			};
-		private static readonly IEnumerable<ISerializer> _orderedSerializers;
+		private static List<ISerializer> _orderedSerializers;
 
 		static SerializerFactory()
 		{
@@ -34,7 +34,7 @@ namespace Manatee.Json.Serialization
 											  .Cast<ISerializer>()
 											  .ToList();
 			_autoSerializer = _serializers.OfType<ITypeSerializer>().FirstOrDefault();
-			_orderedSerializers = _serializers.OrderBy(s => (s as IPrioritizedSerializer)?.Priority ?? 0);
+			_UpdateOrderedSerializers();
 		}
 
 		/// <summary>
@@ -46,6 +46,7 @@ namespace Manatee.Json.Serialization
 			var existing = _serializers.FirstOrDefault(s => s.GetType() == serializer.GetType());
 			if (existing == null)
 				_serializers.Add(serializer);
+			_UpdateOrderedSerializers();
 		}
 		/// <summary>
 		/// Removes a custom serializer.
@@ -56,6 +57,7 @@ namespace Manatee.Json.Serialization
 		{
 			var serializer = _serializers.OfType<T>().FirstOrDefault();
 			_serializers.Remove(serializer);
+			_UpdateOrderedSerializers();
 		}
 
 		internal static ISerializer GetSerializer(SerializationContext context)
@@ -86,6 +88,11 @@ namespace Manatee.Json.Serialization
 				innerSerializer = new ReferencingSerializer(innerSerializer);
 
 			return new SchemaValidator(new DefaultValueSerializer(innerSerializer));
+		}
+
+		private static void _UpdateOrderedSerializers()
+		{
+			_orderedSerializers = _serializers.OrderBy(s => (s as IPrioritizedSerializer)?.Priority ?? 0).ToList();
 		}
 	}
 }

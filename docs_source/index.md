@@ -75,8 +75,9 @@ Manatee.Json also:
     - Draft 4
     - Draft 6
     - Draft 7
+    - Draft 8 (spec to be released soon)
     - Native object model
-    - Customizable JSON Schema validation errors
+    - Output contains all info required to craft custom error messages
     - User-defined keywords
 - Supports [JSONPath](http://goessner.net/articles/JsonPath/)
     - Native object model

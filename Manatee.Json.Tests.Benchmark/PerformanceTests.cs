@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Newtonsoft.Json;
 using JsonSerializer = Manatee.Json.Serialization.JsonSerializer;
 
@@ -23,8 +24,8 @@ namespace Manatee.Json.Tests.Benchmark
 			// This initializes whatever caches might be inside the serializer
 			_RunSingle(false);
 
-			_RunSingle();
-			_RunBulk();
+			//_RunSingle();
+			//_RunBulk();
 		}
 
 		private static void _RunSingle(bool output = true)
@@ -53,6 +54,8 @@ namespace Manatee.Json.Tests.Benchmark
 
 		private static void _Run(IEnumerable<MyClass> subjects, Func<MyClass, string> serialize, Func<string, MyClass> deserialize, bool output = true)
 		{
+			Thread.Sleep(250);
+
 			var watch = new Stopwatch();
 
 			watch.Start();
@@ -69,6 +72,8 @@ namespace Manatee.Json.Tests.Benchmark
 
 			if (output)
 				Console.WriteLine($"  Deserialize: {watch.Elapsed} ({watch.ElapsedTicks})");
+
+			Thread.Sleep(250);
 		}
 
 		private static string _ManateeSerialize(MyClass obj)
@@ -89,7 +94,7 @@ namespace Manatee.Json.Tests.Benchmark
 				{
 					Value = Guid.NewGuid().ToString(),
 					OtherValue = new Random().Next(),
-					NestedValue = nest < 5 && new Random().Next(1) == 0 ? _GenerateSubject(nest + 1) : null
+					NestedValue = nest < 0 && new Random().Next(1) == 0 ? _GenerateSubject(nest + 1) : null
 				};
 		}
 	}

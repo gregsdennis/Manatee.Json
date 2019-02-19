@@ -1,3 +1,11 @@
+# 10.1.2
+
+*Released on 21 Nov, 2018*
+
+<span id="patch">patch</span>
+
+BUG FIX: There was a concurrency issue when determining the correct internal serializer to use.
+
 # 10.1.1
 
 *Released on 21 Nov, 2018*

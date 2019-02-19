@@ -10,6 +10,8 @@
 
 <a href="http://www.jetbrains.com/resharper"><img src="http://i61.tinypic.com/15qvwj7.jpg" alt="ReSharper" title="ReSharper"></a>
 
+**Documentation for this library can be found [here]](https://gregsdennis.github.io/Manatee.Json).**
+
 The primary goal of Manatee.Json is to make working with JSON simple and intuitive for the developer.  This library recognizes that JSON is much more than just a mechanism for data transfer.
 
 Secondarily, Manatee.Json is *intended* to be strictly compliant with RFC-8259, which means that it purposefully does not support JSON variants, like single-quoted strings or BSON.
@@ -85,8 +87,9 @@ Manatee.Json also:
     - Draft 4
     - Draft 6
     - Draft 7
+    - Draft 8 (spec to be released soon)
     - Native object model
-    - Customizable JSON Schema validation errors
+    - Output contains all info required to craft custom error messages
     - User-defined keywords
 - Supports [JSONPath](http://goessner.net/articles/JsonPath/)
     - Native object model

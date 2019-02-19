@@ -24,11 +24,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{
 		schema07.json = schema07.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests.Benchmark", "Manatee.Json.Tests.Benchmark\Manatee.Json.Tests.Benchmark.csproj", "{74EC4F28-6C1A-4C9C-A446-07400386C304}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests.Benchmark", "Manatee.Json.Tests.Benchmark\Manatee.Json.Tests.Benchmark.csproj", "{74EC4F28-6C1A-4C9C-A446-07400386C304}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -61,6 +64,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A28ED14-DF83-45F6-BA43-47423E29D5D9}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Json.vsmdi
