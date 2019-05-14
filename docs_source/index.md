@@ -64,7 +64,7 @@ There are many ways to customize serialization.  See the wiki page for more deta
 
 Manatee.Json also:
 
-- Is covered by over 2000 unit tests
+- Is covered by over 3000 unit tests
 - Conforms to RFC-8259: The JSON specification
 - Supports:
     - .Net Framework 4.5
@@ -75,7 +75,7 @@ Manatee.Json also:
     - Draft 4
     - Draft 6
     - Draft 7
-    - Draft 8 (spec to be released soon)
+    - Draft 8 (upcoming, spec to be released soon)
     - Native object model
     - Output contains all info required to craft custom error messages
     - User-defined keywords
