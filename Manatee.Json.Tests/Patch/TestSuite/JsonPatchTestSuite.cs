@@ -48,6 +48,9 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 		[TestCaseSource(nameof(TestData))]
 		public void Run(string fileName, JsonValue testJson)
 		{
+			if (testJson.Object.TryGetBoolean("disabled") ?? false)
+				Assert.Inconclusive("Test marked as 'disabled'.  NUnit is sad when catching failed assertions, then marking as inconclusive, so we just ignore these for now.");
+
 			JsonPatchResult result = null;
 			try
 			{
