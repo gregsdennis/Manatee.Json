@@ -63,6 +63,7 @@ namespace Manatee.Json.Schema
 			};
 			var nestedResults = Value.Validate(newContext);
 			context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
+			context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
 
 			if (nestedResults.IsValid)
 			{

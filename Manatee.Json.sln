@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,14 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{
 		schema07.json = schema07.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests.Benchmark", "Manatee.Json.Tests.Benchmark\Manatee.Json.Tests.Benchmark.csproj", "{74EC4F28-6C1A-4C9C-A446-07400386C304}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{FECC9923-41DB-4DE7-9715-D7E565456B8C}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -45,25 +42,28 @@ Global
 		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
-		{F36D4EA3-B5FE-4375-B37E-2F7A6952D3B8} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 		{74EC4F28-6C1A-4C9C-A446-07400386C304} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+		{FECC9923-41DB-4DE7-9715-D7E565456B8C} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A28ED14-DF83-45F6-BA43-47423E29D5D9}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

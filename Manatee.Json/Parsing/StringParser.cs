@@ -231,16 +231,15 @@ namespace Manatee.Json.Parsing
 									break;
 								}
 
-								hex = StringExtensions.CalculateUtf32(hex, hex2);
+								var surrogatePairHex = StringExtensions.CalculateUtf32(hex, hex2);
+
+								if (surrogatePairHex.IsValidUtf32CodePoint())
+									hex = surrogatePairHex;
+								else
+									length -= 6;
 							}
 
-							if (hex.IsValidUtf32CodePoint())
-								append = char.ConvertFromUtf32(hex);
-							else
-							{
-								errorMessage = "Invalid UTF-32 code point.";
-								break;
-							}
+							append = char.ConvertFromUtf32(hex);
 							index += length;
 							break;
 						case '"':
@@ -335,13 +334,13 @@ namespace Manatee.Json.Parsing
 						if (previousHex != null)
 						{
 							// Our last character was \u, so combine and emit the UTF32 codepoint
-							currentHex = StringExtensions.CalculateUtf32(previousHex.Value, currentHex);
-							if (currentHex.IsValidUtf32CodePoint())
-								builder.Append(char.ConvertFromUtf32(currentHex));
+							var surrogateHex = StringExtensions.CalculateUtf32(previousHex.Value, currentHex);
+							if (surrogateHex.IsValidUtf32CodePoint())
+								builder.Append(char.ConvertFromUtf32(surrogateHex));
 							else
 							{
-								value = null;
-								return "Invalid UTF-32 code point.";
+								builder.Append((char) previousHex.Value);
+								builder.Append((char) currentHex);
 							}
 							previousHex = null;
 						}
@@ -507,11 +506,14 @@ namespace Manatee.Json.Parsing
 						if (previousHex != null)
 						{
 							// Our last character was \u, so combine and emit the UTF32 codepoint
-							currentHex = StringExtensions.CalculateUtf32(previousHex.Value, currentHex);
-							if (currentHex.IsValidUtf32CodePoint())
-								builder.Append(char.ConvertFromUtf32(currentHex));
+							var surrogateHex = StringExtensions.CalculateUtf32(previousHex.Value, currentHex);
+							if (surrogateHex.IsValidUtf32CodePoint())
+								builder.Append(char.ConvertFromUtf32(surrogateHex));
 							else
-								return ("Invalid UTF-32 code point.", null);
+							{
+								builder.Append((char)previousHex.Value);
+								builder.Append((char)currentHex);
+							}
 							previousHex = null;
 						}
 						else

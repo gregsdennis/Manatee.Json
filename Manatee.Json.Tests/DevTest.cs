@@ -24,13 +24,7 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			var serializer = new JsonSerializer();
-			var target = new Container {Value = new Mass {Value = 5}};
-			JsonValue expected = new JsonObject {["Value"] = new JsonObject {["Value"] = 5}};
-
-			var actual = serializer.Serialize(target);
-
-			Assert.AreEqual(expected, actual);
+			Console.WriteLine(JsonPatch.Schema.ToJson(new JsonSerializer()).GetIndentedString());
 		}
 	}
 }

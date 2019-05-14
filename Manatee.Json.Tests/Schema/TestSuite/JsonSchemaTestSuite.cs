@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
@@ -11,21 +12,20 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 	[TestFixture]
 	public class JsonSchemaTestSuite
 	{
-		private const string Draft04TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft4\";
-		private const string Draft06TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft6\";
-		private const string Draft07TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft7\";
-		private const string Draft08TestFolder = @"..\..\..\Json-Schema-Test-Suite\tests\draft8\";
-		private const string RemotesFolder = @"..\..\..\Json-Schema-Test-Suite\remotes\";
+		private const string RootTestsFolder = @"..\..\..\..\Json-Schema-Test-Suite\tests\";
+		private const string RemotesFolder = @"..\..\..\..\Json-Schema-Test-Suite\remotes\";
 		private static readonly JsonSerializer _serializer;
 
-		public static IEnumerable TestData04 => _LoadSchemaJson(Draft04TestFolder);
-		public static IEnumerable TestData06 => _LoadSchemaJson(Draft06TestFolder);
-		public static IEnumerable TestData07 => _LoadSchemaJson(Draft07TestFolder);
-		public static IEnumerable TestData08 => _LoadSchemaJson(Draft08TestFolder);
+		public static IEnumerable AllTestData => _LoadSchemaJson("draft4")
+			.Concat(_LoadSchemaJson("draft6"))
+			.Concat(_LoadSchemaJson("draft7"))
+			.Concat(_LoadSchemaJson("draft8"));
 
-		private static IEnumerable<TestCaseData> _LoadSchemaJson(string testFolder)
+		private static IEnumerable<TestCaseData> _LoadSchemaJson(string draft)
 		{
-			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, testFolder).AdjustForOS();
+			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.WorkDirectory, RootTestsFolder, $"{draft}\\").AdjustForOS();
+			if (!Directory.Exists(testsPath)) yield break;
+
 			var fileNames = Directory.GetFiles(testsPath, "*.json");
 
 			foreach (var fileName in fileNames)
@@ -38,7 +38,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					var schemaJson = testSet.Object["schema"];
 					foreach (var testJson in testSet.Object["tests"].Array)
 					{
-						var testName = $"{testSet.Object["description"]}.{testJson.Object["description"]}".Replace(' ', '_');
+						var testName = $"{testSet.Object["description"]}.{testJson.Object["description"]}.{draft}".Replace(' ', '_');
 						yield return new TestCaseData(fileName, testJson, schemaJson, testName) {TestName = testName};
 					}
 				}
@@ -75,10 +75,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.Download = null;
 		}
 
-		[TestCaseSource(nameof(TestData04))]
-		[TestCaseSource(nameof(TestData06))]
-		[TestCaseSource(nameof(TestData07))]
-		//[TestCaseSource(nameof(TestData08))]
+		[TestCaseSource(nameof(AllTestData))]
 		public void Run(string fileName, JsonValue testJson, JsonValue schemaJson, string testName)
 		{
 			_Run(fileName, testJson, schemaJson);

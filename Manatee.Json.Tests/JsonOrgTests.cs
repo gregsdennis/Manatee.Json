@@ -12,13 +12,16 @@ namespace Manatee.Json.Tests
 	public class JsonOrgTests
 	{
 		[Test]
-		[Ignore("not ready yet.")]
+		//[Ignore("not ready yet.")]
 		public void JsonCheckerTest()
 		{
 			var text = new WebClient().DownloadString("http://www.json.org/JSON_checker/test/pass1.json");
+			Console.WriteLine($"{text}\n");
 
 			// Just make sure the parser doesn't fail.
 			var json = JsonValue.Parse(text);
+
+			Console.WriteLine(json);
 		}
 	}
 }

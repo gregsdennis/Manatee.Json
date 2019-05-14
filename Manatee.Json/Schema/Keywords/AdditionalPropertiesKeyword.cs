@@ -55,7 +55,7 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Type != JsonValueType.Object) return new SchemaValidationResults(Name, context);
 
 			var obj = context.Instance.Object;
-			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
+			var toEvaluate = obj.Where(kvp => !context.LocallyEvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
 
 			var nestedResults = new List<SchemaValidationResults>();
 
