@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using Manatee.Json.Path;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
 

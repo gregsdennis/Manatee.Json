@@ -5,6 +5,7 @@ using System.IO;
 using Manatee.Json.Patch;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace Manatee.Json.Tests.Patch.TestSuite
 {
@@ -48,40 +49,44 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 		[TestCaseSource(nameof(TestData))]
 		public void Run(string fileName, JsonValue testJson)
 		{
-			if (testJson.Object.TryGetBoolean("disabled") ?? false)
-				Assert.Inconclusive("Test marked as 'disabled'.  NUnit is sad when catching failed assertions, then marking as inconclusive, so we just ignore these for now.");
+			var isOptional = testJson.Object.TryGetBoolean("disabled") ?? false;
 
 			JsonPatchResult result = null;
-			try
+			using (new TestExecutionContext.IsolatedContext())
 			{
-				var schemaValidation = JsonPatchTest.Schema.Validate(testJson);
-				if (!schemaValidation.IsValid)
+				try
 				{
-					foreach (var error in schemaValidation.NestedResults)
+					var schemaValidation = JsonPatchTest.Schema.Validate(testJson);
+					if (!schemaValidation.IsValid)
 					{
-						Console.WriteLine(error);
+						foreach (var error in schemaValidation.NestedResults)
+						{
+							Console.WriteLine(error);
+						}
+
+						return;
 					}
-					return;
+
+					var test = _serializer.Deserialize<JsonPatchTest>(testJson);
+
+					result = test.Patch.TryApply(test.Doc);
+
+					Assert.AreNotEqual(test.ExpectsError, result.Success);
+					if (test.HasExpectedValue)
+						Assert.AreEqual(test.ExpectedValue, result.Patched);
 				}
-				var test = _serializer.Deserialize<JsonPatchTest>(testJson);
-
-				result = test.Patch.TryApply(test.Doc);
-
-				Assert.AreNotEqual(test.ExpectsError, result.Success);
-				if (test.HasExpectedValue)
-					Assert.AreEqual(test.ExpectedValue, result.Patched);
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(fileName);
-				Console.WriteLine(testJson.GetIndentedString());
-				Console.WriteLine(e.Message);
-				Console.WriteLine(e.StackTrace);
-				if (result != null)
-					Console.WriteLine(result.Error);
-				if (testJson.Object.TryGetBoolean("disabled") ?? false)
-					Assert.Inconclusive("This is an acceptable failure.  Test case failed, but was marked as 'disabled'.");
-				throw;
+				catch (Exception e)
+				{
+					Console.WriteLine(fileName);
+					Console.WriteLine(testJson.GetIndentedString());
+					Console.WriteLine(e.Message);
+					Console.WriteLine(e.StackTrace);
+					if (result != null)
+						Console.WriteLine(result.Error);
+					if (isOptional)
+						Assert.Inconclusive("This is an acceptable failure.  Test case failed, but was marked as 'disabled'.");
+					throw;
+				}
 			}
 		}
 	}
