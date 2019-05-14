@@ -47,6 +47,7 @@ namespace Manatee.Json.Schema
 					};
 					var result = s.Validate(newContext);
 					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
+					context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
 					return result;
 				}).ToList();
 

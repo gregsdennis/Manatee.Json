@@ -1,3 +1,13 @@
+# 10.1.3
+
+*Released on 14 May, 2019*
+
+<span id="patch">patch</span>
+
+([#203](https://github.com/gregsdennis/Manatee.Json/issues/203)) Adjacent (consecutive) escape sequences that contained Unicode values were always considered as a surrogate pair even if they were just two separate characters.
+
+Updating schema test suite references exposed a bug in `additionalProperties` keyword implementation in that it would look into applicator keywords (`anyOf`, `allOf`, etc.).  This bug was fixed.
+
 # 10.1.2
 
 *Released on 21 Nov, 2018*

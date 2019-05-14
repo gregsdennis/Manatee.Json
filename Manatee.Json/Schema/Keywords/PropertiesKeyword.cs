@@ -45,6 +45,7 @@ namespace Manatee.Json.Schema
 				if (!obj.ContainsKey(property.Key)) continue;
 
 				context.EvaluatedPropertyNames.Add(property.Key);
+				context.LocallyEvaluatedPropertyNames.Add(property.Key);
 				var newContext = new SchemaValidationContext
 					{
 						BaseUri = context.BaseUri,

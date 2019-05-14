@@ -52,6 +52,7 @@ namespace Manatee.Json.Schema
 				foreach (var match in matches)
 				{
 					context.EvaluatedPropertyNames.Add(match);
+					context.LocallyEvaluatedPropertyNames.Add(match);
 					var newContext = new SchemaValidationContext
 						{
 							BaseUri = context.BaseUri,

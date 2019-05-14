@@ -10,14 +10,14 @@ namespace Manatee.Json.Tests.Path.TestSuite
 	[TestFixture]
 	public class JsonPathTestSuite
 	{
-		private const string TestFolder = @"..\..\..\Json-Path-Test-Suite\tests\";
+		private const string TestFolder = @"..\..\..\..\Json-Path-Test-Suite\tests\";
 		private static readonly JsonSerializer _serializer;
 
 		public static IEnumerable TestData
 		{
 			get
 			{
-				var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, TestFolder).AdjustForOS();
+				var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.WorkDirectory, TestFolder).AdjustForOS();
 				var fileNames = Directory.GetFiles(testsPath);
 
 				foreach (var fileName in fileNames)

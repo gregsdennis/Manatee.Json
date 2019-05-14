@@ -11,7 +11,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 	[TestFixture]
 	public class JsonPatchTestSuite
 	{
-		private const string _testFolder = @"..\..\..\json-patch-tests";
+		private const string _testFolder = @"..\..\..\..\json-patch-tests";
 		private static readonly JsonSerializer _serializer;
 
 		// ReSharper disable once MemberCanBePrivate.Global
@@ -21,7 +21,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 		{
 			JsonOptions.DuplicateKeyBehavior = DuplicateKeyBehavior.Overwrite;
 
-			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, _testFolder).AdjustForOS();
+			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.WorkDirectory, _testFolder).AdjustForOS();
 			var fileNames = Directory.GetFiles(testsPath, "*tests*.json");
 
 			foreach (var fileName in fileNames)
@@ -48,6 +48,9 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 		[TestCaseSource(nameof(TestData))]
 		public void Run(string fileName, JsonValue testJson)
 		{
+			if (testJson.Object.TryGetBoolean("disabled") ?? false)
+				Assert.Inconclusive("Test marked as 'disabled'.  NUnit is sad when catching failed assertions, then marking as inconclusive, so we just ignore these for now.");
+
 			JsonPatchResult result = null;
 			try
 			{
@@ -77,7 +80,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 				if (result != null)
 					Console.WriteLine(result.Error);
 				if (testJson.Object.TryGetBoolean("disabled") ?? false)
-					Assert.Inconclusive();
+					Assert.Inconclusive("This is an acceptable failure.  Test case failed, but was marked as 'disabled'.");
 				throw;
 			}
 		}

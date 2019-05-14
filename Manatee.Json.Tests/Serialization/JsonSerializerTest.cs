@@ -693,30 +693,30 @@ namespace Manatee.Json.Tests.Serialization
 			dyn.IntProp = 5;
 			dyn.NestProp = new ExpandoObject();
 			dyn.NestProp.Value = new ObjectWithBasicProps
-				{
-					BoolProp = true
-				};
+			{
+				BoolProp = true
+			};
 
 			JsonValue expected = new JsonObject
+			{
+				["StringProp"] = "string",
+				["IntProp"] = 5,
+				["NestProp"] = new JsonObject
 				{
-					["StringProp"] = "string",
-					["IntProp"] = 5,
-					["NestProp"] = new JsonObject
-						{
-							["Value"] = new JsonObject
-								{
-									["BoolProp"] = true
-								}
-						}
-				};
+					["Value"] = new JsonObject
+					{
+						["BoolProp"] = true
+					}
+				}
+			};
 
 			var serializer = new JsonSerializer
-				{
-					Options =
+			{
+				Options =
 						{
 							TypeNameSerializationBehavior = TypeNameSerializationBehavior.OnlyForAbstractions
 						}
-				};
+			};
 			var json = serializer.Serialize<dynamic>(dyn);
 
 			Assert.AreEqual(expected, json);
@@ -986,10 +986,10 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var enumerable = Enumerable.Range(1, 20).Where(i => i % 3 == 0);
 
-			var target = new {Enumerable = enumerable};
-			JsonValue expected = new JsonObject {["Enumerable"] = new JsonArray {3, 6, 9, 12, 15, 18}};
+			var target = new { Enumerable = enumerable };
+			JsonValue expected = new JsonObject { ["Enumerable"] = new JsonArray { 3, 6, 9, 12, 15, 18 } };
 
-			var serializer = new JsonSerializer {Options = {PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite}};
+			var serializer = new JsonSerializer { Options = { PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite } };
 			var actual = serializer.Serialize(target);
 
 			Assert.AreEqual(expected, actual);
@@ -1000,11 +1000,11 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var enumerable = Enumerable.Range(1, 20).Where(i => i % 3 == 0).Select(i => i.ToString());
 
-			var target = new {Enumerable = enumerable};
-			JsonValue expected = new JsonObject {["Enumerable"] = new JsonArray {"3", "6", "9", "12", "15", "18"}};
+			var target = new { Enumerable = enumerable };
+			JsonValue expected = new JsonObject { ["Enumerable"] = new JsonArray { "3", "6", "9", "12", "15", "18" } };
 
 
-			var serializer = new JsonSerializer {Options = {PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite}};
+			var serializer = new JsonSerializer { Options = { PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite } };
 			var actual = serializer.Serialize(target);
 
 			Assert.AreEqual(expected, actual);

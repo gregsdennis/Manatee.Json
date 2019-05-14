@@ -26,6 +26,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public List<string> EvaluatedPropertyNames { get; } = new List<string>();
 		/// <summary>
+		/// Gets a list of property names that have been evaluated in this validation pass.
+		/// </summary>
+		public List<string> LocallyEvaluatedPropertyNames { get; } = new List<string>();
+		/// <summary>
 		/// Gets or sets the base URI at this point in the validation.
 		/// </summary>
 		public Uri BaseUri { get; set; }
