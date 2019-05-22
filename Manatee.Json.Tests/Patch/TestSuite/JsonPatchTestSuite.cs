@@ -5,7 +5,7 @@ using System.IO;
 using Manatee.Json.Patch;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
 
 namespace Manatee.Json.Tests.Patch.TestSuite
 {

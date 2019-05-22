@@ -49,7 +49,6 @@
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-		<PackageReference Include="CompilerAttributes" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
@@ -57,7 +56,6 @@
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-	  <PackageReference Include="CompilerAttributes" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
