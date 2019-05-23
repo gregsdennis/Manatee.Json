@@ -108,6 +108,15 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add a <code>contentSchema</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema ContentSchema(this JsonSchema schema, JsonSchema match)
+		{
+			schema.Add(new ContentSchemaKeyword(match));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a <code>default</code> keyword to the schema.
 		/// </summary>
 		public static JsonSchema Default(this JsonSchema schema, JsonValue value)

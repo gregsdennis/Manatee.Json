@@ -73,6 +73,13 @@ namespace Manatee.Json.Schema
 			return schema.Get<ContentMediaTypeKeyword>()?.Value;
 		}
 		/// <summary>
+		/// Gets the value for the <code>contentSchema</code> keyword, if present.
+		/// </summary>
+		public static JsonSchema ContentSchema(this JsonSchema schema)
+		{
+			return schema.Get<ContentSchemaKeyword>()?.Value;
+		}
+		/// <summary>
 		/// Gets the value for the <code>default</code> keyword, if present.
 		/// </summary>
 		public static JsonValue Default(this JsonSchema schema)

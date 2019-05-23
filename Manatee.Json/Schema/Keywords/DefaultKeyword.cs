@@ -27,7 +27,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public SchemaVocabulary Vocabulary => SchemaVocabularies.Annotation;
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.MetaData;
 
 		/// <summary>
 		/// The JSON value for this keyword.

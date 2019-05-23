@@ -6,24 +6,32 @@
 	public static class SchemaVocabularies
 	{
 		/// <summary>
-		/// Used for keywords that only exist in schema versions prior to draft-08.
+		/// Used for keywords that only exist in schema versions prior to 2019-04.
 		/// </summary>
-		public static readonly SchemaVocabulary PreDraft08 = new SchemaVocabulary("pre-draft-08");
+		public static readonly SchemaVocabulary Pre2019_04 = new SchemaVocabulary("pre-draft-08");
 		/// <summary>
-		/// Identifies the Draft-08 core keywords vocabulary.
+		/// Identifies the 2019-04 core keywords vocabulary.
 		/// </summary>
-		public static readonly SchemaVocabulary Core = new SchemaVocabulary("https://json-schema.org/draft-08/vocabularies/core", "https://json-schema.org/draft-08/core");
+		public static readonly SchemaVocabulary Core = new SchemaVocabulary("https://json-schema.org/2019-04/vocab/core", "https://json-schema.org/2019-04/core");
 		/// <summary>
-		/// Identifies the Draft-08 applicator keywords vocabulary.
+		/// Identifies the 2019-04 applicator keywords vocabulary.
 		/// </summary>
-		public static readonly SchemaVocabulary Applicator = new SchemaVocabulary("https://json-schema.org/draft-08/vocabularies/applicator", "https://json-schema.org/draft-08/applicator");
+		public static readonly SchemaVocabulary Applicator = new SchemaVocabulary("https://json-schema.org/2019-04/vocab/applicator", "https://json-schema.org/2019-04/meta/applicator");
 		/// <summary>
-		/// Identifies the Draft-08 annotation keywords vocabulary.
+		/// Identifies the 2019-04 meta-data keywords vocabulary.
 		/// </summary>
-		public static readonly SchemaVocabulary Annotation = new SchemaVocabulary("https://json-schema.org/draft-08/vocabularies/annotation", "https://json-schema.org/draft-08/annotation");
+		public static readonly SchemaVocabulary MetaData = new SchemaVocabulary("https://json-schema.org/2019-04/vocab/meta-data", "https://json-schema.org/2019-04/meta/meta-data");
 		/// <summary>
-		/// Identifies the Draft-08 assertion keywords vocabulary.
+		/// Identifies the 2019-04 validation keywords vocabulary.
 		/// </summary>
-		public static readonly SchemaVocabulary Assertion = new SchemaVocabulary("https://json-schema.org/draft-08/vocabularies/assertion", "https://json-schema.org/draft-08/assertion");
+		public static readonly SchemaVocabulary Validation = new SchemaVocabulary("https://json-schema.org/2019-04/vocab/validation", "https://json-schema.org/2019-04/meta/validation");
+		/// <summary>
+		/// Identifies the 2019-04 format keywords vocabulary.
+		/// </summary>
+		public static readonly SchemaVocabulary Format = new SchemaVocabulary("https://json-schema.org/2019-04/vocab/format", "https://json-schema.org/2019-04/meta/format");
+		/// <summary>
+		/// Identifies the 2019-04 content keywords vocabulary.
+		/// </summary>
+		public static readonly SchemaVocabulary Content = new SchemaVocabulary("https://json-schema.org/2019-04/vocab/content", "https://json-schema.org/2019-04/meta/content");
 	}
 }

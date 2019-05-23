@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -8,34 +8,30 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>contains</code> JSON Schema keyword.
+	/// Defines the <code>contentSchema</code> JSON Schema keyword.
 	/// </summary>
-	[DebuggerDisplay("Name={Name}")]
-	public class ContainsKeyword : IJsonSchemaKeyword, IEquatable<ContainsKeyword>
+	[DebuggerDisplay("Name={Name} Value={Value}")]
+	public class ContentSchemaKeyword : IJsonSchemaKeyword, IEquatable<ContentSchemaKeyword>
 	{
 		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
-		public string Name => "contains";
+		public string Name => "contentSchema";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_04;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft2019_04;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
-		/// <implementationNotes>
-		/// May be duplicated across different keywords.  This property comes into play when there
-		/// are several keywords which must be evaluated in a specific order.
-		/// </implementationNotes>
 		public int ValidationSequence => 1;
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Content;
 
 		/// <summary>
-		/// The schema value for this keyword.
+		/// The content encoding type for this keyword.
 		/// </summary>
 		public JsonSchema Value { get; private set; }
 
@@ -43,11 +39,11 @@ namespace Manatee.Json.Schema
 		/// Used for deserialization.
 		/// </summary>
 		[DeserializationUseOnly]
-		public ContainsKeyword() { }
+		public ContentSchemaKeyword() { }
 		/// <summary>
-		/// Creates an instance of the <see cref="AdditionalItemsKeyword"/>.
+		/// Creates an instance of the <see cref="ContentSchemaKeyword"/>.
 		/// </summary>
-		public ContainsKeyword(JsonSchema value)
+		public ContentSchemaKeyword(JsonSchema value)
 		{
 			Value = value;
 		}
@@ -59,50 +55,33 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
+			if (context.Instance.Type != JsonValueType.String) return new SchemaValidationResults(Name, context);
 
 			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-			var nestedResults = context.Instance.Array.Select((jv, i) =>
+			var nestedResult = Value.Validate(new SchemaValidationContext
 				{
-					var newContext = new SchemaValidationContext
-						{
-							BaseUri = context.BaseUri,
-							Instance = jv,
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
-					};
-					var result = Value.Validate(newContext);
-					return result;
+					BaseUri = context.BaseUri,
+					Instance = context.Instance,
+					Root = context.Root,
+					RecursiveAnchor = context.RecursiveAnchor,
+					BaseRelativeLocation = baseRelativeLocation,
+					RelativeLocation = relativeLocation,
+					InstanceLocation = context.InstanceLocation.CloneAndAppend(Name)
 				});
 
 			SchemaValidationResults results;
 			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag &&
-			    context.Local.Get<MinContainsKeyword>() == null &&
-			    context.Local.Get<MaxContainsKeyword>() == null)
+			    context.Local.Get<ContentMediaTypeKeyword>() == null)
 				results = new SchemaValidationResults(Name, context)
 					{
-						IsValid = nestedResults.Any(r => r.IsValid)
+						IsValid = nestedResult.IsValid
 					};
 			else
-			{
-				var resultsList = nestedResults.ToList();
-				results = new SchemaValidationResults(Name, context) {NestedResults = resultsList};
-
-				var matchedIndices = resultsList.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
-				context.Misc["containsCount"] = matchedIndices.Count;
-
-				if (!matchedIndices.Any())
-				{
-					results.IsValid = false;
-					results.Keyword = Name;
-				}
-				else
-					results.AdditionalInfo["matchedIndices"] = matchedIndices;
-			}
+				results = new SchemaValidationResults(Name, context)
+					{
+						NestedResults = new List<SchemaValidationResults> {nestedResult}
+					};
 
 			return results;
 		}
@@ -147,7 +126,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(ContainsKeyword other)
+		public bool Equals(ContentSchemaKeyword other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -158,20 +137,20 @@ namespace Manatee.Json.Schema
 		/// <param name="other">An object to compare with this object.</param>
 		public bool Equals(IJsonSchemaKeyword other)
 		{
-			return Equals(other as ContainsKeyword);
+			return Equals(other as ContentSchemaKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
 		public override bool Equals(object obj)
 		{
-			return Equals(obj as ContainsKeyword);
+			return Equals(obj as ContentSchemaKeyword);
 		}
 		/// <summary>Serves as the default hash function. </summary>
 		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
-			return (Value != null ? Value.GetHashCode() : 0);
+			return (Value.GetHashCode());
 		}
 	}
 }

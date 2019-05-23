@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -8,46 +7,42 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>contains</code> JSON Schema keyword.
+	/// Defines the <code>description</code> JSON Schema keyword.
 	/// </summary>
-	[DebuggerDisplay("Name={Name}")]
-	public class ContainsKeyword : IJsonSchemaKeyword, IEquatable<ContainsKeyword>
+	[DebuggerDisplay("Name={Name} Value={Value}")]
+	public class DeprecatedKeyword : IJsonSchemaKeyword, IEquatable<DeprecatedKeyword>
 	{
 		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
-		public string Name => "contains";
+		public string Name => "deprecated";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_04;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft2019_04;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
-		/// <implementationNotes>
-		/// May be duplicated across different keywords.  This property comes into play when there
-		/// are several keywords which must be evaluated in a specific order.
-		/// </implementationNotes>
 		public int ValidationSequence => 1;
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.MetaData;
 
 		/// <summary>
-		/// The schema value for this keyword.
+		/// The boolean value for this keyword.
 		/// </summary>
-		public JsonSchema Value { get; private set; }
+		public bool Value { get; private set; }
 
 		/// <summary>
 		/// Used for deserialization.
 		/// </summary>
 		[DeserializationUseOnly]
-		public ContainsKeyword() { }
+		public DeprecatedKeyword() { }
 		/// <summary>
-		/// Creates an instance of the <see cref="AdditionalItemsKeyword"/>.
+		/// Creates an instance of the <see cref="DeprecatedKeyword"/>.
 		/// </summary>
-		public ContainsKeyword(JsonSchema value)
+		public DeprecatedKeyword(bool value)
 		{
 			Value = value;
 		}
@@ -59,61 +54,16 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
-
-			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
-			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-			var nestedResults = context.Instance.Array.Select((jv, i) =>
+			return new SchemaValidationResults(Name, context)
 				{
-					var newContext = new SchemaValidationContext
-						{
-							BaseUri = context.BaseUri,
-							Instance = jv,
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
-					};
-					var result = Value.Validate(newContext);
-					return result;
-				});
-
-			SchemaValidationResults results;
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag &&
-			    context.Local.Get<MinContainsKeyword>() == null &&
-			    context.Local.Get<MaxContainsKeyword>() == null)
-				results = new SchemaValidationResults(Name, context)
-					{
-						IsValid = nestedResults.Any(r => r.IsValid)
-					};
-			else
-			{
-				var resultsList = nestedResults.ToList();
-				results = new SchemaValidationResults(Name, context) {NestedResults = resultsList};
-
-				var matchedIndices = resultsList.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
-				context.Misc["containsCount"] = matchedIndices.Count;
-
-				if (!matchedIndices.Any())
-				{
-					results.IsValid = false;
-					results.Keyword = Name;
-				}
-				else
-					results.AdditionalInfo["matchedIndices"] = matchedIndices;
-			}
-
-			return results;
+					AnnotationValue = Value
+				};
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri)
-		{
-			Value.RegisterSubschemas(baseUri);
-		}
+		public void RegisterSubschemas(Uri baseUri) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
 		/// </summary>
@@ -122,7 +72,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
 		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
-			return Value.ResolveSubschema(pointer, baseUri);
+			return null;
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.
@@ -132,7 +82,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = serializer.Deserialize<JsonSchema>(json);
+			Value = json.Boolean;
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -142,12 +92,12 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return serializer.Serialize(Value);
+			return Value;
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(ContainsKeyword other)
+		public bool Equals(DeprecatedKeyword other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -158,20 +108,20 @@ namespace Manatee.Json.Schema
 		/// <param name="other">An object to compare with this object.</param>
 		public bool Equals(IJsonSchemaKeyword other)
 		{
-			return Equals(other as ContainsKeyword);
+			return Equals(other as DeprecatedKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
 		public override bool Equals(object obj)
 		{
-			return Equals(obj as ContainsKeyword);
+			return Equals(obj as DeprecatedKeyword);
 		}
 		/// <summary>Serves as the default hash function. </summary>
 		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
-			return (Value != null ? Value.GetHashCode() : 0);
+			return Value.GetHashCode();
 		}
 	}
 }

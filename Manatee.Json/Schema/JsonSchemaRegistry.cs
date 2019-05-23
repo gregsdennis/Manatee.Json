@@ -94,7 +94,7 @@ namespace Manatee.Json.Schema
 			var draft04Uri = MetaSchemas.Draft04.Id.Split('#')[0];
 			var draft06Uri = MetaSchemas.Draft06.Id.Split('#')[0];
 			var draft07Uri = MetaSchemas.Draft07.Id.Split('#')[0];
-			var draft08Uri = MetaSchemas.Draft08.Id.Split('#')[0];
+			var draft08Uri = MetaSchemas.Draft2019_04.Id.Split('#')[0];
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
@@ -102,11 +102,13 @@ namespace Manatee.Json.Schema
 				_schemaLookup[draft04Uri] = MetaSchemas.Draft04;
 				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
 				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
-				_schemaLookup[draft08Uri] = MetaSchemas.Draft08;
-				_schemaLookup[MetaSchemas.Draft08Core.Id] = MetaSchemas.Draft08Core;
-				_schemaLookup[MetaSchemas.Draft08Annotation.Id] = MetaSchemas.Draft08Annotation;
-				_schemaLookup[MetaSchemas.Draft08Applicator.Id] = MetaSchemas.Draft08Applicator;
-				_schemaLookup[MetaSchemas.Draft08Assertion.Id] = MetaSchemas.Draft08Assertion;
+				_schemaLookup[draft08Uri] = MetaSchemas.Draft2019_04;
+				_schemaLookup[MetaSchemas.Draft2019_04_Core.Id] = MetaSchemas.Draft2019_04_Core;
+				_schemaLookup[MetaSchemas.Draft2019_04_MetaData.Id] = MetaSchemas.Draft2019_04_MetaData;
+				_schemaLookup[MetaSchemas.Draft2019_04_Applicator.Id] = MetaSchemas.Draft2019_04_Applicator;
+				_schemaLookup[MetaSchemas.Draft2019_04_Validation.Id] = MetaSchemas.Draft2019_04_Validation;
+				_schemaLookup[MetaSchemas.Draft2019_04_Format.Id] = MetaSchemas.Draft2019_04_Format;
+				_schemaLookup[MetaSchemas.Draft2019_04_Content.Id] = MetaSchemas.Draft2019_04_Content;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

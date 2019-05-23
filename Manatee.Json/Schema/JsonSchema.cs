@@ -266,7 +266,7 @@ namespace Manatee.Json.Schema
 			var refKeyword = this.Get<RefKeyword>();
 			if (refKeyword == null ||
 			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
-			    context.Root.SupportedVersions == JsonSchemaVersion.Draft08)
+			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_04)
 			{
 				if (context.BaseUri == null)
 					context.BaseUri = DocumentPath;

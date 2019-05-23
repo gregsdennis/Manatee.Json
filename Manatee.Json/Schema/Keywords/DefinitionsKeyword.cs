@@ -21,7 +21,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public override SchemaVocabulary Vocabulary => SchemaVocabularies.PreDraft08;
+		public override SchemaVocabulary Vocabulary => SchemaVocabularies.Pre2019_04;
 
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>

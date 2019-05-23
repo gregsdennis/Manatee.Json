@@ -20,7 +20,7 @@ namespace Manatee.Json.Tests.Schema
 				yield return new TestCaseData(MetaSchemas.Draft04) {TestName = nameof(MetaSchemas.Draft04)};
 				yield return new TestCaseData(MetaSchemas.Draft06) {TestName = nameof(MetaSchemas.Draft06)};
 				yield return new TestCaseData(MetaSchemas.Draft07) {TestName = nameof(MetaSchemas.Draft07)};
-				//yield return new TestCaseData(MetaSchemas.Draft08) {TestName = nameof(MetaSchemas.Draft08)};
+				//yield return new TestCaseData(MetaSchemas.Draft2019_04) {TestName = nameof(MetaSchemas.Draft2019_04)};
 			}
 		}
 		
