@@ -371,7 +371,7 @@ namespace Manatee.Json.Schema
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
 
-			var keywordMatch = this.LeftOuterJoin(other,
+			var keywordMatch = this.FullOuterJoin(other,
 			                                      tk => tk.Name,
 			                                      ok => ok.Name,
 			                                      (tk, ok) => new {ThisKeyword = tk, OtherKeyword = ok})

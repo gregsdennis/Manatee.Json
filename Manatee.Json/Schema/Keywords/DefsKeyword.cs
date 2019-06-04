@@ -99,7 +99,7 @@ namespace Manatee.Json.Schema
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
 
-			var definitionsMatch = this.LeftOuterJoin(other,
+			var definitionsMatch = this.FullOuterJoin(other,
 													  tk => tk.Key,
 													  ok => ok.Key,
 													  (tk, ok) => new {ThisDefinition = tk.Value, OtherDefinition = ok.Value})

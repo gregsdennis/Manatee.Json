@@ -389,5 +389,23 @@ namespace Manatee.Json.Tests.Schema
 
 			messages.AssertInvalid(expected);
 		}
+
+		[Test]
+		public void Issue205_PropertiesEquality()
+		{
+			var schema1 = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Property("foo", new JsonSchema().Type(JsonSchemaType.Integer))
+				.Property("bar", new JsonSchema().Type(JsonSchemaType.String))
+				.AdditionalProperties(false);
+			var schema2 = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Property("foo", new JsonSchema().Type(JsonSchemaType.Integer))
+				.Property("bar", new JsonSchema().Type(JsonSchemaType.String))
+				.Property("baz", new JsonSchema().Type(JsonSchemaType.Boolean))
+				.AdditionalProperties(false);
+
+			Assert.AreNotEqual(schema1, schema2);
+		}
 	}
 }
