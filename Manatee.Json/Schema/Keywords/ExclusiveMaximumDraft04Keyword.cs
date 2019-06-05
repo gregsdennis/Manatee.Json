@@ -13,6 +13,16 @@ namespace Manatee.Json.Schema
 	public class ExclusiveMaximumDraft04Keyword : IJsonSchemaKeywordPlus, IEquatable<ExclusiveMaximumDraft04Keyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - upperBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The value {{actual}} should be strictly less than {{upperBound}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "exclusiveMaximum";
@@ -66,8 +76,7 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Number >= keyword.Value)
 			{
 				results.IsValid = false;
-				results.AdditionalInfo["expected"] = keyword.Value;
-				results.AdditionalInfo["isExclusive"] = Value;
+				results.AdditionalInfo["upperBound"] = keyword.Value;
 				results.AdditionalInfo["actual"] = context.Instance;
 			}
 

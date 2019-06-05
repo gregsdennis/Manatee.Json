@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Internal
 {
@@ -11,7 +6,7 @@ namespace Manatee.Json.Internal
 	{
 		private static readonly Regex _tokenPattern = new Regex(@"\{\{(?<key>[a-z,0-9]*)(?<format>:.*?)?\}\}", RegexOptions.IgnoreCase);
 
-		public static string ResolveTokens(this string template, Dictionary<string, object> settings)
+		public static string ResolveTokens(this string template, JsonObject settings)
 		{
 			var matches = _tokenPattern.Matches(template);
 

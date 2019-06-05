@@ -13,6 +13,17 @@ namespace Manatee.Json.Schema
 	public class FormatKeyword : IJsonSchemaKeyword, IEquatable<FormatKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - format
+		/// - isKnownFormat
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{actual}} is not in an acceptable {{format}} format.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "format";
@@ -54,28 +65,26 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var valid = new SchemaValidationResults(Name, context)
+			var results = new SchemaValidationResults(Name, context)
 				{
 					AnnotationValue = Value.Key
 				};
 
 
-			if (!JsonSchemaOptions.ValidateFormatKeyword) return valid;
-			if (context.Instance.Type != JsonValueType.String) return valid;
+			if (!JsonSchemaOptions.ValidateFormatKeyword) return results;
+			if (context.Instance.Type != JsonValueType.String) return results;
 
 			var format = Value;
 			if (!format.Validate(context.Instance.String))
-				return new SchemaValidationResults(Name, context)
-					{
-						IsValid = false,
-						AdditionalInfo =
-							{
-								["format"] = format.Key,
-								["isKnownFormat"] = format.IsKnown
-							}
-					};
+			{
+				results.IsValid = false;
+				results.AdditionalInfo["actual"] = context.Instance;
+				results.AdditionalInfo["format"] = format.Key;
+				results.AdditionalInfo["isKnownFormat"] = format.IsKnown;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			};
 
-			return valid;
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

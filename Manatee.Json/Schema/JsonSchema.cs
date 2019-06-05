@@ -13,6 +13,14 @@ namespace Manatee.Json.Schema
 	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>
 	{
 		/// <summary>
+		/// Gets or sets the error message template used for `false` schemas.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "No value is valid against the false schema.";
+
+		/// <summary>
 		/// Defines the empty schema.  Analogous to <see cref="True"/>.
 		/// </summary>
 		public static readonly JsonSchema Empty = new JsonSchema();
@@ -96,6 +104,8 @@ namespace Manatee.Json.Schema
 				startVersion = JsonSchemaVersion.Draft06;
 			else if (Schema == MetaSchemas.Draft07.Id)
 				startVersion = JsonSchemaVersion.Draft07;
+			else if (Schema == MetaSchemas.Draft2019_04.Id)
+				startVersion = JsonSchemaVersion.Draft2019_04;
 			else
 			{
 				startVersion = JsonSchemaVersion.All;
@@ -137,13 +147,13 @@ namespace Manatee.Json.Schema
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
-				//if (supportedVersions.HasFlag(JsonSchemaVersion.Draft08))
-				//{
-				//	var metaValidation = MetaSchemas.Draft08.Validate(ToJson(new JsonSerializer()));
-				//	results.MetaSchemaValidations[MetaSchemas.Draft08.Id] = metaValidation;
-				//	if (metaValidation.IsValid)
-				//		results.SupportedVersions |= JsonSchemaVersion.Draft08;
-				//}
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft2019_04))
+				{
+					var metaValidation = MetaSchemas.Draft2019_04.Validate(ToJson(new JsonSerializer()));
+					results.MetaSchemaValidations[MetaSchemas.Draft2019_04.Id] = metaValidation;
+					if (metaValidation.IsValid)
+						results.SupportedVersions |= JsonSchemaVersion.Draft2019_04;
+				}
 			}
 
 			_supportedVersions = supportedVersions;
@@ -256,7 +266,11 @@ namespace Manatee.Json.Schema
 			if (_inherentValue.HasValue)
 			{
 				if (_inherentValue.Value) return new SchemaValidationResults(context);
-				return new SchemaValidationResults(context){IsValid = false};
+				return new SchemaValidationResults(context)
+					{
+						IsValid = false,
+						ErrorMessage = ErrorTemplate
+					};
 			}
 
 			RegisterSubschemas(null);

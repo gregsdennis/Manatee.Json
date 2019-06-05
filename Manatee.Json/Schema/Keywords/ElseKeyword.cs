@@ -13,6 +13,14 @@ namespace Manatee.Json.Schema
 	public class ElseKeyword : IJsonSchemaKeyword, IEquatable<ElseKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Validation of `if` failed, but validation of `else` also failed";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "else";

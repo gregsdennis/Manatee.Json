@@ -14,6 +14,16 @@ namespace Manatee.Json.Schema
 	public class MultipleOfKeyword : IJsonSchemaKeyword, IEquatable<MultipleOfKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - lowerBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{actual}} should be a multiple of {{divisor}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "multipleOf";
@@ -62,8 +72,9 @@ namespace Manatee.Json.Schema
 			if ((decimal)context.Instance.Number % (decimal?) Value != 0)
 			{
 				results.IsValid = false;
-				results.AdditionalInfo["multipleOf"] = Value;
+				results.AdditionalInfo["divisor"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Number % Value;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

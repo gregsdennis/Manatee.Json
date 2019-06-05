@@ -42,6 +42,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public string Keyword { get; set; }
 		/// <summary>
+		/// Gets or sets the error message.
+		/// </summary>
+		public string ErrorMessage { get; set; }
+		/// <summary>
 		/// Gets or sets any additional information regarding the validation.
 		/// </summary>
 		public JsonObject AdditionalInfo { get; set; } = new JsonObject();
@@ -133,6 +137,7 @@ namespace Manatee.Json.Schema
 			InstanceLocation = other.InstanceLocation;
 			AnnotationValue = other.AnnotationValue;
 			Keyword = other.Keyword;
+			ErrorMessage = other.ErrorMessage;
 			AdditionalInfo = other.AdditionalInfo;
 			NestedResults = other.NestedResults;
 		}
@@ -161,6 +166,7 @@ namespace Manatee.Json.Schema
 			var nested = obj.TryGetArray("annotations") ?? obj.TryGetArray("errors");
 			if (nested != null)
 				NestedResults = nested.Select(serializer.Deserialize<SchemaValidationResults>).ToList();
+			ErrorMessage = obj.TryGetString("error");
 			AdditionalInfo = obj.TryGetObject("additionalInfo");
 		}
 		/// <summary>
@@ -188,6 +194,8 @@ namespace Manatee.Json.Schema
 			var nonNullNestedResults = NestedResults.Where(r => !ReferenceEquals(r, Null)).ToList();
 			if (Keyword != null)
 				obj["keyword"] = Keyword;
+			if (!string.IsNullOrWhiteSpace(ErrorMessage))
+				obj["error"] = ErrorMessage;
 			if (IsValid)
 			{
 				if (AnnotationValue != null)
@@ -201,7 +209,7 @@ namespace Manatee.Json.Schema
 				if (nonNullNestedResults.Any())
 					obj["errors"] = nonNullNestedResults.Select(r => r.ToJson(serializer)).ToJson();
 			}
-			if (AdditionalInfo.Any())
+			if (AdditionalInfo != null && AdditionalInfo.Any())
 				obj["additionalInfo"] = AdditionalInfo;
 
 			return obj;

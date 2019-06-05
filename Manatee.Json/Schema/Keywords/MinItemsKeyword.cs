@@ -14,6 +14,16 @@ namespace Manatee.Json.Schema
 	public class MinItemsKeyword : IJsonSchemaKeyword, IEquatable<MinItemsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - lowerBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The array should contain at least {{lowerBound}} items, but {{actual}} were found.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "minItems";
@@ -62,8 +72,9 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Array.Count < Value)
 			{
 				results.IsValid = false;
-				results.AdditionalInfo["expected"] = Value;
+				results.AdditionalInfo["lowerBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Array.Count;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

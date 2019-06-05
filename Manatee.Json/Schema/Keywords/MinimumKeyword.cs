@@ -14,6 +14,16 @@ namespace Manatee.Json.Schema
 	public class MinimumKeyword : IJsonSchemaKeyword, IEquatable<MinimumKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - lowerBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The value {{actual}} should be at least {{lowerBound}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "minimum";
@@ -62,8 +72,9 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Number < Value)
 			{
 				results.IsValid = false;
-				results.AdditionalInfo["expected"] = Value;
+				results.AdditionalInfo["lowerBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Number;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

@@ -14,6 +14,14 @@ namespace Manatee.Json.Schema
 	public class ContainsKeyword : IJsonSchemaKeyword, IEquatable<ContainsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Expected an item that matched the given schema but no such items were found.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "contains";
@@ -99,9 +107,12 @@ namespace Manatee.Json.Schema
 				{
 					results.IsValid = false;
 					results.Keyword = Name;
+					results.ErrorMessage = ErrorTemplate;
 				}
 				else
+				{
 					results.AdditionalInfo["matchedIndices"] = matchedIndices;
+				}
 			}
 
 			return results;

@@ -1,4 +1,6 @@
-﻿namespace Manatee.Json.Schema
+﻿using System;
+
+namespace Manatee.Json.Schema
 {
 	/// <summary>
 	/// Defines tokenized error messages for schema validations.
@@ -7,6 +9,7 @@
 	/// Tokens are denoted using a set of double curly braces (e.g. <code>{{value}}</code>. All messages support a "value" token, which is the validated value.  Others are declared in the notes for each message.
 	/// Properties which have no error message listed here simply forward error messages from children schemata.
 	/// </remarks>
+	[Obsolete("Customizing error messages can now be performed directly on their respective keyword classes.")]
 	public static class SchemaErrorMessages
 	{
 		/// <summary>

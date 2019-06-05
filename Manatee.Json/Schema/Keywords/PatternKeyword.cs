@@ -15,6 +15,16 @@ namespace Manatee.Json.Schema
 	public class PatternKeyword : IJsonSchemaKeyword, IEquatable<PatternKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - pattern
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{actual}} should match the Regular Expression `{{pattern}}`.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "pattern";
@@ -70,7 +80,9 @@ namespace Manatee.Json.Schema
 			if (!Value.IsMatch(context.Instance.String))
 			{
 				results.IsValid = false;
+				results.AdditionalInfo["actual"] = context.Instance;
 				results.AdditionalInfo["pattern"] = Value.ToString();
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

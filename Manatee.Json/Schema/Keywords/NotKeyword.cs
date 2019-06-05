@@ -13,6 +13,14 @@ namespace Manatee.Json.Schema
 	public class NotKeyword : IJsonSchemaKeyword, IEquatable<NotKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Value should not validate against the schema.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "not";
@@ -71,6 +79,7 @@ namespace Manatee.Json.Schema
 			context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
 
 			results.IsValid = !nestedResults.IsValid;
+
 
 			return results;
 		}

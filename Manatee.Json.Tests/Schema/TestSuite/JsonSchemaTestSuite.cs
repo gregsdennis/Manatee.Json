@@ -7,6 +7,7 @@ using System.Linq;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace Manatee.Json.Tests.Schema.TestSuite
 {
@@ -15,6 +16,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 	{
 		private const string RootTestsFolder = @"..\..\..\..\Json-Schema-Test-Suite\tests\";
 		private const string RemotesFolder = @"..\..\..\..\Json-Schema-Test-Suite\remotes\";
+		private const string OutputFolder = @"..\..\..\..\Json-Schema-Test-Results\";
 		private static readonly JsonSerializer _serializer;
 
 		public static IEnumerable AllTestData => _LoadSchemaJson("draft4")
@@ -27,7 +29,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.WorkDirectory, RootTestsFolder, $"{draft}\\").AdjustForOS();
 			if (!Directory.Exists(testsPath)) yield break;
 
-			var fileNames = Directory.GetFiles(testsPath, "*.json");
+			var fileNames = Directory.GetFiles(testsPath, "*.json", SearchOption.AllDirectories);
 
 			foreach (var fileName in fileNames)
 			{
@@ -40,7 +42,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					foreach (var testJson in testSet.Object["tests"].Array)
 					{
 						var testName = $"{testSet.Object["description"]}.{testJson.Object["description"]}.{draft}".Replace(' ', '_');
-						yield return new TestCaseData(fileName, testJson, schemaJson, testName) {TestName = testName};
+						var isOptional = fileName.Contains("optional");
+						yield return new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional) {TestName = testName};
 					}
 				}
 			}
@@ -68,6 +71,10 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 					return File.ReadAllText(newPath.LocalPath);
 				};
+
+			if (Directory.Exists(OutputFolder))
+				Directory.Delete(OutputFolder, true);
+			Directory.CreateDirectory(OutputFolder);
 		}
 
 		[OneTimeTearDown]
@@ -77,13 +84,13 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		[TestCaseSource(nameof(AllTestData))]
-		public void Run(string fileName, JsonValue testJson, JsonValue schemaJson, string testName)
+		public void Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, bool isOptional)
 		{
 			var outputFormat = JsonSchemaOptions.OutputFormat;
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 			try
 			{
-				_Run(fileName, testJson, schemaJson);
+				_Run(fileName, setDescription, testJson, schemaJson, isOptional);
 			}
 			finally
 			{
@@ -91,36 +98,79 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			}
 		}
 
-		private static void _Run(string fileName, JsonValue testJson, JsonValue schemaJson)
+		private static void _Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, bool isOptional)
 		{
-			try
+			using (new TestExecutionContext.IsolatedContext())
 			{
-				var test = _serializer.Deserialize<SchemaTest>(testJson);
-				var schema = _serializer.Deserialize<JsonSchema>(schemaJson);
-
-				if (test.Description == "mismatch base schema")
+				try
 				{
-					Debugger.Break();
+					var test = _serializer.Deserialize<SchemaTest>(testJson);
+					var schema = _serializer.Deserialize<JsonSchema>(schemaJson);
+
+					if (test.Description == "mismatch base schema")
+					{
+						Debugger.Break();
+					}
+
+					var results = schema.Validate(test.Data);
+
+					if (test.Valid != results.IsValid)
+						Console.WriteLine(string.Join("\n", _serializer.Serialize(results).GetIndentedString()));
+					Assert.AreEqual(test.Valid, results.IsValid);
+
+					if (!fileName.Contains("draft7")) return;
+
+					var exportTestsValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
+
+					if (!bool.TryParse(exportTestsValue, out var exportTests) || !exportTests) return;
+
+					test.Results = results;
+
+					List<SchemaTestSet> testSets = null;
+					SchemaTestSet testSet = null;
+					var outputFile = System.IO.Path.Combine(OutputFolder, System.IO.Path.GetFileName(fileName));
+					if (File.Exists(outputFile))
+					{
+						var fileContents = File.ReadAllText(outputFile);
+						var fileJson = JsonValue.Parse(fileContents);
+						testSets = _serializer.Deserialize<List<SchemaTestSet>>(fileJson);
+						testSet = testSets.FirstOrDefault(s => s.Description == setDescription);
+					}
+
+					if (testSets == null)
+						testSets = new List<SchemaTestSet>();
+
+					if (testSet == null)
+					{
+						testSet = new SchemaTestSet
+							{
+								Description = setDescription,
+								Schema = schema,
+								Tests = new List<SchemaTest>()
+							};
+						testSets.Add(testSet);
+					}
+
+					testSet.Tests.Add(test);
+
+					var outputJson = _serializer.Serialize(testSets);
+					File.WriteAllText(outputFile, outputJson.GetIndentedString());
 				}
+				catch (Exception e)
+				{
+					if (e is SchemaLoadException sle)
+						Console.WriteLine(sle.MetaValidation.ToJson(new JsonSerializer()).GetIndentedString());
 
-				var results = schema.Validate(test.Data);
-
-				if (test.Valid != results.IsValid)
-					Console.WriteLine(string.Join("\n", _serializer.Serialize(results).GetIndentedString()));
-				Assert.AreEqual(test.Valid, results.IsValid);
-
-			}
-			catch (Exception e)
-			{
-				if (e is SchemaLoadException sle)
-					Console.WriteLine(sle.MetaValidation.ToJson(new JsonSerializer()).GetIndentedString());
-
-				Console.WriteLine(fileName);
-				Console.WriteLine("\nSchema");
-				Console.WriteLine(schemaJson.GetIndentedString());
-				Console.WriteLine("\nTest");
-				Console.WriteLine(testJson.GetIndentedString());
-				throw;
+					Console.WriteLine(fileName);
+					Console.WriteLine("\nSchema");
+					Console.WriteLine(schemaJson.GetIndentedString());
+					Console.WriteLine("\nTest");
+					Console.WriteLine(testJson.GetIndentedString());
+					
+					if (isOptional)
+						Assert.Inconclusive("This is an acceptable failure.  Test case failed, but was marked as 'optional'.");
+					throw;
+				}
 			}
 		}
 	}

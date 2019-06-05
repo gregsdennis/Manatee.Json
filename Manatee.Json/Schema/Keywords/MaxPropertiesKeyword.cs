@@ -14,6 +14,16 @@ namespace Manatee.Json.Schema
 	public class MaxPropertiesKeyword : IJsonSchemaKeyword, IEquatable<MaxPropertiesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - upperBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The array should contain at most {{upperBound}} properties, but {{actual}} were found.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "maxProperties";
@@ -62,9 +72,9 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Object.Count > Value)
 			{
 				results.IsValid = false;
-				results.AdditionalInfo["expected"] = Value;
+				results.AdditionalInfo["upperBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Object.Count;
-				results.AdditionalInfo["value"] = context.Instance;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

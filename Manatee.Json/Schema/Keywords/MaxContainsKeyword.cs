@@ -11,6 +11,16 @@ namespace Manatee.Json.Schema
 	public class MaxContainsKeyword : IJsonSchemaKeyword, IEquatable<MaxContainsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - upperBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The array should contain at most {{upperBound}} items that match the schema, but {{actual}} were found.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "maxContains";
@@ -117,8 +127,9 @@ namespace Manatee.Json.Schema
 			if (containsCount > Value)
 			{
 				results.IsValid = false;
-				results.AdditionalInfo["contains"] = containsCount;
-				results.AdditionalInfo["maxContains"] = Value;
+				results.AdditionalInfo["actual"] = containsCount;
+				results.AdditionalInfo["upperBound"] = Value;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

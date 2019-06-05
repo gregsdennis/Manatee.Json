@@ -14,6 +14,15 @@ namespace Manatee.Json.Schema
 	public class EnumKeyword : List<JsonValue>, IJsonSchemaKeyword, IEquatable<EnumKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - value
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{value}} does not match any of the required values.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "enum";
@@ -57,6 +66,12 @@ namespace Manatee.Json.Schema
 				{
 					IsValid = Contains(context.Instance)
 				};
+
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["value"] = context.Instance;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			}
 
 			return results;
 		}

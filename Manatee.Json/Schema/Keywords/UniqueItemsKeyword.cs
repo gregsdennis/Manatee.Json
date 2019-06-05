@@ -14,6 +14,14 @@ namespace Manatee.Json.Schema
 	public class UniqueItemsKeyword : IJsonSchemaKeyword, IEquatable<UniqueItemsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Array should contain unique items.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "uniqueItems";
@@ -62,6 +70,7 @@ namespace Manatee.Json.Schema
 			{
 				results.IsValid = false;
 				results.AdditionalInfo["value"] = context.Instance;
+				results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;

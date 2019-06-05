@@ -1,4 +1,4 @@
-using System;
+using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Tests.Schema.TestSuite
@@ -8,6 +8,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		public string Description { get; set; }
 		public JsonValue Data { get; set; }
 		public bool Valid { get; set; }
+		public SchemaValidationResults Results { get; set; }
 
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
@@ -15,10 +16,24 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			Description = obj.TryGetString("description");
 			Data = obj["data"];
 			Valid = obj["valid"].Boolean;
+			var results = obj.TryGetObject("output")?.TryGetObject("basic");
+			if (results != null)
+				Results = serializer.Deserialize<SchemaValidationResults>(results);
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			throw new NotImplementedException();
+			return new JsonObject
+				{
+					["description"] = Description,
+					["data"] = Data,
+					["valid"] = Valid,
+					["output"] = new JsonObject
+						{
+							["basic"] = Results.Flatten().ToJson(serializer),
+							["detailed"] = Results.Condense().ToJson(serializer),
+							["verbose"] = Results.ToJson(serializer)
+						}
+				};
 		}
 	}
 }

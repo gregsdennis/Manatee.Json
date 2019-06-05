@@ -15,6 +15,15 @@ namespace Manatee.Json.Schema
 	public class RequiredKeyword : List<string>, IJsonSchemaKeyword, IEquatable<RequiredKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - properties
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The properties {{properties}} are required.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "required";
@@ -78,7 +87,8 @@ namespace Manatee.Json.Schema
 			if (missingProperties.Any())
 			{
 				results.IsValid = false;
-				results.AdditionalInfo["missing"] = missingProperties.ToJson();
+				results.AdditionalInfo["properties"] = missingProperties.ToJson();
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;
