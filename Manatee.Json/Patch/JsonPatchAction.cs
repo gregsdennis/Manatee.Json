@@ -106,8 +106,8 @@ namespace Manatee.Json.Patch
 		{
 			// TODO: This isn't the most efficient way to do this, but it'll get the job done.
 			var remove = _Remove(json);
-			return remove.Success ? remove : _Add(json);
-		}
+			return remove.Success ? _Add(json): remove;
+        }
 
 		private JsonPatchResult _Move(JsonValue json)
 		{
