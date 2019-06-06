@@ -15,6 +15,21 @@ namespace Manatee.Json.Schema
 	public class AdditionalPropertiesKeyword : IJsonSchemaKeyword, IEquatable<AdditionalPropertiesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Any properties not covered by `properties` and `patternProperties` failed validation.";
+		/// <summary>
+		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate_False { get; set; } = "Properties not covered by `properties` and `patternProperties` are not allowed.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "additionalProperties";
@@ -61,6 +76,15 @@ namespace Manatee.Json.Schema
 			var obj = context.Instance.Object;
 			var toEvaluate = obj.Where(kvp => !context.LocallyEvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
 
+			var results = new SchemaValidationResults(Name, context);
+			if (Value == JsonSchema.False && toEvaluate.Any())
+			{
+				results.IsValid = false;
+				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate_False;
+				return results;
+			}
+
 			var nestedResults = new List<SchemaValidationResults>();
 
 			foreach (var kvp in toEvaluate)
@@ -78,12 +102,13 @@ namespace Manatee.Json.Schema
 				nestedResults.Add(Value.Validate(newContext));
 			}
 
-			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
+			results.NestedResults = nestedResults;
 
 			if (nestedResults.Any(r => !r.IsValid))
 			{
 				results.IsValid = false;
 				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;

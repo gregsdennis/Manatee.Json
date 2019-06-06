@@ -111,8 +111,10 @@ namespace Manatee.Json.Schema
 		{
 			var condensed = Condense();
 
-			var children = condensed._GetAllChildren();
+			var children = condensed._GetAllChildren().ToList();
 			condensed.NestedResults = new List<SchemaValidationResults>();
+
+			if (!children.Any()) return condensed;
 
 			var results = new SchemaValidationResults
 				{
@@ -194,8 +196,6 @@ namespace Manatee.Json.Schema
 			var nonNullNestedResults = NestedResults.Where(r => !ReferenceEquals(r, Null)).ToList();
 			if (Keyword != null)
 				obj["keyword"] = Keyword;
-			if (!string.IsNullOrWhiteSpace(ErrorMessage))
-				obj["error"] = ErrorMessage;
 			if (IsValid)
 			{
 				if (AnnotationValue != null)
@@ -205,7 +205,8 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				// TODO: process error messages
+				if (!string.IsNullOrWhiteSpace(ErrorMessage))
+					obj["error"] = ErrorMessage;
 				if (nonNullNestedResults.Any())
 					obj["errors"] = nonNullNestedResults.Select(r => r.ToJson(serializer)).ToJson();
 			}
@@ -226,6 +227,7 @@ namespace Manatee.Json.Schema
 			       Equals(AbsoluteLocation, other.AbsoluteLocation) &&
 			       Equals(InstanceLocation, other.InstanceLocation) &&
 			       Equals(AnnotationValue, other.AnnotationValue) &&
+			       Equals(ErrorMessage, other.ErrorMessage) &&
 			       string.Equals(Keyword, other.Keyword) &&
 			       Equals(AdditionalInfo, other.AdditionalInfo) &&
 			       NestedResults.ContentsEqual(other.NestedResults);
@@ -248,6 +250,7 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode * 397) ^ (AbsoluteLocation?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (InstanceLocation?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (AnnotationValue?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (ErrorMessage?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (Keyword?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (AdditionalInfo?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (NestedResults?.GetCollectionHashCode() ?? 0);

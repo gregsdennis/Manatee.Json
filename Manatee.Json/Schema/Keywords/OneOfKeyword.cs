@@ -15,6 +15,15 @@ namespace Manatee.Json.Schema
 	public class OneOfKeyword : List<JsonSchema>, IJsonSchemaKeyword, IEquatable<OneOfKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - passed
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Expected exactly one subschema to pass validation, but found {{passed}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "oneOf";
@@ -57,31 +66,41 @@ namespace Manatee.Json.Schema
 				});
 
 			SchemaValidationResults results;
+			var validCount = 0;
 			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 			{
 				results = new SchemaValidationResults(Name, context);
-				var foundValid = false;
 				foreach (var result in nestedResults)
 				{
 					if (result.IsValid)
-						if (foundValid)
+					{
+						if (validCount != 0)
 						{
 							results.IsValid = false;
 							return results;
 						}
-					foundValid |= result.IsValid;
+
+						validCount++;
+					}
 				}
 
-				results.IsValid = foundValid;
+				results.IsValid = validCount == 1;
 			}
 			else
 			{
 				var resultsList = nestedResults.ToList();
+				validCount = resultsList.Count(r => r.IsValid);
 				results = new SchemaValidationResults(Name, context)
 					{
 						NestedResults = resultsList,
-						IsValid = resultsList.Count(r => r.IsValid) == 1
+						IsValid = validCount == 1
 					};
+			}
+
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["passed"] = validCount;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

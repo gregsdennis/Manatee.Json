@@ -15,6 +15,16 @@ namespace Manatee.Json.Schema
 	public class DependentRequiredKeyword : List<PropertyDependency>, IJsonSchemaKeyword, IEquatable<DependentRequiredKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - failed
+		/// - total
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{failed}} of {{total}} dependencies failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "dependentRequired";
@@ -69,6 +79,13 @@ namespace Manatee.Json.Schema
 						NestedResults = resultsList,
 						IsValid = resultsList.All(r => r.IsValid)
 					};
+			}
+
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["failed"] = nestedResults.Count(r => !r.IsValid);
+				results.AdditionalInfo["total"] = Count;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

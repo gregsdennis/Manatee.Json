@@ -14,6 +14,15 @@ namespace Manatee.Json.Schema
 	public class PropertyNamesKeyword : IJsonSchemaKeyword, IEquatable<PropertyNamesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - properties
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Properties {{properties}} have names that failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "propertyNames";
@@ -75,16 +84,21 @@ namespace Manatee.Json.Schema
 						};
 					var result = Value.Validate(newContext);
 
-					return result;
-				});
+					return new {propertyName, result};
+				}).ToList();
 
 			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
-				results.IsValid = nestedResults.All(r => r.IsValid);
+				results.IsValid = nestedResults.All(r => r.result.IsValid);
 			else
 			{
-				var resultsList = nestedResults.ToList();
-				results.NestedResults = resultsList;
-				results.IsValid = resultsList.All(r => r.IsValid);
+				results.NestedResults = nestedResults.Select(r => r.result).ToList();
+				results.IsValid = nestedResults.All(r => r.result.IsValid);
+			}
+
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["properties"] = nestedResults.Select(r => r.propertyName).ToJson();
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

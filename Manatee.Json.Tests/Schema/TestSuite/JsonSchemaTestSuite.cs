@@ -33,6 +33,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 			foreach (var fileName in fileNames)
 			{
+				var shortFileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
 				var contents = File.ReadAllText(fileName);
 				var json = JsonValue.Parse(contents);
 
@@ -41,9 +42,12 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					var schemaJson = testSet.Object["schema"];
 					foreach (var testJson in testSet.Object["tests"].Array)
 					{
-						var testName = $"{testSet.Object["description"]}.{testJson.Object["description"]}.{draft}".Replace(' ', '_');
+						var testName = $"{shortFileName}.{testSet.Object["description"]}.{testJson.Object["description"]}.{draft}".Replace(' ', '_');
 						var isOptional = fileName.Contains("optional");
-						yield return new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional) {TestName = testName};
+						yield return new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional)
+							{
+								TestName = testName
+							};
 					}
 				}
 			}

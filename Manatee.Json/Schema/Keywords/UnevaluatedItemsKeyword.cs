@@ -15,6 +15,21 @@ namespace Manatee.Json.Schema
 	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Items not covered by `items` or `additionalItems` failed validation.";
+		/// <summary>
+		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate_False { get; set; } = "Items not covered by `items` or `additionalItems` are not allowed.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "unevaluatedItems";
@@ -98,6 +113,13 @@ namespace Manatee.Json.Schema
 						NestedResults = resultsList,
 						IsValid = resultsList.All(r => r.IsValid)
 					};
+			}
+
+			if (nestedResults.Any(r => !r.IsValid))
+			{
+				results.IsValid = false;
+				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;

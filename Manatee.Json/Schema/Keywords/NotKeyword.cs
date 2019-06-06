@@ -80,6 +80,8 @@ namespace Manatee.Json.Schema
 
 			results.IsValid = !nestedResults.IsValid;
 
+			if (!results.IsValid)
+				results.ErrorMessage = ErrorTemplate;
 
 			return results;
 		}

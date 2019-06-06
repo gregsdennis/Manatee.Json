@@ -15,6 +15,16 @@ namespace Manatee.Json.Schema
 	public class DependenciesKeyword : List<IJsonSchemaDependency>, IJsonSchemaKeyword, IEquatable<DependenciesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - failed
+		/// - total
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{failed}} of {{total}} dependencies failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "dependencies";
@@ -57,10 +67,12 @@ namespace Manatee.Json.Schema
 
 			SchemaValidationResults results;
 			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+			{
 				results = new SchemaValidationResults(Name, context)
 					{
 						IsValid = nestedResults.All(r => r.IsValid)
 					};
+			}
 			else
 			{
 				var resultsList = nestedResults.ToList();
@@ -69,6 +81,13 @@ namespace Manatee.Json.Schema
 						NestedResults = resultsList,
 						IsValid = resultsList.All(r => r.IsValid)
 					};
+			}
+
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["failed"] = nestedResults.Count(r => !r.IsValid);
+				results.AdditionalInfo["total"] = Count;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

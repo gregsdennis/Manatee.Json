@@ -15,6 +15,16 @@ namespace Manatee.Json.Schema
 	public class AllOfKeyword : List<JsonSchema>, IJsonSchemaKeyword, IEquatable<AllOfKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - failed
+		/// - total
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{failed}} of {{total}} subschemas failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "allOf";
@@ -71,6 +81,12 @@ namespace Manatee.Json.Schema
 						NestedResults = resultsList,
 						IsValid = resultsList.All(r => r.IsValid)
 					};
+				if (!results.IsValid)
+				{
+					results.AdditionalInfo["failed"] = resultsList.Count(r => !r.IsValid);
+					results.AdditionalInfo["total"] = Count;
+					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+				}
 			}
 
 			return results;

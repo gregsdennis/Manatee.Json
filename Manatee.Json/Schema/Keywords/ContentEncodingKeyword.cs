@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 		{
 			return new SchemaValidationResults(Name, context)
 				{
-					AnnotationValue = Value.ToString()
+					AnnotationValue = Value
 				};
 		}
 		/// <summary>

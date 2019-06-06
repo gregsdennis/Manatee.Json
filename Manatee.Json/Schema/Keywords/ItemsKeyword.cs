@@ -15,6 +15,15 @@ namespace Manatee.Json.Schema
 	public class ItemsKeyword : List<JsonSchema>, IJsonSchemaKeyword, IEquatable<ItemsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - indices
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Items at indices {{indices}} failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "items";

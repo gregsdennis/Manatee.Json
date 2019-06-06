@@ -16,7 +16,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			Description = obj.TryGetString("description");
 			Data = obj["data"];
 			Valid = obj["valid"].Boolean;
-			var results = obj.TryGetObject("output")?.TryGetObject("basic");
+			var results = obj.TryGetObject("output")?.TryGetObject("verbose");
 			if (results != null)
 				Results = serializer.Deserialize<SchemaValidationResults>(results);
 		}

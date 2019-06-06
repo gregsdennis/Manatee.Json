@@ -19,7 +19,7 @@ namespace Manatee.Json.Schema
 		/// <remarks>
 		/// Does not supports any tokens.
 		/// </remarks>
-		public static string ErrorTemplate { get; set; } = "Array should contain unique items.";
+		public static string ErrorTemplate { get; set; } = "Array contains multiple instances of at least one value.";
 
 		/// <summary>
 		/// Gets the name of the keyword.

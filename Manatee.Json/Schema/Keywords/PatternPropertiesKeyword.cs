@@ -16,6 +16,14 @@ namespace Manatee.Json.Schema
 	public class PatternPropertiesKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IEquatable<PatternPropertiesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "At least one subschema failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "patternProperties";
@@ -79,6 +87,9 @@ namespace Manatee.Json.Schema
 
 			results.IsValid = nestedResults.All(r => r.IsValid);
 			results.NestedResults.AddRange(nestedResults);
+
+			if (!results.IsValid)
+				results.ErrorMessage = ErrorTemplate;
 
 			return results;
 		}
