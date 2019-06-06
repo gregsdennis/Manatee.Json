@@ -53,7 +53,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static StringFormat Iri { get; set; }
 		/// <summary>
-		/// Defines an IRI Reference format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
+		/// Defines an IRI Reference format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>.
 		/// </summary>
 		public static StringFormat IriReference { get; set; }
 		/// <summary>
@@ -74,13 +74,17 @@ namespace Manatee.Json.Schema
 		/// <remarks>For draft-06 schema and later, only use this for absolute URIs.</remarks>
 		public static StringFormat Uri { get; set; }
 		/// <summary>
-		/// Defines a URI Reference format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
+		/// Defines a URI Reference format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>.
 		/// </summary>
 		public static StringFormat UriReference { get; set; }
 		/// <summary>
-		/// Defines a URI Template format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>
+		/// Defines a URI Template format via <see cref="System.Uri.IsWellFormedUriString(string, UriKind)"/>.
 		/// </summary>
 		public static StringFormat UriTemplate { get; set; }
+		/// <summary>
+		/// Defines a UUID format.
+		/// </summary>
+		public static StringFormat Uuid { get; set; }
 
 		private static readonly Dictionary<string, StringFormat> _lookup;
 
@@ -135,6 +139,8 @@ namespace Manatee.Json.Schema
 			UriTemplate = new StringFormat("uri-template", JsonSchemaVersion.Draft2019_04,
 			                                @"^$");
 			Uri = new StringFormat("uri", JsonSchemaVersion.All, s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
+			Uuid = new StringFormat("uuid", JsonSchemaVersion.Draft2019_04,
+			                        @"[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
 		}
 		/// <summary>
 		/// Creates a new <see cref="StringFormat"/> instance using a regular expression.
