@@ -108,7 +108,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public Func<string, bool> ValidationFunction { get; }
 
-		internal bool IsKnown { get; set; }
+		internal bool IsKnown { get; private set; } = true;
 
 		static StringFormat()
 		{
