@@ -72,7 +72,7 @@ namespace Manatee.Json
 
 				builder.Append(tab1);
 				builder.Append('"');
-				builder.Append(kvp.Key);
+				builder.Append(kvp.Key.InsertEscapeSequences());
 				builder.Append("\" : ");
 				kvp.Value.AppendIndentedString(builder, indentLevel + 2);
 
@@ -135,7 +135,7 @@ namespace Manatee.Json
 					builder.Append(',');
 
 				builder.Append('"');
-				builder.Append(kvp.Key);
+				builder.Append(kvp.Key.InsertEscapeSequences());
 				builder.Append("\":");
 				kvp.Value.AppendString(builder);
 

@@ -42,8 +42,10 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					var schemaJson = testSet.Object["schema"];
 					foreach (var testJson in testSet.Object["tests"].Array)
 					{
-						var testName = $"{shortFileName}.{testSet.Object["description"]}.{testJson.Object["description"]}.{draft}".Replace(' ', '_');
 						var isOptional = fileName.Contains("optional");
+						var testName = $"{shortFileName}.{testSet.Object["description"].String}.{testJson.Object["description"].String}.{draft}".Replace(' ', '_');
+						if (isOptional)
+							testName = $"optional.{testName}";
 						yield return new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional)
 							{
 								TestName = testName
@@ -79,12 +81,15 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			if (Directory.Exists(OutputFolder))
 				Directory.Delete(OutputFolder, true);
 			Directory.CreateDirectory(OutputFolder);
+
+			SchemaValidationResults.IncludeAdditionalInfo = false;
 		}
 
 		[OneTimeTearDown]
 		public static void TearDown()
 		{
 			JsonSchemaOptions.Download = null;
+			SchemaValidationResults.IncludeAdditionalInfo = true;
 		}
 
 		[TestCaseSource(nameof(AllTestData))]

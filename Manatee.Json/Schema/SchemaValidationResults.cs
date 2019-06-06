@@ -54,6 +54,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public List<SchemaValidationResults> NestedResults { get; set; } = new List<SchemaValidationResults>();
 
+		internal static bool IncludeAdditionalInfo { get; set; }
 		internal bool RecursionDetected { get; set; }
 
 		internal SchemaValidationResults() { }
@@ -210,7 +211,7 @@ namespace Manatee.Json.Schema
 				if (nonNullNestedResults.Any())
 					obj["errors"] = nonNullNestedResults.Select(r => r.ToJson(serializer)).ToJson();
 			}
-			if (AdditionalInfo != null && AdditionalInfo.Any())
+			if (IncludeAdditionalInfo && AdditionalInfo != null && AdditionalInfo.Any())
 				obj["additionalInfo"] = AdditionalInfo;
 
 			return obj;

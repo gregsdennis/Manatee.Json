@@ -261,8 +261,11 @@ namespace Manatee.Json.Tests.Schema
 					RelativeLocation = JsonPointer.Parse("#/format"),
 					InstanceLocation = JsonPointer.Parse("#"),
 					Keyword = "format",
+					ErrorMessage = "\"32\" is not in an acceptable \"Int32\" format.",
+					AnnotationValue = "Int32",
 					AdditionalInfo = new JsonObject
 						{
+							["actual"] = "32",
 							["format"] = "Int32",
 							["isKnownFormat"] = false
 						}

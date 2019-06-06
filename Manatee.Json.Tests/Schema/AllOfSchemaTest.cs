@@ -32,6 +32,12 @@ namespace Manatee.Json.Tests.Schema
 									Keyword = "allOf",
 									RelativeLocation = JsonPointer.Parse("#/allOf"),
 									InstanceLocation = JsonPointer.Parse("#"),
+									ErrorMessage = "2 of 2 subschemas failed validation.",
+									AdditionalInfo =
+										{
+											["failed"] = 2,
+											["total"] = 2
+										},
 									NestedResults =
 										{
 											new SchemaValidationResults
@@ -47,9 +53,10 @@ namespace Manatee.Json.Tests.Schema
 																	Keyword = "type",
 																	RelativeLocation = JsonPointer.Parse("#/allOf/0/type"),
 																	InstanceLocation = JsonPointer.Parse("#"),
+																	ErrorMessage = "Values of type \"object\" are not one of the allowed types \"array\".",
 																	AdditionalInfo =
 																		{
-																			["expected"] = "array",
+																			["allowed"] = "array",
 																			["actual"] = "object"
 																		}
 																}
@@ -68,9 +75,10 @@ namespace Manatee.Json.Tests.Schema
 																	Keyword = "type",
 																	RelativeLocation = JsonPointer.Parse("#/allOf/1/type"),
 																	InstanceLocation = JsonPointer.Parse("#"),
+																	ErrorMessage = "Values of type \"object\" are not one of the allowed types \"number\".",
 																	AdditionalInfo =
 																		{
-																			["expected"] = "number",
+																			["allowed"] = "number",
 																			["actual"] = "object"
 																		}
 																}
@@ -79,7 +87,7 @@ namespace Manatee.Json.Tests.Schema
 										}
 								}
 						}
-				};		
+				};
 
 			var results = schema.Validate(json);
 

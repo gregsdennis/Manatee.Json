@@ -378,9 +378,10 @@ namespace Manatee.Json.Tests.Schema
 					AbsoluteLocation = new Uri("http://myschema.org/test194#/definitions/apredefinedtype/required"),
 					InstanceLocation = JsonPointer.Parse("#"),
 					Keyword = "required",
+					ErrorMessage = "The properties [\"prop1\"] are required.",
 					AdditionalInfo = new JsonObject
 						{
-							["missing"] = new JsonArray {"prop1"}
+							["properties"] = new JsonArray {"prop1"}
 
 						}
 				};
