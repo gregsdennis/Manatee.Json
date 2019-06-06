@@ -117,7 +117,7 @@ namespace Manatee.Json.Schema
 			Date = new StringFormat("date", JsonSchemaVersion.Draft2019_04,
 			                        @"^(\d{4})-(\d{2})-(\d{2})$");
 			DateTime = new StringFormat("date-time", JsonSchemaVersion.All,
-			                            @"^(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})$");
+										@"^(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})([+-](\d{2})\:(\d{2})|Z)$");
 			Duration = new StringFormat("duration", JsonSchemaVersion.Draft2019_04,
 			                            @"^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$");
 			Email = new StringFormat("email", JsonSchemaVersion.All,
@@ -130,7 +130,7 @@ namespace Manatee.Json.Schema
 			                        @"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$");
 			IriReference = new StringFormat("iri-reference", JsonSchemaVersion.Draft2019_04,
 			                                @"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?");
-			Iri = new StringFormat("uri", JsonSchemaVersion.Draft2019_04, s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
+			Iri = new StringFormat("iri", JsonSchemaVersion.Draft2019_04, s => System.Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute));
 			JsonPointer = new StringFormat("json-pointer", JsonSchemaVersion.Draft2019_04, @"^(/(([^/~])|(~[01]))+)*/?$");
 			Regex = new StringFormat("regex", JsonSchemaVersion.All, null, true);
 			RelativeJsonPointer = new StringFormat("relative-json-pointer", JsonSchemaVersion.Draft2019_04, @"^[0-9]+#/(([^/~])|(~[01]))*$");
