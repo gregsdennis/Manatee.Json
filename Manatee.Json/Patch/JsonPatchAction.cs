@@ -1,6 +1,7 @@
 ﻿using System;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
+using System.Linq;
 
 namespace Manatee.Json.Patch
 {
@@ -84,6 +85,12 @@ namespace Manatee.Json.Patch
 
 		private JsonPatchResult _Remove(JsonValue json)
 		{
+			if (string.IsNullOrEmpty(Path))
+			{
+				json.Object.Clear();
+				return new JsonPatchResult(json);
+			}
+			
 			var (target, key, index, found) = JsonPointerFunctions.ResolvePointer(json, Path);
 			if (!found) return new JsonPatchResult(json, $"Path '{Path}' not found.");
 			
@@ -107,7 +114,7 @@ namespace Manatee.Json.Patch
 			// TODO: This isn't the most efficient way to do this, but it'll get the job done.
 			var remove = _Remove(json);
 			return remove.Success ? _Add(json): remove;
-        }
+		}
 
 		private JsonPatchResult _Move(JsonValue json)
 		{
