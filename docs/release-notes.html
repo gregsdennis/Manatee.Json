@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>10.1.2 </title>
+    <title>10.1.3 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="10.1.2 ">
+    <meta name="title" content="10.1.3 ">
     <meta name="generator" content="docfx 2.36.1.0">
     
     <link rel="shortcut icon" href="favicon.ico">
@@ -60,8 +60,13 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="1012">10.1.2</h1>
+<h1 id="1013">10.1.3</h1>
 
+<p><em>Released on 14 May, 2019</em></p>
+<p><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/203">#203</a>) Adjacent (consecutive) escape sequences that contained Unicode values were always considered as a surrogate pair even if they were just two separate characters.</p>
+<p>Updating schema test suite references exposed a bug in <code>additionalProperties</code> keyword implementation in that it would look into applicator keywords (<code>anyOf</code>, <code>allOf</code>, etc.).  This bug was fixed.</p>
+<h1 id="1012">10.1.2</h1>
 <p><em>Released on 21 Nov, 2018</em></p>
 <p><span id="patch">patch</span></p>
 <p>BUG FIX: There was a concurrency issue when determining the correct internal serializer to use.</p>
@@ -161,7 +166,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/feature/175-draft-08/docs_source/release-notes.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/release-notes.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

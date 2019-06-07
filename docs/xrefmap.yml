@@ -12915,6 +12915,19 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.SchemaValidationContext.Local
   nameWithType: SchemaValidationContext.Local
+- uid: Manatee.Json.Schema.SchemaValidationContext.LocallyEvaluatedPropertyNames
+  name: LocallyEvaluatedPropertyNames
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_LocallyEvaluatedPropertyNames
+  commentId: P:Manatee.Json.Schema.SchemaValidationContext.LocallyEvaluatedPropertyNames
+  fullName: Manatee.Json.Schema.SchemaValidationContext.LocallyEvaluatedPropertyNames
+  nameWithType: SchemaValidationContext.LocallyEvaluatedPropertyNames
+- uid: Manatee.Json.Schema.SchemaValidationContext.LocallyEvaluatedPropertyNames*
+  name: LocallyEvaluatedPropertyNames
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_LocallyEvaluatedPropertyNames_
+  commentId: Overload:Manatee.Json.Schema.SchemaValidationContext.LocallyEvaluatedPropertyNames
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.SchemaValidationContext.LocallyEvaluatedPropertyNames
+  nameWithType: SchemaValidationContext.LocallyEvaluatedPropertyNames
 - uid: Manatee.Json.Schema.SchemaValidationContext.RelativeLocation
   name: RelativeLocation
   href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_RelativeLocation
