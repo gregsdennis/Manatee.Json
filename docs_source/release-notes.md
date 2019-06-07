@@ -1,3 +1,11 @@
+# 10.1.4
+
+*Released on 8 Jun, 2019*
+
+<span id="patch">patch</span>
+
+([#206](https://github.com/gregsdennis/Manatee.Json/pull/206)) [@Kimtho](https://github.com/Kimtho) fixed JSON Patch `replace` verb.  Thanks!
+
 # 10.1.3
 
 *Released on 14 May, 2019*
