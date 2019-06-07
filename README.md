@@ -135,6 +135,7 @@ If you'd like to help out with the code, please feel free to fork and create a p
 ### Special thanks
 
 @sixlettervariables (Christopher Watford) for digging around the muck that was the serialization code and drastically improving performance.
+@Kimtho for finding and fixing some backwards logic in the JSON Patch `replace` verb.
 
 ### The Project
 
