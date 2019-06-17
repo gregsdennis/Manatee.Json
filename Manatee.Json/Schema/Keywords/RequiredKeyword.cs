@@ -32,7 +32,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonSchemaVersion SupportedVersions => this.Any()
 			? JsonSchemaVersion.All
-			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_04;
+			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>

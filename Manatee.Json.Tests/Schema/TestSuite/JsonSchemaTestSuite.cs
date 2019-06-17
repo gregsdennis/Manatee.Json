@@ -22,15 +22,16 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		public static IEnumerable AllTestData => _LoadSchemaJson("draft4")
 			.Concat(_LoadSchemaJson("draft6"))
 			.Concat(_LoadSchemaJson("draft7"))
-			.Concat(_LoadSchemaJson("draft8"));
+			.Concat(_LoadSchemaJson("draft2019-06"));
 
 		private static IEnumerable<TestCaseData> _LoadSchemaJson(string draft)
 		{
 			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.WorkDirectory, RootTestsFolder, $"{draft}\\").AdjustForOS();
-			if (!Directory.Exists(testsPath)) yield break;
+			if (!Directory.Exists(testsPath)) return Enumerable.Empty<TestCaseData>();
 
 			var fileNames = Directory.GetFiles(testsPath, "*.json", SearchOption.AllDirectories);
 
+			var allTests = new List<TestCaseData>();
 			foreach (var fileName in fileNames)
 			{
 				var shortFileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
@@ -46,13 +47,15 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 						var testName = $"{shortFileName}.{testSet.Object["description"].String}.{testJson.Object["description"].String}.{draft}".Replace(' ', '_');
 						if (isOptional)
 							testName = $"optional.{testName}";
-						yield return new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional)
+						allTests.Add(new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional)
 							{
 								TestName = testName
-							};
+							});
 					}
 				}
 			}
+
+			return allTests;
 		}
 		
 		static JsonSchemaTestSuite()
@@ -126,14 +129,20 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					if (test.Valid != results.IsValid)
 						Console.WriteLine(string.Join("\n", _serializer.Serialize(results).GetIndentedString()));
 					Assert.AreEqual(test.Valid, results.IsValid);
+					if (test.Output != null)
+					{
+						Assert.AreEqual(test.Output.Basic, results.Flatten());
+						Assert.AreEqual(test.Output.Detailed, results.Condense());
+						Assert.AreEqual(test.Output.Verbose, results);
+					}
 
-					if (!fileName.Contains("draft7")) return;
-
+					if (!fileName.Contains("draft2019-06")) return;
+					
 					var exportTestsValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
 
 					if (!bool.TryParse(exportTestsValue, out var exportTests) || !exportTests) return;
 
-					test.Results = results;
+					test.OutputGeneration = results;
 
 					List<SchemaTestSet> testSets = null;
 					SchemaTestSet testSet = null;

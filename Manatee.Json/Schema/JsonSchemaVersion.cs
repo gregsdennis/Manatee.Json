@@ -25,12 +25,12 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		Draft07 = 1 << 2,
 		/// <summary>
-		/// Adheres to 2019-04.
+		/// Adheres to draft 2019-06.
 		/// </summary>
-		Draft2019_04 = 1 << 3,
+		Draft2019_06 = 1 << 3,
 		/// <summary>
 		/// Adheres to all known schema drafts.
 		/// </summary>
-		All = Draft04 | Draft06 | Draft07 | Draft2019_04
+		All = Draft04 | Draft06 | Draft07 | Draft2019_06
 	}
 }

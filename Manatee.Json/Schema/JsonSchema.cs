@@ -104,8 +104,8 @@ namespace Manatee.Json.Schema
 				startVersion = JsonSchemaVersion.Draft06;
 			else if (Schema == MetaSchemas.Draft07.Id)
 				startVersion = JsonSchemaVersion.Draft07;
-			else if (Schema == MetaSchemas.Draft2019_04.Id)
-				startVersion = JsonSchemaVersion.Draft2019_04;
+			else if (Schema == MetaSchemas.Draft2019_06.Id)
+				startVersion = JsonSchemaVersion.Draft2019_06;
 			else
 			{
 				startVersion = JsonSchemaVersion.All;
@@ -126,34 +126,35 @@ namespace Manatee.Json.Schema
 				results.OtherErrors.Add("The provided keywords do not support a common schema version.");
 			else
 			{
+				var asJson = ToJson(new JsonSerializer());
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft04))
 				{
-					var metaValidation = MetaSchemas.Draft04.Validate(ToJson(new JsonSerializer()));
+					var metaValidation = MetaSchemas.Draft04.Validate(asJson);
 					results.MetaSchemaValidations[MetaSchemas.Draft04.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft04;
 				}
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft06))
 				{
-					var metaValidation = MetaSchemas.Draft06.Validate(ToJson(new JsonSerializer()));
+					var metaValidation = MetaSchemas.Draft06.Validate(asJson);
 					results.MetaSchemaValidations[MetaSchemas.Draft06.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft06;
 				}
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft07))
 				{
-					var metaValidation = MetaSchemas.Draft07.Validate(ToJson(new JsonSerializer()));
+					var metaValidation = MetaSchemas.Draft07.Validate(asJson);
 					results.MetaSchemaValidations[MetaSchemas.Draft07.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
-				//if (supportedVersions.HasFlag(JsonSchemaVersion.Draft2019_04))
-				//{
-				//	var metaValidation = MetaSchemas.Draft2019_04.Validate(ToJson(new JsonSerializer()));
-				//	results.MetaSchemaValidations[MetaSchemas.Draft2019_04.Id] = metaValidation;
-				//	if (metaValidation.IsValid)
-				//		results.SupportedVersions |= JsonSchemaVersion.Draft2019_04;
-				//}
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft2019_06))
+				{
+					var metaValidation = MetaSchemas.Draft2019_06.Validate(asJson);
+					results.MetaSchemaValidations[MetaSchemas.Draft2019_06.Id] = metaValidation;
+					if (metaValidation.IsValid)
+						results.SupportedVersions |= JsonSchemaVersion.Draft2019_06;
+				}
 			}
 
 			_supportedVersions = supportedVersions;
@@ -280,7 +281,7 @@ namespace Manatee.Json.Schema
 			var refKeyword = this.Get<RefKeyword>();
 			if (refKeyword == null ||
 			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
-			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_04)
+			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_06)
 			{
 				if (context.BaseUri == null)
 					context.BaseUri = DocumentPath;

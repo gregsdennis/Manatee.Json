@@ -19,7 +19,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions => JsonSchemaVersion.Draft2019_04;
+		public JsonSchemaVersion SupportedVersions => JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
@@ -102,9 +102,14 @@ namespace Manatee.Json.Schema
 		{
 			var nestedResults = new List<SchemaValidationResults>();
 
-			foreach (var kvp in this)
+			var allVocabularies = this.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+			allVocabularies[SchemaVocabularies.Core] = true;
+
+			foreach (var kvp in allVocabularies)
 			{
 				var vocabulary = kvp.Key;
+				if (vocabulary.MetaSchemaId == context.Local.Id) continue;
+
 				var required = kvp.Value;
 				if (vocabulary.MetaSchemaId != null)
 				{

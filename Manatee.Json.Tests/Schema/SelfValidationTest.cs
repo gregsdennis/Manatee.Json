@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Manatee.Json.Schema;
@@ -13,17 +13,15 @@ namespace Manatee.Json.Tests.Schema
 	{
 		private static readonly JsonSerializer _serializer = new JsonSerializer();
 
-		public static IEnumerable TestData
-		{
-			get
-			{
-				yield return new TestCaseData(MetaSchemas.Draft04) {TestName = nameof(MetaSchemas.Draft04)};
-				yield return new TestCaseData(MetaSchemas.Draft06) {TestName = nameof(MetaSchemas.Draft06)};
-				yield return new TestCaseData(MetaSchemas.Draft07) {TestName = nameof(MetaSchemas.Draft07)};
-				//yield return new TestCaseData(MetaSchemas.Draft2019_04) {TestName = nameof(MetaSchemas.Draft2019_04)};
-			}
-		}
-		
+		public static IEnumerable<TestCaseData> TestData =>
+			new[]
+				{
+					new TestCaseData(MetaSchemas.Draft04) {TestName = nameof(MetaSchemas.Draft04)},
+					new TestCaseData(MetaSchemas.Draft06) {TestName = nameof(MetaSchemas.Draft06)},
+					new TestCaseData(MetaSchemas.Draft07) {TestName = nameof(MetaSchemas.Draft07)},
+					new TestCaseData(MetaSchemas.Draft2019_06) {TestName = nameof(MetaSchemas.Draft2019_06)}
+				};
+
 		[TestCaseSource(nameof(TestData))]
 		public void Hardcoded(JsonSchema schema)
 		{
