@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Manatee.Json.Schema
 {
@@ -11,7 +12,8 @@ namespace Manatee.Json.Schema
 	/// In the future, as vocabularies are better defined, there may be a data format for them.
 	/// As the feature develops in JSON Schema, it will be developed within this library.
 	/// </remarks>
-	public class SchemaVocabulary
+	[DebuggerDisplay("{Id}")]
+	public class SchemaVocabulary : IEquatable<SchemaVocabulary>
 	{
 		/// <summary>
 		/// Gets the vocabulary ID.
@@ -35,6 +37,38 @@ namespace Manatee.Json.Schema
 		internal SchemaVocabulary(string id)
 		{
 			Id = id;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		public bool Equals(SchemaVocabulary other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return string.Equals(Id, other.Id) && string.Equals(MetaSchemaId, other.MetaSchemaId);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as SchemaVocabulary);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((Id != null ? Id.GetHashCode() : 0) * 397) ^ (MetaSchemaId != null ? MetaSchemaId.GetHashCode() : 0);
+			}
 		}
 	}
 }

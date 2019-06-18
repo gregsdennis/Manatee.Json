@@ -14,15 +14,17 @@ namespace Manatee.Json.Internal
 			return items.Where(i => i != null);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool ContentsEqual<T>(this IEnumerable<T> a, IEnumerable<T> b)
 		{
-			if (a == null && b != null) return false;
-			if (a != null && b == null) return false;
-			if (a == null) return true;
+			//if (a == null && b != null) return false;
+			//if (a != null && b == null) return false;
+			//if (a == null) return true;
 
-			var listA = a.ToList();
-			var listB = b.ToList();
-			return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
+			//var listA = a.ToList();
+			//var listB = b.ToList();
+			//return listA.Count == listB.Count && listA.All(item => listB.Contains(item));
+			return MultiSetComparer<T>.Default.Equals(a, b);
 		}
 
 		private static IEnumerable<TOut> _LeftJoin<TA, TB, TKey, TOut>(this IEnumerable<TA> aItems,

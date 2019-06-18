@@ -127,30 +127,42 @@ namespace Manatee.Json.Schema
 			else
 			{
 				var asJson = ToJson(new JsonSerializer());
+				var context = new SchemaValidationContext
+					{
+						Instance = asJson,
+						BaseRelativeLocation = new JsonPointer("#"),
+						RelativeLocation = new JsonPointer("#"),
+						InstanceLocation = new JsonPointer("#"),
+						IsMetaSchemaValidation = true
+					};
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft04))
 				{
-					var metaValidation = MetaSchemas.Draft04.Validate(asJson);
+					context.Root = MetaSchemas.Draft04;
+					var metaValidation = MetaSchemas.Draft04.Validate(context);
 					results.MetaSchemaValidations[MetaSchemas.Draft04.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft04;
 				}
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft06))
 				{
-					var metaValidation = MetaSchemas.Draft06.Validate(asJson);
+					context.Root = MetaSchemas.Draft06;
+					var metaValidation = MetaSchemas.Draft06.Validate(context);
 					results.MetaSchemaValidations[MetaSchemas.Draft06.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft06;
 				}
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft07))
 				{
-					var metaValidation = MetaSchemas.Draft07.Validate(asJson);
+					context.Root = MetaSchemas.Draft07;
+					var metaValidation = MetaSchemas.Draft07.Validate(context);
 					results.MetaSchemaValidations[MetaSchemas.Draft07.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft2019_06))
 				{
-					var metaValidation = MetaSchemas.Draft2019_06.Validate(asJson);
+					context.Root = MetaSchemas.Draft2019_06;
+					var metaValidation = MetaSchemas.Draft2019_06.Validate(context);
 					results.MetaSchemaValidations[MetaSchemas.Draft2019_06.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft2019_06;
@@ -340,9 +352,7 @@ namespace Manatee.Json.Schema
 					         {
 								 var keyword = SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer);
 						         if (keyword == null)
-						         {
-									 OtherData[kvp.Key] = kvp.Value;
-						         }
+							         OtherData[kvp.Key] = kvp.Value;
 
 						         return keyword;
 					         })
@@ -394,7 +404,11 @@ namespace Manatee.Json.Schema
 
 			return _inherentValue == other._inherentValue &&
 			       Equals(OtherData, other.OtherData) &&
-			       keywordMatch.All(k => Equals(k.ThisKeyword, k.OtherKeyword));
+			       keywordMatch.All(k =>
+				       {
+					       var equals = Equals(k.ThisKeyword, k.OtherKeyword);
+					       return equals;
+				       });
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
@@ -407,7 +421,7 @@ namespace Manatee.Json.Schema
 		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return this.GetCollectionHashCode();
 		}
 		/// <summary>
 		/// Overloads the equals operator for <see cref="JsonSchema"/>.

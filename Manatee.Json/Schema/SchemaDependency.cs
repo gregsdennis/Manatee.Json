@@ -131,7 +131,8 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				return ((_schema != null ? _schema.GetHashCode() : 0) * 397) ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
+				var value = (_schema != null ? _schema.GetHashCode() : 0) * 397;
+				return value ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
 			}
 		}
 		/// <summary>

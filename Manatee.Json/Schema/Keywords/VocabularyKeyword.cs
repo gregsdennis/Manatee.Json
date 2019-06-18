@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
@@ -10,6 +11,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines the <code>$vocabulary</code> JSON Schema keyword.
 	/// </summary>
+	[DebuggerDisplay("Name={Name} Value={Vocabulary.Id}")]
 	public class VocabularyKeyword : Dictionary<SchemaVocabulary, bool>, IJsonSchemaKeyword, IEquatable<VocabularyKeyword>
 	{
 		/// <summary>
@@ -100,6 +102,8 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			if (!context.IsMetaSchemaValidation) return SchemaValidationResults.Null;
+
 			var nestedResults = new List<SchemaValidationResults>();
 
 			var allVocabularies = this.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);

@@ -58,6 +58,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonPointer BaseRelativeLocation { get; set; }
 		/// <summary>
+		/// Gets or sets whether the current validation run is for a meta-schema.
+		/// </summary>
+		public bool IsMetaSchemaValidation { get; set; }
+		/// <summary>
 		/// Miscellaneous data.  Useful for communicating results between keywords.
 		/// </summary>
 		/// <remarks>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -8,6 +9,7 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Defines the <code>$recursiveAnchor</code> JSON Schema keyword.
 	/// </summary>
+	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class RecursiveAnchorKeyword : IJsonSchemaKeyword, IEquatable<RecursiveAnchorKeyword>
 	{
 		/// <summary>

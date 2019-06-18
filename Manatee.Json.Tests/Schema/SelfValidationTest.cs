@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using NUnit.Framework;
@@ -16,14 +17,14 @@ namespace Manatee.Json.Tests.Schema
 		public static IEnumerable<TestCaseData> TestData =>
 			new[]
 				{
-					new TestCaseData(MetaSchemas.Draft04) {TestName = nameof(MetaSchemas.Draft04)},
-					new TestCaseData(MetaSchemas.Draft06) {TestName = nameof(MetaSchemas.Draft06)},
-					new TestCaseData(MetaSchemas.Draft07) {TestName = nameof(MetaSchemas.Draft07)},
-					new TestCaseData(MetaSchemas.Draft2019_06) {TestName = nameof(MetaSchemas.Draft2019_06)}
+					new TestCaseData(nameof(MetaSchemas.Draft04), MetaSchemas.Draft04),
+					new TestCaseData(nameof(MetaSchemas.Draft06), MetaSchemas.Draft06),
+					new TestCaseData(nameof(MetaSchemas.Draft07), MetaSchemas.Draft07),
+					new TestCaseData(nameof(MetaSchemas.Draft2019_06), MetaSchemas.Draft2019_06)
 				};
 
 		[TestCaseSource(nameof(TestData))]
-		public void Hardcoded(JsonSchema schema)
+		public void Hardcoded(string testName, JsonSchema schema)
 		{
 			var json = schema.ToJson(_serializer);
 			var validation = schema.Validate(json);
@@ -32,7 +33,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[TestCaseSource(nameof(TestData))]
-		public void Online(JsonSchema schema)
+		public void Online(string testName, JsonSchema schema)
 		{
 			try
 			{
@@ -46,15 +47,30 @@ namespace Manatee.Json.Tests.Schema
 				var localValidation = schema.Validate(onlineSchemaJson);
 				var onlineValidation = onlineSchema.Validate(localSchemaJson);
 
-				Assert.AreEqual(onlineSchema, schema);
+				try
+				{
+					Console.WriteLine("Asserting schema equality");
+					Assert.AreEqual(onlineSchema, schema);
 
-				onlineValidation.AssertValid();
-				localValidation.AssertValid();
+					Console.WriteLine("Validating local against online");
+					onlineValidation.AssertValid();
+					Console.WriteLine("Validating online against local");
+					localValidation.AssertValid();
 
-				Assert.AreEqual(onlineSchemaJson, localSchemaJson);
-
+					Console.WriteLine("Asserting json equality");
+					Assert.AreEqual(onlineSchemaJson, localSchemaJson);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine("Online {0}", onlineSchemaJson);
+					Console.WriteLine("Local {0}", localSchemaJson);
+				}
 			}
 			catch (WebException)
+			{
+				Assert.Inconclusive();
+			}
+			catch (SocketException)
 			{
 				Assert.Inconclusive();
 			}
@@ -67,7 +83,7 @@ namespace Manatee.Json.Tests.Schema
 		}
 
 		[TestCaseSource(nameof(TestData))]
-		public void RoundTrip(JsonSchema schema)
+		public void RoundTrip(string testName, JsonSchema schema)
 		{
 			var json = _serializer.Serialize(schema);
 			Console.WriteLine(json.GetIndentedString());

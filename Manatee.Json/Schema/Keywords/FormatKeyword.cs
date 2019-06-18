@@ -38,7 +38,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Format;
 
 		/// <summary>
 		/// The string format for this keyword.
