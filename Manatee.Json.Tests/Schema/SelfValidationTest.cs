@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
@@ -76,7 +77,7 @@ namespace Manatee.Json.Tests.Schema
 			}
 			catch (AggregateException e)
 			{
-				if (e.InnerExceptions.OfType<WebException>().Any())
+				if (e.InnerExceptions.OfType<WebException>().Any() || e.InnerExceptions.OfType<HttpRequestException>().Any())
 					Assert.Inconclusive();
 				throw;
 			}

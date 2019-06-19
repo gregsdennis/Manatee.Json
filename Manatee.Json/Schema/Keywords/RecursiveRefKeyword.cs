@@ -169,8 +169,12 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
-			if (context.RecursiveAnchor != null && context.Local.Get<RecursiveAnchorKeyword>() != null)
-				_resolvedRoot = context.RecursiveAnchor;
+			if (context.RecursiveAnchor != null)
+			{
+				var baseDocument = JsonSchemaRegistry.Get(context.BaseUri.OriginalString);
+				if (baseDocument?.Get<RecursiveAnchorKeyword>() != null)
+					_resolvedRoot = context.RecursiveAnchor;
+			}
 
 			var documentPath = _resolvedRoot?.DocumentPath ?? context.BaseUri;
 			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
