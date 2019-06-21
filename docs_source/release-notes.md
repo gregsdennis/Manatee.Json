@@ -1,10 +1,11 @@
 # 10.2.0
 
 *Beta 1 - Released on 22 Jun, 2019*
+> ***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
 
 <span id="feature">feature</span>
 
-([#175](https://github.com/gregsdennis/Manatee.Json/issues/175)) JSON Schema draft-08 support.
+([#175](https://github.com/gregsdennis/Manatee.Json/issues/175)) JSON Schema draft-08 support.  
 
 ([#209](https://github.com/gregsdennis/Manatee.Json/issues/209)) `PropertiesKeyword` does not return nested results.  This was fixed as part of #175.
 
