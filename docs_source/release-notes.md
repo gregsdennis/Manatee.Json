@@ -1,3 +1,17 @@
+# 10.2.0
+
+*Beta 1 - Released on 22 Jun, 2019*
+
+<span id="feature">feature</span>
+
+([#175](https://github.com/gregsdennis/Manatee.Json/issues/175)) JSON Schema draft-08 support.
+
+([#209](https://github.com/gregsdennis/Manatee.Json/issues/209)) `PropertiesKeyword` does not return nested results.  This was fixed as part of #175.
+
+([#205](https://github.com/gregsdennis/Manatee.Json/issues/205)) Schema equality doesn't capture extra properties on second schema.  E.g. for `a.Equals(b)` if `b` has a property that doesn't exist in `a`, `.Equals()` still returns true.  The collection comparison has been fixed.
+
+([#201](https://github.com/gregsdennis/Manatee.Json/issues/201)) CompilerAttributes causes errors in .Net Standard versions.  This dependency has been removed.
+
 # 10.1.4
 
 *Released on 8 Jun, 2019*
