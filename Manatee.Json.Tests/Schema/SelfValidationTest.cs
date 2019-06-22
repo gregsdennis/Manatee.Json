@@ -61,10 +61,11 @@ namespace Manatee.Json.Tests.Schema
 					Console.WriteLine("Asserting json equality");
 					Assert.AreEqual(onlineSchemaJson, localSchemaJson);
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					Console.WriteLine("Online {0}", onlineSchemaJson);
 					Console.WriteLine("Local {0}", localSchemaJson);
+					throw;
 				}
 			}
 			catch (WebException)
