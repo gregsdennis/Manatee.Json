@@ -19,11 +19,15 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -60,10 +64,11 @@ namespace Manatee.Json.Schema
 					BaseUri = context.BaseUri,
 					Instance = context.Instance,
 					Root = context.Root,
+					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
-			};
+				};
 
 			var ifResults = Value.Validate(newContext);
 
@@ -78,6 +83,7 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = context.Instance,
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(then.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(then.Name),
 						InstanceLocation = context.InstanceLocation
@@ -87,6 +93,7 @@ namespace Manatee.Json.Schema
 				{
 					results.IsValid = false;
 					results.Keyword = then.Name;
+					results.ErrorMessage = ThenKeyword.ErrorTemplate;
 					results.NestedResults.Add(thenResults);
 				}
 
@@ -103,6 +110,7 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = context.Instance,
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(@else.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(@else.Name),
 						InstanceLocation = context.InstanceLocation
@@ -112,6 +120,7 @@ namespace Manatee.Json.Schema
 				{
 					results.IsValid = false;
 					results.Keyword = @else.Name;
+					results.ErrorMessage = ElseKeyword.ErrorTemplate;
 					results.NestedResults.Add(elseResults);
 				}
 

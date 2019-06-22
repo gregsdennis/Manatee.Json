@@ -15,6 +15,15 @@ namespace Manatee.Json.Schema
 	public class RequiredKeyword : List<string>, IJsonSchemaKeyword, IEquatable<RequiredKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - properties
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The properties {{properties}} are required.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "required";
@@ -23,11 +32,15 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonSchemaVersion SupportedVersions => this.Any()
 			? JsonSchemaVersion.All
-			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// Used for deserialization.
@@ -61,14 +74,21 @@ namespace Manatee.Json.Schema
 			foreach (var propertyName in this)
 			{
 				if (!obj.ContainsKey(propertyName))
+				{
+					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					{
+						results.IsValid = false;
+						return results;
+					}
 					missingProperties.Add(propertyName);
+				}
 			}
 
 			if (missingProperties.Any())
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
-				results.AdditionalInfo["missing"] = missingProperties.ToJson();
+				results.AdditionalInfo["properties"] = missingProperties.ToJson();
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

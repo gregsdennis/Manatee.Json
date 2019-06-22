@@ -15,6 +15,21 @@ namespace Manatee.Json.Schema
 	public class AdditionalItemsKeyword : IJsonSchemaKeyword, IEquatable<AdditionalItemsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Items not covered by `items` failed validation.";
+		/// <summary>
+		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate_False { get; set; } = "Items not covered by `items` are not allowed.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "additionalItems";
@@ -25,7 +40,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
-		public int ValidationSequence => 1;
+		public int ValidationSequence => 2;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -59,10 +78,19 @@ namespace Manatee.Json.Schema
 
 			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
+			var results = new SchemaValidationResults(Name, context);
 
-			if (itemsKeyword.Count < array.Count)
+			if (context.LocalTierLastEvaluatedIndex < array.Count)
 			{
-				nestedResults.AddRange(array.Skip(itemsKeyword.Count).Select((jv, i) =>
+				if (Value == JsonSchema.False)
+				{
+					results.IsValid = false;
+					results.Keyword = Name;
+					results.ErrorMessage = ErrorTemplate_False;
+					return results;
+				}
+
+				nestedResults.AddRange(array.Skip(context.LocalTierLastEvaluatedIndex).Select((jv, i) =>
 					{
 						var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 						var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -71,19 +99,25 @@ namespace Manatee.Json.Schema
 								BaseUri = context.BaseUri,
 								Instance = jv,
 								Root = context.Root,
+								RecursiveAnchor = context.RecursiveAnchor,
 								BaseRelativeLocation = baseRelativeLocation,
 								RelativeLocation = relativeLocation,
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 							};
-						return Value.Validate(newContext);
-					}));}
+						var localResults = Value.Validate(newContext);
+						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						return localResults;
+					}));
+			}
 
-			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
+			results.NestedResults = nestedResults;
 
 			if (nestedResults.Any(r => !r.IsValid))
 			{
 				results.IsValid = false;
 				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;

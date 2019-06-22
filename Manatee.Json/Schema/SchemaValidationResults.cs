@@ -42,6 +42,10 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public string Keyword { get; set; }
 		/// <summary>
+		/// Gets or sets the error message.
+		/// </summary>
+		public string ErrorMessage { get; set; }
+		/// <summary>
 		/// Gets or sets any additional information regarding the validation.
 		/// </summary>
 		public JsonObject AdditionalInfo { get; set; } = new JsonObject();
@@ -49,6 +53,9 @@ namespace Manatee.Json.Schema
 		/// Gets or sets any results of nested schemas.
 		/// </summary>
 		public List<SchemaValidationResults> NestedResults { get; set; } = new List<SchemaValidationResults>();
+
+		internal static bool IncludeAdditionalInfo { get; set; }
+		internal bool RecursionDetected { get; set; }
 
 		internal SchemaValidationResults() { }
 		internal SchemaValidationResults(SchemaValidationContext context)
@@ -77,7 +84,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public SchemaValidationResults Condense()
 		{
-			var children = NestedResults.Select(r => r.Condense()).ToList();
+			var children = NestedResults.Where(r => r.RelativeLocation != null && !r.RecursionDetected)
+				.Select(r => r.Condense())
+				.Where(r => (!IsValid && !r.IsValid) || (IsValid && r.AnnotationValue != null) || r.NestedResults.Any())
+				.Distinct()
+				.ToList();
 
 			var copy = new SchemaValidationResults();
 			copy._CopyDataFrom(this);
@@ -85,8 +96,7 @@ namespace Manatee.Json.Schema
 
 			if (copy.AnnotationValue != null) return copy;
 
-			if (copy.NestedResults.Any(r => !r.IsValid))
-				copy.NestedResults = copy.NestedResults.Where(r => !r.IsValid).ToList();
+			copy.NestedResults = copy.NestedResults.Where(r => r.IsValid == copy.IsValid).ToList();
 
 			if (copy.NestedResults.Count != 1) return copy;
 
@@ -102,8 +112,10 @@ namespace Manatee.Json.Schema
 		{
 			var condensed = Condense();
 
-			var children = condensed._GetAllChildren();
+			var children = condensed._GetAllChildren().ToList();
 			condensed.NestedResults = new List<SchemaValidationResults>();
+
+			if (!children.Any()) return condensed;
 
 			var results = new SchemaValidationResults
 				{
@@ -128,6 +140,7 @@ namespace Manatee.Json.Schema
 			InstanceLocation = other.InstanceLocation;
 			AnnotationValue = other.AnnotationValue;
 			Keyword = other.Keyword;
+			ErrorMessage = other.ErrorMessage;
 			AdditionalInfo = other.AdditionalInfo;
 			NestedResults = other.NestedResults;
 		}
@@ -156,6 +169,7 @@ namespace Manatee.Json.Schema
 			var nested = obj.TryGetArray("annotations") ?? obj.TryGetArray("errors");
 			if (nested != null)
 				NestedResults = nested.Select(serializer.Deserialize<SchemaValidationResults>).ToList();
+			ErrorMessage = obj.TryGetString("error");
 			AdditionalInfo = obj.TryGetObject("additionalInfo");
 		}
 		/// <summary>
@@ -172,7 +186,9 @@ namespace Manatee.Json.Schema
 			{
 				var relativeLocation = RelativeLocation.ToString();
 				obj["keywordLocation"] = relativeLocation;
-				if (AbsoluteLocation != null && (AbsoluteLocation.Fragment != relativeLocation || RelativeLocation.Contains("$ref")))
+				if (AbsoluteLocation != null && (AbsoluteLocation.Fragment != relativeLocation ||
+				                                 RelativeLocation.Contains("$ref") ||
+				                                 RelativeLocation.Contains("$recursiveRef")))
 					obj["absoluteKeywordLocation"] = AbsoluteLocation.OriginalString;
 			}
 			if (InstanceLocation != null)
@@ -190,11 +206,12 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				// TODO: process error messages
+				if (!string.IsNullOrWhiteSpace(ErrorMessage))
+					obj["error"] = ErrorMessage;
 				if (nonNullNestedResults.Any())
 					obj["errors"] = nonNullNestedResults.Select(r => r.ToJson(serializer)).ToJson();
 			}
-			if (AdditionalInfo.Any())
+			if (IncludeAdditionalInfo && AdditionalInfo != null && AdditionalInfo.Any())
 				obj["additionalInfo"] = AdditionalInfo;
 
 			return obj;
@@ -211,6 +228,7 @@ namespace Manatee.Json.Schema
 			       Equals(AbsoluteLocation, other.AbsoluteLocation) &&
 			       Equals(InstanceLocation, other.InstanceLocation) &&
 			       Equals(AnnotationValue, other.AnnotationValue) &&
+			       Equals(ErrorMessage, other.ErrorMessage) &&
 			       string.Equals(Keyword, other.Keyword) &&
 			       Equals(AdditionalInfo, other.AdditionalInfo) &&
 			       NestedResults.ContentsEqual(other.NestedResults);
@@ -233,6 +251,7 @@ namespace Manatee.Json.Schema
 				hashCode = (hashCode * 397) ^ (AbsoluteLocation?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (InstanceLocation?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (AnnotationValue?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (ErrorMessage?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (Keyword?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (AdditionalInfo?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (NestedResults?.GetCollectionHashCode() ?? 0);

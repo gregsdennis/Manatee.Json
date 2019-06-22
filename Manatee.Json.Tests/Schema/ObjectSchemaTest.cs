@@ -121,6 +121,54 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid();
 		}
 		[Test]
+		public void ValidateReturnsValidOnValidUnevaluatedProperty()
+		{
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Object)
+				.AllOf(new JsonSchema()
+					       .Property("test1", new JsonSchema().Type(JsonSchemaType.String)),
+				       new JsonSchema()
+					       .Property("test2", new JsonSchema().Type(JsonSchemaType.Number)))
+				.UnevaluatedProperties(new JsonSchema().Type(JsonSchemaType.Boolean));
+			var json = new JsonObject {{"test1", "value"}, {"test2", 5.5}, {"test", false}};
+
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
+		[Test]
+		public void ValidateReturnsErrorOnInvalidAdditionalPropertyWithNestedProperties()
+		{
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Object)
+				.AllOf(new JsonSchema()
+					       .Property("test1", new JsonSchema().Type(JsonSchemaType.String)),
+				       new JsonSchema()
+					       .Property("test2", new JsonSchema().Type(JsonSchemaType.Number)))
+				.AdditionalProperties(new JsonSchema().Type(JsonSchemaType.Boolean));
+			var json = new JsonObject {{"test1", "value"}, {"test2", 5.5}, {"test", false}};
+
+			var results = schema.Validate(json);
+
+			results.AssertInvalid();
+		}
+		[Test]
+		public void ValidateReturnsErrorOnInvalidUnevaluatedProperty()
+		{
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Object)
+				.AllOf(new JsonSchema()
+					       .Property("test1", new JsonSchema().Type(JsonSchemaType.String)),
+				       new JsonSchema()
+					       .Property("test2", new JsonSchema().Type(JsonSchemaType.Number)))
+				.UnevaluatedProperties(new JsonSchema().Type(JsonSchemaType.Boolean));
+			var json = new JsonObject {{"test1", "value"}, {"test2", 5.5}, {"test", "invalid"}};
+
+			var results = schema.Validate(json);
+
+			results.AssertInvalid();
+		}
+		[Test]
 		public void ValidateReturnsValidOnValidPatternProperty()
 		{
 			var schema = new JsonSchema()

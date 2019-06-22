@@ -15,6 +15,16 @@ namespace Manatee.Json.Schema
 	public class MinLengthKeyword : IJsonSchemaKeyword, IEquatable<MinLengthKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - lowerBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The string should be at least {{lowerBound}} characters long, but was {{actual}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "minLength";
@@ -26,6 +36,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// The numeric value for this keyword.
@@ -60,9 +74,9 @@ namespace Manatee.Json.Schema
 			if (length < Value)
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
-				results.AdditionalInfo["expected"] = Value;
+				results.AdditionalInfo["lowerBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.String.Length;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

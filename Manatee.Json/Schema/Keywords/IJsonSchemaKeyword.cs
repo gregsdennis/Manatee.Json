@@ -27,6 +27,11 @@ namespace Manatee.Json.Schema
 		int ValidationSequence { get; }
 
 		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		SchemaVocabulary Vocabulary { get; }
+
+		/// <summary>
 		/// Provides the validation logic for this keyword.
 		/// </summary>
 		/// <param name="context">The context object.</param>

@@ -73,11 +73,25 @@ namespace Manatee.Json.Schema
 			return schema.Get<ContentMediaTypeKeyword>()?.Value;
 		}
 		/// <summary>
+		/// Gets the value for the <code>contentSchema</code> keyword, if present.
+		/// </summary>
+		public static JsonSchema ContentSchema(this JsonSchema schema)
+		{
+			return schema.Get<ContentSchemaKeyword>()?.Value;
+		}
+		/// <summary>
 		/// Gets the value for the <code>default</code> keyword, if present.
 		/// </summary>
 		public static JsonValue Default(this JsonSchema schema)
 		{
 			return schema.Get<DefaultKeyword>()?.Value;
+		}
+		/// <summary>
+		/// Gets the value for the <code>$defs</code> keyword, if present.
+		/// </summary>
+		public static Dictionary<string, JsonSchema> Defs(this JsonSchema schema)
+		{
+			return schema.Get<DefsKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the <code>definitions</code> keyword, if present.
@@ -164,6 +178,13 @@ namespace Manatee.Json.Schema
 			return schema.Get<ItemsKeyword>();
 		}
 		/// <summary>
+		/// Gets the value for the <code>maxContains</code> keyword, if present.
+		/// </summary>
+		public static double? MaxContains(this JsonSchema schema)
+		{
+			return schema.Get<MaxContainsKeyword>()?.Value;
+		}
+		/// <summary>
 		/// Gets the value for the <code>maximum</code> keyword, if present.
 		/// </summary>
 		public static double? Maximum(this JsonSchema schema)
@@ -190,6 +211,13 @@ namespace Manatee.Json.Schema
 		public static double? MaxProperties(this JsonSchema schema)
 		{
 			return schema.Get<MaxPropertiesKeyword>()?.Value;
+		}
+		/// <summary>
+		/// Gets the value for the <code>minContains</code> keyword, if present.
+		/// </summary>
+		public static double? MinContains(this JsonSchema schema)
+		{
+			return schema.Get<MinContainsKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the <code>minimum</code> keyword, if present.
@@ -276,6 +304,20 @@ namespace Manatee.Json.Schema
 			return schema.Get<ReadOnlyKeyword>()?.Value ?? false;
 		}
 		/// <summary>
+		/// Gets the value for the <code>$recursiveAnchor</code> keyword, if present.
+		/// </summary>
+		public static bool? RecursiveAnchor(this JsonSchema schema)
+		{
+			return schema.Get<RecursiveAnchorKeyword>()?.Value;
+		}
+		/// <summary>
+		/// Gets the value for the <code>recursiveRef</code> keyword, if present.
+		/// </summary>
+		public static string RecursiveRef(this JsonSchema schema)
+		{
+			return schema.Get<RecursiveRefKeyword>()?.Reference;
+		}
+		/// <summary>
 		/// Gets the value for the <code>$ref</code> keyword, if present.
 		/// </summary>
 		public static string Ref(this JsonSchema schema)
@@ -318,11 +360,32 @@ namespace Manatee.Json.Schema
 			return schema.Get<TitleKeyword>()?.Value;
 		}
 		/// <summary>
+		/// Gets the value for the <code>unevaluatedItems</code> keyword, if present.
+		/// </summary>
+		public static JsonSchema UnevaluatedItems(this JsonSchema schema)
+		{
+			return schema.Get<UnevaluatedItemsKeyword>()?.Value;
+		}
+		/// <summary>
+		/// Gets the value for the <code>unevaluatedProperties</code> keyword, if present.
+		/// </summary>
+		public static JsonSchema UnevaluatedProperties(this JsonSchema schema)
+		{
+			return schema.Get<UnevaluatedPropertiesKeyword>()?.Value;
+		}
+		/// <summary>
 		/// Gets the value for the <code>uniqueItems</code> keyword, if present.
 		/// </summary>
 		public static bool UniqueItems(this JsonSchema schema)
 		{
 			return schema.Get<UniqueItemsKeyword>()?.Value ?? false;
+		}
+		/// <summary>
+		/// Gets the value for the <code>uniqueItems</code> keyword, if present.
+		/// </summary>
+		public static Dictionary<SchemaVocabulary, bool> Vocabulary(this JsonSchema schema)
+		{
+			return schema.Get<VocabularyKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the <code>writeOnly</code> keyword, if present.

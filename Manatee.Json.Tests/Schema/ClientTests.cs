@@ -358,7 +358,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue194_refNoIntuitiveErrorMessage()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var actual = new JsonSchema()
 				.Id("http://myschema.org/test194")
 				.Ref("#/definitions/apredefinedtype")
@@ -378,9 +378,10 @@ namespace Manatee.Json.Tests.Schema
 					AbsoluteLocation = new Uri("http://myschema.org/test194#/definitions/apredefinedtype/required"),
 					InstanceLocation = JsonPointer.Parse("#"),
 					Keyword = "required",
+					ErrorMessage = "The properties [\"prop1\"] are required.",
 					AdditionalInfo = new JsonObject
 						{
-							["missing"] = new JsonArray {"prop1"}
+							["properties"] = new JsonArray {"prop1"}
 
 						}
 				};
@@ -388,6 +389,24 @@ namespace Manatee.Json.Tests.Schema
 			var messages = actual.Validate(jObject);
 
 			messages.AssertInvalid(expected);
+		}
+
+		[Test]
+		public void Issue205_PropertiesEquality()
+		{
+			var schema1 = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Property("foo", new JsonSchema().Type(JsonSchemaType.Integer))
+				.Property("bar", new JsonSchema().Type(JsonSchemaType.String))
+				.AdditionalProperties(false);
+			var schema2 = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Property("foo", new JsonSchema().Type(JsonSchemaType.Integer))
+				.Property("bar", new JsonSchema().Type(JsonSchemaType.String))
+				.Property("baz", new JsonSchema().Type(JsonSchemaType.Boolean))
+				.AdditionalProperties(false);
+
+			Assert.AreNotEqual(schema1, schema2);
 		}
 	}
 }

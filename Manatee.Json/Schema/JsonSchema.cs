@@ -13,6 +13,14 @@ namespace Manatee.Json.Schema
 	public class JsonSchema : List<IJsonSchemaKeyword>, IJsonSerializable, IEquatable<JsonSchema>
 	{
 		/// <summary>
+		/// Gets or sets the error message template used for `false` schemas.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "No value is valid against the false schema.";
+
+		/// <summary>
 		/// Defines the empty schema.  Analogous to <see cref="True"/>.
 		/// </summary>
 		public static readonly JsonSchema Empty = new JsonSchema();
@@ -28,13 +36,15 @@ namespace Manatee.Json.Schema
 		private bool? _inherentValue;
 		private Uri _documentPath;
 		private bool _hasRegistered;
+		private bool _hasValidated;
+		private JsonSchemaVersion _supportedVersions;
 
 		/// <summary>
 		/// Defines the document path.  If not explicitly provided, it will be derived from the <see cref="Id"/> property.
 		/// </summary>
 		public Uri DocumentPath
 		{
-			get => _documentPath ?? (_documentPath = Id == null ? null : new Uri(Id, UriKind.RelativeOrAbsolute));
+			get => _documentPath ?? (_documentPath = _BuildDocumentPath());
 			set => _documentPath = value;
 		}
 		/// <summary>
@@ -45,6 +55,23 @@ namespace Manatee.Json.Schema
 		/// Gets the <code>$schema</code> property, if declared.
 		/// </summary>
 		public string Schema => this.Get<SchemaKeyword>()?.Value;
+		/// <summary>
+		/// 
+		/// </summary>
+		public JsonSchemaVersion SupportedVersions
+		{
+			get
+			{
+				if (!_hasValidated)
+					ValidateSchema();
+				return _supportedVersions;
+			}
+			internal set
+			{
+				_supportedVersions = value;
+				_hasValidated = true;
+			}
+		}
 		/// <summary>
 		/// Gets other data that may be present in the schema but unrelated to any known keywords.
 		/// </summary>
@@ -77,16 +104,19 @@ namespace Manatee.Json.Schema
 				startVersion = JsonSchemaVersion.Draft06;
 			else if (Schema == MetaSchemas.Draft07.Id)
 				startVersion = JsonSchemaVersion.Draft07;
+			else if (Schema == MetaSchemas.Draft2019_06.Id)
+				startVersion = JsonSchemaVersion.Draft2019_06;
 			else
 			{
 				startVersion = JsonSchemaVersion.All;
-				if (!string.IsNullOrEmpty(Schema))
+				var schemaDeclaration = Schema;
+				if (!string.IsNullOrEmpty(schemaDeclaration))
 				{
-					var metaSchema = JsonSchemaRegistry.Get(Schema);
+					var metaSchema = JsonSchemaRegistry.Get(schemaDeclaration);
 					if (metaSchema != null)
 					{
 						var metaValidation = metaSchema.Validate(ToJson(new JsonSerializer()));
-						results.MetaSchemaValidations[Schema] = metaValidation;
+						results.MetaSchemaValidations[schemaDeclaration] = metaValidation;
 					}
 				}
 			}
@@ -96,28 +126,50 @@ namespace Manatee.Json.Schema
 				results.OtherErrors.Add("The provided keywords do not support a common schema version.");
 			else
 			{
+				var asJson = ToJson(new JsonSerializer());
+				var context = new SchemaValidationContext
+					{
+						Instance = asJson,
+						BaseRelativeLocation = new JsonPointer("#"),
+						RelativeLocation = new JsonPointer("#"),
+						InstanceLocation = new JsonPointer("#"),
+						IsMetaSchemaValidation = true
+					};
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft04))
 				{
-					var metaValidation = MetaSchemas.Draft04.Validate(ToJson(new JsonSerializer()));
+					context.Root = MetaSchemas.Draft04;
+					var metaValidation = MetaSchemas.Draft04.Validate(context);
 					results.MetaSchemaValidations[MetaSchemas.Draft04.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft04;
 				}
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft06))
 				{
-					var metaValidation = MetaSchemas.Draft06.Validate(ToJson(new JsonSerializer()));
+					context.Root = MetaSchemas.Draft06;
+					var metaValidation = MetaSchemas.Draft06.Validate(context);
 					results.MetaSchemaValidations[MetaSchemas.Draft06.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft06;
 				}
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft07))
 				{
-					var metaValidation = MetaSchemas.Draft07.Validate(ToJson(new JsonSerializer()));
+					context.Root = MetaSchemas.Draft07;
+					var metaValidation = MetaSchemas.Draft07.Validate(context);
 					results.MetaSchemaValidations[MetaSchemas.Draft07.Id] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft2019_06))
+				{
+					context.Root = MetaSchemas.Draft2019_06;
+					var metaValidation = MetaSchemas.Draft2019_06.Validate(context);
+					results.MetaSchemaValidations[MetaSchemas.Draft2019_06.Id] = metaValidation;
+					if (metaValidation.IsValid)
+						results.SupportedVersions |= JsonSchemaVersion.Draft2019_06;
+				}
 			}
+
+			_supportedVersions = supportedVersions;
 
 			var duplicateKeywords = this.GroupBy(k => k.Name)
 			                            .Where(g => g.Count() > 1)
@@ -125,6 +177,8 @@ namespace Manatee.Json.Schema
 			                            .ToList();
 			if (duplicateKeywords.Any())
 				results.OtherErrors.Add($"The following keywords have been entered more than once: {string.Join(", ", duplicateKeywords)}");
+
+			_hasValidated = true;
 
 			return results;
 		}
@@ -146,20 +200,20 @@ namespace Manatee.Json.Schema
 
 			switch (JsonSchemaOptions.OutputFormat)
 			{
-				case SchemaValidationOutputFormat.Basic:
+				case SchemaValidationOutputFormat.Flag:
 					results.AdditionalInfo = new JsonObject();
 					results.RelativeLocation = null;
 					results.AbsoluteLocation = null;
 					results.InstanceLocation = null;
 					results.NestedResults = new List<SchemaValidationResults>();
 					break;
-				case SchemaValidationOutputFormat.List:
+				case SchemaValidationOutputFormat.Basic:
 					results = results.Flatten();
 					break;
-				case SchemaValidationOutputFormat.Hierarchy:
+				case SchemaValidationOutputFormat.Detailed:
 					results = results.Condense();
 					break;
-				case SchemaValidationOutputFormat.VerboseHierarchy:
+				case SchemaValidationOutputFormat.Verbose:
 					break;
 			}
 
@@ -225,20 +279,32 @@ namespace Manatee.Json.Schema
 			if (_inherentValue.HasValue)
 			{
 				if (_inherentValue.Value) return new SchemaValidationResults(context);
-				return new SchemaValidationResults(context){IsValid = false};
+				return new SchemaValidationResults(context)
+					{
+						IsValid = false,
+						ErrorMessage = ErrorTemplate
+					};
 			}
 
 			RegisterSubschemas(null);
 
-			// TODO: Verify that $ref can work alongside other keywords (draft-08) and allow it if so.
 			context.Local = this;
 
-			if (context.BaseUri == null)
-				context.BaseUri = DocumentPath;
-			else if (DocumentPath != null)
-				context.BaseUri = DocumentPath.IsAbsoluteUri
-					? DocumentPath
-					: new Uri(context.BaseUri, DocumentPath);
+			var refKeyword = this.Get<RefKeyword>();
+			if (refKeyword == null ||
+			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
+			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_06)
+			{
+				if (context.BaseUri == null)
+					context.BaseUri = DocumentPath;
+				else if (DocumentPath != null)
+				{
+					if (DocumentPath.IsAbsoluteUri)
+						context.BaseUri = DocumentPath;
+					else
+						context.BaseUri = new Uri(context.BaseUri, DocumentPath);
+				}
+			}
 
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
@@ -246,7 +312,6 @@ namespace Manatee.Json.Schema
 			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
 				JsonSchemaRegistry.Register(this);
 
-			var refKeyword = this.OfType<RefKeyword>().FirstOrDefault();
 			if (refKeyword != null) return refKeyword.Validate(context);
 
 			var results = new SchemaValidationResults(context);
@@ -260,6 +325,13 @@ namespace Manatee.Json.Schema
 			results.NestedResults = nestedResults;
 
 			return results;
+		}
+
+		private Uri _BuildDocumentPath()
+		{
+			return Id != null
+				? new Uri(Id, UriKind.RelativeOrAbsolute)
+				: null;
 		}
 
 		/// <summary>
@@ -280,9 +352,7 @@ namespace Manatee.Json.Schema
 					         {
 								 var keyword = SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer);
 						         if (keyword == null)
-						         {
-									 OtherData[kvp.Key] = kvp.Value;
-						         }
+							         OtherData[kvp.Key] = kvp.Value;
 
 						         return keyword;
 					         })
@@ -326,7 +396,7 @@ namespace Manatee.Json.Schema
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
 
-			var keywordMatch = this.LeftOuterJoin(other,
+			var keywordMatch = this.FullOuterJoin(other,
 			                                      tk => tk.Name,
 			                                      ok => ok.Name,
 			                                      (tk, ok) => new {ThisKeyword = tk, OtherKeyword = ok})
@@ -334,7 +404,11 @@ namespace Manatee.Json.Schema
 
 			return _inherentValue == other._inherentValue &&
 			       Equals(OtherData, other.OtherData) &&
-			       keywordMatch.All(k => Equals(k.ThisKeyword, k.OtherKeyword));
+			       keywordMatch.All(k =>
+				       {
+					       var equals = Equals(k.ThisKeyword, k.OtherKeyword);
+					       return equals;
+				       });
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
@@ -347,7 +421,7 @@ namespace Manatee.Json.Schema
 		/// <returns>A hash code for the current object.</returns>
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return this.GetCollectionHashCode();
 		}
 		/// <summary>
 		/// Overloads the equals operator for <see cref="JsonSchema"/>.

@@ -15,6 +15,15 @@ namespace Manatee.Json.Schema
 	public class ItemsKeyword : List<JsonSchema>, IJsonSchemaKeyword, IEquatable<ItemsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - indices
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Items at indices {{indices}} failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "items";
@@ -26,11 +35,15 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// Gets whether this keyword represents a single schema or an array of schemas.
 		/// </summary>
-		public bool IsArray { get; private set; }
+		public bool IsArray { get; set; }
 
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -56,13 +69,25 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = array[i],
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 						};
+					var localResults = this[i].Validate(newContext);
+					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
+					{
+						results.IsValid = false;
+						return results;
+					}
 					nestedResults.Add(this[i].Validate(newContext));
 					i++;
+					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 				}
+
+				results.IsValid = JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag || nestedResults.All(r => r.IsValid);
+				results.NestedResults.AddRange(nestedResults);
 			}
 			else
 			{
@@ -80,18 +105,20 @@ namespace Manatee.Json.Schema
 								RelativeLocation = relativeLocation,
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 							};
-						return this[0].Validate(newContext);
+						var localResults = this[0].Validate(newContext);
+						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						return localResults;
 					});
-				nestedResults.AddRange(itemValidations);
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					results.IsValid = itemValidations.All(r => r.IsValid);
+				else
+				{
+					nestedResults.AddRange(itemValidations);
+					results.IsValid = nestedResults.All(r => r.IsValid);
+					results.NestedResults.AddRange(nestedResults);
+				}
 			}
-
-			if (nestedResults.Any(r => !r.IsValid))
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
-
-			results.NestedResults.AddRange(nestedResults);
 
 			return results;
 		}

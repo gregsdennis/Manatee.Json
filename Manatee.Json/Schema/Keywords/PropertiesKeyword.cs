@@ -15,6 +15,14 @@ namespace Manatee.Json.Schema
 	public class PropertiesKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IEquatable<PropertiesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "At least one subschema failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "properties";
@@ -26,6 +34,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -51,22 +63,25 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = obj[property.Key],
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, property.Key),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, property.Key),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key)
-				};
+					};
 				var result = property.Value.Validate(newContext);
-				if (result != null && !result.IsValid)
-					nestedResults.Add(result);
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !result.IsValid)
+				{
+					results.IsValid = false;
+					return results;
+				}
+				nestedResults.Add(result);
 			}
 
-			if (nestedResults.Any(r => !r.IsValid))
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
-
+			results.IsValid = nestedResults.All(r => r.IsValid);
 			results.NestedResults.AddRange(nestedResults);
+
+			if (!results.IsValid)
+				results.ErrorMessage = ErrorTemplate;
 
 			return results;
 		}
@@ -118,8 +133,8 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return this.ToDictionary(kvp => kvp.Key,
-			                         kvp => serializer.Serialize(kvp.Value))
-			           .ToJson();
+									 kvp => serializer.Serialize(kvp.Value))
+					   .ToJson();
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
@@ -129,10 +144,10 @@ namespace Manatee.Json.Schema
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
 
-			var propertiesMatch = this.LeftOuterJoin(other,
-			                                      tk => tk.Key,
-			                                      ok => ok.Key,
-			                                      (tk, ok) => new { ThisProperty = tk.Value, OtherProperty = ok.Value })
+			var propertiesMatch = this.FullOuterJoin(other,
+			                                         tk => tk.Key,
+			                                         ok => ok.Key,
+			                                         (tk, ok) => new {ThisProperty = tk.Value, OtherProperty = ok.Value})
 				.ToList();
 
 			return propertiesMatch.All(k => Equals(k.ThisProperty, k.OtherProperty));

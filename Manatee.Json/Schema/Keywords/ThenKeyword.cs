@@ -13,17 +13,29 @@ namespace Manatee.Json.Schema
 	public class ThenKeyword : IJsonSchemaKeyword, IEquatable<ThenKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Validation of `if` succeeded, but validation of `then` failed";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "then";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
 
 		/// <summary>
 		/// The schema value for this keyword.

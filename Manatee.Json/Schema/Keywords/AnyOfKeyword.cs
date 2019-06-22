@@ -15,6 +15,14 @@ namespace Manatee.Json.Schema
 	public class AnyOfKeyword : List<JsonSchema>, IJsonSchemaKeyword, IEquatable<AnyOfKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "All subschemas failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "anyOf";
@@ -26,6 +34,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
 
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -41,26 +53,32 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = context.Instance,
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation
-					};
+						};
 					var result = s.Validate(newContext);
 					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 					context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
 					return result;
-				}).ToList();
+				});
 
-
-			var results = new SchemaValidationResults(Name, context) { NestedResults = nestedResults };
-
-			if (nestedResults.All(r => !r.IsValid))
+			SchemaValidationResults results;
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				results = new SchemaValidationResults(Name, context)
+					{
+						IsValid = nestedResults.Any(r => r.IsValid)
+					};
+			else
 			{
-				results.IsValid = false;
-				results.Keyword = Name;
+				var resultsList = nestedResults.ToList();
+				results = new SchemaValidationResults(Name, context)
+					{
+						NestedResults = resultsList,
+						IsValid = resultsList.Any(r => r.IsValid)
+					};
 			}
-
-			results.NestedResults.AddRange(nestedResults);
 
 			return results;
 		}

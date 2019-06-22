@@ -12,6 +12,16 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class PropertyDependency : IJsonSchemaDependency, IEquatable<PropertyDependency>
 	{
+		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - required
+		/// - dependency
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Properties {{required}} are required when {{dependency}} is present.";
+
 		private readonly IEnumerable<string> _dependencies;
 
 		/// <summary>
@@ -23,7 +33,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonSchemaVersion SupportedVersions => _dependencies.Any()
 			? JsonSchemaVersion.All
-			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="PropertyDependency"/> class.
@@ -64,7 +74,9 @@ namespace Manatee.Json.Schema
 				{
 					results.IsValid = false;
 					results.Keyword = $"dependencies/{PropertyName}";
-					results.AdditionalInfo["missingProperties"] = missingProperties.ToJson();
+					results.AdditionalInfo["required"] = missingProperties.ToJson();
+					results.AdditionalInfo["dependency"] = PropertyName;
+					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 				}
 			}
 
@@ -115,7 +127,8 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				return ((_dependencies != null ? _dependencies.GetHashCode() : 0) * 397) ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
+				var value = (_dependencies != null ? _dependencies.GetCollectionHashCode() : 0) * 397;
+				return value ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
 			}
 		}
 		/// <summary>

@@ -14,17 +14,31 @@ namespace Manatee.Json.Schema
 	public class ExclusiveMaximumKeyword : IJsonSchemaKeywordPlus, IEquatable<ExclusiveMaximumKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - upperBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The value {{actual}} should be strictly less than {{upperBound}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "exclusiveMaximum";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// The numeric value for this keyword.
@@ -58,8 +72,7 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Number >= Value)
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
-				results.AdditionalInfo["expected"] = Value;
+				results.AdditionalInfo["upperBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance;
 			}
 

@@ -38,6 +38,9 @@ bld/
 *.VisualState.xml
 TestResult.xml
 
+# Other test output
+Json-Schema-Test-Results/
+
 # Build Results of an ATL Project
 [Dd]ebugPS/
 [Rr]eleasePS/

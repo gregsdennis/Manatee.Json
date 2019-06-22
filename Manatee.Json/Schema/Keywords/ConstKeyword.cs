@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
@@ -14,17 +13,31 @@ namespace Manatee.Json.Schema
 	public class ConstKeyword : IJsonSchemaKeyword, IEquatable<ConstKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - expected
+		/// - actual
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The value {{actual}} does not match the expected {{expected}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "const";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// The JSON value for this keyword.
@@ -53,15 +66,19 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance == Value) return new SchemaValidationResults(Name, context);
 
-			return new SchemaValidationResults(Name, context)
+			var results = new SchemaValidationResults(Name, context)
 				{
 					IsValid = false,
 					Keyword = Name,
 					AdditionalInfo =
 						{
-							["expected"] = Value
+							["expected"] = Value,
+							["actual"] = context.Instance
 						}
 				};
+			results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.

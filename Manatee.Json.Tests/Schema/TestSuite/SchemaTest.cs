@@ -1,4 +1,5 @@
 using System;
+using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Tests.Schema.TestSuite
@@ -8,6 +9,8 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		public string Description { get; set; }
 		public JsonValue Data { get; set; }
 		public bool Valid { get; set; }
+		public SchemaTestOutputSet Output { get; set; }
+		public SchemaValidationResults OutputGeneration { get; set; }
 
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
@@ -15,10 +18,34 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			Description = obj.TryGetString("description");
 			Data = obj["data"];
 			Valid = obj["valid"].Boolean;
+			var output = obj.TryGetObject("output");
+			if (output != null)
+				Output = serializer.Deserialize<SchemaTestOutputSet>(output);
+			var results = obj.TryGetObject("outputGeneration")?.TryGetObject("verbose");
+			if (results != null)
+				OutputGeneration = serializer.Deserialize<SchemaValidationResults>(results);
 		}
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			throw new NotImplementedException();
+			var obj = new JsonObject
+				{
+					["description"] = Description,
+					["data"] = Data,
+					["valid"] = Valid
+				};
+
+			var exportTestsValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
+			if (bool.TryParse(exportTestsValue, out var exportTests) && exportTests && OutputGeneration != null)
+				obj["output"] = new JsonObject
+					{
+						["basic"] = OutputGeneration.Flatten().ToJson(serializer),
+						["detailed"] = OutputGeneration.Condense().ToJson(serializer),
+						["verbose"] = OutputGeneration.ToJson(serializer)
+					};
+			else if (Output != null)
+				obj["output"] = serializer.Serialize(Output);
+
+			return obj;
 		}
 	}
 }

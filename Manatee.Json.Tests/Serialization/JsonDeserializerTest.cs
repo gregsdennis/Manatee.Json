@@ -352,18 +352,11 @@ namespace Manatee.Json.Tests.Serialization
 			}
 		}
 		[Test]
-		[Ignore("Needs to be rewritten.")]
 		public void Dictionary_Successful()
 		{
 			var serializer = new JsonSerializer();
 			var expected = new Dictionary<string, double> {{"four", 4}, {"three", 3}, {"five", 5}, {"six", 6}};
-			JsonValue json = new JsonArray
-				{
-					new JsonObject {{"Key", "four"}, {"Value", 4}},
-					new JsonObject {{"Key", "three"}, {"Value", 3}},
-					new JsonObject {{"Key", "five"}, {"Value", 5}},
-					new JsonObject {{"Key", "six"}, {"Value", 6}}
-				};
+			var json = new JsonObject {{"four", 4}, {"three", 3}, {"five", 5}, {"six", 6}};
 			var actual = serializer.Deserialize<Dictionary<string, double>>(json);
 			Assert.AreEqual(expected.Count, actual.Count);
 			foreach (var key in actual.Keys)

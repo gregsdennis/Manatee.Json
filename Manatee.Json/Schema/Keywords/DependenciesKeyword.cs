@@ -15,6 +15,16 @@ namespace Manatee.Json.Schema
 	public class DependenciesKeyword : List<IJsonSchemaDependency>, IJsonSchemaKeyword, IEquatable<DependenciesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - failed
+		/// - total
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{failed}} of {{total}} dependencies failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "dependencies";
@@ -26,6 +36,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Pre2019_04;
 
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -34,8 +48,6 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var results = new SchemaValidationResults(Name, context);
-
 			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 			var nestedResults = this.Select(d =>
@@ -45,18 +57,37 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = context.Instance,
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = baseRelativeLocation,
 							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation
 						};
 					return d.Validate(newContext);
-				}).ToList();
+				});
 
-			if (nestedResults.Any(r => !r.IsValid))
+			SchemaValidationResults results;
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 			{
-				results.IsValid = false;
-				results.Keyword = Name;
-				results.NestedResults = nestedResults;
+				results = new SchemaValidationResults(Name, context)
+					{
+						IsValid = nestedResults.All(r => r.IsValid)
+					};
+			}
+			else
+			{
+				var resultsList = nestedResults.ToList();
+				results = new SchemaValidationResults(Name, context)
+					{
+						NestedResults = resultsList,
+						IsValid = resultsList.All(r => r.IsValid)
+					};
+			}
+
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["failed"] = nestedResults.Count(r => !r.IsValid);
+				results.AdditionalInfo["total"] = Count;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;
@@ -112,8 +143,8 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return this.ToDictionary(d => d.PropertyName,
-			                         d => d.ToJson(serializer))
-			           .ToJson();
+									 d => d.ToJson(serializer))
+					   .ToJson();
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>

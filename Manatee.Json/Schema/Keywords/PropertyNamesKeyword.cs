@@ -14,17 +14,30 @@ namespace Manatee.Json.Schema
 	public class PropertyNamesKeyword : IJsonSchemaKeyword, IEquatable<PropertyNamesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - properties
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Properties {{properties}} have names that failed validation.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "propertyNames";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -64,22 +77,29 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = propertyName,
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = baseRelativeLocation,
 							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(propertyName)
 						};
 					var result = Value.Validate(newContext);
 
-					return result;
+					return new {propertyName, result};
 				}).ToList();
 
-			if (nestedResults.Any(r => !r.IsValid))
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				results.IsValid = nestedResults.All(r => r.result.IsValid);
+			else
 			{
-				results.IsValid = false;
-				results.Keyword = Name;
+				results.NestedResults = nestedResults.Select(r => r.result).ToList();
+				results.IsValid = nestedResults.All(r => r.result.IsValid);
 			}
 
-			results.NestedResults.AddRange(nestedResults);
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["properties"] = nestedResults.Select(r => r.propertyName).ToJson();
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			}
 
 			return results;
 		}

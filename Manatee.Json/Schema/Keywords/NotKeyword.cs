@@ -13,6 +13,14 @@ namespace Manatee.Json.Schema
 	public class NotKeyword : IJsonSchemaKeyword, IEquatable<NotKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Value should not validate against the schema.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "not";
@@ -24,6 +32,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -57,19 +69,19 @@ namespace Manatee.Json.Schema
 					BaseUri = context.BaseUri,
 					Instance = context.Instance,
 					Root = context.Root,
+					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					InstanceLocation = context.InstanceLocation
-			};
+				};
 			var nestedResults = Value.Validate(newContext);
 			context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 			context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
 
-			if (nestedResults.IsValid)
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
+			results.IsValid = !nestedResults.IsValid;
+
+			if (!results.IsValid)
+				results.ErrorMessage = ErrorTemplate;
 
 			return results;
 		}

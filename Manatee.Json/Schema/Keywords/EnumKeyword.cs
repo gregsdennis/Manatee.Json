@@ -14,6 +14,15 @@ namespace Manatee.Json.Schema
 	public class EnumKeyword : List<JsonValue>, IJsonSchemaKeyword, IEquatable<EnumKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - value
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "{{value}} does not match any of the required values.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "enum";
@@ -25,6 +34,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// Used for deserialization.
@@ -49,11 +62,15 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var results = new SchemaValidationResults(Name, context);
-			if (!Contains(context.Instance))
+			var results = new SchemaValidationResults(Name, context)
+				{
+					IsValid = Contains(context.Instance)
+				};
+
+			if (!results.IsValid)
 			{
-				results.IsValid = false;
-				results.Keyword = Name;
+				results.AdditionalInfo["value"] = context.Instance;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

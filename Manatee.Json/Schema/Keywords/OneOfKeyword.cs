@@ -15,6 +15,15 @@ namespace Manatee.Json.Schema
 	public class OneOfKeyword : List<JsonSchema>, IJsonSchemaKeyword, IEquatable<OneOfKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - passed
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Expected exactly one subschema to pass validation, but found {{passed}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "oneOf";
@@ -26,6 +35,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
 
 		/// <summary>
 		/// Provides the validation logic for this keyword.
@@ -41,6 +54,7 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = context.Instance,
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation
@@ -49,18 +63,45 @@ namespace Manatee.Json.Schema
 					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 					context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
 					return result;
-				}).ToList();
+				});
 
-			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
-
-			var validCount = nestedResults.Count(r => r.IsValid);
-			if (validCount != 1)
+			SchemaValidationResults results;
+			var validCount = 0;
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 			{
-				results.IsValid = false;
-				results.Keyword = Name;
+				results = new SchemaValidationResults(Name, context);
+				foreach (var result in nestedResults)
+				{
+					if (result.IsValid)
+					{
+						if (validCount != 0)
+						{
+							results.IsValid = false;
+							return results;
+						}
+
+						validCount++;
+					}
+				}
+
+				results.IsValid = validCount == 1;
+			}
+			else
+			{
+				var resultsList = nestedResults.ToList();
+				validCount = resultsList.Count(r => r.IsValid);
+				results = new SchemaValidationResults(Name, context)
+					{
+						NestedResults = resultsList,
+						IsValid = validCount == 1
+					};
 			}
 
-			results.NestedResults.AddRange(nestedResults);
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["passed"] = validCount;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			}
 
 			return results;
 		}

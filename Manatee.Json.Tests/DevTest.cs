@@ -24,7 +24,8 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			Console.WriteLine(JsonPatch.Schema.ToJson(new JsonSerializer()).GetIndentedString());
+			var serializer = new JsonSerializer();
+			Console.WriteLine(serializer.Serialize(MetaSchemas.Draft2019_06).GetIndentedString());
 		}
 	}
 }

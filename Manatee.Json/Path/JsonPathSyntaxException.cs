@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 
 namespace Manatee.Json.Path
 {
@@ -24,13 +23,11 @@ namespace Manatee.Json.Path
 		/// <filterpriority>1</filterpriority>
 		public override string Message => string.Format(_isExpression ? "{0} Expression up to error: '{1}'" : "{0} Path up to error: '{1}'", base.Message, Path);
 
-		[StringFormatMethod("format")]
 		internal JsonPathSyntaxException(JsonPath path, string message)
 			: base(message)
 		{
 			Path = path.ToString();
 		}
-		[StringFormatMethod("format")]
 		internal JsonPathSyntaxException(string expression, string format, params object[] parameters)
 			: base(string.Format(format, parameters))
 		{

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -15,6 +13,16 @@ namespace Manatee.Json.Schema
 	public class ExclusiveMaximumDraft04Keyword : IJsonSchemaKeywordPlus, IEquatable<ExclusiveMaximumDraft04Keyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Supports the following tokens:
+		/// - actual
+		/// - upperBound
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The value {{actual}} should be strictly less than {{upperBound}}.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "exclusiveMaximum";
@@ -26,6 +34,10 @@ namespace Manatee.Json.Schema
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Pre2019_04;
 
 		/// <summary>
 		/// The boolean value for this keyword.
@@ -64,9 +76,7 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Number >= keyword.Value)
 			{
 				results.IsValid = false;
-				results.Keyword = Name;
-				results.AdditionalInfo["expected"] = keyword.Value;
-				results.AdditionalInfo["isExclusive"] = Value;
+				results.AdditionalInfo["upperBound"] = keyword.Value;
 				results.AdditionalInfo["actual"] = context.Instance;
 			}
 

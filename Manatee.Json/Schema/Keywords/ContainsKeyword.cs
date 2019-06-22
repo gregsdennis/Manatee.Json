@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -15,13 +14,21 @@ namespace Manatee.Json.Schema
 	public class ContainsKeyword : IJsonSchemaKeyword, IEquatable<ContainsKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Expected an item that matched the given schema but no such items were found.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "contains";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
@@ -30,6 +37,10 @@ namespace Manatee.Json.Schema
 		/// are several keywords which must be evaluated in a specific order.
 		/// </implementationNotes>
 		public int ValidationSequence => 1;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Applicator;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -67,25 +78,42 @@ namespace Manatee.Json.Schema
 							BaseUri = context.BaseUri,
 							Instance = jv,
 							Root = context.Root,
+							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = baseRelativeLocation,
 							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString())
 					};
 					var result = Value.Validate(newContext);
 					return result;
-				}).ToList();
+				});
 
-			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
-
-			var matchedIndices = nestedResults.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
-
-			if (!matchedIndices.Any())
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
-			}
+			SchemaValidationResults results;
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag &&
+			    context.Local.Get<MinContainsKeyword>() == null &&
+			    context.Local.Get<MaxContainsKeyword>() == null)
+				results = new SchemaValidationResults(Name, context)
+					{
+						IsValid = nestedResults.Any(r => r.IsValid)
+					};
 			else
-				results.AdditionalInfo["matchedIndices"] = matchedIndices;
+			{
+				var resultsList = nestedResults.ToList();
+				results = new SchemaValidationResults(Name, context) {NestedResults = resultsList};
+
+				var matchedIndices = resultsList.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
+				context.Misc["containsCount"] = matchedIndices.Count;
+
+				if (!matchedIndices.Any())
+				{
+					results.IsValid = false;
+					results.Keyword = Name;
+					results.ErrorMessage = ErrorTemplate;
+				}
+				else
+				{
+					results.AdditionalInfo["matchedIndices"] = matchedIndices;
+				}
+			}
 
 			return results;
 		}

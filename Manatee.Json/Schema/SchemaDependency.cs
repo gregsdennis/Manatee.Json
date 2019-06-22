@@ -9,6 +9,14 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaDependency : IJsonSchemaDependency, IEquatable<SchemaDependency>
 	{
+		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "The schema failed validation.";
+
 		private readonly JsonSchema _schema;
 
 		/// <summary>
@@ -63,6 +71,7 @@ namespace Manatee.Json.Schema
 				results.IsValid = false;
 				results.Keyword = $"dependencies.{PropertyName}";
 				results.NestedResults.Add(nestedResult);
+				results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;
@@ -122,7 +131,8 @@ namespace Manatee.Json.Schema
 		{
 			unchecked
 			{
-				return ((_schema != null ? _schema.GetHashCode() : 0) * 397) ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
+				var value = (_schema != null ? _schema.GetHashCode() : 0) * 397;
+				return value ^ (PropertyName != null ? PropertyName.GetHashCode() : 0);
 			}
 		}
 		/// <summary>

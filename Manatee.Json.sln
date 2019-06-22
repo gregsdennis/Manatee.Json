@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6E84846A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json", "Manatee.Json\Manatee.Json.csproj", "{7548217B-8C18-4CA5-A248-59889EF93CF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Study", "Manatee.Study\Manatee.Study.csproj", "{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{2EABC48C-8556-4A6D-B0CA-B2D5A46C7239}"
 	ProjectSection(SolutionItems) = preProject
 		schema04.json = schema04.json
@@ -24,9 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{
 		schema07.json = schema07.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests.Benchmark", "Manatee.Json.Tests.Benchmark\Manatee.Json.Tests.Benchmark.csproj", "{74EC4F28-6C1A-4C9C-A446-07400386C304}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{FECC9923-41DB-4DE7-9715-D7E565456B8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{FECC9923-41DB-4DE7-9715-D7E565456B8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,14 +34,6 @@ Global
 		{7548217B-8C18-4CA5-A248-59889EF93CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7548217B-8C18-4CA5-A248-59889EF93CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7548217B-8C18-4CA5-A248-59889EF93CF5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74EC4F28-6C1A-4C9C-A446-07400386C304}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,8 +43,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4E8D8CA6-A811-4F04-9492-2CB4C83306A9} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
-		{74EC4F28-6C1A-4C9C-A446-07400386C304} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

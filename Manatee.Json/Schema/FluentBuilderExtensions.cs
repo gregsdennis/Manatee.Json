@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
@@ -107,11 +108,37 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add a <code>contentSchema</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema ContentSchema(this JsonSchema schema, JsonSchema match)
+		{
+			schema.Add(new ContentSchemaKeyword(match));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a <code>default</code> keyword to the schema.
 		/// </summary>
 		public static JsonSchema Default(this JsonSchema schema, JsonValue value)
 		{
 			schema.Add(new DefaultKeyword(value));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a single definition to the <code>$def</code> keyword.
+		/// </summary>
+		public static JsonSchema Def(this JsonSchema schema, string name, JsonSchema definition)
+		{
+			var keyword = schema.OfType<DefsKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DefsKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(name, definition);
 
 			return schema;
 		}
@@ -150,6 +177,23 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add a property-based dependency to the <code>dependencies</code> keyword.
+		/// </summary>
+		public static JsonSchema DependentRequired(this JsonSchema schema, string name, params string[] dependencies)
+		{
+			var keyword = schema.OfType<DependentRequiredKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DependentRequiredKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(new PropertyDependency(name, dependencies));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a schema-based dependency to the <code>dependencies</code> keyword.
 		/// </summary>
 		public static JsonSchema Dependency(this JsonSchema schema, string name, JsonSchema dependency)
@@ -159,6 +203,23 @@ namespace Manatee.Json.Schema
 			if (keyword == null)
 			{
 				keyword = new DependenciesKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword.Add(new SchemaDependency(name, dependency));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a schema-based dependency to the <code>dependencies</code> keyword.
+		/// </summary>
+		public static JsonSchema DependentSchema(this JsonSchema schema, string name, JsonSchema dependency)
+		{
+			var keyword = schema.OfType<DependentSchemasKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new DependentSchemasKeyword();
 				schema.Add(keyword);
 			}
 
@@ -277,17 +338,54 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Add an <code>items</code> keyword to the schema.
 		/// </summary>
+		public static JsonSchema Item(this JsonSchema schema, JsonSchema definition)
+		{
+			var keyword = schema.OfType<ItemsKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new ItemsKeyword {IsArray = true};
+				schema.Add(keyword);
+			}
+
+			keyword.Add(definition);
+
+			return schema;
+		}
+		/// <summary>
+		/// Add an <code>items</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema Items(this JsonSchema schema, JsonSchema definition)
+		{
+			var keyword = new ItemsKeyword {definition};
+			schema.Add(keyword);
+
+			return schema;
+		}
+		/// <summary>
+		/// (Obsolete) Add an <code>items</code> keyword to the schema.
+		/// </summary>
+		[Obsolete("This method cannot consider a single-item array value.  Use multiple calls to Item() instead.")]
 		public static JsonSchema Items(this JsonSchema schema, params JsonSchema[] definitions)
 		{
 			var keyword = schema.OfType<ItemsKeyword>().FirstOrDefault();
 
 			if (keyword == null)
 			{
-				keyword = new ItemsKeyword();
+				keyword = new ItemsKeyword {IsArray = true};
 				schema.Add(keyword);
 			}
 
 			keyword.AddRange(definitions);
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>maxContains</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema MaxContains(this JsonSchema schema, uint count)
+		{
+			schema.Add(new MaxContainsKeyword(count));
 
 			return schema;
 		}
@@ -324,6 +422,15 @@ namespace Manatee.Json.Schema
 		public static JsonSchema MaxProperties(this JsonSchema schema, uint count)
 		{
 			schema.Add(new MaxPropertiesKeyword(count));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>minContains</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema MinContains(this JsonSchema schema, uint count)
+		{
+			schema.Add(new MinContainsKeyword(count));
 
 			return schema;
 		}
@@ -469,6 +576,33 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add a <code>$recursiveAnchor</code> keyword to the schema.  The only supported value is <code>true</code>.
+		/// </summary>
+		public static JsonSchema RecursiveAnchor(this JsonSchema schema, bool value)
+		{
+			schema.Add(new RecursiveAnchorKeyword(value));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>$recursiveRef</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema RecursiveRef(this JsonSchema schema, string reference)
+		{
+			schema.Add(new RecursiveRefKeyword(reference));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a <code>$recursiveRef</code> that points to the root (<code>#</code>) keyword to the schema.
+		/// </summary>
+		public static JsonSchema RecursiveRefRoot(this JsonSchema schema)
+		{
+			schema.Add(new RecursiveRefKeyword("#"));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a <code>$ref</code> keyword to the schema.
 		/// </summary>
 		public static JsonSchema Ref(this JsonSchema schema, string reference)
@@ -532,11 +666,64 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
+		/// Add an <code>unevaluatedItems</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema UnevaluatedItems(this JsonSchema schema, JsonSchema otherSchema)
+		{
+			schema.Add(new UnevaluatedItemsKeyword(otherSchema));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add an <code>unevaluatedProperties</code> keyword to the schema.
+		/// </summary>
+		public static JsonSchema UnevaluatedProperties(this JsonSchema schema, JsonSchema otherSchema)
+		{
+			schema.Add(new UnevaluatedPropertiesKeyword(otherSchema));
+
+			return schema;
+		}
+		/// <summary>
 		/// Add a <code>uniqueItems</code> keyword to the schema.
 		/// </summary>
 		public static JsonSchema UniqueItems(this JsonSchema schema, bool unique)
 		{
 			schema.Add(new UniqueItemsKeyword(unique));
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a single property requirement to the <code>properties</code> keyword.
+		/// </summary>
+		public static JsonSchema Vocabulary(this JsonSchema schema, string id, bool required)
+		{
+			var keyword = schema.OfType<VocabularyKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new VocabularyKeyword();
+				schema.Add(keyword);
+			}
+
+			var vocabulary = SchemaKeywordCatalog.GetVocabulary(id) ?? new SchemaVocabulary(id);
+			keyword[vocabulary] = required;
+
+			return schema;
+		}
+		/// <summary>
+		/// Add a single property requirement to the <code>properties</code> keyword.
+		/// </summary>
+		public static JsonSchema Vocabulary(this JsonSchema schema, SchemaVocabulary vocabulary, bool required)
+		{
+			var keyword = schema.OfType<VocabularyKeyword>().FirstOrDefault();
+
+			if (keyword == null)
+			{
+				keyword = new VocabularyKeyword();
+				schema.Add(keyword);
+			}
+
+			keyword[vocabulary] = required;
 
 			return schema;
 		}

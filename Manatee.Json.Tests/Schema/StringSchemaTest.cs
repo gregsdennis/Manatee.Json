@@ -212,32 +212,16 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnUnknownFormat()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
 			var json = (JsonValue) "32";
 			var expected = new SchemaValidationResults
 				{
 					IsValid = true,
-					RelativeLocation = JsonPointer.Parse("#"),
+					RelativeLocation = JsonPointer.Parse("#/format"),
 					InstanceLocation = JsonPointer.Parse("#"),
-					NestedResults = new List<SchemaValidationResults>
-						{
-							new SchemaValidationResults
-								{
-									IsValid = true,
-									RelativeLocation = JsonPointer.Parse("#/type"),
-									InstanceLocation = JsonPointer.Parse("#"),
-									Keyword = "type"
-								},
-							new SchemaValidationResults
-								{
-									IsValid = true,
-									RelativeLocation = JsonPointer.Parse("#/format"),
-									InstanceLocation = JsonPointer.Parse("#"),
-									Keyword = "format",
-									AnnotationValue = "Int32"
-								}
-						}
+					Keyword = "format",
+					AnnotationValue = "Int32"
 				};
 
 			var results = schema.Validate(json);
@@ -268,7 +252,7 @@ namespace Manatee.Json.Tests.Schema
 		public void ValidateReturnsInvalidOnUnknownFormat()
 		{
 			JsonSchemaOptions.AllowUnknownFormats = false;
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Hierarchy;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
 			var json = (JsonValue)"32";
 			var expected = new SchemaValidationResults
@@ -277,8 +261,11 @@ namespace Manatee.Json.Tests.Schema
 					RelativeLocation = JsonPointer.Parse("#/format"),
 					InstanceLocation = JsonPointer.Parse("#"),
 					Keyword = "format",
+					ErrorMessage = "\"32\" is not in an acceptable \"Int32\" format.",
+					AnnotationValue = "Int32",
 					AdditionalInfo = new JsonObject
 						{
+							["actual"] = "32",
 							["format"] = "Int32",
 							["isKnownFormat"] = false
 						}

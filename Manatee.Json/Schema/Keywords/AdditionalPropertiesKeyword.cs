@@ -15,17 +15,36 @@ namespace Manatee.Json.Schema
 	public class AdditionalPropertiesKeyword : IJsonSchemaKeyword, IEquatable<AdditionalPropertiesKeyword>
 	{
 		/// <summary>
+		/// Gets or sets the error message template.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate { get; set; } = "Any properties not covered by `properties` and `patternProperties` failed validation.";
+		/// <summary>
+		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
+		/// </summary>
+		/// <remarks>
+		/// Does not supports any tokens.
+		/// </remarks>
+		public static string ErrorTemplate_False { get; set; } = "Properties not covered by `properties` and `patternProperties` are not allowed.";
+
+		/// <summary>
 		/// Gets the name of the keyword.
 		/// </summary>
 		public string Name => "additionalProperties";
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft08;
+		public JsonSchemaVersion SupportedVersions { get; } = JsonSchemaVersion.All;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
 		public int ValidationSequence => 3;
+		/// <summary>
+		/// Gets the vocabulary that defines this keyword.
+		/// </summary>
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.Validation;
 
 		/// <summary>
 		/// The schema value for this keyword.
@@ -57,6 +76,15 @@ namespace Manatee.Json.Schema
 			var obj = context.Instance.Object;
 			var toEvaluate = obj.Where(kvp => !context.LocallyEvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
 
+			var results = new SchemaValidationResults(Name, context);
+			if (Value == JsonSchema.False && toEvaluate.Any())
+			{
+				results.IsValid = false;
+				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate_False;
+				return results;
+			}
+
 			var nestedResults = new List<SchemaValidationResults>();
 
 			foreach (var kvp in toEvaluate)
@@ -66,6 +94,7 @@ namespace Manatee.Json.Schema
 						BaseUri = context.BaseUri,
 						Instance = kvp.Value,
 						Root = context.Root,
+						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key)
@@ -73,12 +102,13 @@ namespace Manatee.Json.Schema
 				nestedResults.Add(Value.Validate(newContext));
 			}
 
-			var results = new SchemaValidationResults(Name, context) {NestedResults = nestedResults};
+			results.NestedResults = nestedResults;
 
 			if (nestedResults.Any(r => !r.IsValid))
 			{
 				results.IsValid = false;
 				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;
