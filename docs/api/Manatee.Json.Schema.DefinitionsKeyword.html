@@ -80,7 +80,8 @@
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">System.String</span>, <a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a>&gt;</div>
-    <div class="level2"><span class="xref">DefinitionsKeyword</span></div>
+    <div class="level2"><a class="xref" href="Manatee.Json.Schema.DefsKeyword.html">DefsKeyword</a></div>
+    <div class="level3"><span class="xref">DefinitionsKeyword</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -97,10 +98,35 @@
     <div><a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a></div>
     <div><a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html">IJsonSerializable</a></div>
     <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a>&gt;</div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.DefsKeyword.html">DefsKeyword</a>&gt;</div>
     <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Schema.DefinitionsKeyword.html">DefinitionsKeyword</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_ValidationSequence">DefsKeyword.ValidationSequence</a>
+    </div>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_Validate_Manatee_Json_Schema_SchemaValidationContext_">DefsKeyword.Validate(SchemaValidationContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_RegisterSubschemas_System_Uri_">DefsKeyword.RegisterSubschemas(Uri)</a>
+    </div>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_">DefsKeyword.ResolveSubschema(JsonPointer, Uri)</a>
+    </div>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_">DefsKeyword.FromJson(JsonValue, JsonSerializer)</a>
+    </div>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_ToJson_Manatee_Json_Serialization_JsonSerializer_">DefsKeyword.ToJson(JsonSerializer)</a>
+    </div>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_Equals_Manatee_Json_Schema_DefsKeyword_">DefsKeyword.Equals(DefsKeyword)</a>
+    </div>
+    <div>
+      <a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_Equals_Manatee_Json_Schema_IJsonSchemaKeyword_">DefsKeyword.Equals(IJsonSchemaKeyword)</a>
+    </div>
     <div>
       <span class="xref">System.Collections.Generic.Dictionary&lt;System.String, Manatee.Json.Schema.JsonSchema&gt;.System.Collections.IDictionary.get_Item(System.Object)</span>
     </div>
@@ -238,7 +264,7 @@
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_Schema_DefinitionsKeyword_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class DefinitionsKeyword : Dictionary&lt;string, JsonSchema&gt;, IDictionary&lt;string, JsonSchema&gt;, ICollection&lt;KeyValuePair&lt;string, JsonSchema&gt;&gt;, IReadOnlyDictionary&lt;string, JsonSchema&gt;, IReadOnlyCollection&lt;KeyValuePair&lt;string, JsonSchema&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;string, JsonSchema&gt;&gt;, IDictionary, ICollection, IEnumerable, IDeserializationCallback, ISerializable, IJsonSchemaKeyword, IJsonSerializable, IEquatable&lt;IJsonSchemaKeyword&gt;, IEquatable&lt;DefinitionsKeyword&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class DefinitionsKeyword : DefsKeyword, IDictionary&lt;string, JsonSchema&gt;, ICollection&lt;KeyValuePair&lt;string, JsonSchema&gt;&gt;, IReadOnlyDictionary&lt;string, JsonSchema&gt;, IReadOnlyCollection&lt;KeyValuePair&lt;string, JsonSchema&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;string, JsonSchema&gt;&gt;, IDictionary, ICollection, IEnumerable, IDeserializationCallback, ISerializable, IJsonSchemaKeyword, IJsonSerializable, IEquatable&lt;IJsonSchemaKeyword&gt;, IEquatable&lt;DefsKeyword&gt;, IEquatable&lt;DefinitionsKeyword&gt;</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -247,7 +273,7 @@
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_Name.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L20">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L13">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_DefinitionsKeyword_Name_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Name*"></a>
   <h4 id="Manatee_Json_Schema_DefinitionsKeyword_Name" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Name">Name</h4>
@@ -256,7 +282,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public override string Name { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -273,12 +299,14 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_Name">DefsKeyword.Name</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_SupportedVersions.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.SupportedVersions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L24">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L18">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_DefinitionsKeyword_SupportedVersions_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.SupportedVersions*"></a>
   <h4 id="Manatee_Json_Schema_DefinitionsKeyword_SupportedVersions" data-uid="Manatee.Json.Schema.DefinitionsKeyword.SupportedVersions">SupportedVersions</h4>
@@ -287,7 +315,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public JsonSchemaVersion SupportedVersions { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public override JsonSchemaVersion SupportedVersions { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -304,21 +332,23 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_SupportedVersions">DefsKeyword.SupportedVersions</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_ValidationSequence.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.ValidationSequence%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_Vocabulary.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.Vocabulary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L28">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L24">View Source</a>
   </span>
-  <a id="Manatee_Json_Schema_DefinitionsKeyword_ValidationSequence_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.ValidationSequence*"></a>
-  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_ValidationSequence" data-uid="Manatee.Json.Schema.DefinitionsKeyword.ValidationSequence">ValidationSequence</h4>
-  <div class="markdown level1 summary"><p>Gets the a value indicating the sequence in which this keyword will be evaluated.</p>
+  <a id="Manatee_Json_Schema_DefinitionsKeyword_Vocabulary_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Vocabulary*"></a>
+  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_Vocabulary" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Vocabulary">Vocabulary</h4>
+  <div class="markdown level1 summary"><p>Gets the vocabulary that defines this keyword.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int ValidationSequence { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public override SchemaVocabulary Vocabulary { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -330,11 +360,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="Manatee.Json.Schema.SchemaVocabulary.html">SchemaVocabulary</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_Vocabulary">DefsKeyword.Vocabulary</a></div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
@@ -342,7 +374,7 @@
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_Equals_Manatee_Json_Schema_DefinitionsKeyword_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.Equals(Manatee.Json.Schema.DefinitionsKeyword)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L93">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L29">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_DefinitionsKeyword_Equals_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Equals*"></a>
   <h4 id="Manatee_Json_Schema_DefinitionsKeyword_Equals_Manatee_Json_Schema_DefinitionsKeyword_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Equals(Manatee.Json.Schema.DefinitionsKeyword)">Equals(DefinitionsKeyword)</h4>
@@ -389,60 +421,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_Equals_Manatee_Json_Schema_IJsonSchemaKeyword_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.Equals(Manatee.Json.Schema.IJsonSchemaKeyword)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L110">View Source</a>
-  </span>
-  <a id="Manatee_Json_Schema_DefinitionsKeyword_Equals_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Equals*"></a>
-  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_Equals_Manatee_Json_Schema_IJsonSchemaKeyword_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Equals(Manatee.Json.Schema.IJsonSchemaKeyword)">Equals(IJsonSchemaKeyword)</h4>
-  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Equals(IJsonSchemaKeyword other)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Schema.IJsonSchemaKeyword.html">IJsonSchemaKeyword</a></td>
-        <td><span class="parametername">other</span></td>
-        <td><p>An object to compare with this object.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><p>true if the current object is equal to the <code data-dev-comment-type="paramref" class="paramref">other</code> parameter; otherwise, false.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L117">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L39">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_DefinitionsKeyword_Equals_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Equals*"></a>
   <h4 id="Manatee_Json_Schema_DefinitionsKeyword_Equals_System_Object_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Equals(System.Object)">Equals(Object)</h4>
@@ -488,54 +470,13 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.FromJson(Manatee.Json.JsonValue%2CManatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L71">View Source</a>
-  </span>
-  <a id="Manatee_Json_Schema_DefinitionsKeyword_FromJson_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.FromJson*"></a>
-  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)">FromJson(JsonValue, JsonSerializer)</h4>
-  <div class="markdown level1 summary"><p>Builds an object from a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void FromJson(JsonValue json, JsonSerializer serializer)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><span class="parametername">json</span></td>
-        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
-        <td><span class="parametername">serializer</span></td>
-        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
-serialization of values.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
+  <div><a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_Equals_System_Object_">DefsKeyword.Equals(Object)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_GetHashCode.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L123">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L45">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_DefinitionsKeyword_GetHashCode_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.GetHashCode*"></a>
   <h4 id="Manatee_Json_Schema_DefinitionsKeyword_GetHashCode" data-uid="Manatee.Json.Schema.DefinitionsKeyword.GetHashCode">GetHashCode()</h4>
@@ -563,198 +504,7 @@ serialization of values.</p>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">System.Object.GetHashCode()</span></div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_RegisterSubschemas_System_Uri_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.RegisterSubschemas(System.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L43">View Source</a>
-  </span>
-  <a id="Manatee_Json_Schema_DefinitionsKeyword_RegisterSubschemas_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.RegisterSubschemas*"></a>
-  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_RegisterSubschemas_System_Uri_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.RegisterSubschemas(System.Uri)">RegisterSubschemas(Uri)</h4>
-  <div class="markdown level1 summary"><p>Used register any subschemas during validation.  Enables look-forward compatibility with <pre><code>$ref</code></pre> keywords.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void RegisterSubschemas(Uri baseUri)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Uri</span></td>
-        <td><span class="parametername">baseUri</span></td>
-        <td><p>The current base URI</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer%2CSystem.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L56">View Source</a>
-  </span>
-  <a id="Manatee_Json_Schema_DefinitionsKeyword_ResolveSubschema_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.ResolveSubschema*"></a>
-  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer,System.Uri)">ResolveSubschema(JsonPointer, Uri)</h4>
-  <div class="markdown level1 summary"><p>Resolves any subschemas during resolution of a <pre><code>$ref</code></pre> during validation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a></td>
-        <td><span class="parametername">pointer</span></td>
-        <td><p>A <a class="xref" href="Manatee.Json.Pointer.JsonPointer.html">JsonPointer</a> to the target schema.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Uri</span></td>
-        <td><span class="parametername">baseUri</span></td>
-        <td><p>The current base URI.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
-        <td><p>The referenced schema, if it exists; otherwise null.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_ToJson_Manatee_Json_Serialization_JsonSerializer_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.ToJson(Manatee.Json.Serialization.JsonSerializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L84">View Source</a>
-  </span>
-  <a id="Manatee_Json_Schema_DefinitionsKeyword_ToJson_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.ToJson*"></a>
-  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_ToJson_Manatee_Json_Serialization_JsonSerializer_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.ToJson(Manatee.Json.Serialization.JsonSerializer)">ToJson(JsonSerializer)</h4>
-  <div class="markdown level1 summary"><p>Converts an object to a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public JsonValue ToJson(JsonSerializer serializer)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a></td>
-        <td><span class="parametername">serializer</span></td>
-        <td><p>The <a class="xref" href="Manatee.Json.Serialization.JsonSerializer.html">JsonSerializer</a> instance to use for additional
-serialization of values.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>The <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> representation of the object.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword_Validate_Manatee_Json_Schema_SchemaValidationContext_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword.Validate(Manatee.Json.Schema.SchemaValidationContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L35">View Source</a>
-  </span>
-  <a id="Manatee_Json_Schema_DefinitionsKeyword_Validate_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Validate*"></a>
-  <h4 id="Manatee_Json_Schema_DefinitionsKeyword_Validate_Manatee_Json_Schema_SchemaValidationContext_" data-uid="Manatee.Json.Schema.DefinitionsKeyword.Validate(Manatee.Json.Schema.SchemaValidationContext)">Validate(SchemaValidationContext)</h4>
-  <div class="markdown level1 summary"><p>Provides the validation logic for this keyword.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SchemaValidationResults Validate(SchemaValidationContext context)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Schema.SchemaValidationContext.html">SchemaValidationContext</a></td>
-        <td><span class="parametername">context</span></td>
-        <td><p>The context object.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Schema.SchemaValidationResults.html">SchemaValidationResults</a></td>
-        <td><p>Results object containing a final result and any errors that may have been found.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
+  <div><a class="xref" href="Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_GetHashCode">DefsKeyword.GetHashCode()</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <span class="xref">System.Collections.Generic.IDictionary&lt;TKey, TValue&gt;</span>
@@ -798,6 +548,9 @@ serialization of values.</p>
   <div>
       <span class="xref">System.IEquatable&lt;T&gt;</span>
   </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson__1_System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair_System_String___0___Manatee_Json_Serialization_JsonSerializer_">LinqExtensions.ToJson&lt;T&gt;(IEnumerable&lt;KeyValuePair&lt;String, T&gt;&gt;, JsonSerializer)</a>
@@ -813,7 +566,7 @@ serialization of values.</p>
                     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_DefinitionsKeyword.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.DefinitionsKeyword%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L14" class="contribution-link">View Source</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/DefinitionsKeyword.cs/#L8" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

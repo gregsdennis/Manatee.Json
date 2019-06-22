@@ -186,7 +186,7 @@ The default is true.</p>
   </span>
   <a id="Manatee_Json_Schema_JsonSchemaOptions_OutputFormat_" data-uid="Manatee.Json.Schema.JsonSchemaOptions.OutputFormat*"></a>
   <h4 id="Manatee_Json_Schema_JsonSchemaOptions_OutputFormat" data-uid="Manatee.Json.Schema.JsonSchemaOptions.OutputFormat">OutputFormat</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the output verbosity.  The default is <a class="xref" href="Manatee.Json.Schema.SchemaValidationOutputFormat.html#Manatee_Json_Schema_SchemaValidationOutputFormat_Hierarchy">Hierarchy</a>.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the output verbosity.  The default is <a class="xref" href="Manatee.Json.Schema.SchemaValidationOutputFormat.html#Manatee_Json_Schema_SchemaValidationOutputFormat_Detailed">Detailed</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -208,6 +208,46 @@ The default is true.</p>
       </tr>
     </tbody>
   </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_JsonSchemaOptions_RefResolution.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchemaOptions.RefResolution%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/JsonSchemaOptions.cs/#L58">View Source</a>
+  </span>
+  <a id="Manatee_Json_Schema_JsonSchemaOptions_RefResolution_" data-uid="Manatee.Json.Schema.JsonSchemaOptions.RefResolution*"></a>
+  <h4 id="Manatee_Json_Schema_JsonSchemaOptions_RefResolution" data-uid="Manatee.Json.Schema.JsonSchemaOptions.RefResolution">RefResolution</h4>
+  <div class="markdown level1 summary"><p>Determines how <pre><code>$ref</code></pre> keywords are resolved when adjacent to an <pre><code>$id</code></pre> keyword
+when a specific draft cannot be identified.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static RefResolutionStrategy RefResolution { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.RefResolutionStrategy.html">RefResolutionStrategy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Manatee_Json_Schema_JsonSchemaOptions_RefResolution_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>As of draft-08, keywords are allowed to be adjacent to <pre><code>$ref</code></pre>.  This means that an
+adjacent <pre><code>$id</code></pre> keyword will now change the base URI whereas in prior drafts it would not
+since adjacent keywords were to be ignored.</p>
+<p>When Manatee.Json cannot determine the draft a particular schema is using (determined via
+the <pre><code>$schema</code></pre> keyword or the selection of keywords being used), this option will
+determine the behavior for resolving URIs.</p>
+</div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_JsonSchemaOptions_ValidateFormatKeyword.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.JsonSchemaOptions.ValidateFormatKeyword%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>

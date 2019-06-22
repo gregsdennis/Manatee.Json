@@ -87,7 +87,7 @@ Manatee.Json also:
     - Draft 4
     - Draft 6
     - Draft 7
-    - Draft 8 (spec to be released soon)
+    - Draft 8 (In beta! Spec to be released soon!)
     - Native object model
     - Output contains all info required to craft custom error messages
     - User-defined keywords
