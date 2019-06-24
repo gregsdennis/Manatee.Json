@@ -5,7 +5,7 @@ using Manatee.Json.Internal;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>id</code> JSON Schema keyword for draft-04.
+	/// Defines the `id` JSON Schema keyword for draft-04.
 	/// </summary>
 	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class IdKeywordDraft04 : IdKeyword, IEquatable<IdKeywordDraft04>

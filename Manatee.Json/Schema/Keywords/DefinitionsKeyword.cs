@@ -3,7 +3,7 @@
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>definitions</code> JSON Schema keyword.
+	/// Defines the `definitions` JSON Schema keyword.
 	/// </summary>
 	public class DefinitionsKeyword : DefsKeyword, IEquatable<DefinitionsKeyword>
 	{

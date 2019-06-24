@@ -9,7 +9,7 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>$vocabulary</code> JSON Schema keyword.
+	/// Defines the `$vocabulary` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name} Value={Vocabulary.Id}")]
 	public class VocabularyKeyword : Dictionary<SchemaVocabulary, bool>, IJsonSchemaKeyword, IEquatable<VocabularyKeyword>
@@ -125,8 +125,9 @@ namespace Manatee.Json.Schema
 							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, vocabulary.Id),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, vocabulary.Id),
-							InstanceLocation = context.InstanceLocation
-						};
+							InstanceLocation = context.InstanceLocation,
+							IsMetaSchemaValidation = context.IsMetaSchemaValidation
+					};
 					var metaSchema = JsonSchemaRegistry.Get(vocabulary.MetaSchemaId);
 					if (metaSchema != null)
 						metaSchema.Validate(newContext);
@@ -144,15 +145,15 @@ namespace Manatee.Json.Schema
 			return results;
 		}
 		/// <summary>
-		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
+		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <implementationNotes>
-		/// If the keyword does not contain any schemas (e.g. <code>maximum</code>), this method is a no-op.
+		/// If the keyword does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
 		public void RegisterSubschemas(Uri baseUri) { }
 		/// <summary>
-		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
+		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>

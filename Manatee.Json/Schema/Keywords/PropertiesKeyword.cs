@@ -9,7 +9,7 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>properties</code> JSON Schema keyword.
+	/// Defines the `properties` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}; Count={Count}")]
 	public class PropertiesKeyword : Dictionary<string, JsonSchema>, IJsonSchemaKeyword, IEquatable<PropertiesKeyword>
@@ -66,8 +66,9 @@ namespace Manatee.Json.Schema
 						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, property.Key),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, property.Key),
-						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key)
-					};
+						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key),
+						IsMetaSchemaValidation = context.IsMetaSchemaValidation
+				};
 				var result = property.Value.Validate(newContext);
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !result.IsValid)
 				{
@@ -86,7 +87,7 @@ namespace Manatee.Json.Schema
 			return results;
 		}
 		/// <summary>
-		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
+		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		public void RegisterSubschemas(Uri baseUri)
@@ -97,7 +98,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 		/// <summary>
-		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
+		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
