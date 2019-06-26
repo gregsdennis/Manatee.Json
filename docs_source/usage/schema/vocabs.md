@@ -90,9 +90,11 @@ So, back to the example, because we declare the vocabulary to be required (by gi
 
 ### Registering a vocabulary
 
-To tell Manatee.Json about a vocabulary, you just need to create a `SchemaVocabulary` instance, return it from a new keyword (see below) and register the new keyword using `SchemaKeywordCatalog.Add<T>()`.  The vocabulary will automatically register.  If you have multiple keywords defined by the same vocabulary, add them all individually.
+To tell Manatee.Json about a vocabulary, you just need to create a `SchemaVocabulary` instance, return it from a new keyword (see below), and register the new keyword using `SchemaKeywordCatalog.Add<T>()`.  The vocabulary will automatically register.
 
-The `SchemaVocabulary` class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These are both required in the constructor.
+If you have multiple keywords defined by the same vocabulary, *you need to add them all*.
+
+The `SchemaVocabulary` class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These URIs are both required in the constructor.
 
 ## Write a keyword
 
