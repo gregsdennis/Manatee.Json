@@ -19,7 +19,7 @@ Done.
 
 To build a schema inline, you can either declare all of the keywords individually and add them to a `JsonSchema` instance:
 
-```json 
+```javascript 
 {
     "properties":{
         "myProperty":{
