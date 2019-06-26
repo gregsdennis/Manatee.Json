@@ -10,7 +10,7 @@ Because Manatee.Json supported extending schemas with custom keywords before voc
 
 This is best explained with an example.  Suppose we have a meta-schema **M**, a schema **S** that uses **M** as its `$schema`, and a couple instances **I1** and **I2** to be validated by **S**.
 
-```json
+```javascript
 // meta-schema M
 {
   "$schema": "https://myserver.net/meta-schema#",                           // 1
