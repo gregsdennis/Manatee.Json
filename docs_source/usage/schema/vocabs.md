@@ -61,7 +61,7 @@ This is best explained with an example.  Suppose we have a meta-schema **M**, a 
 2. We list the vocabularies that the Manatee.Json should know about in order to process schemas that declare this meta-schema as their `$schema` (see #5).  This includes all of the vocabularies from draft-08 (because we want all of the draft-08 capabilities) as well as the vocab for this meta-schema.  We'll explain a bit more about this later.
 3. We also need all of the syntactic validation from draft-08, so we include it in an `allOf`.
 4. We define a new keyword, `pastDate`, that takes a boolean value.
-5. We create a schema that uses my new meta-schema (because we want to use the new keyword).
+5. We create a schema that uses our new meta-schema (because we want to use the new keyword).
 6. We use the new keyword to define a property to be found in the instance.
 7. The first instance defines a date in the past.
 8. The second date defines a date in the future.
@@ -70,7 +70,7 @@ The kicker here is that we can read "pastDate" and know that when its value is `
 
 That's where the vocabulary comes in.  The vocabulary is a human-readable document that gives *semantic* meaning to `pastDate`.  It is documentation of business logic that allows a programmer to code an extension that provides additional validation.  For example, this is the documentation for `minLength` in the Schema Validation specification:
 
-> 6.3.2. minLength
+> **6.3.2. minLength**
 >
 > The value of this keyword MUST be a non-negative integer.
 >
@@ -82,11 +82,11 @@ That's where the vocabulary comes in.  The vocabulary is a human-readable docume
 
 It gives meaning to the keyword beyond how the meta-schema describes it: a non-negative integer.
 
-Any validator can validate that `pastDate` is a boolean, but only a validator that understands `https://myserver.net/my-vocab` as a vocabulary will understand how to process `pastDate`.
+Any validator can validate that `pastDate` is a boolean, but only a validator that understands `https://myserver.net/my-vocab` as a vocabulary will understand that `pastDate` should validate that given a string that contains a date, that date should be in the past.
 
 Now, if you look at the entry, the vocabulary has its ID as the key with a boolean value.  In this case, that value is `true`.  That means that if Manatee.Json *doesn't* know about the vocabulary, it **must** refuse to process any schema that declares **M** as its `$schema` (as **S** does).  If this value were `false`, then Manatee.Json would be allowed to continue, which means that only syntactic analysis (i.e. "Is `pastDate` a boolean?") would be performed.
 
-So, back to the example, because we declare the vocabulary to be required (by giving it a value of `true`) *and* because Manatee.Json knows about it, **I1** is reported as valid and **I2** is not.  If the vocabulary had not been required, both **I1** and **I2** would be reported as true because the `pastDate` keyword would not have been enforced.
+So, back to the example, because we declare the vocabulary to be required (by giving it a value of `true`) *and* because Manatee.Json knows about it, **I1** is reported as valid and **I2** is not.  If the vocabulary had not been required _and_ Manatee.Json didn't know about the vocabulary, both **I1** and **I2** would be reported as true because the `pastDate` keyword would not have been enforced.
 
 ### Registering a vocabulary
 
