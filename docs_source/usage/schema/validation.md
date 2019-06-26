@@ -1,6 +1,6 @@
-## Validation & annotations
+# Validation & annotations
 
-### Validating the schema itself
+## Validating the schema itself
 
 Because the `JsonSchema` class will accept any keyword, and some keywords are only supported by specific drafts, it may be important to ensure that the schema that's created is valid against one of the drafts.
 
@@ -13,7 +13,7 @@ The results object is an instance of `MetaSchemaValidationResults` which exposes
 - `MetaSchemaValidations` is a dictionary, keyed by schema ID strings, that contains validation results for those schemas.  Typically the keys will be the IDs of the draft meta-schemas, but could be the ID of any schema.
 - `OtherErrors` is a list of strings to support other errors that may result outside of those produced by meta-schema validations.
 
-### Validating instances
+## Validating instances
 
 `JsonSchema` exposes a `Validate(JsonValue)` method which is used to validate incoming JSON values.  Let's begin with the schema from above and a few JSON objects:
 
@@ -63,7 +63,7 @@ In the above example, the following would be reported:
 - `shortJson` failed because the value of `"myProperty"` was too short.
 - `nonObject` also passed validation because `properties` and `required` ignore non-object JSON.
 
-### Validation results
+## Validation results
 
 Planned for JSON Schema draft-08 is a standardized format for validation output in order to support cross-platform and cross-implementation compatibility.  The format is described in [this GitHub issue](https://github.com/json-schema-org/json-schema-spec/issues/643).  This includes support for both errors and annotation collection.
 
@@ -79,9 +79,9 @@ The default output format is the condensed hierarchy, but this can be configured
 
 ***NOTE** It's only possible to translate from a more detailed to a less detailed format.*
 
-#### Examples of output
+### Examples of output
 
-##### Verbose Hierarchy
+#### Verbose Hierarchy
 
 ```json
 {
@@ -135,7 +135,7 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-##### Condensed Hierarchy
+#### Condensed Hierarchy
 
 ```json
 {
@@ -168,7 +168,7 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-##### Flat List
+#### Flat List
 
 ```json
 {
@@ -204,20 +204,27 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-### String format validation
+## String format validation
 
 The `format` keyword has been around a while.  It's available in all of the drafts supported by Manatee.Json.  Although this keyword is techincally classified as an annotation, the specification does allow (the word used is "SHOULD") that implementation provide some level of validation on it so long as that validation may be configured on and off.
 
 Manatee.Json makes a valiant attempt at validating a few of them.  These are hardcoded as static properties on the `StringFormat` class.  Out of the box, these are available:
 
+- `date`
 - `date-time`
+- `duration`
 - `email`
 - `hostname`
 - `ipv4`
 - `ipv6`
+- `iri`
+- `iri-reference`
+- `json-pointer`
 - `regex`
+- `relative-json-pointer`
 - `uri`
 - `uri-reference`
+- `uri-template`
 
 I'm not going to claim that the validation on any of these is perfect, but it will likely suffice for most applications.  In the (rare) event that it doesn't support your needs, they are completely overridable.
 
@@ -225,7 +232,7 @@ All of the static properties can be set to new instances.  When creating a new i
 
 In the same way, entirely new formats can be created to make them available to Manatee.Json.
 
-### Static options
+## Static options
 
 The `JsonSchemaOptions` class gives you a few configuration points that likely won't change at runtime.
 
