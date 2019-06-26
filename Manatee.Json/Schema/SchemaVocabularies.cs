@@ -8,7 +8,7 @@
 		/// <summary>
 		/// Used for keywords that only exist in schema versions prior to 2019-06.
 		/// </summary>
-		public static readonly SchemaVocabulary Pre2019_04 = new SchemaVocabulary("pre-draft-2019-06");
+		public static readonly SchemaVocabulary None = new SchemaVocabulary("none");
 		/// <summary>
 		/// Identifies the 2019-06 core keywords vocabulary.
 		/// </summary>

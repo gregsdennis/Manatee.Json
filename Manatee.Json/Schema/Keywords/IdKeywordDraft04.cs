@@ -21,7 +21,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public override SchemaVocabulary Vocabulary => SchemaVocabularies.Pre2019_04;
+		public override SchemaVocabulary Vocabulary => SchemaVocabularies.None;
 
 		/// <summary>
 		/// Used for deserialization.

@@ -8,9 +8,7 @@ A vocabulary is a collection of keywords.  It will be identified by a URI and sh
 
 Because Manatee.Json supported extending schemas with custom keywords before vocabularies were introduced, creating a vocabulary isn't strictly required.  But if you're using it to consume and validate draft-08 schemas, it is strongly suggested.
 
-### How they work
-
-This is best explained with an example.  Suppose I have a meta-schema **M**, a schema **S** that uses that meta-schema, and an instance **I** to be validated by the schema.
+This is best explained with an example.  Suppose we have a meta-schema **M**, a schema **S** that uses **M** as its `$schema`, and a couple instances **I1** and **I2** to be validated by **S**.
 
 ```json
 // meta-schema M
@@ -18,16 +16,20 @@ This is best explained with an example.  Suppose I have a meta-schema **M**, a s
   "$schema": "https://myserver.net/meta-schema#",                           // 1
   "$id": "https://myserver.net/meta-schema#",
   "$vocabulary": {
-    "https://json-schema.org/draft/2019-04/vocab/core": true,               // 2
-    "https://json-schema.org/draft/2019-04/vocab/applicator": true
+    "https://json-schema.org/draft/2019-WIP/vocab/core": true,              // 2
+    "https://json-schema.org/draft/2019-WIP/vocab/applicator": true,
+    "https://json-schema.org/draft/2019-WIP/vocab/validation": true,
+    "https://json-schema.org/draft/2019-WIP/vocab/meta-data": true,
+    "https://json-schema.org/draft/2019-WIP/vocab/format": true,
+    "https://json-schema.org/draft/2019-WIP/vocab/content": true,
+    "https://myserver.net/my-vocab": true
   },
   "allOf": [                                                                // 3
     { "$ref": "https://json-schema.org/draft/2019-06/schema#" }
   ],
   "properties": {
-    "newKeyword": {                                                         // 4
-      "type": "integer",
-      "minimum": 1
+    "pastDate": {                                                           // 4
+      "type": "boolean"
     }
   }
 }
@@ -37,66 +39,62 @@ This is best explained with an example.  Suppose I have a meta-schema **M**, a s
   "$schema": "https://myserver.net/meta-schema#",                           // 5
   "$id": "https://myserver.net/schema#",
   "properties": {
-    "foo": { "type": "string" }
-  },
-  "newKeyword": 5                                                           // 6
-}
-
-// instance I
-{
-  "foo": "value"
-}
-```
-
-First I'll summarize each of the parts, then we can go over them in more depth.
-
-1. I declare a meta-schema.  The meta-schema should validate itself, so I declare the `$schema` to be the same as the `$id`.
-2. I need to list the vocabularies that I'm going to use to describe this new meta-schema.  `allOf` and `properties` are listed in the Applicators vocabulary, and Core is assumed if it's not listed explicitly (it contains `$id`, etc.).
-3. I also want the draft-08 schema to be applicable, so I include it in an `allOf`.
-4. I define a new keyword: `newKeyword`.
-5. I create a schema that uses my new meta-schema (because I want to use the new keyword).
-6. I use the new keyword.
-
-Note that the `newKeyword` value can be validated when **M** is validating **S**, but there is no details as to what `newKeyword` does when **S** is validating **I**.  To do that, I need to write some code.  See [Write a keyword](#write-a-keyword) for more details.
-
-Now that makes sense, but why are the vocabularies needed?  It seems like **S** would work just fine without them so long as I provide the logic for `newKeyword`.  The value of vocabularies comes in when *you* want to extend *my* meta-schema.
-
-```json
-// meta-schema X
-{
-  "$schema": "https://yourserver.net/meta-schema#",
-  "$id": "https://yourserver.net/meta-schema#",
-  "$vocabulary": {
-    "https://json-schema.org/draft/2019-04/vocab/core": true,
-    "https://json-schema.org/draft/2019-04/vocab/applicator": true,
-    "https://myserver.net/vocabs/my-vocab": true                            // 1
-  },
-  "allOf": [
-    { "$ref": "https://myserver.net/meta-schema#" }                         // 2
-  ],
-  "properties": {
-    "anotherNewKeyword": {                                                  // 3
-      "type": "boolean"
+    "publishedOnDate": {
+      "type": "string",
+      "format": "date",
+      "pastDate": true                                                      // 6
     }
-  },
-  "newKeyword": 10                                                          // 4
+  }
 }
 
-// schema Y
+// instance I1
 {
-  "$schema": "https://yourserver.net/meta-schema#",                         // 5
-  "$id": "https://yourserver.net/schema#",
-  "properties": {
-    "foo": { "type": "string" }
-  },
-  "newKeyword": 5,                                                          // 6
-  "anotherNewKeyword": false                                                // 7
+  "publishedOnDate": "2019-06-22"                                           // 7
+}
+// instance I2
+{
+  "publishedOnDate": "2119-06-22"                                           // 8
 }
 ```
 
-1. 
+1. We declare a meta-schema.  The meta-schema should validate itself, so we declare `$schema` to be the same as `$id`.
+2. We list the vocabularies that the Manatee.Json should know about in order to process schemas that declare this meta-schema as their `$schema` (see #5).  This includes all of the vocabularies from draft-08 (because we want all of the draft-08 capabilities) as well as the vocab for this meta-schema.  We'll explain a bit more about this later.
+3. We also need all of the syntactic validation from draft-08, so we include it in an `allOf`.
+4. We define a new keyword, `pastDate`, that takes a boolean value.
+5. We create a schema that uses my new meta-schema (because we want to use the new keyword).
+6. We use the new keyword to define a property to be found in the instance.
+7. The first instance defines a date in the past.
+8. The second date defines a date in the future.
 
+The kicker here is that we can read "pastDate" and know that when its value is `true`, the value of the property should be a date in the past... because we're human, and we understand things like that.  However, a validator isn't going to be able to infer that.  It can only validate that a boolean was given for `pastDate` in the schema (**S**).
 
+That's where the vocabulary comes in.  The vocabulary is a human-readable document that gives *semantic* meaning to `pastDate`.  It is documentation of business logic that allows a programmer to code an extension that provides additional validation.  For example, this is the documentation for `minLength` in the Schema Validation specification:
+
+> 6.3.2. minLength
+>
+> The value of this keyword MUST be a non-negative integer.
+>
+> A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
+>
+> The length of a string instance is defined as the number of its characters as defined by RFC 8259.
+>
+> Omitting this keyword has the same behavior as a value of 0.
+
+It gives meaning to the keyword beyond how the meta-schema describes it: a non-negative integer.
+
+Any validator can validate that `pastDate` is a boolean, but only a validator that understands `https://myserver.net/my-vocab` as a vocabulary will understand how to process `pastDate`.
+
+Now, if you look at the entry, the vocabulary has its ID as the key with a boolean value.  In this case, that value is `true`.  That means that if Manatee.Json *doesn't* know about the vocabulary, it **must** refuse to process any schema that declares **M** as its `$schema` (as **S** does).  If this value were `false`, then Manatee.Json would be allowed to continue, which means that only syntactic analysis (i.e. "Is `pastDate` a boolean?") would be performed.
+
+So, back to the example, because we declare the vocabulary to be required (by giving it a value of `true`) *and* because Manatee.Json knows about it, **I1** is reported as valid and **I2** is not.  If the vocabulary had not been required, both **I1** and **I2** would be reported as true because the `pastDate` keyword would not have been enforced.
+
+### Registering a vocabulary
+
+To tell Manatee.Json about a vocabulary, you just need to create a `SchemaVocabulary` instance, return it from a new keyword (see below) and register the new keyword using `SchemaKeywordCatalog.Add<T>()`.  The vocabulary will automatically register.  If you have multiple keywords defined by the same vocabulary, add them all individually.
+
+The `SchemaVocabulary` class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These are both required in the constructor.
+
+## Write a keyword
 
 `JsonSchema` has been designed to allow you to create your own keywords.  There are several steps that need to be performed to do this.
 
@@ -104,9 +102,7 @@ Now that makes sense, but why are the vocabularies needed?  It seems like **S** 
 1. Add the keyword implementation to the catalog.
 1. ... um... yeah, I guess that's it.
 
-## Write a keyword
-
-Here's what you need to know about each member defined by `IJsonSchemaKeyword`.  You'll need to implement all of these as there is no base class.
+This is what you'll need to implement:
 
 ### `Name`
 
@@ -123,8 +119,6 @@ This property becomes important when you have several keywords that must be eval
 ### `Vocabulary`
 
 If the keyword is to be supported as part of JSON Schema draft-08, then this should return the `SchemaVocabulary` object that defines the keyword.  Otherwise it should just return `SchemaVocabularies.None`.
-
-See [Vocabularies](vocabs.html) for more information on vocabularies and the `SchemaVocabulary` object.
 
 ### `RegisterSubschemas(Uri)`
 
