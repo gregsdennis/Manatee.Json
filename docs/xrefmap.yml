@@ -16393,12 +16393,12 @@ references:
   commentId: F:Manatee.Json.Schema.SchemaVocabularies.MetaData
   fullName: Manatee.Json.Schema.SchemaVocabularies.MetaData
   nameWithType: SchemaVocabularies.MetaData
-- uid: Manatee.Json.Schema.SchemaVocabularies.Pre2019_04
-  name: Pre2019_04
-  href: api/Manatee.Json.Schema.SchemaVocabularies.html#Manatee_Json_Schema_SchemaVocabularies_Pre2019_04
-  commentId: F:Manatee.Json.Schema.SchemaVocabularies.Pre2019_04
-  fullName: Manatee.Json.Schema.SchemaVocabularies.Pre2019_04
-  nameWithType: SchemaVocabularies.Pre2019_04
+- uid: Manatee.Json.Schema.SchemaVocabularies.None
+  name: None
+  href: api/Manatee.Json.Schema.SchemaVocabularies.html#Manatee_Json_Schema_SchemaVocabularies_None
+  commentId: F:Manatee.Json.Schema.SchemaVocabularies.None
+  fullName: Manatee.Json.Schema.SchemaVocabularies.None
+  nameWithType: SchemaVocabularies.None
 - uid: Manatee.Json.Schema.SchemaVocabularies.Validation
   name: Validation
   href: api/Manatee.Json.Schema.SchemaVocabularies.html#Manatee_Json_Schema_SchemaVocabularies_Validation
@@ -17464,19 +17464,6 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.UnevaluatedItemsKeyword.ErrorTemplate
   nameWithType: UnevaluatedItemsKeyword.ErrorTemplate
-- uid: Manatee.Json.Schema.UnevaluatedItemsKeyword.ErrorTemplate_False
-  name: ErrorTemplate_False
-  href: api/Manatee.Json.Schema.UnevaluatedItemsKeyword.html#Manatee_Json_Schema_UnevaluatedItemsKeyword_ErrorTemplate_False
-  commentId: P:Manatee.Json.Schema.UnevaluatedItemsKeyword.ErrorTemplate_False
-  fullName: Manatee.Json.Schema.UnevaluatedItemsKeyword.ErrorTemplate_False
-  nameWithType: UnevaluatedItemsKeyword.ErrorTemplate_False
-- uid: Manatee.Json.Schema.UnevaluatedItemsKeyword.ErrorTemplate_False*
-  name: ErrorTemplate_False
-  href: api/Manatee.Json.Schema.UnevaluatedItemsKeyword.html#Manatee_Json_Schema_UnevaluatedItemsKeyword_ErrorTemplate_False_
-  commentId: Overload:Manatee.Json.Schema.UnevaluatedItemsKeyword.ErrorTemplate_False
-  isSpec: "True"
-  fullName: Manatee.Json.Schema.UnevaluatedItemsKeyword.ErrorTemplate_False
-  nameWithType: UnevaluatedItemsKeyword.ErrorTemplate_False
 - uid: Manatee.Json.Schema.UnevaluatedItemsKeyword.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
   name: FromJson(JsonValue, JsonSerializer)
   href: api/Manatee.Json.Schema.UnevaluatedItemsKeyword.html#Manatee_Json_Schema_UnevaluatedItemsKeyword_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_
@@ -17683,19 +17670,6 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.ErrorTemplate
   nameWithType: UnevaluatedPropertiesKeyword.ErrorTemplate
-- uid: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.ErrorTemplate_False
-  name: ErrorTemplate_False
-  href: api/Manatee.Json.Schema.UnevaluatedPropertiesKeyword.html#Manatee_Json_Schema_UnevaluatedPropertiesKeyword_ErrorTemplate_False
-  commentId: P:Manatee.Json.Schema.UnevaluatedPropertiesKeyword.ErrorTemplate_False
-  fullName: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.ErrorTemplate_False
-  nameWithType: UnevaluatedPropertiesKeyword.ErrorTemplate_False
-- uid: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.ErrorTemplate_False*
-  name: ErrorTemplate_False
-  href: api/Manatee.Json.Schema.UnevaluatedPropertiesKeyword.html#Manatee_Json_Schema_UnevaluatedPropertiesKeyword_ErrorTemplate_False_
-  commentId: Overload:Manatee.Json.Schema.UnevaluatedPropertiesKeyword.ErrorTemplate_False
-  isSpec: "True"
-  fullName: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.ErrorTemplate_False
-  nameWithType: UnevaluatedPropertiesKeyword.ErrorTemplate_False
 - uid: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
   name: FromJson(JsonValue, JsonSerializer)
   href: api/Manatee.Json.Schema.UnevaluatedPropertiesKeyword.html#Manatee_Json_Schema_UnevaluatedPropertiesKeyword_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_

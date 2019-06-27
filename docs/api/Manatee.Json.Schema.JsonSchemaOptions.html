@@ -217,7 +217,7 @@ The default is true.</p>
   </span>
   <a id="Manatee_Json_Schema_JsonSchemaOptions_RefResolution_" data-uid="Manatee.Json.Schema.JsonSchemaOptions.RefResolution*"></a>
   <h4 id="Manatee_Json_Schema_JsonSchemaOptions_RefResolution" data-uid="Manatee.Json.Schema.JsonSchemaOptions.RefResolution">RefResolution</h4>
-  <div class="markdown level1 summary"><p>Determines how <pre><code>$ref</code></pre> keywords are resolved when adjacent to an <pre><code>$id</code></pre> keyword
+  <div class="markdown level1 summary"><p>Determines how <code>$ref</code> keywords are resolved when adjacent to an <code>$id</code> keyword
 when a specific draft cannot be identified.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -241,11 +241,11 @@ when a specific draft cannot be identified.</p>
     </tbody>
   </table>
   <h5 id="Manatee_Json_Schema_JsonSchemaOptions_RefResolution_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>As of draft-08, keywords are allowed to be adjacent to <pre><code>$ref</code></pre>.  This means that an
-adjacent <pre><code>$id</code></pre> keyword will now change the base URI whereas in prior drafts it would not
+  <div class="markdown level1 remarks"><p>As of draft-08, keywords are allowed to be adjacent to <code>$ref</code>.  This means that an
+adjacent <code>$id</code> keyword will now change the base URI whereas in prior drafts it would not
 since adjacent keywords were to be ignored.</p>
 <p>When Manatee.Json cannot determine the draft a particular schema is using (determined via
-the <pre><code>$schema</code></pre> keyword or the selection of keywords being used), this option will
+the <code>$schema</code> keyword or the selection of keywords being used), this option will
 determine the behavior for resolving URIs.</p>
 </div>
   <span class="small pull-right mobile-hide">

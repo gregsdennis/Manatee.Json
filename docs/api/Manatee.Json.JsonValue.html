@@ -1092,7 +1092,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Equality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Equality(Manatee.Json.JsonValue%2CManatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L521">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L531">View Source</a>
   </span>
   <a id="Manatee_Json_JsonValue_op_Equality_" data-uid="Manatee.Json.JsonValue.op_Equality*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Equality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_" data-uid="Manatee.Json.JsonValue.op_Equality(Manatee.Json.JsonValue,Manatee.Json.JsonValue)">Equality(JsonValue, JsonValue)</h4>
@@ -1148,7 +1148,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonArray__Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonArray)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L511">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L521">View Source</a>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonArray__Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonArray)~Manatee.Json.JsonValue">Implicit(JsonArray to JsonValue)</h4>
@@ -1197,21 +1197,22 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
 </div>
   <h5 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonArray__Manatee_Json_JsonValue_examples">Examples</h5>
-  <pre><code>    JsonObject obj = new JsonObject{
-    	{&quot;stringData&quot;, &quot;string&quot;},
-    	{&quot;numberData&quot;, 10.6},
-    	{&quot;boolData&quot;, true},
-    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
-    	{&quot;objectData&quot;, new JsonObject{
-    		{&quot;stringData2&quot;, &quot;another string&quot;},
-    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+  <pre><code>JsonObject obj = new JsonObject{
+{&amp;quot;stringData&amp;quot;, &amp;quot;string&amp;quot;},
+{&amp;quot;numberData&amp;quot;, 10.6},
+{&amp;quot;boolData&amp;quot;, true},
+{&amp;quot;arrayData&amp;quot;, new JsonArray{false, &amp;quot;Array String&amp;quot;, JsonValue.Null, 8e-4}},
+{&amp;quot;objectData&amp;quot;, new JsonObject{
+{&amp;quot;stringData2&amp;quot;, &amp;quot;another string&amp;quot;},
+{&amp;quot;moreBoolData&amp;quot;, false}}}};
+</code></pre>
 
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonObject__Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonObject)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L489">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L497">View Source</a>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonObject__Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(Manatee.Json.JsonObject)~Manatee.Json.JsonValue">Implicit(JsonObject to JsonValue)</h4>
@@ -1260,21 +1261,22 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
 </div>
   <h5 id="Manatee_Json_JsonValue_op_Implicit_Manatee_Json_JsonObject__Manatee_Json_JsonValue_examples">Examples</h5>
-  <pre><code>    JsonObject obj = new JsonObject{
-    	{&quot;stringData&quot;, &quot;string&quot;},
-    	{&quot;numberData&quot;, 10.6},
-    	{&quot;boolData&quot;, true},
-    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
-    	{&quot;objectData&quot;, new JsonObject{
-    		{&quot;stringData2&quot;, &quot;another string&quot;},
-    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+  <pre><code>JsonObject obj = new JsonObject{
+{&amp;quot;stringData&amp;quot;, &amp;quot;string&amp;quot;},
+{&amp;quot;numberData&amp;quot;, 10.6},
+{&amp;quot;boolData&amp;quot;, true},
+{&amp;quot;arrayData&amp;quot;, new JsonArray{false, &amp;quot;Array String&amp;quot;, JsonValue.Null, 8e-4}},
+{&amp;quot;objectData&amp;quot;, new JsonObject{
+{&amp;quot;stringData2&amp;quot;, &amp;quot;another string&amp;quot;},
+{&amp;quot;moreBoolData&amp;quot;, false}}}};
+</code></pre>
 
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(System.Nullable%7BSystem.Boolean%7D)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L423">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L425">View Source</a>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Boolean})~Manatee.Json.JsonValue">Implicit(Nullable&lt;Boolean&gt; to JsonValue)</h4>
@@ -1323,21 +1325,22 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
 </div>
   <h5 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue_examples">Examples</h5>
-  <pre><code>    JsonObject obj = new JsonObject{
-    	{&quot;stringData&quot;, &quot;string&quot;},
-    	{&quot;numberData&quot;, 10.6},
-    	{&quot;boolData&quot;, true},
-    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
-    	{&quot;objectData&quot;, new JsonObject{
-    		{&quot;stringData2&quot;, &quot;another string&quot;},
-    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+  <pre><code>JsonObject obj = new JsonObject{
+{&amp;quot;stringData&amp;quot;, &amp;quot;string&amp;quot;},
+{&amp;quot;numberData&amp;quot;, 10.6},
+{&amp;quot;boolData&amp;quot;, true},
+{&amp;quot;arrayData&amp;quot;, new JsonArray{false, &amp;quot;Array String&amp;quot;, JsonValue.Null, 8e-4}},
+{&amp;quot;objectData&amp;quot;, new JsonObject{
+{&amp;quot;stringData2&amp;quot;, &amp;quot;another string&amp;quot;},
+{&amp;quot;moreBoolData&amp;quot;, false}}}};
+</code></pre>
 
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(System.Nullable%7BSystem.Double%7D)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L467">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L473">View Source</a>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Double})~Manatee.Json.JsonValue">Implicit(Nullable&lt;Double&gt; to JsonValue)</h4>
@@ -1386,21 +1389,22 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
 </div>
   <h5 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue_examples">Examples</h5>
-  <pre><code>    JsonObject obj = new JsonObject{
-    	{&quot;stringData&quot;, &quot;string&quot;},
-    	{&quot;numberData&quot;, 10.6},
-    	{&quot;boolData&quot;, true},
-    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
-    	{&quot;objectData&quot;, new JsonObject{
-    		{&quot;stringData2&quot;, &quot;another string&quot;},
-    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+  <pre><code>JsonObject obj = new JsonObject{
+{&amp;quot;stringData&amp;quot;, &amp;quot;string&amp;quot;},
+{&amp;quot;numberData&amp;quot;, 10.6},
+{&amp;quot;boolData&amp;quot;, true},
+{&amp;quot;arrayData&amp;quot;, new JsonArray{false, &amp;quot;Array String&amp;quot;, JsonValue.Null, 8e-4}},
+{&amp;quot;objectData&amp;quot;, new JsonObject{
+{&amp;quot;stringData2&amp;quot;, &amp;quot;another string&amp;quot;},
+{&amp;quot;moreBoolData&amp;quot;, false}}}};
+</code></pre>
 
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Implicit(System.String)~Manatee.Json.JsonValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L445">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L449">View Source</a>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.String)~Manatee.Json.JsonValue">Implicit(String to JsonValue)</h4>
@@ -1449,21 +1453,22 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   <div class="markdown level1 remarks"><p>This is useful when creating an initialized <a class="xref" href="Manatee.Json.JsonObject.html">JsonObject</a> or <a class="xref" href="Manatee.Json.JsonArray.html">JsonArray</a>.</p>
 </div>
   <h5 id="Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue_examples">Examples</h5>
-  <pre><code>    JsonObject obj = new JsonObject{
-    	{&quot;stringData&quot;, &quot;string&quot;},
-    	{&quot;numberData&quot;, 10.6},
-    	{&quot;boolData&quot;, true},
-    	{&quot;arrayData&quot;, new JsonArray{false, &quot;Array String&quot;, JsonValue.Null, 8e-4}},
-    	{&quot;objectData&quot;, new JsonObject{
-    		{&quot;stringData2&quot;, &quot;another string&quot;},
-    		{&quot;moreBoolData&quot;, false}}}};</code></pre>
+  <pre><code>JsonObject obj = new JsonObject{
+{&amp;quot;stringData&amp;quot;, &amp;quot;string&amp;quot;},
+{&amp;quot;numberData&amp;quot;, 10.6},
+{&amp;quot;boolData&amp;quot;, true},
+{&amp;quot;arrayData&amp;quot;, new JsonArray{false, &amp;quot;Array String&amp;quot;, JsonValue.Null, 8e-4}},
+{&amp;quot;objectData&amp;quot;, new JsonObject{
+{&amp;quot;stringData2&amp;quot;, &amp;quot;another string&amp;quot;},
+{&amp;quot;moreBoolData&amp;quot;, false}}}};
+</code></pre>
 
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_op_Inequality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.op_Inequality(Manatee.Json.JsonValue%2CManatee.Json.JsonValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L531">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/JsonValue.cs/#L541">View Source</a>
   </span>
   <a id="Manatee_Json_JsonValue_op_Inequality_" data-uid="Manatee.Json.JsonValue.op_Inequality*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Inequality_Manatee_Json_JsonValue_Manatee_Json_JsonValue_" data-uid="Manatee.Json.JsonValue.op_Inequality(Manatee.Json.JsonValue,Manatee.Json.JsonValue)">Inequality(JsonValue, JsonValue)</h4>
