@@ -89,11 +89,11 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertInvalid();
 		}
-		[Test]
-		public void ValidateReturnsValidOnValidDateTimeFormat()
+		[TestCaseSource(nameof(DateTimeCases))]
+		public void ValidateReturnsValidOnValidDateTimeFormat(string dateTimeString)
 		{
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.DateTime);
-			var json = (JsonValue) "2016-01-25T10:32:02Z";
+			var json = (JsonValue) dateTimeString;
 
 			var results = schema.Validate(json);
 
@@ -302,5 +302,19 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid();
 		}
+
+		private static string[] DateTimeCases = new[]
+		{
+			"2016-01-25T10:32:02Z",
+			"2019-06-25T08:40:24.1383719Z",
+			"2019-06-25T08:40:24.138371Z",
+			"2019-06-25T08:40:24.13837Z",
+			"2019-06-25T08:40:24.1383Z",
+			"2019-06-25T08:40:24.138Z",
+			"2019-06-25T08:40:24.13Z",
+			"2019-06-25T08:40:24.1Z",
+			"2019-06-26T15:46:18.4123654+01:00",
+			"2019-06-26T13:46:43.4281740-01:00"
+		};
 	}
 }
