@@ -10,7 +10,7 @@ Because Manatee.Json supported extending schemas with custom keywords before voc
 
 This is best explained with an example.  Suppose we have a meta-schema **M**, a schema **S** that uses **M** as its `$schema`, and a couple instances **I1** and **I2** to be validated by **S**.
 
-```javascript
+```json
 // meta-schema M
 {
   "$schema": "https://myserver.net/meta-schema#",                           // 1
@@ -84,17 +84,17 @@ It gives meaning to the keyword beyond how the meta-schema describes it: a non-n
 
 Any validator can validate that `pastDate` is a boolean, but only a validator that understands `https://myserver.net/my-vocab` as a vocabulary will understand that `pastDate` should validate that given a string that contains a date, that date should be in the past.
 
-Now, if you look at the entry, the vocabulary has its ID as the key with a boolean value.  In this case, that value is `true`.  That means that if Manatee.Json *doesn't* know about the vocabulary, it **must** refuse to process any schema that declares **M** as its `$schema` (as **S** does).  If this value were `false`, then Manatee.Json would be allowed to continue, which means that only syntactic analysis (i.e. "Is `pastDate` a boolean?") would be performed.
+Now, if you look at the `$vocabulary` entry for `https://myserver.net/my-vocab`, the vocabulary has its ID as the key with a boolean value.  In this case, that value is `true`.  That means that if Manatee.Json *doesn't* know about the vocabulary, it **must** refuse to process any schema that declares **M** as its `$schema` (as **S** does).  If this value were `false`, then Manatee.Json would be allowed to continue, which means that only syntactic analysis (i.e. "Is `pastDate` a boolean?") would be performed.
 
-So, back to the example, because we declare the vocabulary to be required (by giving it a value of `true`) *and* because Manatee.Json knows about it, **I1** is reported as valid and **I2** is not.  If the vocabulary had not been required _and_ Manatee.Json didn't know about the vocabulary, both **I1** and **I2** would be reported as true because the `pastDate` keyword would not have been enforced.
+So, back to the example, because we declare the vocabulary to be required (by giving it a value of `true`) *and* because Manatee.Json knows about it, **I1** is reported as valid and **I2** is not.  If the vocabulary had not been required _and_ Manatee.Json didn't know about the vocabulary, both **I1** and **I2** would be reported as valid because the `pastDate` keyword would not have been enforced.
 
 ### Registering a vocabulary
 
 To tell Manatee.Json about a vocabulary, you just need to create a `SchemaVocabulary` instance, return it from a new keyword (see below), and register the new keyword using `SchemaKeywordCatalog.Add<T>()`.  The vocabulary will automatically register.
 
-If you have multiple keywords defined by the same vocabulary, *you need to add them all*.
-
 The `SchemaVocabulary` class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These URIs are both required in the constructor.
+
+If you have multiple keywords defined by the same vocabulary, *you need to add them all*.  Manatee.Json learns about vocabularies via the keywords that are added.  There is currently no mechanism defined by JSON Schema that makes all of the keywords defined by a vocabulary known to the implementation.  (This is functionality that will likely come in later drafts.)
 
 ## Write a keyword
 

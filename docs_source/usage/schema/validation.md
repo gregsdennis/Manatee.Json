@@ -17,7 +17,7 @@ The results object is an instance of `MetaSchemaValidationResults` which exposes
 
 `JsonSchema` exposes a `Validate(JsonValue)` method which is used to validate incoming JSON values.  Let's begin with the schema from above and a few JSON objects:
 
-```javascript 
+```json 
 {
   "properties":{
     "myProperty":{
@@ -83,7 +83,7 @@ The default output format is the condensed hierarchy, but this can be configured
 
 #### Verbose Hierarchy
 
-```javascript
+```json
 {
   "valid" : false,
   "keywordLocation" : "#",
@@ -137,7 +137,7 @@ The default output format is the condensed hierarchy, but this can be configured
 
 #### Condensed Hierarchy
 
-```javascript
+```json
 {
   "valid" : false,
   "keywordLocation" : "#/allOf",
@@ -170,7 +170,7 @@ The default output format is the condensed hierarchy, but this can be configured
 
 #### Flat List
 
-```javascript
+```json
 {
   "valid" : false,
   "errors" : [

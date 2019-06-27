@@ -111,7 +111,7 @@ Here, the `ToJson()` method is an extension method on the `IEnumerable<KeyValueP
 
 As you can see, creating these constructs is quite easy and very readable.  As is expected, calling `json.ToString()` yields:
 
-```javascript
+```json
 {"boolean":true,"number":42,"string":"a string","null":null,"array":[6.7,true,"a value"],"object":{"aKey":42,"anotherKey":false}}
 ```
 

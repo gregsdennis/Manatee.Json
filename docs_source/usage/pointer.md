@@ -12,7 +12,7 @@ The syntax is fairly simple:
 
 For example, given the JSON document (from the spec linked above):
 
-```javascript
+```json
 {
     "foo": ["bar", "baz"],
     "": 0,
