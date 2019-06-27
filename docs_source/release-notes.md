@@ -1,6 +1,9 @@
 # 10.2.0
 
 *Beta 1 - Released on 22 Jun, 2019*
+
+*Beta 2 - Released on 28 Jun, 2019*
+
 > ***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
 
 <span id="feature">feature</span>
@@ -12,6 +15,8 @@
 ([#205](https://github.com/gregsdennis/Manatee.Json/issues/205)) Schema equality doesn't capture extra properties on second schema.  E.g. for `a.Equals(b)` if `b` has a property that doesn't exist in `a`, `.Equals()` still returns true.  The collection comparison has been fixed.
 
 ([#201](https://github.com/gregsdennis/Manatee.Json/issues/201)) CompilerAttributes causes errors in .Net Standard versions.  This dependency has been removed.
+
+([#211](https://github.com/gregsdennis/Manatee.Json/issues/211)) [@desmondgc](https://github.com/desmondgc) Date/Time format validation within schemas is insufficient.  Default implementation now uses `DateTime.TryParseExact()` with support for fractional seconds.
 
 # 10.1.4
 
@@ -115,7 +120,7 @@ Fixed issue where a non-null object with all properties as default values would 
 
 ([#132](https://github.com/gregsdennis/Manatee.Json/issues/132)) Changed parsing and schema errors to use JSON Pointers to indicate the locations of errors instead of JSON Paths.  The reasoning behind this is JSON Path is a query syntax that can return multiple values, whereas JSON Pointer was specifically designed to represent a single path resulting in a single value.
 
-([#175](https://github.com/gregsdennis/Manatee.Json/issues/175) Part 1) In preparation for JSON Schema draft-08, the JSON Schema implementation has been overhauled.  The key takeaways from this work are:
+([#175](https://github.com/gregsdennis/Manatee.Json/issues/175) (Part 1) In preparation for JSON Schema draft-08, the JSON Schema implementation has been overhauled.  The key takeaways from this work are:
 
 - The schema drafts are no longer represented by multiple classes, but rather a single `JsonSchema` class that is capable of modeling all of the drafts.
 - The `JsonSchema` type does not expose keywords as properties, but is a container of keyword implementations.  This allows for easier extension.

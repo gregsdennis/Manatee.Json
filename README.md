@@ -138,6 +138,8 @@ If you'd like to help out with the code, please feel free to fork and create a p
 
 @Kimtho for finding and fixing some backwards logic in the JSON Patch `replace` verb.
 
+@desmondgc (Desmond Cox) for improving the validation within schemas for `date-time` formatted strings.
+
 ### The Project
 
 This code uses C# 7 features, so a compiler/IDE that supports these features is required.
