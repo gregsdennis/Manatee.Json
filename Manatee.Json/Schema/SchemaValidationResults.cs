@@ -13,7 +13,7 @@ namespace Manatee.Json.Schema
 	public class SchemaValidationResults : IJsonSerializable, IEquatable<SchemaValidationResults>
 	{
 		/// <summary>
-		/// Gets a value to return for no results.  Only used when a keyword should not produce any output, such as <code>$id</code>.
+		/// Gets a value to return for no results.  Only used when a keyword should not produce any output, such as `$id`.
 		/// </summary>
 		public static SchemaValidationResults Null { get; } = new SchemaValidationResults();
 
@@ -22,11 +22,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public bool IsValid { get; set; } = true;
 		/// <summary>
-		/// Gets or sets the location of the keyword relative to the original schema root.  This will include any <code>$ref</code> segments.
+		/// Gets or sets the location of the keyword relative to the original schema root.  This will include any `$ref` segments.
 		/// </summary>
 		public JsonPointer RelativeLocation { get; set; }
 		/// <summary>
-		/// Gets or sets the absolute location of the keyword.  This is a direct reference after all <code>$ref</code> keywords have been resolved.
+		/// Gets or sets the absolute location of the keyword.  This is a direct reference after all `$ref` keywords have been resolved.
 		/// </summary>
 		public Uri AbsoluteLocation { get; set; }
 		/// <summary>

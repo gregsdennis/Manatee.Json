@@ -9,7 +9,7 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>unevaluatedProperties</code> JSON Schema keyword.
+	/// Defines the `unevaluatedProperties` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}")]
 	public class UnevaluatedPropertiesKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedPropertiesKeyword>
@@ -21,13 +21,6 @@ namespace Manatee.Json.Schema
 		/// Does not supports any tokens.
 		/// </remarks>
 		public static string ErrorTemplate { get; set; } = "Any properties not covered by `properties`, `patternProperties`, and `additionalProperties` failed validation.";
-		/// <summary>
-		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
-		/// </summary>
-		/// <remarks>
-		/// Does not supports any tokens.
-		/// </remarks>
-		public static string ErrorTemplate_False { get; set; } = "Properties not covered by `properties`, `patternProperties`, and `additionalProperties` are not allowed.";
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -88,8 +81,9 @@ namespace Manatee.Json.Schema
 						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
-						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key)
-					};
+						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
+						IsMetaSchemaValidation = context.IsMetaSchemaValidation
+				};
 				nestedResults.Add(Value.Validate(newContext));
 			}
 
@@ -119,7 +113,7 @@ namespace Manatee.Json.Schema
 			return results;
 		}
 		/// <summary>
-		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
+		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		public void RegisterSubschemas(Uri baseUri)
@@ -127,7 +121,7 @@ namespace Manatee.Json.Schema
 			Value.RegisterSubschemas(baseUri);
 		}
 		/// <summary>
-		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
+		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>

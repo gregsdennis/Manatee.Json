@@ -1,5 +1,6 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Manatee.Json.Internal;
@@ -110,6 +111,19 @@ namespace Manatee.Json.Schema
 
 		internal bool IsKnown { get; private set; } = true;
 
+		private static string[] DateTimeFormats = new[]
+		{
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffffffK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffffK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ssK",
+			"yyyy'-'MM'-'dd'T'HH':'mm':'ss",
+		};
+
 		static StringFormat()
 		{
 			_lookup = new Dictionary<string, StringFormat>();
@@ -117,7 +131,7 @@ namespace Manatee.Json.Schema
 			Date = new StringFormat("date", JsonSchemaVersion.Draft2019_06,
 			                        @"^(\d{4})-(\d{2})-(\d{2})$");
 			DateTime = new StringFormat("date-time", JsonSchemaVersion.All,
-										@"^(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})([+-](\d{2})\:(\d{2})|Z)$");
+										s => System.DateTimeOffset.TryParseExact(s, DateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out _));
 			Duration = new StringFormat("duration", JsonSchemaVersion.Draft2019_06,
 			                            @"^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$");
 			Email = new StringFormat("email", JsonSchemaVersion.All,

@@ -7,7 +7,7 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>else</code> JSON Schema keyword.
+	/// Defines the `else` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}")]
 	public class ElseKeyword : IJsonSchemaKeyword, IEquatable<ElseKeyword>
@@ -65,7 +65,7 @@ namespace Manatee.Json.Schema
 			return SchemaValidationResults.Null;
 		}
 		/// <summary>
-		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
+		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		public void RegisterSubschemas(Uri baseUri)
@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 			Value.RegisterSubschemas(baseUri);
 		}
 		/// <summary>
-		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
+		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>

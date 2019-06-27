@@ -410,7 +410,8 @@ namespace Manatee.Json
 		/// <remarks>
 		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
-		/// <example><code>
+		/// <example>
+		/// ```
 		/// JsonObject obj = new JsonObject{
 		///		{"stringData", "string"},
 		///		{"numberData", 10.6},
@@ -419,7 +420,8 @@ namespace Manatee.Json
 		///		{"objectData", new JsonObject{
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
-		/// </code></example>
+		/// ```
+		/// </example>
 		public static implicit operator JsonValue(bool? b)
 		{
 			return b == null ? null : new JsonValue(b);
@@ -432,7 +434,8 @@ namespace Manatee.Json
 		/// <remarks>
 		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
-		/// <example><code>
+		/// <example>
+		/// ```
 		/// JsonObject obj = new JsonObject{
 		///		{"stringData", "string"},
 		///		{"numberData", 10.6},
@@ -441,7 +444,8 @@ namespace Manatee.Json
 		///		{"objectData", new JsonObject{
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
-		/// </code></example>
+		/// ```
+		/// </example>
 		public static implicit operator JsonValue(string s)
 		{
 			return s == null ? null : new JsonValue(s);
@@ -454,7 +458,8 @@ namespace Manatee.Json
 		/// <remarks>
 		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
-		/// <example><code>
+		/// <example>
+		/// ```
 		/// JsonObject obj = new JsonObject{
 		///		{"stringData", "string"},
 		///		{"numberData", 10.6},
@@ -463,7 +468,8 @@ namespace Manatee.Json
 		///		{"objectData", new JsonObject{
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
-		/// </code></example>
+		/// ```
+		/// </example>
 		public static implicit operator JsonValue(double? n)
 		{
 			return n == null ? null : new JsonValue(n);
@@ -476,7 +482,8 @@ namespace Manatee.Json
 		/// <remarks>
 		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
-		/// <example><code>
+		/// <example>
+		/// ```
 		/// JsonObject obj = new JsonObject{
 		///		{"stringData", "string"},
 		///		{"numberData", 10.6},
@@ -485,7 +492,8 @@ namespace Manatee.Json
 		///		{"objectData", new JsonObject{
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
-		/// </code></example>
+		/// ```
+		/// </example>
 		public static implicit operator JsonValue(JsonObject o)
 		{
 			return o == null ? null : new JsonValue(o);
@@ -498,7 +506,8 @@ namespace Manatee.Json
 		/// <remarks>
 		/// This is useful when creating an initialized <see cref="JsonObject"/> or <see cref="JsonArray"/>.
 		/// </remarks>
-		/// <example><code>
+		/// <example>
+		/// ```
 		/// JsonObject obj = new JsonObject{
 		///		{"stringData", "string"},
 		///		{"numberData", 10.6},
@@ -507,7 +516,8 @@ namespace Manatee.Json
 		///		{"objectData", new JsonObject{
 		///			{"stringData2", "another string"},
 		///			{"moreBoolData", false}}}};
-		/// </code></example>
+		/// ```
+		/// </example>
 		public static implicit operator JsonValue(JsonArray a)
 		{
 			return a == null ? null : new JsonValue(a);

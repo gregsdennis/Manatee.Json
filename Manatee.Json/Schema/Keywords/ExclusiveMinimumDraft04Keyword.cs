@@ -7,7 +7,7 @@ using Manatee.Json.Serialization;
 namespace Manatee.Json.Schema
 {
 	/// <summary>
-	/// Defines the <code>exclusiveMinimum</code> JSON Schema keyword for draft-04 schemas.
+	/// Defines the `exclusiveMinimum` JSON Schema keyword for draft-04 schemas.
 	/// </summary>
 	[DebuggerDisplay("Name={Name} Value={Value}")]
 	public class ExclusiveMinimumDraft04Keyword : IJsonSchemaKeywordPlus, IEquatable<ExclusiveMinimumDraft04Keyword>
@@ -37,7 +37,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
-		public SchemaVocabulary Vocabulary => SchemaVocabularies.Pre2019_04;
+		public SchemaVocabulary Vocabulary => SchemaVocabularies.None;
 
 		/// <summary>
 		/// The boolean value for this keyword.
@@ -87,12 +87,12 @@ namespace Manatee.Json.Schema
 			return value.Type == JsonValueType.Boolean;
 		}
 		/// <summary>
-		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
+		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		public void RegisterSubschemas(Uri baseUri) { }
 		/// <summary>
-		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
+		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>

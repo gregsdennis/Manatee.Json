@@ -48,11 +48,11 @@ namespace Manatee.Json.Schema
 			set => _documentPath = value;
 		}
 		/// <summary>
-		/// Gets the <code>$id</code> (or <code>id</code> for draft-04) property value, if declared.
+		/// Gets the `$id` (or `id` for draft-04) property value, if declared.
 		/// </summary>
 		public string Id => this.Get<IdKeyword>()?.Value;
 		/// <summary>
-		/// Gets the <code>$schema</code> property, if declared.
+		/// Gets the `$schema` property, if declared.
 		/// </summary>
 		public string Schema => this.Get<SchemaKeyword>()?.Value;
 		/// <summary>
@@ -220,7 +220,7 @@ namespace Manatee.Json.Schema
 			return results;
 		}
 		/// <summary>
-		/// Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.
+		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		public void RegisterSubschemas(Uri baseUri)
@@ -240,7 +240,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 		/// <summary>
-		/// Resolves any subschemas during resolution of a <code>$ref</code> during validation.
+		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>

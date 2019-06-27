@@ -11,7 +11,7 @@ namespace Manatee.Json.Schema
 	public static class FluentBuilderExtensions
 	{
 		/// <summary>
-		/// Add an <code>additionalItems</code> keyword to the schema.
+		/// Add an `additionalItems` keyword to the schema.
 		/// </summary>
 		public static JsonSchema AdditionalItems(this JsonSchema schema, JsonSchema additionalItems)
 		{
@@ -20,7 +20,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>additionalProperties</code> keyword to the schema.
+		/// Add an `additionalProperties` keyword to the schema.
 		/// </summary>
 		public static JsonSchema AdditionalProperties(this JsonSchema schema, JsonSchema otherSchema)
 		{
@@ -29,7 +29,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>allOf</code> keyword to the schema.
+		/// Add an `allOf` keyword to the schema.
 		/// </summary>
 		public static JsonSchema AllOf(this JsonSchema schema, params JsonSchema[] definitions)
 		{
@@ -46,7 +46,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>anyOf</code> keyword to the schema.
+		/// Add an `anyOf` keyword to the schema.
 		/// </summary>
 		public static JsonSchema AnyOf(this JsonSchema schema, params JsonSchema[] definitions)
 		{
@@ -63,7 +63,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$comment</code> keyword to the schema.
+		/// Add a `$comment` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Comment(this JsonSchema schema, string comment)
 		{
@@ -72,7 +72,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>const</code> keyword to the schema.
+		/// Add a `const` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Const(this JsonSchema schema, JsonValue value)
 		{
@@ -81,7 +81,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>contains</code> keyword to the schema.
+		/// Add a `contains` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Contains(this JsonSchema schema, JsonSchema match)
 		{
@@ -90,7 +90,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>contentEncoding</code> keyword to the schema.
+		/// Add a `contentEncoding` keyword to the schema.
 		/// </summary>
 		public static JsonSchema ContentEncoding(this JsonSchema schema, string encoding)
 		{
@@ -99,7 +99,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>contentMediaType</code> keyword to the schema.
+		/// Add a `contentMediaType` keyword to the schema.
 		/// </summary>
 		public static JsonSchema ContentMediaType(this JsonSchema schema, string mediaType)
 		{
@@ -108,7 +108,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>contentSchema</code> keyword to the schema.
+		/// Add a `contentSchema` keyword to the schema.
 		/// </summary>
 		public static JsonSchema ContentSchema(this JsonSchema schema, JsonSchema match)
 		{
@@ -117,7 +117,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>default</code> keyword to the schema.
+		/// Add a `default` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Default(this JsonSchema schema, JsonValue value)
 		{
@@ -126,7 +126,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a single definition to the <code>$def</code> keyword.
+		/// Add a single definition to the `$def` keyword.
 		/// </summary>
 		public static JsonSchema Def(this JsonSchema schema, string name, JsonSchema definition)
 		{
@@ -143,7 +143,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a single definition to the <code>definitions</code> keyword.
+		/// Add a single definition to the `definitions` keyword.
 		/// </summary>
 		public static JsonSchema Definition(this JsonSchema schema, string name, JsonSchema definition)
 		{
@@ -160,7 +160,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a property-based dependency to the <code>dependencies</code> keyword.
+		/// Add a property-based dependency to the `dependencies` keyword.
 		/// </summary>
 		public static JsonSchema Dependency(this JsonSchema schema, string name, params string[] dependencies)
 		{
@@ -177,7 +177,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a property-based dependency to the <code>dependencies</code> keyword.
+		/// Add a property-based dependency to the `dependencies` keyword.
 		/// </summary>
 		public static JsonSchema DependentRequired(this JsonSchema schema, string name, params string[] dependencies)
 		{
@@ -194,7 +194,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a schema-based dependency to the <code>dependencies</code> keyword.
+		/// Add a schema-based dependency to the `dependencies` keyword.
 		/// </summary>
 		public static JsonSchema Dependency(this JsonSchema schema, string name, JsonSchema dependency)
 		{
@@ -211,7 +211,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a schema-based dependency to the <code>dependencies</code> keyword.
+		/// Add a schema-based dependency to the `dependencies` keyword.
 		/// </summary>
 		public static JsonSchema DependentSchema(this JsonSchema schema, string name, JsonSchema dependency)
 		{
@@ -228,7 +228,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>descriptions</code> keyword to the schema.
+		/// Add a `descriptions` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Description(this JsonSchema schema, string description)
 		{
@@ -237,7 +237,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>else</code> keyword to the schema.
+		/// Add an `else` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Else(this JsonSchema schema, JsonSchema elseSchema)
 		{
@@ -246,7 +246,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>enum</code> keyword to the schema.
+		/// Add an `enum` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Enum(this JsonSchema schema, params JsonValue[] values)
 		{
@@ -255,7 +255,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>examples</code> keyword to the schema.
+		/// Add an `examples` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Examples(this JsonSchema schema, params JsonValue[] value)
 		{
@@ -264,7 +264,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>exclusiveMaximum</code> keyword to the schema.
+		/// Add an `exclusiveMaximum` keyword to the schema.
 		/// </summary>
 		public static JsonSchema ExclusiveMaximum(this JsonSchema schema, double maximum)
 		{
@@ -273,7 +273,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>exclusiveMaximum</code> keyword for draft-04 to the schema.
+		/// Add an `exclusiveMaximum` keyword for draft-04 to the schema.
 		/// </summary>
 		public static JsonSchema ExclusiveMaximumDraft04(this JsonSchema schema, bool isExclusive)
 		{
@@ -282,7 +282,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>exclusiveMinimum</code> keyword to the schema.
+		/// Add an `exclusiveMinimum` keyword to the schema.
 		/// </summary>
 		public static JsonSchema ExclusiveMinimum(this JsonSchema schema, double minimum)
 		{
@@ -291,7 +291,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>exclusiveMinimum</code> keyword for draft-04 to the schema.
+		/// Add an `exclusiveMinimum` keyword for draft-04 to the schema.
 		/// </summary>
 		public static JsonSchema ExclusiveMinimumDraft04(this JsonSchema schema, bool isExclusive)
 		{
@@ -300,7 +300,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>format</code> keyword to the schema.
+		/// Add a `format` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Format(this JsonSchema schema, StringFormat format)
 		{
@@ -309,7 +309,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>$id</code> keyword to the schema.
+		/// Add an `$id` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Id(this JsonSchema schema, string id)
 		{
@@ -318,7 +318,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>id</code> keyword for draft-04 to the schema.
+		/// Add an `id` keyword for draft-04 to the schema.
 		/// </summary>
 		public static JsonSchema IdDraft04(this JsonSchema schema, string id)
 		{
@@ -327,7 +327,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>if</code> keyword to the schema.
+		/// Add an `if` keyword to the schema.
 		/// </summary>
 		public static JsonSchema If(this JsonSchema schema, JsonSchema ifSchema)
 		{
@@ -336,7 +336,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>items</code> keyword to the schema.
+		/// Add an `items` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Item(this JsonSchema schema, JsonSchema definition)
 		{
@@ -353,7 +353,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>items</code> keyword to the schema.
+		/// Add an `items` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Items(this JsonSchema schema, JsonSchema definition)
 		{
@@ -363,7 +363,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// (Obsolete) Add an <code>items</code> keyword to the schema.
+		/// (Obsolete) Add an `items` keyword to the schema.
 		/// </summary>
 		[Obsolete("This method cannot consider a single-item array value.  Use multiple calls to Item() instead.")]
 		public static JsonSchema Items(this JsonSchema schema, params JsonSchema[] definitions)
@@ -381,7 +381,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>maxContains</code> keyword to the schema.
+		/// Add a `maxContains` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MaxContains(this JsonSchema schema, uint count)
 		{
@@ -390,7 +390,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>maximum</code> keyword to the schema.
+		/// Add a `maximum` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Maximum(this JsonSchema schema, double maximum)
 		{
@@ -399,7 +399,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>maxItems</code> keyword to the schema.
+		/// Add a `maxItems` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MaxItems(this JsonSchema schema, uint count)
 		{
@@ -408,7 +408,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>maxLength</code> keyword to the schema.
+		/// Add a `maxLength` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MaxLength(this JsonSchema schema, uint length)
 		{
@@ -417,7 +417,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>maxProperties</code> keyword to the schema.
+		/// Add a `maxProperties` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MaxProperties(this JsonSchema schema, uint count)
 		{
@@ -426,7 +426,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>minContains</code> keyword to the schema.
+		/// Add a `minContains` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MinContains(this JsonSchema schema, uint count)
 		{
@@ -435,7 +435,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>minimum</code> keyword to the schema.
+		/// Add a `minimum` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Minimum(this JsonSchema schema, double minimum)
 		{
@@ -444,7 +444,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>minItems</code> keyword to the schema.
+		/// Add a `minItems` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MinItems(this JsonSchema schema, uint count)
 		{
@@ -453,7 +453,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>minLength</code> keyword to the schema.
+		/// Add a `minLength` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MinLength(this JsonSchema schema, uint length)
 		{
@@ -462,7 +462,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>minProperties</code> keyword to the schema.
+		/// Add a `minProperties` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MinProperties(this JsonSchema schema, uint count)
 		{
@@ -471,7 +471,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>multipleOf</code> keyword to the schema.
+		/// Add a `multipleOf` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MultipleOf(this JsonSchema schema, double divisor)
 		{
@@ -480,7 +480,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>not</code> keyword to the schema.
+		/// Add a `not` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Not(this JsonSchema schema, JsonSchema notSchema)
 		{
@@ -489,7 +489,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>oneOf</code> keyword to the schema.
+		/// Add a `oneOf` keyword to the schema.
 		/// </summary>
 		public static JsonSchema OneOf(this JsonSchema schema, params JsonSchema[] definitions)
 		{
@@ -506,7 +506,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>pattern</code> keyword to the schema.
+		/// Add a `pattern` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Pattern(this JsonSchema schema, [RegexPattern] string pattern)
 		{
@@ -515,7 +515,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>pattern</code> keyword to the schema.
+		/// Add a `pattern` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Pattern(this JsonSchema schema, Regex pattern)
 		{
@@ -524,7 +524,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a single pattern-based property requirement to the <code>patterProperties</code> keyword.
+		/// Add a single pattern-based property requirement to the `patterProperties` keyword.
 		/// </summary>
 		public static JsonSchema PatternProperty(this JsonSchema schema, [RegexPattern] string name, JsonSchema property)
 		{
@@ -541,7 +541,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a single property requirement to the <code>properties</code> keyword.
+		/// Add a single property requirement to the `properties` keyword.
 		/// </summary>
 		public static JsonSchema Property(this JsonSchema schema, string name, JsonSchema property)
 		{
@@ -558,7 +558,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>propertyNames</code> keyword to the schema.
+		/// Add a `propertyNames` keyword to the schema.
 		/// </summary>
 		public static JsonSchema PropertyNames(this JsonSchema schema, JsonSchema otherSchema)
 		{
@@ -567,7 +567,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>readOnly</code> keyword to the schema.
+		/// Add a `readOnly` keyword to the schema.
 		/// </summary>
 		public static JsonSchema ReadOnly(this JsonSchema schema, bool isReadOnly)
 		{
@@ -576,7 +576,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$recursiveAnchor</code> keyword to the schema.  The only supported value is <code>true</code>.
+		/// Add a `$recursiveAnchor` keyword to the schema.  The only supported value is `true`.
 		/// </summary>
 		public static JsonSchema RecursiveAnchor(this JsonSchema schema, bool value)
 		{
@@ -585,7 +585,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$recursiveRef</code> keyword to the schema.
+		/// Add a `$recursiveRef` keyword to the schema.
 		/// </summary>
 		public static JsonSchema RecursiveRef(this JsonSchema schema, string reference)
 		{
@@ -594,7 +594,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$recursiveRef</code> that points to the root (<code>#</code>) keyword to the schema.
+		/// Add a `$recursiveRef` that points to the root (`#`) keyword to the schema.
 		/// </summary>
 		public static JsonSchema RecursiveRefRoot(this JsonSchema schema)
 		{
@@ -603,7 +603,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$ref</code> keyword to the schema.
+		/// Add a `$ref` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Ref(this JsonSchema schema, string reference)
 		{
@@ -612,7 +612,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$ref</code> keyword that points to the root (<code>#</code>) to the schema.
+		/// Add a `$ref` keyword that points to the root (`#`) to the schema.
 		/// </summary>
 		public static JsonSchema RefRoot(this JsonSchema schema)
 		{
@@ -621,7 +621,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>required</code> keyword to the schema.
+		/// Add a `required` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Required(this JsonSchema schema, params string[] values)
 		{
@@ -630,7 +630,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>$schema</code> keyword to the schema.
+		/// Add a `$schema` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Schema(this JsonSchema schema, string schemaCallout)
 		{
@@ -639,7 +639,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>then</code> keyword to the schema.
+		/// Add a `then` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Then(this JsonSchema schema, JsonSchema thenSchema)
 		{
@@ -648,7 +648,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>title</code> keyword to the schema.
+		/// Add a `title` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Title(this JsonSchema schema, string title)
 		{
@@ -657,7 +657,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>type</code> keyword to the schema.
+		/// Add a `type` keyword to the schema.
 		/// </summary>
 		public static JsonSchema Type(this JsonSchema schema, JsonSchemaType type)
 		{
@@ -666,7 +666,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>unevaluatedItems</code> keyword to the schema.
+		/// Add an `unevaluatedItems` keyword to the schema.
 		/// </summary>
 		public static JsonSchema UnevaluatedItems(this JsonSchema schema, JsonSchema otherSchema)
 		{
@@ -675,7 +675,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add an <code>unevaluatedProperties</code> keyword to the schema.
+		/// Add an `unevaluatedProperties` keyword to the schema.
 		/// </summary>
 		public static JsonSchema UnevaluatedProperties(this JsonSchema schema, JsonSchema otherSchema)
 		{
@@ -684,7 +684,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>uniqueItems</code> keyword to the schema.
+		/// Add a `uniqueItems` keyword to the schema.
 		/// </summary>
 		public static JsonSchema UniqueItems(this JsonSchema schema, bool unique)
 		{
@@ -693,7 +693,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a single property requirement to the <code>properties</code> keyword.
+		/// Add a single property requirement to the `properties` keyword.
 		/// </summary>
 		public static JsonSchema Vocabulary(this JsonSchema schema, string id, bool required)
 		{
@@ -711,7 +711,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a single property requirement to the <code>properties</code> keyword.
+		/// Add a single property requirement to the `properties` keyword.
 		/// </summary>
 		public static JsonSchema Vocabulary(this JsonSchema schema, SchemaVocabulary vocabulary, bool required)
 		{
@@ -728,7 +728,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// Add a <code>writeOnly</code> keyword to the schema.
+		/// Add a `writeOnly` keyword to the schema.
 		/// </summary>
 		public static JsonSchema WriteOnly(this JsonSchema schema, bool isWriteOnly)
 		{
