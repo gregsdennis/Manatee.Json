@@ -10,7 +10,7 @@ To support JSON Schema, Manatee.Json exposes the `JsonSchema` type.  This type i
 
 ## Drafts
 
-There are currently four active drafts of the JSON Schema specification:
+There are currently five active drafts of the JSON Schema specification:
 
 - Draft-03
 - Draft-04
@@ -24,7 +24,7 @@ Manatee.Json supports draft-04 and later.
 
 Each draft defines a meta-schema.  This is a special JSON Schema that describes all of the keywords available for that draft.  They are intended to be used to validate other schemas.  Usually, a schema will declare the draft it should adhere to using the `$schema` keyword.
 
-Manatee.Json declares the meta-schemas for draft-04, draft-06, and draft-07 as members of the `MetaSchemas` static class.
+Manatee.Json declares the meta-schemas for the supported drafts as members of the `MetaSchemas` static class.
 
 Draft-08 introduced vocabularies.  As part of this new feature, the meta-schema for draft-08 has been split into vocabulary-specific meta-schemas.  Additionally, the specification recognizes that the meta-schemas aren't perfect and may need to be updated occasionally.  To this end, the meta-schemas are versioned with the year and month they are published.  The schemas within this library are named accordingly.
 

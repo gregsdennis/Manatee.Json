@@ -38,12 +38,16 @@ The results object is an instance of `MetaSchemaValidationResults` which exposes
 To validate these, all we have to do is pass these into our schema's `Validate(JsonValue)` method.
 
 ```csharp
-var schema = GetSchema(); // defines the schema we created above.
+var schema = new JsonSchema()
+                   .Property("myProperty", new JsonSchema()
+                                                 .Type(JsonSchemaType.String)
+                                                 .MinLength(10))
+                   .Required("myProperty");
 var emptyJson = new JsonObject();
-var booleanJson = new JsonObject { {"myProperty", false} };
-var stringJson = new JsonObject { {"myProperty", "some string"} };
-var shortJson = new JsonObject { {"myProperty", "short"} };
-var numberJson = new JsonObject { {"otherProperty", 35.4} };
+var booleanJson = new JsonObject { ["myProperty"] = false };
+var stringJson = new JsonObject { ["myProperty"] = "some string" };
+var shortJson = new JsonObject { ["myProperty"] = "short" };
+var numberJson = new JsonObject { ["otherProperty"] = 35.4 };
 var nonObject = (JsonValue)"nonObject";
 
 var emptyResults = schema.Validate(emptyJson);
@@ -237,7 +241,7 @@ In the same way, entirely new formats can be created to make them available to M
 The `JsonSchemaOptions` class gives you a few configuration points that likely won't change at runtime.
 
 - `Download` - This function property is the mechanism by which `JsonSchemaRepository` downloads unregistered schemas.  By default, it knows to use `HttpClient` for *http:* endpoints and `System.IO.File` for file paths.  If you need more functionality (for instance if your schema is buried inside an FTP share), override this with a new function that can read from your endpoint.
-- `ValidateFormatKeyword` - This defines whether a schema will attempt to apply string format validation based on the value of a `format` keyword.  This is enabled by default.  See below for more information on string format validation.
+- `ValidateFormatKeyword` - This defines whether a schema will attempt to apply string format validation based on the value of a `format` keyword.  This is enabled by default.  See above for more information on string format validation.
 - `AllowUnknownFormats` - This specifies whether the system will allow unknown string formats.  It is enabled by default.  If `ValidateFormatKeyword` is disabled, this option has no effect.  There are two effect of disabling this option,
   - Validations by schemas with unknown string formats will always return invalid.  This impacts schemas explicitly built in code.
   - If a schema with an unknown string format is deserialized (loaded from an external source), a `JsonSerializationException` will be thrown.

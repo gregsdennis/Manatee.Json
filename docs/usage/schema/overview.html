@@ -76,7 +76,7 @@
 <p>More information about JSON Schema can be found at <a href="http://json-schema.org">json-schema.org</a>.</p>
 <p>To support JSON Schema, Manatee.Json exposes the <code>JsonSchema</code> type.  This type is implemented as a list of keywords, each of which correspond to one of the keywords defined in the JSON Schema specifications.</p>
 <h2 id="drafts">Drafts</h2>
-<p>There are currently four active drafts of the JSON Schema specification:</p>
+<p>There are currently five active drafts of the JSON Schema specification:</p>
 <ul>
 <li>Draft-03</li>
 <li>Draft-04</li>
@@ -87,7 +87,7 @@
 <p>Manatee.Json supports draft-04 and later.</p>
 <h3 id="meta-schemas">Meta-schemas</h3>
 <p>Each draft defines a meta-schema.  This is a special JSON Schema that describes all of the keywords available for that draft.  They are intended to be used to validate other schemas.  Usually, a schema will declare the draft it should adhere to using the <code>$schema</code> keyword.</p>
-<p>Manatee.Json declares the meta-schemas for draft-04, draft-06, and draft-07 as members of the <code>MetaSchemas</code> static class.</p>
+<p>Manatee.Json declares the meta-schemas for the supported drafts as members of the <code>MetaSchemas</code> static class.</p>
 <p>Draft-08 introduced vocabularies.  As part of this new feature, the meta-schema for draft-08 has been split into vocabulary-specific meta-schemas.  Additionally, the specification recognizes that the meta-schemas aren't perfect and may need to be updated occasionally.  To this end, the meta-schemas are versioned with the year and month they are published.  The schemas within this library are named accordingly.</p>
 <h2 id="keywords">Keywords</h2>
 <p>JSON Schema is expressed as a collection of keywords, each of which provides a specific constraint on a JSON instance.  For example, the <code>type</code> keyword specifies what type of data an instance may be, whereas the <code>minimum</code> keyword specifies a minimum numeric value <em>for numeric data</em>.  These keywords can be combined to express the expected shape of any JSON instance.  Once defined, the schema validates the instance, providing feedback on errors that occurred, including what and where the error occurred.</p>
@@ -99,7 +99,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/better-draft-8-docs/docs_source/usage/schema/overview.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/schema/overview.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

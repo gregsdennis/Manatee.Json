@@ -98,12 +98,16 @@
 &quot;nonObject&quot;
 </code></pre>
 <p>To validate these, all we have to do is pass these into our schema's <code>Validate(JsonValue)</code> method.</p>
-<pre><code class="lang-csharp">var schema = GetSchema(); // defines the schema we created above.
+<pre><code class="lang-csharp">var schema = new JsonSchema()
+                   .Property(&quot;myProperty&quot;, new JsonSchema()
+                                                 .Type(JsonSchemaType.String)
+                                                 .MinLength(10))
+                   .Required(&quot;myProperty&quot;);
 var emptyJson = new JsonObject();
-var booleanJson = new JsonObject { {&quot;myProperty&quot;, false} };
-var stringJson = new JsonObject { {&quot;myProperty&quot;, &quot;some string&quot;} };
-var shortJson = new JsonObject { {&quot;myProperty&quot;, &quot;short&quot;} };
-var numberJson = new JsonObject { {&quot;otherProperty&quot;, 35.4} };
+var booleanJson = new JsonObject { [&quot;myProperty&quot;] = false };
+var stringJson = new JsonObject { [&quot;myProperty&quot;] = &quot;some string&quot; };
+var shortJson = new JsonObject { [&quot;myProperty&quot;] = &quot;short&quot; };
+var numberJson = new JsonObject { [&quot;otherProperty&quot;] = 35.4 };
 var nonObject = (JsonValue)&quot;nonObject&quot;;
 
 var emptyResults = schema.Validate(emptyJson);
@@ -271,7 +275,7 @@ var nonObjectResults = schame.Validate(nonObject);
 <p>The <code>JsonSchemaOptions</code> class gives you a few configuration points that likely won't change at runtime.</p>
 <ul>
 <li><code>Download</code> - This function property is the mechanism by which <code>JsonSchemaRepository</code> downloads unregistered schemas.  By default, it knows to use <code>HttpClient</code> for <em>http:</em> endpoints and <code>System.IO.File</code> for file paths.  If you need more functionality (for instance if your schema is buried inside an FTP share), override this with a new function that can read from your endpoint.</li>
-<li><code>ValidateFormatKeyword</code> - This defines whether a schema will attempt to apply string format validation based on the value of a <code>format</code> keyword.  This is enabled by default.  See below for more information on string format validation.</li>
+<li><code>ValidateFormatKeyword</code> - This defines whether a schema will attempt to apply string format validation based on the value of a <code>format</code> keyword.  This is enabled by default.  See above for more information on string format validation.</li>
 <li><code>AllowUnknownFormats</code> - This specifies whether the system will allow unknown string formats.  It is enabled by default.  If <code>ValidateFormatKeyword</code> is disabled, this option has no effect.  There are two effect of disabling this option,
 <ul>
 <li>Validations by schemas with unknown string formats will always return invalid.  This impacts schemas explicitly built in code.</li>
@@ -288,7 +292,7 @@ var nonObjectResults = schame.Validate(nonObject);
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/better-draft-8-docs/docs_source/usage/schema/validation.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/docs_source/usage/schema/validation.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
