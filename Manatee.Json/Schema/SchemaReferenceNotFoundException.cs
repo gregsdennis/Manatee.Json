@@ -18,7 +18,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="location">The location of the reference relative to the original schema root.</param>
 		public SchemaReferenceNotFoundException(JsonPointer location)
-			: base($"Cannot resolve schema referenced by the pointer '{location}'.")
+			: base($"Cannot resolve schema referenced at '{location}'.")
 		{
 			Location = location;
 		}

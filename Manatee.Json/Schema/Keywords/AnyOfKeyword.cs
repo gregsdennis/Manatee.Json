@@ -48,17 +48,11 @@ namespace Manatee.Json.Schema
 		{
 			var nestedResults = this.Select((s, i) =>
 				{
-					var newContext = new SchemaValidationContext
+					var newContext = new SchemaValidationContext(context)
 						{
-							BaseUri = context.BaseUri,
-							Instance = context.Instance,
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
-							InstanceLocation = context.InstanceLocation,
-							IsMetaSchemaValidation = context.IsMetaSchemaValidation
-					};
+						};
 					var result = s.Validate(newContext);
 					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
 					context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);

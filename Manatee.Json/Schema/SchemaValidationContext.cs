@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
@@ -69,5 +70,40 @@ namespace Manatee.Json.Schema
 		/// processed in the correct order so that the communication occurs properly.
 		/// </remarks>
 		public Dictionary<string, object> Misc { get; } = new Dictionary<string, object>();
+
+		internal JsonSchemaRegistry LocalRegistry { get; }
+
+		/// <summary>
+		/// Obsolete - Creates a new instance of the <see cref="SchemaValidationContext"/> class.
+		/// </summary>
+		[Obsolete("Use the copy constructor instead and replace what you need.")]
+		public SchemaValidationContext()
+		{
+			LocalRegistry = new JsonSchemaRegistry();
+		}
+		/// <summary>
+		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.
+		/// </summary>
+		public SchemaValidationContext(SchemaValidationContext source)
+#pragma warning disable 618
+			: this()
+#pragma warning restore 618
+		{
+			Local = source.Local;
+			Root = source.Root;
+			RecursiveAnchor = source.RecursiveAnchor;
+			Instance = source.Instance;
+			EvaluatedPropertyNames.AddRange(source.EvaluatedPropertyNames);
+			LocallyEvaluatedPropertyNames.AddRange(source.LocallyEvaluatedPropertyNames);
+			LastEvaluatedIndex = source.LastEvaluatedIndex;
+			LocalTierLastEvaluatedIndex = source.LocalTierLastEvaluatedIndex;
+			BaseUri = source.BaseUri;
+			InstanceLocation = source.InstanceLocation;
+			RelativeLocation = source.RelativeLocation;
+			BaseRelativeLocation = source.BaseRelativeLocation;
+			IsMetaSchemaValidation = source.IsMetaSchemaValidation;
+
+			LocalRegistry = source.LocalRegistry;
+		}
 	}
 }

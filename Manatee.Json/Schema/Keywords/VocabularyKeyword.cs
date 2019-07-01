@@ -117,17 +117,11 @@ namespace Manatee.Json.Schema
 				var required = kvp.Value;
 				if (vocabulary.MetaSchemaId != null)
 				{
-					var newContext = new SchemaValidationContext
+					var newContext = new SchemaValidationContext(context)
 						{
-							BaseUri = context.BaseUri,
-							Instance = context.Instance,
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, vocabulary.Id),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, vocabulary.Id),
-							InstanceLocation = context.InstanceLocation,
-							IsMetaSchemaValidation = context.IsMetaSchemaValidation
-					};
+						};
 					var metaSchema = JsonSchemaRegistry.Get(vocabulary.MetaSchemaId);
 					if (metaSchema != null)
 						metaSchema.Validate(newContext);

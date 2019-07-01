@@ -127,6 +127,7 @@ namespace Manatee.Json.Schema
 			else
 			{
 				var asJson = ToJson(new JsonSerializer());
+#pragma warning disable 618
 				var context = new SchemaValidationContext
 					{
 						Instance = asJson,
@@ -135,6 +136,7 @@ namespace Manatee.Json.Schema
 						InstanceLocation = new JsonPointer("#"),
 						IsMetaSchemaValidation = true
 					};
+#pragma warning restore 618
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft04))
 				{
 					context.Root = MetaSchemas.Draft04;
@@ -189,14 +191,16 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(JsonValue json)
 		{
+#pragma warning disable 618
 			var results = Validate(new SchemaValidationContext
-				{
+				                       {
 					Instance = json,
 					Root = this,
 					BaseRelativeLocation = new JsonPointer("#"),
 					RelativeLocation = new JsonPointer("#"),
 					InstanceLocation = new JsonPointer("#")
 				});
+#pragma warning restore 618
 
 			switch (JsonSchemaOptions.OutputFormat)
 			{
@@ -228,8 +232,12 @@ namespace Manatee.Json.Schema
 			if (_hasRegistered) return;
 			_hasRegistered = true;
 
-			if (Uri.TryCreate(Id, UriKind.Absolute, out var uri))
+			var address = Id;
+			if (baseUri != null && address != null)
+				address = new Uri(baseUri, address).OriginalString;
+			if (Uri.TryCreate(address, UriKind.Absolute, out var uri))
 			{
+				DocumentPath = uri;
 				JsonSchemaRegistry.Register(this);
 				baseUri = uri;
 			}
@@ -271,7 +279,6 @@ namespace Manatee.Json.Schema
 			var foundSchema = serializer.Deserialize<JsonSchema>(found.Result);
 
 			return foundSchema;
-
 		}
 
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
@@ -287,6 +294,7 @@ namespace Manatee.Json.Schema
 			}
 
 			RegisterSubschemas(null);
+			context.LocalRegistry.RegisterLocal(this);
 
 			context.Local = this;
 

@@ -64,17 +64,13 @@ namespace Manatee.Json.Schema
 				var i = 0;
 				while (i < array.Count && i < Count)
 				{
-					var newContext = new SchemaValidationContext
+					var newContext = new SchemaValidationContext(context)
 						{
-							BaseUri = context.BaseUri,
 							Instance = array[i],
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
-							IsMetaSchemaValidation = context.IsMetaSchemaValidation
-					};
+						};
 					var localResults = this[i].Validate(newContext);
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
 					{
@@ -97,16 +93,13 @@ namespace Manatee.Json.Schema
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 				var itemValidations = array.Select((jv, i) =>
 					{
-						var newContext = new SchemaValidationContext
+						var newContext = new SchemaValidationContext(context)
 							{
-								BaseUri = context.BaseUri,
 								Instance = jv,
-								Root = context.Root,
 								BaseRelativeLocation = baseRelativeLocation,
 								RelativeLocation = relativeLocation,
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
-								IsMetaSchemaValidation = context.IsMetaSchemaValidation
-						};
+							};
 						var localResults = this[0].Validate(newContext);
 						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);

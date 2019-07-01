@@ -94,17 +94,13 @@ namespace Manatee.Json.Schema
 					{
 						var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 						var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-						var newContext = new SchemaValidationContext
+						var newContext = new SchemaValidationContext(context)
 							{
-								BaseUri = context.BaseUri,
 								Instance = jv,
-								Root = context.Root,
-								RecursiveAnchor = context.RecursiveAnchor,
 								BaseRelativeLocation = baseRelativeLocation,
 								RelativeLocation = relativeLocation,
 								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
-								IsMetaSchemaValidation = context.IsMetaSchemaValidation
-						};
+							};
 						var localResults = Value.Validate(newContext);
 						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);

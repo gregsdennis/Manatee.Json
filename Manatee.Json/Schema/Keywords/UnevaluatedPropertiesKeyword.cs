@@ -73,17 +73,13 @@ namespace Manatee.Json.Schema
 
 			foreach (var kvp in toEvaluate)
 			{
-				var newContext = new SchemaValidationContext
+				var newContext = new SchemaValidationContext(context)
 					{
-						BaseUri = context.BaseUri,
 						Instance = kvp.Value,
-						Root = context.Root,
-						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
-						IsMetaSchemaValidation = context.IsMetaSchemaValidation
-				};
+					};
 				nestedResults.Add(Value.Validate(newContext));
 			}
 

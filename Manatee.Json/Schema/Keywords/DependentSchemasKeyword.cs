@@ -52,17 +52,11 @@ namespace Manatee.Json.Schema
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 			var nestedResults = this.Select(d =>
 				{
-					var newContext = new SchemaValidationContext
+					var newContext = new SchemaValidationContext(context)
 						{
-							BaseUri = context.BaseUri,
-							Instance = context.Instance,
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = baseRelativeLocation,
 							RelativeLocation = relativeLocation,
-							InstanceLocation = context.InstanceLocation,
-							IsMetaSchemaValidation = context.IsMetaSchemaValidation
-					};
+						};
 					return d.Validate(newContext);
 				}).ToList();
 

@@ -58,17 +58,13 @@ namespace Manatee.Json.Schema
 
 				context.EvaluatedPropertyNames.Add(property.Key);
 				context.LocallyEvaluatedPropertyNames.Add(property.Key);
-				var newContext = new SchemaValidationContext
+				var newContext = new SchemaValidationContext(context)
 					{
-						BaseUri = context.BaseUri,
 						Instance = obj[property.Key],
-						Root = context.Root,
-						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, property.Key),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, property.Key),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key),
-						IsMetaSchemaValidation = context.IsMetaSchemaValidation
-				};
+					};
 				var result = property.Value.Validate(newContext);
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !result.IsValid)
 				{

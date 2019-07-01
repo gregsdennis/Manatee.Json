@@ -59,17 +59,11 @@ namespace Manatee.Json.Schema
 
 			if (then == null && @else == null) return SchemaValidationResults.Null;
 
-			var newContext = new SchemaValidationContext
+			var newContext = new SchemaValidationContext(context)
 				{
-					BaseUri = context.BaseUri,
-					Instance = context.Instance,
-					Root = context.Root,
-					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
-					InstanceLocation = context.InstanceLocation,
-					IsMetaSchemaValidation = context.IsMetaSchemaValidation
-			};
+				};
 
 			var ifResults = Value.Validate(newContext);
 
@@ -79,17 +73,11 @@ namespace Manatee.Json.Schema
 
 				var results = new SchemaValidationResults(Name, context);
 
-				newContext = new SchemaValidationContext
+				newContext = new SchemaValidationContext(context)
 					{
-						BaseUri = context.BaseUri,
-						Instance = context.Instance,
-						Root = context.Root,
-						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(then.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(then.Name),
-						InstanceLocation = context.InstanceLocation,
-						IsMetaSchemaValidation = context.IsMetaSchemaValidation
-				};
+					};
 				var thenResults = then.Value.Validate(newContext);
 				if (!thenResults.IsValid)
 				{
@@ -107,17 +95,11 @@ namespace Manatee.Json.Schema
 
 				var results = new SchemaValidationResults(Name, context);
 
-				newContext = new SchemaValidationContext
+				newContext = new SchemaValidationContext(context)
 					{
-						BaseUri = context.BaseUri,
-						Instance = context.Instance,
-						Root = context.Root,
-						RecursiveAnchor = context.RecursiveAnchor,
 						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(@else.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(@else.Name),
-						InstanceLocation = context.InstanceLocation,
-						IsMetaSchemaValidation = context.IsMetaSchemaValidation
-				};
+					};
 				var elseResults = @else.Value.Validate(newContext);
 				if (!elseResults.IsValid)
 				{

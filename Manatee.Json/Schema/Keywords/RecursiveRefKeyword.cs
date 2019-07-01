@@ -81,17 +81,13 @@ namespace Manatee.Json.Schema
 
 			var results = new SchemaValidationResults(Name, context);
 
-			var newContext = new SchemaValidationContext
+			var newContext = new SchemaValidationContext(context)
 				{
 					BaseUri = _resolvedRoot.DocumentPath,
-					Instance = context.Instance,
 					Root = _resolvedRoot ?? context.Root,
-					RecursiveAnchor = context.RecursiveAnchor,
 					BaseRelativeLocation = _resolvedFragment.WithHash(),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
-					InstanceLocation = context.InstanceLocation,
-					IsMetaSchemaValidation = context.IsMetaSchemaValidation
-			};
+				};
 
 			_validatingLocations.Add(context.InstanceLocation);
 			var nestedResults = Resolved.Validate(newContext);

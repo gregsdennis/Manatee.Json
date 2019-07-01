@@ -54,15 +54,11 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Type != JsonValueType.Object) return results;
 			if (!context.Instance.Object.ContainsKey(PropertyName)) return results;
 
-			var newContext = new SchemaValidationContext
+			var newContext = new SchemaValidationContext(context)
 				{
-					Instance = context.Instance,
-					Root = context.Root,
-					BaseUri = context.BaseUri,
 					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(PropertyName),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(PropertyName),
-					InstanceLocation = context.InstanceLocation
-			};
+				};
 
 			var nestedResult = _schema.Validate(newContext);
 
