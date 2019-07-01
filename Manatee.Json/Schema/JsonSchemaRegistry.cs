@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Manatee.Json.Internal;
 using Manatee.Json.Patch;
 using Manatee.Json.Serialization;
 
@@ -91,7 +92,7 @@ namespace Manatee.Json.Schema
 
 		internal void RegisterLocal(JsonSchema schema)
 		{
-			if (schema.Id == null) return;
+			if (schema.Id == null || !schema.Id.IsLocalSchemaId()) return;
 			lock (_contextLookup)
 			{
 				_contextLookup[schema.Id] = schema;

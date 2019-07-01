@@ -127,7 +127,6 @@ namespace Manatee.Json.Schema
 			else
 			{
 				var asJson = ToJson(new JsonSerializer());
-#pragma warning disable 618
 				var context = new SchemaValidationContext
 					{
 						Instance = asJson,
@@ -136,7 +135,6 @@ namespace Manatee.Json.Schema
 						InstanceLocation = new JsonPointer("#"),
 						IsMetaSchemaValidation = true
 					};
-#pragma warning restore 618
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft04))
 				{
 					context.Root = MetaSchemas.Draft04;
@@ -191,7 +189,6 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(JsonValue json)
 		{
-#pragma warning disable 618
 			var results = Validate(new SchemaValidationContext
 				                       {
 					Instance = json,
@@ -200,7 +197,6 @@ namespace Manatee.Json.Schema
 					RelativeLocation = new JsonPointer("#"),
 					InstanceLocation = new JsonPointer("#")
 				});
-#pragma warning restore 618
 
 			switch (JsonSchemaOptions.OutputFormat)
 			{
@@ -227,10 +223,13 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri)
+		/// <param name="localRegistry"></param>
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
 		{
 			if (_hasRegistered) return;
 			_hasRegistered = true;
+
+			localRegistry.RegisterLocal(this);
 
 			var address = Id;
 			if (baseUri != null && address != null)
@@ -244,7 +243,7 @@ namespace Manatee.Json.Schema
 
 			foreach (var keyword in this)
 			{
-				keyword.RegisterSubschemas(baseUri);
+				keyword.RegisterSubschemas(baseUri, localRegistry);
 			}
 		}
 		/// <summary>
@@ -293,7 +292,7 @@ namespace Manatee.Json.Schema
 					};
 			}
 
-			RegisterSubschemas(null);
+			RegisterSubschemas(null, context.LocalRegistry);
 			context.LocalRegistry.RegisterLocal(this);
 
 			context.Local = this;

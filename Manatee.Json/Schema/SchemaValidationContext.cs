@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
@@ -73,11 +72,7 @@ namespace Manatee.Json.Schema
 
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
-		/// <summary>
-		/// Obsolete - Creates a new instance of the <see cref="SchemaValidationContext"/> class.
-		/// </summary>
-		[Obsolete("Use the copy constructor instead and replace what you need.")]
-		public SchemaValidationContext()
+		internal SchemaValidationContext()
 		{
 			LocalRegistry = new JsonSchemaRegistry();
 		}
@@ -85,9 +80,7 @@ namespace Manatee.Json.Schema
 		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.
 		/// </summary>
 		public SchemaValidationContext(SchemaValidationContext source)
-#pragma warning disable 618
 			: this()
-#pragma warning restore 618
 		{
 			Local = source.Local;
 			Root = source.Root;

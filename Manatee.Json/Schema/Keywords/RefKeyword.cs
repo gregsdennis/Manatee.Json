@@ -74,7 +74,7 @@ namespace Manatee.Json.Schema
 
 			var newContext = new SchemaValidationContext(context)
 				{
-					BaseUri = _resolvedRoot.DocumentPath,
+					BaseUri = _resolvedRoot?.DocumentPath,
 					Instance = context.Instance,
 					Root = _resolvedRoot ?? context.Root,
 					BaseRelativeLocation = _resolvedFragment?.WithHash(),
@@ -91,7 +91,8 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri) { }
+		/// <param name="localRegistry"></param>
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
@@ -155,7 +156,7 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
-			if (Reference != "#" && !Reference.StartsWith("#/") && Reference.StartsWith("#"))
+			if (Reference.IsLocalSchemaId())
 			{
 				Resolved = context.LocalRegistry.GetLocal(Reference);
 				if (Resolved != null) return;

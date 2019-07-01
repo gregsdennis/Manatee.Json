@@ -102,7 +102,8 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$recursiveRef` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri) { }
+		/// <param name="localRegistry"></param>
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$recursiveRef` during validation.
 		/// </summary>
@@ -173,6 +174,12 @@ namespace Manatee.Json.Schema
 					_resolvedRoot = context.RecursiveAnchor;
 			}
 
+			if (Reference.IsLocalSchemaId())
+			{
+				Resolved = context.LocalRegistry.GetLocal(Reference);
+				if (Resolved != null) return;
+			}
+
 			var documentPath = _resolvedRoot?.DocumentPath ?? context.BaseUri;
 			var referenceParts = Reference.Split(new[] {'#'}, StringSplitOptions.None);
 			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? documentPath?.OriginalString : referenceParts[0];
@@ -194,9 +201,14 @@ namespace Manatee.Json.Schema
 					_resolvedRoot = JsonSchemaRegistry.Get(address);
 				}
 				else
-				{
 					_resolvedRoot = context.Root;
-				}
+			}
+
+			var wellKnown = JsonSchemaRegistry.GetWellKnown(Reference);
+			if (wellKnown != null)
+			{
+				Resolved = wellKnown;
+				return;
 			}
 
 			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri);
