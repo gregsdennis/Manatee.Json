@@ -1,12 +1,23 @@
-# 10.2.0
+# 11.0.0
 
-*Beta 1 - Released on 22 Jun, 2019*
+*v10.2.0 beta 1 - Released on 22 Jun, 2019*
 
-*Beta 2 - Released on 28 Jun, 2019*
+*v10.2.0 beta 2 - Released on 28 Jun, 2019*
+
+*v11.0.0 beta 1 - Released on 1 Jul, 2019*
 
 > ***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
 
 <span id="feature">feature</span>
+
+## Breaking changes
+
+In order to support some new independent reference tests, some changes were made to the schema validation logic to include a validation-run-independent schema registry, seperate from the static one.
+
+- `IJsonSchemaKeyword.RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)` - The second parameter is new.
+- `SchemaValidationContext` now requires a source context from which to copy values.
+
+## Non-breaking changes
 
 ([#175](https://github.com/gregsdennis/Manatee.Json/issues/175)) JSON Schema draft-08 support.  
 
@@ -17,6 +28,8 @@
 ([#201](https://github.com/gregsdennis/Manatee.Json/issues/201)) CompilerAttributes causes errors in .Net Standard versions.  This dependency has been removed.
 
 ([#211](https://github.com/gregsdennis/Manatee.Json/issues/211)) [@desmondgc](https://github.com/desmondgc) Date/Time format validation within schemas is insufficient.  Default implementation now uses `DateTime.TryParseExact()` with support for fractional seconds.
+
+- `JsonSchemaRegistry` is no longer static, but all previously existing functionality is still static.  All instance functionality is internal.
 
 # 10.1.4
 

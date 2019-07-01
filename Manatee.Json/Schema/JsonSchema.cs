@@ -190,7 +190,7 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(JsonValue json)
 		{
 			var results = Validate(new SchemaValidationContext
-				                       {
+				{
 					Instance = json,
 					Root = this,
 					BaseRelativeLocation = new JsonPointer("#"),
