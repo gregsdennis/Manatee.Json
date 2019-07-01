@@ -91,8 +91,9 @@
     { &quot;$ref&quot;: &quot;https://json-schema.org/draft/2019-06/schema#&quot; }
   ],
   &quot;properties&quot;: {
-    &quot;pastDate&quot;: {                                                           // 4
-      &quot;type&quot;: &quot;boolean&quot;
+    &quot;minDate&quot;: {                                                            // 4
+      &quot;type&quot;: &quot;string&quot;,
+      &quot;format&quot;: &quot;date&quot;
     }
   }
 }
@@ -103,9 +104,7 @@
   &quot;$id&quot;: &quot;https://myserver.net/schema#&quot;,
   &quot;properties&quot;: {
     &quot;publishedOnDate&quot;: {
-      &quot;type&quot;: &quot;string&quot;,
-      &quot;format&quot;: &quot;date&quot;,
-      &quot;pastDate&quot;: true                                                      // 6
+      &quot;minDate&quot;: &quot;2019-01-01&quot;                                               // 6
     }
   }
 }
@@ -116,21 +115,21 @@
 }
 // instance I2
 {
-  &quot;publishedOnDate&quot;: &quot;2119-06-22&quot;                                           // 8
+  &quot;publishedOnDate&quot;: &quot;1998-06-22&quot;                                           // 8
 }
 </code></pre>
 <ol>
 <li>We declare a meta-schema.  The meta-schema should validate itself, so we declare <code>$schema</code> to be the same as <code>$id</code>.</li>
 <li>We list the vocabularies that the Manatee.Json should know about in order to process schemas that declare this meta-schema as their <code>$schema</code> (see #5).  This includes all of the vocabularies from draft-08 (because we want all of the draft-08 capabilities) as well as the vocab for this meta-schema.  We'll explain a bit more about this later.</li>
 <li>We also need all of the syntactic validation from draft-08, so we include it in an <code>allOf</code>.</li>
-<li>We define a new keyword, <code>pastDate</code>, that takes a boolean value.</li>
+<li>We define a new keyword, <code>minDate</code>, that takes a date-formatted string value.</li>
 <li>We create a schema that uses our new meta-schema (because we want to use the new keyword).</li>
 <li>We use the new keyword to define a property to be found in the instance.</li>
 <li>The first instance defines a date in the past.</li>
 <li>The second date defines a date in the future.</li>
 </ol>
-<p>The kicker here is that we can read &quot;pastDate&quot; and know that when its value is <code>true</code>, the value of the property should be a date in the past... because we're human, and we understand things like that.  However, a validator isn't going to be able to infer that.  It can only validate that a boolean was given for <code>pastDate</code> in the schema (<strong>S</strong>).</p>
-<p>That's where the vocabulary comes in.  The vocabulary is a human-readable document that gives <em>semantic</em> meaning to <code>pastDate</code>.  It is documentation of business logic that allows a programmer to code an extension that provides additional validation.  For example, this is the documentation for <code>minLength</code> in the Schema Validation specification:</p>
+<p>The kicker here is that we can read &quot;minDate&quot; and know that its value represents the minimum acceptable date... because we're human, and we understand things like that.  However, a validator isn't going to be able to infer that.  It can only validate that a date-formatted string was given for <code>minDate</code> in the schema (<strong>S</strong>).</p>
+<p>That's where the vocabulary comes in.  The vocabulary is a human-readable document that gives <em>semantic</em> meaning to <code>minDate</code>.  It is documentation of business logic that allows a programmer to code an extension that provides additional validation.  For example, this is the documentation for <code>minLength</code> in the Schema Validation specification:</p>
 <blockquote>
 <p><strong>6.3.2. minLength</strong></p>
 <p>The value of this keyword MUST be a non-negative integer.</p>
@@ -139,9 +138,9 @@
 <p>Omitting this keyword has the same behavior as a value of 0.</p>
 </blockquote>
 <p>It gives meaning to the keyword beyond how the meta-schema describes it: a non-negative integer.</p>
-<p>Any validator can validate that <code>pastDate</code> is a boolean, but only a validator that understands <code>https://myserver.net/my-vocab</code> as a vocabulary will understand that <code>pastDate</code> should validate that given a string that contains a date, that date should be in the past.</p>
-<p>Now, if you look at the <code>$vocabulary</code> entry for <code>https://myserver.net/my-vocab</code>, the vocabulary has its ID as the key with a boolean value.  In this case, that value is <code>true</code>.  That means that if Manatee.Json <em>doesn't</em> know about the vocabulary, it <strong>must</strong> refuse to process any schema that declares <strong>M</strong> as its <code>$schema</code> (as <strong>S</strong> does).  If this value were <code>false</code>, then Manatee.Json would be allowed to continue, which means that only syntactic analysis (i.e. &quot;Is <code>pastDate</code> a boolean?&quot;) would be performed.</p>
-<p>So, back to the example, because we declare the vocabulary to be required (by giving it a value of <code>true</code>) <em>and</em> because Manatee.Json knows about it, <strong>I1</strong> is reported as valid and <strong>I2</strong> is not.  If the vocabulary had not been required <em>and</em> Manatee.Json didn't know about the vocabulary, both <strong>I1</strong> and <strong>I2</strong> would be reported as valid because the <code>pastDate</code> keyword would not have been enforced.</p>
+<p>Any validator can validate that <code>minDate</code> is a date-formatted string, but only a validator that understands <code>https://myserver.net/my-vocab</code> as a vocabulary will understand that <code>minDate</code> should validate that a date in the instance should be later than that in the schema.</p>
+<p>Now, if you look at the <code>$vocabulary</code> entry for <code>https://myserver.net/my-vocab</code>, the vocabulary has its ID as the key with a boolean value.  In this case, that value is <code>true</code>.  That means that if Manatee.Json <em>doesn't</em> know about the vocabulary, it <strong>must</strong> refuse to process any schema that declares <strong>M</strong> as its <code>$schema</code> (as <strong>S</strong> does).  If this value were <code>false</code>, then Manatee.Json would be allowed to continue, which means that only syntactic analysis (i.e. &quot;Is <code>minDate</code> a date-formatted string?&quot;) would be performed.</p>
+<p>So, back to the example, because we declare the vocabulary to be required (by giving it a value of <code>true</code>) <em>and</em> because Manatee.Json knows about it, <strong>I1</strong> is reported as valid and <strong>I2</strong> is not.  If the vocabulary had not been required <em>and</em> Manatee.Json didn't know about the vocabulary, both <strong>I1</strong> and <strong>I2</strong> would be reported as valid because the <code>minDate</code> keyword would not have been enforced.</p>
 <h3 id="registering-a-vocabulary">Registering a vocabulary</h3>
 <p>To tell Manatee.Json about a vocabulary, you just need to create a <code>SchemaVocabulary</code> instance, return it from a new keyword (see below), and register the new keyword using <code>SchemaKeywordCatalog.Add&lt;T&gt;()</code>.  The vocabulary will automatically register.</p>
 <p>The <code>SchemaVocabulary</code> class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These URIs are both required in the constructor.</p>

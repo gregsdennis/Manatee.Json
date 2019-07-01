@@ -4,7 +4,7 @@
 
 *v10.2.0 beta 2 - Released on 28 Jun, 2019*
 
-*v11.0.0 beta 1 - Released on 1 Jul, 2019*
+*v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)*
 
 > ***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
 

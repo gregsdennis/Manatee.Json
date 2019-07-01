@@ -49,6 +49,12 @@ references:
   commentId: N:Manatee.Json.Internal
   fullName: Manatee.Json.Internal
   nameWithType: Manatee.Json.Internal
+- uid: Manatee.Json.Internal.DeserializationUseOnlyAttribute
+  name: DeserializationUseOnlyAttribute
+  href: api/Manatee.Json.Internal.DeserializationUseOnlyAttribute.html
+  commentId: T:Manatee.Json.Internal.DeserializationUseOnlyAttribute
+  fullName: Manatee.Json.Internal.DeserializationUseOnlyAttribute
+  nameWithType: DeserializationUseOnlyAttribute
 - uid: Manatee.Json.Internal.Uri3986
   name: Uri3986
   href: api/Manatee.Json.Internal.Uri3986.html
@@ -2579,12 +2585,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.AdditionalItemsKeyword.Name
   nameWithType: AdditionalItemsKeyword.Name
-- uid: Manatee.Json.Schema.AdditionalItemsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.AdditionalItemsKeyword.html#Manatee_Json_Schema_AdditionalItemsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.AdditionalItemsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.AdditionalItemsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: AdditionalItemsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.AdditionalItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.AdditionalItemsKeyword.html#Manatee_Json_Schema_AdditionalItemsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.AdditionalItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.AdditionalItemsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: AdditionalItemsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.AdditionalItemsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.AdditionalItemsKeyword.html#Manatee_Json_Schema_AdditionalItemsKeyword_RegisterSubschemas_
@@ -2798,12 +2804,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.AdditionalPropertiesKeyword.Name
   nameWithType: AdditionalPropertiesKeyword.Name
-- uid: Manatee.Json.Schema.AdditionalPropertiesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.AdditionalPropertiesKeyword.html#Manatee_Json_Schema_AdditionalPropertiesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.AdditionalPropertiesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.AdditionalPropertiesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: AdditionalPropertiesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.AdditionalPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.AdditionalPropertiesKeyword.html#Manatee_Json_Schema_AdditionalPropertiesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.AdditionalPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.AdditionalPropertiesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: AdditionalPropertiesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.AdditionalPropertiesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.AdditionalPropertiesKeyword.html#Manatee_Json_Schema_AdditionalPropertiesKeyword_RegisterSubschemas_
@@ -2985,12 +2991,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.AllOfKeyword.Name
   nameWithType: AllOfKeyword.Name
-- uid: Manatee.Json.Schema.AllOfKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.AllOfKeyword.html#Manatee_Json_Schema_AllOfKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.AllOfKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.AllOfKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: AllOfKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.AllOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.AllOfKeyword.html#Manatee_Json_Schema_AllOfKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.AllOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.AllOfKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: AllOfKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.AllOfKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.AllOfKeyword.html#Manatee_Json_Schema_AllOfKeyword_RegisterSubschemas_
@@ -3159,12 +3165,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.AnyOfKeyword.Name
   nameWithType: AnyOfKeyword.Name
-- uid: Manatee.Json.Schema.AnyOfKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.AnyOfKeyword.html#Manatee_Json_Schema_AnyOfKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.AnyOfKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.AnyOfKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: AnyOfKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.AnyOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.AnyOfKeyword.html#Manatee_Json_Schema_AnyOfKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.AnyOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.AnyOfKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: AnyOfKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.AnyOfKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.AnyOfKeyword.html#Manatee_Json_Schema_AnyOfKeyword_RegisterSubschemas_
@@ -3339,12 +3345,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.CommentKeyword.Name
   nameWithType: CommentKeyword.Name
-- uid: Manatee.Json.Schema.CommentKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.CommentKeyword.html#Manatee_Json_Schema_CommentKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.CommentKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.CommentKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: CommentKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.CommentKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.CommentKeyword.html#Manatee_Json_Schema_CommentKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.CommentKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.CommentKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: CommentKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.CommentKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.CommentKeyword.html#Manatee_Json_Schema_CommentKeyword_RegisterSubschemas_
@@ -3545,12 +3551,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ConstKeyword.Name
   nameWithType: ConstKeyword.Name
-- uid: Manatee.Json.Schema.ConstKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ConstKeyword.html#Manatee_Json_Schema_ConstKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ConstKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ConstKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ConstKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ConstKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ConstKeyword.html#Manatee_Json_Schema_ConstKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ConstKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ConstKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ConstKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ConstKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ConstKeyword.html#Manatee_Json_Schema_ConstKeyword_RegisterSubschemas_
@@ -3751,12 +3757,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ContainsKeyword.Name
   nameWithType: ContainsKeyword.Name
-- uid: Manatee.Json.Schema.ContainsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ContainsKeyword.html#Manatee_Json_Schema_ContainsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ContainsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ContainsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ContainsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ContainsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ContainsKeyword.html#Manatee_Json_Schema_ContainsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ContainsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ContainsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ContainsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ContainsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ContainsKeyword.html#Manatee_Json_Schema_ContainsKeyword_RegisterSubschemas_
@@ -3944,12 +3950,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ContentEncodingKeyword.Name
   nameWithType: ContentEncodingKeyword.Name
-- uid: Manatee.Json.Schema.ContentEncodingKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ContentEncodingKeyword.html#Manatee_Json_Schema_ContentEncodingKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ContentEncodingKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ContentEncodingKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ContentEncodingKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ContentEncodingKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ContentEncodingKeyword.html#Manatee_Json_Schema_ContentEncodingKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ContentEncodingKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ContentEncodingKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ContentEncodingKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ContentEncodingKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ContentEncodingKeyword.html#Manatee_Json_Schema_ContentEncodingKeyword_RegisterSubschemas_
@@ -4137,12 +4143,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ContentMediaTypeKeyword.Name
   nameWithType: ContentMediaTypeKeyword.Name
-- uid: Manatee.Json.Schema.ContentMediaTypeKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ContentMediaTypeKeyword.html#Manatee_Json_Schema_ContentMediaTypeKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ContentMediaTypeKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ContentMediaTypeKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ContentMediaTypeKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ContentMediaTypeKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ContentMediaTypeKeyword.html#Manatee_Json_Schema_ContentMediaTypeKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ContentMediaTypeKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ContentMediaTypeKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ContentMediaTypeKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ContentMediaTypeKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ContentMediaTypeKeyword.html#Manatee_Json_Schema_ContentMediaTypeKeyword_RegisterSubschemas_
@@ -4330,12 +4336,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ContentSchemaKeyword.Name
   nameWithType: ContentSchemaKeyword.Name
-- uid: Manatee.Json.Schema.ContentSchemaKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ContentSchemaKeyword.html#Manatee_Json_Schema_ContentSchemaKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ContentSchemaKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ContentSchemaKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ContentSchemaKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ContentSchemaKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ContentSchemaKeyword.html#Manatee_Json_Schema_ContentSchemaKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ContentSchemaKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ContentSchemaKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ContentSchemaKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ContentSchemaKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ContentSchemaKeyword.html#Manatee_Json_Schema_ContentSchemaKeyword_RegisterSubschemas_
@@ -4523,12 +4529,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.DefaultKeyword.Name
   nameWithType: DefaultKeyword.Name
-- uid: Manatee.Json.Schema.DefaultKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.DefaultKeyword.html#Manatee_Json_Schema_DefaultKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.DefaultKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.DefaultKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: DefaultKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.DefaultKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.DefaultKeyword.html#Manatee_Json_Schema_DefaultKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.DefaultKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.DefaultKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: DefaultKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.DefaultKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.DefaultKeyword.html#Manatee_Json_Schema_DefaultKeyword_RegisterSubschemas_
@@ -4774,12 +4780,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.DefsKeyword.Name
   nameWithType: DefsKeyword.Name
-- uid: Manatee.Json.Schema.DefsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.DefsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.DefsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: DefsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.DefsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.DefsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.DefsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: DefsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.DefsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.DefsKeyword.html#Manatee_Json_Schema_DefsKeyword_RegisterSubschemas_
@@ -4948,12 +4954,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.DependenciesKeyword.Name
   nameWithType: DependenciesKeyword.Name
-- uid: Manatee.Json.Schema.DependenciesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.DependenciesKeyword.html#Manatee_Json_Schema_DependenciesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.DependenciesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.DependenciesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: DependenciesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.DependenciesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.DependenciesKeyword.html#Manatee_Json_Schema_DependenciesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.DependenciesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.DependenciesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: DependenciesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.DependenciesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.DependenciesKeyword.html#Manatee_Json_Schema_DependenciesKeyword_RegisterSubschemas_
@@ -5122,12 +5128,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.DependentRequiredKeyword.Name
   nameWithType: DependentRequiredKeyword.Name
-- uid: Manatee.Json.Schema.DependentRequiredKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.DependentRequiredKeyword.html#Manatee_Json_Schema_DependentRequiredKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.DependentRequiredKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.DependentRequiredKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: DependentRequiredKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.DependentRequiredKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.DependentRequiredKeyword.html#Manatee_Json_Schema_DependentRequiredKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.DependentRequiredKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.DependentRequiredKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: DependentRequiredKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.DependentRequiredKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.DependentRequiredKeyword.html#Manatee_Json_Schema_DependentRequiredKeyword_RegisterSubschemas_
@@ -5296,12 +5302,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.DependentSchemasKeyword.Name
   nameWithType: DependentSchemasKeyword.Name
-- uid: Manatee.Json.Schema.DependentSchemasKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.DependentSchemasKeyword.html#Manatee_Json_Schema_DependentSchemasKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.DependentSchemasKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.DependentSchemasKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: DependentSchemasKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.DependentSchemasKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.DependentSchemasKeyword.html#Manatee_Json_Schema_DependentSchemasKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.DependentSchemasKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.DependentSchemasKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: DependentSchemasKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.DependentSchemasKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.DependentSchemasKeyword.html#Manatee_Json_Schema_DependentSchemasKeyword_RegisterSubschemas_
@@ -5476,12 +5482,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.DeprecatedKeyword.Name
   nameWithType: DeprecatedKeyword.Name
-- uid: Manatee.Json.Schema.DeprecatedKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.DeprecatedKeyword.html#Manatee_Json_Schema_DeprecatedKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.DeprecatedKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.DeprecatedKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: DeprecatedKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.DeprecatedKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.DeprecatedKeyword.html#Manatee_Json_Schema_DeprecatedKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.DeprecatedKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.DeprecatedKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: DeprecatedKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.DeprecatedKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.DeprecatedKeyword.html#Manatee_Json_Schema_DeprecatedKeyword_RegisterSubschemas_
@@ -5669,12 +5675,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.DescriptionKeyword.Name
   nameWithType: DescriptionKeyword.Name
-- uid: Manatee.Json.Schema.DescriptionKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.DescriptionKeyword.html#Manatee_Json_Schema_DescriptionKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.DescriptionKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.DescriptionKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: DescriptionKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.DescriptionKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.DescriptionKeyword.html#Manatee_Json_Schema_DescriptionKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.DescriptionKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.DescriptionKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: DescriptionKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.DescriptionKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.DescriptionKeyword.html#Manatee_Json_Schema_DescriptionKeyword_RegisterSubschemas_
@@ -5875,12 +5881,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ElseKeyword.Name
   nameWithType: ElseKeyword.Name
-- uid: Manatee.Json.Schema.ElseKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ElseKeyword.html#Manatee_Json_Schema_ElseKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ElseKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ElseKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ElseKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ElseKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ElseKeyword.html#Manatee_Json_Schema_ElseKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ElseKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ElseKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ElseKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ElseKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ElseKeyword.html#Manatee_Json_Schema_ElseKeyword_RegisterSubschemas_
@@ -6093,12 +6099,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.EnumKeyword.Name
   nameWithType: EnumKeyword.Name
-- uid: Manatee.Json.Schema.EnumKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.EnumKeyword.html#Manatee_Json_Schema_EnumKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.EnumKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.EnumKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: EnumKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.EnumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.EnumKeyword.html#Manatee_Json_Schema_EnumKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.EnumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.EnumKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: EnumKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.EnumKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.EnumKeyword.html#Manatee_Json_Schema_EnumKeyword_RegisterSubschemas_
@@ -6285,12 +6291,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ExamplesKeyword.Name
   nameWithType: ExamplesKeyword.Name
-- uid: Manatee.Json.Schema.ExamplesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ExamplesKeyword.html#Manatee_Json_Schema_ExamplesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ExamplesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ExamplesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ExamplesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ExamplesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ExamplesKeyword.html#Manatee_Json_Schema_ExamplesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ExamplesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ExamplesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ExamplesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ExamplesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ExamplesKeyword.html#Manatee_Json_Schema_ExamplesKeyword_RegisterSubschemas_
@@ -6478,12 +6484,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.Name
   nameWithType: ExclusiveMaximumDraft04Keyword.Name
-- uid: Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.html#Manatee_Json_Schema_ExclusiveMaximumDraft04Keyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.RegisterSubschemas(System.Uri)
-  nameWithType: ExclusiveMaximumDraft04Keyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.html#Manatee_Json_Schema_ExclusiveMaximumDraft04Keyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ExclusiveMaximumDraft04Keyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ExclusiveMaximumDraft04Keyword.html#Manatee_Json_Schema_ExclusiveMaximumDraft04Keyword_RegisterSubschemas_
@@ -6684,12 +6690,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ExclusiveMaximumKeyword.Name
   nameWithType: ExclusiveMaximumKeyword.Name
-- uid: Manatee.Json.Schema.ExclusiveMaximumKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ExclusiveMaximumKeyword.html#Manatee_Json_Schema_ExclusiveMaximumKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ExclusiveMaximumKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ExclusiveMaximumKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ExclusiveMaximumKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ExclusiveMaximumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ExclusiveMaximumKeyword.html#Manatee_Json_Schema_ExclusiveMaximumKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ExclusiveMaximumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ExclusiveMaximumKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ExclusiveMaximumKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ExclusiveMaximumKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ExclusiveMaximumKeyword.html#Manatee_Json_Schema_ExclusiveMaximumKeyword_RegisterSubschemas_
@@ -6890,12 +6896,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.Name
   nameWithType: ExclusiveMinimumDraft04Keyword.Name
-- uid: Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.html#Manatee_Json_Schema_ExclusiveMinimumDraft04Keyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.RegisterSubschemas(System.Uri)
-  nameWithType: ExclusiveMinimumDraft04Keyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.html#Manatee_Json_Schema_ExclusiveMinimumDraft04Keyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ExclusiveMinimumDraft04Keyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ExclusiveMinimumDraft04Keyword.html#Manatee_Json_Schema_ExclusiveMinimumDraft04Keyword_RegisterSubschemas_
@@ -7096,12 +7102,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ExclusiveMinimumKeyword.Name
   nameWithType: ExclusiveMinimumKeyword.Name
-- uid: Manatee.Json.Schema.ExclusiveMinimumKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ExclusiveMinimumKeyword.html#Manatee_Json_Schema_ExclusiveMinimumKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ExclusiveMinimumKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ExclusiveMinimumKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ExclusiveMinimumKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ExclusiveMinimumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ExclusiveMinimumKeyword.html#Manatee_Json_Schema_ExclusiveMinimumKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ExclusiveMinimumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ExclusiveMinimumKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ExclusiveMinimumKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ExclusiveMinimumKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ExclusiveMinimumKeyword.html#Manatee_Json_Schema_ExclusiveMinimumKeyword_RegisterSubschemas_
@@ -8178,12 +8184,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.FormatKeyword.Name
   nameWithType: FormatKeyword.Name
-- uid: Manatee.Json.Schema.FormatKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.FormatKeyword.html#Manatee_Json_Schema_FormatKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.FormatKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.FormatKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: FormatKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.FormatKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.FormatKeyword.html#Manatee_Json_Schema_FormatKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.FormatKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.FormatKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: FormatKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.FormatKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.FormatKeyword.html#Manatee_Json_Schema_FormatKeyword_RegisterSubschemas_
@@ -9108,12 +9114,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.IdKeyword.Name
   nameWithType: IdKeyword.Name
-- uid: Manatee.Json.Schema.IdKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.IdKeyword.html#Manatee_Json_Schema_IdKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.IdKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.IdKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: IdKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.IdKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.IdKeyword.html#Manatee_Json_Schema_IdKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.IdKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.IdKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: IdKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.IdKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.IdKeyword.html#Manatee_Json_Schema_IdKeyword_RegisterSubschemas_
@@ -9397,12 +9403,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.IfKeyword.Name
   nameWithType: IfKeyword.Name
-- uid: Manatee.Json.Schema.IfKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.IfKeyword.html#Manatee_Json_Schema_IfKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.IfKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.IfKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: IfKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.IfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.IfKeyword.html#Manatee_Json_Schema_IfKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.IfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.IfKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: IfKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.IfKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.IfKeyword.html#Manatee_Json_Schema_IfKeyword_RegisterSubschemas_
@@ -9520,12 +9526,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.IJsonSchemaDependency.PropertyName
   nameWithType: IJsonSchemaDependency.PropertyName
-- uid: Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.IJsonSchemaDependency.html#Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri)
-  nameWithType: IJsonSchemaDependency.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.IJsonSchemaDependency.html#Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: IJsonSchemaDependency.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.IJsonSchemaDependency.html#Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_
@@ -9591,12 +9597,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.IJsonSchemaKeyword.Name
   nameWithType: IJsonSchemaKeyword.Name
-- uid: Manatee.Json.Schema.IJsonSchemaKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.IJsonSchemaKeyword.html#Manatee_Json_Schema_IJsonSchemaKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.IJsonSchemaKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.IJsonSchemaKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: IJsonSchemaKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.IJsonSchemaKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.IJsonSchemaKeyword.html#Manatee_Json_Schema_IJsonSchemaKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.IJsonSchemaKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.IJsonSchemaKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: IJsonSchemaKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.IJsonSchemaKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.IJsonSchemaKeyword.html#Manatee_Json_Schema_IJsonSchemaKeyword_RegisterSubschemas_
@@ -9765,12 +9771,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ItemsKeyword.Name
   nameWithType: ItemsKeyword.Name
-- uid: Manatee.Json.Schema.ItemsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ItemsKeyword.html#Manatee_Json_Schema_ItemsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ItemsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ItemsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ItemsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ItemsKeyword.html#Manatee_Json_Schema_ItemsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ItemsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ItemsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ItemsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ItemsKeyword.html#Manatee_Json_Schema_ItemsKeyword_RegisterSubschemas_
@@ -10035,12 +10041,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.JsonSchema.OtherData
   nameWithType: JsonSchema.OtherData
-- uid: Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.JsonSchema.html#Manatee_Json_Schema_JsonSchema_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri)
-  nameWithType: JsonSchema.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.JsonSchema.html#Manatee_Json_Schema_JsonSchema_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.JsonSchema.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: JsonSchema.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.JsonSchema.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.JsonSchema.html#Manatee_Json_Schema_JsonSchema_RegisterSubschemas_
@@ -10465,12 +10471,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MaxContainsKeyword.Name
   nameWithType: MaxContainsKeyword.Name
-- uid: Manatee.Json.Schema.MaxContainsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MaxContainsKeyword.html#Manatee_Json_Schema_MaxContainsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MaxContainsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MaxContainsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MaxContainsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MaxContainsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MaxContainsKeyword.html#Manatee_Json_Schema_MaxContainsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MaxContainsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MaxContainsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MaxContainsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MaxContainsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MaxContainsKeyword.html#Manatee_Json_Schema_MaxContainsKeyword_RegisterSubschemas_
@@ -10671,12 +10677,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MaximumKeyword.Name
   nameWithType: MaximumKeyword.Name
-- uid: Manatee.Json.Schema.MaximumKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MaximumKeyword.html#Manatee_Json_Schema_MaximumKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MaximumKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MaximumKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MaximumKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MaximumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MaximumKeyword.html#Manatee_Json_Schema_MaximumKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MaximumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MaximumKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MaximumKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MaximumKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MaximumKeyword.html#Manatee_Json_Schema_MaximumKeyword_RegisterSubschemas_
@@ -10877,12 +10883,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MaxItemsKeyword.Name
   nameWithType: MaxItemsKeyword.Name
-- uid: Manatee.Json.Schema.MaxItemsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MaxItemsKeyword.html#Manatee_Json_Schema_MaxItemsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MaxItemsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MaxItemsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MaxItemsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MaxItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MaxItemsKeyword.html#Manatee_Json_Schema_MaxItemsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MaxItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MaxItemsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MaxItemsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MaxItemsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MaxItemsKeyword.html#Manatee_Json_Schema_MaxItemsKeyword_RegisterSubschemas_
@@ -11083,12 +11089,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MaxLengthKeyword.Name
   nameWithType: MaxLengthKeyword.Name
-- uid: Manatee.Json.Schema.MaxLengthKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MaxLengthKeyword.html#Manatee_Json_Schema_MaxLengthKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MaxLengthKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MaxLengthKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MaxLengthKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MaxLengthKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MaxLengthKeyword.html#Manatee_Json_Schema_MaxLengthKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MaxLengthKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MaxLengthKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MaxLengthKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MaxLengthKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MaxLengthKeyword.html#Manatee_Json_Schema_MaxLengthKeyword_RegisterSubschemas_
@@ -11289,12 +11295,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MaxPropertiesKeyword.Name
   nameWithType: MaxPropertiesKeyword.Name
-- uid: Manatee.Json.Schema.MaxPropertiesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MaxPropertiesKeyword.html#Manatee_Json_Schema_MaxPropertiesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MaxPropertiesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MaxPropertiesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MaxPropertiesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MaxPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MaxPropertiesKeyword.html#Manatee_Json_Schema_MaxPropertiesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MaxPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MaxPropertiesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MaxPropertiesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MaxPropertiesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MaxPropertiesKeyword.html#Manatee_Json_Schema_MaxPropertiesKeyword_RegisterSubschemas_
@@ -11645,12 +11651,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MinContainsKeyword.Name
   nameWithType: MinContainsKeyword.Name
-- uid: Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MinContainsKeyword.html#Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MinContainsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MinContainsKeyword.html#Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MinContainsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MinContainsKeyword.html#Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_
@@ -11851,12 +11857,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MinimumKeyword.Name
   nameWithType: MinimumKeyword.Name
-- uid: Manatee.Json.Schema.MinimumKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MinimumKeyword.html#Manatee_Json_Schema_MinimumKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MinimumKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MinimumKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MinimumKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MinimumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MinimumKeyword.html#Manatee_Json_Schema_MinimumKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MinimumKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MinimumKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MinimumKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MinimumKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MinimumKeyword.html#Manatee_Json_Schema_MinimumKeyword_RegisterSubschemas_
@@ -12057,12 +12063,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MinItemsKeyword.Name
   nameWithType: MinItemsKeyword.Name
-- uid: Manatee.Json.Schema.MinItemsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MinItemsKeyword.html#Manatee_Json_Schema_MinItemsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MinItemsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MinItemsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MinItemsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MinItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MinItemsKeyword.html#Manatee_Json_Schema_MinItemsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MinItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MinItemsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MinItemsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MinItemsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MinItemsKeyword.html#Manatee_Json_Schema_MinItemsKeyword_RegisterSubschemas_
@@ -12263,12 +12269,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MinLengthKeyword.Name
   nameWithType: MinLengthKeyword.Name
-- uid: Manatee.Json.Schema.MinLengthKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MinLengthKeyword.html#Manatee_Json_Schema_MinLengthKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MinLengthKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MinLengthKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MinLengthKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MinLengthKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MinLengthKeyword.html#Manatee_Json_Schema_MinLengthKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MinLengthKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MinLengthKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MinLengthKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MinLengthKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MinLengthKeyword.html#Manatee_Json_Schema_MinLengthKeyword_RegisterSubschemas_
@@ -12469,12 +12475,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MinPropertiesKeyword.Name
   nameWithType: MinPropertiesKeyword.Name
-- uid: Manatee.Json.Schema.MinPropertiesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MinPropertiesKeyword.html#Manatee_Json_Schema_MinPropertiesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MinPropertiesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MinPropertiesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MinPropertiesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MinPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MinPropertiesKeyword.html#Manatee_Json_Schema_MinPropertiesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MinPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MinPropertiesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MinPropertiesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MinPropertiesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MinPropertiesKeyword.html#Manatee_Json_Schema_MinPropertiesKeyword_RegisterSubschemas_
@@ -12675,12 +12681,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.MultipleOfKeyword.Name
   nameWithType: MultipleOfKeyword.Name
-- uid: Manatee.Json.Schema.MultipleOfKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.MultipleOfKeyword.html#Manatee_Json_Schema_MultipleOfKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.MultipleOfKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.MultipleOfKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: MultipleOfKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.MultipleOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.MultipleOfKeyword.html#Manatee_Json_Schema_MultipleOfKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.MultipleOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.MultipleOfKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: MultipleOfKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.MultipleOfKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.MultipleOfKeyword.html#Manatee_Json_Schema_MultipleOfKeyword_RegisterSubschemas_
@@ -12881,12 +12887,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.NotKeyword.Name
   nameWithType: NotKeyword.Name
-- uid: Manatee.Json.Schema.NotKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.NotKeyword.html#Manatee_Json_Schema_NotKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.NotKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.NotKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: NotKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.NotKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.NotKeyword.html#Manatee_Json_Schema_NotKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.NotKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.NotKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: NotKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.NotKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.NotKeyword.html#Manatee_Json_Schema_NotKeyword_RegisterSubschemas_
@@ -13068,12 +13074,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.OneOfKeyword.Name
   nameWithType: OneOfKeyword.Name
-- uid: Manatee.Json.Schema.OneOfKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.OneOfKeyword.html#Manatee_Json_Schema_OneOfKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.OneOfKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.OneOfKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: OneOfKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.OneOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.OneOfKeyword.html#Manatee_Json_Schema_OneOfKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.OneOfKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.OneOfKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: OneOfKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.OneOfKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.OneOfKeyword.html#Manatee_Json_Schema_OneOfKeyword_RegisterSubschemas_
@@ -13267,12 +13273,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.PatternKeyword.Name
   nameWithType: PatternKeyword.Name
-- uid: Manatee.Json.Schema.PatternKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.PatternKeyword.html#Manatee_Json_Schema_PatternKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.PatternKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.PatternKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: PatternKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.PatternKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.PatternKeyword.html#Manatee_Json_Schema_PatternKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.PatternKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.PatternKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: PatternKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.PatternKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.PatternKeyword.html#Manatee_Json_Schema_PatternKeyword_RegisterSubschemas_
@@ -13454,12 +13460,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.PatternPropertiesKeyword.Name
   nameWithType: PatternPropertiesKeyword.Name
-- uid: Manatee.Json.Schema.PatternPropertiesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.PatternPropertiesKeyword.html#Manatee_Json_Schema_PatternPropertiesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.PatternPropertiesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.PatternPropertiesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: PatternPropertiesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.PatternPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.PatternPropertiesKeyword.html#Manatee_Json_Schema_PatternPropertiesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.PatternPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.PatternPropertiesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: PatternPropertiesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.PatternPropertiesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.PatternPropertiesKeyword.html#Manatee_Json_Schema_PatternPropertiesKeyword_RegisterSubschemas_
@@ -13628,12 +13634,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.PropertiesKeyword.Name
   nameWithType: PropertiesKeyword.Name
-- uid: Manatee.Json.Schema.PropertiesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.PropertiesKeyword.html#Manatee_Json_Schema_PropertiesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.PropertiesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.PropertiesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: PropertiesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.PropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.PropertiesKeyword.html#Manatee_Json_Schema_PropertiesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.PropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.PropertiesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: PropertiesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.PropertiesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.PropertiesKeyword.html#Manatee_Json_Schema_PropertiesKeyword_RegisterSubschemas_
@@ -13827,12 +13833,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.PropertyDependency.PropertyName
   nameWithType: PropertyDependency.PropertyName
-- uid: Manatee.Json.Schema.PropertyDependency.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.PropertyDependency.html#Manatee_Json_Schema_PropertyDependency_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.PropertyDependency.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.PropertyDependency.RegisterSubschemas(System.Uri)
-  nameWithType: PropertyDependency.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.PropertyDependency.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.PropertyDependency.html#Manatee_Json_Schema_PropertyDependency_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.PropertyDependency.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.PropertyDependency.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: PropertyDependency.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.PropertyDependency.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.PropertyDependency.html#Manatee_Json_Schema_PropertyDependency_RegisterSubschemas_
@@ -13994,12 +14000,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.PropertyNamesKeyword.Name
   nameWithType: PropertyNamesKeyword.Name
-- uid: Manatee.Json.Schema.PropertyNamesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.PropertyNamesKeyword.html#Manatee_Json_Schema_PropertyNamesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.PropertyNamesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.PropertyNamesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: PropertyNamesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.PropertyNamesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.PropertyNamesKeyword.html#Manatee_Json_Schema_PropertyNamesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.PropertyNamesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.PropertyNamesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: PropertyNamesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.PropertyNamesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.PropertyNamesKeyword.html#Manatee_Json_Schema_PropertyNamesKeyword_RegisterSubschemas_
@@ -14187,12 +14193,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ReadOnlyKeyword.Name
   nameWithType: ReadOnlyKeyword.Name
-- uid: Manatee.Json.Schema.ReadOnlyKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ReadOnlyKeyword.html#Manatee_Json_Schema_ReadOnlyKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ReadOnlyKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ReadOnlyKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ReadOnlyKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ReadOnlyKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ReadOnlyKeyword.html#Manatee_Json_Schema_ReadOnlyKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ReadOnlyKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ReadOnlyKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ReadOnlyKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ReadOnlyKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ReadOnlyKeyword.html#Manatee_Json_Schema_ReadOnlyKeyword_RegisterSubschemas_
@@ -14380,12 +14386,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.RecursiveAnchorKeyword.Name
   nameWithType: RecursiveAnchorKeyword.Name
-- uid: Manatee.Json.Schema.RecursiveAnchorKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.RecursiveAnchorKeyword.html#Manatee_Json_Schema_RecursiveAnchorKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.RecursiveAnchorKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.RecursiveAnchorKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: RecursiveAnchorKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.RecursiveAnchorKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.RecursiveAnchorKeyword.html#Manatee_Json_Schema_RecursiveAnchorKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.RecursiveAnchorKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.RecursiveAnchorKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: RecursiveAnchorKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.RecursiveAnchorKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.RecursiveAnchorKeyword.html#Manatee_Json_Schema_RecursiveAnchorKeyword_RegisterSubschemas_
@@ -14586,12 +14592,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.RecursiveRefKeyword.Reference
   nameWithType: RecursiveRefKeyword.Reference
-- uid: Manatee.Json.Schema.RecursiveRefKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.RecursiveRefKeyword.html#Manatee_Json_Schema_RecursiveRefKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.RecursiveRefKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.RecursiveRefKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: RecursiveRefKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.RecursiveRefKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.RecursiveRefKeyword.html#Manatee_Json_Schema_RecursiveRefKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.RecursiveRefKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.RecursiveRefKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: RecursiveRefKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.RecursiveRefKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.RecursiveRefKeyword.html#Manatee_Json_Schema_RecursiveRefKeyword_RegisterSubschemas_
@@ -14792,12 +14798,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.RefKeyword.Reference
   nameWithType: RefKeyword.Reference
-- uid: Manatee.Json.Schema.RefKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.RefKeyword.html#Manatee_Json_Schema_RefKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.RefKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.RefKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: RefKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.RefKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.RefKeyword.html#Manatee_Json_Schema_RefKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.RefKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.RefKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: RefKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.RefKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.RefKeyword.html#Manatee_Json_Schema_RefKeyword_RegisterSubschemas_
@@ -15028,12 +15034,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.RequiredKeyword.Name
   nameWithType: RequiredKeyword.Name
-- uid: Manatee.Json.Schema.RequiredKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.RequiredKeyword.html#Manatee_Json_Schema_RequiredKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.RequiredKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.RequiredKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: RequiredKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.RequiredKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.RequiredKeyword.html#Manatee_Json_Schema_RequiredKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.RequiredKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.RequiredKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: RequiredKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.RequiredKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.RequiredKeyword.html#Manatee_Json_Schema_RequiredKeyword_RegisterSubschemas_
@@ -15215,12 +15221,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.SchemaDependency.PropertyName
   nameWithType: SchemaDependency.PropertyName
-- uid: Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.SchemaDependency.html#Manatee_Json_Schema_SchemaDependency_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri)
-  nameWithType: SchemaDependency.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.SchemaDependency.html#Manatee_Json_Schema_SchemaDependency_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.SchemaDependency.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: SchemaDependency.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.SchemaDependency.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.SchemaDependency.html#Manatee_Json_Schema_SchemaDependency_RegisterSubschemas_
@@ -15713,12 +15719,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.SchemaKeyword.Name
   nameWithType: SchemaKeyword.Name
-- uid: Manatee.Json.Schema.SchemaKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.SchemaKeyword.html#Manatee_Json_Schema_SchemaKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.SchemaKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.SchemaKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: SchemaKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.SchemaKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.SchemaKeyword.html#Manatee_Json_Schema_SchemaKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.SchemaKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.SchemaKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: SchemaKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.SchemaKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.SchemaKeyword.html#Manatee_Json_Schema_SchemaKeyword_RegisterSubschemas_
@@ -15912,6 +15918,19 @@ references:
   commentId: T:Manatee.Json.Schema.SchemaValidationContext
   fullName: Manatee.Json.Schema.SchemaValidationContext
   nameWithType: SchemaValidationContext
+- uid: Manatee.Json.Schema.SchemaValidationContext.#ctor(Manatee.Json.Schema.SchemaValidationContext)
+  name: SchemaValidationContext(SchemaValidationContext)
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext__ctor_Manatee_Json_Schema_SchemaValidationContext_
+  commentId: M:Manatee.Json.Schema.SchemaValidationContext.#ctor(Manatee.Json.Schema.SchemaValidationContext)
+  fullName: Manatee.Json.Schema.SchemaValidationContext.SchemaValidationContext(Manatee.Json.Schema.SchemaValidationContext)
+  nameWithType: SchemaValidationContext.SchemaValidationContext(SchemaValidationContext)
+- uid: Manatee.Json.Schema.SchemaValidationContext.#ctor*
+  name: SchemaValidationContext
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext__ctor_
+  commentId: Overload:Manatee.Json.Schema.SchemaValidationContext.#ctor
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.SchemaValidationContext.SchemaValidationContext
+  nameWithType: SchemaValidationContext.SchemaValidationContext
 - uid: Manatee.Json.Schema.SchemaValidationContext.BaseRelativeLocation
   name: BaseRelativeLocation
   href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_BaseRelativeLocation
@@ -16898,12 +16917,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.ThenKeyword.Name
   nameWithType: ThenKeyword.Name
-- uid: Manatee.Json.Schema.ThenKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.ThenKeyword.html#Manatee_Json_Schema_ThenKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.ThenKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.ThenKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: ThenKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.ThenKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.ThenKeyword.html#Manatee_Json_Schema_ThenKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.ThenKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.ThenKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: ThenKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.ThenKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.ThenKeyword.html#Manatee_Json_Schema_ThenKeyword_RegisterSubschemas_
@@ -17091,12 +17110,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.TitleKeyword.Name
   nameWithType: TitleKeyword.Name
-- uid: Manatee.Json.Schema.TitleKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.TitleKeyword.html#Manatee_Json_Schema_TitleKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.TitleKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.TitleKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: TitleKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.TitleKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.TitleKeyword.html#Manatee_Json_Schema_TitleKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.TitleKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.TitleKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: TitleKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.TitleKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.TitleKeyword.html#Manatee_Json_Schema_TitleKeyword_RegisterSubschemas_
@@ -17297,12 +17316,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.TypeKeyword.Name
   nameWithType: TypeKeyword.Name
-- uid: Manatee.Json.Schema.TypeKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.TypeKeyword.html#Manatee_Json_Schema_TypeKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.TypeKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.TypeKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: TypeKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.TypeKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.TypeKeyword.html#Manatee_Json_Schema_TypeKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.TypeKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.TypeKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: TypeKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.TypeKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.TypeKeyword.html#Manatee_Json_Schema_TypeKeyword_RegisterSubschemas_
@@ -17503,12 +17522,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.UnevaluatedItemsKeyword.Name
   nameWithType: UnevaluatedItemsKeyword.Name
-- uid: Manatee.Json.Schema.UnevaluatedItemsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.UnevaluatedItemsKeyword.html#Manatee_Json_Schema_UnevaluatedItemsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.UnevaluatedItemsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.UnevaluatedItemsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: UnevaluatedItemsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.UnevaluatedItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.UnevaluatedItemsKeyword.html#Manatee_Json_Schema_UnevaluatedItemsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.UnevaluatedItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.UnevaluatedItemsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: UnevaluatedItemsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.UnevaluatedItemsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.UnevaluatedItemsKeyword.html#Manatee_Json_Schema_UnevaluatedItemsKeyword_RegisterSubschemas_
@@ -17709,12 +17728,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.Name
   nameWithType: UnevaluatedPropertiesKeyword.Name
-- uid: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.UnevaluatedPropertiesKeyword.html#Manatee_Json_Schema_UnevaluatedPropertiesKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.UnevaluatedPropertiesKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: UnevaluatedPropertiesKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.UnevaluatedPropertiesKeyword.html#Manatee_Json_Schema_UnevaluatedPropertiesKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.UnevaluatedPropertiesKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: UnevaluatedPropertiesKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.UnevaluatedPropertiesKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.UnevaluatedPropertiesKeyword.html#Manatee_Json_Schema_UnevaluatedPropertiesKeyword_RegisterSubschemas_
@@ -17915,12 +17934,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.UniqueItemsKeyword.Name
   nameWithType: UniqueItemsKeyword.Name
-- uid: Manatee.Json.Schema.UniqueItemsKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.UniqueItemsKeyword.html#Manatee_Json_Schema_UniqueItemsKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.UniqueItemsKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.UniqueItemsKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: UniqueItemsKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.UniqueItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.UniqueItemsKeyword.html#Manatee_Json_Schema_UniqueItemsKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.UniqueItemsKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.UniqueItemsKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: UniqueItemsKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.UniqueItemsKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.UniqueItemsKeyword.html#Manatee_Json_Schema_UniqueItemsKeyword_RegisterSubschemas_
@@ -18089,12 +18108,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.VocabularyKeyword.Name
   nameWithType: VocabularyKeyword.Name
-- uid: Manatee.Json.Schema.VocabularyKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.VocabularyKeyword.html#Manatee_Json_Schema_VocabularyKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.VocabularyKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.VocabularyKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: VocabularyKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.VocabularyKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.VocabularyKeyword.html#Manatee_Json_Schema_VocabularyKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.VocabularyKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.VocabularyKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: VocabularyKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.VocabularyKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.VocabularyKeyword.html#Manatee_Json_Schema_VocabularyKeyword_RegisterSubschemas_
@@ -18269,12 +18288,12 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.WriteOnlyKeyword.Name
   nameWithType: WriteOnlyKeyword.Name
-- uid: Manatee.Json.Schema.WriteOnlyKeyword.RegisterSubschemas(System.Uri)
-  name: RegisterSubschemas(Uri)
-  href: api/Manatee.Json.Schema.WriteOnlyKeyword.html#Manatee_Json_Schema_WriteOnlyKeyword_RegisterSubschemas_System_Uri_
-  commentId: M:Manatee.Json.Schema.WriteOnlyKeyword.RegisterSubschemas(System.Uri)
-  fullName: Manatee.Json.Schema.WriteOnlyKeyword.RegisterSubschemas(System.Uri)
-  nameWithType: WriteOnlyKeyword.RegisterSubschemas(Uri)
+- uid: Manatee.Json.Schema.WriteOnlyKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.WriteOnlyKeyword.html#Manatee_Json_Schema_WriteOnlyKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.WriteOnlyKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.WriteOnlyKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: WriteOnlyKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
 - uid: Manatee.Json.Schema.WriteOnlyKeyword.RegisterSubschemas*
   name: RegisterSubschemas
   href: api/Manatee.Json.Schema.WriteOnlyKeyword.html#Manatee_Json_Schema_WriteOnlyKeyword_RegisterSubschemas_
