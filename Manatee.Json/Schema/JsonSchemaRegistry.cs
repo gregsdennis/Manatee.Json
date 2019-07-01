@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Manatee.Json.Internal;
 using Manatee.Json.Patch;
 using Manatee.Json.Serialization;
 
@@ -8,10 +9,11 @@ namespace Manatee.Json.Schema
 	/// <summary>
 	/// Provides a registry in which JSON schema can be saved to be referenced by the system.
 	/// </summary>
-	public static class JsonSchemaRegistry
+	public class JsonSchemaRegistry
 	{
 		private static readonly ConcurrentDictionary<string, JsonSchema> _schemaLookup;
 		private static readonly JsonSerializer _serializer;
+		private readonly ConcurrentDictionary<string, JsonSchema> _contextLookup;
 
 		/// <summary>
 		/// Initializes the <see cref="JsonSchemaRegistry"/> class.
@@ -21,6 +23,10 @@ namespace Manatee.Json.Schema
 			_schemaLookup = new ConcurrentDictionary<string, JsonSchema>();
 			_serializer = new JsonSerializer();
 			Clear();
+		}
+		internal JsonSchemaRegistry()
+		{
+			_contextLookup = new ConcurrentDictionary<string, JsonSchema>();
 		}
 
 		/// <summary>
@@ -50,6 +56,28 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 
+		internal static JsonSchema GetWellKnown(string uri)
+		{
+			lock (_schemaLookup)
+			{
+				uri = uri.TrimEnd('#');
+				_schemaLookup.TryGetValue(uri, out var schema);
+
+				return schema;
+			}
+		}
+
+		internal JsonSchema GetLocal(string uri)
+		{
+			lock (_contextLookup)
+			{
+				uri = uri.TrimEnd('#');
+				_contextLookup.TryGetValue(uri, out var schema);
+
+				return schema;
+			}
+		}
+
 		/// <summary>
 		/// Explicitly registers an existing schema.
 		/// </summary>
@@ -59,6 +87,15 @@ namespace Manatee.Json.Schema
 			lock (_schemaLookup)
 			{
 				_schemaLookup[schema.DocumentPath.OriginalString] = schema;
+			}
+		}
+
+		internal void RegisterLocal(JsonSchema schema)
+		{
+			if (schema.Id == null || !schema.Id.IsLocalSchemaId()) return;
+			lock (_contextLookup)
+			{
+				_contextLookup[schema.Id] = schema;
 			}
 		}
 

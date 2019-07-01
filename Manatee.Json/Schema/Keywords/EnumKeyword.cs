@@ -79,7 +79,8 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri) { }
+		/// <param name="localRegistry"></param>
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>

@@ -72,17 +72,14 @@ namespace Manatee.Json.Schema
 
 			var results = new SchemaValidationResults(Name, context);
 
-			var newContext = new SchemaValidationContext
+			var newContext = new SchemaValidationContext(context)
 				{
-					BaseUri = _resolvedRoot.DocumentPath,
+					BaseUri = _resolvedRoot?.DocumentPath,
 					Instance = context.Instance,
 					Root = _resolvedRoot ?? context.Root,
-					RecursiveAnchor = context.RecursiveAnchor,
-					BaseRelativeLocation = _resolvedFragment.WithHash(),
+					BaseRelativeLocation = _resolvedFragment?.WithHash(),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
-					InstanceLocation = context.InstanceLocation,
-					IsMetaSchemaValidation = context.IsMetaSchemaValidation
-			};
+				};
 			var nestedResults = Resolved.Validate(newContext);
 
 			results.IsValid = nestedResults.IsValid;
@@ -94,7 +91,8 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri) { }
+		/// <param name="localRegistry"></param>
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
@@ -158,6 +156,12 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
+			if (Reference.IsLocalSchemaId())
+			{
+				Resolved = context.LocalRegistry.GetLocal(Reference);
+				if (Resolved != null) return;
+			}
+
 			var documentPath = context.BaseUri;
 			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
 			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? documentPath?.OriginalString : referenceParts[0];
@@ -180,6 +184,13 @@ namespace Manatee.Json.Schema
 			}
 			else
 				_resolvedRoot = context.Root;
+
+			var wellKnown = JsonSchemaRegistry.GetWellKnown(Reference);
+			if (wellKnown != null)
+			{
+				Resolved = wellKnown;
+				return;
+			}
 
 			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri);
 		}

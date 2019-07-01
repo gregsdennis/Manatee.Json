@@ -65,17 +65,13 @@ namespace Manatee.Json.Schema
 				{
 					context.EvaluatedPropertyNames.Add(match);
 					context.LocallyEvaluatedPropertyNames.Add(match);
-					var newContext = new SchemaValidationContext
+					var newContext = new SchemaValidationContext(context)
 						{
-							BaseUri = context.BaseUri,
 							Instance = obj[match],
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = baseRelativeLocation,
 							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(match),
-							IsMetaSchemaValidation = context.IsMetaSchemaValidation
-					};
+						};
 					var result = localSchema.Validate(newContext);
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !result.IsValid)
 					{
@@ -98,11 +94,12 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri)
+		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
 		{
 			foreach (var schema in Values)
 			{
-				schema.RegisterSubschemas(baseUri);
+				schema.RegisterSubschemas(baseUri, localRegistry);
 			}
 		}
 		/// <summary>

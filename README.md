@@ -76,7 +76,7 @@ There are many ways to customize serialization.  See the wiki page for more deta
 
 Manatee.Json also:
 
-- Is covered by over 2000 unit tests
+- Is covered by over 3000 unit tests
 - Conforms to RFC-8259: The JSON specification
 - Supports:
     - .Net Framework 4.5

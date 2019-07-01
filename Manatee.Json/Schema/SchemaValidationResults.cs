@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 		internal SchemaValidationResults(SchemaValidationContext context)
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
-			if (context.BaseUri != null)
+			if (context.BaseUri != null && context.BaseRelativeLocation != null)
 				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation.ToString(), UriKind.RelativeOrAbsolute);
 			RelativeLocation = context.RelativeLocation;
 		}
@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults(string keyword, SchemaValidationContext context)
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
-			if (context.BaseUri != null)
+			if (context.BaseUri != null && context.BaseRelativeLocation != null)
 				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation.CloneAndAppend(keyword).ToString(), UriKind.RelativeOrAbsolute);
 			RelativeLocation = context.RelativeLocation.CloneAndAppend(keyword);
 			Keyword = keyword;

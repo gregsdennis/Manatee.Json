@@ -223,20 +223,27 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
-		public void RegisterSubschemas(Uri baseUri)
+		/// <param name="localRegistry"></param>
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
 		{
 			if (_hasRegistered) return;
 			_hasRegistered = true;
 
-			if (Uri.TryCreate(Id, UriKind.Absolute, out var uri))
+			localRegistry.RegisterLocal(this);
+
+			var address = Id;
+			if (baseUri != null && address != null)
+				address = new Uri(baseUri, address).OriginalString;
+			if (Uri.TryCreate(address, UriKind.Absolute, out var uri))
 			{
+				DocumentPath = uri;
 				JsonSchemaRegistry.Register(this);
 				baseUri = uri;
 			}
 
 			foreach (var keyword in this)
 			{
-				keyword.RegisterSubschemas(baseUri);
+				keyword.RegisterSubschemas(baseUri, localRegistry);
 			}
 		}
 		/// <summary>
@@ -271,7 +278,6 @@ namespace Manatee.Json.Schema
 			var foundSchema = serializer.Deserialize<JsonSchema>(found.Result);
 
 			return foundSchema;
-
 		}
 
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
@@ -286,7 +292,8 @@ namespace Manatee.Json.Schema
 					};
 			}
 
-			RegisterSubschemas(null);
+			RegisterSubschemas(null, context.LocalRegistry);
+			context.LocalRegistry.RegisterLocal(this);
 
 			context.Local = this;
 

@@ -20,7 +20,7 @@ namespace Manatee.Json
 		public static Uri GetParentUri(this Uri uri)
 		{
 			if (uri == null) throw new ArgumentNullException(nameof(uri));
-			if (!uri.IsAbsoluteUri && uri.Segments.Length == 1) throw new InvalidOperationException("Cannot get parent of root");
+			if (uri.IsAbsoluteUri && uri.Segments.Length == 1) throw new InvalidOperationException("Cannot get parent of root");
 
 			var path = uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - uri.Segments.Last().Length);
 

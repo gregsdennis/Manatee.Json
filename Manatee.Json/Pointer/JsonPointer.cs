@@ -55,8 +55,10 @@ namespace Manatee.Json.Pointer
 
 			if (parts[0] == "#")
 				pointer._usesHash = true;
-			else
+			else if (string.IsNullOrEmpty(parts[0]))
 				parts = parts.Skip(1).ToArray();
+			else
+				parts = parts.ToArray();
 
 			pointer.AddRange(parts.SkipWhile(s => s == "#").Select(_Unescape));
 

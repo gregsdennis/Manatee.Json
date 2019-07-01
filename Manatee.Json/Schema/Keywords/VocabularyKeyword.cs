@@ -117,17 +117,11 @@ namespace Manatee.Json.Schema
 				var required = kvp.Value;
 				if (vocabulary.MetaSchemaId != null)
 				{
-					var newContext = new SchemaValidationContext
+					var newContext = new SchemaValidationContext(context)
 						{
-							BaseUri = context.BaseUri,
-							Instance = context.Instance,
-							Root = context.Root,
-							RecursiveAnchor = context.RecursiveAnchor,
 							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, vocabulary.Id),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, vocabulary.Id),
-							InstanceLocation = context.InstanceLocation,
-							IsMetaSchemaValidation = context.IsMetaSchemaValidation
-					};
+						};
 					var metaSchema = JsonSchemaRegistry.Get(vocabulary.MetaSchemaId);
 					if (metaSchema != null)
 						metaSchema.Validate(newContext);
@@ -148,10 +142,11 @@ namespace Manatee.Json.Schema
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
+		/// <param name="localRegistry"></param>
 		/// <implementationNotes>
 		/// If the keyword does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
-		public void RegisterSubschemas(Uri baseUri) { }
+		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>

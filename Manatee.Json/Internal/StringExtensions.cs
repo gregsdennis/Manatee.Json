@@ -206,5 +206,10 @@ namespace Manatee.Json.Internal
 				.Insert(0, s, n)
 				.ToString();
 		}
+
+		public static bool IsLocalSchemaId(this string s)
+		{
+			return s != "#" && !s.Contains("#/") && s.Contains("#");
+		}
 	}
 }
