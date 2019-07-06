@@ -94,7 +94,7 @@ namespace Manatee.Json.Path
 		{
 			if (Index.HasValue)
 			{
-				return Index.Value < 0 || json.Count < Index.Value
+				return Index.Value < 0 || json.Count <= Index.Value
 						   ? Enumerable.Empty<JsonValue>()
 						   : new[] { json[Index.Value] };
 			}
