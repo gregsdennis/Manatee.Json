@@ -6,6 +6,8 @@
 
 *v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)*
 
+*v11.0.0 beta 2 - Released on 10 Jul, 2019*
+
 > ***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
 
 <span id="feature">feature</span>
@@ -16,6 +18,8 @@ In order to support some new independent reference tests, some changes were made
 
 - `IJsonSchemaKeyword.RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)` - The second parameter is new.
 - `SchemaValidationContext` now requires a source context from which to copy values.
+
+Additionally, it was pointed out on [the JSON Schema spec repo](https://github.com/json-schema-org/json-schema-spec/issues/759) that `format` is not specifically intended for strings, but can also be used to validate other types.  To address this, the `StringFormat` type has been renamed to `Format` and now accepts `JsonValue` instead of merely `string`.
 
 ## Non-breaking changes
 

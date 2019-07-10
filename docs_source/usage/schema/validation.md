@@ -208,11 +208,11 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-## String format validation
+## Value format validation
 
 The `format` keyword has been around a while.  It's available in all of the drafts supported by Manatee.Json.  Although this keyword is techincally classified as an annotation, the specification does allow (the word used is "SHOULD") that implementation provide some level of validation on it so long as that validation may be configured on and off.
 
-Manatee.Json makes a valiant attempt at validating a few of them.  These are hardcoded as static properties on the `StringFormat` class.  Out of the box, these are available:
+Manatee.Json makes a valiant attempt at validating a few of them.  These are hardcoded as static properties on the `Format` class.  Out of the box, these are available:
 
 - `date`
 - `date-time`
