@@ -302,7 +302,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Add a `format` keyword to the schema.
 		/// </summary>
-		public static JsonSchema Format(this JsonSchema schema, StringFormat format)
+		public static JsonSchema Format(this JsonSchema schema, Format format)
 		{
 			schema.Add(new FormatKeyword(format));
 
