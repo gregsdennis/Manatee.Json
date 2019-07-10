@@ -248,9 +248,9 @@ var nonObjectResults = schame.Validate(nonObject);
     ]
 }
 </code></pre>
-<h2 id="string-format-validation">String format validation</h2>
+<h2 id="value-format-validation">Value format validation</h2>
 <p>The <code>format</code> keyword has been around a while.  It's available in all of the drafts supported by Manatee.Json.  Although this keyword is techincally classified as an annotation, the specification does allow (the word used is &quot;SHOULD&quot;) that implementation provide some level of validation on it so long as that validation may be configured on and off.</p>
-<p>Manatee.Json makes a valiant attempt at validating a few of them.  These are hardcoded as static properties on the <code>StringFormat</code> class.  Out of the box, these are available:</p>
+<p>Manatee.Json makes a valiant attempt at validating a few of them.  These are hardcoded as static properties on the <code>Format</code> class.  Out of the box, these are available:</p>
 <ul>
 <li><code>date</code></li>
 <li><code>date-time</code></li>
