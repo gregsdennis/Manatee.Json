@@ -43,7 +43,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// The string format for this keyword.
 		/// </summary>
-		public StringFormat Value { get; private set; }
+		public Format Value { get; private set; }
 
 		/// <summary>
 		/// Used for deserialization.
@@ -53,7 +53,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Creates an instance of the <see cref="FormatKeyword"/>.
 		/// </summary>
-		public FormatKeyword(StringFormat value)
+		public FormatKeyword(Format value)
 		{
 			Value = value;
 		}
@@ -72,10 +72,9 @@ namespace Manatee.Json.Schema
 
 
 			if (!JsonSchemaOptions.ValidateFormatKeyword) return results;
-			if (context.Instance.Type != JsonValueType.String) return results;
 
 			var format = Value;
-			if (!format.Validate(context.Instance.String))
+			if (!format.Validate(context.Instance))
 			{
 				results.IsValid = false;
 				results.AdditionalInfo["actual"] = context.Instance;
@@ -110,7 +109,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = StringFormat.GetFormat(json.String);
+			Value = Format.GetFormat(json.String);
 
 			if (!Value.IsKnown && JsonSchemaOptions.ValidateFormatKeyword && !JsonSchemaOptions.AllowUnknownFormats)
 				throw new JsonSerializationException("Unknown format specifier found.  Either allow unknown formats or disable format validation in the JsonSchemaOptions.");

@@ -82,7 +82,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnInvalidDateTimeFormat()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.DateTime);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.DateTime);
 			var json = (JsonValue) "test123";
 
 			var results = schema.Validate(json);
@@ -92,7 +92,7 @@ namespace Manatee.Json.Tests.Schema
 		[TestCaseSource(nameof(DateTimeCases))]
 		public void ValidateReturnsValidOnValidDateTimeFormat(string dateTimeString)
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.DateTime);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.DateTime);
 			var json = (JsonValue) dateTimeString;
 
 			var results = schema.Validate(json);
@@ -102,7 +102,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnInvalidEmailFormat()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Email);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Email);
 			var json = (JsonValue) "test123";
 
 			var results = schema.Validate(json);
@@ -112,7 +112,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnValidEmailFormat()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Email);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Email);
 			var json = (JsonValue) "me@you.com";
 
 			var results = schema.Validate(json);
@@ -122,7 +122,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnValidEmailFormat2()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Email);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Email);
 			var json = (JsonValue) "Me@You.net";
 
 			var results = schema.Validate(json);
@@ -132,7 +132,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnInvalidHostNameFormat()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.HostName);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.HostName);
 			var json = (JsonValue) "$test123";
 
 			var results = schema.Validate(json);
@@ -142,7 +142,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnValidHostNameFormat()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.HostName);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.HostName);
 			var json = (JsonValue) "me.you.com";
 
 			var results = schema.Validate(json);
@@ -152,7 +152,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnInvalidIpv4Format()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Ipv4);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Ipv4);
 			var json = (JsonValue) "test123";
 
 			var results = schema.Validate(json);
@@ -162,7 +162,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnValidIpv4Format()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Ipv4);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Ipv4);
 			var json = (JsonValue) "255.255.1.1";
 
 			var results = schema.Validate(json);
@@ -172,7 +172,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnInvalidIpv6Format()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Ipv6);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Ipv6);
 			var json = (JsonValue) "test123";
 
 			var results = schema.Validate(json);
@@ -182,7 +182,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnValidIpv6Format()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Ipv6);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Ipv6);
 			var json = (JsonValue) "2001:0db8:85a3:0042:1000:8a2e:0370:7334";
 
 			var results = schema.Validate(json);
@@ -192,7 +192,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnInvalidUriFormat()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Uri);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Uri);
 			var json = (JsonValue) "test123^%";
 
 			var results = schema.Validate(json);
@@ -202,7 +202,7 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnValidUriFormat()
 		{
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.Uri);
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.Uri);
 			var json = (JsonValue) "http://en.wikipedia.org/wiki/ISO_8601";
 
 			var results = schema.Validate(json);
@@ -213,7 +213,7 @@ namespace Manatee.Json.Tests.Schema
 		public void ValidateReturnsValidOnUnknownFormat()
 		{
 			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.GetFormat("Int32"));
 			var json = (JsonValue) "32";
 			var expected = new SchemaValidationResults
 				{
@@ -253,7 +253,7 @@ namespace Manatee.Json.Tests.Schema
 		{
 			JsonSchemaOptions.AllowUnknownFormats = false;
 			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
-			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(StringFormat.GetFormat("Int32"));
+			var schema = new JsonSchema().Type(JsonSchemaType.String).Format(Format.GetFormat("Int32"));
 			var json = (JsonValue)"32";
 			var expected = new SchemaValidationResults
 				{

@@ -159,7 +159,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the value for the `format` keyword, if present.
 		/// </summary>
-		public static StringFormat Format(this JsonSchema schema)
+		public static Format Format(this JsonSchema schema)
 		{
 			return schema.Get<FormatKeyword>()?.Value;
 		}
