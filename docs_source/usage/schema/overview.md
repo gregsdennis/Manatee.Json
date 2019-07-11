@@ -1,6 +1,6 @@
 # JSON Schema Overview
 
-> *This documentation only applies to Manatee.Json version 10 and later.  To work with JSON Schema in previous Manatee.Json versions, please refer to the [legacy JSON Schema page](schema-v9.html).*
+> *This documentation only applies to Manatee.Json version 10 and later.  To work with JSON Schema in previous Manatee.Json versions, please refer to the [legacy JSON Schema page](v9.html).*
 
 The occasion may arise when you wish to validate that a JSON object is in the correct form (has the appropriate keys and the right types of values).  Enter JSON Schema.  Much like XML Schema with XML, JSON Schema defines a pattern for JSON data.  A JSON Schema validator can verify that a given JSON object meets the requirements as defined by the JSON Schema.  This validation can come in handy as a precursor step before deserializing.
 
