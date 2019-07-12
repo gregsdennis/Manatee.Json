@@ -158,4 +158,4 @@ I use [Jetbrains Resharper](https://www.jetbrains.com/resharper/) in Visual Stud
 
 If you've enjoyed using this library and you'd like to contribute financially, please use the button below.
 
-[![Donate](https://i.imgur.com/Fkk2ET1.png)](https://gogetfunding.com/campaign_funds/?pre=5486922)
+[![Donate](https://i.imgur.com/Fkk2ET1.png)](https://ko-fi.com/gregsdennis)
