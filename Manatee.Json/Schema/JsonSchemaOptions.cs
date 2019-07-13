@@ -15,6 +15,7 @@ namespace Manatee.Json.Schema
 	public static class JsonSchemaOptions
 	{
 		private static Func<string, string> _download;
+		private static readonly bool _configureForTestOutput;
 
 		/// <summary>
 		/// Gets and sets a method used to download online schema.
@@ -57,6 +58,14 @@ namespace Manatee.Json.Schema
 		/// </remarks>
 		public static RefResolutionStrategy RefResolution { get; set; } = RefResolutionStrategy.IgnoreSiblingId;
 
+		internal static bool ConfigureForTestOutput => _configureForTestOutput;
+
+		static JsonSchemaOptions()
+		{
+			var configureForTestOutputValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
+			bool.TryParse(configureForTestOutputValue, out _configureForTestOutput);
+		}
+
 		private static string _BasicDownload(string path)
 		{
 			Console.WriteLine(path);
@@ -78,60 +87,5 @@ namespace Manatee.Json.Schema
 					throw new Exception($"URI scheme {uri.Scheme} is not supported.  Only HTTP(S) and local file system URIs are allowed.");
 			}
 		}
-	}
-
-	/// <summary>
-	/// Determines how `$ref` keywords are resolved when adjacent to an
-	/// `$id` keyword.
-	/// </summary>
-	/// <remarks>
-	/// See the specific members for examples.
-	/// </remarks>
-	public enum RefResolutionStrategy
-	{
-		/// <summary>
-		/// Sibling `$id` properties will be ignored and will not change the
-		/// base URI.  This will process `$ref` according to draft-07 and earlier.
-		/// </summary>
-		/// <example>
-		/// The `$ref` in the following schema will resolve to <i>http://example.com/document.json</i>
-		/// because the `$id` of <i>folder</i> will be ignored.
-		/// 
-		/// `
-		/// {
-		///   "$schema": "http://json-schema.org/draft-08/schema#",
-		///   "$id": "http://example.com/root.json"
-		///   "properties": {
-		///     "prop": {
-		///       "$id": "folder"
-		///       "$ref": "document.json"
-		///     }
-		///   }
-		/// }
-		/// `
-		/// </example>
-		IgnoreSiblingId,
-		/// <summary>
-		/// Sibling `$id` properties will be processed and will change the
-		/// base URI.  This will process `$ref` according to draft-08.
-		/// </summary>
-		/// <example>
-		/// The `$ref` in the following schema will resolve to <i>http://example.com/folder/document.json</i>
-		/// because the `$id` of <i>folder</i> will be processed.
-		/// 
-		/// `
-		/// {
-		///   "$schema": "http://json-schema.org/draft-08/schema#",
-		///   "$id": "http://example.com/root.json"
-		///   "properties": {
-		///     "prop": {
-		///       "$id": "folder"
-		///       "$ref": "document.json"
-		///     }
-		///   }
-		/// }
-		/// `
-		/// </example>
-		ProcessSiblingId
 	}
 }

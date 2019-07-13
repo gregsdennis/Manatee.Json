@@ -56,8 +56,11 @@ namespace Manatee.Json.Schema
 
 		internal static bool IncludeAdditionalInfo { get; set; }
 		internal bool RecursionDetected { get; set; }
-
-		internal SchemaValidationResults() { }
+		/// <summary>
+		/// This is exposed solely for deserialization purposes.
+		/// </summary>
+		[DeserializationUseOnly]
+		public SchemaValidationResults() { }
 		internal SchemaValidationResults(SchemaValidationContext context)
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
@@ -195,7 +198,7 @@ namespace Manatee.Json.Schema
 				obj["instanceLocation"] = InstanceLocation.ToString();
 
 			var nonNullNestedResults = NestedResults.Where(r => !ReferenceEquals(r, Null)).ToList();
-			if (Keyword != null)
+			if (!JsonSchemaOptions.ConfigureForTestOutput && Keyword != null)
 				obj["keyword"] = Keyword;
 			if (IsValid)
 			{
@@ -206,12 +209,12 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				if (!string.IsNullOrWhiteSpace(ErrorMessage))
+				if (!JsonSchemaOptions.ConfigureForTestOutput && !string.IsNullOrWhiteSpace(ErrorMessage))
 					obj["error"] = ErrorMessage;
 				if (nonNullNestedResults.Any())
 					obj["errors"] = nonNullNestedResults.Select(r => r.ToJson(serializer)).ToJson();
 			}
-			if (IncludeAdditionalInfo && AdditionalInfo != null && AdditionalInfo.Any())
+			if (!JsonSchemaOptions.ConfigureForTestOutput && IncludeAdditionalInfo && AdditionalInfo != null && AdditionalInfo.Any())
 				obj["additionalInfo"] = AdditionalInfo;
 
 			return obj;

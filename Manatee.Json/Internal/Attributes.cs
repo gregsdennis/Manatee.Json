@@ -2,9 +2,9 @@
 
 namespace Manatee.Json.Internal
 {
-#if !NET45
-	//[CompilerAttributes.GeneratesError("This constructor is provided for deserialization purposes only.  Please use the parameterized one instead.")]
-#endif
+	/// <summary>
+	/// Marks a type or member as intended for deserialization use only.
+	/// </summary>
 	public class DeserializationUseOnlyAttribute : Attribute
 	{
 	}
