@@ -62,10 +62,11 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="1100">11.0.0</h1>
 
-<p><em>v10.2.0 beta 1 - Released on 22 Jun, 2019</em></p>
-<p><em>v10.2.0 beta 2 - Released on 28 Jun, 2019</em></p>
-<p><em>v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)</em></p>
+<p><em>v11.0.0 beta 3 - Released on 18 Jul, 2019</em></p>
 <p><em>v11.0.0 beta 2 - Released on 10 Jul, 2019</em></p>
+<p><em>v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)</em></p>
+<p><em>v10.2.0 beta 2 - Released on 28 Jun, 2019</em></p>
+<p><em>v10.2.0 beta 1 - Released on 22 Jun, 2019</em></p>
 <blockquote>
 <p><em><strong>NOTE</strong> The properties for the new drafts contain version names like &quot;Draft2019_06&quot;.  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.</em></p>
 </blockquote>
@@ -83,8 +84,10 @@
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/205">#205</a>) Schema equality doesn't capture extra properties on second schema.  E.g. for <code>a.Equals(b)</code> if <code>b</code> has a property that doesn't exist in <code>a</code>, <code>.Equals()</code> still returns true.  The collection comparison has been fixed.</p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/201">#201</a>) CompilerAttributes causes errors in .Net Standard versions.  This dependency has been removed.</p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/211">#211</a>) <a href="https://github.com/desmondgc">@desmondgc</a> Date/Time format validation within schemas is insufficient.  Default implementation now uses <code>DateTime.TryParseExact()</code> with support for fractional seconds.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/219">#219</a>) <code>$ref</code> resolution fails when using a relative URI as the <code>$id</code> for the root schema.  Added a new option <code>JsonSchemaOptions.DefaultBaseUri</code> as suggested by the spec.  The default value for this option is <code>manatee://json-schema/</code>.</p>
 <ul>
 <li><code>JsonSchemaRegistry</code> is no longer static, but all previously existing functionality is still static.  All instance functionality is internal.</li>
+<li>Minor memory usage improvements for JSON Schema validation.</li>
 </ul>
 <h1 id="1014">10.1.4</h1>
 <p><em>Released on 8 Jun, 2019</em></p>

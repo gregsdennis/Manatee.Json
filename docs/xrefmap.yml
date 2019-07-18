@@ -10471,6 +10471,19 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.JsonSchemaOptions.AllowUnknownFormats
   nameWithType: JsonSchemaOptions.AllowUnknownFormats
+- uid: Manatee.Json.Schema.JsonSchemaOptions.DefaultBaseUri
+  name: DefaultBaseUri
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_DefaultBaseUri
+  commentId: P:Manatee.Json.Schema.JsonSchemaOptions.DefaultBaseUri
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.DefaultBaseUri
+  nameWithType: JsonSchemaOptions.DefaultBaseUri
+- uid: Manatee.Json.Schema.JsonSchemaOptions.DefaultBaseUri*
+  name: DefaultBaseUri
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_DefaultBaseUri_
+  commentId: Overload:Manatee.Json.Schema.JsonSchemaOptions.DefaultBaseUri
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.DefaultBaseUri
+  nameWithType: JsonSchemaOptions.DefaultBaseUri
 - uid: Manatee.Json.Schema.JsonSchemaOptions.Download
   name: Download
   href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_Download
@@ -16463,6 +16476,12 @@ references:
   commentId: T:Manatee.Json.Schema.SchemaValidationResults
   fullName: Manatee.Json.Schema.SchemaValidationResults
   nameWithType: SchemaValidationResults
+- uid: Manatee.Json.Schema.SchemaValidationResults.#ctor
+  name: SchemaValidationResults()
+  href: api/Manatee.Json.Schema.SchemaValidationResults.html#Manatee_Json_Schema_SchemaValidationResults__ctor
+  commentId: M:Manatee.Json.Schema.SchemaValidationResults.#ctor
+  fullName: Manatee.Json.Schema.SchemaValidationResults.SchemaValidationResults()
+  nameWithType: SchemaValidationResults.SchemaValidationResults()
 - uid: Manatee.Json.Schema.SchemaValidationResults.#ctor(System.String,Manatee.Json.Schema.SchemaValidationContext)
   name: SchemaValidationResults(String, SchemaValidationContext)
   href: api/Manatee.Json.Schema.SchemaValidationResults.html#Manatee_Json_Schema_SchemaValidationResults__ctor_System_String_Manatee_Json_Schema_SchemaValidationContext_
