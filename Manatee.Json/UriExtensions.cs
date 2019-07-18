@@ -13,8 +13,6 @@ namespace Manatee.Json
 		/// <returns>
 		/// The parent <see cref="Uri" />.
 		/// </returns>
-		/// <exception cref="ArgumentNullException">uri</exception>
-		/// <exception cref="InvalidOperationException">Cannot get parent of root</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="uri" /> is <c>null</c>.</exception>
 		/// <exception cref="InvalidOperationException"><paramref name="uri" /> has no parent, it refers to a root resource.</exception>
 		public static Uri GetParentUri(this Uri uri)

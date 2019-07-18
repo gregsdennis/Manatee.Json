@@ -234,8 +234,10 @@ namespace Manatee.Json.Schema
 			var address = Id;
 			if (baseUri != null && address != null)
 				address = new Uri(baseUri, address).OriginalString;
-			if (Uri.TryCreate(address, UriKind.Absolute, out var uri))
+			if (_documentPath == null && address != null && !address.StartsWith("#"))
 			{
+				if (!Uri.TryCreate(address, UriKind.Absolute, out var uri))
+					uri = new Uri(JsonSchemaOptions.DefaultBaseUri, address);
 				DocumentPath = uri;
 				JsonSchemaRegistry.Register(this);
 				baseUri = uri;

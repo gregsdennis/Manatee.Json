@@ -58,6 +58,11 @@ namespace Manatee.Json.Schema
 		/// </remarks>
 		public static RefResolutionStrategy RefResolution { get; set; } = RefResolutionStrategy.IgnoreSiblingId;
 
+		/// <summary>
+		/// Defines a default base URI for root schemas that use a relative URI for their `$id`.
+		/// </summary>
+		public static Uri DefaultBaseUri { get; set; } = new Uri("manatee://json-schema/", UriKind.Absolute);
+
 		internal static bool ConfigureForTestOutput => _configureForTestOutput;
 
 		static JsonSchemaOptions()
@@ -83,6 +88,8 @@ namespace Manatee.Json.Schema
 				case "file":
 					var filename = Uri.UnescapeDataString(uri.AbsolutePath);
 					return File.ReadAllText(filename);
+				case "manatee":
+					return null;
 				default:
 					throw new Exception($"URI scheme {uri.Scheme} is not supported.  Only HTTP(S) and local file system URIs are allowed.");
 			}
