@@ -9,6 +9,8 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationContext
 	{
+		private HashSet<string> _evaluatedPropertyNames;
+		private HashSet<string> _locallyEvaluatedPropertyNames;
 		/// <summary>
 		/// Gets or sets the local schema at this point in the validation.
 		/// </summary>
@@ -28,11 +30,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets a list of property names that have been evaluated in this validation pass.
 		/// </summary>
-		public List<string> EvaluatedPropertyNames { get; } = new List<string>();
+		public HashSet<string> EvaluatedPropertyNames => _evaluatedPropertyNames ?? (_evaluatedPropertyNames = new HashSet<string>());
 		/// <summary>
 		/// Gets a list of property names that have been evaluated on the current tier of this validation pass.
 		/// </summary>
-		public List<string> LocallyEvaluatedPropertyNames { get; } = new List<string>();
+		public HashSet<string> LocallyEvaluatedPropertyNames => _locallyEvaluatedPropertyNames ?? (_locallyEvaluatedPropertyNames = new HashSet<string>());
 		/// <summary>
 		/// Gets the last array index that has been evaluated in this validation pass.
 		/// </summary>
@@ -86,8 +88,8 @@ namespace Manatee.Json.Schema
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
-			EvaluatedPropertyNames.AddRange(source.EvaluatedPropertyNames);
-			LocallyEvaluatedPropertyNames.AddRange(source.LocallyEvaluatedPropertyNames);
+			EvaluatedPropertyNames.UnionWith(source.EvaluatedPropertyNames);
+			LocallyEvaluatedPropertyNames.UnionWith(source.LocallyEvaluatedPropertyNames);
 			LastEvaluatedIndex = source.LastEvaluatedIndex;
 			LocalTierLastEvaluatedIndex = source.LocalTierLastEvaluatedIndex;
 			BaseUri = source.BaseUri;

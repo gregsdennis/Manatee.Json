@@ -1,12 +1,14 @@
 # 11.0.0
 
-*v10.2.0 beta 1 - Released on 22 Jun, 2019*
+*v11.0.0 beta 3 - Released on 18 Jul, 2019*
 
-*v10.2.0 beta 2 - Released on 28 Jun, 2019*
+*v11.0.0 beta 2 - Released on 10 Jul, 2019*
 
 *v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)*
 
-*v11.0.0 beta 2 - Released on 10 Jul, 2019*
+*v10.2.0 beta 2 - Released on 28 Jun, 2019*
+
+*v10.2.0 beta 1 - Released on 22 Jun, 2019*
 
 > ***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
 
@@ -33,7 +35,10 @@ Additionally, it was pointed out on [the JSON Schema spec repo](https://github.c
 
 ([#211](https://github.com/gregsdennis/Manatee.Json/issues/211)) [@desmondgc](https://github.com/desmondgc) Date/Time format validation within schemas is insufficient.  Default implementation now uses `DateTime.TryParseExact()` with support for fractional seconds.
 
+([#219](https://github.com/gregsdennis/Manatee.Json/issues/219)) `$ref` resolution fails when using a relative URI as the `$id` for the root schema.  Added a new option `JsonSchemaOptions.DefaultBaseUri` as suggested by the spec.  The default value for this option is `manatee://json-schema/`.
+
 - `JsonSchemaRegistry` is no longer static, but all previously existing functionality is still static.  All instance functionality is internal.
+- Minor memory usage improvements for JSON Schema validation.
 
 # 10.1.4
 

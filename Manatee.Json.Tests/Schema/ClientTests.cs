@@ -408,5 +408,41 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.AreNotEqual(schema1, schema2);
 		}
+
+		[Test]
+		public void Issue217_MaxLengthDoesNotSupportUtf8Properly()
+		{
+			var json = new JsonObject {["data"] = "“Silly Gooseberry!”"};
+			var schema = new JsonSchema()
+				.Type(JsonSchemaType.Object)
+				.Property("data", new JsonSchema()
+					          .MaxLength(20));
+
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
+
+		[Test]
+		public void Issue219_RootSchemaIdentifiedByRelativeUri()
+		{
+			var schema = new JsonSchema()
+				.Id("1")
+				.Property("value", new JsonSchema()
+					          .Type(JsonSchemaType.Integer))
+				.Property("loop", new JsonSchema()
+					          .Ref("1"))
+				.Required("value");
+
+			var json = new JsonObject
+				{
+					["value"] = 6,
+					["loop"] = new JsonObject { ["value"] = 31 }
+				};
+
+			var results = schema.Validate(json);
+
+			results.AssertValid();
+		}
 	}
 }

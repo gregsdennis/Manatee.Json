@@ -70,8 +70,8 @@ namespace Manatee.Json.Schema
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 				};
 			var nestedResults = Value.Validate(newContext);
-			context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
-			context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
+			context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+			context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 
 			results.IsValid = !nestedResults.IsValid;
 

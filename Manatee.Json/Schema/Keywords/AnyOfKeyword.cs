@@ -54,8 +54,8 @@ namespace Manatee.Json.Schema
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 						};
 					var result = s.Validate(newContext);
-					context.EvaluatedPropertyNames.AddRange(newContext.EvaluatedPropertyNames);
-					context.EvaluatedPropertyNames.AddRange(newContext.LocallyEvaluatedPropertyNames);
+					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 					return result;
 				});
 
