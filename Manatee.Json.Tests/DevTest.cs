@@ -25,7 +25,7 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			//JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
 
 			var serializer = new JsonSerializer();
 
@@ -39,10 +39,10 @@ namespace Manatee.Json.Tests
 			var jsonText = File.ReadAllText(jsonFile);
 			var json = JsonValue.Parse(jsonText);
 
-			//var metaResults = schema.ValidateSchema();
+			var metaResults = schema.ValidateSchema();
 			var results = schema.Validate(json);
 
-			//File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\metaResults.json", serializer.Serialize(metaResults).GetIndentedString());
+			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\metaResults.json", serializer.Serialize(metaResults).GetIndentedString());
 			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\results.json", serializer.Serialize(results).GetIndentedString());
 		}
 	}

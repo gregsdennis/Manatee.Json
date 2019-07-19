@@ -1,5 +1,7 @@
 # 11.0.0
 
+*v11.0.0 beta 4 - Released on 19 Jul, 2019*
+
 *v11.0.0 beta 3 - Released on 18 Jul, 2019*
 
 *v11.0.0 beta 2 - Released on 10 Jul, 2019*
@@ -20,6 +22,7 @@ In order to support some new independent reference tests, some changes were made
 
 - `IJsonSchemaKeyword.RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)` - The second parameter is new.
 - `SchemaValidationContext` now requires a source context from which to copy values.
+- `JsonSchemaOptions.OutputFormat` now has a default value of `Flag`, which only returns whether an instance is valid, without any error details.
 
 Additionally, it was pointed out on [the JSON Schema spec repo](https://github.com/json-schema-org/json-schema-spec/issues/759) that `format` is not specifically intended for strings, but can also be used to validate other types.  To address this, the `StringFormat` type has been renamed to `Format` and now accepts `JsonValue` instead of merely `string`.
 

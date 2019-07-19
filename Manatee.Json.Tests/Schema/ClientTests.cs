@@ -444,5 +444,21 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid();
 		}
+
+		[Test]
+		public void Issue219_RootSchemaIdentifiedByRelativeUriFailsBecauseRefDoesNotUseFragment()
+		{
+			var serializer = new JsonSerializer();
+
+			var schemaText =
+				@"{""$id"":""1"",""definitions"":{""defaultTemplate"":{""$id"":""template"",""type"":""object"",""required"":[""movie""],""properties"":{""movie"":{""type"":""object""}}}},""$schema"":""http:\/\/json-schema.org\/draft-07\/schema"",""allOf"":[{""$ref"":""/definitions/defaultTemplate""},{""required"":[""movie""],""properties"":{""movie"":{""required"":[""metadata""],""properties"":{""metadata"":{""type"":""object"",""required"":[""name"",""movieId""],""properties"":{""name"":{""type"":""string""},""movieId"":{""type"":""string""}}}}}}}]}";
+			var schemaJson = JsonValue.Parse(schemaText);
+			var schema = serializer.Deserialize<JsonSchema>(schemaJson);
+
+			var jsonText = @"{ ""movie"": { ""metadata"": { ""name"": ""1"", ""movieId"": ""12"" } } }";
+			var json = JsonValue.Parse(jsonText);
+
+			Assert.Throws<SchemaReferenceNotFoundException>(() => schema.Validate(json));
+		}
 	}
 }

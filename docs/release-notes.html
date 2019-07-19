@@ -62,6 +62,7 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="1100">11.0.0</h1>
 
+<p><em>v11.0.0 beta 4 - Released on 19 Jul, 2019</em></p>
 <p><em>v11.0.0 beta 3 - Released on 18 Jul, 2019</em></p>
 <p><em>v11.0.0 beta 2 - Released on 10 Jul, 2019</em></p>
 <p><em>v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)</em></p>
@@ -76,6 +77,7 @@
 <ul>
 <li><code>IJsonSchemaKeyword.RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)</code> - The second parameter is new.</li>
 <li><code>SchemaValidationContext</code> now requires a source context from which to copy values.</li>
+<li><code>JsonSchemaOptions.OutputFormat</code> now has a default value of <code>Flag</code>, which only returns whether an instance is valid, without any error details.</li>
 </ul>
 <p>Additionally, it was pointed out on <a href="https://github.com/json-schema-org/json-schema-spec/issues/759">the JSON Schema spec repo</a> that <code>format</code> is not specifically intended for strings, but can also be used to validate other types.  To address this, the <code>StringFormat</code> type has been renamed to <code>Format</code> and now accepts <code>JsonValue</code> instead of merely <code>string</code>.</p>
 <h2 id="non-breaking-changes">Non-breaking changes</h2>

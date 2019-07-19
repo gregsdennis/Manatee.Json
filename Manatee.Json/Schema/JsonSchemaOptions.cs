@@ -1,11 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using Manatee.Json.Serialization;
-
-#if !NET45
 using System.Net.Http;
-#endif
+using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
 {
@@ -39,9 +35,9 @@ namespace Manatee.Json.Schema
 		public static bool AllowUnknownFormats { get; set; } = true;
 
 		/// <summary>
-		/// Gets or sets the output verbosity.  The default is <see cref="SchemaValidationOutputFormat.Detailed"/>.
+		/// Gets or sets the output verbosity.  The default is <see cref="SchemaValidationOutputFormat.Flag"/>.
 		/// </summary>
-		public static SchemaValidationOutputFormat OutputFormat { get; set; } = SchemaValidationOutputFormat.Detailed;
+		public static SchemaValidationOutputFormat OutputFormat { get; set; } = SchemaValidationOutputFormat.Flag;
 
 		/// <summary>
 		/// Determines how `$ref` keywords are resolved when adjacent to an `$id` keyword
@@ -80,11 +76,7 @@ namespace Manatee.Json.Schema
 			{
 				case "http":
 				case "https":
-#if NET45
-					return new WebClient().DownloadString(uri);
-#else
 					return new HttpClient().GetStringAsync(uri).Result;
-#endif
 				case "file":
 					var filename = Uri.UnescapeDataString(uri.AbsolutePath);
 					return File.ReadAllText(filename);

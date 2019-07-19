@@ -204,6 +204,8 @@ namespace Manatee.Json.Schema
 					_resolvedRoot = context.Root;
 			}
 
+			if (_resolvedRoot == null) return;
+
 			var wellKnown = JsonSchemaRegistry.GetWellKnown(Reference);
 			if (wellKnown != null)
 			{

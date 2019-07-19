@@ -24,8 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{FECC9923-41DB-4DE7-9715-D7E565456B8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests.Console", "Manatee.Json.Tests.Console\Manatee.Json.Tests.Console.csproj", "{CC72D4B0-945B-4634-BD65-442A910A6401}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,17 +38,12 @@ Global
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC72D4B0-945B-4634-BD65-442A910A6401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC72D4B0-945B-4634-BD65-442A910A6401}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC72D4B0-945B-4634-BD65-442A910A6401}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC72D4B0-945B-4634-BD65-442A910A6401}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
-		{CC72D4B0-945B-4634-BD65-442A910A6401} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A28ED14-DF83-45F6-BA43-47423E29D5D9}

@@ -41,6 +41,7 @@ namespace Manatee.Json.Schema
 				if (!_schemaLookup.TryGetValue(uri, out schema))
 				{
 					var schemaJson = JsonSchemaOptions.Download(uri);
+					if (schemaJson == null) return null;
 				    var schemaValue = JsonValue.Parse(schemaJson);
 					schema = new JsonSchema {DocumentPath = new Uri(uri, UriKind.RelativeOrAbsolute)};
 					schema.FromJson(schemaValue, _serializer);
@@ -81,6 +82,9 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Explicitly registers an existing schema.
 		/// </summary>
+		/// <remarks>
+		/// This generally isn't required since <see cref="JsonSchema"/> will automatically register itself upon validation.
+		/// </remarks>
 		public static void Register(JsonSchema schema)
 		{
 			if (schema.DocumentPath == null) return;
