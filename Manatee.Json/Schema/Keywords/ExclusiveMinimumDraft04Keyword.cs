@@ -78,6 +78,7 @@ namespace Manatee.Json.Schema
 				results.IsValid = false;
 				results.AdditionalInfo["lowerBound"] = keyword.Value;
 				results.AdditionalInfo["actual"] = context.Instance;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

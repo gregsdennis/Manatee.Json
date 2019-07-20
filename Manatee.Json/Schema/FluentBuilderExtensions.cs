@@ -363,24 +363,6 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 		/// <summary>
-		/// (Obsolete) Add an `items` keyword to the schema.
-		/// </summary>
-		[Obsolete("This method cannot consider a single-item array value.  Use multiple calls to Item() instead.")]
-		public static JsonSchema Items(this JsonSchema schema, params JsonSchema[] definitions)
-		{
-			var keyword = schema.OfType<ItemsKeyword>().FirstOrDefault();
-
-			if (keyword == null)
-			{
-				keyword = new ItemsKeyword {IsArray = true};
-				schema.Add(keyword);
-			}
-
-			keyword.AddRange(definitions);
-
-			return schema;
-		}
-		/// <summary>
 		/// Add a `maxContains` keyword to the schema.
 		/// </summary>
 		public static JsonSchema MaxContains(this JsonSchema schema, uint count)

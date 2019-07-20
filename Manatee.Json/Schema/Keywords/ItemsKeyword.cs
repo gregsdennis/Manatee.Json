@@ -58,6 +58,7 @@ namespace Manatee.Json.Schema
 
 			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
+			var failedIndices = new JsonArray();
 			if (IsArray)
 			{
 				// have array of schemata: validate in sequence
@@ -77,6 +78,8 @@ namespace Manatee.Json.Schema
 						results.IsValid = false;
 						return results;
 					}
+					if (!localResults.IsValid)
+						failedIndices.Add(i);
 					nestedResults.Add(this[i].Validate(newContext));
 					i++;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
@@ -103,6 +106,8 @@ namespace Manatee.Json.Schema
 						var localResults = this[0].Validate(newContext);
 						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+						if (!localResults.IsValid)
+							failedIndices.Add(i);
 						return localResults;
 					});
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
@@ -113,6 +118,11 @@ namespace Manatee.Json.Schema
 					results.IsValid = nestedResults.All(r => r.IsValid);
 					results.NestedResults.AddRange(nestedResults);
 				}
+			}
+			if (!results.IsValid)
+			{
+				results.AdditionalInfo["indices"] = failedIndices;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

@@ -73,6 +73,8 @@ namespace Manatee.Json.Schema
 						NestedResults = resultsList,
 						IsValid = resultsList.Any(r => r.IsValid)
 					};
+				if (!results.IsValid)
+					results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;

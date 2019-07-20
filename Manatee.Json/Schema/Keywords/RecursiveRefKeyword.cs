@@ -14,9 +14,9 @@ namespace Manatee.Json.Schema
 	[DebuggerDisplay("Name={Name} Value={Reference}")]
 	public class RecursiveRefKeyword : IJsonSchemaKeyword, IEquatable<RecursiveRefKeyword>
 	{
+		private readonly List<JsonPointer> _validatingLocations = new List<JsonPointer>();
 		private JsonSchema _resolvedRoot;
 		private JsonPointer _resolvedFragment;
-		private List<JsonPointer> _validatingLocations = new List<JsonPointer>();
 
 		/// <summary>
 		/// Gets the name of the keyword.
