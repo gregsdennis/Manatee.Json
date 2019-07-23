@@ -50,37 +50,41 @@ namespace Manatee.Json.Schema
 		{
 			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-			var nestedResults = this.Select(d =>
+
+			var valid = true;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var nestedResults = new List<SchemaValidationResults>();
+			var failedCount = 0;
+
+			foreach (var d in this)
+			{
+				var newContext = new SchemaValidationContext(context)
+					{
+						BaseRelativeLocation = baseRelativeLocation,
+						RelativeLocation = relativeLocation,
+					};
+				var localResults = d.Validate(newContext);
+				valid &= localResults.IsValid;
+				if (!valid)
+					failedCount++;
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					var newContext = new SchemaValidationContext(context)
-						{
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-						};
-					return d.Validate(newContext);
-				});
+					if (!valid) break;
+				}
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
+			}
 
-			SchemaValidationResults results;
+			var results = new SchemaValidationResults(Name, context)
+				{
+					IsValid = valid
+				};
 			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				results.NestedResults = nestedResults;
+			else if (!results.IsValid)
 			{
-				results = new SchemaValidationResults(Name, context)
-					{
-						IsValid = nestedResults.All(r => r.IsValid)
-					};
-			}
-			else
-			{
-				var resultsList = nestedResults.ToList();
-				results = new SchemaValidationResults(Name, context)
-					{
-						NestedResults = resultsList,
-						IsValid = resultsList.All(r => r.IsValid)
-					};
-			}
-
-			if (!results.IsValid)
-			{
-				results.AdditionalInfo["failed"] = nestedResults.Count(r => !r.IsValid);
+				results.AdditionalInfo["failed"] = failedCount;
 				results.AdditionalInfo["total"] = Count;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
