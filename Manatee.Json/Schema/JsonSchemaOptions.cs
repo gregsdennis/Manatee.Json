@@ -15,14 +15,14 @@ namespace Manatee.Json.Schema
 	{
 		private interface IErrorCollectionCondition
 		{
-			bool ShouldCollectErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context);
+			bool ShouldExcludeChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context);
 		}
 
 		private class LocationErrorCollectionCondition : IErrorCollectionCondition
 		{
 			public JsonPointer Location { get; set; }
 
-			public bool ShouldCollectErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
+			public bool ShouldExcludeChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 			{
 				return context.RelativeLocation.IsChildOf(Location);
 			}
@@ -32,13 +32,13 @@ namespace Manatee.Json.Schema
 		{
 			public Type Type { get; set; }
 
-			public bool ShouldCollectErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
+			public bool ShouldExcludeChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 			{
 				return Type.IsInstanceOfType(keyword);
 			}
 		}
 
-		private static readonly bool _configureForTestOutput;
+		private static bool _configureForTestOutput;
 		private static readonly List<IErrorCollectionCondition> _errorCollectionConditions;
 		private static Func<string, string> _download;
 
@@ -88,7 +88,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Uri DefaultBaseUri { get; set; } = new Uri("manatee://json-schema/", UriKind.Absolute);
 
-		internal static bool ConfigureForTestOutput => _configureForTestOutput;
+		public static bool ConfigureForTestOutput
+		{
+			get { return _configureForTestOutput; }
+			set { _configureForTestOutput = value; }
+		}
 
 		static JsonSchemaOptions()
 		{
@@ -156,7 +160,7 @@ namespace Manatee.Json.Schema
 		/// contain the immediate error.  Annotations are always collected.</returns>
 		public static bool ShouldReportChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 		{
-			return _errorCollectionConditions.Any(c => c.ShouldCollectErrors(keyword, context));
+			return !_errorCollectionConditions.Any(c => c.ShouldExcludeChildErrors(keyword, context));
 		}
 	}
 }

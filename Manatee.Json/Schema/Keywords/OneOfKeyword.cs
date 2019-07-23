@@ -47,50 +47,38 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var nestedResults = this.Select((s, i) =>
-				{
-					var newContext = new SchemaValidationContext(context)
-						{
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
-							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
-						};
-					var result = s.Validate(newContext);
-					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
-					return result;
-				});
-
-			SchemaValidationResults results;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var i = 0;
+			var nestedResults = new List<SchemaValidationResults>();
 			var validCount = 0;
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
-			{
-				results = new SchemaValidationResults(Name, context);
-				foreach (var result in nestedResults)
-				{
-					if (result.IsValid)
-					{
-						if (validCount != 0)
-						{
-							results.IsValid = false;
-							return results;
-						}
 
-						validCount++;
-					}
-				}
-
-				results.IsValid = validCount == 1;
-			}
-			else
+			foreach (var s in this)
 			{
-				var resultsList = nestedResults.ToList();
-				validCount = resultsList.Count(r => r.IsValid);
-				results = new SchemaValidationResults(Name, context)
+				var newContext = new SchemaValidationContext(context)
 					{
-						NestedResults = resultsList,
-						IsValid = validCount == 1
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 					};
+				var localResults = s.Validate(newContext);
+				if (localResults.IsValid)
+					validCount++;
+				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+				context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, newContext.LastEvaluatedIndex);
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				{
+					if (validCount > 1) break;
+				}
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
 			}
+
+			var results = new SchemaValidationResults(Name, context)
+				{
+					IsValid = validCount == 1,
+					NestedResults = nestedResults
+				};
 
 			if (!results.IsValid)
 			{

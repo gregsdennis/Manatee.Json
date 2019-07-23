@@ -66,14 +66,11 @@ namespace Manatee.Json.Schema
 					InstanceLocation = context.InstanceLocation.CloneAndAppend(Name),
 				});
 
-			SchemaValidationResults results;
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag &&
-			    context.Local.Get<ContentMediaTypeKeyword>() == null)
-				results = new SchemaValidationResults(Name, context)
-					{
-						IsValid = nestedResult.IsValid
-					};
-			else
+			var results = new SchemaValidationResults(Name, context)
+				{
+					IsValid = nestedResult.IsValid
+				};
+			if (JsonSchemaOptions.OutputFormat != SchemaValidationOutputFormat.Flag)
 				results = new SchemaValidationResults(Name, context)
 					{
 						NestedResults = new List<SchemaValidationResults> {nestedResult}

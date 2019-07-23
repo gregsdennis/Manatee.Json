@@ -12,20 +12,20 @@ using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Schema;
-using Manatee.Json.Tests.Test_References;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
 {
 	[TestFixture]
 	// TODO: Add categories to exclude this test.
-	[Ignore("This test fixture for development purposes only.")]
+	//[Ignore("This test fixture for development purposes only.")]
 	public class DevTest
 	{
 		[Test]
 		public void Test()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
+			JsonSchemaOptions.IgnoreErrorsForChildren<OneOfKeyword>();
 
 			var serializer = new JsonSerializer();
 
@@ -44,6 +44,8 @@ namespace Manatee.Json.Tests
 
 			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\metaResults.json", serializer.Serialize(metaResults).GetIndentedString());
 			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\results.json", serializer.Serialize(results).GetIndentedString());
+
+			results.AssertInvalid();
 		}
 	}
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
@@ -18,7 +20,11 @@ namespace Manatee.Json.Tests.Console
 
 		private static void RunManatee()
 		{
-			//JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
+			var watch = Stopwatch.StartNew();
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
+			JsonSchemaOptions.IgnoreErrorsForChildren<OneOfKeyword>();
+
+			JsonSchemaOptions.ConfigureForTestOutput = false;
 
 			var serializer = new JsonSerializer();
 
@@ -32,11 +38,12 @@ namespace Manatee.Json.Tests.Console
 			var jsonText = File.ReadAllText(jsonFile);
 			var json = JsonValue.Parse(jsonText);
 
-			//var metaResults = schema.ValidateSchema();
+			var metaResults = schema.ValidateSchema();
 			var results = schema.Validate(json);
 
-			//File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\metaResults.json", serializer.Serialize(metaResults).GetIndentedString());
+			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\metaResults.json", serializer.Serialize(metaResults).GetIndentedString());
 			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\results.json", serializer.Serialize(results).GetIndentedString());
+			System.Console.WriteLine(watch.Elapsed);
 		}
 
 		private static void RunNewtonsoft()

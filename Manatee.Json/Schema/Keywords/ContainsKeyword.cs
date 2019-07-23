@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -71,46 +72,49 @@ namespace Manatee.Json.Schema
 
 			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-			var nestedResults = context.Instance.Array.Select((jv, i) =>
-				{
-					var newContext = new SchemaValidationContext(context)
-						{
-							Instance = jv,
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
-						};
-					var result = Value.Validate(newContext);
-					return result;
-				});
 
-			SchemaValidationResults results;
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag &&
-			    context.Local.Get<MinContainsKeyword>() == null &&
-			    context.Local.Get<MaxContainsKeyword>() == null)
-				results = new SchemaValidationResults(Name, context)
-					{
-						IsValid = nestedResults.Any(r => r.IsValid)
-					};
-			else
+			var valid = false;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var i = 0;
+			var nestedResults = new List<SchemaValidationResults>();
+			var matchedIndices = new JsonArray();
+			var hasMinMaxConstraints = context.Local.Get<MinContainsKeyword>() != null ||
+			                           context.Local.Get<MaxContainsKeyword>() != null;
+
+			foreach (var jv in context.Instance.Array)
 			{
-				var resultsList = nestedResults.ToList();
-				results = new SchemaValidationResults(Name, context) {NestedResults = resultsList};
+				var newContext = new SchemaValidationContext(context)
+					{
+						Instance = jv,
+						BaseRelativeLocation = baseRelativeLocation,
+						RelativeLocation = relativeLocation,
+						InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
+					};
+				var localResults = Value.Validate(newContext);
+				valid |= localResults.IsValid;
+				if (localResults.IsValid)
+					matchedIndices.Add(i);
 
-				var matchedIndices = resultsList.IndexesWhere(r => r.IsValid).Select(i => (JsonValue)i).ToJson();
-				context.Misc["containsCount"] = matchedIndices.Count;
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				{
+					if (valid && !hasMinMaxConstraints) break;
+				}
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
 
-				if (!matchedIndices.Any())
-				{
-					results.IsValid = false;
-					results.Keyword = Name;
-					results.ErrorMessage = ErrorTemplate;
-				}
-				else
-				{
-					results.AdditionalInfo["matchedIndices"] = matchedIndices;
-				}
+				i++;
 			}
+
+			context.Misc["containsCount"] = matchedIndices.Count;
+			var results = new SchemaValidationResults
+				{
+					NestedResults = nestedResults,
+					IsValid = valid,
+					Keyword = Name,
+					AdditionalInfo = {["matchedIndices"] = matchedIndices}
+				};
+			if (!valid)
+				results.ErrorMessage = ErrorTemplate;
 
 			return results;
 		}

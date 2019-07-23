@@ -108,7 +108,7 @@ namespace Manatee.Json.Schema
 					var localResults = Value.Validate(newContext);
 					valid &= localResults.IsValid;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
-					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index); nestedResults.Add(localResults);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
 					index++;
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
@@ -120,13 +120,11 @@ namespace Manatee.Json.Schema
 				}
 			}
 			results.NestedResults = nestedResults;
+			results.IsValid = valid;
+			results.Keyword = Name;
 
-			if (valid)
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
+			if (!valid)
 				results.ErrorMessage = ErrorTemplate;
-			}
 
 			return results;
 		}
