@@ -85,6 +85,8 @@ namespace Manatee.Json.Schema
 				return results;
 			}
 
+			var valid = true;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
 
 			foreach (var kvp in toEvaluate)
@@ -96,7 +98,14 @@ namespace Manatee.Json.Schema
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
 					};
-				nestedResults.Add(Value.Validate(newContext));
+				var localResults = Value.Validate(newContext);
+				valid &= localResults.IsValid;
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				{
+					if (!valid) break;
+				} else if (reportChildErrors)
+					nestedResults.Add(localResults);
 			}
 
 			results.NestedResults = nestedResults;

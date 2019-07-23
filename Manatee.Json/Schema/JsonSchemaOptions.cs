@@ -88,15 +88,6 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Uri DefaultBaseUri { get; set; } = new Uri("manatee://json-schema/", UriKind.Absolute);
 
-		/// <summary>
-		/// Defines whether annotations should be collected and reported during validation.  Default is `true`.
-		/// </summary>
-		/// <remarks>
-		/// Disabling this may improve performance for keywords that can be short-circuited in the valid case,
-		/// like `anyOf`.
-		/// </remarks>
-		public static bool CollectAnnotations { get; set; } = true;
-
 		internal static bool ConfigureForTestOutput => _configureForTestOutput;
 
 		static JsonSchemaOptions()
