@@ -34,8 +34,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					["valid"] = Valid
 				};
 
-			var exportTestsValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
-			if (bool.TryParse(exportTestsValue, out var exportTests) && exportTests && OutputGeneration != null)
+			if (JsonSchemaOptions.ConfigureForTestOutput && OutputGeneration != null)
 				obj["output"] = new JsonObject
 					{
 						["basic"] = OutputGeneration.Flatten().ToJson(serializer),

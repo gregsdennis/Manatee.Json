@@ -38,7 +38,6 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		private static bool _configureForTestOutput;
 		private static readonly List<IErrorCollectionCondition> _errorCollectionConditions;
 		private static Func<string, string> _download;
 
@@ -88,17 +87,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Uri DefaultBaseUri { get; set; } = new Uri("manatee://json-schema/", UriKind.Absolute);
 
-		public static bool ConfigureForTestOutput
-		{
-			get { return _configureForTestOutput; }
-			set { _configureForTestOutput = value; }
-		}
+		internal static bool ConfigureForTestOutput { get; set; }
 
 		static JsonSchemaOptions()
 		{
 			_errorCollectionConditions = new List<IErrorCollectionCondition>();
-			var configureForTestOutputValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
-			bool.TryParse(configureForTestOutputValue, out _configureForTestOutput);
 		}
 
 		private static string _BasicDownload(string path)

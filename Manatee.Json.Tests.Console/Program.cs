@@ -21,10 +21,7 @@ namespace Manatee.Json.Tests.Console
 		private static void RunManatee()
 		{
 			var watch = Stopwatch.StartNew();
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
-			JsonSchemaOptions.IgnoreErrorsForChildren<OneOfKeyword>();
-
-			JsonSchemaOptions.ConfigureForTestOutput = false;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
 
 			var serializer = new JsonSerializer();
 
