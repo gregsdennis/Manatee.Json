@@ -117,6 +117,16 @@ namespace Manatee.Json.Pointer
 			return clone;
 		}
 
+		/// <summary>
+		/// Determines whether the pointer is a child of another pointer (starts with the same segments).
+		/// </summary>
+		/// <param name="pointer">Another pointer.</param>
+		/// <returns>`true` if this pointer starts with all of the segments of <paramref name="pointer"/>; `false` otherwise.</returns>
+		public bool IsChildOf(JsonPointer pointer)
+		{
+			return this.Take(pointer.Count).SequenceEqual(pointer);
+		}
+
 		internal JsonPointer WithHash()
 		{
 			return new JsonPointer(this) {_usesHash = true};

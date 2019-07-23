@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
 namespace Manatee.Json.Schema
@@ -10,8 +13,34 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public static class JsonSchemaOptions
 	{
-		private static Func<string, string> _download;
+		private interface IErrorCollectionCondition
+		{
+			bool ShouldCollectErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context);
+		}
+
+		private class LocationErrorCollectionCondition : IErrorCollectionCondition
+		{
+			public JsonPointer Location { get; set; }
+
+			public bool ShouldCollectErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
+			{
+				return context.RelativeLocation.IsChildOf(Location);
+			}
+		}
+
+		private class KeywordErrorCollectionCondition : IErrorCollectionCondition
+		{
+			public Type Type { get; set; }
+
+			public bool ShouldCollectErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
+			{
+				return Type.IsInstanceOfType(keyword);
+			}
+		}
+
 		private static readonly bool _configureForTestOutput;
+		private static readonly List<IErrorCollectionCondition> _errorCollectionConditions;
+		private static Func<string, string> _download;
 
 		/// <summary>
 		/// Gets and sets a method used to download online schema.
@@ -59,10 +88,20 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Uri DefaultBaseUri { get; set; } = new Uri("manatee://json-schema/", UriKind.Absolute);
 
+		/// <summary>
+		/// Defines whether annotations should be collected and reported during validation.  Default is `true`.
+		/// </summary>
+		/// <remarks>
+		/// Disabling this may improve performance for keywords that can be short-circuited in the valid case,
+		/// like `anyOf`.
+		/// </remarks>
+		public static bool CollectAnnotations { get; set; } = true;
+
 		internal static bool ConfigureForTestOutput => _configureForTestOutput;
 
 		static JsonSchemaOptions()
 		{
+			_errorCollectionConditions = new List<IErrorCollectionCondition>();
 			var configureForTestOutputValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
 			bool.TryParse(configureForTestOutputValue, out _configureForTestOutput);
 		}
@@ -85,6 +124,48 @@ namespace Manatee.Json.Schema
 				default:
 					throw new Exception($"URI scheme {uri.Scheme} is not supported.  Only HTTP(S) and local file system URIs are allowed.");
 			}
+		}
+
+		/// <summary>
+		/// Ignores error and annotation collection for children of specific keywords.
+		/// </summary>
+		/// <typeparam name="T">The keyword type to ignore.</typeparam>
+		/// <remarks>
+		///	This may help improve performance.  There may be cases where it would be sufficient to only
+		/// report on the immediate error rather than all child errors.  An example of this may be a keyword
+		/// like `oneOf`, where the client may only want a single error that says, "4 of the 10 subschemas
+		/// passed validation, but only 1 was expected."
+		/// </remarks>
+		public static void IgnoreErrorsForChildren<T>()
+			where T : IJsonSchemaKeyword
+		{
+			_errorCollectionConditions.Add(new KeywordErrorCollectionCondition {Type = typeof(T)});
+		}
+
+		/// <summary>
+		/// Ignores error and annotation collection for children of specific schema locations.
+		/// </summary>
+		/// <remarks>
+		///	This may help improve performance.  There may be cases where it would be sufficient to only
+		/// report on the immediate error rather than all child errors.  An example of this may be a keyword
+		/// like `oneOf` at a specific location, where the client may only want a single error that says,
+		/// "4 of the 10 subschemas passed validation, but only 1 was expected."
+		/// </remarks>
+		public static void IgnoreErrorsForChildren(JsonPointer location)
+		{
+			_errorCollectionConditions.Add(new LocationErrorCollectionCondition {Location = location});
+		}
+
+		/// <summary>
+		/// Checks whether child errors should be reported.  Called during validation.
+		/// </summary>
+		/// <param name="keyword">The keyword currently executing validation.</param>
+		/// <param name="context">The validation context.</param>
+		/// <returns>`true` if child errors should be included in the error; `false` if the result should only
+		/// contain the immediate error.  Annotations are always collected.</returns>
+		public static bool ShouldReportChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
+		{
+			return _errorCollectionConditions.Any(c => c.ShouldCollectErrors(keyword, context));
 		}
 	}
 }
