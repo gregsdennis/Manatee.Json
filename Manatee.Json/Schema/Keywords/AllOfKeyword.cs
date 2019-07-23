@@ -79,10 +79,9 @@ namespace Manatee.Json.Schema
 				i++;
 			}
 
-			var resultsList = nestedResults.ToList();
 			var results = new SchemaValidationResults(Name, context)
 				{
-					NestedResults = resultsList,
+					NestedResults = nestedResults,
 					IsValid = valid
 				};
 			if (!results.IsValid)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -70,31 +71,39 @@ namespace Manatee.Json.Schema
 
 			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-			var nestedResults = context.Instance.Object.Keys.Select(propertyName =>
-				{
-					var newContext = new SchemaValidationContext(context)
-						{
-							Instance = propertyName,
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-							InstanceLocation = context.InstanceLocation.CloneAndAppend(propertyName),
-						};
-					var result = Value.Validate(newContext);
+			var valid = true;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var nestedResults = new List<SchemaValidationResults>();
+			var invalidPropertyNames = new JsonArray();
 
-					return new {propertyName, result};
-				}).ToList();
-
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
-				results.IsValid = nestedResults.All(r => r.result.IsValid);
-			else
+			foreach (var propertyName in context.Instance.Object.Keys)
 			{
-				results.NestedResults = nestedResults.Select(r => r.result).ToList();
-				results.IsValid = nestedResults.All(r => r.result.IsValid);
+				var newContext = new SchemaValidationContext(context)
+					{
+						Instance = propertyName,
+						BaseRelativeLocation = baseRelativeLocation,
+						RelativeLocation = relativeLocation,
+						InstanceLocation = context.InstanceLocation.CloneAndAppend(propertyName),
+					};
+				var localResults = Value.Validate(newContext);
+				valid &= localResults.IsValid;
+				if (!valid)
+					invalidPropertyNames.Add(propertyName);
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				{
+					if (!valid) break;
+				}
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
 			}
 
+			results.IsValid = valid;
+			results.NestedResults = nestedResults;
+			
 			if (!results.IsValid)
 			{
-				results.AdditionalInfo["properties"] = nestedResults.Select(r => r.propertyName).ToJson();
+				results.AdditionalInfo["properties"] = invalidPropertyNames;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 

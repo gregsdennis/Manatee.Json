@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
@@ -49,7 +50,10 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var results = new SchemaValidationResults(PropertyName, context);
+			var results = new SchemaValidationResults(PropertyName, context)
+				{
+					Keyword = $"{context.Misc["dependencyParent"]}/{PropertyName}"
+				};
 
 			if (context.Instance.Type != JsonValueType.Object) return results;
 			if (!context.Instance.Object.ContainsKey(PropertyName)) return results;
@@ -61,12 +65,11 @@ namespace Manatee.Json.Schema
 				};
 
 			var nestedResult = _schema.Validate(newContext);
+			results.NestedResults = new List<SchemaValidationResults> {nestedResult};
 
 			if (!nestedResult.IsValid)
 			{
 				results.IsValid = false;
-				results.Keyword = $"dependencies.{PropertyName}";
-				results.NestedResults.Add(nestedResult);
 				results.ErrorMessage = ErrorTemplate;
 			}
 

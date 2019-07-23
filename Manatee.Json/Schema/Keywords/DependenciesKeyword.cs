@@ -62,6 +62,7 @@ namespace Manatee.Json.Schema
 					{
 						BaseRelativeLocation = baseRelativeLocation,
 						RelativeLocation = relativeLocation,
+						Misc = {["dependencyParent"] = Name}
 					};
 				var localResults = d.Validate(newContext);
 				valid &= localResults.IsValid;

@@ -24,8 +24,7 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
-			JsonSchemaOptions.IgnoreErrorsForChildren<OneOfKeyword>();
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
 
 			var serializer = new JsonSerializer();
 

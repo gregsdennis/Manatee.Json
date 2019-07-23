@@ -67,8 +67,19 @@ namespace Manatee.Json.Schema
 			if (context.Instance.Type != JsonValueType.Object) return new SchemaValidationResults(Name, context);
 
 			var obj = context.Instance.Object;
-			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key));
+			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
 
+			var results = new SchemaValidationResults(Name, context);
+			if (Value == JsonSchema.False && toEvaluate.Any())
+			{
+				results.IsValid = false;
+				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate;
+				return results;
+			}
+
+			var valid = true;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
 
 			foreach (var kvp in toEvaluate)
@@ -80,24 +91,18 @@ namespace Manatee.Json.Schema
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
 					};
-				nestedResults.Add(Value.Validate(newContext));
+				var localResults = Value.Validate(newContext);
+				valid &= localResults.IsValid;
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				{
+					if (!valid) break;
+				}
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
 			}
 
-			SchemaValidationResults results;
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
-				results = new SchemaValidationResults(Name, context)
-					{
-						IsValid = nestedResults.All(r => r.IsValid)
-					};
-			else
-			{
-				var resultsList = nestedResults.ToList();
-				results = new SchemaValidationResults(Name, context)
-					{
-						NestedResults = resultsList,
-						IsValid = resultsList.All(r => r.IsValid)
-					};
-			}
+			results.NestedResults = nestedResults;
 
 			if (nestedResults.Any(r => !r.IsValid))
 			{

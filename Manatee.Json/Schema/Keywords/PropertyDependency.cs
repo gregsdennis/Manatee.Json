@@ -64,7 +64,10 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var results = new SchemaValidationResults(PropertyName, context);
+			var results = new SchemaValidationResults(PropertyName, context)
+				{
+					Keyword = $"{context.Misc["dependencyParent"]}/{PropertyName}"
+				};
 
 			if (context.Instance.Type != JsonValueType.Object) return results;
 			if (context.Instance.Object.ContainsKey(PropertyName))
@@ -73,7 +76,6 @@ namespace Manatee.Json.Schema
 				if (missingProperties.Any())
 				{
 					results.IsValid = false;
-					results.Keyword = $"dependencies/{PropertyName}";
 					results.AdditionalInfo["required"] = missingProperties.ToJson();
 					results.AdditionalInfo["dependency"] = PropertyName;
 					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
