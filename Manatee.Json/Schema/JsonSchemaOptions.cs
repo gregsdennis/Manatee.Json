@@ -152,12 +152,12 @@ namespace Manatee.Json.Schema
 		}
 
 		/// <summary>
-		/// Checks whether child errors should be reported.  Called during validation.
+		/// Checks whether child errors and annotations should be reported.  Should be called during validation.
 		/// </summary>
 		/// <param name="keyword">The keyword currently executing validation.</param>
 		/// <param name="context">The validation context.</param>
 		/// <returns>`true` if child errors should be included in the error; `false` if the result should only
-		/// contain the immediate error.  Annotations are always collected.</returns>
+		/// contain the immediate error.</returns>
 		public static bool ShouldReportChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 		{
 			return !_errorCollectionConditions.Any(c => c.ShouldExcludeChildErrors(keyword, context));

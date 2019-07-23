@@ -12,6 +12,9 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationResults : IJsonSerializable, IEquatable<SchemaValidationResults>
 	{
+		private List<SchemaValidationResults> _nestedResults;
+		private JsonObject _additionalInfo;
+
 		/// <summary>
 		/// Gets a value to return for no results.  Only used when a keyword should not produce any output, such as `$id`.
 		/// </summary>
@@ -48,11 +51,19 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets any additional information regarding the validation.
 		/// </summary>
-		public JsonObject AdditionalInfo { get; set; } = new JsonObject();
+		public JsonObject AdditionalInfo
+		{
+			get => _additionalInfo ?? (_additionalInfo = new JsonObject());
+			set => _additionalInfo = value;
+		}
 		/// <summary>
 		/// Gets or sets any results of nested schemas.
 		/// </summary>
-		public List<SchemaValidationResults> NestedResults { get; set; } = new List<SchemaValidationResults>();
+		public List<SchemaValidationResults> NestedResults
+		{
+			get => _nestedResults ?? (_nestedResults = new List<SchemaValidationResults>());
+			set => _nestedResults = value;
+		}
 
 		internal static bool IncludeAdditionalInfo { get; set; }
 		internal bool RecursionDetected { get; set; }

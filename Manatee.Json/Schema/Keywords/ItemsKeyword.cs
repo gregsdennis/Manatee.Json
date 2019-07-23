@@ -56,6 +56,7 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Array) return results;
 
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
 			var failedIndices = new JsonArray();
@@ -80,45 +81,54 @@ namespace Manatee.Json.Schema
 					}
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
-					nestedResults.Add(this[i].Validate(newContext));
+					if (reportChildErrors)
+						nestedResults.Add(this[i].Validate(newContext));
 					i++;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 				}
 
 				results.IsValid = JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag || nestedResults.All(r => r.IsValid);
-				results.NestedResults.AddRange(nestedResults);
+				results.NestedResults = nestedResults;
 			}
 			else
 			{
 				// have single schema: validate all against this
 				var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-				var itemValidations = array.Select((jv, i) =>
-					{
-						var newContext = new SchemaValidationContext(context)
-							{
-								Instance = jv,
-								BaseRelativeLocation = baseRelativeLocation,
-								RelativeLocation = relativeLocation,
-								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
-							};
-						var localResults = this[0].Validate(newContext);
-						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-						if (!localResults.IsValid)
-							failedIndices.Add(i);
-						return localResults;
-					});
-				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
-					results.IsValid = itemValidations.All(r => r.IsValid);
-				else
+				var valid = true;
+				var i = 0;
+
+				foreach (var jv in array)
 				{
-					nestedResults.AddRange(itemValidations);
-					results.IsValid = nestedResults.All(r => r.IsValid);
-					results.NestedResults.AddRange(nestedResults);
+					var newContext = new SchemaValidationContext(context)
+						{
+							Instance = jv,
+							BaseRelativeLocation = baseRelativeLocation,
+							RelativeLocation = relativeLocation,
+							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
+						};
+					var localResults = this[0].Validate(newContext);
+					valid &= localResults.IsValid;
+					if (!localResults.IsValid)
+						failedIndices.Add(i);
+					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+
+					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					{
+						if (!valid) break;
+					}
+					else if (reportChildErrors)
+						nestedResults.Add(localResults);
+
+					i++;
 				}
+
+				results.IsValid = valid;
+				results.NestedResults = nestedResults;
 			}
+
 			if (!results.IsValid)
 			{
 				results.AdditionalInfo["indices"] = failedIndices;
