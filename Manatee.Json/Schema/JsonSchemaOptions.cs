@@ -69,7 +69,7 @@ namespace Manatee.Json.Schema
 
 		/// <summary>
 		/// Determines how `$ref` keywords are resolved when adjacent to an `$id` keyword
-		/// when a specific draft cannot be identified.
+		/// when a specific draft cannot be identified.  The default is <see cref="RefResolutionStrategy.ProcessSiblingId"/>.
 		/// </summary>
 		/// <remarks>
 		/// As of draft-08, keywords are allowed to be adjacent to `$ref`.  This means that an
@@ -80,10 +80,10 @@ namespace Manatee.Json.Schema
 		/// the `$schema` keyword or the selection of keywords being used), this option will
 		/// determine the behavior for resolving URIs.
 		/// </remarks>
-		public static RefResolutionStrategy RefResolution { get; set; } = RefResolutionStrategy.IgnoreSiblingId;
+		public static RefResolutionStrategy RefResolution { get; set; } = RefResolutionStrategy.ProcessSiblingId;
 
 		/// <summary>
-		/// Defines a default base URI for root schemas that use a relative URI for their `$id`.
+		/// Defines a default base URI for root schemas that use a relative URI for their `$id`.  The default is `manatee://json-schema/`.
 		/// </summary>
 		public static Uri DefaultBaseUri { get; set; } = new Uri("manatee://json-schema/", UriKind.Absolute);
 
@@ -110,7 +110,7 @@ namespace Manatee.Json.Schema
 				case "manatee":
 					return null;
 				default:
-					throw new Exception($"URI scheme {uri.Scheme} is not supported.  Only HTTP(S) and local file system URIs are allowed.");
+					throw new Exception($"URI scheme '{uri.Scheme}' is not supported.  Only HTTP(S) and local file system URIs are allowed.");
 			}
 		}
 
