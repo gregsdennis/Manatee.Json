@@ -78,10 +78,7 @@ Manatee.Json also:
 
 - Is covered by over 3000 unit tests
 - Conforms to RFC-8259: The JSON specification
-- Supports:
-    - .Net Framework 4.5
-    - .Net Standard 1.3
-    - .Net Standard 2.0
+- Support .Net Standard 2.0
 - Outputs compact and prettified JSON text
 - Supports [JSON Schema](http://json-schema.org/) **INCLUDED AND FREE!**
     - Draft 4
