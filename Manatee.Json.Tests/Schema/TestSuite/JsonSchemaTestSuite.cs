@@ -86,12 +86,17 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			Directory.CreateDirectory(OutputFolder);
 
 			SchemaValidationResults.IncludeAdditionalInfo = false;
+
+			var configureForTestOutputValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
+			bool.TryParse(configureForTestOutputValue, out var configureForTestOutput);
+			JsonSchemaOptions.ConfigureForTestOutput = configureForTestOutput;
 		}
 
 		[OneTimeTearDown]
 		public static void TearDown()
 		{
 			JsonSchemaOptions.Download = null;
+			JsonSchemaOptions.ConfigureForTestOutput = false;
 			SchemaValidationResults.IncludeAdditionalInfo = true;
 		}
 

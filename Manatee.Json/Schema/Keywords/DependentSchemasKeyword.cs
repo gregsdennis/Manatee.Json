@@ -50,35 +50,42 @@ namespace Manatee.Json.Schema
 		{
 			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-			var nestedResults = this.Select(d =>
-				{
-					var newContext = new SchemaValidationContext(context)
-						{
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-						};
-					return d.Validate(newContext);
-				}).ToList();
 
-			SchemaValidationResults results;
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
-				results = new SchemaValidationResults(Name, context)
-					{
-						IsValid = nestedResults.All(r => r.IsValid)
-					};
-			else
+			var valid = true;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var nestedResults = new List<SchemaValidationResults>();
+			var failedCount = 0;
+
+			foreach (var d in this)
 			{
-				var resultsList = nestedResults.ToList();
-				results = new SchemaValidationResults(Name, context)
+				var newContext = new SchemaValidationContext(context)
 					{
-						NestedResults = resultsList,
-						IsValid = resultsList.All(r => r.IsValid)
+						BaseRelativeLocation = baseRelativeLocation,
+						RelativeLocation = relativeLocation,
+						Misc = {["dependencyParent"] = Name}
 					};
+				var localResults = d.Validate(newContext);
+				valid &= localResults.IsValid;
+				if (!valid)
+					failedCount++;
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				{
+					if (!valid) break;
+				}
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
 			}
 
-			if (!results.IsValid)
+			var results = new SchemaValidationResults(Name, context)
+				{
+					IsValid = valid
+				};
+			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				results.NestedResults = nestedResults;
+			else if (!results.IsValid)
 			{
-				results.AdditionalInfo["failed"] = nestedResults.Count(r => !r.IsValid);
+				results.AdditionalInfo["failed"] = failedCount;
 				results.AdditionalInfo["total"] = Count;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}

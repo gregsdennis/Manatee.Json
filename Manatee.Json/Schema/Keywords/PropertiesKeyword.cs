@@ -50,6 +50,8 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object) return results;
 
+			var valid = true;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var obj = context.Instance.Object;
 			var nestedResults = new List<SchemaValidationResults>();
 			foreach (var property in this)
@@ -65,17 +67,19 @@ namespace Manatee.Json.Schema
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, property.Key),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key),
 					};
-				var result = property.Value.Validate(newContext);
-				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !result.IsValid)
+				var localResults = property.Value.Validate(newContext);
+				valid &= localResults.IsValid;
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					results.IsValid = false;
-					return results;
+					if (!valid) break;
 				}
-				nestedResults.Add(result);
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
 			}
 
-			results.IsValid = nestedResults.All(r => r.IsValid);
-			results.NestedResults.AddRange(nestedResults);
+			results.IsValid = valid;
+			results.NestedResults = nestedResults;
 
 			if (!results.IsValid)
 				results.ErrorMessage = ErrorTemplate;

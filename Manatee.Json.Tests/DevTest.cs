@@ -12,7 +12,6 @@ using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Schema;
-using Manatee.Json.Tests.Test_References;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
@@ -44,6 +43,8 @@ namespace Manatee.Json.Tests
 
 			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\metaResults.json", serializer.Serialize(metaResults).GetIndentedString());
 			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\results.json", serializer.Serialize(results).GetIndentedString());
+
+			results.AssertInvalid();
 		}
 	}
 }

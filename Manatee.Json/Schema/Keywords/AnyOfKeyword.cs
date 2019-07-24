@@ -46,36 +46,41 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var nestedResults = this.Select((s, i) =>
-				{
-					var newContext = new SchemaValidationContext(context)
-						{
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
-							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
-						};
-					var result = s.Validate(newContext);
-					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
-					return result;
-				});
+			var valid = false;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var i = 0;
+			var nestedResults = new List<SchemaValidationResults>();
 
-			SchemaValidationResults results;
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
-				results = new SchemaValidationResults(Name, context)
-					{
-						IsValid = nestedResults.Any(r => r.IsValid)
-					};
-			else
+			foreach (var s in this)
 			{
-				var resultsList = nestedResults.ToList();
-				results = new SchemaValidationResults(Name, context)
+				var newContext = new SchemaValidationContext(context)
 					{
-						NestedResults = resultsList,
-						IsValid = resultsList.Any(r => r.IsValid)
+						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 					};
-				if (!results.IsValid)
-					results.ErrorMessage = ErrorTemplate;
+				var localResults = s.Validate(newContext);
+				valid |= localResults.IsValid;
+				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				{
+					if (valid) break;
+				}
+				else if (reportChildErrors)
+					nestedResults.Add(localResults);
+
+				i++;
 			}
+
+			var resultsList = nestedResults.ToList();
+			var results = new SchemaValidationResults(Name, context)
+				{
+					NestedResults = resultsList,
+					IsValid = valid
+				};
+			if (!results.IsValid)
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 
 			return results;
 		}

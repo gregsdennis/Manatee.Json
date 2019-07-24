@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
@@ -77,6 +78,10 @@ namespace Manatee.Json.Schema
 
 			if (!results.IsValid)
 				results.ErrorMessage = ErrorTemplate;
+
+			if (JsonSchemaOptions.OutputFormat != SchemaValidationOutputFormat.Flag &&
+			    JsonSchemaOptions.ShouldReportChildErrors(this, context))
+				results.NestedResults = new List<SchemaValidationResults> {nestedResults};
 
 			return results;
 		}

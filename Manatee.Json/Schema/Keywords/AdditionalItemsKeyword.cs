@@ -79,6 +79,8 @@ namespace Manatee.Json.Schema
 			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
 			var results = new SchemaValidationResults(Name, context);
+			var valid = true;
+			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 
 			if (context.LocalTierLastEvaluatedIndex < array.Count)
 			{
@@ -90,32 +92,39 @@ namespace Manatee.Json.Schema
 					return results;
 				}
 
-				nestedResults.AddRange(array.Skip(context.LocalTierLastEvaluatedIndex).Select((jv, i) =>
+				var eligibleItems = array.Skip(context.LocalTierLastEvaluatedIndex);
+				var index = 0;
+				foreach (var item in eligibleItems)
+				{
+					var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
+					var newContext = new SchemaValidationContext(context)
+						{
+							Instance = item,
+							BaseRelativeLocation = baseRelativeLocation,
+							RelativeLocation = relativeLocation,
+							InstanceLocation = context.InstanceLocation.CloneAndAppend(index.ToString()),
+						};
+					var localResults = Value.Validate(newContext);
+					valid &= localResults.IsValid;
+					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					index++;
+
+					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{
-						var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
-						var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
-						var newContext = new SchemaValidationContext(context)
-							{
-								Instance = jv,
-								BaseRelativeLocation = baseRelativeLocation,
-								RelativeLocation = relativeLocation,
-								InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
-							};
-						var localResults = Value.Validate(newContext);
-						context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-						context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-						return localResults;
-					}));
+						if (!valid) break;
+					}
+					else if (reportChildErrors)
+						nestedResults.Add(localResults);
+				}
 			}
-
 			results.NestedResults = nestedResults;
+			results.IsValid = valid;
+			results.Keyword = Name;
 
-			if (nestedResults.Any(r => !r.IsValid))
-			{
-				results.IsValid = false;
-				results.Keyword = Name;
+			if (!valid)
 				results.ErrorMessage = ErrorTemplate;
-			}
 
 			return results;
 		}
