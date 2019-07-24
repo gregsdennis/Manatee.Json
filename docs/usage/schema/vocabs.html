@@ -187,9 +187,8 @@
 <li><code>Misc</code> - This is just a string-based lookup for any additional data you may need passed between keywords.  The <code>if</code>/<code>then</code>/<code>else</code> keywords do this.</li>
 </ul>
 <p>If your keyword contains a nested schema, it's important that you create a new context based on the properties in the context that was given to your keyword.  Changing the existing context will affect the validation of sibling or cousin keywords.  Some of the context properties will have to be modified based on how your keyword behaves.</p>
-<p>First, you'll always want to append your keyword name to the <code>RelativeLocation</code> and <code>BaseRelativeLocation</code> pointers.  There may be additional segments that you'll want to append. (The <code>items</code> keyword does this when it contains an array of subschemas.)</p>
-<p>Secondly, if the subschemas apply to the same instance that your keyword was given (like the <code>*Of</code> or <code>if</code>/<code>then</code>/<code>else</code> keywords), you'll want to leave the <code>InstanceLocation</code> alone, copying it as-is to the new context.  However, if your keyword processes an instance property or array item (like the <code>items</code> keyword), you'll need to append that property name or array index appropriately.</p>
-<p>Lastly, copy any properties from the original context that you haven't supplied yourself.</p>
+<p>To create a new context, pass your keyword's name and the context you've been given into the <code>SchemaValidationContext(string, SchemaValdiationContext)</code> constructor.  This will create a new context, copying all of the properties while adjusting all of the pointers accordingly.  If there are special cases, the properties are settable so that you can make any changes you need to.</p>
+<p>An example of further modification can be found in the <code>items</code> keyword, which modifies the instance path to which the subschema applies by adding the appropriate item index.</p>
 <h4 id="building-a-result">Building a result</h4>
 <p>The result object is defined by a current proposal for draft-08 which seeks to standardize the output produced by a schema.  Manatee.Json builds the verbose hierarchy format then condenses it according to the <code>JsonSchemaOptions.OutputFormat</code> static property.  The location properties are taken care of simply by passing the context into the constructor.  You'll need to set the validation-oriented ones yourself.</p>
 <ul>
@@ -199,6 +198,30 @@
 <li><code>AdditionalInfo</code> - This is just a <code>JsonObject</code> that you can use to pass any other pertinent information.</li>
 <li><code>NestedResults</code> - If your keyword has one or more subschemas, this property is for the validation results that they produce.</li>
 </ul>
+<h4 id="short-circuiting-the-validation">Short-circuiting the validation</h4>
+<p>For schema keywords that contain subschemas, there are two cases when a validation should be short-circuited: if the output format (specified by <code>JsonSchemaOptions.OutputFormat</code> is <code>Flag</code>) or if the user has configured the keyword or specific location (via the <code>JsonSchemaOptions.IgnoreErrorsForChildren()</code> methods).</p>
+<p>If the output is configured as <code>Flag</code>, then simply check whether the final validation result can be determined (e.g. at the first failing subschema of the <code>allOf</code> keyword).  If it <em>can</em> be determined, you can immediately return the correct result.  (Note also that for this case, nested results don't need to be collected.)</p>
+<p>Otherwise, check if the keyword should collect errors/annotations from subschemas by calling <code>JsonSchemaOptions.ShouldReportChildErrors(IJsonSchema, SchemaValidationContext)</code> and pass your keyword and the context that was passed to it.  If so, then include any nested results.</p>
+<p>In implementing the keywords contained in the library, I generally found that manually looping through the subschemas and tracking the valid state and nested results was facilitated by this pattern, though you may come up with your own.</p>
+<pre><code class="lang-csharp">var valid = true;
+for(var currentSchema in subschemas)
+{
+    var newContext = ...;  // copy the context then modify it for subschemas
+    var localResults = currentSchema.Validate(newContext);
+    valid &amp;= localResults.IsValid;  // if valid initializes as true
+    //valid |= localResults.IsValid;  // if valid initializes as false
+
+    ... // other stuff you may need to do
+
+    if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+    {
+        if (!valid) break;
+    }
+    else if (reportChildErrors)
+        nestedResults.Add(localResults);
+}
+</code></pre>
+<p>For full examples, you can view the <a href="https://github.com/gregsdennis/Manatee.Json/tree/master/Manatee.Json/Schema/Keywords">keyword source files</a>.</p>
 <h2 id="add-your-keyword-to-the-catalog">Add your keyword to the catalog</h2>
 <p>The <code>SchemaKeywordCatalog</code> static class is the curator of all of the keywords.  It also provides the keyword instances during deserialization.</p>
 <p>To make your keyword available for use, call the <code>Add&lt;T&gt;()</code> method using your keyword type as the type parameter.  The method <em>does</em> contain type constraints that required <code>T</code> to implement <code>IJsonSchemaKeyword</code> and to have a parameterless constructor.</p>

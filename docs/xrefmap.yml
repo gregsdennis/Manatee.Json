@@ -2374,6 +2374,19 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Pointer.JsonPointer.GetHashCode
   nameWithType: JsonPointer.GetHashCode
+- uid: Manatee.Json.Pointer.JsonPointer.IsChildOf(Manatee.Json.Pointer.JsonPointer)
+  name: IsChildOf(JsonPointer)
+  href: api/Manatee.Json.Pointer.JsonPointer.html#Manatee_Json_Pointer_JsonPointer_IsChildOf_Manatee_Json_Pointer_JsonPointer_
+  commentId: M:Manatee.Json.Pointer.JsonPointer.IsChildOf(Manatee.Json.Pointer.JsonPointer)
+  fullName: Manatee.Json.Pointer.JsonPointer.IsChildOf(Manatee.Json.Pointer.JsonPointer)
+  nameWithType: JsonPointer.IsChildOf(JsonPointer)
+- uid: Manatee.Json.Pointer.JsonPointer.IsChildOf*
+  name: IsChildOf
+  href: api/Manatee.Json.Pointer.JsonPointer.html#Manatee_Json_Pointer_JsonPointer_IsChildOf_
+  commentId: Overload:Manatee.Json.Pointer.JsonPointer.IsChildOf
+  isSpec: "True"
+  fullName: Manatee.Json.Pointer.JsonPointer.IsChildOf
+  nameWithType: JsonPointer.IsChildOf
 - uid: Manatee.Json.Pointer.JsonPointer.Parse(System.String)
   name: Parse(String)
   href: api/Manatee.Json.Pointer.JsonPointer.html#Manatee_Json_Pointer_JsonPointer_Parse_System_String_
@@ -10488,6 +10501,28 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.JsonSchemaOptions.Download
   nameWithType: JsonSchemaOptions.Download
+- uid: Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren(Manatee.Json.Pointer.JsonPointer)
+  name: IgnoreErrorsForChildren(JsonPointer)
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_IgnoreErrorsForChildren_Manatee_Json_Pointer_JsonPointer_
+  commentId: M:Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren(Manatee.Json.Pointer.JsonPointer)
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren(Manatee.Json.Pointer.JsonPointer)
+  nameWithType: JsonSchemaOptions.IgnoreErrorsForChildren(JsonPointer)
+- uid: Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren*
+  name: IgnoreErrorsForChildren
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_IgnoreErrorsForChildren_
+  commentId: Overload:Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren
+  nameWithType: JsonSchemaOptions.IgnoreErrorsForChildren
+- uid: Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren``1
+  name: IgnoreErrorsForChildren<T>()
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_IgnoreErrorsForChildren__1
+  commentId: M:Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren``1
+  name.vb: IgnoreErrorsForChildren(Of T)()
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren<T>()
+  fullName.vb: Manatee.Json.Schema.JsonSchemaOptions.IgnoreErrorsForChildren(Of T)()
+  nameWithType: JsonSchemaOptions.IgnoreErrorsForChildren<T>()
+  nameWithType.vb: JsonSchemaOptions.IgnoreErrorsForChildren(Of T)()
 - uid: Manatee.Json.Schema.JsonSchemaOptions.OutputFormat
   name: OutputFormat
   href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_OutputFormat
@@ -10514,6 +10549,19 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.JsonSchemaOptions.RefResolution
   nameWithType: JsonSchemaOptions.RefResolution
+- uid: Manatee.Json.Schema.JsonSchemaOptions.ShouldReportChildErrors(Manatee.Json.Schema.IJsonSchemaKeyword,Manatee.Json.Schema.SchemaValidationContext)
+  name: ShouldReportChildErrors(IJsonSchemaKeyword, SchemaValidationContext)
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_ShouldReportChildErrors_Manatee_Json_Schema_IJsonSchemaKeyword_Manatee_Json_Schema_SchemaValidationContext_
+  commentId: M:Manatee.Json.Schema.JsonSchemaOptions.ShouldReportChildErrors(Manatee.Json.Schema.IJsonSchemaKeyword,Manatee.Json.Schema.SchemaValidationContext)
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.ShouldReportChildErrors(Manatee.Json.Schema.IJsonSchemaKeyword, Manatee.Json.Schema.SchemaValidationContext)
+  nameWithType: JsonSchemaOptions.ShouldReportChildErrors(IJsonSchemaKeyword, SchemaValidationContext)
+- uid: Manatee.Json.Schema.JsonSchemaOptions.ShouldReportChildErrors*
+  name: ShouldReportChildErrors
+  href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_ShouldReportChildErrors_
+  commentId: Overload:Manatee.Json.Schema.JsonSchemaOptions.ShouldReportChildErrors
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.JsonSchemaOptions.ShouldReportChildErrors
+  nameWithType: JsonSchemaOptions.ShouldReportChildErrors
 - uid: Manatee.Json.Schema.JsonSchemaOptions.ValidateFormatKeyword
   name: ValidateFormatKeyword
   href: api/Manatee.Json.Schema.JsonSchemaOptions.html#Manatee_Json_Schema_JsonSchemaOptions_ValidateFormatKeyword
