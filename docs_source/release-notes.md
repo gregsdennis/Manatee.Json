@@ -31,6 +31,7 @@ Additionally, it was pointed out on [the JSON Schema spec repo](https://github.c
 
 ### Other breaking changes
 
+- Dropped multi-target support.  Now only targeting .Net Standard 2.0.  This is still compatible with .Net Framework 4.6.1 and higher.
 - `JsonSchemaOptions.OutputFormat` now has a default value of `Flag`, which only returns whether an instance is valid, without any error details.  This greatly improves performance out of the box.  Configuration is required to generate error details.
 - `JsonSchemaoptions.RefResolutionStrategy` now has a default value of `ProcessSiblingId` to conform with the draft-08 definition of `$ref` and `$recursiveRef`.
 

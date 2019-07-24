@@ -83,6 +83,7 @@
 <p>Additionally, it was pointed out on <a href="https://github.com/json-schema-org/json-schema-spec/issues/759">the JSON Schema spec repo</a> that <code>format</code> is not specifically intended for strings, but can also be used to validate other types.  To address this, the <code>StringFormat</code> type has been renamed to <code>Format</code> and now accepts <code>JsonValue</code> instead of merely <code>string</code>.</p>
 <h3 id="other-breaking-changes">Other breaking changes</h3>
 <ul>
+<li>Dropped multi-target support.  Now only targeting .Net Standard 2.0.  This is still compatible with .Net Framework 4.6.1 and higher.</li>
 <li><code>JsonSchemaOptions.OutputFormat</code> now has a default value of <code>Flag</code>, which only returns whether an instance is valid, without any error details.  This greatly improves performance out of the box.  Configuration is required to generate error details.</li>
 <li><code>JsonSchemaoptions.RefResolutionStrategy</code> now has a default value of <code>ProcessSiblingId</code> to conform with the draft-08 definition of <code>$ref</code> and <code>$recursiveRef</code>.</li>
 </ul>
