@@ -22,18 +22,25 @@
 
 ## Breaking changes
 
-In order to support some new independent reference tests, some changes were made to the schema validation logic to include a validation-run-independent schema registry, separate from the static one.  These changes support this requirement:
+### Schema
+
+In order to support some new independent reference tests, some changes were made to the schema validation logic to include a validation-run-independent schema registry, separate from the static one.  The first two changes support this requirement:
 
 - `IJsonSchemaKeyword.RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)` - The second parameter is new.
 - `SchemaValidationContext` now requires a source context from which to copy values.
+- `JsonSchemaOptions.OutputFormat` now has a default value of `Flag`, which only returns whether an instance is valid, without any error details.  This greatly improves performance out of the box.  Configuration is required to generate error details.
+- `JsonSchemaoptions.RefResolutionStrategy` now has a default value of `ProcessSiblingId` to conform with the draft-08 definition of `$ref` and `$recursiveRef`.
 
 Additionally, it was pointed out on [the JSON Schema spec repo](https://github.com/json-schema-org/json-schema-spec/issues/759) that `format` is not specifically intended for strings, but can also be used to validate other types.  To address this, the `StringFormat` type has been renamed to `Format` and now accepts `JsonValue` instead of merely `string`.
 
+### Serialization
+
+- `IResolver.Resolve<T>()` removed since it wasn't used internally anywhere.
+- `IResolver.Resolve(Type, Dictionary<SerializationInfo, object>)` - The second parameter is new.
+
 ### Other breaking changes
 
-- Dropped multi-target support.  Now only targeting .Net Standard 2.0.  This is still compatible with .Net Framework 4.6.1 and higher.
-- `JsonSchemaOptions.OutputFormat` now has a default value of `Flag`, which only returns whether an instance is valid, without any error details.  This greatly improves performance out of the box.  Configuration is required to generate error details.
-- `JsonSchemaoptions.RefResolutionStrategy` now has a default value of `ProcessSiblingId` to conform with the draft-08 definition of `$ref` and `$recursiveRef`.
+Dropped multi-target support.  Now only targeting .Net Standard 2.0.  This is still compatible with .Net Framework 4.6.1 and higher.
 
 ### Obsolete items removed
 
