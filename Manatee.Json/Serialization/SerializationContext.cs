@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization.Internal;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
@@ -41,6 +43,7 @@ namespace Manatee.Json.Serialization
 		public JsonSerializer RootSerializer { get; }
 
 		internal SerializationReferenceCache SerializationMap { get; }
+		internal Dictionary<SerializationInfo, object> ValueMap { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="SerializationContext"/> class.
