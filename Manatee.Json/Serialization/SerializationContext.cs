@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization.Internal;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
@@ -39,6 +41,10 @@ namespace Manatee.Json.Serialization
 		/// The original serializer called by the client.
 		/// </summary>
 		public JsonSerializer RootSerializer { get; }
+		/// <summary>
+		/// A mapping of the deserialized values to the type's property information.
+		/// </summary>
+		public Dictionary<SerializationInfo, object> ValueMap { get; set; }
 
 		internal SerializationReferenceCache SerializationMap { get; }
 

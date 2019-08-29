@@ -105,6 +105,7 @@ Serialization features:
 - De/Serialize dynamic types
 - JIT type creation for unregistered abstraction types
 - De/Serialize anonymous types
+- De/Serialize immutable types
 - Fully customizable serialization of both 1st- and 3rd-party types
 - De/Serialize static types/properties
 - De/Serialize fields

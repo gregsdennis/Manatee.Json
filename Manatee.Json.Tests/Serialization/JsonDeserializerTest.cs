@@ -55,7 +55,7 @@ namespace Manatee.Json.Tests.Serialization
 							DateTimeSerializationFormat = DateTimeSerializationFormat.Milliseconds
 						}
 				};
-			JsonValue json = DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond;
+			JsonValue json = DateTime.Today.Ticks / TimeSpan.TicksPerMillisecond;
 			var expected = DateTime.Today;
 			var actual = serializer.Deserialize<DateTime>(json);
 			serializer.Options = null;
@@ -81,7 +81,7 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void Basic_Successful()
 		{
-			var serializer = new JsonSerializer{Options = {EnumSerializationFormat = EnumSerializationFormat.AsInteger}};
+			var serializer = new JsonSerializer {Options = {EnumSerializationFormat = EnumSerializationFormat.AsInteger}};
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -162,14 +162,14 @@ namespace Manatee.Json.Tests.Serialization
 					{
 						"AbstractProp", new JsonObject
 							{
-								{"$type", typeof (DerivedClass).AssemblyQualifiedName},
+								{"$type", typeof(DerivedClass).AssemblyQualifiedName},
 								{"SomeProp", 42}
 							}
 					},
 					{
 						"InterfaceProp", new JsonObject
 							{
-								{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
+								{"$type", typeof(ImplementationClass).AssemblyQualifiedName},
 								{"RequiredProp", "test"}
 							}
 					}
@@ -207,7 +207,7 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			var json = new JsonObject
 				{
-					{"$type", typeof (DerivedClass).AssemblyQualifiedName},
+					{"$type", typeof(DerivedClass).AssemblyQualifiedName},
 					{"SomeProp", 42},
 					{"NewProp", "test"}
 				};
@@ -245,7 +245,7 @@ namespace Manatee.Json.Tests.Serialization
 			var serializer = new JsonSerializer();
 			JsonValue json = new JsonObject
 				{
-					{"$type", typeof (ImplementationClass).AssemblyQualifiedName},
+					{"$type", typeof(ImplementationClass).AssemblyQualifiedName},
 					{"RequiredProp", "test"}
 				};
 			IInterface expected = new ImplementationClass {RequiredProp = "test"};
@@ -265,7 +265,7 @@ namespace Manatee.Json.Tests.Serialization
 
 			var actual = serializer.Deserialize<IInterface>(json);
 			Assert.AreEqual(expected.RequiredProp, actual.RequiredProp);
-			Assert.AreNotEqual(typeof (ImplementationClass), actual.GetType());
+			Assert.AreNotEqual(typeof(ImplementationClass), actual.GetType());
 		}
 		[Test]
 		public void InterfaceWithMap_Successful()
@@ -540,11 +540,14 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void Fields()
 		{
-			var serializer = new JsonSerializer {Options =
+			var serializer = new JsonSerializer
 				{
-					EnumSerializationFormat = EnumSerializationFormat.AsInteger,
-					AutoSerializeFields = true
-				}};
+					Options =
+						{
+							EnumSerializationFormat = EnumSerializationFormat.AsInteger,
+							AutoSerializeFields = true
+						}
+				};
 			var json = new JsonObject
 				{
 					{"StringProp", "stringValue"},
@@ -572,35 +575,35 @@ namespace Manatee.Json.Tests.Serialization
 		public void MapGenericAbstraction_Interface_Success()
 		{
 			var serializer = new JsonSerializer();
-			serializer.AbstractionMap.MapGeneric(typeof (IFace<>), typeof (Impl<>));
+			serializer.AbstractionMap.MapGeneric(typeof(IFace<>), typeof(Impl<>));
 
 			var json = new JsonObject {{"Value", 1}};
 			var value = serializer.Deserialize<IFace<int>>(json);
 
-			Assert.AreEqual(typeof (Impl<int>), value.GetType());
+			Assert.AreEqual(typeof(Impl<int>), value.GetType());
 		}
 		[Test]
 		public void MapGenericAbstraction_BaseClass_Success()
 		{
 			var serializer = new JsonSerializer();
-			serializer.AbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));
+			serializer.AbstractionMap.MapGeneric(typeof(Impl<>), typeof(Derived<>));
 
 			var json = new JsonObject {{"Value", 1}};
 			var value = serializer.Deserialize<Impl<int>>(json);
 
-			Assert.AreEqual(typeof (Derived<int>), value.GetType());
+			Assert.AreEqual(typeof(Derived<int>), value.GetType());
 		}
 		[Test]
 		public void MapGenericAbstraction_WithOverride_Success()
 		{
 			var serializer = new JsonSerializer();
-			serializer.AbstractionMap.MapGeneric(typeof (Impl<>), typeof (Derived<>));
+			serializer.AbstractionMap.MapGeneric(typeof(Impl<>), typeof(Derived<>));
 			serializer.AbstractionMap.Map<Impl<string>, Derived<string>>();
 
 			var json = new JsonObject {{"Value", 1}};
 			var value = serializer.Deserialize<Impl<int>>(json);
 
-			Assert.AreEqual(typeof (Derived<int>), value.GetType());
+			Assert.AreEqual(typeof(Derived<int>), value.GetType());
 		}
 		[Test]
 		public void NameTransformation()
@@ -652,7 +655,7 @@ namespace Manatee.Json.Tests.Serialization
 		[Test]
 		public void DeserializeListOfRandomStuff()
 		{
-			JsonValue json = new JsonArray { 1, false, "string", new JsonObject { ["DoubleProp"] = 5.5 } };
+			JsonValue json = new JsonArray {1, false, "string", new JsonObject {["DoubleProp"] = 5.5}};
 
 			var serializer = new JsonSerializer
 				{
@@ -754,7 +757,7 @@ namespace Manatee.Json.Tests.Serialization
 				{
 					{"RequiredProp", "test"}
 				};
-			IInterface expected = new ImplementationClass { RequiredProp = "test" };
+			IInterface expected = new ImplementationClass {RequiredProp = "test"};
 			var alternateJson = new JsonObject
 				{
 					{"Value", "string"}
@@ -928,8 +931,8 @@ namespace Manatee.Json.Tests.Serialization
 		public void DeserializeNullableStructAsPropertyOfClass()
 		{
 			var serializer = new JsonSerializer();
-			var expected = new Container { Value = new Mass { Value = 5 } };
-			JsonValue target = new JsonObject { ["Value"] = new JsonObject { ["Value"] = 5 } };
+			var expected = new Container {Value = new Mass {Value = 5}};
+			JsonValue target = new JsonObject {["Value"] = new JsonObject {["Value"] = 5}};
 
 			var actual = serializer.Deserialize<Container>(target);
 
@@ -940,8 +943,8 @@ namespace Manatee.Json.Tests.Serialization
 		public void DeserializeNullableStructAsPropertyOfClassNull()
 		{
 			var serializer = new JsonSerializer();
-			var expected = new Container { Value = null };
-			JsonValue target = new JsonObject { ["Value"] = null };
+			var expected = new Container {Value = null};
+			JsonValue target = new JsonObject {["Value"] = null};
 
 			var actual = serializer.Deserialize<Container>(target);
 

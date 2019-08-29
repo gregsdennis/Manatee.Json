@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Manatee.Json.Schema;
@@ -141,6 +142,80 @@ namespace Manatee.Json.Tests.Serialization
 			// produces {"A":"00:00:30","B":{"#Ref":"94e343ba-4ffd-4402-80be-67feb8299d90"}}
 
 			Assert.AreEqual(expected, actual);
+		}
+
+		class ImmutableClass
+		{
+			public string Value { get; }
+			public int OtherValue { get; }
+
+			public ImmutableClass(string value, int otherValue)
+			{
+				Value = value;
+				OtherValue = otherValue;
+			}
+
+			public override string ToString()
+			{
+				return $"Value: `{Value}`; OtherValue: {OtherValue}";
+			}
+
+			protected bool Equals(ImmutableClass other)
+			{
+				return Value == other.Value && OtherValue == other.OtherValue;
+			}
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj)) return false;
+				if (ReferenceEquals(this, obj)) return true;
+				if (obj.GetType() != GetType()) return false;
+				return Equals((ImmutableClass) obj);
+			}
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					return ((Value != null ? Value.GetHashCode() : 0) * 397) ^ OtherValue;
+				}
+			}
+		}
+
+		[Test]
+		public void Issue222_DeserializationOfImmutableTypes_Struct()
+		{
+			var json = new JsonObject
+				{
+					["Value"] = "hello",
+					["OtherValue"] = 5
+				};
+			var serializer = new JsonSerializer {Options = {PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite}};
+			var expected = new ImmutableClass("hello", 5);
+
+			var actual = serializer.Deserialize<ImmutableClass>(json);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Issue222_RoundTripAnonymousType()
+		{
+			var obj = new
+				{
+					Value = "hello",
+					OtherValue = 5
+				};
+
+			JsonValue json = new JsonObject
+				{
+					["Value"] = "hello",
+					["OtherValue"] = 5
+				};
+			var serializer = new JsonSerializer {Options = {PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite}};
+			var serialized = serializer.Serialize(obj);
+			Assert.AreEqual(json, serialized);
+			var deserialized = serializer.Deserialize(obj.GetType(), serialized);
+
+			Assert.AreEqual(obj, deserialized);
 		}
 	}
 }

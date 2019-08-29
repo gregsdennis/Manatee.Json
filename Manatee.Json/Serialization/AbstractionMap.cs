@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization.Internal;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
@@ -126,24 +127,24 @@ namespace Manatee.Json.Serialization
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal object CreateInstance(SerializationContext context)
 		{
-			return CreateInstance(context.InferredType, context.LocalValue, context.RootSerializer.Options.Resolver);
+			return CreateInstance(context.InferredType, context.LocalValue, context.RootSerializer.Options.Resolver, context.ValueMap);
 		}
 
-		internal object CreateInstance(Type type, JsonValue json, IResolver resolver)
+		internal object CreateInstance(Type type, JsonValue json, IResolver resolver, Dictionary<SerializationInfo, object> parameters = null)
 		{
 			var typeInfo = type.GetTypeInfo();
 			var resolveSlow = typeInfo.IsAbstract || typeInfo.IsInterface || typeInfo.IsGenericType;
 			return resolveSlow
-				       ? _ResolveSlow(type, json, resolver)
-				       : resolver.Resolve(type);
+				       ? _ResolveSlow(type, json, resolver, parameters)
+				       : resolver.Resolve(type, parameters);
 		}
 
-		private object _ResolveSlow(Type type, JsonValue json, IResolver resolver)
+		internal Type IdentifyTypeToResolve(Type type, JsonValue json)
 		{
 			if (json != null && json.Type == JsonValueType.Object && json.Object.ContainsKey(Constants.TypeKey))
 			{
 				var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
-				return resolver.Resolve(concrete);
+				return concrete;
 			}
 
 			if (!_registry.TryGetValue(type, out Type tConcrete))
@@ -158,13 +159,20 @@ namespace Manatee.Json.Serialization
 			{
 				if (tConcrete.GetTypeInfo().IsGenericTypeDefinition)
 					tConcrete = tConcrete.MakeGenericType(type.GetTypeArguments());
-				return resolver.Resolve(tConcrete);
+				return tConcrete;
 			}
 
-			if (type.GetTypeInfo().IsInterface)
+			return type;
+		}
+
+		private object _ResolveSlow(Type type, JsonValue json, IResolver resolver, Dictionary<SerializationInfo, object> parameters)
+		{
+			var typeToResolve = IdentifyTypeToResolve(type, json);
+
+			if (typeToResolve.GetTypeInfo().IsInterface)
 				return TypeGenerator.Generate(type);
 
-			return resolver.Resolve(type);
+			return resolver.Resolve(typeToResolve, parameters);
 		}
 
 		private void _MapTypes(Type tAbstract, Type tConcrete, MapBaseAbstractionBehavior mappingBehavior)

@@ -51,13 +51,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public object Deserialize(SerializationContext context)
 		{
 			var json = context.LocalValue;
-			var obj = context.RootSerializer.AbstractionMap.CreateInstance(context);
-			var type = obj.GetType();
+			var type = context.RootSerializer.AbstractionMap.IdentifyTypeToResolve(context.InferredType, context.LocalValue);
 			var propertyList = ReflectionCache.GetMembers(type, context.RootSerializer.Options.PropertySelectionStrategy, context.RootSerializer.Options.AutoSerializeFields);
 			var map = _DeserializeValues(context, propertyList, !context.RootSerializer.Options.CaseSensitiveDeserialization);
+			context.ValueMap = map;
 			if ((json.Object.Count > 0) && (context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
 				throw new TypeDoesNotContainPropertyException(type, json);
-			_AssignObjectProperties(ref obj, map);
+			_AssignObjectProperties(out var obj, type, context);
 			return obj;
 		}
 		public void DeserializeType<T>(JsonValue json, JsonSerializer serializer)
@@ -235,14 +235,21 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					{
 						if (string.Compare(kvp.Key, name, StringComparison.OrdinalIgnoreCase) != 0) continue;
 
-							key = kvp.Key;
-							value = kvp.Value;
-							break;
-						}
+						key = kvp.Key;
+						value = kvp.Value;
+						break;
 					}
 				}
+			}
 
 			return key != null;
+		}
+		private static void _AssignObjectProperties(out object obj, Type type, SerializationContext context)
+		{
+			obj = type.GetTypeInfo().IsInterface
+				? TypeGenerator.Generate(type)
+				: context.RootSerializer.Options.Resolver.Resolve(type, context.ValueMap);
+			_AssignObjectProperties(ref obj, context.ValueMap);
 		}
 		private static void _AssignObjectProperties(ref object obj, Dictionary<SerializationInfo, object> memberMap)
 		{

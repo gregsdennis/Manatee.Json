@@ -37,7 +37,7 @@ namespace Manatee.Json.Schema
 		public static void Add<T>()
 			where T : IJsonSchemaKeyword, new()
 		{
-			var keyword = (T) _resolver.Resolve(typeof(T));
+			var keyword = (T) _resolver.Resolve(typeof(T), null);
 			if (!_cache.TryGetValue(keyword.Name, out var list))
 			{
 				list = new List<Type>();
@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 		public static void Remove<T>()
 			where T : IJsonSchemaKeyword, new()
 		{
-			var keyword = (T) _resolver.Resolve(typeof(T));
+			var keyword = (T) _resolver.Resolve(typeof(T), null);
 			if (!_cache.TryGetValue(keyword.Name, out var list)) return;
 
 			list.Remove(typeof(T));
@@ -81,13 +81,13 @@ namespace Manatee.Json.Schema
 
 			IJsonSchemaKeyword keyword = null;
 			var specials = list.Where(t => t.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IJsonSchemaKeywordPlus)))
-				.Select(t => (IJsonSchemaKeywordPlus) _resolver.Resolve(t))
+				.Select(t => (IJsonSchemaKeywordPlus) _resolver.Resolve(t, null))
 				.ToList();
 			if (specials.Any())
 				keyword = specials.FirstOrDefault(k => k.Handles(json));
 
 			if (keyword == null)
-				keyword = (IJsonSchemaKeyword) _resolver.Resolve(list.First());
+				keyword = (IJsonSchemaKeyword) _resolver.Resolve(list.First(), null);
 			keyword.FromJson(json, serializer);
 
 			return keyword;
