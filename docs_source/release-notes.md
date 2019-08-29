@@ -1,5 +1,7 @@
 # 11.0.0
 
+*v11.0.0 beta 7 - Released on 29 Aug, 2019*
+
 *v11.0.0 beta 6 - Released on 24 Jul, 2019*
 
 *v11.0.0 beta 5 - Released on 21 Jul, 2019*
