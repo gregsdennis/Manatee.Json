@@ -1,6 +1,6 @@
 # Manatee.Json
 
-[![NuGet version](https://img.shields.io/nuget/v/Manatee.Json.svg?style=flat-square)](https://www.nuget.org/packages/Manatee.Json/)
+[![NuGet version](https://img.shields.io/nuget/v/Manatee.Json.svg?svg=true)](https://www.nuget.org/packages/Manatee.Json/)
 [![Build status](https://ci.appveyor.com/api/projects/status/wda5exdfiuic3kg2/branch/master?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)
 [![AppVeyor tests](https://img.shields.io/appveyor/tests/gregsdennis/manatee-json?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/gregsdennis/Manatee.Json.svg)](http://isitmaintained.com/project/gregsdennis/Manatee.Json "Percentage of issues still open")
