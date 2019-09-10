@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -18,33 +19,65 @@ namespace Manatee.Json.Tests
 {
 	[TestFixture]
 	// TODO: Add categories to exclude this test.
-	[Ignore("This test fixture for development purposes only.")]
+	//[Ignore("This test fixture for development purposes only.")]
 	public class DevTest
 	{
 		[Test]
 		public void Test()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 
 			var serializer = new JsonSerializer();
 
-			var schemaFile = @"C:\Users\gregs\Downloads\Sample\fhir.schema.json";
-			var jsonFile = @"C:\Users\gregs\Downloads\Sample\sample.json";
+			var schemaFile = @"C:\Users\gregs\Downloads\dozor-schema.json";
 
 			var schemaText = File.ReadAllText(schemaFile);
 			var schemaJson = JsonValue.Parse(schemaText);
 			var schema = serializer.Deserialize<JsonSchema>(schemaJson);
 
-			var jsonText = File.ReadAllText(jsonFile);
-			var json = JsonValue.Parse(jsonText);
+			JsonValue json = new JsonObject
+				{
+					["events"] = new JsonArray
+						{
+							new JsonObject
+								{
+									["data"] = new JsonObject {["screen_name"] = "example screen 4"},
+									["event_type"] = "screen_view"
+								},
+							new JsonObject
+								{
+									["data"] = new JsonObject
+										{
+											["custom_attributes"] = new JsonObject {["foo"] = "literally anything"},
+											["custom_event_type"] = "navigation",
+											["event_name"] = "example custom 40"
+										},
+									["event_type"] = "custom_event"
+								}
+						},
+					["user_attributes"] = new JsonObject
+							{
+								["foo-string6"] = "a string",
+								["foo-boolean4"] = false,
+								["custom_property"] = new JsonArray {5, false, "string"}
+							}
+						["user_identities"] = new JsonObject
+						{
+							["customer_id"] = "name",
+							["email"] = "email",
+							["other"] = Math.PI,
+							["other_property"] = null
+						}
+				};
 
-			var metaResults = schema.ValidateSchema();
+			var watch = Stopwatch.StartNew();
 			var results = schema.Validate(json);
+			watch.Stop();
 
-			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\metaResults.json", serializer.Serialize(metaResults).GetIndentedString());
-			File.WriteAllText(@"C:\Users\gregs\Downloads\Sample\results.json", serializer.Serialize(results).GetIndentedString());
+			Console.WriteLine(json);
+			Console.WriteLine(watch.ElapsedMilliseconds);
 
-			results.AssertInvalid();
+			results.AssertValid();
 		}
 	}
 }
