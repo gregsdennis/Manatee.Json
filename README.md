@@ -6,13 +6,8 @@
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/gregsdennis/Manatee.Json.svg)](http://isitmaintained.com/project/gregsdennis/Manatee.Json "Percentage of issues still open")
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/gregsdennis/Manatee.Json.svg)](http://isitmaintained.com/project/gregsdennis/Manatee.Json "Average time to resolve an issue")
 
-<!-- [![Discuss on Slack](/Resources/Slack_RGB.png)](https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI) -->
-
-<a href="https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI"><img src="/Resources/Slack_RGB.svg" alt="Discuss on Slack" title="Slack" height="100"></a>
-
-<!-- [![Made with Jetbrains Resharper](/Resources/Resharper.svg)](http://www.jetbrains.com/resharper) -->
-
-<a href="http://www.jetbrains.com/resharper"><img src="/Resources/Resharper.svg" alt="Made with Jetbrains Resharper" title="Resharper" height="100"></a>
+<a href="https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI"><img src="/Resources/Slack_RGB.svg" alt="Discuss on Slack" title="Discuss on Slack" height="75"></a>
+<a href="http://www.jetbrains.com/resharper"><img src="/Resources/Resharper.svg" alt="Made with Jetbrains Resharper" title="Made with Jetbrains Resharper" height="75"></a>
 
 **Documentation for this library can be found [here](https://gregsdennis.github.io/Manatee.Json).**
 
