@@ -1,10 +1,11 @@
 # Manatee.Json
 
-[![NuGet version (Manatee.Json)](https://img.shields.io/nuget/v/Manatee.Json.svg?style=flat-square)](https://www.nuget.org/packages/Manatee.Json/)
+[![NuGet version](https://img.shields.io/nuget/v/Manatee.Json.svg?style=flat-square)](https://www.nuget.org/packages/Manatee.Json/)
 [![Build status](https://ci.appveyor.com/api/projects/status/wda5exdfiuic3kg2/branch/master?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)
-[![MyGet Build Status](https://www.myget.org/BuildSource/Badge/littlecrabsolutions?identifier=7898edc2-8d91-411c-88c9-2023d9d9fd41)](https://www.myget.org/)
+[![AppVeyor tests](https://img.shields.io/appveyor/tests/gregsdennis/manatee-json?svg=true)](https://ci.appveyor.com/project/gregsdennis/manatee-json/branch/master)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/gregsdennis/Manatee.Json.svg)](http://isitmaintained.com/project/gregsdennis/Manatee.Json "Percentage of issues still open")
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/gregsdennis/Manatee.Json.svg)](http://isitmaintained.com/project/gregsdennis/Manatee.Json "Average time to resolve an issue")
+![License](https://img.shields.io/github/license/gregsdennis/Manatee.Json)
 
 <a href="https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI"><img src="/Resources/Slack_RGB.svg" alt="Discuss on Slack" title="Discuss on Slack" height="75"></a>
 <a href="http://www.jetbrains.com/resharper"><img src="/Resources/Resharper.svg" alt="Made with Jetbrains Resharper" title="Made with Jetbrains Resharper" height="75"></a>
