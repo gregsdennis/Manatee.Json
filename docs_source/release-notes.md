@@ -1,6 +1,6 @@
 # 11.0.0
 
-*Released on XX Sep, 2019*
+*Released on 18 Sep, 2019*
 
 <details><summary>Beta releases</summary>
 <p>
