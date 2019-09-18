@@ -17,12 +17,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json", "Manatee.Jso
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{2EABC48C-8556-4A6D-B0CA-B2D5A46C7239}"
 	ProjectSection(SolutionItems) = preProject
-		schema04.json = schema04.json
-		schema06.json = schema06.json
-		schema07.json = schema07.json
+		Meta-Schemas\schema04.json = Meta-Schemas\schema04.json
+		Meta-Schemas\schema06.json = Meta-Schemas\schema06.json
+		Meta-Schemas\schema07.json = Meta-Schemas\schema07.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests", "Manatee.Json.Tests\Manatee.Json.Tests.csproj", "{FECC9923-41DB-4DE7-9715-D7E565456B8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2019-09", "2019-09", "{4021715A-4D23-4A60-B41C-40542B7BF215}"
+	ProjectSection(SolutionItems) = preProject
+		Meta-Schemas\2019-09\applicator.json = Meta-Schemas\2019-09\applicator.json
+		Meta-Schemas\2019-09\content.json = Meta-Schemas\2019-09\content.json
+		Meta-Schemas\2019-09\core.json = Meta-Schemas\2019-09\core.json
+		Meta-Schemas\2019-09\format.json = Meta-Schemas\2019-09\format.json
+		Meta-Schemas\2019-09\meta-data.json = Meta-Schemas\2019-09\meta-data.json
+		Meta-Schemas\2019-09\validation.json = Meta-Schemas\2019-09\validation.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +54,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+		{4021715A-4D23-4A60-B41C-40542B7BF215} = {2EABC48C-8556-4A6D-B0CA-B2D5A46C7239}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A28ED14-DF83-45F6-BA43-47423E29D5D9}
