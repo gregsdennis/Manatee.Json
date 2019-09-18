@@ -53,7 +53,7 @@
 							  .Type(JsonSchemaType.String)
 							  .Format(Format.UriReference)
 							  .Comment("Non-empty fragments not allowed.")
-							  .Pattern("^[^#]#?$"))
+							  .Pattern("^[^#]*#?$"))
 				.Property("$schema", new JsonSchema()
 							  .Type(JsonSchemaType.String)
 							  .Format(Format.Uri))

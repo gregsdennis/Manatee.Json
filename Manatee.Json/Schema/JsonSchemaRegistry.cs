@@ -96,10 +96,22 @@ namespace Manatee.Json.Schema
 
 		internal void RegisterLocal(JsonSchema schema)
 		{
-			if (schema.Id == null || !schema.Id.IsLocalSchemaId()) return;
-			lock (_contextLookup)
+			if (schema.Id != null && schema.Id.IsLocalSchemaId())
 			{
-				_contextLookup[schema.Id] = schema;
+				lock (_contextLookup)
+				{
+					_contextLookup[schema.Id] = schema;
+				}
+			}
+
+			var anchor = schema.Get<AnchorKeyword>();
+			if (anchor != null)
+			{
+				var anchorUri = $"{schema.DocumentPath}#{anchor.Value}";
+				lock (_contextLookup)
+				{
+					_contextLookup[anchorUri] = schema;
+				}
 			}
 		}
 

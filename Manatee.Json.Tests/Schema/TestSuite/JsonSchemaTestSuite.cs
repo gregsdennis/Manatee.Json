@@ -21,7 +21,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		public static IEnumerable AllTestData => _LoadSchemaJson("draft4")
 			.Concat(_LoadSchemaJson("draft6"))
 			.Concat(_LoadSchemaJson("draft7"))
-			.Concat(_LoadSchemaJson("draft2019-08"));
+			.Concat(_LoadSchemaJson("draft2019-09"));
 
 		private static IEnumerable<TestCaseData> _LoadSchemaJson(string draft)
 		{
