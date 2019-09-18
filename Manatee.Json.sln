@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2019-09", "2019-09", "{4021
 		Meta-Schemas\2019-09\core.json = Meta-Schemas\2019-09\core.json
 		Meta-Schemas\2019-09\format.json = Meta-Schemas\2019-09\format.json
 		Meta-Schemas\2019-09\meta-data.json = Meta-Schemas\2019-09\meta-data.json
+		Meta-Schemas\2019-09\schema.json = Meta-Schemas\2019-09\schema.json
 		Meta-Schemas\2019-09\validation.json = Meta-Schemas\2019-09\validation.json
 	EndProjectSection
 EndProject
