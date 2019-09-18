@@ -72,6 +72,10 @@ namespace Manatee.Json.Tests.Schema
 			{
 				Assert.Inconclusive();
 			}
+			catch (HttpRequestException)
+			{
+				Assert.Inconclusive();
+			}
 			catch (SocketException)
 			{
 				Assert.Inconclusive();
