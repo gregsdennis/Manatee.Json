@@ -96,10 +96,22 @@ namespace Manatee.Json.Schema
 
 		internal void RegisterLocal(JsonSchema schema)
 		{
-			if (schema.Id == null || !schema.Id.IsLocalSchemaId()) return;
-			lock (_contextLookup)
+			if (schema.Id != null && schema.Id.IsLocalSchemaId())
 			{
-				_contextLookup[schema.Id] = schema;
+				lock (_contextLookup)
+				{
+					_contextLookup[schema.Id] = schema;
+				}
+			}
+
+			var anchor = schema.Get<AnchorKeyword>();
+			if (anchor != null)
+			{
+				var anchorUri = $"{schema.DocumentPath}#{anchor.Value}";
+				lock (_contextLookup)
+				{
+					_contextLookup[anchorUri] = schema;
+				}
 			}
 		}
 
@@ -135,7 +147,7 @@ namespace Manatee.Json.Schema
 			var draft04Uri = MetaSchemas.Draft04.Id.Split('#')[0];
 			var draft06Uri = MetaSchemas.Draft06.Id.Split('#')[0];
 			var draft07Uri = MetaSchemas.Draft07.Id.Split('#')[0];
-			var draft2019_06Uri = MetaSchemas.Draft2019_06.Id.Split('#')[0];
+			var draft2019_09Uri = MetaSchemas.Draft2019_09.Id.Split('#')[0];
 			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
 			lock (_schemaLookup)
 			{
@@ -143,13 +155,13 @@ namespace Manatee.Json.Schema
 				_schemaLookup[draft04Uri] = MetaSchemas.Draft04;
 				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
 				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
-				_schemaLookup[draft2019_06Uri] = MetaSchemas.Draft2019_06;
-				_schemaLookup[MetaSchemas.Draft2019_06_Core.Id] = MetaSchemas.Draft2019_06_Core;
-				_schemaLookup[MetaSchemas.Draft2019_06_MetaData.Id] = MetaSchemas.Draft2019_06_MetaData;
-				_schemaLookup[MetaSchemas.Draft2019_06_Applicator.Id] = MetaSchemas.Draft2019_06_Applicator;
-				_schemaLookup[MetaSchemas.Draft2019_06_Validation.Id] = MetaSchemas.Draft2019_06_Validation;
-				_schemaLookup[MetaSchemas.Draft2019_06_Format.Id] = MetaSchemas.Draft2019_06_Format;
-				_schemaLookup[MetaSchemas.Draft2019_06_Content.Id] = MetaSchemas.Draft2019_06_Content;
+				_schemaLookup[draft2019_09Uri] = MetaSchemas.Draft2019_09;
+				_schemaLookup[MetaSchemas.Draft2019_09_Core.Id] = MetaSchemas.Draft2019_09_Core;
+				_schemaLookup[MetaSchemas.Draft2019_09_MetaData.Id] = MetaSchemas.Draft2019_09_MetaData;
+				_schemaLookup[MetaSchemas.Draft2019_09_Applicator.Id] = MetaSchemas.Draft2019_09_Applicator;
+				_schemaLookup[MetaSchemas.Draft2019_09_Validation.Id] = MetaSchemas.Draft2019_09_Validation;
+				_schemaLookup[MetaSchemas.Draft2019_09_Format.Id] = MetaSchemas.Draft2019_09_Format;
+				_schemaLookup[MetaSchemas.Draft2019_09_Content.Id] = MetaSchemas.Draft2019_09_Content;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

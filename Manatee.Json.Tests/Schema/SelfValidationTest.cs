@@ -21,7 +21,7 @@ namespace Manatee.Json.Tests.Schema
 					new TestCaseData(nameof(MetaSchemas.Draft04), MetaSchemas.Draft04),
 					new TestCaseData(nameof(MetaSchemas.Draft06), MetaSchemas.Draft06),
 					new TestCaseData(nameof(MetaSchemas.Draft07), MetaSchemas.Draft07),
-					new TestCaseData(nameof(MetaSchemas.Draft2019_06), MetaSchemas.Draft2019_06)
+					new TestCaseData(nameof(MetaSchemas.Draft2019_09), MetaSchemas.Draft2019_09)
 				};
 
 		[TestCaseSource(nameof(TestData))]
@@ -69,6 +69,10 @@ namespace Manatee.Json.Tests.Schema
 				}
 			}
 			catch (WebException)
+			{
+				Assert.Inconclusive();
+			}
+			catch (HttpRequestException)
 			{
 				Assert.Inconclusive();
 			}

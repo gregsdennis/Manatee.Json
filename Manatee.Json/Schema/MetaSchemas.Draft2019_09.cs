@@ -3,20 +3,20 @@
 	public static partial class MetaSchemas
 	{
 		/// <summary>
-		/// The meta-schema for 2019-06.
+		/// The meta-schema for 2019-09.
 		/// </summary>
-		public static readonly JsonSchema Draft2019_06 =
-			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_06}
-				.Schema("http://json-schema.org/draft/2019-06/schema#")
-				.Id("http://json-schema.org/draft/2019-06/schema#")
-				.RecursiveAnchor(true)
+		public static readonly JsonSchema Draft2019_09 =
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_09}
+				.Schema("https://json-schema.org/draft/2019-09/schema")
+				.Id("https://json-schema.org/draft/2019-09/schema")
 				.Vocabulary(SchemaVocabularies.Core, true)
 				.Vocabulary(SchemaVocabularies.Applicator, true)
 				.Vocabulary(SchemaVocabularies.Validation, true)
 				.Vocabulary(SchemaVocabularies.MetaData, true)
-				.Vocabulary(SchemaVocabularies.Format, true)
+				.Vocabulary(SchemaVocabularies.Format, false)
 				.Vocabulary(SchemaVocabularies.Content, true)
-				.Title("Core schema meta-schema")
+				.RecursiveAnchor(true)
+				.Title("Core and Validation specifications meta-schema")
 				.AllOf(new JsonSchema().Ref("meta/core"),
 				       new JsonSchema().Ref("meta/applicator"),
 				       new JsonSchema().Ref("meta/validation"),
@@ -39,22 +39,27 @@
 						                                       new JsonSchema().Ref("meta/validation#/$defs/stringArray"))));
 
 		/// <summary>
-		/// The core meta-schema for 2019-06.
+		/// The core meta-schema for 2019-09.
 		/// </summary>
-		public static readonly JsonSchema Draft2019_06_Core =
-			new JsonSchema { SupportedVersions = JsonSchemaVersion.Draft2019_06 }
-				.Schema("http://json-schema.org/draft/2019-06/schema#")
-				.Id("http://json-schema.org/draft/2019-06/meta/core")
+		public static readonly JsonSchema Draft2019_09_Core =
+			new JsonSchema { SupportedVersions = JsonSchemaVersion.Draft2019_09 }
+				.Schema("https://json-schema.org/draft/2019-09/schema")
+				.Id("https://json-schema.org/draft/2019-09/meta/core")
 				.Vocabulary(SchemaVocabularies.Core, true)
 				.RecursiveAnchor(true)
 				.Title("Core vocabulary meta-schema")
 				.Type(JsonSchemaType.Object | JsonSchemaType.Boolean)
 				.Property("$id", new JsonSchema()
 							  .Type(JsonSchemaType.String)
-							  .Format(Format.UriReference))
+							  .Format(Format.UriReference)
+							  .Comment("Non-empty fragments not allowed.")
+							  .Pattern("^[^#]*#?$"))
 				.Property("$schema", new JsonSchema()
 							  .Type(JsonSchemaType.String)
 							  .Format(Format.Uri))
+				.Property("$anchor", new JsonSchema()
+					          .Type(JsonSchemaType.String)
+					          .Pattern("^[A-Za-z][-A-Za-z0-9.:_]*$"))
 				.Property("$ref", new JsonSchema()
 							  .Type(JsonSchemaType.String)
 							  .Format(Format.UriReference))
@@ -71,19 +76,20 @@
 												 .Type(JsonSchemaType.String)
 												 .Format(Format.Uri))
 							  .AdditionalProperties(new JsonSchema().Type(JsonSchemaType.Boolean)))
-				.Property("$comment", new JsonSchema().Type(JsonSchemaType.String))
+				.Property("$comment", new JsonSchema()
+					          .Type(JsonSchemaType.String))
 				.Property("$defs", new JsonSchema()
 							  .Type(JsonSchemaType.Object)
 							  .AdditionalProperties(new JsonSchema().RecursiveRefRoot())
 							  .Default(new JsonObject()));
 
 		/// <summary>
-		/// The applicator meta-schema for 2019-06.
+		/// The applicator meta-schema for 2019-09.
 		/// </summary>
-		public static readonly JsonSchema Draft2019_06_Applicator =
-			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_06}
-				.Schema("http://json-schema.org/draft/2019-06/schema#")
-				.Id("http://json-schema.org/draft/2019-06/meta/applicator")
+		public static readonly JsonSchema Draft2019_09_Applicator =
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_09}
+				.Schema("https://json-schema.org/draft/2019-09/schema")
+				.Id("https://json-schema.org/draft/2019-09/meta/applicator")
 				.Vocabulary(SchemaVocabularies.Applicator, true)
 				.RecursiveAnchor(true)
 				.Title("Applicator vocabulary meta-schema")
@@ -96,7 +102,8 @@
 				.Property("additionalProperties", new JsonSchema().RecursiveRefRoot())
 				.Property("unevaluatedProperties", new JsonSchema()
 							  .Type(JsonSchemaType.Object)
-							  .AdditionalProperties(new JsonSchema().RecursiveRefRoot()))
+							  .AdditionalProperties(new JsonSchema()
+								                        .RecursiveRefRoot()))
 				.Property("properties", new JsonSchema()
 							  .Type(JsonSchemaType.Object)
 							  .AdditionalProperties(new JsonSchema().RecursiveRefRoot())
@@ -108,7 +115,8 @@
 							  .Default(new JsonObject()))
 				.Property("dependentSchemas", new JsonSchema()
 							  .Type(JsonSchemaType.Object)
-							  .AdditionalProperties(new JsonSchema().RecursiveRefRoot()))
+							  .AdditionalProperties(new JsonSchema()
+								                        .RecursiveRefRoot()))
 				.Property("propertyNames", new JsonSchema().RecursiveRefRoot())
 				.Property("if", new JsonSchema().RecursiveRefRoot())
 				.Property("then", new JsonSchema().RecursiveRefRoot())
@@ -123,17 +131,20 @@
 					     .Items(new JsonSchema().RecursiveRefRoot()));
 
 		/// <summary>
-		/// The annotation meta-schema for 2019-06.
+		/// The annotation meta-schema for 2019-09.
 		/// </summary>
-		public static readonly JsonSchema Draft2019_06_MetaData =
-			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_06}
-				.Schema("http://json-schema.org/draft/2019-06/schema#")
-				.Id("http://json-schema.org/draft/2019-06/meta/meta-data")
+		public static readonly JsonSchema Draft2019_09_MetaData =
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_09}
+				.Schema("https://json-schema.org/draft/2019-09/schema")
+				.Id("https://json-schema.org/draft/2019-09/meta/meta-data")
 				.Vocabulary(SchemaVocabularies.MetaData, true)
 				.RecursiveAnchor(true)
 				.Title("Meta-data vocabulary meta-schema")
-				.Property("title", new JsonSchema().Type(JsonSchemaType.String))
-				.Property("description", new JsonSchema().Type(JsonSchemaType.String))
+				.Type(JsonSchemaType.Object | JsonSchemaType.Boolean)
+				.Property("title", new JsonSchema()
+					          .Type(JsonSchemaType.String))
+				.Property("description", new JsonSchema()
+					          .Type(JsonSchemaType.String))
 				.Property("default", true)
 				.Property("deprecated", new JsonSchema()
 					          .Type(JsonSchemaType.Boolean)
@@ -146,12 +157,12 @@
 							  .Items(true));
 
 		/// <summary>
-		/// The assertion meta-schema for 2019-06.
+		/// The assertion meta-schema for 2019-09.
 		/// </summary>
-		public static readonly JsonSchema Draft2019_06_Validation =
-			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_06}
-				.Schema("http://json-schema.org/draft/2019-06/schema#")
-				.Id("http://json-schema.org/draft/2019-06/meta/validation")
+		public static readonly JsonSchema Draft2019_09_Validation =
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_09}
+				.Schema("https://json-schema.org/draft/2019-09/schema")
+				.Id("https://json-schema.org/draft/2019-09/meta/validation")
 				.Vocabulary(SchemaVocabularies.Validation, true)
 				.RecursiveAnchor(true)
 				.Title("Validation vocabulary meta-schema")
@@ -159,10 +170,14 @@
 				.Property("multipleOf", new JsonSchema()
 					          .Type(JsonSchemaType.Number)
 					          .ExclusiveMinimum(0))
-				.Property("maximum", new JsonSchema().Type(JsonSchemaType.Number))
-				.Property("exclusiveMaximum", new JsonSchema().Type(JsonSchemaType.Number))
-				.Property("minimum", new JsonSchema().Type(JsonSchemaType.Number))
-				.Property("exclusiveMinimum", new JsonSchema().Type(JsonSchemaType.Number))
+				.Property("maximum", new JsonSchema()
+					          .Type(JsonSchemaType.Number))
+				.Property("exclusiveMaximum", new JsonSchema()
+					          .Type(JsonSchemaType.Number))
+				.Property("minimum", new JsonSchema()
+					          .Type(JsonSchemaType.Number))
+				.Property("exclusiveMinimum", new JsonSchema()
+					          .Type(JsonSchemaType.Number))
 				.Property("maxLength", new JsonSchema().Ref("#/$defs/nonNegativeInteger"))
 				.Property("minLength", new JsonSchema().Ref("#/$defs/nonNegativeIntegerDefault0"))
 				.Property("pattern", new JsonSchema()
@@ -182,13 +197,12 @@
 				.Property("required", new JsonSchema().Ref("#/$defs/stringArray"))
 				.Property("dependentRequired", new JsonSchema()
 					          .Type(JsonSchemaType.Object)
-					          .AdditionalProperties(new JsonSchema().Ref("#/$defs/stringArray")))
+					          .AdditionalProperties(new JsonSchema()
+						                                .Ref("#/$defs/stringArray")))
 				.Property("const", true)
 				.Property("enum", new JsonSchema()
 					          .Type(JsonSchemaType.Array)
-					          .Items(true)
-					          .MinItems(1)
-					          .UniqueItems(true))
+					          .Items(true))
 				.Property("type", new JsonSchema()
 					          .AnyOf(new JsonSchema().Ref("#/$defs/simpleTypes"),
 					                 new JsonSchema()
@@ -211,12 +225,12 @@
 					     .Default(new JsonArray()));
 
 		/// <summary>
-		/// The format meta-schema for 2019-06.
+		/// The format meta-schema for 2019-09.
 		/// </summary>
-		public static readonly JsonSchema Draft2019_06_Format =
-			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_06}
-				.Schema("http://json-schema.org/draft/2019-06/schema#")
-				.Id("http://json-schema.org/draft/2019-06/meta/format")
+		public static readonly JsonSchema Draft2019_09_Format =
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_09}
+				.Schema("https://json-schema.org/draft/2019-09/schema")
+				.Id("https://json-schema.org/draft/2019-09/meta/format")
 				.Vocabulary(SchemaVocabularies.Format, true)
 				.RecursiveAnchor(true)
 				.Title("Format vocabulary meta-schema")
@@ -224,12 +238,12 @@
 				.Property("format", new JsonSchema().Type(JsonSchemaType.String));
 
 		/// <summary>
-		/// The content meta-schema for 2019-06.
+		/// The content meta-schema for 2019-09.
 		/// </summary>
-		public static readonly JsonSchema Draft2019_06_Content =
-			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_06}
-				.Schema("http://json-schema.org/draft/2019-06/schema#")
-				.Id("http://json-schema.org/draft/2019-06/meta/content")
+		public static readonly JsonSchema Draft2019_09_Content =
+			new JsonSchema {SupportedVersions = JsonSchemaVersion.Draft2019_09}
+				.Schema("https://json-schema.org/draft/2019-09/schema")
+				.Id("https://json-schema.org/draft/2019-09/meta/content")
 				.Vocabulary(SchemaVocabularies.Content, true)
 				.RecursiveAnchor(true)
 				.Title("Content vocabulary meta-schema")

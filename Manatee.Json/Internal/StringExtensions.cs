@@ -207,6 +207,9 @@ namespace Manatee.Json.Internal
 				.ToString();
 		}
 
+		// for draft-2019-09, this covers $anchor which allows #abc
+		// whereas $id which only allows # and #/a/b/c
+		// in previous drafts both of these were allowed in $id
 		public static bool IsLocalSchemaId(this string s)
 		{
 			return s != "#" && !s.Contains("#/") && s.Contains("#");

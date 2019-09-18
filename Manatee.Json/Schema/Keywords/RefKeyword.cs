@@ -170,7 +170,7 @@ namespace Manatee.Json.Schema
 			{
 				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute) &&
 					(JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
-					 context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_06))
+					 context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09))
 					address = context.Local.Id + address;
 
 				if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))

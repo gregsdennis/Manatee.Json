@@ -1,24 +1,24 @@
 # 11.0.0
 
-*v11.0.0 beta 7 - Released on 29 Aug, 2019*
+*Released on 18 Sep, 2019*
 
-*v11.0.0 beta 6 - Released on 24 Jul, 2019*
+<details><summary>Beta releases</summary>
+<p>
 
-*v11.0.0 beta 5 - Released on 21 Jul, 2019*
+- *v11.0.0 beta 7 - Released on 29 Aug, 2019*
+- *v11.0.0 beta 6 - Released on 24 Jul, 2019*
+- *v11.0.0 beta 5 - Released on 21 Jul, 2019*
+- *v11.0.0 beta 4 - Released on 19 Jul, 2019*
+- *v11.0.0 beta 3 - Released on 18 Jul, 2019*
+- *v11.0.0 beta 2 - Released on 10 Jul, 2019*
+- *v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)*
+- *v10.2.0 beta 2 - Released on 28 Jun, 2019*
+- *v10.2.0 beta 1 - Released on 22 Jun, 2019*
 
-*v11.0.0 beta 4 - Released on 19 Jul, 2019*
+***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
 
-*v11.0.0 beta 3 - Released on 18 Jul, 2019*
-
-*v11.0.0 beta 2 - Released on 10 Jul, 2019*
-
-*v11.0.0 beta 1 - Released on 1 Jul, 2019 (introduces breaking changes)*
-
-*v10.2.0 beta 2 - Released on 28 Jun, 2019*
-
-*v10.2.0 beta 1 - Released on 22 Jun, 2019*
-
-> ***NOTE** The properties for the new drafts contain version names like "Draft2019_06".  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.*
+</p>
+</details>
 
 <span id="feature">feature</span>
 
@@ -33,7 +33,7 @@ In order to support some new independent reference tests, some changes were made
 - `JsonSchemaOptions.OutputFormat` now has a default value of `Flag`, which only returns whether an instance is valid, without any error details.  This greatly improves performance out of the box.  Configuration is required to generate error details.
 - `JsonSchemaoptions.RefResolutionStrategy` now has a default value of `ProcessSiblingId` to conform with the draft-08 definition of `$ref` and `$recursiveRef`.
 
-Additionally, it was pointed out on [the JSON Schema spec repo](https://github.com/json-schema-org/json-schema-spec/issues/759) that `format` is not specifically intended for strings, but can also be used to validate other types.  To address this, the `StringFormat` type has been renamed to `Format` and now accepts `JsonValue` instead of merely `string`.
+Additionally, it was pointed out on [the JSON Schema spec repo](https://github.com/json-schema-org/json-schema-spec/issues/759) that `format` is not specifically intended for strings, but can also be used to validate other types.  To address this, the `StringFormat` type has been renamed to `Format` and now accepts `JsonValue` instead of merely `string`, although one string formats are defined by the spec.  Formatting for other types as well as their validation logic will need to be provided by the consumer (you).
 
 ### Serialization
 

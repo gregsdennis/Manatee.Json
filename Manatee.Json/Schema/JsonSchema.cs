@@ -104,8 +104,8 @@ namespace Manatee.Json.Schema
 				startVersion = JsonSchemaVersion.Draft06;
 			else if (Schema == MetaSchemas.Draft07.Id)
 				startVersion = JsonSchemaVersion.Draft07;
-			else if (Schema == MetaSchemas.Draft2019_06.Id)
-				startVersion = JsonSchemaVersion.Draft2019_06;
+			else if (Schema == MetaSchemas.Draft2019_09.Id)
+				startVersion = JsonSchemaVersion.Draft2019_09;
 			else
 			{
 				startVersion = JsonSchemaVersion.All;
@@ -159,13 +159,13 @@ namespace Manatee.Json.Schema
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
-				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft2019_06))
+				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft2019_09))
 				{
-					context.Root = MetaSchemas.Draft2019_06;
-					var metaValidation = MetaSchemas.Draft2019_06.Validate(context);
-					results.MetaSchemaValidations[MetaSchemas.Draft2019_06.Id] = metaValidation;
+					context.Root = MetaSchemas.Draft2019_09;
+					var metaValidation = MetaSchemas.Draft2019_09.Validate(context);
+					results.MetaSchemaValidations[MetaSchemas.Draft2019_09.Id] = metaValidation;
 					if (metaValidation.IsValid)
-						results.SupportedVersions |= JsonSchemaVersion.Draft2019_06;
+						results.SupportedVersions |= JsonSchemaVersion.Draft2019_09;
 				}
 			}
 
@@ -302,7 +302,7 @@ namespace Manatee.Json.Schema
 			var refKeyword = this.Get<RefKeyword>();
 			if (refKeyword == null ||
 			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
-			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_06)
+			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09)
 			{
 				if (context.BaseUri == null)
 					context.BaseUri = DocumentPath;
