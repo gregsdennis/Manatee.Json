@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Manatee.Json.Schema;
@@ -22,7 +21,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		public static IEnumerable AllTestData => _LoadSchemaJson("draft4")
 			.Concat(_LoadSchemaJson("draft6"))
 			.Concat(_LoadSchemaJson("draft7"))
-			.Concat(_LoadSchemaJson("draft2019-06"));
+			.Concat(_LoadSchemaJson("draft2019-08"));
 
 		private static IEnumerable<TestCaseData> _LoadSchemaJson(string draft)
 		{
@@ -136,7 +135,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 						Assert.AreEqual(test.Output.Verbose, results);
 					}
 
-					if (!fileName.Contains("draft2019-06")) return;
+					if (!fileName.Contains("draft2019-09")) return;
 					
 					var exportTestsValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
 

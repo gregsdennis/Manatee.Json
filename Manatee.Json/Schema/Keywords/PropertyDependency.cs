@@ -33,7 +33,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public JsonSchemaVersion SupportedVersions => _dependencies.Any()
 			? JsonSchemaVersion.All
-			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_06;
+			: JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_09;
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="PropertyDependency"/> class.
