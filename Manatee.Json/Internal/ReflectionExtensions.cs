@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
-using Manatee.Json.Serialization.Internal.Serializers;
+using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Internal
 {
@@ -30,10 +30,11 @@ namespace Manatee.Json.Internal
 			var currentType = tDerived.GetTypeInfo().BaseType;
 			while (currentType != null)
 			{
-				if (currentType.GetTypeInfo().IsGenericType)
+				var typeInfo = currentType.GetTypeInfo();
+				if (typeInfo.IsGenericType)
 					currentType = currentType.GetGenericTypeDefinition();
 				if (currentType == tBase) return true;
-				currentType = currentType.GetTypeInfo().BaseType;
+				currentType = typeInfo.BaseType;
 			}
 			return false;
 		}

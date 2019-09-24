@@ -37,7 +37,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var map = _SerializeValues(context, propertyList);
 			_ConstructJsonObject(json, map, context.RootSerializer.Options);
 			return json;
-			//return json.Count == 0 ? JsonValue.Null : json;
 		}
 		public JsonValue SerializeType<T>(JsonSerializer serializer)
 		{
@@ -147,7 +146,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return dict;
 		}
-	    private static void _ConstructJsonObject(JsonObject json, Dictionary<SerializationInfo, JsonValue> memberMap, JsonSerializerOptions options)
+	    private static void _ConstructJsonObject(JsonObject json, IDictionary<SerializationInfo, JsonValue> memberMap, JsonSerializerOptions options)
 	    {
 	        foreach (var memberInfo in memberMap.Keys)
 	        {
@@ -218,29 +217,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, out JsonValue value)
 		{
-			var key = name;
-			value = null;
+			var comparison = ignoreCase
+				? StringComparison.Ordinal
+				: StringComparison.OrdinalIgnoreCase;
+			var kvp = json.Object.FirstOrDefault(k => string.Equals(k.Key, name, comparison));
 
-			// PERF: attempt to read the name AS-IS before searching
-			if (!json.Object.TryGetValue(name, out value))
-			{
-				key = null;
-
-				// PERF: if we didn't have an exact match, we must be 'ignore case'.
-				//       Otherwise the key does not exist and we should not go
-				//       looking for the key.
-				if (ignoreCase)
-				{
-					foreach (var kvp in json.Object)
-					{
-						if (string.Compare(kvp.Key, name, StringComparison.OrdinalIgnoreCase) != 0) continue;
-
-						key = kvp.Key;
-						value = kvp.Value;
-						break;
-					}
-				}
-			}
+			var key = kvp.Key;
+			value = kvp.Value;
 
 			return key != null;
 		}

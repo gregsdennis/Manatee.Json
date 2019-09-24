@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Manatee.Json.Internal;
 using Manatee.Json.Serialization.Internal;
-using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
@@ -117,10 +116,7 @@ namespace Manatee.Json.Serialization
 				}
 			}
 			if (!typeInfo.IsAbstract && !typeInfo.IsInterface)
-			{
 				_registry[type] = type;
-				return type;
-			}
 			return type;
 		}
 

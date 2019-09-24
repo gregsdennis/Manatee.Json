@@ -62,8 +62,8 @@ This is best explained with an example.  Suppose we have a meta-schema **M**, a 
 4. We define a new keyword, `minDate`, that takes a date-formatted string value.
 5. We create a schema that uses our new meta-schema (because we want to use the new keyword).
 6. We use the new keyword to define a property to be found in the instance.
-7. The first instance defines a date in the past.
-8. The second date defines a date in the future.
+7. The first instance defines a date after the minimum required date.
+8. The second date defines a date before the minimum required date.
 
 The kicker here is that we can read "minDate" and know that its value represents the minimum acceptable date... because we're human, and we understand things like that.  However, a validator isn't going to be able to infer that.  It can only validate that a date-formatted string was given for `minDate` in the schema (**S**).
 
@@ -89,7 +89,7 @@ So, back to the example, because we declare the vocabulary to be required (by gi
 
 ### Registering a vocabulary
 
-To tell Manatee.Json about a vocabulary, you just need to create a `SchemaVocabulary` instance, return it from a new keyword (see below), and register the new keyword using `SchemaKeywordCatalog.Add<T>()`.  The vocabulary will automatically register.
+To tell Manatee.Json about a vocabulary, you just need to create a `SchemaVocabulary` instance, return it [from a new keyword](#Vocabulary), and register the new keyword using `SchemaKeywordCatalog.Add<T>()`.  The vocabulary will automatically register.
 
 The `SchemaVocabulary` class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These URIs are both required in the constructor.
 
