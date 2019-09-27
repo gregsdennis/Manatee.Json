@@ -93,7 +93,7 @@ To tell Manatee.Json about a vocabulary, you just need to create a `SchemaVocabu
 
 The `SchemaVocabulary` class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These URIs are both required in the constructor.
 
-If you have multiple keywords defined by the same vocabulary, *you need to add them all*.  Manatee.Json learns about vocabularies via the keywords that are added.  There is currently no mechanism defined by JSON Schema that makes all of the keywords defined by a vocabulary known to the implementation.  (This is functionality that will likely come in later drafts.)
+If you have multiple keywords defined by the same vocabulary, *you need to add them all*.  Manatee.Json learns about vocabularies via the keywords that are added.  There is currently no mechanism defined by JSON Schema that makes all of the keywords defined by a vocabulary known to the implementation.  (This is functionality that will likely come in later drafts as a machine-readable vocabulary document.)
 
 ## Write a keyword
 

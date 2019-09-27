@@ -1,3 +1,15 @@
+# 11.0.1
+
+*Released on 8 Jun, 2019*
+
+<span id="patch">patch</span>
+
+([#215](https://github.com/gregsdennis/Manatee.Json/pulls/215)) `IndexOutOfRangeException` thrown on JSON Path arrays when index equals array count.
+
+The schema `format` keyword was incorrectly failing for some keywords when value type is not a string.
+
+Minor serialization improvements.
+
 # 11.0.0
 
 *Released on 18 Sep, 2019*
