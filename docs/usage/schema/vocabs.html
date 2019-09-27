@@ -125,8 +125,8 @@
 <li>We define a new keyword, <code>minDate</code>, that takes a date-formatted string value.</li>
 <li>We create a schema that uses our new meta-schema (because we want to use the new keyword).</li>
 <li>We use the new keyword to define a property to be found in the instance.</li>
-<li>The first instance defines a date in the past.</li>
-<li>The second date defines a date in the future.</li>
+<li>The first instance defines a date after the minimum required date.</li>
+<li>The second date defines a date before the minimum required date.</li>
 </ol>
 <p>The kicker here is that we can read &quot;minDate&quot; and know that its value represents the minimum acceptable date... because we're human, and we understand things like that.  However, a validator isn't going to be able to infer that.  It can only validate that a date-formatted string was given for <code>minDate</code> in the schema (<strong>S</strong>).</p>
 <p>That's where the vocabulary comes in.  The vocabulary is a human-readable document that gives <em>semantic</em> meaning to <code>minDate</code>.  It is documentation of business logic that allows a programmer to code an extension that provides additional validation.  For example, this is the documentation for <code>minLength</code> in the Schema Validation specification:</p>
@@ -142,9 +142,9 @@
 <p>Now, if you look at the <code>$vocabulary</code> entry for <code>https://myserver.net/my-vocab</code>, the vocabulary has its ID as the key with a boolean value.  In this case, that value is <code>true</code>.  That means that if Manatee.Json <em>doesn't</em> know about the vocabulary, it <strong>must</strong> refuse to process any schema that declares <strong>M</strong> as its <code>$schema</code> (as <strong>S</strong> does).  If this value were <code>false</code>, then Manatee.Json would be allowed to continue, which means that only syntactic analysis (i.e. &quot;Is <code>minDate</code> a date-formatted string?&quot;) would be performed.</p>
 <p>So, back to the example, because we declare the vocabulary to be required (by giving it a value of <code>true</code>) <em>and</em> because Manatee.Json knows about it, <strong>I1</strong> is reported as valid and <strong>I2</strong> is not.  If the vocabulary had not been required <em>and</em> Manatee.Json didn't know about the vocabulary, both <strong>I1</strong> and <strong>I2</strong> would be reported as valid because the <code>minDate</code> keyword would not have been enforced.</p>
 <h3 id="registering-a-vocabulary">Registering a vocabulary</h3>
-<p>To tell Manatee.Json about a vocabulary, you just need to create a <code>SchemaVocabulary</code> instance, return it from a new keyword (see below), and register the new keyword using <code>SchemaKeywordCatalog.Add&lt;T&gt;()</code>.  The vocabulary will automatically register.</p>
+<p>To tell Manatee.Json about a vocabulary, you just need to create a <code>SchemaVocabulary</code> instance, return it <a href="#Vocabulary">from a new keyword</a>, and register the new keyword using <code>SchemaKeywordCatalog.Add&lt;T&gt;()</code>.  The vocabulary will automatically register.</p>
 <p>The <code>SchemaVocabulary</code> class is quite simple.  It just links the vocabulary URI to the associated meta-schema URI.  These URIs are both required in the constructor.</p>
-<p>If you have multiple keywords defined by the same vocabulary, <em>you need to add them all</em>.  Manatee.Json learns about vocabularies via the keywords that are added.  There is currently no mechanism defined by JSON Schema that makes all of the keywords defined by a vocabulary known to the implementation.  (This is functionality that will likely come in later drafts.)</p>
+<p>If you have multiple keywords defined by the same vocabulary, <em>you need to add them all</em>.  Manatee.Json learns about vocabularies via the keywords that are added.  There is currently no mechanism defined by JSON Schema that makes all of the keywords defined by a vocabulary known to the implementation.  (This is functionality that will likely come in later drafts as a machine-readable vocabulary document.)</p>
 <h2 id="write-a-keyword">Write a keyword</h2>
 <p><code>JsonSchema</code> has been designed to allow you to create your own keywords.  There are several steps that need to be performed to do this.</p>
 <ol>
