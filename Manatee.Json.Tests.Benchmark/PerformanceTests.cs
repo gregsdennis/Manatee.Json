@@ -24,8 +24,8 @@ namespace Manatee.Json.Tests.Benchmark
 			// This initializes whatever caches might be inside the serializer
 			_RunSingle(false);
 
-			//_RunSingle();
-			//_RunBulk();
+			//_RunSingle();5
+			_RunBulk();
 		}
 
 		private static void _RunSingle(bool output = true)
@@ -34,7 +34,7 @@ namespace Manatee.Json.Tests.Benchmark
 
 			if (output)
 				Console.WriteLine("\nNewtonsoft @1");
-			_Run(subjects, JsonConvert.SerializeObject, JsonConvert.DeserializeObject<MyClass>, output);
+			//_Run(subjects, JsonConvert.SerializeObject, JsonConvert.DeserializeObject<MyClass>, output);
 
 			if (output)
 				Console.WriteLine("\nManatee @1");
@@ -43,12 +43,13 @@ namespace Manatee.Json.Tests.Benchmark
 
 		private static void _RunBulk()
 		{
-			var subjects = Enumerable.Range(0, 10000).Select(i => _GenerateSubject()).ToList();
+			var count = 20000;
+			var subjects = Enumerable.Range(0, count).Select(i => _GenerateSubject()).ToList();
 
-			Console.WriteLine("\nNewtonsoft @10000");
+			Console.WriteLine($"\nNewtonsoft @{count}");
 			_Run(subjects, JsonConvert.SerializeObject, JsonConvert.DeserializeObject<MyClass>);
 
-			Console.WriteLine("\nManatee @10000");
+			Console.WriteLine($"\nManatee @{count}");
 			_Run(subjects, _ManateeSerialize, _ManateeDeserialize);
 		}
 

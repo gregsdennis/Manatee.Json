@@ -115,7 +115,16 @@ namespace Manatee.Json.Schema
 					var metaSchema = JsonSchemaRegistry.Get(schemaDeclaration);
 					if (metaSchema != null)
 					{
-						var metaValidation = metaSchema.Validate(ToJson(new JsonSerializer()));
+						var asJson = ToJson(new JsonSerializer());
+						var context = new SchemaValidationContext
+							{
+								Instance = asJson,
+								BaseRelativeLocation = new JsonPointer("#"),
+								RelativeLocation = new JsonPointer("#"),
+								InstanceLocation = new JsonPointer("#"),
+								IsMetaSchemaValidation = true
+							};
+						var metaValidation = metaSchema.Validate(context);
 						results.MetaSchemaValidations[schemaDeclaration] = metaValidation;
 					}
 				}

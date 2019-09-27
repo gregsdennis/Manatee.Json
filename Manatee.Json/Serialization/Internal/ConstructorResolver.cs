@@ -21,7 +21,7 @@ namespace Manatee.Json.Serialization.Internal
 			}
 		}
 
-		private object _Resolve(Type type, Dictionary<SerializationInfo, object> parameters)
+		private static object _Resolve(Type type, Dictionary<SerializationInfo, object> parameters)
 		{
 			var ctors = type.GetTypeInfo().DeclaredConstructors
 				.Select(c => new {Method = c, Parameters = c.GetParameters()})
@@ -57,7 +57,7 @@ namespace Manatee.Json.Serialization.Internal
 			return bestMatch.Constructor.Invoke(bestMatch.Matched.Select(m => m.JsonParameter.Value).ToArray());
 		}
 
-		private object _ResolveSimple(Type type)
+		private static object _ResolveSimple(Type type)
 		{
 			ConstructorInfo shortestCtor = null;
 			foreach (var constructor in type.GetTypeInfo().DeclaredConstructors)

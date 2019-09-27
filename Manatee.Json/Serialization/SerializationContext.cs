@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization.Internal;
-using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
