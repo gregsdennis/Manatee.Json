@@ -88,7 +88,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 			var configureForTestOutputValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
 			bool.TryParse(configureForTestOutputValue, out var configureForTestOutput);
-			JsonSchemaOptions.ConfigureForTestOutput = configureForTestOutput;
+			//JsonSchemaOptions.ConfigureForTestOutput = configureForTestOutput;
 		}
 
 		[OneTimeTearDown]
