@@ -1,6 +1,14 @@
+# 11.0.2
+
+*Released on 14 Oct, 2019*
+
+<span id="patch">patch</span>
+
+Fixed an issue with deserialization name transformations where the function was passed the member name instead of the JSON key value.
+
 # 11.0.1
 
-*Released on 8 Jun, 2019*
+*Released on 29 Sep, 2019*
 
 <span id="patch">patch</span>
 
