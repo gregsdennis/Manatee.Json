@@ -164,11 +164,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
-				if (memberInfo.ShouldTransform)
-					name = context.RootSerializer.Options.DeserializationNameTransform(name);
+				var transform = memberInfo.ShouldTransform
+					? context.RootSerializer.Options.DeserializationNameTransform
+					: s => s;
 
 				var visited = new HashSet<string>(ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
-				if (_TryGetKeyValue(context.LocalValue, name, ignoreCase, out var value) &&
+				if (_TryGetKeyValue(context.LocalValue, name, ignoreCase, transform, out var value) &&
 				    visited.Add(name))
 				{
 					Type type;
@@ -201,7 +202,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var name = memberInfo.SerializationName;
 
 				var visited = new HashSet<string>(ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
-				if (_TryGetKeyValue(json, name, ignoreCase, out var value) && visited.Add(name))
+				if (_TryGetKeyValue(json, name, ignoreCase, serializer.Options.DeserializationNameTransform, out var value) && visited.Add(name))
 				{
 					Type type;
 					if (memberInfo.MemberInfo is PropertyInfo info)
@@ -215,12 +216,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return dict;
 		}
-		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, out JsonValue value)
+		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, Func<string, string> nameTransform, out JsonValue value)
 		{
 			var comparison = ignoreCase
 				? StringComparison.Ordinal
 				: StringComparison.OrdinalIgnoreCase;
-			var kvp = json.Object.FirstOrDefault(k => string.Equals(k.Key, name, comparison));
+			var kvp = json.Object.FirstOrDefault(k =>
+				{
+					var transformed = nameTransform(k.Key);
+					return string.Equals(transformed, name, comparison);
+				});
 
 			var key = kvp.Key;
 			value = kvp.Value;
