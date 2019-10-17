@@ -3095,6 +3095,212 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.AllOfKeyword.Vocabulary
   nameWithType: AllOfKeyword.Vocabulary
+- uid: Manatee.Json.Schema.AnchorKeyword
+  name: AnchorKeyword
+  href: api/Manatee.Json.Schema.AnchorKeyword.html
+  commentId: T:Manatee.Json.Schema.AnchorKeyword
+  fullName: Manatee.Json.Schema.AnchorKeyword
+  nameWithType: AnchorKeyword
+- uid: Manatee.Json.Schema.AnchorKeyword.#ctor
+  name: AnchorKeyword()
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword__ctor
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.#ctor
+  fullName: Manatee.Json.Schema.AnchorKeyword.AnchorKeyword()
+  nameWithType: AnchorKeyword.AnchorKeyword()
+- uid: Manatee.Json.Schema.AnchorKeyword.#ctor(System.String)
+  name: AnchorKeyword(String)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword__ctor_System_String_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.#ctor(System.String)
+  fullName: Manatee.Json.Schema.AnchorKeyword.AnchorKeyword(System.String)
+  nameWithType: AnchorKeyword.AnchorKeyword(String)
+- uid: Manatee.Json.Schema.AnchorKeyword.#ctor*
+  name: AnchorKeyword
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword__ctor_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.#ctor
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.AnchorKeyword
+  nameWithType: AnchorKeyword.AnchorKeyword
+- uid: Manatee.Json.Schema.AnchorKeyword.Equals(Manatee.Json.Schema.AnchorKeyword)
+  name: Equals(AnchorKeyword)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Equals_Manatee_Json_Schema_AnchorKeyword_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.Equals(Manatee.Json.Schema.AnchorKeyword)
+  fullName: Manatee.Json.Schema.AnchorKeyword.Equals(Manatee.Json.Schema.AnchorKeyword)
+  nameWithType: AnchorKeyword.Equals(AnchorKeyword)
+- uid: Manatee.Json.Schema.AnchorKeyword.Equals(Manatee.Json.Schema.IJsonSchemaKeyword)
+  name: Equals(IJsonSchemaKeyword)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Equals_Manatee_Json_Schema_IJsonSchemaKeyword_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.Equals(Manatee.Json.Schema.IJsonSchemaKeyword)
+  fullName: Manatee.Json.Schema.AnchorKeyword.Equals(Manatee.Json.Schema.IJsonSchemaKeyword)
+  nameWithType: AnchorKeyword.Equals(IJsonSchemaKeyword)
+- uid: Manatee.Json.Schema.AnchorKeyword.Equals(System.Object)
+  name: Equals(Object)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Equals_System_Object_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.Equals(System.Object)
+  fullName: Manatee.Json.Schema.AnchorKeyword.Equals(System.Object)
+  nameWithType: AnchorKeyword.Equals(Object)
+- uid: Manatee.Json.Schema.AnchorKeyword.Equals*
+  name: Equals
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Equals_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.Equals
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.Equals
+  nameWithType: AnchorKeyword.Equals
+- uid: Manatee.Json.Schema.AnchorKeyword.ErrorTemplate
+  name: ErrorTemplate
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ErrorTemplate
+  commentId: P:Manatee.Json.Schema.AnchorKeyword.ErrorTemplate
+  fullName: Manatee.Json.Schema.AnchorKeyword.ErrorTemplate
+  nameWithType: AnchorKeyword.ErrorTemplate
+- uid: Manatee.Json.Schema.AnchorKeyword.ErrorTemplate*
+  name: ErrorTemplate
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ErrorTemplate_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.ErrorTemplate
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.ErrorTemplate
+  nameWithType: AnchorKeyword.ErrorTemplate
+- uid: Manatee.Json.Schema.AnchorKeyword.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
+  name: FromJson(JsonValue, JsonSerializer)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_FromJson_Manatee_Json_JsonValue_Manatee_Json_Serialization_JsonSerializer_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.FromJson(Manatee.Json.JsonValue,Manatee.Json.Serialization.JsonSerializer)
+  fullName: Manatee.Json.Schema.AnchorKeyword.FromJson(Manatee.Json.JsonValue, Manatee.Json.Serialization.JsonSerializer)
+  nameWithType: AnchorKeyword.FromJson(JsonValue, JsonSerializer)
+- uid: Manatee.Json.Schema.AnchorKeyword.FromJson*
+  name: FromJson
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_FromJson_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.FromJson
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.FromJson
+  nameWithType: AnchorKeyword.FromJson
+- uid: Manatee.Json.Schema.AnchorKeyword.GetHashCode
+  name: GetHashCode()
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_GetHashCode
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.GetHashCode
+  fullName: Manatee.Json.Schema.AnchorKeyword.GetHashCode()
+  nameWithType: AnchorKeyword.GetHashCode()
+- uid: Manatee.Json.Schema.AnchorKeyword.GetHashCode*
+  name: GetHashCode
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_GetHashCode_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.GetHashCode
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.GetHashCode
+  nameWithType: AnchorKeyword.GetHashCode
+- uid: Manatee.Json.Schema.AnchorKeyword.Name
+  name: Name
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Name
+  commentId: P:Manatee.Json.Schema.AnchorKeyword.Name
+  fullName: Manatee.Json.Schema.AnchorKeyword.Name
+  nameWithType: AnchorKeyword.Name
+- uid: Manatee.Json.Schema.AnchorKeyword.Name*
+  name: Name
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Name_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.Name
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.Name
+  nameWithType: AnchorKeyword.Name
+- uid: Manatee.Json.Schema.AnchorKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  name: RegisterSubschemas(Uri, JsonSchemaRegistry)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)
+  fullName: Manatee.Json.Schema.AnchorKeyword.RegisterSubschemas(System.Uri, Manatee.Json.Schema.JsonSchemaRegistry)
+  nameWithType: AnchorKeyword.RegisterSubschemas(Uri, JsonSchemaRegistry)
+- uid: Manatee.Json.Schema.AnchorKeyword.RegisterSubschemas*
+  name: RegisterSubschemas
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_RegisterSubschemas_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.RegisterSubschemas
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.RegisterSubschemas
+  nameWithType: AnchorKeyword.RegisterSubschemas
+- uid: Manatee.Json.Schema.AnchorKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer,System.Uri)
+  name: ResolveSubschema(JsonPointer, Uri)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer,System.Uri)
+  fullName: Manatee.Json.Schema.AnchorKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer, System.Uri)
+  nameWithType: AnchorKeyword.ResolveSubschema(JsonPointer, Uri)
+- uid: Manatee.Json.Schema.AnchorKeyword.ResolveSubschema*
+  name: ResolveSubschema
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ResolveSubschema_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.ResolveSubschema
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.ResolveSubschema
+  nameWithType: AnchorKeyword.ResolveSubschema
+- uid: Manatee.Json.Schema.AnchorKeyword.SupportedVersions
+  name: SupportedVersions
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_SupportedVersions
+  commentId: P:Manatee.Json.Schema.AnchorKeyword.SupportedVersions
+  fullName: Manatee.Json.Schema.AnchorKeyword.SupportedVersions
+  nameWithType: AnchorKeyword.SupportedVersions
+- uid: Manatee.Json.Schema.AnchorKeyword.SupportedVersions*
+  name: SupportedVersions
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_SupportedVersions_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.SupportedVersions
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.SupportedVersions
+  nameWithType: AnchorKeyword.SupportedVersions
+- uid: Manatee.Json.Schema.AnchorKeyword.ToJson(Manatee.Json.Serialization.JsonSerializer)
+  name: ToJson(JsonSerializer)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ToJson_Manatee_Json_Serialization_JsonSerializer_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.ToJson(Manatee.Json.Serialization.JsonSerializer)
+  fullName: Manatee.Json.Schema.AnchorKeyword.ToJson(Manatee.Json.Serialization.JsonSerializer)
+  nameWithType: AnchorKeyword.ToJson(JsonSerializer)
+- uid: Manatee.Json.Schema.AnchorKeyword.ToJson*
+  name: ToJson
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ToJson_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.ToJson
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.ToJson
+  nameWithType: AnchorKeyword.ToJson
+- uid: Manatee.Json.Schema.AnchorKeyword.Validate(Manatee.Json.Schema.SchemaValidationContext)
+  name: Validate(SchemaValidationContext)
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Validate_Manatee_Json_Schema_SchemaValidationContext_
+  commentId: M:Manatee.Json.Schema.AnchorKeyword.Validate(Manatee.Json.Schema.SchemaValidationContext)
+  fullName: Manatee.Json.Schema.AnchorKeyword.Validate(Manatee.Json.Schema.SchemaValidationContext)
+  nameWithType: AnchorKeyword.Validate(SchemaValidationContext)
+- uid: Manatee.Json.Schema.AnchorKeyword.Validate*
+  name: Validate
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Validate_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.Validate
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.Validate
+  nameWithType: AnchorKeyword.Validate
+- uid: Manatee.Json.Schema.AnchorKeyword.ValidationSequence
+  name: ValidationSequence
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ValidationSequence
+  commentId: P:Manatee.Json.Schema.AnchorKeyword.ValidationSequence
+  fullName: Manatee.Json.Schema.AnchorKeyword.ValidationSequence
+  nameWithType: AnchorKeyword.ValidationSequence
+- uid: Manatee.Json.Schema.AnchorKeyword.ValidationSequence*
+  name: ValidationSequence
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_ValidationSequence_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.ValidationSequence
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.ValidationSequence
+  nameWithType: AnchorKeyword.ValidationSequence
+- uid: Manatee.Json.Schema.AnchorKeyword.Value
+  name: Value
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Value
+  commentId: P:Manatee.Json.Schema.AnchorKeyword.Value
+  fullName: Manatee.Json.Schema.AnchorKeyword.Value
+  nameWithType: AnchorKeyword.Value
+- uid: Manatee.Json.Schema.AnchorKeyword.Value*
+  name: Value
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Value_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.Value
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.Value
+  nameWithType: AnchorKeyword.Value
+- uid: Manatee.Json.Schema.AnchorKeyword.Vocabulary
+  name: Vocabulary
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Vocabulary
+  commentId: P:Manatee.Json.Schema.AnchorKeyword.Vocabulary
+  fullName: Manatee.Json.Schema.AnchorKeyword.Vocabulary
+  nameWithType: AnchorKeyword.Vocabulary
+- uid: Manatee.Json.Schema.AnchorKeyword.Vocabulary*
+  name: Vocabulary
+  href: api/Manatee.Json.Schema.AnchorKeyword.html#Manatee_Json_Schema_AnchorKeyword_Vocabulary_
+  commentId: Overload:Manatee.Json.Schema.AnchorKeyword.Vocabulary
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.AnchorKeyword.Vocabulary
+  nameWithType: AnchorKeyword.Vocabulary
 - uid: Manatee.Json.Schema.AnyOfKeyword
   name: AnyOfKeyword
   href: api/Manatee.Json.Schema.AnyOfKeyword.html
@@ -10723,12 +10929,12 @@ references:
   commentId: F:Manatee.Json.Schema.JsonSchemaVersion.Draft07
   fullName: Manatee.Json.Schema.JsonSchemaVersion.Draft07
   nameWithType: JsonSchemaVersion.Draft07
-- uid: Manatee.Json.Schema.JsonSchemaVersion.Draft2019_06
-  name: Draft2019_06
-  href: api/Manatee.Json.Schema.JsonSchemaVersion.html#Manatee_Json_Schema_JsonSchemaVersion_Draft2019_06
-  commentId: F:Manatee.Json.Schema.JsonSchemaVersion.Draft2019_06
-  fullName: Manatee.Json.Schema.JsonSchemaVersion.Draft2019_06
-  nameWithType: JsonSchemaVersion.Draft2019_06
+- uid: Manatee.Json.Schema.JsonSchemaVersion.Draft2019_09
+  name: Draft2019_09
+  href: api/Manatee.Json.Schema.JsonSchemaVersion.html#Manatee_Json_Schema_JsonSchemaVersion_Draft2019_09
+  commentId: F:Manatee.Json.Schema.JsonSchemaVersion.Draft2019_09
+  fullName: Manatee.Json.Schema.JsonSchemaVersion.Draft2019_09
+  nameWithType: JsonSchemaVersion.Draft2019_09
 - uid: Manatee.Json.Schema.JsonSchemaVersion.None
   name: None
   href: api/Manatee.Json.Schema.JsonSchemaVersion.html#Manatee_Json_Schema_JsonSchemaVersion_None
@@ -11789,48 +11995,48 @@ references:
   commentId: F:Manatee.Json.Schema.MetaSchemas.Draft07
   fullName: Manatee.Json.Schema.MetaSchemas.Draft07
   nameWithType: MetaSchemas.Draft07
-- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_06
-  name: Draft2019_06
-  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_06
-  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_06
-  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_06
-  nameWithType: MetaSchemas.Draft2019_06
-- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Applicator
-  name: Draft2019_06_Applicator
-  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_06_Applicator
-  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_06_Applicator
-  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Applicator
-  nameWithType: MetaSchemas.Draft2019_06_Applicator
-- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Content
-  name: Draft2019_06_Content
-  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_06_Content
-  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_06_Content
-  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Content
-  nameWithType: MetaSchemas.Draft2019_06_Content
-- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Core
-  name: Draft2019_06_Core
-  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_06_Core
-  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_06_Core
-  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Core
-  nameWithType: MetaSchemas.Draft2019_06_Core
-- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Format
-  name: Draft2019_06_Format
-  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_06_Format
-  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_06_Format
-  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Format
-  nameWithType: MetaSchemas.Draft2019_06_Format
-- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_06_MetaData
-  name: Draft2019_06_MetaData
-  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_06_MetaData
-  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_06_MetaData
-  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_06_MetaData
-  nameWithType: MetaSchemas.Draft2019_06_MetaData
-- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Validation
-  name: Draft2019_06_Validation
-  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_06_Validation
-  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_06_Validation
-  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_06_Validation
-  nameWithType: MetaSchemas.Draft2019_06_Validation
+- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_09
+  name: Draft2019_09
+  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_09
+  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_09
+  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_09
+  nameWithType: MetaSchemas.Draft2019_09
+- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Applicator
+  name: Draft2019_09_Applicator
+  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_09_Applicator
+  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_09_Applicator
+  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Applicator
+  nameWithType: MetaSchemas.Draft2019_09_Applicator
+- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Content
+  name: Draft2019_09_Content
+  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_09_Content
+  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_09_Content
+  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Content
+  nameWithType: MetaSchemas.Draft2019_09_Content
+- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Core
+  name: Draft2019_09_Core
+  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_09_Core
+  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_09_Core
+  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Core
+  nameWithType: MetaSchemas.Draft2019_09_Core
+- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Format
+  name: Draft2019_09_Format
+  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_09_Format
+  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_09_Format
+  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Format
+  nameWithType: MetaSchemas.Draft2019_09_Format
+- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_09_MetaData
+  name: Draft2019_09_MetaData
+  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_09_MetaData
+  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_09_MetaData
+  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_09_MetaData
+  nameWithType: MetaSchemas.Draft2019_09_MetaData
+- uid: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Validation
+  name: Draft2019_09_Validation
+  href: api/Manatee.Json.Schema.MetaSchemas.html#Manatee_Json_Schema_MetaSchemas_Draft2019_09_Validation
+  commentId: F:Manatee.Json.Schema.MetaSchemas.Draft2019_09_Validation
+  fullName: Manatee.Json.Schema.MetaSchemas.Draft2019_09_Validation
+  nameWithType: MetaSchemas.Draft2019_09_Validation
 - uid: Manatee.Json.Schema.MetaSchemaValidationResults
   name: MetaSchemaValidationResults
   href: api/Manatee.Json.Schema.MetaSchemaValidationResults.html
@@ -18312,12 +18518,15 @@ references:
   commentId: T:Manatee.Json.Serialization.IResolver
   fullName: Manatee.Json.Serialization.IResolver
   nameWithType: IResolver
-- uid: Manatee.Json.Serialization.IResolver.Resolve(System.Type)
-  name: Resolve(Type)
-  href: api/Manatee.Json.Serialization.IResolver.html#Manatee_Json_Serialization_IResolver_Resolve_System_Type_
-  commentId: M:Manatee.Json.Serialization.IResolver.Resolve(System.Type)
-  fullName: Manatee.Json.Serialization.IResolver.Resolve(System.Type)
-  nameWithType: IResolver.Resolve(Type)
+- uid: Manatee.Json.Serialization.IResolver.Resolve(System.Type,System.Collections.Generic.Dictionary{Manatee.Json.Serialization.SerializationInfo,System.Object})
+  name: Resolve(Type, Dictionary<SerializationInfo, Object>)
+  href: api/Manatee.Json.Serialization.IResolver.html#Manatee_Json_Serialization_IResolver_Resolve_System_Type_System_Collections_Generic_Dictionary_Manatee_Json_Serialization_SerializationInfo_System_Object__
+  commentId: M:Manatee.Json.Serialization.IResolver.Resolve(System.Type,System.Collections.Generic.Dictionary{Manatee.Json.Serialization.SerializationInfo,System.Object})
+  name.vb: Resolve(Type, Dictionary(Of SerializationInfo, Object))
+  fullName: Manatee.Json.Serialization.IResolver.Resolve(System.Type, System.Collections.Generic.Dictionary<Manatee.Json.Serialization.SerializationInfo, System.Object>)
+  fullName.vb: Manatee.Json.Serialization.IResolver.Resolve(System.Type, System.Collections.Generic.Dictionary(Of Manatee.Json.Serialization.SerializationInfo, System.Object))
+  nameWithType: IResolver.Resolve(Type, Dictionary<SerializationInfo, Object>)
+  nameWithType.vb: IResolver.Resolve(Type, Dictionary(Of SerializationInfo, Object))
 - uid: Manatee.Json.Serialization.IResolver.Resolve*
   name: Resolve
   href: api/Manatee.Json.Serialization.IResolver.html#Manatee_Json_Serialization_IResolver_Resolve_
@@ -18325,15 +18534,6 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.IResolver.Resolve
   nameWithType: IResolver.Resolve
-- uid: Manatee.Json.Serialization.IResolver.Resolve``1
-  name: Resolve<T>()
-  href: api/Manatee.Json.Serialization.IResolver.html#Manatee_Json_Serialization_IResolver_Resolve__1
-  commentId: M:Manatee.Json.Serialization.IResolver.Resolve``1
-  name.vb: Resolve(Of T)()
-  fullName: Manatee.Json.Serialization.IResolver.Resolve<T>()
-  fullName.vb: Manatee.Json.Serialization.IResolver.Resolve(Of T)()
-  nameWithType: IResolver.Resolve<T>()
-  nameWithType.vb: IResolver.Resolve(Of T)()
 - uid: Manatee.Json.Serialization.ISerializer
   name: ISerializer
   href: api/Manatee.Json.Serialization.ISerializer.html
@@ -18991,6 +19191,90 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Serialization.SerializationContext.Source
   nameWithType: SerializationContext.Source
+- uid: Manatee.Json.Serialization.SerializationContext.ValueMap
+  name: ValueMap
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_ValueMap
+  commentId: P:Manatee.Json.Serialization.SerializationContext.ValueMap
+  fullName: Manatee.Json.Serialization.SerializationContext.ValueMap
+  nameWithType: SerializationContext.ValueMap
+- uid: Manatee.Json.Serialization.SerializationContext.ValueMap*
+  name: ValueMap
+  href: api/Manatee.Json.Serialization.SerializationContext.html#Manatee_Json_Serialization_SerializationContext_ValueMap_
+  commentId: Overload:Manatee.Json.Serialization.SerializationContext.ValueMap
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationContext.ValueMap
+  nameWithType: SerializationContext.ValueMap
+- uid: Manatee.Json.Serialization.SerializationInfo
+  name: SerializationInfo
+  href: api/Manatee.Json.Serialization.SerializationInfo.html
+  commentId: T:Manatee.Json.Serialization.SerializationInfo
+  fullName: Manatee.Json.Serialization.SerializationInfo
+  nameWithType: SerializationInfo
+- uid: Manatee.Json.Serialization.SerializationInfo.Equals(System.Object)
+  name: Equals(Object)
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_Equals_System_Object_
+  commentId: M:Manatee.Json.Serialization.SerializationInfo.Equals(System.Object)
+  fullName: Manatee.Json.Serialization.SerializationInfo.Equals(System.Object)
+  nameWithType: SerializationInfo.Equals(Object)
+- uid: Manatee.Json.Serialization.SerializationInfo.Equals*
+  name: Equals
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_Equals_
+  commentId: Overload:Manatee.Json.Serialization.SerializationInfo.Equals
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationInfo.Equals
+  nameWithType: SerializationInfo.Equals
+- uid: Manatee.Json.Serialization.SerializationInfo.GetHashCode
+  name: GetHashCode()
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_GetHashCode
+  commentId: M:Manatee.Json.Serialization.SerializationInfo.GetHashCode
+  fullName: Manatee.Json.Serialization.SerializationInfo.GetHashCode()
+  nameWithType: SerializationInfo.GetHashCode()
+- uid: Manatee.Json.Serialization.SerializationInfo.GetHashCode*
+  name: GetHashCode
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_GetHashCode_
+  commentId: Overload:Manatee.Json.Serialization.SerializationInfo.GetHashCode
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationInfo.GetHashCode
+  nameWithType: SerializationInfo.GetHashCode
+- uid: Manatee.Json.Serialization.SerializationInfo.MemberInfo
+  name: MemberInfo
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_MemberInfo
+  commentId: P:Manatee.Json.Serialization.SerializationInfo.MemberInfo
+  fullName: Manatee.Json.Serialization.SerializationInfo.MemberInfo
+  nameWithType: SerializationInfo.MemberInfo
+- uid: Manatee.Json.Serialization.SerializationInfo.MemberInfo*
+  name: MemberInfo
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_MemberInfo_
+  commentId: Overload:Manatee.Json.Serialization.SerializationInfo.MemberInfo
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationInfo.MemberInfo
+  nameWithType: SerializationInfo.MemberInfo
+- uid: Manatee.Json.Serialization.SerializationInfo.SerializationName
+  name: SerializationName
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_SerializationName
+  commentId: P:Manatee.Json.Serialization.SerializationInfo.SerializationName
+  fullName: Manatee.Json.Serialization.SerializationInfo.SerializationName
+  nameWithType: SerializationInfo.SerializationName
+- uid: Manatee.Json.Serialization.SerializationInfo.SerializationName*
+  name: SerializationName
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_SerializationName_
+  commentId: Overload:Manatee.Json.Serialization.SerializationInfo.SerializationName
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationInfo.SerializationName
+  nameWithType: SerializationInfo.SerializationName
+- uid: Manatee.Json.Serialization.SerializationInfo.ShouldTransform
+  name: ShouldTransform
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_ShouldTransform
+  commentId: P:Manatee.Json.Serialization.SerializationInfo.ShouldTransform
+  fullName: Manatee.Json.Serialization.SerializationInfo.ShouldTransform
+  nameWithType: SerializationInfo.ShouldTransform
+- uid: Manatee.Json.Serialization.SerializationInfo.ShouldTransform*
+  name: ShouldTransform
+  href: api/Manatee.Json.Serialization.SerializationInfo.html#Manatee_Json_Serialization_SerializationInfo_ShouldTransform_
+  commentId: Overload:Manatee.Json.Serialization.SerializationInfo.ShouldTransform
+  isSpec: "True"
+  fullName: Manatee.Json.Serialization.SerializationInfo.ShouldTransform
+  nameWithType: SerializationInfo.ShouldTransform
 - uid: Manatee.Json.Serialization.SerializerFactory
   name: SerializerFactory
   href: api/Manatee.Json.Serialization.SerializerFactory.html

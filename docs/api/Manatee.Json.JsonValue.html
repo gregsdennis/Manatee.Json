@@ -85,26 +85,11 @@
     <h5>Implements</h5>
     <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>&gt;</div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.html">Manatee.Json</a></h6>
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_JsonValue_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class JsonValue : IEquatable&lt;JsonValue&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class JsonValue : object, IEquatable&lt;JsonValue&gt;</code></pre>
   </div>
   <h5 id="Manatee_Json_JsonValue_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks"><p>A value can consist of a string, a numerical value, a boolean (true or false), a null
@@ -734,8 +719,6 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_GetHashCode.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -768,8 +751,6 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">System.Object.GetHashCode()</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_JsonValue_GetIndentedString_System_Int32_.md&amp;value=---%0Auid%3A%20Manatee.Json.JsonValue.GetIndentedString(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -865,7 +846,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>The JSON value represented by the <span class="xref">System.String</span>.</p>
+        <td><p>The JSON value represented by the <see cref="!:System.String"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -905,7 +886,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   </span>
   <a id="Manatee_Json_JsonValue_Parse_" data-uid="Manatee.Json.JsonValue.Parse*"></a>
   <h4 id="Manatee_Json_JsonValue_Parse_System_String_" data-uid="Manatee.Json.JsonValue.Parse(System.String)">Parse(String)</h4>
-  <div class="markdown level1 summary"><p>Parses a <span class="xref">System.String</span> containing a JSON value.</p>
+  <div class="markdown level1 summary"><p>Parses a <see cref="!:System.String"></see> containing a JSON value.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -925,7 +906,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">source</span></td>
-        <td><p>the <span class="xref">System.String</span> to parse.</p>
+        <td><p>the <see cref="!:System.String"></see> to parse.</p>
 </td>
       </tr>
     </tbody>
@@ -941,7 +922,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>The JSON value represented by the <span class="xref">System.String</span>.</p>
+        <td><p>The JSON value represented by the <see cref="!:System.String"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1017,7 +998,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>&gt;</td>
-        <td><p>The JSON value represented by the <span class="xref">System.String</span>.</p>
+        <td><p>The JSON value represented by the <see cref="!:System.String"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1080,8 +1061,6 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">System.Object.ToString()</span></div>
   <h5 id="Manatee_Json_JsonValue_ToString_remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>Passing the returned string back into the parser will result in a copy of this <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
 </div>
@@ -1280,7 +1259,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Boolean___Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Boolean})~Manatee.Json.JsonValue">Implicit(Nullable&lt;Boolean&gt; to JsonValue)</h4>
-  <div class="markdown level1 summary"><p>Implicitly converts a <span class="xref">System.Boolean</span> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+  <div class="markdown level1 summary"><p>Implicitly converts a <see cref="!:System.Boolean"></see> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1300,7 +1279,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
       <tr>
         <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
         <td><span class="parametername">b</span></td>
-        <td><p>A <span class="xref">System.Boolean</span>.</p>
+        <td><p>A <see cref="!:System.Boolean"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1316,7 +1295,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <span class="xref">System.Boolean</span>.</p>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <see cref="!:System.Boolean"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1344,7 +1323,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_System_Nullable_System_Double___Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.Nullable{System.Double})~Manatee.Json.JsonValue">Implicit(Nullable&lt;Double&gt; to JsonValue)</h4>
-  <div class="markdown level1 summary"><p>Implicitly converts a <span class="xref">System.Double</span> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+  <div class="markdown level1 summary"><p>Implicitly converts a <see cref="!:System.Double"></see> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1364,7 +1343,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
       <tr>
         <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
         <td><span class="parametername">n</span></td>
-        <td><p>A <span class="xref">System.Double</span>.</p>
+        <td><p>A <see cref="!:System.Double"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1380,7 +1359,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <span class="xref">System.Double</span>.</p>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <see cref="!:System.Double"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1408,7 +1387,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   </span>
   <a id="Manatee_Json_JsonValue_op_Implicit_" data-uid="Manatee.Json.JsonValue.op_Implicit*"></a>
   <h4 id="Manatee_Json_JsonValue_op_Implicit_System_String__Manatee_Json_JsonValue" data-uid="Manatee.Json.JsonValue.op_Implicit(System.String)~Manatee.Json.JsonValue">Implicit(String to JsonValue)</h4>
-  <div class="markdown level1 summary"><p>Implicitly converts a <span class="xref">System.String</span> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
+  <div class="markdown level1 summary"><p>Implicitly converts a <see cref="!:System.String"></see> into a <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1428,7 +1407,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">s</span></td>
-        <td><p>A <span class="xref">System.String</span>.</p>
+        <td><p>A <see cref="!:System.String"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1444,7 +1423,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a></td>
-        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <span class="xref">System.String</span>.</p>
+        <td><p>A <a class="xref" href="Manatee.Json.JsonValue.html">JsonValue</a> that represents the <see cref="!:System.String"></see>.</p>
 </td>
       </tr>
     </tbody>
@@ -1521,7 +1500,7 @@ placeholder, a JSON array of values, or a nested JSON object.</p>
   </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <span class="xref">System.IEquatable&lt;T&gt;</span>
+      <span class="xref">System.IEquatable&lt;&gt;</span>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
