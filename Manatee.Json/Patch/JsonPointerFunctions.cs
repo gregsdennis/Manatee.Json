@@ -46,7 +46,7 @@ namespace Manatee.Json.Patch
             return (parent, key, index, true);
         }
 
-        public static (JsonValue result, bool success) InsertValue(JsonValue json, string path, JsonValue value)
+        public static (JsonValue result, bool success) InsertValue(JsonValue json, string path, JsonValue value, bool insertAfter)
         {
             if (path == string.Empty) return (value, true);
             var parts = path.Split('/').Skip(1);
@@ -81,13 +81,32 @@ namespace Manatee.Json.Patch
                         index = Math.Max(0, current.Array.Count - 1);
 
                     var array = current.Array;
-                    var tempIndex = index;
-                    addValue = v =>
+                    if (key == "-" || index == current.Array.Count)
+                    {
+                        addValue = v =>
                         {
-                            if (tempIndex > array.Count) return false;
-                            array.Insert(tempIndex, v);
+                            array.Add(v);
                             return true;
                         };
+                    }
+                    else
+                    {
+                        var tempIndex = index;
+                        addValue = v =>
+                            {
+                                if (tempIndex > array.Count - 1) return false;
+                                array.Insert(tempIndex, v);
+
+                                if (insertAfter)
+                                {
+                                    var oldValue = array[tempIndex];
+                                    array[tempIndex] = array[tempIndex + 1];
+                                    array[tempIndex + 1] = oldValue;
+                                }
+
+                                return true;
+                            };
+                    }
 
                     current = index < current.Array.Count
                                   ? current.Array[index]

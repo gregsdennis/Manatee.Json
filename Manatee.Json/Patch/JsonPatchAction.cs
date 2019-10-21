@@ -76,7 +76,7 @@ namespace Manatee.Json.Patch
 
 		private JsonPatchResult _Add(JsonValue json)
 		{
-			var (result, success) = JsonPointerFunctions.InsertValue(json, Path, Value);
+			var (result, success) = JsonPointerFunctions.InsertValue(json, Path, Value, false);
 
 			if (!success) return new JsonPatchResult(json, "Could not add the value");
 			
@@ -85,29 +85,8 @@ namespace Manatee.Json.Patch
 
 		private JsonPatchResult _Remove(JsonValue json)
 		{
-			if (string.IsNullOrEmpty(Path))
-			{
-				json.Object.Clear();
-				return new JsonPatchResult(json);
-			}
-			
-			var (target, key, index, found) = JsonPointerFunctions.ResolvePointer(json, Path);
-			if (!found) return new JsonPatchResult(json, $"Path '{Path}' not found.");
-			
-			switch (target.Type)
-			{
-				case JsonValueType.Object:
-					target.Object.Remove(key);
-					break;
-				case JsonValueType.Array:
-					target.Array.RemoveAt(index);
-					break;
-				default:
-					return new JsonPatchResult(json, $"Cannot remove a value from a '{target.Type}'");
-			}
-
-			return new JsonPatchResult(json);
-		}
+            return _RemoveAtPath(json, Path);
+        }
 
 		private JsonPatchResult _Replace(JsonValue json)
 		{
@@ -119,16 +98,21 @@ namespace Manatee.Json.Patch
 		private JsonPatchResult _Move(JsonValue json)
 		{
 			// TODO: This isn't the most efficient way to do this, but it'll get the job done.
+            if(JsonPointer.Parse(From).Equals(JsonPointer.Parse(Path)))
+            {
+                return new JsonPatchResult(json);
+            }
+
 			var copy = _Copy(json);
-			return !copy.Success ? copy : _Remove(json);
+			return !copy.Success ? copy : _RemoveAtPath(json, From);
 		}
 
-		private JsonPatchResult _Copy(JsonValue json)
+        private JsonPatchResult _Copy(JsonValue json)
 		{
 			var results = JsonPointer.Parse(From).Evaluate(json);
 			if (results.Error != null) return new JsonPatchResult(json, results.Error);
 			
-			var (result, success) = JsonPointerFunctions.InsertValue(json, Path, results.Result);
+			var (result, success) = JsonPointerFunctions.InsertValue(json, Path, results.Result, true);
 			if (!success) return new JsonPatchResult(json, "Could not add the value");
 			
 			return new JsonPatchResult(result);
@@ -143,5 +127,31 @@ namespace Manatee.Json.Patch
 			
 			return new JsonPatchResult(json);
 		}
-	}
+
+        private JsonPatchResult _RemoveAtPath(JsonValue json, string path)
+        {
+            if (string.IsNullOrEmpty(Path))
+            {
+                json.Object.Clear();
+                return new JsonPatchResult(json);
+            }
+
+            var (target, key, index, found) = JsonPointerFunctions.ResolvePointer(json, path);
+            if (!found) return new JsonPatchResult(json, $"Path '{path}' not found.");
+
+            switch (target.Type)
+            {
+                case JsonValueType.Object:
+                    target.Object.Remove(key);
+                    break;
+                case JsonValueType.Array:
+                    target.Array.RemoveAt(index);
+                    break;
+                default:
+                    return new JsonPatchResult(json, $"Cannot remove a value from a '{target.Type}'");
+            }
+
+            return new JsonPatchResult(json);
+        }
+    }
 }
