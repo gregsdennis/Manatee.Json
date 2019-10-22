@@ -1,6 +1,6 @@
 If you find you need help with Manatee.Json you have several options:
 
-- Join the [Manatee Open Source Slack workspace](https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWQ0ODM5ZTVhMTVhODY1Mjk5MTIxMjgxZjI2NWRiZWZkYmExMDM0MDRjNGE4OWRkMjYxMTc1M2ViMTZiYzM0OTI).
+- Join the [Manatee Open Source Slack workspace](https://join.slack.com/t/manateeopensource/shared_invite/enQtMzU4MjgzMjgyNzU3LWZjYzAzYzY3NjY1MjY3ODI0ZGJiZjc3Nzk1MDM5NTNlMjMyOTE0MzMxYWVjMjdiOGU1NDY5OGVhMGQ5YzY4Zjg).
 - Post a question on [StackOverflow](http://www.stackoverflow.com) (be sure to add the tag **Manatee.Json**), or
 - Email me at my GitHub username at yahoo.
 
