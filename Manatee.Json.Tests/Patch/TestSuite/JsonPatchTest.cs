@@ -19,7 +19,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 		public JsonValue ExpectedValue { get; set; }
 		public bool HasExpectedValue { get; set; }
 		public bool ExpectsError { get; set; }
-        public string Comment { get; set; }
+		public string Comment { get; set; }
 		public JsonPatch Patch { get; set; }
 		public bool Disabled { get; set; }
 		
@@ -28,13 +28,13 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 			var obj = json.Object;
 			Comment = obj.TryGetString("comment");
 			Doc = obj["doc"];
-            if (obj.ContainsKey("expected"))
-            {
-                HasExpectedValue = true;
-                ExpectedValue = obj["expected"];
-            }
-            else
-                HasExpectedValue = false;
+			if (obj.ContainsKey("expected"))
+			{
+				HasExpectedValue = true;
+				ExpectedValue = obj["expected"];
+			}
+			else
+				HasExpectedValue = false;
 			ExpectsError = !string.IsNullOrWhiteSpace(obj.TryGetString("error"));
 			Patch = serializer.Deserialize<JsonPatch>(obj["patch"]);
 			Disabled = obj.TryGetBoolean("disabled") ?? false;

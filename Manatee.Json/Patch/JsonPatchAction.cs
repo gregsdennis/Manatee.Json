@@ -85,8 +85,8 @@ namespace Manatee.Json.Patch
 
 		private JsonPatchResult _Remove(JsonValue json)
 		{
-            return _RemoveAtPath(json, Path);
-        }
+			return _RemoveAtPath(json, Path);
+		}
 
 		private JsonPatchResult _Replace(JsonValue json)
 		{
@@ -98,16 +98,16 @@ namespace Manatee.Json.Patch
 		private JsonPatchResult _Move(JsonValue json)
 		{
 			// TODO: This isn't the most efficient way to do this, but it'll get the job done.
-            if(JsonPointer.Parse(From).Equals(JsonPointer.Parse(Path)))
-            {
-                return new JsonPatchResult(json);
-            }
+			if(JsonPointer.Parse(From).Equals(JsonPointer.Parse(Path)))
+			{
+				return new JsonPatchResult(json);
+			}
 
 			var copy = _Copy(json);
 			return !copy.Success ? copy : _RemoveAtPath(json, From);
 		}
 
-        private JsonPatchResult _Copy(JsonValue json)
+		private JsonPatchResult _Copy(JsonValue json)
 		{
 			var results = JsonPointer.Parse(From).Evaluate(json);
 			if (results.Error != null) return new JsonPatchResult(json, results.Error);
@@ -128,30 +128,30 @@ namespace Manatee.Json.Patch
 			return new JsonPatchResult(json);
 		}
 
-        private JsonPatchResult _RemoveAtPath(JsonValue json, string path)
-        {
-            if (string.IsNullOrEmpty(Path))
-            {
-                json.Object.Clear();
-                return new JsonPatchResult(json);
-            }
+		private JsonPatchResult _RemoveAtPath(JsonValue json, string path)
+		{
+			if (string.IsNullOrEmpty(Path))
+			{
+				json.Object.Clear();
+				return new JsonPatchResult(json);
+			}
 
-            var (target, key, index, found) = JsonPointerFunctions.ResolvePointer(json, path);
-            if (!found) return new JsonPatchResult(json, $"Path '{path}' not found.");
+			var (target, key, index, found) = JsonPointerFunctions.ResolvePointer(json, path);
+			if (!found) return new JsonPatchResult(json, $"Path '{path}' not found.");
 
-            switch (target.Type)
-            {
-                case JsonValueType.Object:
-                    target.Object.Remove(key);
-                    break;
-                case JsonValueType.Array:
-                    target.Array.RemoveAt(index);
-                    break;
-                default:
-                    return new JsonPatchResult(json, $"Cannot remove a value from a '{target.Type}'");
-            }
+			switch (target.Type)
+			{
+				case JsonValueType.Object:
+					target.Object.Remove(key);
+					break;
+				case JsonValueType.Array:
+					target.Array.RemoveAt(index);
+					break;
+				default:
+					return new JsonPatchResult(json, $"Cannot remove a value from a '{target.Type}'");
+			}
 
-            return new JsonPatchResult(json);
-        }
-    }
+			return new JsonPatchResult(json);
+		}
+	}
 }
