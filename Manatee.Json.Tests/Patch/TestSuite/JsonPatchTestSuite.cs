@@ -34,7 +34,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 				{
 					var testDescription = test.Object.TryGetString("comment") ?? "UNNAMED TEST";
 					var testName = testDescription.Replace(' ', '_');
-					yield return new TestCaseData(fileName, test) {TestName = testName};
+					yield return new TestCaseData(fileName, test) { TestName = testName };
 				}
 			}
 
@@ -72,6 +72,7 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 					result = test.Patch.TryApply(test.Doc);
 
 					Assert.AreNotEqual(test.ExpectsError, result.Success);
+
 					if (test.HasExpectedValue)
 						Assert.AreEqual(test.ExpectedValue, result.Patched);
 				}
