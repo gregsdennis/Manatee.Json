@@ -1,3 +1,11 @@
+# 11.0.3
+
+*Released on 26 Oct, 2019*
+
+<span id="patch">patch</span>
+
+([#226](https://github.com/gregsdennis/Manatee.Json/pulls/226)) Fixes for JSON Patch move and add operations.
+
 # 11.0.2
 
 *Released on 14 Oct, 2019*
