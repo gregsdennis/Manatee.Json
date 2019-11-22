@@ -462,5 +462,47 @@ namespace Manatee.Json.Tests.Schema
 
 			Assert.Throws<SchemaReferenceNotFoundException>(() => schema.Validate(json));
 		}
+
+		[Test]
+		public void Issue231_ReferenceNotFoundExceptionOnValidRef()
+		{
+			var schema = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Id("http://localhost/Resistance.schema.json")
+				.Type(JsonSchemaType.Object)
+				.Definition("1DVector", new JsonSchema()
+					            .Id("#1DVector")
+					            .Type(JsonSchemaType.Array)
+					            .MinItems(1)
+					            .Items(new JsonSchema()
+						                   .AnyOf(new JsonSchema().Type(JsonSchemaType.Number),
+						                          new JsonSchema().Type(JsonSchemaType.Null))
+						                   .Default(JsonValue.Null))
+					            .Examples(1.1, 2.3, 4.5))
+				.Definition("t_PulseTimePeriod", new JsonSchema()
+					            .Id("#t_PulseTimePeriod")
+					            .Type(JsonSchemaType.Object)
+					            .Title("The t_PulseTimePeriod Schema")
+					            .Required("values")
+					            .Property("values", new JsonSchema().Ref("#/definitions/1DVector")))
+				.Required("t_PulseTimePeriod")
+				.Property("t_PulseTimePeriod", new JsonSchema().Ref("#t_PulseTimePeriod"))
+				.AdditionalProperties(false);
+
+			var instance = new JsonObject {["t_PulseTimePeriod"] = new JsonObject {["values"] = new JsonArray()}};
+
+			var format = JsonSchemaOptions.OutputFormat;
+			try
+			{
+				JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
+				var result = schema.Validate(instance);
+
+				result.AssertInvalid();
+			}
+			finally
+			{
+				JsonSchemaOptions.OutputFormat = format;
+			}
+		}
 	}
 }

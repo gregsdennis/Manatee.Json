@@ -48,7 +48,7 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+			var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 
 			var valid = true;

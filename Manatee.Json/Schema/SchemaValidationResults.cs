@@ -76,7 +76,7 @@ namespace Manatee.Json.Schema
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
 			if (context.BaseUri != null && context.BaseRelativeLocation != null)
-				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation.ToString(), UriKind.RelativeOrAbsolute);
+				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation?.ToString(), UriKind.RelativeOrAbsolute);
 			RelativeLocation = context.RelativeLocation;
 		}
 		/// <summary>
@@ -88,7 +88,7 @@ namespace Manatee.Json.Schema
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
 			if (context.BaseUri != null && context.BaseRelativeLocation != null)
-				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation.CloneAndAppend(keyword).ToString(), UriKind.RelativeOrAbsolute);
+				AbsoluteLocation = new Uri(context.BaseUri + context.BaseRelativeLocation?.CloneAndAppend(keyword).ToString(), UriKind.RelativeOrAbsolute);
 			RelativeLocation = context.RelativeLocation.CloneAndAppend(keyword);
 			Keyword = keyword;
 		}

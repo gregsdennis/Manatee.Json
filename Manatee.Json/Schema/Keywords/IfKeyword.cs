@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 
 			var newContext = new SchemaValidationContext(context)
 				{
-					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+					BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 				};
 
@@ -75,7 +75,7 @@ namespace Manatee.Json.Schema
 
 				newContext = new SchemaValidationContext(context)
 					{
-						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(then.Name),
+						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(then.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(then.Name),
 					};
 				var thenResults = then.Value.Validate(newContext);
@@ -98,7 +98,7 @@ namespace Manatee.Json.Schema
 
 				newContext = new SchemaValidationContext(context)
 					{
-						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(@else.Name),
+						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(@else.Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(@else.Name),
 					};
 				var elseResults = @else.Value.Validate(newContext);

@@ -60,7 +60,7 @@ namespace Manatee.Json.Schema
 
 			var newContext = new SchemaValidationContext(context)
 				{
-					BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(PropertyName),
+					BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(PropertyName),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(PropertyName),
 				};
 

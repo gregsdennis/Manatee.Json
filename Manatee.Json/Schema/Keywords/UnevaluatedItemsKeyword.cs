@@ -86,7 +86,7 @@ namespace Manatee.Json.Schema
 				var index = 0;
 				foreach (var item in eligibleItems)
 				{
-					var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 					var newContext = new SchemaValidationContext(context)
 						{

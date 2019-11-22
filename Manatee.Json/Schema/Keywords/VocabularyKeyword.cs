@@ -119,7 +119,7 @@ namespace Manatee.Json.Schema
 				{
 					var newContext = new SchemaValidationContext(context)
 						{
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, vocabulary.Id),
+							BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, vocabulary.Id),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, vocabulary.Id),
 						};
 					var metaSchema = JsonSchemaRegistry.Get(vocabulary.MetaSchemaId);

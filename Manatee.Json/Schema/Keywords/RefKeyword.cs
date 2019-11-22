@@ -164,7 +164,7 @@ namespace Manatee.Json.Schema
 
 			var documentPath = context.BaseUri;
 			var referenceParts = Reference.Split(new[] { '#' }, StringSplitOptions.None);
-			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? documentPath?.OriginalString : referenceParts[0];
+			var address = string.IsNullOrWhiteSpace(referenceParts[0]) ? documentPath?.OriginalString.Split('#')[0] : referenceParts[0];
 			_resolvedFragment = referenceParts.Length > 1 ? JsonPointer.Parse(referenceParts[1]) : new JsonPointer();
 			if (!string.IsNullOrWhiteSpace(address))
 			{
