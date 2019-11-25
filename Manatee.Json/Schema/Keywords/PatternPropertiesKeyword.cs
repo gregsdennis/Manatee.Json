@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 				var pattern = new Regex(patternProperty.Key);
 				var localSchema = patternProperty.Value;
 				var matches = obj.Keys.Where(k => pattern.IsMatch(k));
-				var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, patternProperty.Key);
+				var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, patternProperty.Key);
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
 				foreach (var match in matches)
 				{

@@ -69,7 +69,7 @@ namespace Manatee.Json.Schema
 					var newContext = new SchemaValidationContext(context)
 						{
 							Instance = array[i],
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, i.ToString()),
+							BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, i.ToString()),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
 						};
@@ -94,7 +94,7 @@ namespace Manatee.Json.Schema
 			else
 			{
 				// have single schema: validate all against this
-				var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+				var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 				var valid = true;
 				var i = 0;

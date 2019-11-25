@@ -87,7 +87,7 @@ namespace Manatee.Json.Schema
 				var newContext = new SchemaValidationContext(context)
 					{
 						Instance = kvp.Value,
-						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name),
+						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
 					};

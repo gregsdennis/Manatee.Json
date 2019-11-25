@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.String) return new SchemaValidationResults(Name, context);
 
-			var baseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name);
+			var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 			var nestedResult = Value.Validate(new SchemaValidationContext(context)
 				{
