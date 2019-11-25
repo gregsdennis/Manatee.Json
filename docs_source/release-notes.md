@@ -1,6 +1,6 @@
 # 11.0.4
 
-*Released on 26 Oct, 2019*
+*Released on XX Nov, 2019*
 
 <span id="patch">patch</span>
 
