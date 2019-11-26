@@ -65,6 +65,8 @@ namespace Manatee.Json.Schema
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
 				foreach (var match in matches)
 				{
+					context.EvaluatedPropertyNames.Add(match);
+					context.LocallyEvaluatedPropertyNames.Add(match);
 					var newContext = new SchemaValidationContext(context)
 						{
 							Instance = obj[match],
@@ -74,8 +76,8 @@ namespace Manatee.Json.Schema
 						};
 					var localResults = localSchema.Validate(newContext);
 					valid &= localResults.IsValid;
-					context.EvaluatedPropertyNames.Add(match);
-					context.LocallyEvaluatedPropertyNames.Add(match);
+					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{

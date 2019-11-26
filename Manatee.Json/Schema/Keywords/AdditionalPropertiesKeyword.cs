@@ -91,6 +91,8 @@ namespace Manatee.Json.Schema
 
 			foreach (var kvp in toEvaluate)
 			{
+				context.EvaluatedPropertyNames.Add(kvp.Key);
+				context.LocallyEvaluatedPropertyNames.Add(kvp.Key);
 				var newContext = new SchemaValidationContext(context)
 					{
 						Instance = kvp.Value,
@@ -99,6 +101,8 @@ namespace Manatee.Json.Schema
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
 					};
 				var localResults = Value.Validate(newContext);
+				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 				valid &= localResults.IsValid;
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
