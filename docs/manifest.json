@@ -45,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Internal.DeserializationUseOnlyAttribute.html",
-          "hash": "VHubCypBvOWYKfRAEJUR+A=="
+          "hash": "y2Ugqnaw/GvyQJCBejSJSQ=="
         }
       },
       "is_incremental": false,
@@ -429,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.AdditionalPropertiesKeyword.html",
-          "hash": "fOR1f4YRfwn7x4grsTUhWA=="
+          "hash": "ns3Yj/gdHqVK1osAzaouAw=="
         }
       },
       "is_incremental": false,
@@ -1101,7 +1101,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.PatternPropertiesKeyword.html",
-          "hash": "CT1d/nb59peom+PCdbr87A=="
+          "hash": "2Sum8MZw7sBsfXUbyJGr2w=="
         }
       },
       "is_incremental": false,
@@ -1113,7 +1113,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Manatee.Json.Schema.PropertiesKeyword.html",
-          "hash": "DHPh4DieF+9Il5PDRbTVwA=="
+          "hash": "DD/z9yQpOCngodEV9a/OVw=="
         }
       },
       "is_incremental": false,
@@ -1880,7 +1880,7 @@
       "output": {
         ".html": {
           "relative_path": "release-notes.html",
-          "hash": "aeSL0d2k7rwGI/vwD2u+kQ=="
+          "hash": "5XcWTVTdcp1/dg4uc8d7LQ=="
         }
       },
       "is_incremental": false,
@@ -1977,6 +1977,18 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "usage/schema/references.md",
+      "output": {
+        ".html": {
+          "relative_path": "usage/schema/references.html",
+          "hash": "6RAJa3KeMkPR/Tp33DOQdg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "log_codes": [
         "InvalidFileLink"
       ],
@@ -2045,7 +2057,7 @@
       "output": {
         ".html": {
           "relative_path": "usage/toc.html",
-          "hash": "qS/oXAwP0siLbu5IYTz76w=="
+          "hash": "PZOqA9YHSYKOuyyB+89Vvw=="
         }
       },
       "is_incremental": false,
@@ -2078,7 +2090,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 16,
+          "total_file_count": 17,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
