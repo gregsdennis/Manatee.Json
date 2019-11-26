@@ -6,6 +6,8 @@
 
 ([#231](https://github.com/gregsdennis/Manatee.Json/pulls/231)) `$ref` throwing `SchemaNotFoundException` when `$id` is an anchor-type reference in drafts 07 and earlier.  (These are disallowed for draft 2019-09.  The functionality was split out to the `$anchor` keyword.)
 
+Fixed an issue where not all evaluated properties were being reported to be used by `unevaluatedProperties`.  This came out of a JSON Schema Slack conversation.
+
 # 11.0.3
 
 *Released on 26 Oct, 2019*
