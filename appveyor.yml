@@ -35,7 +35,7 @@
     artifact: /.*\.nupkg/
     on:
       branch: master
-  on_success:
+  after_deploy:
     # Switch branches to gh-pages, clean the folder, copy everything in from the Wyam output, and commit/push
     # See http://www.appveyor.com/docs/how-to/git-push for more info
     - git config --global credential.helper store
