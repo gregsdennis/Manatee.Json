@@ -8,7 +8,7 @@ namespace Manatee.Json.Internal
 
 		public static MultiSetComparer<T> Default { get; } = new MultiSetComparer<T>();
 
-		public MultiSetComparer(IEqualityComparer<T>? comparer = null)
+		public MultiSetComparer(IEqualityComparer<T> comparer = null)
 		{
 			_comparer = comparer ?? EqualityComparer<T>.Default;
 		}
