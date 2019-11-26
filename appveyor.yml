@@ -8,8 +8,8 @@
     - docs/**/*
   image: Visual Studio 2019
   environment:
-    access_token:
-      secure: J0rJCR/NgyzYYG2Gi4yZm6CSSogyFgZN0GQ20H/Jtmpjb+Hjbb4K7gDoPh26hAmX
+    gh_access_token:
+      secure: jm9ZkMmKGxetJfX6wsjFYUYiLhsX1yC7185wYdFHLicXGUD+vm5ywPNfK3mWSPzk
 
   build:
     project: Manatee.Json.sln
@@ -42,7 +42,7 @@
     # EDIT your Git email and name
     - git config --global user.email gregsdennis@yahoo.com
     - git config --global user.name "Greg Dennis"
-    - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+    - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:gh_access_token):x-oauth-basic@github.com`n"
     - cmd: build-docs.bat
     # EDIT the origin of your repository - have to reset it here because AppVeyor pulls from SSH, but GitHub won't accept SSH pushes
     - git remote set-url origin https://github.com/gregsdennis/Manatee.Json.git
