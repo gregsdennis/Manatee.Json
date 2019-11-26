@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to JSON, including its structure, serialization, JSON Schema, JSON Path, JSON Pointer, and JSON Patch.</Description>
-    <Version>11.0.3</Version>
+    <Version>11.0.4</Version>
     <Copyright>Copyright © 2019 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://gregsdennis.github.io/Manatee.Json/</PackageProjectUrl>
@@ -14,12 +14,15 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>11.0.3.0</FileVersion>
+    <FileVersion>11.0.4.0</FileVersion>
     <AssemblyVersion>11.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
-    <TargetFrameworkIdentifier>.NETStandard</TargetFrameworkIdentifier>
   </PropertyGroup>
+
+  <!--<PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
+  </PropertyGroup>-->
 
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Manatee.Json.xml</DocumentationFile>

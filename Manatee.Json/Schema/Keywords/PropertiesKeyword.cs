@@ -63,11 +63,13 @@ namespace Manatee.Json.Schema
 				var newContext = new SchemaValidationContext(context)
 					{
 						Instance = obj[property.Key],
-						BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, property.Key),
+						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, property.Key),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, property.Key),
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key),
 					};
 				var localResults = property.Value.Validate(newContext);
+				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 				valid &= localResults.IsValid;
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)

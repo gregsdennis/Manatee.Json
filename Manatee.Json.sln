@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
 	ProjectSection(SolutionItems) = preProject
-		build.bat = build.bat
+		appveyor.yml = appveyor.yml
 		Local.testsettings = Local.testsettings
 		README.md = README.md
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests.Benchmar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{D9D06EE8-22B1-4A7B-8B42-412E99AB3370}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Console", "Manatee.Json.Console\Manatee.Json.Console.csproj", "{1D5B51CF-0132-4CD2-8723-D89FAD373AC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Console", "Manatee.Json.Console\Manatee.Json.Console.csproj", "{1D5B51CF-0132-4CD2-8723-D89FAD373AC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
