@@ -18,7 +18,6 @@
     <AssemblyVersion>11.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <!--<PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
