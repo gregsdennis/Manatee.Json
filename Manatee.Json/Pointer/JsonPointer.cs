@@ -37,7 +37,6 @@ namespace Manatee.Json.Pointer
 			: base(source.SkipWhile(s => s == "#"))
 		{
 			_usesHash = source.FirstOrDefault() == "#";
-
 		}
 
 		/// <summary>
@@ -73,7 +72,7 @@ namespace Manatee.Json.Pointer
 		public PointerEvaluationResults Evaluate(JsonValue root)
 		{
 			var upTo = new JsonPointer();
-			var current = root;
+			JsonValue? current = root;
 			foreach (var segment in this)
 			{
 				upTo.Add(segment);
@@ -132,7 +131,7 @@ namespace Manatee.Json.Pointer
 			return new JsonPointer(this) {_usesHash = true};
 		}
 
-		private static JsonValue _EvaluateSegment(JsonValue current, string segment)
+		private static JsonValue? _EvaluateSegment(JsonValue current, string segment)
 		{
 			if (current.Type == JsonValueType.Array)
 			{
@@ -197,7 +196,7 @@ namespace Manatee.Json.Pointer
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(JsonPointer other)
+		public bool Equals(JsonPointer? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -207,7 +206,7 @@ namespace Manatee.Json.Pointer
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as JsonPointer);
 		}

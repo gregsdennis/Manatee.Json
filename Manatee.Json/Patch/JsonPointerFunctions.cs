@@ -6,15 +6,15 @@ namespace Manatee.Json.Patch
 {
     internal static class JsonPointerFunctions
     {
-        private static readonly ValueTuple<JsonValue, string, int, bool> _empty = (null, null, -1, false);
+        private static readonly ValueTuple<JsonValue?, string?, int, bool> _empty = (null, null, -1, false);
         
-        public static (JsonValue parent, string key, int index, bool success) ResolvePointer(JsonValue json, string path)
+        public static (JsonValue? parent, string? key, int index, bool success) ResolvePointer(JsonValue json, string path)
         {
             if (path == string.Empty) return _empty;
             var parts = path.Split('/').Skip(1);
-            JsonValue parent = null;
+            JsonValue? parent = null;
             var current = json;
-            string key = null;
+            string? key = null;
             int index = -1;
             foreach (var part in parts)
             {
@@ -46,12 +46,12 @@ namespace Manatee.Json.Patch
             return (parent, key, index, true);
         }
 
-        public static (JsonValue result, bool success) InsertValue(JsonValue json, string path, JsonValue value, bool insertAfter)
+        public static (JsonValue? result, bool success) InsertValue(JsonValue json, string path, JsonValue value, bool insertAfter)
         {
             if (path == string.Empty) return (value, true);
             var parts = path.Split('/').Skip(1);
-            var current = json;
-            Func<JsonValue, bool> addValue = null;
+            JsonValue? current = json;
+            Func<JsonValue, bool>? addValue = null;
             foreach (var part in parts)
             {
                 var key = part.UnescapePointer();
