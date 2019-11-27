@@ -24,19 +24,19 @@ namespace Manatee.Json.Path.SearchParameters
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return $"[{_query}]";
 		}
 
-		public bool Equals(ArraySearchParameter other)
+		public bool Equals(ArraySearchParameter? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(_query, other._query);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as ArraySearchParameter);
 		}

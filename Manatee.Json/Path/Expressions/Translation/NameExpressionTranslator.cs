@@ -15,19 +15,10 @@ namespace Manatee.Json.Path.Expressions.Translation
 			var parameter = method.Arguments.Last() as ConstantExpression;
 			if (parameter == null || parameter.Type != typeof (string))
 			{
-				return new NameExpression<T>
-				{
-					Path = BuildPath(method, out isLocal),
-					IsLocal = isLocal,
-					NameExp = ExpressionTranslator.TranslateNode<T>(method.Arguments.Last())
-				};
+				return new NameExpression<T>(BuildPath(method, out isLocal), isLocal, ExpressionTranslator.TranslateNode<T>(method.Arguments.Last()));
 			}
-			return new NameExpression<T>
-				{
-					Path = BuildPath(method, out isLocal),
-					IsLocal = isLocal,
-					Name = (string)parameter.Value
-				};
+
+			return new NameExpression<T>(BuildPath(method, out isLocal), isLocal, (string) parameter.Value);
 		}
 	}
 }

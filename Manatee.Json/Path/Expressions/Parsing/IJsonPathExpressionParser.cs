@@ -1,9 +1,11 @@
-﻿namespace Manatee.Json.Path.Expressions.Parsing
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Manatee.Json.Path.Expressions.Parsing
 {
 	internal interface IJsonPathExpressionParser
 	{
 		bool Handles(string input, int index);
 
-		string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression);
+		bool TryParse<TIn>(string source, ref int index, [NotNullWhen(true)] out JsonPathExpression? expression, [NotNullWhen(false)] out string? errorMessage);
 	}
 }

@@ -4,6 +4,6 @@
 	{
 		bool Handles(string input, int index);
 
-		string TryParse(string source, ref int index, ref JsonPath path);
+		bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage);
 	}
 }

@@ -25,7 +25,7 @@ namespace Manatee.Json.Patch
                     index = key == "-" ? int.MaxValue : -1;
                 if (current.Type == JsonValueType.Object)
                 {
-                    if (!current.Object.TryGetValue(key, out JsonValue found)) return _empty;
+                    if (!current.Object.TryGetValue(key, out var found)) return _empty;
 
                     parent = current;
                     current = found;

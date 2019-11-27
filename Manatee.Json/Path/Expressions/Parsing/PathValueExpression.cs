@@ -2,10 +2,9 @@
 {
 	internal class PathValueExpression<T> : ValueExpression
 	{
-		public PathExpression<T> Path
-		{
-			get { return (PathExpression<T>) Value; }
-			set { Value = value; }
-		}
+		public PathValueExpression(object value)
+			: base(value) { }
+
+		public PathExpression<T> Path => (PathExpression<T>) Value;
 	}
 }

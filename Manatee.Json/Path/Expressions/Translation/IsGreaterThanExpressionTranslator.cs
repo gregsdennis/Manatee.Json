@@ -10,11 +10,8 @@ namespace Manatee.Json.Path.Expressions.Translation
 			var equal = body as BinaryExpression;
 			if (equal == null)
 				throw new InvalidOperationException();
-			return new IsGreaterThanExpression<T>
-				{
-					Left = ExpressionTranslator.TranslateNode<T>(equal.Left),
-					Right = ExpressionTranslator.TranslateNode<T>(equal.Right)
-				};
+			return new IsGreaterThanExpression<T>(ExpressionTranslator.TranslateNode<T>(equal.Left),
+			                                      ExpressionTranslator.TranslateNode<T>(equal.Right));
 		}
 	}
 }

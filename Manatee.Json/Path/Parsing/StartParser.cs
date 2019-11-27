@@ -7,13 +7,18 @@
 			return input[index] == '$' || input[index] == '@';
 		}
 
-		public string TryParse(string source, ref int index, ref JsonPath path)
+		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
 		{
-			if (path != null) return "Start token not valid in the middle of path.";
+			if (path != null)
+			{
+				errorMessage = "Start token not valid in the middle of path.";
+				return false;
+			}
 
 			path = new JsonPath();
 			index++;
-			return null;
+			errorMessage = null!;
+			return true;
 		}
 	}
 }

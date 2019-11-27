@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Manatee.Json.Internal;
@@ -19,36 +20,31 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			                                           .ToList();
 		}
 
-		public static string Parse<T, TIn>(string source, ref int index, out Expression<T, TIn> expr)
+		public static bool TryParse<T, TIn>(string source, ref int index, [NotNullWhen(true)] out Expression<T, TIn>? expr, [NotNullWhen(false)] out string? errorMessage)
 		{
-			var error = _Parse(source, ref index, out ExpressionTreeNode<TIn> root);
-
-			if (error != null)
+			if (!_TryParse<TIn>(source, ref index, out var root, out errorMessage))
 			{
-				expr = null;
-				return error;
-			}
-			if (root == null)
-			{
-				expr = null;
-				return "No expression found.";
+				expr = null!;
+				return false;
 			}
 
 			expr = new Expression<T, TIn>(root);
-			return null;
+			return true;
 		}
 
-		private static string _Parse<TIn>(string source, ref int index, out ExpressionTreeNode<TIn> root)
+		private static bool _TryParse<TIn>(string source, ref int index, [NotNullWhen(true)] out ExpressionTreeNode<TIn>? root, [NotNullWhen(false)] out string? errorMessage)
 		{
-			root = null;
-
 			var context = new JsonPathExpressionContext();
 			while (index < source.Length)
 			{
-				var errorMessage = source.SkipWhiteSpace(ref index, source.Length, out _);
-				if (errorMessage != null) return errorMessage;
+				errorMessage = source.SkipWhiteSpace(ref index, source.Length, out _);
+				if (errorMessage != null)
+				{
+					root = null!;
+					return false;
+				}
 
-				IJsonPathExpressionParser foundParser = null;
+				IJsonPathExpressionParser? foundParser = null;
 				foreach (var parser in _parsers)
 				{
 					if (parser.Handles(source, index))
@@ -58,11 +54,19 @@ namespace Manatee.Json.Path.Expressions.Parsing
 					}
 				}
 
-				if (foundParser == null) return "Unrecognized JSON Path Expression element.";
-				errorMessage = foundParser.TryParse<TIn>(source, ref index, out var expression);
-				if (errorMessage != null) return errorMessage;
-				if (expression == null)
-					break;
+				if (foundParser == null)
+				{
+					root = null!;
+					errorMessage = "Unrecognized JSON Path Expression element.";
+					return false;
+				}
+
+				if (!foundParser.TryParse<TIn>(source, ref index, out var expression, out errorMessage))
+				{
+					root = null!;
+					return false;
+				}
+				if (expression == null) break;
 
 				//
 				// Implements the Shunting-yard Algorithm
@@ -101,8 +105,12 @@ namespace Manatee.Json.Path.Expressions.Parsing
 						}
 
 						if (context.Operators.Count == 0
-							|| context.Operators.Pop().Operator != JsonPathOperator.GroupStart)
-							return "Unbalanced parentheses.";
+						    || context.Operators.Pop().Operator != JsonPathOperator.GroupStart)
+						{
+							errorMessage = "Unbalanced parentheses.";
+							root = null!;
+							return false;
+						}
 					}
 					else
 					{
@@ -154,7 +162,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			}
 
 			// Convert the expression into an ExpressionTreeNode
-			return context.CreateExpressionTreeNode(out root);
+			return context.TryCreateExpressionTreeNode(out root, out errorMessage);
 		}
 
 		private static void _GetRequiredChildrenFromOutput(JsonPathExpressionContext context, OperatorExpression expr)

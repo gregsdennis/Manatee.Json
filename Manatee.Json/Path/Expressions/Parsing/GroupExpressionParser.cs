@@ -6,11 +6,12 @@
 		{
 			return input[index] == '(';
 		}
-		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
+		public bool TryParse<TIn>(string source, ref int index, out JsonPathExpression? expression, out string? errorMessage)
 		{
 			index += 1;
-			expression = new OperatorExpression { Operator = JsonPathOperator.GroupStart };
-			return null;
+			expression = new OperatorExpression {Operator = JsonPathOperator.GroupStart};
+			errorMessage = null!;
+			return true;
 		}
 	}
 }

@@ -12,11 +12,18 @@
 			       input[index + 2] == ']';
 		}
 
-		public string TryParse(string source, ref int index, ref JsonPath path)
+		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
 		{
+			if (path == null)
+			{
+				errorMessage = "Start token not found.";
+				return false;
+			}
+	
 			path = path.Array();
 			index += 3;
-			return null;
+			errorMessage = null!;
+			return true;
 		}
 	}
 }

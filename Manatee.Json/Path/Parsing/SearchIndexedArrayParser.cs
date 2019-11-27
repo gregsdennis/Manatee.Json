@@ -15,16 +15,19 @@ namespace Manatee.Json.Path.Parsing
 			       (char.IsDigit(input[index + 3]) || input[index + 3] == '-' || input[index + 3] == ':');
 		}
 
-		public string TryParse(string source, ref int index, ref JsonPath path)
+		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
 		{
-			if (path == null) return "Start token not found.";
+			if (path == null)
+			{
+				errorMessage = "Start token not found.";
+				return false;
+			}
 
 			index += 2;
-			var error = source.GetSlices(ref index, out var slices);
-			if (error != null) return error;
+			if (!source.TryGetSlices(ref index, out var slices, out errorMessage)) return false;
 
 			path = path.SearchArray(slices.ToArray());
-			return null;
+			return true;
 		}
 	}
 }

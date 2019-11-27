@@ -35,17 +35,17 @@ namespace Manatee.Json.Path.Operators
 			}
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return ".*";
 		}
 
-		public bool Equals(WildCardOperator other)
+		public bool Equals(WildCardOperator? other)
 		{
 			return !ReferenceEquals(null, other);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as WildCardOperator);
 		}

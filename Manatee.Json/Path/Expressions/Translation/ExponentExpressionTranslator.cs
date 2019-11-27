@@ -7,14 +7,11 @@ namespace Manatee.Json.Path.Expressions.Translation
 	{
 		public ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
-			var add = body as BinaryExpression;
-			if (add == null)
+			var exp = body as BinaryExpression;
+			if (exp == null)
 				throw new InvalidOperationException();
-			return new ExponentExpression<T>
-				{
-					Left = ExpressionTranslator.TranslateNode<T>(add.Left),
-					Right = ExpressionTranslator.TranslateNode<T>(add.Right)
-				};
+			return new ExponentExpression<T>(ExpressionTranslator.TranslateNode<T>(exp.Left),
+			                                 ExpressionTranslator.TranslateNode<T>(exp.Right));
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to follow.</param>
 		/// <returns>A new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="Length()"/></remarks>
-		public static JsonPath Name(string name = null)
+		public static JsonPath Name(string? name = null)
 		{
 			var path = new JsonPath();
 
@@ -55,7 +55,7 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to search for.</param>
 		/// <returns>A new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="SearchLength()"/></remarks>
-		public static JsonPath Search(string name = null)
+		public static JsonPath Search(string? name = null)
 		{
 			var path = new JsonPath();
 			path.Operators.Add(new SearchOperator(name == null
@@ -74,7 +74,7 @@ namespace Manatee.Json.Path
 			return path;
 		}
 		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies.
+		/// Appends a <see cref="JsonPath"/> by specifying a series of array indices.
 		/// </summary>
 		/// <param name="slices">The indices and slices of the <see cref="JsonValue"/>s to include.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
@@ -109,7 +109,7 @@ namespace Manatee.Json.Path
 			return path;
 		}
 		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies.
+		/// Appends a <see cref="JsonPath"/> by specifying a series of array indices.
 		/// </summary>
 		/// <param name="slices">The indices and slices of the <see cref="JsonValue"/>s to include.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
@@ -167,7 +167,7 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to follow.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="Length(JsonPath)"/></remarks>
-		public static JsonPath Name(this JsonPath path, string name = null)
+		public static JsonPath Name(this JsonPath path, string? name = null)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
@@ -192,7 +192,7 @@ namespace Manatee.Json.Path
 		/// <param name="name">The name to follow.</param>
 		/// <returns>The new <see cref="JsonPath"/>.</returns>
 		/// <remarks>If <paramref name="name"/> is "length", operates as <see cref="SearchLength(JsonPath)"/></remarks>
-		public static JsonPath Search(this JsonPath path, string name = null)
+		public static JsonPath Search(this JsonPath path, string? name = null)
 		{
 			var newPath = new JsonPath();
 			newPath.Operators.AddRange(path.Operators);
@@ -214,7 +214,7 @@ namespace Manatee.Json.Path
 			return newPath;
 		}
 		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies.
+		/// Appends a <see cref="JsonPath"/> by specifying a series of array indices.
 		/// </summary>
 		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
 		/// <param name="slices">The indices and slices of the <see cref="JsonValue"/>s to include.</param>
@@ -267,7 +267,7 @@ namespace Manatee.Json.Path
 			return newPath;
 		}
 		/// <summary>
-		/// Appends a <see cref="JsonPath"/> by specifying a series of array indicies.
+		/// Appends a <see cref="JsonPath"/> by specifying a series of array indices.
 		/// </summary>
 		/// <param name="path">The <see cref="JsonPath"/> to extend.</param>
 		/// <param name="slices">The indices of the <see cref="JsonValue"/>s to include.</param>

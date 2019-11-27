@@ -48,7 +48,7 @@ namespace Manatee.Json.Internal
 			return null;
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNumber(this object value)
+		public static bool IsNumber(this object? value)
 		{
 			return value is double ||
 			       value is float ||

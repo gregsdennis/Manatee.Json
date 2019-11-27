@@ -73,7 +73,7 @@ namespace Manatee.Json.Internal
 			return type.GetTypeInfo().IsValueType ? Activator.CreateInstance(type) : null;
 		}
 
-		public static void SetMember(this object obj, JsonPointer pointer, object value)
+		public static void SetMember(this object? obj, JsonPointer pointer, object value)
 		{
 			if (obj == null) return;
 			if (pointer.Count == 0)

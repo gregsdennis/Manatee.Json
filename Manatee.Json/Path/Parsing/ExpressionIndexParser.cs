@@ -15,21 +15,30 @@ namespace Manatee.Json.Path.Parsing
 			       input[index + 1] == '(';
 		}
 
-		public string TryParse(string source, ref int index, ref JsonPath path)
+		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
 		{
+			if (path == null)
+			{
+				errorMessage = "Start token not found.";
+				return false;
+			}
+
 			index += 1;
-			Expression<int, JsonArray> expression;
-			var error = JsonPathExpressionParser.Parse(source, ref index, out expression);
-
-			if (error != null)
-				return error;
-
-			if (index >= source.Length) return "Unexpected end of input.";
-			if (source[index] != ']') return "Expected ']'";
+			if (!JsonPathExpressionParser.TryParse(source, ref index, out Expression<int, JsonArray> expression, out errorMessage)) return false;
+			if (index >= source.Length)
+			{
+				errorMessage = "Unexpected end of input.";
+				return false;
+			}
+			if (source[index] != ']')
+			{
+				errorMessage = "Expected ']'";
+				return false;
+			}
 
 			index++;
 			path.Operators.Add(new ArrayOperator(new IndexExpressionQuery(expression)));
-			return null;
+			return true;
 		}
 	}
 }

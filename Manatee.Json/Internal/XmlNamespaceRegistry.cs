@@ -42,7 +42,7 @@ namespace Manatee.Json.Internal
 		}
 		public bool ElementDefinesNamespace(XElement element, string space)
 		{
-			return _registry.TryGetValue(element, out List<XmlNamespacePair> entry) && entry.Any(pair => pair.Namespace == space);
+			return _registry.TryGetValue(element, out var entry) && entry.Any(pair => pair.Namespace == space);
 		}
 		public string GetLabel(XElement element, string space)
 		{
@@ -51,7 +51,7 @@ namespace Manatee.Json.Internal
 
 		public void Register(string label, string space)
 		{
-			if (!_stack.TryGetValue(label, out Stack<string> entry))
+			if (!_stack.TryGetValue(label, out var entry))
 			{
 				entry = new Stack<string>();
 				_stack.Add(label, entry);
@@ -66,7 +66,7 @@ namespace Manatee.Json.Internal
 		}
 		public string? GetNamespace(string label)
 		{
-			if (!_stack.TryGetValue(label, out Stack<string> entry)) return null;
+			if (!_stack.TryGetValue(label, out var entry)) return null;
 			return _stack.TryGetValue(label, out entry) && entry.Count != 0 ? entry.Peek() : null;
 		}
 	}
