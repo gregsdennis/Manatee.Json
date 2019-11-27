@@ -454,7 +454,7 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(string s)
+		public static implicit operator JsonValue(string? s)
 		{
 			return s == null ? null : new JsonValue(s);
 		}
@@ -502,7 +502,7 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(JsonObject o)
+		public static implicit operator JsonValue(JsonObject? o)
 		{
 			return o == null ? null : new JsonValue(o);
 		}
@@ -526,7 +526,7 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(JsonArray a)
+		public static implicit operator JsonValue(JsonArray? a)
 		{
 			return a == null ? null : new JsonValue(a);
 		}

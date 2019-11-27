@@ -95,9 +95,7 @@ namespace Manatee.Json.Internal
 						break;
 					default:
 						if (_availableChars[source[i]] != 0)
-						{
 							builder.Append(source[i]);
-						}
 						else
 						{
 							builder.Append(@"\u");
@@ -108,9 +106,9 @@ namespace Manatee.Json.Internal
 			}
 		}
 
-		public static string SkipWhiteSpace(this string source, ref int index, int length, out char ch)
+		public static string? SkipWhiteSpace(this string source, ref int index, int length, out char ch)
 		{
-			ch = default(char);
+			ch = default;
 			while (index < length)
 			{
 				ch = source[index];
@@ -120,16 +118,16 @@ namespace Manatee.Json.Internal
 
 			if (index >= length)
 			{
-				ch = default(char);
+				ch = default;
 				return "Unexpected end of input.";
 			}
 
 			return null;
 		}
 
-		public static string SkipWhiteSpace(this TextReader stream, out char ch)
+		public static string? SkipWhiteSpace(this TextReader stream, out char ch)
 		{
-			ch = default(char);
+			ch = default;
 
 			int c = stream.Peek();
 			while (c != -1)
@@ -142,17 +140,17 @@ namespace Manatee.Json.Internal
 
 			if (c == -1)
 			{
-				ch = default(char);
+				ch = default;
 				return "Unexpected end of input.";
 			}
 
 			return null;
 		}
 
-		public static async Task<(string, char)> SkipWhiteSpaceAsync(this TextReader stream, char[] scratch)
+		public static async Task<(string?, char)> SkipWhiteSpaceAsync(this TextReader stream, char[] scratch)
 		{
 			System.Diagnostics.Debug.Assert(scratch.Length >= 1);
-			char ch = default(char);
+			char ch = default;
 			int c = stream.Peek();
 			while (c != -1)
 			{
@@ -164,7 +162,7 @@ namespace Manatee.Json.Internal
 
 			if (c == -1)
 			{
-				ch = default(char);
+				ch = default;
 				return ("Unexpected end of input.", ch);
 			}
 			return (null, ch);

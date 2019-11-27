@@ -15,12 +15,12 @@ namespace Manatee.Json.Internal
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsInt(this double value)
 		{
-			return Math.Ceiling(value) == Math.Floor(value);
+			return Math.Abs(Math.Ceiling(value) - Math.Floor(value)) < double.Epsilon;
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
 		{
-			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ obj.GetHashCode());
+			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ (obj?.GetHashCode() ?? 0));
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
 		{

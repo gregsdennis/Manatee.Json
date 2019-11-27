@@ -43,7 +43,7 @@ namespace Manatee.Json.Internal
 		{
 			return type.GetTypeInfo().GenericTypeArguments;
 		}
-		public static IEnumerable<PropertyInfo> GetAllProperties(this TypeInfo type)
+		public static IEnumerable<PropertyInfo> GetAllProperties(this TypeInfo? type)
 		{
 			var properties = new List<PropertyInfo>();
 			while (type != null)
@@ -68,7 +68,7 @@ namespace Manatee.Json.Internal
 			       value == typeof(ulong);
 		}
 
-		public static object Default(this Type type)
+		public static object? Default(this Type type)
 		{
 			return type.GetTypeInfo().IsValueType ? Activator.CreateInstance(type) : null;
 		}

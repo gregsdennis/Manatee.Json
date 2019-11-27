@@ -5,10 +5,11 @@ namespace Manatee.Json.Internal
 {
 	internal class ObjectCache<T> where T : class
 	{
+		// ReSharper disable once StaticMemberInGenericType
 		private static readonly int _cacheSize = Environment.ProcessorCount * 2;
 
 		private readonly T[] _items = new T[_cacheSize];
-		private T _item;
+		private T _item = default!;
 
 		private readonly Func<T> _builder;
 
@@ -20,10 +21,8 @@ namespace Manatee.Json.Internal
 		public T Acquire()
 		{
 			var instance = _item;
-			if (instance == null || instance != Interlocked.CompareExchange(ref _item, null, instance))
-			{
+			if (instance == null || instance != Interlocked.CompareExchange(ref _item, null!, instance))
 				instance = _AcquireSlow();
-			}
 
 			return instance;
 		}
@@ -31,16 +30,12 @@ namespace Manatee.Json.Internal
 		public void Release(T obj)
 		{
 			if (_item == null)
-			{
 				// Intentionally not using interlocked here. 
 				// In a worst case scenario two objects may be stored into same slot.
 				// It is very unlikely to happen and will only mean that one of the objects will get collected.
 				_item = obj;
-			}
 			else
-			{
 				_ReleaseSlow(obj);
-			}
 		}
 
 		private T _AcquireSlow()
@@ -51,13 +46,9 @@ namespace Manatee.Json.Internal
 				// We will interlock only when we have a candidate. in a worst case we may miss some
 				// recently returned objects. Not a big deal.
 				var instance = _items[i];
-				if (instance != null)
-				{
-					if (instance == Interlocked.CompareExchange(ref _items[i], null, instance))
-					{
-						return instance;
-					}
-				}
+				if (instance != null &&
+				    instance == Interlocked.CompareExchange(ref _items[i], null!, instance))
+					return instance;
 			}
 
 			return _builder();
