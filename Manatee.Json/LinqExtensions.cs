@@ -190,7 +190,7 @@ namespace Manatee.Json
 		public static T FromJson<T>(this JsonObject json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
 		{
-			if (json == null) return default(T);
+			if (json == null) return default!;
 
 			T obj = new T();
 			obj.FromJson(json, serializer);

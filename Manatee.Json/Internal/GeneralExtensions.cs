@@ -35,14 +35,14 @@ namespace Manatee.Json.Internal
 					                            }
 				                            });
 		}
-		public static JsonValue AsJsonValue(this object value)
+		public static JsonValue? AsJsonValue(this object value)
 		{
 			if (ReferenceEquals(value, null)) return null;
 			if (value is JsonValue jsonValue) return jsonValue;
 			if (value is JsonArray jsonArray) return jsonArray;
 			if (value is JsonObject jsonObject) return jsonObject;
 			if (value is string s) return s;
-			if (value is bool) return (bool) value;
+			if (value is bool b) return b;
 			if (value.IsNumber()) return Convert.ToDouble(value);
 
 			return null;

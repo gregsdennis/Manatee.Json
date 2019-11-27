@@ -25,7 +25,7 @@ namespace Manatee.Json.Parsing
 		public static JsonValue Parse(string source)
 		{
 			var index = 0;
-			var errorMessage = Parse(source, ref index, out JsonValue value);
+			var errorMessage = Parse(source, ref index, out JsonValue? value);
 			if (errorMessage != null)
 				throw new JsonSyntaxException(source, errorMessage, value);
 			return value;
@@ -44,7 +44,7 @@ namespace Manatee.Json.Parsing
 				throw new JsonSyntaxException(errorMessage, value);
 			return value;
 		}
-		public static string Parse(string source, ref int index, out JsonValue value, bool allowExtraChars = false)
+		public static string Parse(string source, ref int index, out JsonValue? value, bool allowExtraChars = false)
 		{
 			var length = source.Length;
 			var errorMessage = source.SkipWhiteSpace(ref index, length, out char c);

@@ -15,7 +15,6 @@
 		/// The default is <see cref="Manatee.Json.DuplicateKeyBehavior.Throw"/>.
 		/// </summary>
 		public static DuplicateKeyBehavior DuplicateKeyBehavior { get; set; }
-		internal static bool AllowTrailingCommas { get; set; }
 		/// <summary>
 		/// Defines a default value for <see cref="JsonArray.EqualityStandard"/>.
 		/// The default is <see cref="ArrayEquality.SequenceEqual"/>.

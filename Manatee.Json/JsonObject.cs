@@ -35,7 +35,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="collection"></param>
 		public JsonObject(IDictionary<string, JsonValue> collection)
-			: base(collection) {}
+			: base(collection.ToDictionary(kvp => kvp.Key, kvp => kvp.Value ?? JsonValue.Null)) {}
 
 		/// <summary>
 		/// Creates a string representation of the JSON data.
@@ -150,7 +150,7 @@ namespace Manatee.Json
 		/// true if the specified <see cref="object"/> is equal to the current <see cref="object"/>; otherwise, false.
 		/// </returns>
 		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (!(obj is JsonObject json)) return false;
 			if (!Keys.ContentsEqual(json.Keys)) return false;

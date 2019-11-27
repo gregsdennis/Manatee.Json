@@ -30,7 +30,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="collection">A collection of <see cref="JsonValue"/>s.</param>
 		public JsonArray(IEnumerable<JsonValue> collection)
-			: base(collection) { }
+			: base(collection.Select(jv => jv ?? JsonValue.Null)) { }
 
 		/// <summary>
 		/// Creates a string representation of the JSON data.
@@ -67,10 +67,7 @@ namespace Manatee.Json
 
 				builder.Append(tab1);
 
-				if (value != null)
-					value.AppendIndentedString(builder, indentLevel + 1);
-				else
-					JsonValue.Null.AppendIndentedString(builder, indentLevel + 1);
+				value.AppendIndentedString(builder, indentLevel + 1);
 
 				comma = true;
 			}
@@ -128,10 +125,7 @@ namespace Manatee.Json
 				if (comma)
 					builder.Append(',');
 
-				if (value != null)
-					value.AppendString(builder);
-				else
-					JsonValue.Null.AppendString(builder);
+				value.AppendString(builder);
 
 				comma = true;
 			}
@@ -145,7 +139,7 @@ namespace Manatee.Json
 		/// true if the specified <see cref="object"/> is equal to the current <see cref="object"/>; otherwise, false.
 		/// </returns>
 		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>.</param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (!(obj is JsonArray json)) return false;
 
