@@ -16,7 +16,7 @@ namespace Manatee.Json.Parsing
 			       c == '-';
 		}
 
-		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
+		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
 		{
 			if (index >= source.Length)
 				throw new ArgumentOutOfRangeException(nameof(index));
@@ -49,12 +49,11 @@ namespace Manatee.Json.Parsing
 			return null;
 		}
 
-		public string TryParse(TextReader stream, out JsonValue value)
+		public string? TryParse(TextReader stream, out JsonValue? value)
 		{
 			value = null;
 
 			var buffer = StringBuilderCache.Acquire();
-			var bufferIndex = 0;
 			while (stream.Peek() != -1)
 			{
 				var c = (char)stream.Peek();
@@ -69,7 +68,6 @@ namespace Manatee.Json.Parsing
 				}
 
 				buffer.Append(c);
-				bufferIndex++;
 			}
 
 			var result = StringBuilderCache.GetStringAndRelease(buffer);
@@ -82,12 +80,12 @@ namespace Manatee.Json.Parsing
 			return null;
 		}
 
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
 			var buffer = StringBuilderCache.Acquire();
 			var scratch = SmallBufferCache.Acquire(1);
 
-			string errorMessage = null;
+			string? errorMessage = null;
 			while (stream.Peek() != -1)
 			{
 				if (token.IsCancellationRequested)

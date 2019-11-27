@@ -8,8 +8,8 @@ namespace Manatee.Json.Parsing
 	{
 		bool Handles(char c);
 		// returns error message, if any.  Null return implies success.
-		string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars);
-		string TryParse(TextReader stream, out JsonValue value);
-		Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token);
+		string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars);
+		string? TryParse(TextReader stream, out JsonValue? value);
+		Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token);
 	}
 }

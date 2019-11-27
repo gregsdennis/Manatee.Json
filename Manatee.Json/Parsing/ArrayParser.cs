@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,11 +13,11 @@ namespace Manatee.Json.Parsing
 		{
 			return c == '[';
 		}
-		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
+		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
 		{
-			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '[');
+			Debug.Assert(index < source.Length && source[index] == '[');
 
-			bool complete = false;
+			var complete = false;
 			var array = new JsonArray();
 			value = array;
 			var length = source.Length;
@@ -35,8 +36,8 @@ namespace Manatee.Json.Parsing
 					}
 					else return "Expected value.";
 				// get value
-				message = JsonParser.Parse(source, ref index, out JsonValue item);
-				array.Add(item);
+				message = JsonParser.Parse(source, ref index, out var item);
+				array.Add(item!);
 				if (message != null) return message;
 				message = source.SkipWhiteSpace(ref index, length, out c);
 				if (message != null) return message;
@@ -50,14 +51,11 @@ namespace Manatee.Json.Parsing
 				if (c != ',') return "Expected ','.";
 			}
 
-			if (!complete)
-				return "Unterminated array (missing ']')";
-
-			return null;
+			return complete ? null : "Unterminated array (missing ']')";
 		}
-		public string TryParse(TextReader stream, out JsonValue value)
+		public string? TryParse(TextReader stream, out JsonValue? value)
 		{
-			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
+			Debug.Assert(stream.Peek() == '[');
 
 			bool complete = false;
 			var array = new JsonArray();
@@ -65,7 +63,7 @@ namespace Manatee.Json.Parsing
 			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '[' or ','
-				var message = stream.SkipWhiteSpace(out char c);
+				var message = stream.SkipWhiteSpace(out var c);
 				if (message != null) return message;
 				// check for empty array
 				if (c == ']')
@@ -77,8 +75,8 @@ namespace Manatee.Json.Parsing
 					}
 					else return "Expected value.";
 				// get value
-				message = JsonParser.Parse(stream, out JsonValue item);
-				array.Add(item);
+				message = JsonParser.Parse(stream, out var item);
+				array.Add(item!);
 				if (message != null) return message;
 				message = stream.SkipWhiteSpace(out c);
 				if (message != null) return message;
@@ -97,17 +95,16 @@ namespace Manatee.Json.Parsing
 
 			return null;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
+			Debug.Assert(stream.Peek() == '[');
 
 			var scratch = SmallBufferCache.Acquire(1);
 			var array = new JsonArray();
 
 			bool complete = false;
 
-			char c;
-			string errorMessage = null;
+			string? errorMessage = null;
 			while (stream.Peek() != -1)
 			{
 				if (token.IsCancellationRequested)
@@ -117,6 +114,7 @@ namespace Manatee.Json.Parsing
 				}
 
 				await stream.TryRead(scratch, 0, 1, token); // waste the '[' or ','
+				char c;
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null)
 					break;
@@ -138,11 +136,10 @@ namespace Manatee.Json.Parsing
 				}
 
 				// get value
-				JsonValue item;
+				JsonValue? item;
 				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
-				array.Add(item);
-				if (errorMessage != null)
-					break;
+				array.Add(item!);
+				if (errorMessage != null) break;
 
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null)
@@ -163,10 +160,8 @@ namespace Manatee.Json.Parsing
 				}
 			}
 
-			if (!complete)
-			{
+			if (!complete) 
 				errorMessage = "Unterminated array (missing ']')";
-			}
 
 			SmallBufferCache.Release(scratch);
 			return (errorMessage, array);

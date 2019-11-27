@@ -25,29 +25,29 @@ namespace Manatee.Json.Parsing
 		public static JsonValue Parse(string source)
 		{
 			var index = 0;
-			var errorMessage = Parse(source, ref index, out JsonValue? value);
+			var errorMessage = Parse(source, ref index, out var value);
 			if (errorMessage != null)
 				throw new JsonSyntaxException(source, errorMessage, value);
-			return value;
+			return value!;
 		}
 		public static JsonValue Parse(TextReader stream)
 		{
-			var errorMessage = Parse(stream, out JsonValue value);
+			var errorMessage = Parse(stream, out var value);
 			if (errorMessage != null)
 				throw new JsonSyntaxException(errorMessage, value);
-			return value;
+			return value!;
 		}
-		public static async Task<JsonValue> ParseAsync(TextReader stream, CancellationToken token = default(CancellationToken))
+		public static async Task<JsonValue> ParseAsync(TextReader stream, CancellationToken token = default)
 		{
 			var (errorMessage, value) = await TryParseAsync(stream, token);
 			if (errorMessage != null)
 				throw new JsonSyntaxException(errorMessage, value);
-			return value;
+			return value!;
 		}
-		public static string Parse(string source, ref int index, out JsonValue? value, bool allowExtraChars = false)
+		public static string? Parse(string source, ref int index, out JsonValue? value, bool allowExtraChars = false)
 		{
 			var length = source.Length;
-			var errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
+			var errorMessage = source.SkipWhiteSpace(ref index, length, out var c);
 			if (errorMessage != null)
 			{
 				value = null;
@@ -63,9 +63,9 @@ namespace Manatee.Json.Parsing
 			value = null;
 			return "Cannot determine type.";
 		}
-		public static string Parse(TextReader stream, out JsonValue value)
+		public static string? Parse(TextReader stream, out JsonValue? value)
 		{
-			var errorMessage = stream.SkipWhiteSpace(out char c);
+			var errorMessage = stream.SkipWhiteSpace(out var c);
 			if (errorMessage != null)
 			{
 				value = null;
@@ -81,9 +81,9 @@ namespace Manatee.Json.Parsing
 			value = null;
 			return "Cannot determine type.";
 		}
-		public static async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		public static async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-			var errorMessage = stream.SkipWhiteSpace(out char c);
+			var errorMessage = stream.SkipWhiteSpace(out var c);
 			if (errorMessage != null)
 			{
 				return (errorMessage, null);

@@ -15,7 +15,7 @@ namespace Manatee.Json.Parsing
 			return c == 't' || c == 'T' || c == 'f' || c == 'F';
 		}
 
-		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
+		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
 		{
 			if (index >= source.Length)
 				throw new ArgumentOutOfRangeException(nameof(index));
@@ -48,7 +48,7 @@ namespace Manatee.Json.Parsing
 			return null;
 		}
 
-		public string TryParse(TextReader stream, out JsonValue value)
+		public string? TryParse(TextReader stream, out JsonValue? value)
 		{
 			value = null;
 
@@ -67,7 +67,7 @@ namespace Manatee.Json.Parsing
 				return _unexpectedEndOfInput;
 			}
 
-			string errorMessage = null;
+			string? errorMessage = null;
 			if (count == 4)
 			{
 				if ((buffer[0] == 't' || buffer[0] == 'T')
@@ -94,7 +94,7 @@ namespace Manatee.Json.Parsing
 			return errorMessage;
 		}
 
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
 			var buffer = SmallBufferCache.Acquire(5);
 			var count = await stream.ReadAsync(buffer, 0, 4);
@@ -110,8 +110,8 @@ namespace Manatee.Json.Parsing
 				return ("Parsing incomplete. The task was cancelled.", null);
 			}
 
-			JsonValue value = null;
-			string errorMessage = null;
+			JsonValue? value = null;
+			string? errorMessage = null;
 			if ((buffer[0] == 't' || buffer[0] == 'T') &&
 			    (buffer[1] == 'r' || buffer[1] == 'R') &&
 			    (buffer[2] == 'u' || buffer[2] == 'U') &&

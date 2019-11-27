@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace Manatee.Json.Parsing
 			return c == '\"';
 		}
 
-		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
+		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
 		{
 			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '"');
 
@@ -54,7 +55,7 @@ namespace Manatee.Json.Parsing
 			return _TryParseInterpretedString(source, ref index, out value);
 		}
 
-		public string TryParse(TextReader stream, out JsonValue value)
+		public string? TryParse(TextReader stream, out JsonValue? value)
 		{
 			value = null;
 
@@ -100,7 +101,7 @@ namespace Manatee.Json.Parsing
 			return _TryParseInterpretedString(builder, stream, out value);
 		}
 
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
 			var scratch = SmallBufferCache.Acquire(4);
 
@@ -136,8 +137,8 @@ namespace Manatee.Json.Parsing
 			{
 				SmallBufferCache.Release(scratch);
 
-				string errorMessage = null;
-				JsonValue value = null;
+				string? errorMessage = null;
+				JsonValue? value = null;
 				if (!complete)
 					errorMessage = "Could not find end of string value.";
 				else
@@ -152,11 +153,11 @@ namespace Manatee.Json.Parsing
 			return await _TryParseInterpretedStringAsync(builder, stream, scratch);
 		}
 
-		private static string _TryParseInterpretedString(string source, ref int index, out JsonValue value)
+		private static string? _TryParseInterpretedString(string source, ref int index, out JsonValue? value)
 		{
 			value = null;
 
-			string errorMessage = null;
+			string? errorMessage = null;
 			var builder = StringBuilderCache.Acquire();
 			var complete = false;
 			while (index < source.Length)
@@ -177,7 +178,7 @@ namespace Manatee.Json.Parsing
 					if (index >= source.Length)
 						return "Could not find end of string value.";
 
-					string append = null;
+					string append = null!;
 					c = source[index++];
 					switch (c)
 					{
@@ -212,7 +213,7 @@ namespace Manatee.Json.Parsing
 							}
 
 							if (index + length + 2 < source.Length &&
-							    source.IndexOf("\\u", index + length, 2) == index + length)
+							    source.IndexOf("\\u", index + length, 2, StringComparison.InvariantCulture) == index + length)
 							{
 								// +2 from \u
 								// +4 from the next four hex chars
@@ -274,7 +275,7 @@ namespace Manatee.Json.Parsing
 			return null;
 		}
 
-		private static string _TryParseInterpretedString(StringBuilder builder, TextReader stream, out JsonValue value)
+		private static string? _TryParseInterpretedString(StringBuilder builder, TextReader stream, out JsonValue? value)
 		{
 			// NOTE: `builder` contains the portion of the string found in `stream`, up to the first
 			//       (possible) escape sequence.
@@ -282,7 +283,6 @@ namespace Manatee.Json.Parsing
 
 			value = null;
 
-			string errorMessage = null;
 			bool complete = false;
 
 			int? previousHex = null;
@@ -381,7 +381,7 @@ namespace Manatee.Json.Parsing
 			}
 
 			value = StringBuilderCache.GetStringAndRelease(builder);
-			return errorMessage;
+			return null;
 		}
 
 		private static bool _IsValidHex(string source, int offset, int count)
@@ -409,47 +409,41 @@ namespace Manatee.Json.Parsing
 		{
 			switch (lookAhead)
 			{
+				// These escape 'as-is'
 				case '"':
 				case '/':
 				case '\\':
-					// These escape 'as-is'
 					return false;
+				// These escape as an escape char
 				case 'b':
 				case 'f':
 				case 'n':
 				case 'r':
 				case 't':
-					// These escape as an escape char
 					return false;
+				// this requires more work...
 				case 'u':
-					// this requires more work...
 					return true;
-				default:
 					// this is an error, which our complex handler will report
+				default:
 					return true;
 			}
 		}
 
 		private static char _InterpretSimpleEscapeSequence(char lookAhead)
 		{
-			switch (lookAhead)
-			{
-				case 'b':
-					return '\b';
-				case 'f':
-					return '\f';
-				case 'n':
-					return '\n';
-				case 'r':
-					return '\r';
-				case 't':
-					return '\t';
-				default:
-					return lookAhead;
-			}
+			return lookAhead switch
+				{
+					'b' => '\b',
+					'f' => '\f',
+					'n' => '\n',
+					'r' => '\r',
+					't' => '\t',
+					_ => lookAhead
+				};
 		}
 
-		private static async Task<(string errorMessage, JsonValue value)> _TryParseInterpretedStringAsync(StringBuilder builder, TextReader stream, char[] scratch)
+		private static async Task<(string? errorMessage, JsonValue? value)> _TryParseInterpretedStringAsync(StringBuilder builder, TextReader stream, char[] scratch)
 		{
 			// NOTE: `builder` contains the portion of the string found in `stream`, up to the first
 			//       (possible) escape sequence.
