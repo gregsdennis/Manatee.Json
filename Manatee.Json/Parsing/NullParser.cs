@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,22 +16,29 @@ namespace Manatee.Json.Parsing
 			return c == 'n' || c == 'N';
 		}
 
-		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage, bool allowExtraChars)
 		{
 			value = null;
 
 			if (index + 4 > source.Length)
-				return _unexpectedEndOfInput;
+			{
+				errorMessage = _unexpectedEndOfInput;
+				return false;
+			}
 
 			if (source.IndexOf("null", index, 4, StringComparison.OrdinalIgnoreCase) != index)
-				return $"Value not recognized: '{source.Substring(index, 4)}'.";
+			{
+				errorMessage = $"Value not recognized: '{source.Substring(index, 4)}'.";
+				return false;
+			}
 
 			index += 4;
 			value = JsonValue.Null;
-			return null;
+			errorMessage = null;
+			return true;
 		}
 
-		public string? TryParse(TextReader stream, out JsonValue? value)
+		public bool TryParse(TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
 			value = null;
 
@@ -39,20 +47,24 @@ namespace Manatee.Json.Parsing
 			if (charsRead != 4)
 			{
 				SmallBufferCache.Release(buffer);
-				return _unexpectedEndOfInput;
+				errorMessage = _unexpectedEndOfInput;
+				return false;
 			}
 
-			string? errorMessage = null;
 			if ((buffer[0] == 'n' || buffer[0] == 'N') &&
 			    (buffer[1] == 'u' || buffer[1] == 'U') &&
 			    (buffer[2] == 'l' || buffer[2] == 'L') &&
 			    (buffer[3] == 'l' || buffer[3] == 'L'))
 				value = JsonValue.Null;
 			else
+			{
 				errorMessage = $"Value not recognized: '{new string(buffer).Trim('\0')}'.";
+				return false;
+			}
 
 			SmallBufferCache.Release(buffer);
-			return errorMessage;
+			errorMessage = null;
+			return true;
 		}
 		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{

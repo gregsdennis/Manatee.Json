@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace Manatee.Json.Parsing
 			       c == '-';
 		}
 
-		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage, bool allowExtraChars)
 		{
 			if (index >= source.Length)
 				throw new ArgumentOutOfRangeException(nameof(index));
@@ -33,7 +34,8 @@ namespace Manatee.Json.Parsing
 				if (!isNumber && allowExtraChars) break;
 				if (!isNumber)
 				{
-					return "Expected ',', ']', or '}'.";
+					errorMessage = "Expected ',', ']', or '}'.";
+					return false;
 				}
 
 				index++;
@@ -42,14 +44,16 @@ namespace Manatee.Json.Parsing
 			var result = source.Substring(originalIndex, index - originalIndex);
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
 			{
-				return $"Value not recognized: '{result}'";
+				errorMessage = $"Value not recognized: '{result}'";
+				return false;
 			}
 
 			value = dbl;
-			return null;
+			errorMessage = null;
+			return true;
 		}
 
-		public string? TryParse(TextReader stream, out JsonValue? value)
+		public bool TryParse(TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
 			value = null;
 
@@ -64,7 +68,8 @@ namespace Manatee.Json.Parsing
 				if (!_IsNumberChar(c))
 				{
 					StringBuilderCache.Release(buffer);
-					return "Expected ',', ']', or '}'.";
+					errorMessage = "Expected ',', ']', or '}'.";
+					return false;
 				}
 
 				buffer.Append(c);
@@ -73,11 +78,13 @@ namespace Manatee.Json.Parsing
 			var result = StringBuilderCache.GetStringAndRelease(buffer);
 			if (!double.TryParse(result, NumberStyles.Any, CultureInfo.InvariantCulture, out double dbl))
 			{
-				return $"Value not recognized: '{result}'";
+				errorMessage = $"Value not recognized: '{result}'";
+				return false;
 			}
 
 			value = dbl;
-			return null;
+			errorMessage = null;
+			return true;
 		}
 
 		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)

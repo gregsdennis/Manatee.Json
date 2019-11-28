@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Manatee.Json.Path.Parsing
 {
@@ -12,7 +13,7 @@ namespace Manatee.Json.Path.Parsing
 			       (char.IsDigit(input[index + 1]) || input[index + 1] == '-' || input[index + 1] == ':');
 		}
 
-		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			if (path == null)
 			{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Expressions
 {
@@ -37,7 +38,7 @@ namespace Manatee.Json.Path.Expressions
 				if (result is JsonObject o)
 					return (T)(object)new JsonValue(o);
 			}
-			return (T) Convert.ChangeType(result, typeof(T));
+			return (T) Convert.ChangeType(result, typeof(T))!;
 		}
 		public override string? ToString()
 		{

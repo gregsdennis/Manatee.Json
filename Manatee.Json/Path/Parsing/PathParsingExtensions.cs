@@ -88,7 +88,7 @@ namespace Manatee.Json.Path.Parsing
 			return true;
 		}
 
-		private static bool _TryGetQuotedKeyWithEscape(string source, char quoteChar, int originalIndex, ref int index, out string key, out string errorMessage)
+		private static bool _TryGetQuotedKeyWithEscape(string source, char quoteChar, int originalIndex, ref int index, [NotNullWhen(true)] out string key, [NotNullWhen(false)] out string errorMessage)
 		{
 			var builder = StringBuilderCache.Acquire();
 			builder.Append(source.Substring(originalIndex, index - originalIndex));

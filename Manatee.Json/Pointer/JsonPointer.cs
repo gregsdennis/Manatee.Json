@@ -163,9 +163,9 @@ namespace Manatee.Json.Pointer
 			var unescaped = reference.Replace("~1", "/")
 				.Replace("~0", "~");
 			var matches = _generalEscapePattern.Matches(unescaped);
-			foreach (Match match in matches)
+			foreach (Match? match in matches)
 			{
-				var value = int.Parse(match.Groups["Value"].Value, NumberStyles.HexNumber);
+				var value = int.Parse(match!.Groups["Value"].Value, NumberStyles.HexNumber);
 				var ch = (char)value;
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -25,17 +26,15 @@ namespace Manatee.Json.Parsing
 		public static JsonValue Parse(string source)
 		{
 			var index = 0;
-			var errorMessage = Parse(source, ref index, out var value);
-			if (errorMessage != null)
+			if (!TryParse(source, ref index, out var value, out var errorMessage))
 				throw new JsonSyntaxException(source, errorMessage, value);
-			return value!;
+			return value;
 		}
 		public static JsonValue Parse(TextReader stream)
 		{
-			var errorMessage = Parse(stream, out var value);
-			if (errorMessage != null)
+			if (!TryParse(stream, out var value, out var errorMessage))
 				throw new JsonSyntaxException(errorMessage, value);
-			return value!;
+			return value;
 		}
 		public static async Task<JsonValue> ParseAsync(TextReader stream, CancellationToken token = default)
 		{
@@ -44,50 +43,50 @@ namespace Manatee.Json.Parsing
 				throw new JsonSyntaxException(errorMessage, value);
 			return value!;
 		}
-		public static string? Parse(string source, ref int index, out JsonValue? value, bool allowExtraChars = false)
+		public static bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage, bool allowExtraChars = false)
 		{
 			var length = source.Length;
-			var errorMessage = source.SkipWhiteSpace(ref index, length, out var c);
+			errorMessage = source.SkipWhiteSpace(ref index, length, out var c);
 			if (errorMessage != null)
 			{
 				value = null;
-				return errorMessage;
+				return false;
 			}
 
 			foreach (var parser in _parsers)
 			{
 				if (parser.Handles(c))
-					return parser.TryParse(source, ref index, out value, allowExtraChars);
+					return parser.TryParse(source, ref index, out value, out errorMessage, allowExtraChars);
 			}
 
 			value = null;
-			return "Cannot determine type.";
+			errorMessage = "Cannot determine type.";
+			return false;
 		}
-		public static string? Parse(TextReader stream, out JsonValue? value)
+		public static bool TryParse(TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
-			var errorMessage = stream.SkipWhiteSpace(out var c);
+			errorMessage = stream.SkipWhiteSpace(out var c);
 			if (errorMessage != null)
 			{
 				value = null;
-				return errorMessage;
+				return false;
 			}
 
 			foreach (var parser in _parsers)
 			{
 				if (parser.Handles(c))
-					return parser.TryParse(stream, out value);
+					return parser.TryParse(stream, out value, out errorMessage);
 			}
 
 			value = null;
-			return "Cannot determine type.";
+			errorMessage = "Cannot determine type.";
+			return false;
 		}
 		public static async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
 			var errorMessage = stream.SkipWhiteSpace(out var c);
 			if (errorMessage != null)
-			{
 				return (errorMessage, null);
-			}
 
 			foreach (var parser in _parsers)
 			{

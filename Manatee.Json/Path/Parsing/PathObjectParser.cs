@@ -1,4 +1,4 @@
-﻿using Manatee.Json.Internal;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Parsing
 {
@@ -16,7 +16,7 @@ namespace Manatee.Json.Path.Parsing
 					|| allowedChars.IndexOf(input[index + 1]) >= 0);
 		}
 
-		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			if (path == null)
 			{

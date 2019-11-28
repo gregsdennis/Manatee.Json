@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Manatee.Json.Parsing
 			return c == '\"';
 		}
 
-		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage, bool allowExtraChars)
 		{
 			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '"');
 
@@ -43,19 +44,23 @@ namespace Manatee.Json.Parsing
 			if (!mustInterpret)
 			{
 				if (!complete)
-					return "Could not find end of string value.";
+				{
+					errorMessage = "Could not find end of string value.";
+					return false;
+				}
 
 				value = source.Substring(originalIndex, (index - originalIndex));
 
 				index += 1; // eat the trailing '"'
-				return null;
+				errorMessage = null;
+				return true;
 			}
 
 			index = originalIndex;
-			return _TryParseInterpretedString(source, ref index, out value);
+			return _TryParseInterpretedString(source, ref index, out value, out errorMessage);
 		}
 
-		public string? TryParse(TextReader stream, out JsonValue? value)
+		public bool TryParse(TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
 			value = null;
 
@@ -90,15 +95,19 @@ namespace Manatee.Json.Parsing
 			if (!mustInterpret)
 			{
 				if (!complete)
-					return "Could not find end of string value.";
+				{
+					errorMessage = "Could not find end of string value.";
+					return false;
+				}
 
 				value = StringBuilderCache.GetStringAndRelease(builder);
-				return null;
+				errorMessage = null;
+				return true;
 			}
 			
 			// NOTE: TryParseInterpretedString is responsible for releasing builder
 			// NOTE: TryParseInterpretedString assumes stream is sitting at the '\\'
-			return _TryParseInterpretedString(builder, stream, out value);
+			return _TryParseInterpretedString(builder, stream, out value, out errorMessage);
 		}
 
 		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
@@ -153,11 +162,11 @@ namespace Manatee.Json.Parsing
 			return await _TryParseInterpretedStringAsync(builder, stream, scratch);
 		}
 
-		private static string? _TryParseInterpretedString(string source, ref int index, out JsonValue? value)
+		private static bool _TryParseInterpretedString(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
 			value = null;
+			errorMessage = null;
 
-			string? errorMessage = null;
 			var builder = StringBuilderCache.Acquire();
 			var complete = false;
 			while (index < source.Length)
@@ -176,7 +185,10 @@ namespace Manatee.Json.Parsing
 				else
 				{
 					if (index >= source.Length)
-						return "Could not find end of string value.";
+					{
+						errorMessage = "Could not find end of string value.";
+						return false;
+					}
 
 					string append = null!;
 					c = source[index++];
@@ -269,13 +281,14 @@ namespace Manatee.Json.Parsing
 			{
 				value = null;
 				StringBuilderCache.Release(builder);
-				return errorMessage ?? "Could not find end of string value.";
+				errorMessage ??= "Could not find end of string value.";
+				return false;
 			}
 			value = StringBuilderCache.GetStringAndRelease(builder);
-			return null;
+			return true;
 		}
 
-		private static string? _TryParseInterpretedString(StringBuilder builder, TextReader stream, out JsonValue? value)
+		private static bool _TryParseInterpretedString(StringBuilder builder, TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
 			// NOTE: `builder` contains the portion of the string found in `stream`, up to the first
 			//       (possible) escape sequence.
@@ -296,7 +309,8 @@ namespace Manatee.Json.Parsing
 					if (stream.Peek() == -1)
 					{
 						StringBuilderCache.Release(builder);
-						return "Could not find end of string value.";
+						errorMessage = "Could not find end of string value.";
+						return false;
 					}
 
 					// escape sequence
@@ -312,7 +326,8 @@ namespace Manatee.Json.Parsing
 						if (lookAhead != 'u')
 						{
 							StringBuilderCache.Release(builder);
-							return $"Invalid escape sequence: '\\{lookAhead}'.";
+							errorMessage = $"Invalid escape sequence: '\\{lookAhead}'.";
+							return false;
 						}
 
 						var buffer = SmallBufferCache.Acquire(4);
@@ -320,7 +335,8 @@ namespace Manatee.Json.Parsing
 						if (4 != stream.Read(buffer, 0, 4))
 						{
 							StringBuilderCache.Release(builder);
-							return "Could not find end of string value.";
+							errorMessage = "Could not find end of string value.";
+							return false;
 						}
 
 						var hexString = new string(buffer, 0, 4);
@@ -328,7 +344,8 @@ namespace Manatee.Json.Parsing
 						    !int.TryParse(hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var currentHex))
 						{
 							StringBuilderCache.Release(builder);
-							return $"Invalid escape sequence: '\\{lookAhead}{hexString}'.";
+							errorMessage = $"Invalid escape sequence: '\\{lookAhead}{hexString}'.";
+							return false;
 						}
 
 						if (previousHex != null)
@@ -377,11 +394,13 @@ namespace Manatee.Json.Parsing
 			{
 				value = null;
 				StringBuilderCache.Release(builder);
-				return "Could not find end of string value.";
+				errorMessage = "Could not find end of string value.";
+				return false;
 			}
 
 			value = StringBuilderCache.GetStringAndRelease(builder);
-			return null;
+			errorMessage = null;
+			return true;
 		}
 
 		private static bool _IsValidHex(string source, int offset, int count)

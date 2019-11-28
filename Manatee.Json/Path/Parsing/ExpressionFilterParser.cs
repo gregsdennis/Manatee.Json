@@ -1,5 +1,5 @@
-﻿using Manatee.Json.Path.ArrayParameters;
-using Manatee.Json.Path.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Manatee.Json.Path.ArrayParameters;
 using Manatee.Json.Path.Expressions.Parsing;
 using Manatee.Json.Path.Operators;
 
@@ -16,7 +16,7 @@ namespace Manatee.Json.Path.Parsing
 				input[index + 2] == '(';
 		}
 
-		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			if (path == null)
 			{
@@ -25,7 +25,7 @@ namespace Manatee.Json.Path.Parsing
 			}
 
 			index += 2;
-			if (!JsonPathExpressionParser.TryParse(source, ref index, out Expression<bool, JsonValue> expression, out errorMessage))
+			if (!JsonPathExpressionParser.TryParse<bool, JsonValue>(source, ref index, out var expression, out errorMessage))
 				return false;
 			if (index >= source.Length)
 			{

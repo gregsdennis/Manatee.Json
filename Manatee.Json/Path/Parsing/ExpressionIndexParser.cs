@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Path.ArrayParameters;
+﻿using System.Diagnostics.CodeAnalysis;
+using Manatee.Json.Path.ArrayParameters;
 using Manatee.Json.Path.Expressions;
 using Manatee.Json.Path.Expressions.Parsing;
 using Manatee.Json.Path.Operators;
@@ -15,7 +16,7 @@ namespace Manatee.Json.Path.Parsing
 			       input[index + 1] == '(';
 		}
 
-		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			if (path == null)
 			{
@@ -24,7 +25,7 @@ namespace Manatee.Json.Path.Parsing
 			}
 
 			index += 1;
-			if (!JsonPathExpressionParser.TryParse(source, ref index, out Expression<int, JsonArray> expression, out errorMessage)) return false;
+			if (!JsonPathExpressionParser.TryParse<int, JsonArray>(source, ref index, out var expression, out errorMessage)) return false;
 			if (index >= source.Length)
 			{
 				errorMessage = "Unexpected end of input.";

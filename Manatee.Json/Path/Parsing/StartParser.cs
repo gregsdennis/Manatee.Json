@@ -1,4 +1,6 @@
-﻿namespace Manatee.Json.Path.Parsing
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Manatee.Json.Path.Parsing
 {
 	internal class StartParser : IJsonPathParser
 	{
@@ -7,7 +9,7 @@
 			return input[index] == '$' || input[index] == '@';
 		}
 
-		public bool TryParse(string source, ref int index, ref JsonPath path, out string errorMessage)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			if (path != null)
 			{

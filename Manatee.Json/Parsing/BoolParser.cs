@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Manatee.Json.Parsing
 			return c == 't' || c == 'T' || c == 'f' || c == 'F';
 		}
 
-		public string? TryParse(string source, ref int index, out JsonValue? value, bool allowExtraChars)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage, bool allowExtraChars)
 		{
 			if (index >= source.Length)
 				throw new ArgumentOutOfRangeException(nameof(index));
@@ -25,10 +26,16 @@ namespace Manatee.Json.Parsing
 			if (source[index] == 't' || source[index] == 'T')
 			{
 				if (index + 4 > source.Length)
-					return _unexpectedEndOfInput;
+				{
+					errorMessage = _unexpectedEndOfInput;
+					return false;
+				}
 
 				if (source.IndexOf("true", index, 4, StringComparison.OrdinalIgnoreCase) != index)
-					return $"Value not recognized: '{source.Substring(index, 4)}'.";
+				{
+					errorMessage = $"Value not recognized: '{source.Substring(index, 4)}'.";
+					return false;
+				}
 
 				index += 4;
 				value = true;
@@ -36,19 +43,26 @@ namespace Manatee.Json.Parsing
 			else
 			{
 				if (index + 5 > source.Length)
-					return _unexpectedEndOfInput;
+				{
+					errorMessage = _unexpectedEndOfInput;
+					return false;
+				}
 
 				if (source.IndexOf("false", index, 5, StringComparison.OrdinalIgnoreCase) != index)
-					return $"Value not recognized: '{source.Substring(index, 5)}'.";
+				{
+					errorMessage = $"Value not recognized: '{source.Substring(index, 5)}'.";
+					return false;
+				}
 
 				index += 5;
 				value = false;
 			}
 
-			return null;
+			errorMessage = null;
+			return true;
 		}
 
-		public string? TryParse(TextReader stream, out JsonValue? value)
+		public bool TryParse(TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
 			value = null;
 
@@ -64,10 +78,10 @@ namespace Manatee.Json.Parsing
 			if (charsRead != count)
 			{
 				SmallBufferCache.Release(buffer);
-				return _unexpectedEndOfInput;
+				errorMessage = _unexpectedEndOfInput;
+				return false;
 			}
 
-			string? errorMessage = null;
 			if (count == 4)
 			{
 				if ((buffer[0] == 't' || buffer[0] == 'T')
@@ -76,7 +90,10 @@ namespace Manatee.Json.Parsing
 				    && (buffer[3] == 'e' || buffer[3] == 'E'))
 					value = true;
 				else
+				{
 					errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
+					return false;
+				}
 			}
 			else
 			{
@@ -87,11 +104,15 @@ namespace Manatee.Json.Parsing
 				    (buffer[4] == 'e' || buffer[4] == 'E'))
 					value = false;
 				else
+				{
 					errorMessage = $"Value not recognized: '{new string(buffer, 0, count)}'.";
+					return false;
+				}
 			}
 
 			SmallBufferCache.Release(buffer);
-			return errorMessage;
+			errorMessage = null;
+			return true;
 		}
 
 		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Manatee.Json.Parsing;
 using Manatee.Json.Path.ArrayParameters;
@@ -14,21 +15,21 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			return input[index] == '@' || input[index] == '$';
 		}
 
-		public bool TryParse<T>(string source, ref int index, out JsonPathExpression? expression, out string? errorMessage)
+		public bool TryParse<T>(string source, ref int index, [NotNullWhen(true)] out JsonPathExpression? expression, [NotNullWhen(false)] out string? errorMessage)
 		{
 			PathExpression<T> node;
 
 			var isLocal = source[index] == '@';
-			// Swallow this error from the path parser and assume the path just ended.
-			// If it's really a syntax error, the expression parser should catch it.
 			if (!JsonPathParser.TryParse(source, ref index, out var path, out errorMessage) &&
+				// Swallow this error from the path parser and assume the path just ended.
+				// If it's really a syntax error, the expression parser should catch it.
 			    errorMessage != "Unrecognized JSON Path element.")
 			{
 				expression = null!;
 				return false;
 			}
 
-			var lastOp = path.Operators.Last();
+			var lastOp = path!.Operators.Last();
 			if (lastOp is NameOperator name)
 			{
 				path.Operators.Remove(name);
@@ -42,10 +43,10 @@ namespace Manatee.Json.Path.Expressions.Parsing
 					}
 
 					index++;
-					errorMessage = JsonParser.Parse(source, ref index, out var parameter, true);
-					// Swallow this error from the JSON parser and assume the value just ended.
-					// If it's really a syntax error, the expression parser should catch it.
-					if (errorMessage != null && errorMessage != "Expected \',\', \']\', or \'}\'.")
+					if (!JsonParser.TryParse(source, ref index, out var parameter, out errorMessage, true) &&
+						// Swallow this error from the JSON parser and assume the value just ended.
+						// If it's really a syntax error, the expression parser should catch it.
+						errorMessage != "Expected \',\', \']\', or \'}\'.")
 					{
 						errorMessage = $"Error parsing parameter for 'indexOf' expression: {errorMessage}.";
 						expression = null!;
@@ -60,7 +61,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 					}
 
 					index++;
-					node = new IndexOfExpression<T>(path, isLocal, parameter);
+					node = new IndexOfExpression<T>(path, isLocal, parameter!);
 				}
 				else
 					node = new NameExpression<T>(path, isLocal, name.Name);
