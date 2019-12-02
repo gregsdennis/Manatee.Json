@@ -26,7 +26,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			context.SerializationMap.Add(new SerializationReference
 				{
 					Object = context.Source,
-					Source = context.CurrentLocation
+					Source = context.CurrentLocation.CleanAndClone()
 				});
 
 			return _innerSerializer.Serialize(context);
@@ -39,15 +39,15 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (jsonObj.TryGetValue(Constants.RefKey, out var reference))
 				{
 					var location = JsonPointer.Parse(reference.String);
-					context.SerializationMap.AddReference(location, context.CurrentLocation);
+					context.SerializationMap.AddReference(location, context.CurrentLocation.CleanAndClone());
 					return context.InferredType.Default();
 				}
 			}
 
 			var pair = new SerializationReference
 				{
-					Source = context.CurrentLocation
-				};
+					Source = context.CurrentLocation.CleanAndClone()
+			};
 			context.SerializationMap.Add(pair);
 
 			var obj = _innerSerializer.Deserialize(context);

@@ -24,7 +24,7 @@ namespace Manatee.Json.Serialization
 		{
 			Push(inferredType, requestedType, propertyName);
 
-			_sources.Push(source);
+			_sources.Push(Source);
 			Source = source;
 		}
 		public void Pop()

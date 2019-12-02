@@ -126,6 +126,11 @@ namespace Manatee.Json.Pointer
 			return this.Take(pointer.Count).SequenceEqual(pointer);
 		}
 
+		internal JsonPointer CleanAndClone()
+		{
+			return new JsonPointer(this.WhereNotNull()) {_usesHash = _usesHash};
+		}
+
 		internal JsonPointer WithHash()
 		{
 			return new JsonPointer(this) {_usesHash = true};

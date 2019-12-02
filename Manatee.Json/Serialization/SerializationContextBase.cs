@@ -41,16 +41,16 @@ namespace Manatee.Json.Serialization
 		internal void OverrideInferredType(Type type)
 		{
 			_inferredTypes.Pop();
+			_inferredTypes.Push(InferredType);
 			InferredType = type;
-			_inferredTypes.Push(type);
 		}
 
 		private protected void Push(Type inferredType, Type requestedType, string propertyName)
 		{
-			_inferredTypes.Push(inferredType);
+			_inferredTypes.Push(InferredType);
 			InferredType = inferredType;
 
-			_requestedTypes.Push(requestedType);
+			_requestedTypes.Push(RequestedType);
 			RequestedType = requestedType;
 
 			CurrentLocation.Add(propertyName);

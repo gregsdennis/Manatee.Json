@@ -33,7 +33,7 @@ namespace Manatee.Json.Serialization
 		{
 			Push(type, type, propertyName);
 
-			_localValues.Push(localValue);
+			_localValues.Push(LocalValue);
 			LocalValue = localValue;
 		}
 		public void Pop()
