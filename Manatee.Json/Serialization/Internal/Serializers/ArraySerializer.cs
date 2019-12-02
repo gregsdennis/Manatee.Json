@@ -23,6 +23,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				context.Push(array[i]?.GetType() ?? typeof(T), typeof(T), i.ToString(), array[i]);
 
 				values[i] = context.RootSerializer.Serialize(context);
+
+				context.Pop();
 			}
 			return new JsonArray(values);
 		}
@@ -32,7 +34,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var values = new T[array.Count];
 			for (int i = 0; i < array.Count; i++)
 			{
-				context.Push(typeof(T), typeof(T), i.ToString(), array[i]);
+				context.Push(typeof(T), i.ToString(), array[i]);
 
 				values[i] = (T) context.RootSerializer.Deserialize(context);
 

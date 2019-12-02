@@ -38,8 +38,10 @@ namespace Manatee.Json.Serialization
 		public JsonValue Serialize<T>(T obj)
 		{
 			var context = new SerializationContext(this);
-			context.Push(obj?.GetType() ?? typeof(T), typeof(T), "#", obj);
-			return Serialize(context);
+			context.Push(obj?.GetType() ?? typeof(T), typeof(T), null, obj);
+			var value = Serialize(context);
+			context.Pop();
+			return value;
 		}
 		/// <summary>
 		/// Serializes an object to a JSON structure.
@@ -50,8 +52,10 @@ namespace Manatee.Json.Serialization
 		public JsonValue Serialize(Type type, object obj)
 		{
 			var context = new SerializationContext(this);
-			context.Push(obj?.GetType() ?? type, type, "#", obj);
-			return Serialize(context);
+			context.Push(obj?.GetType() ?? type, type, null, obj);
+			var value = Serialize(context);
+			context.Pop();
+			return value;
 		}
 
 		internal JsonValue Serialize(SerializationContext context)
@@ -110,9 +114,10 @@ namespace Manatee.Json.Serialization
 		public object Deserialize(Type type, JsonValue json)
 		{
 			var context = new DeserializationContext(this, json);
-			context.Push(type, "#", json);
-
-			return Deserialize(context);
+			context.Push(type, null, json);
+			var value = Deserialize(context);
+			context.Pop();
+			return value;
 		}
 
 		internal object Deserialize(DeserializationContext context)

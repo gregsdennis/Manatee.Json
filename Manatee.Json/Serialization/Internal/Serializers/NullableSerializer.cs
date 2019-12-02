@@ -31,15 +31,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			if (context.LocalValue == JsonValue.Null) return null;
 
-			var newContext = new DeserializationContext(context)
-			{
-					CurrentLocation = context.CurrentLocation.Clone(),
-					InferredType = typeof(T),
-					RequestedType = typeof(T),
-					LocalValue = context.LocalValue
-				};
+			context.Push(typeof(T), null, context.LocalValue);
+			var value = (T) context.RootSerializer.Deserialize(context);
+			context.Pop();
 
-			return (T) context.RootSerializer.Deserialize(newContext);
+			return value;
 		}
 	}
 }

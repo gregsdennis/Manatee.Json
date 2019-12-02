@@ -29,7 +29,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				case JsonValueType.Array:
 					return context.LocalValue.Array.Select((value, i) =>
 						{
-							context.Push(typeof(object), typeof(object), i.ToString(), value);
+							context.Push(typeof(object), i.ToString(), value);
 							var json = context.RootSerializer.Deserialize(context);
 							context.Pop();
 							return json;
@@ -38,14 +38,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					var result = new ExpandoObject() as IDictionary<string, object>;
 					foreach (var kvp in context.LocalValue.Object)
 					{
-						var newContext = new DeserializationContext(context)
-						{
-								CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
-								InferredType = typeof(object),
-								RequestedType = typeof(object),
-								LocalValue = kvp.Value
-							};
-						result[kvp.Key] = context.RootSerializer.Deserialize(newContext);
+						context.Push(typeof(object), kvp.Key, kvp.Value);
+						result[kvp.Key] = context.RootSerializer.Deserialize(context);
+						context.Pop();
 					}
 					return result;
 				case JsonValueType.Null:

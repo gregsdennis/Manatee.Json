@@ -24,7 +24,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public JsonValue Serialize(SerializationContext context)
 		{
-			PrepSource(context);
+			var source = PrepSource(context);
+			if (source != null)
+				context.OverrideSource(source);
 			var typeArguments = GetTypeArguments(context.Source.GetType());
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
@@ -50,6 +52,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				: new[] {type};
 		}
 
-		protected virtual void PrepSource(SerializationContext context) { }
+		protected virtual object? PrepSource(SerializationContext context) => null;
 	}
 }

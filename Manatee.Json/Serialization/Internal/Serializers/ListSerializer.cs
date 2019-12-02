@@ -34,25 +34,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var list = new List<T>(array.Count);
 			for (int i = 0; i < array.Count; i++)
 			{
-				var newContext = new DeserializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = typeof(T),
-						RequestedType = typeof(T),
-						LocalValue = array[i]
-					};
-				list.Add((T) context.RootSerializer.Deserialize(newContext));
+				context.Push(typeof(T), i.ToString(), array[i]);
+				list.Add((T) context.RootSerializer.Deserialize(context));
+				context.Pop();
 			}
 			return list;
 		}
 
-		protected override void PrepSource(SerializationContext context)
+		protected override object PrepSource(SerializationContext context)
 		{
 			var sourceType = context.Source.GetType();
 			if (sourceType.GetTypeInfo().IsGenericType &&
-			    sourceType.GetGenericTypeDefinition().InheritsFrom(typeof(List<>))) return;
+			    sourceType.GetGenericTypeDefinition().InheritsFrom(typeof(List<>))) return context.Source;
 
-			context.Source = (context.Source as IEnumerable).Cast<object>().ToList();
+			return (context.Source as IEnumerable).Cast<object>().ToList();
 		}
 	}
 }

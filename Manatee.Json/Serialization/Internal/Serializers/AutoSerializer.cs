@@ -171,15 +171,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						type = info.PropertyType;
 					else
 						type = ((FieldInfo) memberInfo.MemberInfo).FieldType;
-					var newLocation = context.CurrentLocation.CloneAndAppend(memberInfo.SerializationName);
-					var newContext = new SerializationContext(context)
-						{
-							CurrentLocation = newLocation,
-							InferredType = type,
-							RequestedType = type,
-							LocalValue = value,
-						};
-					var valueObj = context.RootSerializer.Deserialize(newContext);
+					context.Push(type, memberInfo.SerializationName, value);
+					var valueObj = context.RootSerializer.Deserialize(context);
+					context.Pop();
 					dict.Add(memberInfo, valueObj);
 				}
 			}

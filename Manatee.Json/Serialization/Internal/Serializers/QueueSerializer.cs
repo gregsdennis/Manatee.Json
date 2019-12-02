@@ -30,14 +30,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var queue = new Queue<T>();
 			for (int i = 0; i < context.LocalValue.Array.Count; i++)
 			{
-				var newContext = new DeserializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = typeof(T),
-						RequestedType = typeof(T),
-						LocalValue = context.LocalValue.Array[i]
-					};
-				queue.Enqueue((T)context.RootSerializer.Deserialize(newContext));
+				context.Push(typeof(T), i.ToString(), context.LocalValue.Array[i]);
+				queue.Enqueue((T)context.RootSerializer.Deserialize(context));
+				context.Pop();
 			}
 			return queue;
 		}

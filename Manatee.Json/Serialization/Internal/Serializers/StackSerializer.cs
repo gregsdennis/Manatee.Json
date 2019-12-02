@@ -31,14 +31,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var values = new T[array.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				var newContext = new DeserializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = typeof(T),
-						RequestedType = typeof(T),
-						LocalValue = array[i]
-					};
-				values[i] = (T)context.RootSerializer.Deserialize(newContext);
+				context.Push(typeof(T), i.ToString(), array[i]);
+				values[i] = (T)context.RootSerializer.Deserialize(context);
+				context.Pop();
 			}
 			return new Stack<T>(values);
 		}

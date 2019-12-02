@@ -105,15 +105,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				return json.Object.ToDictionary(kvp => (TKey)(object)kvp.Key,
 												kvp =>
 													{
-														var newContext = new DeserializationContext(context)
-														{
-																CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key.ToString()),
-																InferredType = typeof(TValue),
-																RequestedType = typeof(TValue),
-																LocalValue = kvp.Value
-															};
-
-														return (TValue) context.RootSerializer.Deserialize(newContext);
+														context.Push(typeof(TValue), kvp.Key.ToString(), kvp.Value);
+														var value = (TValue) context.RootSerializer.Deserialize(context);
+														context.Pop();
+														return value;
 													});
 
 			if (typeof(Enum).GetTypeInfo().IsAssignableFrom(typeof(TKey).GetTypeInfo()))
@@ -123,27 +118,22 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				.ToDictionary(jv =>
 					              {
 						              var key = jv.Value.Object["Key"];
-						              var newContext = new DeserializationContext(context)
-									  {
-								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Key"),
-								              InferredType = typeof(TValue),
-								              RequestedType = typeof(TValue),
-								              LocalValue = key
-							              };
-
-						              return (TKey) context.RootSerializer.Deserialize(newContext);
+									  context.Push(typeof(TKey), jv.Index.ToString(), key);
+									  context.Push(typeof(TKey), "Key", key);
+						              var obj = (TKey) context.RootSerializer.Deserialize(context);
+									  context.Pop();
+									  context.Pop();
+									  return obj;
 					              },
 				              jv =>
 					              {
-						              var key = jv.Value.Object["Key"];
-						              var newContext = new DeserializationContext(context)
-									  {
-								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Value"),
-								              InferredType = typeof(TValue),
-								              RequestedType = typeof(TValue),
-								              LocalValue = key
-							              };
-						              return (TValue) context.RootSerializer.Deserialize(newContext);
+						              var value = jv.Value.Object["Value"];
+									  context.Push(typeof(TValue), jv.Index.ToString(), value);
+									  context.Push(typeof(TValue), "Value", value);
+						              var obj = (TValue) context.RootSerializer.Deserialize(context);
+									  context.Pop();
+									  context.Pop();
+									  return obj;
 					              });
 		}
 		private static Dictionary<TKey, TValue> _DecodeEnumDictionary<TKey, TValue>(DeserializationContext context)
@@ -158,22 +148,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var i = 0;
 			foreach (var kvp in context.LocalValue.Object)
 			{
-				var newContext = new DeserializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Key"),
-						InferredType = typeof(TKey),
-						RequestedType = typeof(TKey),
-						LocalValue = serializer.Options.DeserializationNameTransform(kvp.Key)
-				};
-				var key = (TKey) serializer.Deserialize(newContext);
-				newContext = new DeserializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
-						InferredType = typeof(TValue),
-						RequestedType = typeof(TValue),
-						LocalValue = kvp.Value
-					};
-				output.Add(key, (TValue) serializer.Deserialize(newContext));
+				var transformed = serializer.Options.DeserializationNameTransform(kvp.Key);
+				context.Push(typeof(TKey), i.ToString(), transformed);
+				context.Push(typeof(TKey), "Key", transformed);
+				var key = (TKey) serializer.Deserialize(context);
+				context.Pop();
+				context.Pop();
+
+				context.Push(typeof(TValue), kvp.Key, kvp.Value);
+				output.Add(key, (TValue) serializer.Deserialize(context));
+				context.Pop();
 				i++;
 			}
 

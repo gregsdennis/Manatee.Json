@@ -24,7 +24,7 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// The current location in the JSON instance or object.
 		/// </summary>
-		public JsonPointer CurrentLocation { get; } = new JsonPointer();
+		public JsonPointer CurrentLocation { get; } = new JsonPointer("#");
 		/// <summary>
 		/// The original serializer called by the client.
 		/// </summary>
@@ -40,15 +40,15 @@ namespace Manatee.Json.Serialization
 
 		internal void OverrideInferredType(Type type)
 		{
-			InferredType = _inferredTypes.Pop();
-			RequestedType = type;
+			_inferredTypes.Pop();
+			InferredType = type;
 			_inferredTypes.Push(type);
 		}
 
 		private protected void Push(Type inferredType, Type requestedType, string propertyName)
 		{
 			_inferredTypes.Push(inferredType);
-			RequestedType = inferredType;
+			InferredType = inferredType;
 
 			_requestedTypes.Push(requestedType);
 			RequestedType = requestedType;

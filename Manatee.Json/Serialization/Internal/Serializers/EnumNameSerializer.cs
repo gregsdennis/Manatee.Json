@@ -23,7 +23,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public bool Handles(SerializationContextBase context)
 		{
 			var dContext = context as DeserializationContext;
-			var serializing = dContext != null;
+			var serializing = dContext == null;
 			return context.InferredType.GetTypeInfo().IsEnum &&
 			       ((serializing && context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName) || // used during serialization
 			        (!serializing && dContext.LocalValue?.Type == JsonValueType.String)); // used during deserialization

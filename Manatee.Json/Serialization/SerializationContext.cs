@@ -22,7 +22,7 @@ namespace Manatee.Json.Serialization
 
 		public void Push(Type inferredType, Type requestedType, string propertyName, object? source)
 		{
-			base.Push(inferredType, requestedType, propertyName);
+			Push(inferredType, requestedType, propertyName);
 
 			_sources.Push(source);
 			Source = source;
@@ -32,6 +32,13 @@ namespace Manatee.Json.Serialization
 			base.Pop();
 
 			Source = _sources.Pop();
+		}
+
+		internal void OverrideSource(object source)
+		{
+			_sources.Pop();
+			Source = source;
+			_sources.Push(source);
 		}
 	}
 }

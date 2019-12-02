@@ -31,7 +31,7 @@ namespace Manatee.Json.Serialization
 
 		public void Push(Type type, string propertyName, JsonValue localValue)
 		{
-			base.Push(type, type, propertyName);
+			Push(type, type, propertyName);
 
 			_localValues.Push(localValue);
 			LocalValue = localValue;

@@ -90,8 +90,8 @@ namespace Manatee.Json.Pointer
 		public override string ToString()
 		{
 			var asString = _usesHash
-				? $"#/{string.Join("/", this.Select(_Escape))}"
-				: $"/{string.Join("/", this.Select(_Escape))}";
+				? $"#/{string.Join("/", this.Where(s => s != null).Select(_Escape))}"
+				: $"/{string.Join("/", this.Where(s => s != null).Select(_Escape))}";
 
 			return asString == "/" ? asString : asString.TrimEnd('/');
 		}
