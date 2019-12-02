@@ -13,7 +13,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_innerSerializer = innerSerializer;
 		}
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
 			return true;
 		}
@@ -25,7 +25,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return _innerSerializer.Serialize(context);
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			return context.LocalValue.Type == JsonValueType.Null
 				       ? context.InferredType.Default()

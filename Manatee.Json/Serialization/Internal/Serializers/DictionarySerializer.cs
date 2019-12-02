@@ -8,7 +8,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class DictionarySerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context)
+		public override bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType.GetTypeInfo().IsGenericType &&
 			       context.InferredType.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>));
@@ -24,14 +24,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var output = new Dictionary<string, JsonValue>();
 				foreach (var kvp in dict)
 				{
-					var newContext = new SerializationContext(context)
-					{
-							CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key.ToString()),
-							InferredType = kvp.Value?.GetType() ?? typeof(TValue),
-							RequestedType = typeof(TValue),
-							Source = kvp.Value
-						};
-					var value = _SerializeDefaultValue(newContext, useDefaultValue, existingOption);
+					context.Push(kvp.Value?.GetType() ?? typeof(TValue), typeof(TValue), kvp.Key.ToString(), kvp.Value);
+					var value = _SerializeDefaultValue(context, useDefaultValue, existingOption);
 					output.Add((string)(object)kvp.Key, value);
 				}
 
@@ -49,22 +43,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			int i = 0;
 			foreach (var item in dict)
 			{
-				var newContext = new SerializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Key"),
-						InferredType = item.Key.GetType(),
-						RequestedType = typeof(TKey),
-						Source = item.Key
-					};
-				var key = serializer.Serialize(newContext);
-				newContext = new SerializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Value"),
-						InferredType = item.Value.GetType(),
-						RequestedType = typeof(TValue),
-						Source = item.Value
-					};
-				var value = _SerializeDefaultValue(newContext, useDefaultValue, existingOption);
+				var index = i.ToString();
+				
+				context.Push(item.Key.GetType(), typeof(TKey), index, item.Key);
+				context.Push(item.Key.GetType(), typeof(TKey), "Key", item.Key);
+				var key = serializer.Serialize(context);
+				context.Pop();
+				context.Pop();
+
+				context.Push(item.Value?.GetType() ?? typeof(TValue), typeof(TValue), index, item.Value);
+				context.Push(item.Value?.GetType() ?? typeof(TValue), typeof(TValue), "Value", item.Value);
+				var value = _SerializeDefaultValue(context, useDefaultValue, existingOption);
+				context.Pop();
+				context.Pop();
+
 				array[i] = new JsonObject
 				{
 					{ "Key", key},
@@ -80,36 +72,32 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var enumFormat = serializer.Options.EnumSerializationFormat;
 			serializer.Options.EnumSerializationFormat = EnumSerializationFormat.AsName;
 
-			var output = new Dictionary<string, JsonValue>();
+			var output = new JsonObject();
 			int i = 0;
 			foreach (var kvp in dict)
 			{
-				var newContext = new SerializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Key"),
-						InferredType = kvp.Key.GetType(),
-						RequestedType = typeof(TKey),
-						Source = kvp.Key
-					};
-				var key = serializer.Options.SerializationNameTransform(_SerializeDefaultValue(newContext, true, existingOption).String);
-				newContext = new SerializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(key),
-						InferredType = kvp.Value.GetType(),
-						RequestedType = typeof(TValue),
-						Source = kvp.Value
-					};
-				var value = _SerializeDefaultValue(newContext, useDefaultValue, existingOption);
+				var index = i.ToString();
+				
+				context.Push(kvp.Key.GetType(), typeof(TKey), index, kvp.Key);
+				context.Push(kvp.Key.GetType(), typeof(TKey), "Key", kvp.Key);
+				var key = serializer.Options.SerializationNameTransform(_SerializeDefaultValue(context, true, existingOption).String);
+				context.Pop();
+				context.Pop();
+
+				context.Push(kvp.Value?.GetType() ?? typeof(TValue), typeof(TValue), key, kvp.Value);
+				var value = _SerializeDefaultValue(context, useDefaultValue, existingOption);
+				context.Pop();
+
 				output.Add(key, value);
 				i++;
 			}
 
 			serializer.Options.EnumSerializationFormat = enumFormat;
 
-			return output.ToJson();
+			return output;
 		}
 
-		private static Dictionary<TKey, TValue> _Decode<TKey, TValue>(SerializationContext context)
+		private static Dictionary<TKey, TValue> _Decode<TKey, TValue>(DeserializationContext context)
 		{
 			var json = context.LocalValue;
 
@@ -117,7 +105,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				return json.Object.ToDictionary(kvp => (TKey)(object)kvp.Key,
 												kvp =>
 													{
-														var newContext = new SerializationContext(context)
+														var newContext = new DeserializationContext(context)
 														{
 																CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key.ToString()),
 																InferredType = typeof(TValue),
@@ -135,7 +123,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				.ToDictionary(jv =>
 					              {
 						              var key = jv.Value.Object["Key"];
-						              var newContext = new SerializationContext(context)
+						              var newContext = new DeserializationContext(context)
 									  {
 								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Key"),
 								              InferredType = typeof(TValue),
@@ -148,7 +136,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				              jv =>
 					              {
 						              var key = jv.Value.Object["Key"];
-						              var newContext = new SerializationContext(context)
+						              var newContext = new DeserializationContext(context)
 									  {
 								              CurrentLocation = context.CurrentLocation.CloneAndAppend(jv.Index.ToString(), "Value"),
 								              InferredType = typeof(TValue),
@@ -158,7 +146,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						              return (TValue) context.RootSerializer.Deserialize(newContext);
 					              });
 		}
-		private static Dictionary<TKey, TValue> _DecodeEnumDictionary<TKey, TValue>(SerializationContext context)
+		private static Dictionary<TKey, TValue> _DecodeEnumDictionary<TKey, TValue>(DeserializationContext context)
 		{
 			var serializer = context.RootSerializer;
 			var encodeDefaults = serializer.Options.EncodeDefaultValues;
@@ -170,7 +158,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var i = 0;
 			foreach (var kvp in context.LocalValue.Object)
 			{
-				var newContext = new SerializationContext(context)
+				var newContext = new DeserializationContext(context)
 				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString(), "Key"),
 						InferredType = typeof(TKey),
@@ -178,7 +166,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						LocalValue = serializer.Options.DeserializationNameTransform(kvp.Key)
 				};
 				var key = (TKey) serializer.Deserialize(newContext);
-				newContext = new SerializationContext(context)
+				newContext = new DeserializationContext(context)
 				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
 						InferredType = typeof(TValue),

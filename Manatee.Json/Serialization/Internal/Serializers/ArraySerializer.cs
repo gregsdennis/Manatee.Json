@@ -4,7 +4,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ArraySerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context)
+		public override bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType.IsArray;
 		}
@@ -20,33 +20,23 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var values = new JsonValue[array.Length];
 			for (int i = 0; i < array.Length; i++)
 			{
-				var newContext = new SerializationContext(context)
-					{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = array[i]?.GetType() ?? typeof(T),
-						RequestedType = typeof(T),
-						Source = array[i]
-					};
+				context.Push(array[i]?.GetType() ?? typeof(T), typeof(T), i.ToString(), array[i]);
 
-				values[i] = context.RootSerializer.Serialize(newContext);
+				values[i] = context.RootSerializer.Serialize(context);
 			}
 			return new JsonArray(values);
 		}
-		private static T[] _Decode<T>(SerializationContext context)
+		private static T[] _Decode<T>(DeserializationContext context)
 		{
 			var array = context.LocalValue.Array;
 			var values = new T[array.Count];
 			for (int i = 0; i < array.Count; i++)
 			{
-				var newContext = new SerializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = typeof(T),
-						RequestedType = typeof(T),
-						LocalValue = array[i]
-					};
+				context.Push(typeof(T), typeof(T), i.ToString(), array[i]);
 
-				values[i] = (T) context.RootSerializer.Deserialize(newContext);
+				values[i] = (T) context.RootSerializer.Deserialize(context);
+
+				context.Pop();
 			}
 			return values;
 		}

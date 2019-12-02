@@ -10,7 +10,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	{
 		public override int Priority => 3;
 
-		public override bool Handles(SerializationContext context)
+		public override bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType.GetTypeInfo().IsGenericType &&
 			       context.InferredType.InheritsFrom(typeof(IEnumerable));
@@ -22,25 +22,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var array = new JsonValue[list.Count];
 			for (int i = 0; i < array.Length; i++)
 			{
-				var newContext = new SerializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = list[i]?.GetType() ?? typeof(T),
-						RequestedType = typeof(T),
-						Source = list[i]
-					};
-
-				array[i] = context.RootSerializer.Serialize(newContext);
+				context.Push(list[i]?.GetType() ?? typeof(T), typeof(T), i.ToString(), list[i]);
+				array[i] = context.RootSerializer.Serialize(context);
+				context.Pop();
 			}
 			return new JsonArray(array);
 		}
-		private static List<T> _Decode<T>(SerializationContext context)
+		private static List<T> _Decode<T>(DeserializationContext context)
 		{
 			var array = context.LocalValue.Array;
 			var list = new List<T>(array.Count);
 			for (int i = 0; i < array.Count; i++)
 			{
-				var newContext = new SerializationContext(context)
+				var newContext = new DeserializationContext(context)
 				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
 						InferredType = typeof(T),

@@ -5,7 +5,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class NullableSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context)
+		public override bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType.GetTypeInfo().IsGenericType &&
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Nullable<>);
@@ -19,25 +19,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			var encodeDefaultValues = context.RootSerializer.Options.EncodeDefaultValues;
 			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
-			var newContext = new SerializationContext(context)
-			{
-					CurrentLocation = context.CurrentLocation.Clone(),
-					InferredType = typeof(T),
-					RequestedType = typeof(T),
-					LocalValue = context.LocalValue,
-					Source = nullable.Value
-				};
-			var json = context.RootSerializer.Serialize(newContext);
+			context.Push(typeof(T), typeof(T), null, nullable.Value);
+			var json = context.RootSerializer.Serialize(context);
+			context.Pop();
 			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;
 
 			return json;
 		}
-		private static T? _Decode<T>(SerializationContext context)
+		private static T? _Decode<T>(DeserializationContext context)
 			where T : struct
 		{
 			if (context.LocalValue == JsonValue.Null) return null;
 
-			var newContext = new SerializationContext(context)
+			var newContext = new DeserializationContext(context)
 			{
 					CurrentLocation = context.CurrentLocation.Clone(),
 					InferredType = typeof(T),

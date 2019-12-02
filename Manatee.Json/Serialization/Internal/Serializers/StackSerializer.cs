@@ -6,7 +6,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class StackSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context)
+		public override bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType.GetTypeInfo().IsGenericType && 
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Stack<>);
@@ -19,25 +19,19 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			for (int i = 0; i < values.Length; i++)
 			{
 				var element = stack.ElementAt(i);
-				var newContext = new SerializationContext(context)
-				{
-						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-						InferredType = element?.GetType() ?? typeof(T),
-						RequestedType = typeof(T),
-						Source = element
-				};
-
-				values[i] = context.RootSerializer.Serialize(newContext);
+				context.Push(element?.GetType() ?? typeof(T), typeof(T), i.ToString(), element);
+				values[i] = context.RootSerializer.Serialize(context);
+				context.Pop();
 			}
 			return new JsonArray(values);
 		}
-		private static Stack<T> _Decode<T>(SerializationContext context)
+		private static Stack<T> _Decode<T>(DeserializationContext context)
 		{
 			var array = context.LocalValue.Array;
 			var values = new T[array.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
-				var newContext = new SerializationContext(context)
+				var newContext = new DeserializationContext(context)
 				{
 						CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
 						InferredType = typeof(T),

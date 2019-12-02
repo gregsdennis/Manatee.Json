@@ -20,12 +20,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
-			var serializing = context.LocalValue == null;
+			var dContext = context as DeserializationContext;
+			var serializing = dContext != null;
 			return context.InferredType.GetTypeInfo().IsEnum &&
 			       ((serializing && context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName) || // used during serialization
-			        (!serializing && context.LocalValue?.Type == JsonValueType.String)); // used during deserialization
+			        (!serializing && dContext.LocalValue?.Type == JsonValueType.String)); // used during deserialization
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
@@ -40,7 +41,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var enumValue = context.RootSerializer.Options.SerializationNameTransform(context.Source.ToString());
 			return enumValue;
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);

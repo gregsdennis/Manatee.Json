@@ -1,5 +1,4 @@
 ﻿using System;
-using Manatee.Json.Pointer;
 using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
@@ -18,7 +17,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public JsonSerializerOptions Options
 		{
-			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
+			get { return _options ??= new JsonSerializerOptions(JsonSerializerOptions.Default); }
 			set { _options = value; }
 		}
 		/// <summary>
@@ -26,7 +25,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public AbstractionMap AbstractionMap
 		{
-			get { return _abstractionMap ?? (_abstractionMap = new AbstractionMap(AbstractionMap.Default)); }
+			get { return _abstractionMap ??= new AbstractionMap(AbstractionMap.Default); }
 			set { _abstractionMap = value; }
 		}
 
@@ -38,13 +37,8 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			var context = new SerializationContext(this)
-				{
-					InferredType = obj?.GetType() ?? typeof(T),
-					RequestedType = typeof(T),
-					CurrentLocation = new JsonPointer("#"),
-					Source = obj
-				};
+			var context = new SerializationContext(this);
+			context.Push(obj?.GetType() ?? typeof(T), typeof(T), "#", obj);
 			return Serialize(context);
 		}
 		/// <summary>
@@ -55,13 +49,8 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize(Type type, object obj)
 		{
-			var context = new SerializationContext(this)
-				{
-					InferredType = obj?.GetType() ?? type,
-					RequestedType = type,
-					CurrentLocation = new JsonPointer("#"),
-					Source = obj
-				};
+			var context = new SerializationContext(this);
+			context.Push(obj?.GetType() ?? type, type, "#", obj);
 			return Serialize(context);
 		}
 
@@ -120,18 +109,13 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public object Deserialize(Type type, JsonValue json)
 		{
-			var context = new SerializationContext(this, json)
-				{
-					InferredType = type,
-					RequestedType = type,
-					CurrentLocation = new JsonPointer("#"),
-					LocalValue = json
-				};
+			var context = new DeserializationContext(this, json);
+			context.Push(type, "#", json);
 
 			return Deserialize(context);
 		}
 
-		internal object Deserialize(SerializationContext context)
+		internal object Deserialize(DeserializationContext context)
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
