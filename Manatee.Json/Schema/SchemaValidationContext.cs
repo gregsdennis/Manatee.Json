@@ -30,11 +30,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets a list of property names that have been evaluated in this validation pass.
 		/// </summary>
-		public HashSet<string> EvaluatedPropertyNames => _evaluatedPropertyNames ?? (_evaluatedPropertyNames = new HashSet<string>());
+		public HashSet<string> EvaluatedPropertyNames => _evaluatedPropertyNames ??= new HashSet<string>();
 		/// <summary>
 		/// Gets a list of property names that have been evaluated on the current tier of this validation pass.
 		/// </summary>
-		public HashSet<string> LocallyEvaluatedPropertyNames => _locallyEvaluatedPropertyNames ?? (_locallyEvaluatedPropertyNames = new HashSet<string>());
+		public HashSet<string> LocallyEvaluatedPropertyNames => _locallyEvaluatedPropertyNames ??= new HashSet<string>();
 		/// <summary>
 		/// Gets the last array index that has been evaluated in this validation pass.
 		/// </summary>

@@ -144,7 +144,11 @@ namespace Manatee.Json.Pointer
 				}
 
 				if (segment == "-")
+#if NETSTANDARD2_0
 					return current.Array[current.Array.Count-1];
+#else
+					return current.Array[^1];
+#endif
 			}
 
 			return current.Type != JsonValueType.Object || !current.Object.TryGetValue(segment, out var value)
