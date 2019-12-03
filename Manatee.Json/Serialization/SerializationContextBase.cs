@@ -16,11 +16,11 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// The inferred type.  This will usually be the actual type of the object during serialization.
 		/// </summary>
-		public Type InferredType { get; private set; }
+		public Type InferredType { get; private set; } = null!;
 		/// <summary>
 		/// The type requested by the serialize/deserialize call.
 		/// </summary>
-		public Type RequestedType { get; private set; }
+		public Type RequestedType { get; private set; } = null!;
 		/// <summary>
 		/// The current location in the JSON instance or object.
 		/// </summary>
@@ -45,7 +45,7 @@ namespace Manatee.Json.Serialization
 			InferredType = type;
 		}
 
-		private protected void Push(Type inferredType, Type requestedType, string propertyName)
+		private protected void Push(Type inferredType, Type requestedType, string? propertyName)
 		{
 			_inferredTypes.Push(InferredType);
 			InferredType = inferredType;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Manatee.Json.Serialization.Internal;
@@ -75,19 +76,11 @@ namespace Manatee.Json.Serialization
 					context.OverrideInferredType(type);
 			}
 
-			return _BuildSerializer(theChosenOne, context.InferredType.GetTypeInfo());
+			return theChosenOne;
 		}
 		internal static ITypeSerializer GetTypeSerializer()
 		{
 			return _autoSerializer;
-		}
-
-		private static ISerializer _BuildSerializer(ISerializer innerSerializer, TypeInfo typeInfo)
-		{
-			if (!typeInfo.IsValueType && innerSerializer.ShouldMaintainReferences)
-				innerSerializer = new ReferencingSerializer(innerSerializer);
-
-			return new SchemaValidator(new DefaultValueSerializer(innerSerializer));
 		}
 
 		private static void _UpdateOrderedSerializers()

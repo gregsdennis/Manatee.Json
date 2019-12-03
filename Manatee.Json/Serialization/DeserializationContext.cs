@@ -29,7 +29,7 @@ namespace Manatee.Json.Serialization
 			JsonRoot = jsonRoot;
 		}
 
-		public void Push(Type type, string propertyName, JsonValue localValue)
+		public void Push(Type type, string? propertyName, JsonValue localValue)
 		{
 			Push(type, type, propertyName);
 

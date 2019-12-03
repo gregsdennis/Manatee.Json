@@ -54,7 +54,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var propertyList = ReflectionCache.GetMembers(type, context.RootSerializer.Options.PropertySelectionStrategy, context.RootSerializer.Options.AutoSerializeFields);
 			var map = _DeserializeValues(context, propertyList, !context.RootSerializer.Options.CaseSensitiveDeserialization);
 			context.ValueMap = map;
-			if ((json.Object.Count > 0) && (context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
+			if (json.Object.Count > 0 && context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException)
 				throw new TypeDoesNotContainPropertyException(type, json);
 			_AssignObjectProperties(out var obj, type, context);
 			return obj;
@@ -64,7 +64,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var type = typeof (T);
 			var propertyList = ReflectionCache.GetTypeMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _DeserializeTypeValues(json, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);
-			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
+			if (json.Object.Count > 0 && serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException)
 				throw new TypeDoesNotContainPropertyException(type, json);
 			object obj = null;
 			_AssignObjectProperties(ref obj, map);

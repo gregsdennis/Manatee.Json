@@ -409,7 +409,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(JsonSchema other)
+		public bool Equals(JsonSchema? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -431,7 +431,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as JsonSchema);
 		}
@@ -445,7 +445,7 @@ namespace Manatee.Json.Schema
 		/// Overloads the equals operator for <see cref="JsonSchema"/>.
 		/// </summary>
 		/// <returns>true if the two values represent the same schema; false otherwise</returns>
-		public static bool operator ==(JsonSchema left, JsonSchema right)
+		public static bool operator ==(JsonSchema? left, JsonSchema? right)
 		{
 			return Equals(left, right);
 		}
@@ -453,7 +453,7 @@ namespace Manatee.Json.Schema
 		/// Overloads the not-equal operator for <see cref="JsonSchema"/>.
 		/// </summary>
 		/// <returns>false if the two values represent the same schema; true otherwise</returns>
-		public static bool operator !=(JsonSchema left, JsonSchema right)
+		public static bool operator !=(JsonSchema? left, JsonSchema? right)
 		{
 			return !Equals(left, right);
 		}

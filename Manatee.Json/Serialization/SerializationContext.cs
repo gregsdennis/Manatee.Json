@@ -20,7 +20,7 @@ namespace Manatee.Json.Serialization
 		{
 		}
 
-		public void Push(Type inferredType, Type requestedType, string propertyName, object? source)
+		public void Push(Type inferredType, Type requestedType, string? propertyName, object? source)
 		{
 			Push(inferredType, requestedType, propertyName);
 

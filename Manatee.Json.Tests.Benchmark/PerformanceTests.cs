@@ -22,9 +22,9 @@ namespace Manatee.Json.Tests.Benchmark
 		public static void Run()
 		{
 			// This initializes whatever caches might be inside the serializer
-			_RunSingle(false);
+			//_RunSingle(false);
 
-			//_RunSingle();5
+			//_RunSingle();
 			_RunBulk();
 		}
 
@@ -43,7 +43,7 @@ namespace Manatee.Json.Tests.Benchmark
 
 		private static void _RunBulk()
 		{
-			var count = 20000;
+			var count = 100000;
 			var subjects = Enumerable.Range(0, count).Select(i => _GenerateSubject()).ToList();
 
 			Console.WriteLine($"\nNewtonsoft @{count}");
@@ -55,16 +55,16 @@ namespace Manatee.Json.Tests.Benchmark
 
 		private static void _Run(IEnumerable<MyClass> subjects, Func<MyClass, string> serialize, Func<string, MyClass> deserialize, bool output = true)
 		{
-			Thread.Sleep(250);
-
+			Thread.Sleep(1);
+		
 			var watch = new Stopwatch();
 
 			watch.Start();
 			var json = subjects.Select(serialize).ToArray();
 			watch.Stop();
-
+			
 			if (output)
-				Console.WriteLine($"  Serialize: {watch.Elapsed} ({watch.ElapsedTicks})");
+				Console.WriteLine($"  Serialize: {watch.Elapsed}");
 
 			watch.Reset();
 			watch.Start();
@@ -72,9 +72,7 @@ namespace Manatee.Json.Tests.Benchmark
 			watch.Stop();
 
 			if (output)
-				Console.WriteLine($"  Deserialize: {watch.Elapsed} ({watch.ElapsedTicks})");
-
-			Thread.Sleep(250);
+				Console.WriteLine($"  Deserialize: {watch.Elapsed}");
 		}
 
 		private static string _ManateeSerialize(MyClass obj)
@@ -95,7 +93,7 @@ namespace Manatee.Json.Tests.Benchmark
 				{
 					Value = Guid.NewGuid().ToString(),
 					OtherValue = new Random().Next(),
-					NestedValue = nest < 0 && new Random().Next(1) == 0 ? _GenerateSubject(nest + 1) : null
+					NestedValue = nest < 3 && new Random().Next(10)%2 == 0 ? _GenerateSubject(nest + 1) : null
 				};
 		}
 	}

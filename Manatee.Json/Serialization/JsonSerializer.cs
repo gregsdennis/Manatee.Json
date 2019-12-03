@@ -1,5 +1,6 @@
 ﻿using System;
 using Manatee.Json.Serialization.Internal;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
@@ -62,11 +63,9 @@ namespace Manatee.Json.Serialization
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
-			var json = serializer.Serialize(context);
+			var json = SchemaValidator.Instance.TrySerialize(serializer, context);
 			if (--_callCount == 0)
-			{
 				context.SerializationMap.Clear();
-			}
 			return json;
 		}
 		/// <summary>
@@ -124,11 +123,9 @@ namespace Manatee.Json.Serialization
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
-			var obj = serializer.Deserialize(context);
-			if (--_callCount == 0)
-			{
+			var obj = SchemaValidator.Instance.TryDeserialize(serializer, context);
+			if (--_callCount == 0) 
 				context.SerializationMap.Complete(obj);
-			}
 			return obj;
 		}
 
