@@ -207,8 +207,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, Func<string, string> nameTransform, out JsonValue value)
 		{
 			var comparison = ignoreCase
-				? StringComparison.Ordinal
-				: StringComparison.OrdinalIgnoreCase;
+				? StringComparison.OrdinalIgnoreCase
+				: StringComparison.Ordinal;
 			var kvp = json.Object.FirstOrDefault(k =>
 				{
 					var transformed = nameTransform(k.Key);

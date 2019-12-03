@@ -223,15 +223,9 @@ namespace Manatee.Json
 		/// <returns>A string.</returns>
 		public string GetIndentedString(int indentLevel = 0)
 		{
-			switch (Type)
-			{
-				case JsonValueType.Object:
-					return _objectValue.GetIndentedString(indentLevel);
-				case JsonValueType.Array:
-					return _arrayValue.GetIndentedString(indentLevel);
-				default:
-					return ToString();
-			}
+			var builder = new StringBuilder();
+			AppendIndentedString(builder, indentLevel);
+			return builder.ToString();
 		}
 		internal void AppendIndentedString(StringBuilder builder, int indentLevel)
 		{
@@ -258,21 +252,9 @@ namespace Manatee.Json
 		/// </remarks>
 		public override string ToString()
 		{
-			switch (Type)
-			{
-				case JsonValueType.Number:
-					return string.Format(CultureInfo.InvariantCulture, "{0}", _numberValue);
-				case JsonValueType.String:
-					return string.Concat("\"", _stringValue.InsertEscapeSequences(), "\"");
-				case JsonValueType.Boolean:
-					return _boolValue ? "true" : "false";
-				case JsonValueType.Object:
-					return _objectValue.ToString();
-				case JsonValueType.Array:
-					return _arrayValue.ToString();
-				default:
-					return "null";
-			}
+			var stringBuilder = new StringBuilder();
+			AppendString(stringBuilder);
+			return stringBuilder.ToString();
 		}
 		internal void AppendString(StringBuilder builder)
 		{

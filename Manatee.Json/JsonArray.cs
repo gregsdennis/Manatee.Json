@@ -42,9 +42,7 @@ namespace Manatee.Json
 			if (Count == 0) return "[]";
 
 			var builder = new StringBuilder();
-
 			AppendIndentedString(builder, indentLevel);
-
 			return builder.ToString();
 		}
 		internal void AppendIndentedString(StringBuilder builder, int indentLevel)
@@ -104,9 +102,7 @@ namespace Manatee.Json
 			if (Count == 0) return "[]";
 
 			var builder = new StringBuilder();
-
 			AppendString(builder);
-
 			return builder.ToString();
 		}
 
