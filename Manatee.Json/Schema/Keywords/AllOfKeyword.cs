@@ -61,10 +61,13 @@ namespace Manatee.Json.Schema
 						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, i.ToString()),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 					};
+				JsonOptions.Log?.Verbose($"Validating {newContext.RelativeLocation}");
 				var localResults = s.Validate(newContext);
 				valid &= localResults.IsValid;
+				JsonOptions.Log?.Verbose($"Valid: {valid}");
 				if (!valid)
 					failedCount++;
+				JsonOptions.Log?.Verbose($"Marking properties [{newContext.EvaluatedPropertyNames.ToStringList()}] as validated");
 				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
 				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 				context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, newContext.LastEvaluatedIndex);

@@ -7,8 +7,6 @@ namespace Manatee.Json
 	/// </summary>
 	public static class JsonOptions
 	{
-		private static ILog _log;
-
 		/// <summary>
 		/// Determines the indention string to use when calling <see cref="JsonValue.GetIndentedString(int)"/>.
 		/// The default is a single tab.
@@ -33,10 +31,6 @@ namespace Manatee.Json
 		/// <summary>
 		/// Provides "verbose" level logging during serialization and schema processing.
 		/// </summary>
-		public static ILog Log
-		{
-			get { return _log ??= NoOpLog.Instance; }
-			set { _log = value; }
-		}
+		public static ILog? Log { get; set; }
 	}
 }

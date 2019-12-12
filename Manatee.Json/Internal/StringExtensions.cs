@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -211,6 +212,11 @@ namespace Manatee.Json.Internal
 		public static bool IsLocalSchemaId(this string s)
 		{
 			return s != "#" && !s.Contains("#/") && s.Contains("#");
+		}
+
+		public static string ToStringList<T>(this IEnumerable<T> items, string separator = ", ")
+		{
+			return string.Join(separator, items);
 		}
 	}
 }
