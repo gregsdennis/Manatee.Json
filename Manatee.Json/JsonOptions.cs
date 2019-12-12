@@ -1,10 +1,14 @@
-﻿namespace Manatee.Json
+﻿using Manatee.Json.Internal;
+
+namespace Manatee.Json
 {
 	/// <summary>
 	/// Provides some configurability around the basic JSON entities.
 	/// </summary>
 	public static class JsonOptions
 	{
+		private static ILog _log;
+
 		/// <summary>
 		/// Determines the indention string to use when calling <see cref="JsonValue.GetIndentedString(int)"/>.
 		/// The default is a single tab.
@@ -25,5 +29,14 @@
 		/// wrong accessory type (e.g. accessing an array as a boolean).  The default is true.
 		/// </summary>
 		public static bool ThrowOnIncorrectTypeAccess { get; set; } = true;
+
+		/// <summary>
+		/// Provides "verbose" level logging during serialization and schema processing.
+		/// </summary>
+		public static ILog Log
+		{
+			get { return _log ??= NoOpLog.Instance; }
+			set { _log = value; }
+		}
 	}
 }

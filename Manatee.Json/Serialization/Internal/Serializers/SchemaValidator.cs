@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,7 +38,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		private static JsonSchema? _GetSchema(TypeInfo typeInfo)
 		{
-			return _schemas.GetOrAdd(typeInfo, _GetSchemaSlow);
+			return _schemas.GetOrAdd(typeInfo, _GetSchemaSlow!);
 		}
 		private static JsonSchema? _GetSchemaSlow(TypeInfo typeInfo)
 		{
@@ -47,8 +46,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (attribute == null)
 				return null;
 
-			Exception exception = null;
-			JsonSchema schema = null;
+			Exception? exception = null;
+			JsonSchema? schema = null;
 			try
 			{
 				schema = _GetPropertySchema(typeInfo, attribute) ?? _GetFileSchema(attribute);
@@ -65,17 +64,18 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (schema == null)
 				throw new JsonSerializationException($"The value '{attribute.Source}' could not be translated into a valid schema. " +
 				                                     $"This value should represent either a public static property on the {typeInfo.Name} type " +
-				                                     $"or a file with this name should exist at the execution path.", exception);
+				                                     $"or a file with this name should exist at the execution path.", exception!);
 
 			return schema;
 		}
-		private static JsonSchema _GetPropertySchema(TypeInfo typeInfo, SchemaAttribute attribute)
+		private static JsonSchema? _GetPropertySchema(TypeInfo typeInfo, SchemaAttribute attribute)
 		{
 			var propertyName = attribute.Source;
 			var property = typeInfo.GetAllProperties()
 			                       .FirstOrDefault(p => typeof(JsonSchema).GetTypeInfo().IsAssignableFrom(p.PropertyType.GetTypeInfo()) &&
-			                                            p.GetMethod.IsStatic && p.Name == propertyName);
-			var schema = (JsonSchema) property?.GetMethod.Invoke(null, new object[] { });
+			                                            p.GetMethod != null && p.GetMethod.IsStatic &&
+			                                            p.Name == propertyName);
+			var schema = (JsonSchema?) property?.GetMethod.Invoke(null, new object[] { });
 			return schema;
 		}
 		private static JsonSchema _GetFileSchema(SchemaAttribute attribute)
