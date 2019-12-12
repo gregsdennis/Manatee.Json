@@ -64,28 +64,38 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
+			if (context.Instance.Type != JsonValueType.Array)
+			{
+				JsonOptions.Log?.Verbose("Instance not an array; not applicable");
+				return new SchemaValidationResults(Name, context);
+			}
 
 			var nestedResults = new List<SchemaValidationResults>();
 			var array = context.Instance.Array;
 			var results = new SchemaValidationResults(Name, context);
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var startIndex = context.LastEvaluatedIndex + 1;
 
-			if (context.LastEvaluatedIndex < array.Count)
+			JsonOptions.Log?.Verbose(startIndex == 0
+				                         ? "No indices have been evaluated; process all"
+				                         : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
+			if (startIndex < array.Count)
 			{
 				if (Value == JsonSchema.False)
 				{
+					JsonOptions.Log?.Verbose("Subschema is `false`; all instances invalid");
 					results.IsValid = false;
 					results.Keyword = Name;
 					results.ErrorMessage = ErrorTemplate;
 					return results;
 				}
 
-				var eligibleItems = array.Skip(context.LastEvaluatedIndex);
-				var index = 0;
+				var eligibleItems = array.Skip(startIndex);
+				var index = startIndex;
 				foreach (var item in eligibleItems)
 				{
+					JsonOptions.Log?.Verbose($"Evaluating index: {index}");
 					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 					var newContext = new SchemaValidationContext(context)
@@ -97,24 +107,31 @@ namespace Manatee.Json.Schema
 						};
 					var localResults = Value.Validate(newContext);
 					valid &= localResults.IsValid;
-					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
-					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					if (valid)
+						context.UpdateEvaluatedPropertiesFromSubschemaValidation(newContext);
 					index++;
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{
-						if (!valid) break;
+						if (!valid)
+						{
+							JsonOptions.Log?.Verbose("Halting validation early");
+							break;
+						}
 					}
 					else if (reportChildErrors)
 						nestedResults.Add(localResults);
 				}
 			}
+			else
+			{
+				JsonOptions.Log?.Verbose("All items have been validated");
+			}
 			results.NestedResults = nestedResults;
 			results.IsValid = valid;
 			results.Keyword = Name;
 
-			if (!valid)
-				results.ErrorMessage = ErrorTemplate;
+			if (!valid) results.ErrorMessage = ErrorTemplate;
 
 			return results;
 		}

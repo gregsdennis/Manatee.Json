@@ -68,6 +68,7 @@ namespace Manatee.Json.Schema
 			var results = new SchemaValidationResults(Name, context);
 
 			bool valid = true;
+			JsonOptions.Log?.Verbose($"Validating that instance is of type {Value.ToJson()}");
 			switch (context.Instance.Type)
 			{
 				case JsonValueType.Number:
@@ -102,6 +103,7 @@ namespace Manatee.Json.Schema
 
 			if (!valid)
 			{
+				JsonOptions.Log?.Verbose($"Type check failed: found {context.Instance.Type.ToString().ToLower()}");
 				results.IsValid = false;
 				results.AdditionalInfo["allowed"] = Value.ToJson();
 				results.AdditionalInfo["actual"] = context.Instance.Type.ToString().ToLower();
@@ -150,7 +152,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(TypeKeyword other)
+		public bool Equals(TypeKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -159,14 +161,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
+		public bool Equals(IJsonSchemaKeyword? other)
 		{
 			return Equals(other as TypeKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as TypeKeyword);
 		}

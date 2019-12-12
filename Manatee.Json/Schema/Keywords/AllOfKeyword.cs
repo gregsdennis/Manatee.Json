@@ -67,10 +67,7 @@ namespace Manatee.Json.Schema
 				JsonOptions.Log?.Verbose($"Valid: {valid}");
 				if (!valid)
 					failedCount++;
-				JsonOptions.Log?.Verbose($"Marking properties [{newContext.EvaluatedPropertyNames.ToStringList()}] as validated");
-				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
-				context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, newContext.LastEvaluatedIndex);
+				context.UpdateEvaluatedPropertiesFromSubschemaValidation(newContext);
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{

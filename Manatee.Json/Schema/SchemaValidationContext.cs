@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Schema
@@ -38,11 +40,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the last array index that has been evaluated in this validation pass.
 		/// </summary>
-		public int LastEvaluatedIndex { get; set; }
+		public int LastEvaluatedIndex { get; set; } = -1;
 		/// <summary>
 		/// Gets the last array index that has been evaluated on the current tier of this validation pass.
 		/// </summary>
-		public int LocalTierLastEvaluatedIndex { get; set; }
+		public int LocalTierLastEvaluatedIndex { get; set; } = -1;
 		/// <summary>
 		/// Gets or sets the base URI at this point in the validation.
 		/// </summary>
@@ -99,6 +101,18 @@ namespace Manatee.Json.Schema
 			IsMetaSchemaValidation = source.IsMetaSchemaValidation;
 
 			LocalRegistry = source.LocalRegistry;
+		}
+
+		public void UpdateEvaluatedPropertiesFromSubschemaValidation(SchemaValidationContext other)
+		{
+			EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
+			EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
+			if (other.EvaluatedPropertyNames.Any())
+				JsonOptions.Log?.Verbose($"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LastEvaluatedIndex);
+			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LocalTierLastEvaluatedIndex);
+			if (other.EvaluatedPropertyNames.Any())
+				JsonOptions.Log?.Verbose($"Indices through [{other.LastEvaluatedIndex}] have now been validated");
 		}
 	}
 }
