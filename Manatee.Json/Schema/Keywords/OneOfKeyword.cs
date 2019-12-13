@@ -52,6 +52,8 @@ namespace Manatee.Json.Schema
 			var nestedResults = new List<SchemaValidationResults>();
 			var validCount = 0;
 
+			var contextCopy = new SchemaValidationContext(context);
+
 			foreach (var s in this)
 			{
 				var newContext = new SchemaValidationContext(context)
@@ -62,13 +64,16 @@ namespace Manatee.Json.Schema
 				var localResults = s.Validate(newContext);
 				if (localResults.IsValid)
 					validCount++;
-				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
-				context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, newContext.LastEvaluatedIndex);
+				JsonOptions.Log?.Verbose($"`{Name}` {validCount} items valid so far");
+				contextCopy.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (validCount > 1) break;
+					if (validCount > 1)
+					{
+						JsonOptions.Log?.Verbose("More than one subschema succeeded; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);
@@ -82,8 +87,13 @@ namespace Manatee.Json.Schema
 
 			if (!results.IsValid)
 			{
+				JsonOptions.Log?.Verbose($"{validCount} subschemas passed validation; expected only one");
 				results.AdditionalInfo["passed"] = validCount;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			}
+			else
+			{
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(contextCopy);
 			}
 
 			return results;

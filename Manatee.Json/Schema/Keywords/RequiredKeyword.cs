@@ -67,7 +67,11 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				JsonOptions.Log?.Verbose("Instance not an object; not applicable");
+				return results;
+			}
 
 			var missingProperties = new List<string>();
 			var obj = context.Instance.Object;
@@ -86,6 +90,7 @@ namespace Manatee.Json.Schema
 
 			if (missingProperties.Any())
 			{
+				JsonOptions.Log?.Verbose($"Properties {missingProperties.ToJson()} required but not found");
 				results.IsValid = false;
 				results.AdditionalInfo["properties"] = missingProperties.ToJson();
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);

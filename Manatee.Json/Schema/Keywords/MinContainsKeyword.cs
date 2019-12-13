@@ -119,13 +119,23 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Array) return results;
-			if (!context.Misc.TryGetValue("containsCount", out var value)) return results;
+			if (context.Instance.Type != JsonValueType.Array)
+			{
+				JsonOptions.Log?.Verbose("Instance not an array; not applicable");
+				return results;
+			}
+
+			if (!context.Misc.TryGetValue("containsCount", out var value))
+			{
+				JsonOptions.Log?.Verbose("`contains` keyword not present; not applicable");
+				return results;
+			}
 
 			var containsCount = (int) value;
 
 			if (containsCount < Value)
 			{
+				JsonOptions.Log?.Verbose($"Required at least {Value} matching items, but only {containsCount} found");
 				results.IsValid = false;
 				results.AdditionalInfo["actual"] = containsCount;
 				results.AdditionalInfo["lowerBound"] = Value;

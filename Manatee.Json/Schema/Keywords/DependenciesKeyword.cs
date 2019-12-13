@@ -71,7 +71,11 @@ namespace Manatee.Json.Schema
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (!valid) break;
+					if (!valid)
+					{
+						JsonOptions.Log?.Verbose("Dependency failed; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);

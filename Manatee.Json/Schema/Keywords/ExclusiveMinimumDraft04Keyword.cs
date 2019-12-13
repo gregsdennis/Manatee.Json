@@ -66,15 +66,28 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Number) return results;
+			if (context.Instance.Type != JsonValueType.Number)
+			{
+				JsonOptions.Log?.Verbose("Instance not a number; not applicable");
+				return results;
+			}
 
 			var keyword = context.Local.Get<MinimumKeyword>();
-			if (keyword == null) return results;
+			if (keyword == null)
+			{
+				JsonOptions.Log?.Verbose("`minimum` keyword not defined; not applicable");
+				return results;
+			}
 
-			if (!Value) return results;
+			if (!Value)
+			{
+				JsonOptions.Log?.Verbose("Not exclusive; see `minimum` results");
+				return results;
+			}
 
 			if (context.Instance.Number <= keyword.Value)
 			{
+				JsonOptions.Log?.Verbose($"Bounds check failed: {context.Instance.Number} <= {keyword.Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["lowerBound"] = keyword.Value;
 				results.AdditionalInfo["actual"] = context.Instance;

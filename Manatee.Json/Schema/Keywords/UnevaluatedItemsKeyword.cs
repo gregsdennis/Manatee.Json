@@ -95,7 +95,6 @@ namespace Manatee.Json.Schema
 				var index = startIndex;
 				foreach (var item in eligibleItems)
 				{
-					JsonOptions.Log?.Verbose($"Evaluating index: {index}");
 					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 					var newContext = new SchemaValidationContext(context)
@@ -108,14 +107,14 @@ namespace Manatee.Json.Schema
 					var localResults = Value.Validate(newContext);
 					valid &= localResults.IsValid;
 					if (valid)
-						context.UpdateEvaluatedPropertiesFromSubschemaValidation(newContext);
+						context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 					index++;
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{
 						if (!valid)
 						{
-							JsonOptions.Log?.Verbose("Halting validation early");
+							JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
 							break;
 						}
 					}

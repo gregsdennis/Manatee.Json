@@ -103,7 +103,7 @@ namespace Manatee.Json.Schema
 			LocalRegistry = source.LocalRegistry;
 		}
 
-		public void UpdateEvaluatedPropertiesFromSubschemaValidation(SchemaValidationContext other)
+		public void UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(SchemaValidationContext other)
 		{
 			EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
 			EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);

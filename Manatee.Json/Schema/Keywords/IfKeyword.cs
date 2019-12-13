@@ -57,62 +57,23 @@ namespace Manatee.Json.Schema
 			var then = context.Local.Get<ThenKeyword>();
 			var @else = context.Local.Get<ElseKeyword>();
 
-			if (then == null && @else == null) return SchemaValidationResults.Null;
-
-			var newContext = new SchemaValidationContext(context)
-				{
-					BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name),
-					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
-				};
-
-			var ifResults = Value.Validate(newContext);
-
-			if (ifResults.IsValid)
+			if (then != null || @else != null)
 			{
-				if (then == null) return SchemaValidationResults.Null;
-
-				var results = new SchemaValidationResults(Name, context);
-
-				newContext = new SchemaValidationContext(context)
+				var newContext = new SchemaValidationContext(context)
 					{
-						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(then.Name),
-						RelativeLocation = context.RelativeLocation.CloneAndAppend(then.Name),
+						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name),
+						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 					};
-				var thenResults = then.Value.Validate(newContext);
-				if (!thenResults.IsValid)
-				{
-					results.IsValid = false;
-					results.Keyword = then.Name;
-					results.ErrorMessage = ThenKeyword.ErrorTemplate;
-					if (JsonSchemaOptions.ShouldReportChildErrors(then, context))
-						results.NestedResults.Add(thenResults);
-				}
 
-				return results;
+				var ifResults = Value.Validate(newContext);
+				context.Misc["ifKeywordValid"] = ifResults.IsValid;
 			}
 			else
 			{
-				if (@else == null) return SchemaValidationResults.Null;
-
-				var results = new SchemaValidationResults(Name, context);
-
-				newContext = new SchemaValidationContext(context)
-					{
-						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(@else.Name),
-						RelativeLocation = context.RelativeLocation.CloneAndAppend(@else.Name),
-					};
-				var elseResults = @else.Value.Validate(newContext);
-				if (!elseResults.IsValid)
-				{
-					results.IsValid = false;
-					results.Keyword = @else.Name;
-					results.ErrorMessage = ElseKeyword.ErrorTemplate;
-					if (JsonSchemaOptions.ShouldReportChildErrors(@else, context))
-						results.NestedResults.Add(elseResults);
-				}
-
-				return results;
+				JsonOptions.Log?.Verbose("`then` and `else` keywords not present; skipping `if` validation");
 			}
+
+			return new SchemaValidationResults(Name, context);
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.

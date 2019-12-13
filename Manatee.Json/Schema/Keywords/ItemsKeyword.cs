@@ -78,7 +78,6 @@ namespace Manatee.Json.Schema
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
 						};
-					JsonOptions.Log?.Verbose($"Validating {context.RelativeLocation}");
 					var localResults = this[i].Validate(newContext);
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
 					{
@@ -90,10 +89,10 @@ namespace Manatee.Json.Schema
 						failedIndices.Add(i);
 					if (reportChildErrors)
 						nestedResults.Add(this[i].Validate(newContext));
-					i++;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-					context.UpdateEvaluatedPropertiesFromSubschemaValidation(newContext);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LocalTierLastEvaluatedIndex, i);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+					i++;
 				}
 
 				results.IsValid = nestedResults.All(r => r.IsValid);
@@ -117,13 +116,13 @@ namespace Manatee.Json.Schema
 							RelativeLocation = relativeLocation,
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(i.ToString()),
 						};
-					JsonOptions.Log?.Verbose($"Evaluating index: {i}");
 					var localResults = this[0].Validate(newContext);
 					valid &= localResults.IsValid;
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LocalTierLastEvaluatedIndex, i);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{

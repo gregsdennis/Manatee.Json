@@ -49,7 +49,11 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				JsonOptions.Log?.Verbose("Instance not an object; not applicable");
+				return results;
+			}
 
 			var nestedResults = new List<SchemaValidationResults>();
 			var obj = context.Instance.Object;
@@ -61,30 +65,42 @@ namespace Manatee.Json.Schema
 				var pattern = new Regex(patternProperty.Key);
 				var localSchema = patternProperty.Value;
 				var matches = obj.Keys.Where(k => pattern.IsMatch(k));
-				var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, patternProperty.Key);
-				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
-				foreach (var match in matches)
+				if (matches.Any())
 				{
-					context.EvaluatedPropertyNames.Add(match);
-					context.LocallyEvaluatedPropertyNames.Add(match);
-					var newContext = new SchemaValidationContext(context)
-						{
-							Instance = obj[match],
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-							InstanceLocation = context.InstanceLocation.CloneAndAppend(match),
-						};
-					var localResults = localSchema.Validate(newContext);
-					valid &= localResults.IsValid;
-					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
-
-					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					JsonOptions.Log?.Verbose($"Properties {matches.ToJson()} are matches for regular expression \"{pattern}\"");
+					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, patternProperty.Key);
+					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
+					foreach (var match in matches)
 					{
-						if (!valid) break;
+						context.EvaluatedPropertyNames.Add(match);
+						context.LocallyEvaluatedPropertyNames.Add(match);
+						var newContext = new SchemaValidationContext(context)
+							{
+								Instance = obj[match],
+								BaseRelativeLocation = baseRelativeLocation,
+								RelativeLocation = relativeLocation,
+								InstanceLocation = context.InstanceLocation.CloneAndAppend(match),
+							};
+						var localResults = localSchema.Validate(newContext);
+						valid &= localResults.IsValid;
+						if (valid)
+							context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+
+						if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+						{
+							if (!valid)
+							{
+								JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
+								break;
+							}
+						}
+						else if (reportChildErrors)
+							nestedResults.Add(localResults);
 					}
-					else if (reportChildErrors)
-						nestedResults.Add(localResults);
+				}
+				else
+				{
+					JsonOptions.Log?.Verbose($"No properties found that match regular expression \"{pattern}\"");
 				}
 			}
 

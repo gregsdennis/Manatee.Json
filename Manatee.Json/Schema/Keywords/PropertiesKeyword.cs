@@ -48,7 +48,11 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				JsonOptions.Log?.Verbose("Instance not an object; not applicable");
+				return results;
+			}
 
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
@@ -56,7 +60,11 @@ namespace Manatee.Json.Schema
 			var nestedResults = new List<SchemaValidationResults>();
 			foreach (var property in this)
 			{
-				if (!obj.ContainsKey(property.Key)) continue;
+				if (!obj.ContainsKey(property.Key))
+				{
+					JsonOptions.Log?.Verbose($"Property {property.Key} not found; skipping");
+					continue;
+				}
 
 				context.EvaluatedPropertyNames.Add(property.Key);
 				context.LocallyEvaluatedPropertyNames.Add(property.Key);
@@ -74,7 +82,11 @@ namespace Manatee.Json.Schema
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (!valid) break;
+					if (!valid)
+					{
+						JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);

@@ -26,7 +26,8 @@ namespace Manatee.Json.Tests
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			JsonOptions.Log = new ConsoleLog();
+			if (string.Equals(Environment.GetEnvironmentVariable("LOCAL_TEST"), "true", StringComparison.InvariantCultureIgnoreCase))
+				JsonOptions.Log = new ConsoleLog();
 		}
 	}
 }	

@@ -67,7 +67,11 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				JsonOptions.Log?.Verbose("Instance not an object; not applicable");
+				return results;
+			}
 
 			var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -92,7 +96,11 @@ namespace Manatee.Json.Schema
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (!valid) break;
+					if (!valid)
+					{
+						JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);
@@ -103,6 +111,7 @@ namespace Manatee.Json.Schema
 			
 			if (!results.IsValid)
 			{
+				JsonOptions.Log?.Verbose($"Property names {invalidPropertyNames.ToJson()} failed");
 				results.AdditionalInfo["properties"] = invalidPropertyNames;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}

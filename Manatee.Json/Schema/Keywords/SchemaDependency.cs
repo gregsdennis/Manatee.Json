@@ -55,8 +55,17 @@ namespace Manatee.Json.Schema
 					Keyword = $"{context.Misc["dependencyParent"]}/{PropertyName}"
 				};
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
-			if (!context.Instance.Object.ContainsKey(PropertyName)) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				JsonOptions.Log?.Verbose("Instance not an object; not applicable");
+				return results;
+			}
+
+			if (!context.Instance.Object.ContainsKey(PropertyName))
+			{
+				JsonOptions.Log?.Verbose($"Property {PropertyName} not found; not applicable");
+				return results;
+			}
 
 			var newContext = new SchemaValidationContext(context)
 				{
@@ -69,6 +78,7 @@ namespace Manatee.Json.Schema
 
 			if (!nestedResult.IsValid)
 			{
+				JsonOptions.Log?.Verbose($"Property {PropertyName} found, but subschema failed");
 				results.IsValid = false;
 				results.ErrorMessage = ErrorTemplate;
 			}

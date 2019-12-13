@@ -61,17 +61,20 @@ namespace Manatee.Json.Schema
 						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, i.ToString()),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),
 					};
-				JsonOptions.Log?.Verbose($"Validating {newContext.RelativeLocation}");
 				var localResults = s.Validate(newContext);
 				valid &= localResults.IsValid;
-				JsonOptions.Log?.Verbose($"Valid: {valid}");
+				JsonOptions.Log?.Verbose($"`{Name}` {(valid ? "valid" : "invalid")} so far");
 				if (!valid)
 					failedCount++;
-				context.UpdateEvaluatedPropertiesFromSubschemaValidation(newContext);
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (!valid) break;
+					if (!valid)
+					{
+						JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);
