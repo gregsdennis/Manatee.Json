@@ -54,7 +54,6 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			JsonOptions.Log?.Verbose($"Registering ID {Value} at {context.RelativeLocation}");
 			return SchemaValidationResults.Null;
 		}
 		/// <summary>

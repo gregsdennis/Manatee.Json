@@ -333,9 +333,6 @@ namespace Manatee.Json.Schema
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
-			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
-				JsonSchemaRegistry.Register(this);
-
 			if (refKeyword != null) return refKeyword.Validate(context);
 
 			var results = new SchemaValidationResults(context);
