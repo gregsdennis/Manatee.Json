@@ -8,7 +8,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType == typeof(TimeSpan);
 		}
@@ -18,7 +18,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return ts.ToString();
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			return context.LocalValue.Type == JsonValueType.String
 				? TimeSpan.Parse(context.LocalValue.String)

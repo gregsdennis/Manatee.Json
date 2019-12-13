@@ -10,9 +10,14 @@ namespace Manatee.Json
 	public class JsonSyntaxException : Exception
 	{
 		/// <summary>
+		/// Obsolete - Gets the JSON source string.
+		/// </summary>
+		[Obsolete("Use SourceData instead")]
+		public new string? Source => SourceData;
+		/// <summary>
 		/// Gets the JSON source string.
 		/// </summary>
-		public new string Source { get; }
+		public string? SourceData { get; }
 
 		/// <summary>
 		/// Gets a JSON Pointer to the location at which the error was found.
@@ -27,20 +32,20 @@ namespace Manatee.Json
 		/// </returns>
 		public override string Message => $"{base.Message} Path: '{Location}'";
 
-		internal JsonSyntaxException(string message, JsonValue value)
+		internal JsonSyntaxException(string message, JsonValue? value)
 			: base(message)
 		{
 			Location = _BuildPointer(value);
 		}
 
-		internal JsonSyntaxException(string source, string message, JsonValue value)
+		internal JsonSyntaxException(string source, string message, JsonValue? value)
 			: base(message)
 		{
-			Source = source;
+			SourceData = source;
 			Location = _BuildPointer(value);
 		}
 
-		private static JsonPointer _BuildPointer(JsonValue value)
+		private static JsonPointer _BuildPointer(JsonValue? value)
 		{
 			var pointer = new JsonPointer();
 
@@ -60,7 +65,7 @@ namespace Manatee.Json
 					if (!value.Array.Any()) return pointer;
 
 					var item = value.Array.Last();
-					var index = value.Array.Count - 1;
+					var index = value.Array!.Count - 1;
 					pointer.Add(index.ToString());
 					pointer.AddRange(_BuildPointer(item));
 					break;

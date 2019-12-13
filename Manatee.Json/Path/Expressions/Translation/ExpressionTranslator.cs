@@ -9,14 +9,14 @@ namespace Manatee.Json.Path.Expressions.Translation
 {
 	internal static class ExpressionTranslator
 	{
-		private static readonly Dictionary<Type, Func<Expression, IExpressionTranslator>> Translators =
+		private static readonly Dictionary<Type, Func<Expression, IExpressionTranslator>> _translators =
 			new Dictionary<Type, Func<Expression, IExpressionTranslator>>
 				{
-						{typeof(ConstantExpression), _GetValueTranslator},
-						{typeof(BinaryExpression), e => _GetNodeTypeBasedTranslator(e.NodeType)},
-						{typeof(UnaryExpression), e => _GetNodeTypeBasedTranslator(e.NodeType)},
-						{typeof(MethodCallExpression), _GetMethodCallTranslator},
-						{typeof(MemberExpression), _GetMemberTranslator},
+					{typeof(ConstantExpression), _GetValueTranslator},
+					{typeof(BinaryExpression), e => _GetNodeTypeBasedTranslator(e.NodeType)},
+					{typeof(UnaryExpression), e => _GetNodeTypeBasedTranslator(e.NodeType)},
+					{typeof(MethodCallExpression), _GetMethodCallTranslator},
+					{typeof(MemberExpression), _GetMemberTranslator},
 				};
 
 		private static IExpressionTranslator _GetValueTranslator(Expression e)
@@ -141,27 +141,22 @@ namespace Manatee.Json.Path.Expressions.Translation
 				case ExpressionType.OnesComplement:
 				case ExpressionType.IsTrue:
 				case ExpressionType.IsFalse:
-					break;
+				default:
+					throw new NotSupportedException($"Expression type '{type}' is not supported.");
 			}
-			throw new NotSupportedException($"Expression type '{type}' is not supported.");
 		}
 		private static IExpressionTranslator _GetMethodCallTranslator(Expression exp)
 		{
 			var method = (MethodCallExpression) exp;
-			switch (method.Method.Name)
-			{
-				case "Length":
-					return new LengthExpressionTranslator();
-				case "HasProperty":
-					return new HasPropertyExpressionTranslator();
-				case "Name":
-					return new NameExpressionTranslator();
-				case "ArrayIndex":
-					return new ArrayIndexExpressionTranslator();
-				case "IndexOf":
-					return new IndexOfExpressionTranslator();
-			}
-			throw new NotSupportedException($"The method '{method.Method.Name}' is not supported.");
+			return method.Method.Name switch
+				{
+					"Length" => (IExpressionTranslator) new LengthExpressionTranslator(),
+					"HasProperty" => new HasPropertyExpressionTranslator(),
+					"Name" => new NameExpressionTranslator(),
+					"ArrayIndex" => new ArrayIndexExpressionTranslator(),
+					"IndexOf" => new IndexOfExpressionTranslator(),
+					_ => throw new NotSupportedException($"The method '{method.Method.Name}' is not supported.")
+				};
 		}
 		private static IExpressionTranslator _GetMemberTranslator(Expression exp)
 		{
@@ -175,10 +170,10 @@ namespace Manatee.Json.Path.Expressions.Translation
 		{
 			var type = source.GetType();
 			var typeInfo = type.GetTypeInfo();
-			var expressionKey = Translators.Keys.FirstOrDefault(t => t.GetTypeInfo().IsAssignableFrom(typeInfo));
+			var expressionKey = _translators.Keys.FirstOrDefault(t => t.GetTypeInfo().IsAssignableFrom(typeInfo));
 			if (expressionKey != null)
 			{
-				var translator = Translators[expressionKey](source);
+				var translator = _translators[expressionKey](source);
 				if (translator != null)
 					return translator.Translate<T>(source);
 			}

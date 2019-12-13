@@ -2,6 +2,11 @@
 {
 	internal class ValueExpression : JsonPathExpression
 	{
-		public object Value { get; set; }
+		public object Value { get; }
+
+		public ValueExpression(object value)
+		{
+			Value = value;
+		}
 	}
 }

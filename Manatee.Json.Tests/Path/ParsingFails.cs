@@ -32,6 +32,8 @@ namespace Manatee.Json.Tests.Path
 		[TestCase("$[?(@[(@.length-1))]")]
 		[TestCase("$[?(@[?(@.name == 5))]")]
 		[TestCase("$..")]
+		[TestCase("[1]")]
+		[TestCase(".a")]
 		public static void Run(string text)
 		{
 			Assert.Throws<JsonPathSyntaxException>(() =>

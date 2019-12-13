@@ -6,7 +6,7 @@
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType == typeof(string);
 		}
@@ -14,7 +14,7 @@
 		{
 			return context.Source as string;
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			return context.LocalValue.String;
 		}

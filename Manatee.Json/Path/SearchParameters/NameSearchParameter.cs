@@ -25,21 +25,21 @@ namespace Manatee.Json.Path.SearchParameters
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return _name.Any(c => !char.IsLetterOrDigit(c)) || string.IsNullOrWhiteSpace(_name)
 					   ? $"'{_name}'"
 					   : _name;
 		}
 
-		public bool Equals(NameSearchParameter other)
+		public bool Equals(NameSearchParameter? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return string.Equals(_name, other._name);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as NameSearchParameter);
 		}

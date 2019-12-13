@@ -5,7 +5,7 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal static class ValueComparer
 	{
-		public static bool Equal(object a, object b)
+		public static bool Equal(object? a, object? b)
 		{
 			var sleft = _TryGetString(a);
 			var sright = _TryGetString(b);
@@ -21,7 +21,7 @@ namespace Manatee.Json.Path.Expressions
 				return dleft == dright;
 			return false;
 		}
-		public static bool LessThan(object a, object b)
+		public static bool LessThan(object? a, object? b)
 		{
 			var sleft = _TryGetString(a);
 			var sright = _TryGetString(b);
@@ -33,7 +33,7 @@ namespace Manatee.Json.Path.Expressions
 				return dleft < dright;
 			return false;
 		}
-		public static bool GreaterThan(object a, object b)
+		public static bool GreaterThan(object? a, object? b)
 		{
 			var sleft = _TryGetString(a);
 			var sright = _TryGetString(b);
@@ -46,7 +46,7 @@ namespace Manatee.Json.Path.Expressions
 			return false;
 		}
 
-		public static bool LessThanEqual(object a, object b)
+		public static bool LessThanEqual(object? a, object? b)
 		{
 			var sleft = _TryGetString(a);
 			var sright = _TryGetString(b);
@@ -58,7 +58,7 @@ namespace Manatee.Json.Path.Expressions
 				return dleft <= dright;
 			return false;
 		}
-		public static bool GreaterThanEqual(object a, object b)
+		public static bool GreaterThanEqual(object? a, object? b)
 		{
 			var sleft = _TryGetString(a);
 			var sright = _TryGetString(b);
@@ -71,12 +71,12 @@ namespace Manatee.Json.Path.Expressions
 			return false;
 		}
 
-		private static string _TryGetString(object value)
+		private static string? _TryGetString(object? value)
 		{
 			var jv = value as JsonValue;
 			return jv != null && jv.Type == JsonValueType.String ? jv.String : value as string;
 		}
-		private static double? _TryGetNumber(object value)
+		private static double? _TryGetNumber(object? value)
 		{
 			var jv = value as JsonValue;
 			if (jv != null && jv.Type == JsonValueType.Number) return jv.Number;
@@ -84,7 +84,7 @@ namespace Manatee.Json.Path.Expressions
 			// at this point, we have no idea what this is.
 			return null;
 		}
-		private static bool? _TryGetBoolean(object value)
+		private static bool? _TryGetBoolean(object? value)
 		{
 			var jv = value as JsonValue;
 			return jv != null && jv.Type == JsonValueType.Boolean ? jv.Boolean : value as bool?;

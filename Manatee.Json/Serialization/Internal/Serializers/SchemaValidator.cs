@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -8,29 +9,19 @@ using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class SchemaValidator : ISerializer
+	internal class SchemaValidator : IChainedSerializer
 	{
-		private static readonly ConcurrentDictionary<TypeInfo, JsonSchema> _schemas
-			= new ConcurrentDictionary<TypeInfo, JsonSchema>();
+		private static readonly ConcurrentDictionary<TypeInfo, JsonSchema> _schemas = new ConcurrentDictionary<TypeInfo, JsonSchema>();
 
-		private readonly ISerializer _innerSerializer;
+		public static SchemaValidator Instance { get; } = new SchemaValidator();
 
-		public bool ShouldMaintainReferences => _innerSerializer.ShouldMaintainReferences;
+		private SchemaValidator() { }
 
-		public SchemaValidator(ISerializer innerSerializer)
+		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
-			_innerSerializer = innerSerializer;
+			return DefaultValueSerializer.Instance.TrySerialize(serializer, context);
 		}
-
-		public bool Handles(SerializationContext context)
-		{
-			return true;
-		}
-		public JsonValue Serialize(SerializationContext context)
-		{
-			return _innerSerializer.Serialize(context);
-		}
-		public object Deserialize(SerializationContext context)
+		public object? TryDeserialize(ISerializer serializer, DeserializationContext context)
 		{
 			var typeInfo = context.InferredType.GetTypeInfo();
 			var schema = _GetSchema(typeInfo);
@@ -40,16 +31,17 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (!results.IsValid)
 					throw new JsonSerializationException($"JSON did not pass schema defined by type '{context.InferredType}'.\n" +
 					                                     "Errors:\n" +
-														 context.RootSerializer.Serialize(results));
+					                                     context.RootSerializer.Serialize(results));
 			}
 
-			return _innerSerializer.Deserialize(context);
+			return DefaultValueSerializer.Instance.TryDeserialize(serializer, context);
 		}
-		private static JsonSchema _GetSchema(TypeInfo typeInfo)
+
+		private static JsonSchema? _GetSchema(TypeInfo typeInfo)
 		{
 			return _schemas.GetOrAdd(typeInfo, _GetSchemaSlow);
 		}
-		private static JsonSchema _GetSchemaSlow(TypeInfo typeInfo)
+		private static JsonSchema? _GetSchemaSlow(TypeInfo typeInfo)
 		{
 			var attribute = typeInfo.GetCustomAttribute<SchemaAttribute>();
 			if (attribute == null)

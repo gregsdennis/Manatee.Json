@@ -1,30 +1,37 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Expressions
 {
 	internal class ValueExpression<T> : ExpressionTreeNode<T>, IEquatable<ValueExpression<T>>
 	{
-		public object Value { get; set; }
+		public object Value { get; }
 
-		public override object Evaluate(T json, JsonValue root)
+		public ValueExpression(object value)
+		{
+			Value = value;
+		}
+
+		public override object? Evaluate([MaybeNull] T json, JsonValue? root)
 		{
 			return Value;
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
-			return Value is string
-				       ? $"\"{Value}\""
-				       : Value is bool
-					       ? Value.ToString().ToLower()
-					       : Value.ToString();
+			return Value switch
+				{
+					string s => $"\"{s}\"",
+					bool b => b.ToString().ToLower(),
+					_ => Value.ToString()
+				};
 		}
-		public bool Equals(ValueExpression<T> other)
+		public bool Equals(ValueExpression<T>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(Value, other.Value);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as ValueExpression<T>);
 		}

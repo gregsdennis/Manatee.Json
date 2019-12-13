@@ -74,7 +74,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public IResolver Resolver
 		{
-			get { return _resolver ?? (_resolver = _defaultResolver); }
+			get { return _resolver ??= _defaultResolver; }
 			set { _resolver = value; }
 		}
 		/// <summary>
@@ -86,7 +86,7 @@ namespace Manatee.Json.Serialization
 	    /// </summary>
 	    public Func<string, string> SerializationNameTransform
 	    {
-	        get { return _serializationNameTransform ?? (_serializationNameTransform = s => s); }
+	        get { return _serializationNameTransform ??= s => s; }
 	        set { _serializationNameTransform = value; }
 	    }
 	    /// <summary>
@@ -94,7 +94,7 @@ namespace Manatee.Json.Serialization
 	    /// </summary>
 	    public Func<string, string> DeserializationNameTransform
 	    {
-	        get { return _deserializationNameTransform ?? (_deserializationNameTransform = s => s); }
+	        get { return _deserializationNameTransform ??= s => s; }
 	        set { _deserializationNameTransform = value; }
 	    }
 		/// <summary>

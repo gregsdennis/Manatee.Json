@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Manatee.Json
 {
@@ -13,9 +14,13 @@ namespace Manatee.Json
 		/// <param name="arr">The array to search</param>
 		/// <param name="type">The type of value to return</param>
 		/// <returns>A <see cref="JsonArray"/> containing only the <see cref="JsonValue"/>s of a specified type</returns>
-		public static JsonArray OfType(this JsonArray arr, JsonValueType type)
+#if !DEBUG
+		[Obsolete("This method will throw ArgumentNullException in future versions.")]
+#endif
+		public static JsonArray OfType(this JsonArray? arr, JsonValueType type)
 		{
-			if (arr == null) return null;
+			if (arr == null) return null!;
+
 			var retVal = new JsonArray();
 			retVal.AddRange(arr.Where(j => j.Type == type));
 			return retVal;

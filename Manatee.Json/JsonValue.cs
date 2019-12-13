@@ -17,11 +17,11 @@ namespace Manatee.Json
 	/// </remarks>
 	public class JsonValue : IEquatable<JsonValue>
 	{
-		private bool _boolValue;
-		private string _stringValue;
-		private double _numberValue;
-		private JsonObject _objectValue;
-		private JsonArray _arrayValue;
+		private readonly bool _boolValue = default!;
+		private readonly string _stringValue = default!;
+		private readonly double _numberValue = default!;
+		private readonly JsonObject _objectValue = default!;
+		private readonly JsonArray _arrayValue = default!;
 
 		/// <summary>
 		/// Globally defined null-valued JSON value.
@@ -29,7 +29,9 @@ namespace Manatee.Json
 		/// <remarks>
 		/// When adding values to a <see cref="JsonObject"/> or <see cref="JsonArray"/>, nulls will automatically be converted into this field.
 		/// </remarks>
+#pragma warning disable 618
 		public static readonly JsonValue Null = new JsonValue();
+#pragma warning restore 618
 
 		/// <summary>
 		/// Accesses the <see cref="JsonValue"/> as a boolean.
@@ -41,16 +43,9 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (Type != JsonValueType.Boolean)
-					return !JsonOptions.ThrowOnIncorrectTypeAccess
-							   ? default(bool)
-							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
+				if (Type != JsonValueType.Boolean && JsonOptions.ThrowOnIncorrectTypeAccess)
+					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Boolean);
 				return _boolValue;
-			}
-			private set
-			{
-				Type = JsonValueType.Boolean;
-				_boolValue = value;
 			}
 		}
 		/// <summary>
@@ -66,16 +61,9 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (Type != JsonValueType.String)
-					return !JsonOptions.ThrowOnIncorrectTypeAccess
-							   ? default(string)
-							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
+				if (Type != JsonValueType.String && JsonOptions.ThrowOnIncorrectTypeAccess)
+					throw new JsonValueIncorrectTypeException(Type, JsonValueType.String);
 				return _stringValue;
-			}
-			private set
-			{
-				Type = JsonValueType.String;
-				_stringValue = value;
 			}
 		}
 		/// <summary>
@@ -88,16 +76,9 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (Type != JsonValueType.Number)
-					return !JsonOptions.ThrowOnIncorrectTypeAccess
-							   ? default(double)
-							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
+				if (Type != JsonValueType.Number && JsonOptions.ThrowOnIncorrectTypeAccess)
+					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Number);
 				return _numberValue;
-			}
-			private set
-			{
-				Type = JsonValueType.Number;
-				_numberValue = value;
 			}
 		}
 		/// <summary>
@@ -110,16 +91,9 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (Type != JsonValueType.Object)
-					return !JsonOptions.ThrowOnIncorrectTypeAccess
-							   ? default(JsonObject)
-							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
+				if (Type != JsonValueType.Object && JsonOptions.ThrowOnIncorrectTypeAccess)
+					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Object);
 				return _objectValue;
-			}
-			private set
-			{
-				Type = JsonValueType.Object;
-				_objectValue = value;
 			}
 		}
 		/// <summary>
@@ -132,26 +106,21 @@ namespace Manatee.Json
 		{
 			get
 			{
-				if (Type != JsonValueType.Array)
-					return !JsonOptions.ThrowOnIncorrectTypeAccess
-							   ? default(JsonArray)
-							   : throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
+				if (Type != JsonValueType.Array && JsonOptions.ThrowOnIncorrectTypeAccess)
+					throw new JsonValueIncorrectTypeException(Type, JsonValueType.Array);
 				return _arrayValue;
-			}
-			private set
-			{
-				Type = JsonValueType.Array;
-				_arrayValue = value;
 			}
 		}
 		/// <summary>
 		/// Gets the value type of the existing data.
 		/// </summary>
-		public JsonValueType Type { get; private set; }
+		public JsonValueType Type { get; }
 
 		/// <summary>
 		/// Creates a null <see cref="JsonValue"/>.
 		/// </summary>
+		[Obsolete("Use JsonValue.Null instead.")]
+		// TODO: make this private
 		public JsonValue()
 		{
 			Type = JsonValueType.Null;
@@ -159,46 +128,84 @@ namespace Manatee.Json
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a boolean.
 		/// </summary>
+#if !DEBUG
+		[Obsolete("Future versions will remove the null allowance.")]
+#endif
 		public JsonValue(bool? b)
 		{
-			if (b != null) Boolean = b.Value;
+			if (b != null)
+			{
+				Type = JsonValueType.Boolean;
+				_boolValue = b.Value;
+			}
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a string.
 		/// </summary>
-		public JsonValue(string s)
+#if !DEBUG
+		[Obsolete("Future versions will require non-null parameters.")]
+#endif
+		public JsonValue(string? s)
 		{
-			if (s != null) String = s;
+			if (s != null)
+			{
+				Type = JsonValueType.String;
+				_stringValue = s;
+			}
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a numeric value.
 		/// </summary>
+#if !DEBUG
+		[Obsolete("Future versions will remove the null allowance.")]
+#endif
 		public JsonValue(double? n)
 		{
-			if (n != null) Number = n.Value;
+			if (n != null)
+			{
+				Type = JsonValueType.Number;
+				_numberValue = n.Value;
+			}
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a JSON object.
 		/// </summary>
-		public JsonValue(JsonObject o)
+#if !DEBUG
+		[Obsolete("Future versions will require non-null parameters.")]
+#endif
+		public JsonValue(JsonObject? o)
 		{
-			if (o != null) Object = o;
+			if (o != null)
+			{
+				Type = JsonValueType.Object;
+				_objectValue = o;
+			}
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a JSON array.
 		/// </summary>
-		public JsonValue(JsonArray a)
+#if !DEBUG
+		[Obsolete("Future versions will require non-null parameters.")]
+#endif
+		public JsonValue(JsonArray? a)
 		{
-			if (a != null) Array = a;
+			if (a != null)
+			{
+				Type = JsonValueType.Array;
+				_arrayValue = a;
+			}
 			else Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a copy of a <see cref="JsonValue"/>.
 		/// </summary>
+#if !DEBUG
+		[Obsolete("Future versions will require non-null parameters.")]
+#endif
 		public JsonValue(JsonValue other)
 		{
 			_arrayValue = other._arrayValue;
@@ -216,15 +223,9 @@ namespace Manatee.Json
 		/// <returns>A string.</returns>
 		public string GetIndentedString(int indentLevel = 0)
 		{
-			switch (Type)
-			{
-				case JsonValueType.Object:
-					return _objectValue.GetIndentedString(indentLevel);
-				case JsonValueType.Array:
-					return _arrayValue.GetIndentedString(indentLevel);
-				default:
-					return ToString();
-			}
+			var builder = new StringBuilder();
+			AppendIndentedString(builder, indentLevel);
+			return builder.ToString();
 		}
 		internal void AppendIndentedString(StringBuilder builder, int indentLevel)
 		{
@@ -251,21 +252,9 @@ namespace Manatee.Json
 		/// </remarks>
 		public override string ToString()
 		{
-			switch (Type)
-			{
-				case JsonValueType.Number:
-					return string.Format(CultureInfo.InvariantCulture, "{0}", _numberValue);
-				case JsonValueType.String:
-					return string.Concat("\"", _stringValue.InsertEscapeSequences(), "\"");
-				case JsonValueType.Boolean:
-					return _boolValue ? "true" : "false";
-				case JsonValueType.Object:
-					return _objectValue.ToString();
-				case JsonValueType.Array:
-					return _arrayValue.ToString();
-				default:
-					return "null";
-			}
+			var stringBuilder = new StringBuilder();
+			AppendString(stringBuilder);
+			return stringBuilder.ToString();
 		}
 		internal void AppendString(StringBuilder builder)
 		{
@@ -300,16 +289,16 @@ namespace Manatee.Json
 		/// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
 		/// </returns>
 		/// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
-			return Equals(obj.AsJsonValue());
+			return Equals(obj?.AsJsonValue());
 		}
 		/// <summary>
 		/// Indicates whether the current object is equal to another object of the same type.
 		/// </summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(JsonValue other)
+		public bool Equals(JsonValue? other)
 		{
 			// using a == here would result in recursion and death by stack overflow
 			if (ReferenceEquals(other, null)) return false;
@@ -317,15 +306,15 @@ namespace Manatee.Json
 			switch (Type)
 			{
 				case JsonValueType.Number:
-					return Number.Equals(other.Number);
+					return _numberValue.Equals(other.Number);
 				case JsonValueType.String:
-					return String.Equals(other.String);
+					return _stringValue.Equals(other.String);
 				case JsonValueType.Boolean:
-					return Boolean.Equals(other.Boolean);
+					return _boolValue.Equals(other.Boolean);
 				case JsonValueType.Object:
-					return Object.Equals(other.Object);
+					return _objectValue.Equals(other.Object);
 				case JsonValueType.Array:
-					return Array.Equals(other.Array);
+					return _arrayValue.Equals(other.Array);
 				case JsonValueType.Null:
 					return true;
 			}
@@ -342,15 +331,15 @@ namespace Manatee.Json
 			switch (Type)
 			{
 				case JsonValueType.Number:
-					return Number.GetHashCode();
+					return _numberValue.GetHashCode();
 				case JsonValueType.String:
-					return String.GetHashCode();
+					return _stringValue.GetHashCode();
 				case JsonValueType.Boolean:
-					return Boolean.GetHashCode();
+					return _boolValue.GetHashCode();
 				case JsonValueType.Object:
-					return Object.GetHashCode();
+					return _objectValue.GetHashCode();
 				case JsonValueType.Array:
-					return Array.GetHashCode();
+					return _arrayValue.GetHashCode();
 				case JsonValueType.Null:
 					return JsonValueType.Null.GetHashCode();
 			}
@@ -402,6 +391,7 @@ namespace Manatee.Json
 			return JsonParser.ParseAsync(stream);
 		}
 
+#pragma warning disable CS8603 // Possible null reference return.
 		/// <summary>
 		/// Implicitly converts a <see cref="bool"/> into a <see cref="JsonValue"/>.
 		/// </summary>
@@ -446,7 +436,7 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(string s)
+		public static implicit operator JsonValue(string? s)
 		{
 			return s == null ? null : new JsonValue(s);
 		}
@@ -494,7 +484,7 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(JsonObject o)
+		public static implicit operator JsonValue(JsonObject? o)
 		{
 			return o == null ? null : new JsonValue(o);
 		}
@@ -518,17 +508,18 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(JsonArray a)
+		public static implicit operator JsonValue(JsonArray? a)
 		{
 			return a == null ? null : new JsonValue(a);
 		}
+#pragma warning restore CS8603 // Possible null reference return.
 		///<summary>
 		/// Performs an equality comparison between two <see cref="JsonValue"/>s.
 		///</summary>
 		///<param name="a">A JsonValue.</param>
 		///<param name="b">A JsonValue.</param>
 		///<returns>true if the values are equal; otherwise, false.</returns>
-		public static bool operator ==(JsonValue a, JsonValue b)
+		public static bool operator ==(JsonValue? a, JsonValue? b)
 		{
 			return ReferenceEquals(a, b) || (a != null && a.Equals(b));
 		}
@@ -538,7 +529,7 @@ namespace Manatee.Json
 		///<param name="a">A JsonValue.</param>
 		///<param name="b">A JsonValue.</param>
 		///<returns>false if the values are equal; otherwise, true.</returns>
-		public static bool operator !=(JsonValue a, JsonValue b)
+		public static bool operator !=(JsonValue? a, JsonValue? b)
 		{
 			return !Equals(a, b);
 		}
@@ -548,17 +539,18 @@ namespace Manatee.Json
 			switch (Type)
 			{
 				case JsonValueType.Number:
-					return Number;
+					return _numberValue;
 				case JsonValueType.String:
-					return String;
+					return _stringValue;
 				case JsonValueType.Boolean:
-					return Boolean;
+					return _boolValue;
 				case JsonValueType.Object:
-					return Object;
+					return _objectValue;
 				case JsonValueType.Array:
-					return Array;
+					return _arrayValue;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(Type));
 			}
-			return null;
 		}
 
 	}

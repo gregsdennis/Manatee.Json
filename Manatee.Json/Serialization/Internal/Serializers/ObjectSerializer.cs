@@ -7,7 +7,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal class ObjectSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context)
+		public override bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType == typeof(object);
 		}
@@ -16,7 +16,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			throw new NotImplementedException();
 		}
-		private static object _Decode(SerializationContext context)
+		private static object _Decode(DeserializationContext context)
 		{
 			switch (context.LocalValue.Type)
 			{
@@ -29,28 +29,18 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				case JsonValueType.Array:
 					return context.LocalValue.Array.Select((value, i) =>
 						{
-							var newContext = new SerializationContext(context)
-							{
-									CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
-									InferredType = typeof(object),
-									RequestedType = typeof(object),
-									LocalValue = value
-								};
-
-							return context.RootSerializer.Deserialize(newContext);
+							context.Push(typeof(object), i.ToString(), value);
+							var json = context.RootSerializer.Deserialize(context);
+							context.Pop();
+							return json;
 						}).ToList();
 				case JsonValueType.Object:
 					var result = new ExpandoObject() as IDictionary<string, object>;
 					foreach (var kvp in context.LocalValue.Object)
 					{
-						var newContext = new SerializationContext(context)
-						{
-								CurrentLocation = context.CurrentLocation.CloneAndAppend(kvp.Key),
-								InferredType = typeof(object),
-								RequestedType = typeof(object),
-								LocalValue = kvp.Value
-							};
-						result[kvp.Key] = context.RootSerializer.Deserialize(newContext);
+						context.Push(typeof(object), kvp.Key, kvp.Value);
+						result[kvp.Key] = context.RootSerializer.Deserialize(context);
+						context.Pop();
 					}
 					return result;
 				case JsonValueType.Null:

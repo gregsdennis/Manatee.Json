@@ -1,6 +1,6 @@
 ﻿using System;
-using Manatee.Json.Pointer;
 using Manatee.Json.Serialization.Internal;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
@@ -18,7 +18,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public JsonSerializerOptions Options
 		{
-			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
+			get { return _options ??= new JsonSerializerOptions(JsonSerializerOptions.Default); }
 			set { _options = value; }
 		}
 		/// <summary>
@@ -26,7 +26,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public AbstractionMap AbstractionMap
 		{
-			get { return _abstractionMap ?? (_abstractionMap = new AbstractionMap(AbstractionMap.Default)); }
+			get { return _abstractionMap ??= new AbstractionMap(AbstractionMap.Default); }
 			set { _abstractionMap = value; }
 		}
 
@@ -38,14 +38,11 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			var context = new SerializationContext(this)
-				{
-					InferredType = obj?.GetType() ?? typeof(T),
-					RequestedType = typeof(T),
-					CurrentLocation = new JsonPointer("#"),
-					Source = obj
-				};
-			return Serialize(context);
+			var context = new SerializationContext(this);
+			context.Push(obj?.GetType() ?? typeof(T), typeof(T), null, obj);
+			var value = Serialize(context);
+			context.Pop();
+			return value;
 		}
 		/// <summary>
 		/// Serializes an object to a JSON structure.
@@ -55,25 +52,20 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize(Type type, object obj)
 		{
-			var context = new SerializationContext(this)
-				{
-					InferredType = obj?.GetType() ?? type,
-					RequestedType = type,
-					CurrentLocation = new JsonPointer("#"),
-					Source = obj
-				};
-			return Serialize(context);
+			var context = new SerializationContext(this);
+			context.Push(obj?.GetType() ?? type, type, null, obj);
+			var value = Serialize(context);
+			context.Pop();
+			return value;
 		}
 
 		internal JsonValue Serialize(SerializationContext context)
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
-			var json = serializer.Serialize(context);
+			var json = SchemaValidator.Instance.TrySerialize(serializer, context);
 			if (--_callCount == 0)
-			{
 				context.SerializationMap.Clear();
-			}
 			return json;
 		}
 		/// <summary>
@@ -120,26 +112,20 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public object Deserialize(Type type, JsonValue json)
 		{
-			var context = new SerializationContext(this, json)
-				{
-					InferredType = type,
-					RequestedType = type,
-					CurrentLocation = new JsonPointer("#"),
-					LocalValue = json
-				};
-
-			return Deserialize(context);
+			var context = new DeserializationContext(this, json);
+			context.Push(type, null, json);
+			var value = Deserialize(context);
+			context.Pop();
+			return value;
 		}
 
-		internal object Deserialize(SerializationContext context)
+		internal object Deserialize(DeserializationContext context)
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
-			var obj = serializer.Deserialize(context);
-			if (--_callCount == 0)
-			{
+			var obj = SchemaValidator.Instance.TryDeserialize(serializer, context);
+			if (--_callCount == 0) 
 				context.SerializationMap.Complete(obj);
-			}
 			return obj;
 		}
 

@@ -1,37 +1,33 @@
-﻿using Manatee.Json.Internal;
+﻿using System;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class ReferencingSerializer : ISerializer
+	internal class ReferencingSerializer : IChainedSerializer
 	{
-		private readonly ISerializer _innerSerializer;
+		public static ReferencingSerializer Instance { get; } = new ReferencingSerializer();
 
-		public bool ShouldMaintainReferences => true;
+		private ReferencingSerializer() { }
 
-		public ReferencingSerializer(ISerializer innerSerializer)
+		public bool Handles(ISerializer serializer, Type type)
 		{
-			_innerSerializer = innerSerializer;
+			return !type.IsValueType && serializer.ShouldMaintainReferences;
 		}
-
-		public bool Handles(SerializationContext context)
+		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
-			return true;
-		}
-		public JsonValue Serialize(SerializationContext context)
-		{
-			if (context.SerializationMap.TryGetPair(context.Source, out var pair))
-				return new JsonObject {{Constants.RefKey, pair.Source.ToString()}};
+			if (context.SerializationMap.TryGetPair(context.Source!, out var pair))
+				return new JsonObject {[Constants.RefKey] = pair.Source.ToString()};
 
 			context.SerializationMap.Add(new SerializationReference
 				{
 					Object = context.Source,
-					Source = context.CurrentLocation
+					Source = context.CurrentLocation.CleanAndClone()
 				});
 
-			return _innerSerializer.Serialize(context);
+			return serializer.Serialize(context);
 		}
-		public object Deserialize(SerializationContext context)
+		public object? TryDeserialize(ISerializer serializer, DeserializationContext context)
 		{
 			if (context.LocalValue.Type == JsonValueType.Object)
 			{
@@ -39,18 +35,18 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (jsonObj.TryGetValue(Constants.RefKey, out var reference))
 				{
 					var location = JsonPointer.Parse(reference.String);
-					context.SerializationMap.AddReference(location, context.CurrentLocation);
+					context.SerializationMap.AddReference(location, context.CurrentLocation.CleanAndClone());
 					return context.InferredType.Default();
 				}
 			}
 
 			var pair = new SerializationReference
 				{
-					Source = context.CurrentLocation
+					Source = context.CurrentLocation.CleanAndClone()
 				};
 			context.SerializationMap.Add(pair);
 
-			var obj = _innerSerializer.Deserialize(context);
+			var obj = serializer.Deserialize(context);
 
 			pair.Object = obj;
 			pair.DeserializationIsComplete = true;

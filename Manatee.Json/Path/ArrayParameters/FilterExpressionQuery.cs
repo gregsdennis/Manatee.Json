@@ -22,13 +22,13 @@ namespace Manatee.Json.Path.ArrayParameters
 		{
 			return $"?({_expression})";
 		}
-		public bool Equals(FilterExpressionQuery other)
+		public bool Equals(FilterExpressionQuery? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(_expression, other._expression);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as FilterExpressionQuery);
 		}

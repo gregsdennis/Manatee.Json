@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Manatee.Json.Internal;
@@ -10,17 +11,16 @@ namespace Manatee.Json.Path.Parsing
 	{
 		#region GetKey
 
-		public static string GetKey(this string source, ref int index, out string key)
+		public static bool TryGetKey(this string source, ref int index, [NotNullWhen(true)] out string key, [NotNullWhen(false)] out string errorMessage)
 		{
 			if (source[index] == '"' || source[index] == '\'')
-				return _GetQuotedKey(source, ref index, out key);
+				return _TryGetQuotedKey(source, ref index, out key, out errorMessage);
 
-			return _GetBasicKey(source, ref index, out key);
+			return _TryGetBasicKey(source, ref index, out key, out errorMessage);
 		}
 
-		private static string _GetBasicKey(string source, ref int index, out string key)
+		private static bool _TryGetBasicKey(string source, ref int index, [NotNullWhen(true)] out string key, [NotNullWhen(false)] out string errorMessage)
 		{
-			key = null;
 
 			var originalIndex = index;
 			var complete = false;
@@ -36,15 +36,19 @@ namespace Manatee.Json.Path.Parsing
 			}
 
 			if (!complete && index + 1 < source.Length)
-				return $"The character {source[index]} is not supported for unquoted names.";
+			{
+				key = null!;
+				errorMessage = $"The character {source[index]} is not supported for unquoted names.";
+				return false;
+			}
 
 			key = source.Substring(originalIndex, index - originalIndex);
-			return null;
+			errorMessage = null!;
+			return true;
 		}
 
-		private static string _GetQuotedKey(string source, ref int index, out string key)
+		private static bool _TryGetQuotedKey(string source, ref int index, [NotNullWhen(true)] out string key, [NotNullWhen(false)] out string errorMessage)
 		{
-			key = null;
 			Debug.Assert(source[index] == '\'' || source[index] == '"');
 			var quoteChar = source[index];
 			index++;
@@ -69,23 +73,28 @@ namespace Manatee.Json.Path.Parsing
 			}
 
 			if (foundEscape)
-				return _GetQuotedKeyWithEscape(source, quoteChar, originalIndex, ref index, out key);
+				return _TryGetQuotedKeyWithEscape(source, quoteChar, originalIndex, ref index, out key, out errorMessage);
 
-			if (!complete) return "Could not find end of string value.";
+			if (!complete)
+			{
+				key = null!;
+				errorMessage = "Could not find end of string value.";
+				return false;
+			}
 
 			key = source.Substring(originalIndex, index - originalIndex);
+			errorMessage = null!;
 			index++; // swallow quote character
-			return null;
+			return true;
 		}
 
-		private static string _GetQuotedKeyWithEscape(string source, char quoteChar, int originalIndex, ref int index, out string key)
+		private static bool _TryGetQuotedKeyWithEscape(string source, char quoteChar, int originalIndex, ref int index, [NotNullWhen(true)] out string key, [NotNullWhen(false)] out string errorMessage)
 		{
-			key = null;
-			string errorMessage = null;
 			var builder = StringBuilderCache.Acquire();
 			builder.Append(source.Substring(originalIndex, index - originalIndex));
 
 			var complete = false;
+			errorMessage = null!;
 			while (index < source.Length)
 			{
 				var c = source[index++];
@@ -101,9 +110,14 @@ namespace Manatee.Json.Path.Parsing
 					continue;
 				}
 
-				if (index >= source.Length) return "Could not find end of string value.";
+				if (index >= source.Length)
+				{
+					key = null!;
+					errorMessage = "Could not find end of string value.";
+					return false;
+				}
 
-				string append = null;
+				string? append = null;
 				c = source[index++];
 				switch (c)
 				{
@@ -197,10 +211,13 @@ namespace Manatee.Json.Path.Parsing
 			if (!complete || errorMessage != null)
 			{
 				StringBuilderCache.Release(builder);
-				return errorMessage ?? "Could not find end of string value.";
+				key = null!;
+				errorMessage ??= "Could not find end of string value.";
+				return false;
 			}
+
 			key = StringBuilderCache.GetStringAndRelease(builder);
-			return null;
+			return true;
 		}
 
 		private static bool _IsValidHex(string source, int offset, int count)
@@ -221,66 +238,80 @@ namespace Manatee.Json.Path.Parsing
 
 		#region GetSlice
 
-		public static string GetSlices(this string source, ref int index, out IList<Slice> slices)
+		public static bool TryGetSlices(this string source, ref int index, out IList<Slice> slices, [NotNullWhen(false)] out string errorMessage)
 		{
-			string error;
-			Slice lastSlice;
+			Slice? lastSlice;
 			slices = new List<Slice>();
 			do
 			{
 				index++;
-				error = source._GetSlice(ref index, out lastSlice);
-				if (lastSlice != null)
+				if (source._TryGetSlice(ref index, out lastSlice, out errorMessage) && lastSlice != null)
 					slices.Add(lastSlice);
-			} while (error == null && lastSlice != null);
+			} while (errorMessage == null && lastSlice != null);
 
-			if (error != null) return error;
+			if (errorMessage != null) return false;
+			if (slices.Any()) return true;
 
-			return !slices.Any() ? "Index required inside '[]'" : null;
+			errorMessage = "Index required inside '[]'";
+			return false;
+
 		}
 
-		private static string _GetSlice(this string source, ref int index, out Slice slice)
+		private static bool _TryGetSlice(this string source, ref int index, out Slice? slice, [NotNullWhen(false)] out string errorMessage)
 		{
 			slice = null;
-			if (source[index - 1] == ']') return null;
+			if (source[index - 1] == ']')
+			{
+				errorMessage = null!;
+				return true;
+			}
 
-			var error = _GetInt(source, ref index, out var n1);
-			if (error != null) return error;
-			if (index >= source.Length) return "Expected ':', ',', or ']'.";
+			if (!_TryGetInt(source, ref index, out var n1, out errorMessage)) return false;
+			if (index >= source.Length)
+			{
+				errorMessage = "Expected ':', ',', or ']'.";
+				return false;
+			}
 
 			if (n1.HasValue && (source[index] == ',' || source[index] == ']'))
 			{
 				slice = new Slice(n1.Value);
-				return null;
+				return true;
 			}
 
-			if (source[index] != ':') return "Expected ':', ',', or ']'.";
+			if (source[index] != ':')
+			{
+				errorMessage = "Expected ':', ',', or ']'.";
+				return false;
+			}
 
 			index++;
-			error = _GetInt(source, ref index, out var n2);
-			if (error != null) return error;
+			if (!_TryGetInt(source, ref index, out var n2, out errorMessage)) return false;
 			if (source[index] == ',' || source[index] == ']')
 			{
 				slice = new Slice(n1, n2);
-				return null;
+				return true;
 			}
 
-			if (source[index] != ':') return "Expected ':', ',', or ']'.";
+			if (source[index] != ':')
+			{
+				errorMessage = "Expected ':', ',', or ']'.";
+				return false;
+			}
 
 			index++;
-			error = _GetInt(source, ref index, out var n3);
-			if (error != null) return error;
-
+			if (!_TryGetInt(source, ref index, out var n3, out errorMessage)) return false;
 			if (source[index] == ',' || source[index] == ']')
 			{
 				slice = new Slice(n1, n2, n3);
-				return null;
+				return true;
 			}
 
-			return "Expected ',' or ']'.";
+			errorMessage = "Expected ',' or ']'.";
+			return false;
 		}
 
-		private static string _GetInt(string source, ref int index, out int? number)
+		private static bool _TryGetInt(string source, ref int index, out int? number, [NotNullWhen(false)] out string errorMessage)
 		{
 			number = null;
 
@@ -299,14 +330,21 @@ namespace Manatee.Json.Path.Parsing
 
 			if (index - originalIndex == 0 &&
 			    (source[index] == ':' || source[index] == ',' || source[index] == ']'))
-				return null;
+			{
+				errorMessage = null!;
+				return true;
+			}
 
 			string text = source.Substring(originalIndex, index - originalIndex);
 			if (!int.TryParse(text, out var value))
-				return "Expected number.";
+			{
+				errorMessage = "Expected number.";
+				return false;
+			}
 
 			number = value;
-			return null;
+			errorMessage = null!;
+			return true;
 		}
 
 		#endregion
@@ -321,10 +359,8 @@ namespace Manatee.Json.Path.Parsing
 			ExponentDigitsOnly,
 		}
 
-		public static string GetNumber(this string source, ref int index, out double? number)
+		public static bool TryGetNumber(this string source, ref int index, out double number, [NotNullWhen(false)] out string errorMessage)
 		{
-			number = null;
-
 			var originalIndex = index;
 
 			// check for leading negative sign
@@ -393,14 +429,23 @@ namespace Manatee.Json.Path.Parsing
 
 			if (index - originalIndex == 0 &&
 			    (source[index] == ':' || source[index] == ',' || source[index] == ']'))
-				return null;
+			{
+				number = 0;
+				errorMessage = null!;
+				return true;
+			}
 
 			var text = source.Substring(originalIndex, index - originalIndex);
 			if (!double.TryParse(text, out var value))
-				return "Expected number.";
+			{
+				number = default;
+				errorMessage = "Expected number.";
+				return false;
+			}
 
 			number = value;
-			return null;
+			errorMessage = null!;
+			return true;
 		}
 
 		#endregion

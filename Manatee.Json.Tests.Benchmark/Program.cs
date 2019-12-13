@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Manatee.Json.Tests.Benchmark
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static async Task Main(string[] args)
 		{
-			PerformanceTests.Run();
+			await PerformanceTests.Run();
 
 			Console.ReadLine();
 		}

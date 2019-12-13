@@ -21,11 +21,11 @@ namespace Manatee.Json.Path.ArrayParameters
 		{
 			return "*";
 		}
-		public bool Equals(WildCardQuery other)
+		public bool Equals(WildCardQuery? other)
 		{
 			return !ReferenceEquals(null, other);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as WildCardQuery);
 		}

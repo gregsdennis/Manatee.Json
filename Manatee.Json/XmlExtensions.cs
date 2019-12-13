@@ -203,11 +203,8 @@ namespace Manatee.Json
 		}
 		private static JsonValue _ParseValue(string value)
 		{
-			if (bool.TryParse(value, out bool b))
-				return b;
-			double d;
-			if (double.TryParse(value, out d))
-				return d;
+			if (bool.TryParse(value, out bool b)) return b;
+			if (double.TryParse(value, out var d)) return d;
 			return value;
 		}
 		private static bool _ContainsAttributeList(JsonArray json)
@@ -216,7 +213,7 @@ namespace Manatee.Json
 			if (json[0].Type != JsonValueType.Object) return false;
 			return json[0].Object.Keys.All(key => key[0] == '-');
 		}
-		private static string _GetNamespaceForElement(XElement xElement, string space = null)
+		private static string _GetNamespaceForElement(XElement xElement, string? space = null)
 		{
 			var search = space ?? xElement.Name.NamespaceName;
 			if (string.IsNullOrEmpty(search)) return string.Empty;
@@ -234,7 +231,7 @@ namespace Manatee.Json
 			}
 			return string.Empty;
 		}
-		private static XName _GetXName(string key)
+		private static XName? _GetXName(string key)
 		{
 			if (key == null) return null;
 			if (!key.Contains(":") && (key != XmlNamespaceAttribute)) return key;

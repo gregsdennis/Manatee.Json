@@ -20,17 +20,17 @@ namespace Manatee.Json.Path.Operators
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return ".length";
 		}
 
-		public bool Equals(LengthOperator other)
+		public bool Equals(LengthOperator? other)
 		{
 			return !ReferenceEquals(null, other);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as LengthOperator);
 		}

@@ -13,7 +13,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => true;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
 			return true;
 		}
@@ -47,14 +47,14 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			_ConstructJsonObject(json, map, serializer.Options);
 			return json.Count == 0 ? JsonValue.Null : json;
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			var json = context.LocalValue;
 			var type = context.RootSerializer.AbstractionMap.IdentifyTypeToResolve(context.InferredType, context.LocalValue);
 			var propertyList = ReflectionCache.GetMembers(type, context.RootSerializer.Options.PropertySelectionStrategy, context.RootSerializer.Options.AutoSerializeFields);
 			var map = _DeserializeValues(context, propertyList, !context.RootSerializer.Options.CaseSensitiveDeserialization);
 			context.ValueMap = map;
-			if ((json.Object.Count > 0) && (context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
+			if (json.Object.Count > 0 && context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException)
 				throw new TypeDoesNotContainPropertyException(type, json);
 			_AssignObjectProperties(out var obj, type, context);
 			return obj;
@@ -64,7 +64,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var type = typeof (T);
 			var propertyList = ReflectionCache.GetTypeMembers(type, serializer.Options.PropertySelectionStrategy, serializer.Options.AutoSerializeFields);
 			var map = _DeserializeTypeValues(json, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);
-			if ((json.Object.Count > 0) && (serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException))
+			if (json.Object.Count > 0 && serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException)
 				throw new TypeDoesNotContainPropertyException(type, json);
 			object obj = null;
 			_AssignObjectProperties(ref obj, map);
@@ -98,15 +98,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var json = JsonValue.Null;
 				if (value != null)
 				{
-					var newLocation = context.CurrentLocation.CloneAndAppend(property.SerializationName);
-					var newContext = new SerializationContext(context)
-					{
-							CurrentLocation = newLocation,
-							InferredType = value.GetType(),
-							RequestedType = type,
-							Source = value
-						};
-					json = serializer.Serialize(newContext);
+					context.Push(value.GetType(), type, property.SerializationName, value);
+					json = serializer.Serialize(context);
+					context.Pop();
 				}
 
 				if (json == JsonValue.Null && !serializer.Options.EncodeDefaultValues) continue;
@@ -156,7 +150,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	            json.Add(name, memberMap[memberInfo]);
 	        }
 	    }
-		private static Dictionary<SerializationInfo, object> _DeserializeValues(SerializationContext context,
+		private static Dictionary<SerializationInfo, object> _DeserializeValues(DeserializationContext context,
 		                                                                        IEnumerable<SerializationInfo> members,
 		                                                                        bool ignoreCase)
 		{
@@ -177,15 +171,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						type = info.PropertyType;
 					else
 						type = ((FieldInfo) memberInfo.MemberInfo).FieldType;
-					var newLocation = context.CurrentLocation.CloneAndAppend(memberInfo.SerializationName);
-					var newContext = new SerializationContext(context)
-						{
-							CurrentLocation = newLocation,
-							InferredType = type,
-							RequestedType = type,
-							LocalValue = value,
-						};
-					var valueObj = context.RootSerializer.Deserialize(newContext);
+					context.Push(type, memberInfo.SerializationName, value);
+					var valueObj = context.RootSerializer.Deserialize(context);
+					context.Pop();
 					dict.Add(memberInfo, valueObj);
 				}
 			}
@@ -219,8 +207,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		private static bool _TryGetKeyValue(JsonValue json, string name, bool ignoreCase, Func<string, string> nameTransform, out JsonValue value)
 		{
 			var comparison = ignoreCase
-				? StringComparison.Ordinal
-				: StringComparison.OrdinalIgnoreCase;
+				? StringComparison.OrdinalIgnoreCase
+				: StringComparison.Ordinal;
 			var kvp = json.Object.FirstOrDefault(k =>
 				{
 					var transformed = nameTransform(k.Key);
@@ -232,7 +220,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return key != null;
 		}
-		private static void _AssignObjectProperties(out object obj, Type type, SerializationContext context)
+		private static void _AssignObjectProperties(out object obj, Type type, DeserializationContext context)
 		{
 			obj = type.GetTypeInfo().IsInterface
 				? TypeGenerator.Generate(type)

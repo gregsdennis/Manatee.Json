@@ -121,7 +121,7 @@ namespace Manatee.Json.Serialization
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		internal object CreateInstance(SerializationContext context)
+		internal object CreateInstance(DeserializationContext context)
 		{
 			return CreateInstance(context.InferredType, context.LocalValue, context.RootSerializer.Options.Resolver, context.ValueMap);
 		}

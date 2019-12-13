@@ -1,67 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using Manatee.Json.Pointer;
-using Manatee.Json.Serialization.Internal;
 
 namespace Manatee.Json.Serialization
 {
 	/// <summary>
-	/// Encapsulates all data required to serialize and deserialize object to and from JSON.
+	/// Encapsulates all data required to serialize an object to JSON.
 	/// </summary>
-	public class SerializationContext
+	public class SerializationContext : SerializationContextBase
 	{
-		/// <summary>
-		/// The inferred type.  This will usually be the actual type of the object during serialization
-		/// or the <see cref="RequestedType"/> during deserialization.
-		/// </summary>
-		public Type InferredType { get; set; }
-		/// <summary>
-		/// The type requested by the serialize/deserialize call.
-		/// </summary>
-		public Type RequestedType { get; set; }
-		/// <summary>
-		/// The current location in the JSON instance or object.
-		/// </summary>
-		public JsonPointer CurrentLocation { get; set; }
-		/// <summary>
-		/// The current value in the JSON instance for deserialization.
-		/// </summary>
-		public JsonValue LocalValue { get; set; }
+		private readonly Stack<object?> _sources = new Stack<object?>();
+
 		/// <summary>
 		/// The current value in the object for serialization.
 		/// </summary>
-		public object Source { get; set; }
+		public object? Source { get; private set; }
 
-		/// <summary>
-		/// The root of the JSON instance.
-		/// </summary>
-		public JsonValue JsonRoot { get; }
-		/// <summary>
-		/// The original serializer called by the client.
-		/// </summary>
-		public JsonSerializer RootSerializer { get; }
-		/// <summary>
-		/// A mapping of the deserialized values to the type's property information.
-		/// </summary>
-		public Dictionary<SerializationInfo, object> ValueMap { get; set; }
-
-		internal SerializationReferenceCache SerializationMap { get; }
-
-		/// <summary>
-		/// Creates a new instance of the <see cref="SerializationContext"/> class.
-		/// </summary>
-		/// <param name="other"></param>
-		public SerializationContext(SerializationContext other)
+		internal SerializationContext(JsonSerializer rootSerializer)
+			: base(rootSerializer)
 		{
-			SerializationMap = other.SerializationMap;
-			RootSerializer = other.RootSerializer;
-			JsonRoot = other.JsonRoot;
 		}
-		internal SerializationContext(JsonSerializer rootSerializer, JsonValue jsonRoot = null)
+
+		public void Push(Type inferredType, Type requestedType, string? propertyName, object? source)
 		{
-			SerializationMap = new SerializationReferenceCache();
-			RootSerializer = rootSerializer;
-			JsonRoot = jsonRoot;
+			Push(inferredType, requestedType, propertyName);
+
+			_sources.Push(Source);
+			Source = source;
+		}
+		public void Pop()
+		{
+			base.Pop();
+
+			Source = _sources.Pop();
+		}
+
+		internal void OverrideSource(object source)
+		{
+			_sources.Pop();
+			Source = source;
+			_sources.Push(source);
 		}
 	}
 }

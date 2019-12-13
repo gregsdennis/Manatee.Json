@@ -14,20 +14,8 @@ namespace Manatee.Json.Path.Expressions.Translation
 				throw new InvalidOperationException();
 			var parameter = method.Arguments.Last() as ConstantExpression;
 			if (parameter == null || parameter.Type != typeof(JsonValue))
-			{
-				return new IndexOfExpression<T>
-					{
-						Path = BuildPath(method, out isLocal),
-						IsLocal = isLocal,
-						ParameterExpression = ExpressionTranslator.TranslateNode<JsonArray>(method.Arguments.Last())
-					};
-			}
-			return new IndexOfExpression<T>
-				{
-					Path = BuildPath(method, out isLocal),
-					IsLocal = isLocal,
-					Parameter = (JsonValue)parameter.Value,
-				};
+				return new IndexOfExpression<T>(BuildPath(method, out isLocal), isLocal, ExpressionTranslator.TranslateNode<JsonArray>(method.Arguments.Last()));
+			return new IndexOfExpression<T>(BuildPath(method, out isLocal), isLocal, (JsonValue) parameter.Value);
 		}
 	}
 }

@@ -9,7 +9,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType == typeof(DateTime);
 		}
@@ -32,7 +32,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			if (context.RootSerializer.Options == null)
 				return DateTime.Parse(context.LocalValue.String);

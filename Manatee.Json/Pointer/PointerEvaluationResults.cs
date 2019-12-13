@@ -8,11 +8,11 @@
 		/// <summary>
 		/// Gets the referenced value, if found.
 		/// </summary>
-		public JsonValue Result { get; }
+		public JsonValue? Result { get; }
 		/// <summary>
 		/// Gets any errors that may have resulted in not finding the referenced value.
 		/// </summary>
-		public string Error { get; }
+		public string? Error { get; }
 
 		internal PointerEvaluationResults(JsonValue found)
 		{

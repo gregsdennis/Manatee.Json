@@ -39,7 +39,7 @@ namespace Manatee.Json.Tests
 			yield return ("\"some text\\\\\"", new JsonValue("some text\\"), null);
 			yield return ("\"\\uA000\\uA000\"", new JsonValue(string.Empty + (char) 0xA000 + (char) 0xA000), null);
 			yield return ("{\"data\": \"“Silly Gooseberry!”\"}", new JsonValue(new JsonObject{["data"] = "“Silly Gooseberry!”"}), null);
-			}
+		}
 
 		public static IEnumerable TestData => _GetData()
 			.Select(d => new TestCaseData(d.test, d.expected, d.message));

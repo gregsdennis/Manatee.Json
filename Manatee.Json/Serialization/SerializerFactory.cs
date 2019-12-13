@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Manatee.Json.Serialization.Internal;
@@ -60,34 +61,26 @@ namespace Manatee.Json.Serialization
 			_UpdateOrderedSerializers();
 		}
 
-		internal static ISerializer GetSerializer(SerializationContext context)
+		internal static ISerializer GetSerializer(SerializationContextBase context)
 		{
-			context.InferredType = context.RootSerializer.AbstractionMap.GetMap(context.InferredType);
+			context.OverrideInferredType(context.RootSerializer.AbstractionMap.GetMap(context.InferredType ?? context.RequestedType));
 			var theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
 
 			if (theChosenOne is AutoSerializer && context.RequestedType != typeof(object))
 			{
 				var type = context.InferredType;
-				context.InferredType = context.RootSerializer.AbstractionMap.GetMap(context.RequestedType);
+				context.OverrideInferredType(context.RootSerializer.AbstractionMap.GetMap(context.RequestedType));
 				theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
 
 				if (theChosenOne is AutoSerializer)
-					context.InferredType = type;
+					context.OverrideInferredType(type);
 			}
 
-			return _BuildSerializer(theChosenOne, context.InferredType.GetTypeInfo());
+			return theChosenOne;
 		}
 		internal static ITypeSerializer GetTypeSerializer()
 		{
 			return _autoSerializer;
-		}
-
-		private static ISerializer _BuildSerializer(ISerializer innerSerializer, TypeInfo typeInfo)
-		{
-			if (!typeInfo.IsValueType && innerSerializer.ShouldMaintainReferences)
-				innerSerializer = new ReferencingSerializer(innerSerializer);
-
-			return new SchemaValidator(new DefaultValueSerializer(innerSerializer));
 		}
 
 		private static void _UpdateOrderedSerializers()

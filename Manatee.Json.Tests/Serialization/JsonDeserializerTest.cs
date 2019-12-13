@@ -950,5 +950,27 @@ namespace Manatee.Json.Tests.Serialization
 
 			Assert.AreEqual(expected, actual);
 		}
+
+		[Test]
+		public void ReadOnlyPreinitializedObject_ReadAndWrite()
+		{
+			var json = new JsonObject {["List"] = new JsonArray {"one", "two", "three"}};
+
+			var serializer = new JsonSerializer {Options = {PropertySelectionStrategy = PropertySelectionStrategy.ReadAndWrite}};
+			var actual = serializer.Deserialize<ReadOnlyPreinitializedObject>(json);
+
+			Assert.IsTrue(actual.List.SequenceEqual(new[] {"one", "two", "three"}));
+		}
+
+		[Test]
+		public void ReadOnlyPreinitializedObject_ReadOnly()
+		{
+			var json = new JsonObject {["List"] = new JsonArray {"one", "two", "three"}};
+
+			var serializer = new JsonSerializer();
+			var actual = serializer.Deserialize<ReadOnlyPreinitializedObject>(json);
+
+			Assert.IsTrue(actual.List.Count == 0);
+		}
 	}
 }

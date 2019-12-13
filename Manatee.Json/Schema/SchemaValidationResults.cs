@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
@@ -12,8 +13,8 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationResults : IJsonSerializable, IEquatable<SchemaValidationResults>
 	{
-		private List<SchemaValidationResults> _nestedResults;
-		private JsonObject _additionalInfo;
+		private List<SchemaValidationResults> _nestedResults = null!;
+		private JsonObject _additionalInfo = null!;
 
 		/// <summary>
 		/// Gets a value to return for no results.  Only used when a keyword should not produce any output, such as `$id`.
@@ -31,7 +32,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the absolute location of the keyword.  This is a direct reference after all `$ref` keywords have been resolved.
 		/// </summary>
-		public Uri AbsoluteLocation { get; set; }
+		public Uri? AbsoluteLocation { get; set; }
 		/// <summary>
 		/// Gets or sets the location within the instance.
 		/// </summary>
@@ -39,39 +40,44 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets an annotation value.
 		/// </summary>
-		public JsonValue AnnotationValue { get; set; }
+		public JsonValue? AnnotationValue { get; set; }
 		/// <summary>
 		/// Gets or sets the keyword.
 		/// </summary>
-		public string Keyword { get; set; }
+		public string? Keyword { get; set; }
 		/// <summary>
 		/// Gets or sets the error message.
 		/// </summary>
-		public string ErrorMessage { get; set; }
+		public string? ErrorMessage { get; set; }
 		/// <summary>
 		/// Gets or sets any additional information regarding the validation.
 		/// </summary>
+		[AllowNull]
 		public JsonObject AdditionalInfo
 		{
-			get => _additionalInfo ?? (_additionalInfo = new JsonObject());
+			get => _additionalInfo ??= new JsonObject();
 			set => _additionalInfo = value;
 		}
 		/// <summary>
 		/// Gets or sets any results of nested schemas.
 		/// </summary>
+		[AllowNull]
 		public List<SchemaValidationResults> NestedResults
 		{
-			get => _nestedResults ?? (_nestedResults = new List<SchemaValidationResults>());
+			get => _nestedResults ??= new List<SchemaValidationResults>();
 			set => _nestedResults = value;
 		}
 
 		internal static bool IncludeAdditionalInfo { get; set; }
 		internal bool RecursionDetected { get; set; }
+
 		/// <summary>
 		/// This is exposed solely for deserialization purposes.
 		/// </summary>
 		[DeserializationUseOnly]
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		public SchemaValidationResults() { }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		internal SchemaValidationResults(SchemaValidationContext context)
 		{
 			InstanceLocation = context.InstanceLocation.Clone();
@@ -233,7 +239,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(SchemaValidationResults other)
+		public bool Equals(SchemaValidationResults? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -250,7 +256,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as SchemaValidationResults);
 		}

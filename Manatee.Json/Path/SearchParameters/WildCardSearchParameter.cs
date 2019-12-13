@@ -17,17 +17,17 @@ namespace Manatee.Json.Path.SearchParameters
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return "*";
 		}
 
-		public bool Equals(WildCardSearchParameter other)
+		public bool Equals(WildCardSearchParameter? other)
 		{
 			return !ReferenceEquals(null, other);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as WildCardSearchParameter);
 		}

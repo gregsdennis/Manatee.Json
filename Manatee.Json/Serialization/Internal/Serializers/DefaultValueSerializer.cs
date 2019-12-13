@@ -2,34 +2,32 @@
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class DefaultValueSerializer : ISerializer
+	internal class DefaultValueSerializer : IChainedSerializer
 	{
-		private readonly ISerializer _innerSerializer;
+		public static DefaultValueSerializer Instance { get; } = new DefaultValueSerializer();
 
-		public bool ShouldMaintainReferences => _innerSerializer.ShouldMaintainReferences;
+		private DefaultValueSerializer() { }
 
-		public DefaultValueSerializer(ISerializer innerSerializer)
-		{
-			_innerSerializer = innerSerializer;
-		}
-
-		public bool Handles(SerializationContext context)
-		{
-			return true;
-		}
-		public JsonValue Serialize(SerializationContext context)
+		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
 			if (Equals(context.Source, context.RequestedType.Default()) &&
 			    !context.RootSerializer.Options.EncodeDefaultValues)
 				return JsonValue.Null;
 
-			return _innerSerializer.Serialize(context);
+			if (ReferencingSerializer.Instance.Handles(serializer, context.InferredType))
+				return ReferencingSerializer.Instance.TrySerialize(serializer, context);
+
+			return serializer.Serialize(context);
 		}
-		public object Deserialize(SerializationContext context)
+		public object? TryDeserialize(ISerializer serializer, DeserializationContext context)
 		{
-			return context.LocalValue.Type == JsonValueType.Null
-				       ? context.InferredType.Default()
-				       : _innerSerializer.Deserialize(context);
+			if (context.LocalValue.Type == JsonValueType.Null)
+				return context.InferredType.Default();
+
+			if (ReferencingSerializer.Instance.Handles(serializer, context.InferredType))
+				return ReferencingSerializer.Instance.TryDeserialize(serializer, context);
+
+			return serializer.Deserialize(context);
 		}
 	}
 }
