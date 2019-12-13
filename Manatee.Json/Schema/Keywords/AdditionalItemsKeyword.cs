@@ -83,14 +83,15 @@ namespace Manatee.Json.Schema
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var startIndex = context.LocalTierLastEvaluatedIndex + 1;
 
-			JsonOptions.Log?.Verbose(startIndex == 0
+			Log.Verbose(startIndex == 0
 				                         ? "No indices have been evaluated; process all"
-				                         : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
+				                         : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these",
+				LogCategory.Schema);
 			if (startIndex < array.Count)
 			{
 				if (Value == JsonSchema.False)
 				{
-					JsonOptions.Log?.Verbose("Subschema is `false`; all instances invalid");
+					Log.Verbose("Subschema is `false`; all instances invalid", LogCategory.Schema);
 					results.IsValid = false;
 					results.Keyword = Name;
 					results.ErrorMessage = ErrorTemplate_False;
@@ -120,7 +121,7 @@ namespace Manatee.Json.Schema
 					{
 						if (!valid)
 						{
-							JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
+							Log.Verbose("Subschema failed; halting validation early", LogCategory.Schema);
 							break;
 						}
 					}
@@ -130,7 +131,7 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				JsonOptions.Log?.Verbose("All items have been validated");
+				Log.Verbose("All items have been validated", LogCategory.Schema);
 			}
 			results.NestedResults = nestedResults;
 			results.IsValid = valid;

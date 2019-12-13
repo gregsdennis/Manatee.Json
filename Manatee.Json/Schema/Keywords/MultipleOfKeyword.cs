@@ -69,13 +69,13 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Number)
 			{
-				JsonOptions.Log?.Verbose("Instance not a number; not applicable");
+				Log.Verbose("Instance not a number; not applicable", LogCategory.Schema);
 				return results;
 			}
 
 			if ((decimal)context.Instance.Number % (decimal?) Value != 0)
 			{
-				JsonOptions.Log?.Verbose($"{context.Instance.Number} is not a multiple of {Value}");
+				Log.Verbose($"{context.Instance.Number} is not a multiple of {Value}", LogCategory.Schema);
 				results.IsValid = false;
 				results.AdditionalInfo["divisor"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Number % Value;

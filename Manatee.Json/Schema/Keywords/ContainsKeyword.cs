@@ -69,7 +69,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.Array)
 			{
-				JsonOptions.Log?.Verbose("Instance not an array; not applicable");
+				Log.Verbose("Instance not an array; not applicable", LogCategory.Schema);
 				return new SchemaValidationResults(Name, context);
 			}
 
@@ -102,7 +102,7 @@ namespace Manatee.Json.Schema
 				{
 					if (valid && !hasMinMaxConstraints)
 					{
-						JsonOptions.Log?.Verbose("Match found and no min/max constraints; halting validation early");
+						Log.Verbose("Match found and no min/max constraints; halting validation early", LogCategory.Schema);
 						break;
 					}
 				}
@@ -112,7 +112,7 @@ namespace Manatee.Json.Schema
 				i++;
 			}
 
-			JsonOptions.Log?.Verbose($"Found {matchedIndices.Count} instances that match; saving for later");
+			Log.Verbose($"Found {matchedIndices.Count} instances that match; saving for later", LogCategory.Schema);
 			context.Misc["containsCount"] = matchedIndices.Count;
 			var results = new SchemaValidationResults
 				{

@@ -17,9 +17,10 @@ namespace Manatee.Json.Tests
 				_stopwatch.Start();
 			}
 
-			public void Verbose(string message)
+			public void Verbose(string message, LogCategory category)
 			{
-				Console.WriteLine($@"[{_stopwatch.Elapsed:mm\:ss\.ffffff}]: {message}");
+				if (JsonOptions.LogCategory.HasFlag(category))
+					Console.WriteLine($@"[{_stopwatch.Elapsed:mm\:ss\.ffffff}]: {message}");
 			}
 		}
 

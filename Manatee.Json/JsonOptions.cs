@@ -1,4 +1,4 @@
-﻿using Manatee.Json.Internal;
+﻿using System;
 
 namespace Manatee.Json
 {
@@ -32,5 +32,16 @@ namespace Manatee.Json
 		/// Provides "verbose" level logging during serialization and schema processing.
 		/// </summary>
 		public static ILog? Log { get; set; }
+		public static LogCategory LogCategory { get; set; }
+	}
+
+	[Flags]
+	public enum LogCategory
+	{
+		None,
+		General = 1 << 0,
+		Serialization = 1 << 1,
+		Schema = 1 << 2,
+		All = General | Serialization | Schema
 	}
 }

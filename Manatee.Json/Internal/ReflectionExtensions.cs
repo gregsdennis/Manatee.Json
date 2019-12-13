@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 using Manatee.Json.Serialization.Internal;
@@ -128,6 +129,22 @@ namespace Manatee.Json.Internal
 				SetMember(local, new JsonPointer(pointer.Skip(1)), value);
 				return;
 			}
+		}
+		public static string CSharpName(this Type type, StringBuilder sb = null)
+		{
+			var name = type.Name;
+			if (!type.IsGenericType)
+			{
+				return name;
+			}
+
+			sb = sb ?? new StringBuilder();
+			sb.Append(name.Substring(0, name.IndexOf('`')));
+			sb.Append("<");
+			sb.Append(string.Join(", ", type.GetGenericArguments()
+				                      .Select(t => t.CSharpName(sb))));
+			sb.Append(">");
+			return sb.ToString();
 		}
 	}
 }

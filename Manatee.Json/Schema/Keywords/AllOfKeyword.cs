@@ -63,7 +63,7 @@ namespace Manatee.Json.Schema
 					};
 				var localResults = s.Validate(newContext);
 				valid &= localResults.IsValid;
-				JsonOptions.Log?.Verbose($"`{Name}` {(valid ? "valid" : "invalid")} so far");
+				Log.Verbose($"`{Name}` {(valid ? "valid" : "invalid")} so far", LogCategory.Schema);
 				if (!valid)
 					failedCount++;
 				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
@@ -72,7 +72,7 @@ namespace Manatee.Json.Schema
 				{
 					if (!valid)
 					{
-						JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
+						Log.Verbose("Subschema failed; halting validation early", LogCategory.Schema);
 						break;
 					}
 				}

@@ -62,7 +62,7 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			JsonOptions.Log?.Verbose("Checking defined values for instance");
+			Log.Verbose("Checking defined values for instance", LogCategory.Schema);
 			var results = new SchemaValidationResults(Name, context)
 				{
 					IsValid = Contains(context.Instance)
@@ -70,7 +70,7 @@ namespace Manatee.Json.Schema
 
 			if (!results.IsValid)
 			{
-				JsonOptions.Log?.Verbose("Instance does not match any of the defined values");
+				Log.Verbose("Instance does not match any of the defined values", LogCategory.Schema);
 				results.AdditionalInfo["value"] = context.Instance;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}

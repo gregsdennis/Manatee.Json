@@ -121,13 +121,13 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Array)
 			{
-				JsonOptions.Log?.Verbose("Instance not an array; not applicable");
+				Log.Verbose("Instance not an array; not applicable", LogCategory.Schema);
 				return results;
 			}
 
 			if (!context.Misc.TryGetValue("containsCount", out var value))
 			{
-				JsonOptions.Log?.Verbose("`contains` keyword not present; not applicable");
+				Log.Verbose("`contains` keyword not present; not applicable", LogCategory.Schema);
 				return results;
 			}
 
@@ -135,7 +135,7 @@ namespace Manatee.Json.Schema
 
 			if (containsCount < Value)
 			{
-				JsonOptions.Log?.Verbose($"Required at least {Value} matching items, but only {containsCount} found");
+				Log.Verbose($"Required at least {Value} matching items, but only {containsCount} found", LogCategory.Schema);
 				results.IsValid = false;
 				results.AdditionalInfo["actual"] = containsCount;
 				results.AdditionalInfo["lowerBound"] = Value;

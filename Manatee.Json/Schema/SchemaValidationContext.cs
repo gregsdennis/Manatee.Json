@@ -108,11 +108,11 @@ namespace Manatee.Json.Schema
 			EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
 			EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
 			if (other.EvaluatedPropertyNames.Any())
-				JsonOptions.Log?.Verbose($"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+				Log.Verbose($"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated", LogCategory.Schema);
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LastEvaluatedIndex);
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LocalTierLastEvaluatedIndex);
 			if (other.EvaluatedPropertyNames.Any())
-				JsonOptions.Log?.Verbose($"Indices through [{other.LastEvaluatedIndex}] have now been validated");
+				Log.Verbose($"Indices through [{other.LastEvaluatedIndex}] have now been validated", LogCategory.Schema);
 		}
 	}
 }

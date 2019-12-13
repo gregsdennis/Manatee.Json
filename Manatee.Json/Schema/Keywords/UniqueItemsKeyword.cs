@@ -67,12 +67,12 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Array)
 			{
-				JsonOptions.Log?.Verbose("Instance not an array; not applicable");
+				Log.Verbose("Instance not an array; not applicable", LogCategory.Schema);
 				return results;
 			}
 			if (context.Instance.Array.Distinct().Count() != context.Instance.Array.Count)
 			{
-				JsonOptions.Log?.Verbose("Instance contains duplicate items");
+				Log.Verbose("Instance contains duplicate items", LogCategory.Schema);
 				results.IsValid = false;
 				results.AdditionalInfo["value"] = context.Instance;
 				results.ErrorMessage = ErrorTemplate;

@@ -11,6 +11,12 @@ namespace Manatee.Json.Tests.Serialization
 	[TestFixture]
 	public class JsonSerializerTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Serialization;
+		}
+
 		[Test]
 		public void RegisteredType_Successful()
 		{

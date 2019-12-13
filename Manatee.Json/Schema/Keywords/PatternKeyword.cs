@@ -77,13 +77,13 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.String)
 			{
-				JsonOptions.Log?.Verbose("Instance not a string; not applicable");
+				Log.Verbose("Instance not a string; not applicable", LogCategory.Schema);
 				return results;
 			}
 
 			if (!Value.IsMatch(context.Instance.String))
 			{
-				JsonOptions.Log?.Verbose("Value does not match regular expression");
+				Log.Verbose("Value does not match regular expression", LogCategory.Schema);
 				results.IsValid = false;
 				results.AdditionalInfo["actual"] = context.Instance;
 				results.AdditionalInfo["pattern"] = Value.ToString();

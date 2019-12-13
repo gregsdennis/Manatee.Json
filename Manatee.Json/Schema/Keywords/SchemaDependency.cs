@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
@@ -57,13 +58,13 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				JsonOptions.Log?.Verbose("Instance not an object; not applicable");
+				Log.Verbose("Instance not an object; not applicable", LogCategory.Schema);
 				return results;
 			}
 
 			if (!context.Instance.Object.ContainsKey(PropertyName))
 			{
-				JsonOptions.Log?.Verbose($"Property {PropertyName} not found; not applicable");
+				Log.Verbose($"Property {PropertyName} not found; not applicable", LogCategory.Schema);
 				return results;
 			}
 
@@ -78,7 +79,7 @@ namespace Manatee.Json.Schema
 
 			if (!nestedResult.IsValid)
 			{
-				JsonOptions.Log?.Verbose($"Property {PropertyName} found, but subschema failed");
+				Log.Verbose($"Property {PropertyName} found, but subschema failed", LogCategory.Schema);
 				results.IsValid = false;
 				results.ErrorMessage = ErrorTemplate;
 			}

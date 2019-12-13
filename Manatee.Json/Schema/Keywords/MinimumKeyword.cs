@@ -69,13 +69,13 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Number)
 			{
-				JsonOptions.Log?.Verbose("Instance not a number; not applicable");
+				Log.Verbose("Instance not a number; not applicable", LogCategory.Schema);
 				return results;
 			}
 
 			if (context.Instance.Number < Value)
 			{
-				JsonOptions.Log?.Verbose($"Bounds check failed: {context.Instance.Number} < {Value}");
+				Log.Verbose($"Bounds check failed: {context.Instance.Number} < {Value}", LogCategory.Schema);
 				results.IsValid = false;
 				results.AdditionalInfo["lowerBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Number;

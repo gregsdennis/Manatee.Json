@@ -13,6 +13,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class SelfValidationTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		private static readonly JsonSerializer _serializer = new JsonSerializer();
 
 		public static IEnumerable<TestCaseData> TestData =>

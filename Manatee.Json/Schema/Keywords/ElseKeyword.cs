@@ -64,7 +64,7 @@ namespace Manatee.Json.Schema
 		{
 			if (!context.Misc.TryGetValue("ifKeywordValid", out var ifKeywordValidStore))
 			{
-				JsonOptions.Log?.Verbose("`if` keyword not present; not applicable");
+				Log.Verbose("`if` keyword not present; not applicable", LogCategory.Schema);
 				return new SchemaValidationResults(Name, context);
 			}
 
@@ -72,7 +72,7 @@ namespace Manatee.Json.Schema
 
 			if (ifKeywordValid)
 			{
-				JsonOptions.Log?.Verbose("`if` subschema succeeded; not applicable");
+				Log.Verbose("`if` subschema succeeded; not applicable", LogCategory.Schema);
 				return new SchemaValidationResults(Name, context);
 			}
 
@@ -86,7 +86,7 @@ namespace Manatee.Json.Schema
 			var elseResults = Value.Validate(newContext);
 			if (!elseResults.IsValid)
 			{
-				JsonOptions.Log?.Verbose("`if` subschema failed, but `else` subschema also failed");
+				Log.Verbose("`if` subschema failed, but `else` subschema also failed", LogCategory.Schema);
 				results.IsValid = false;
 				results.Keyword = Name;
 				results.ErrorMessage = ErrorTemplate;

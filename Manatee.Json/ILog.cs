@@ -9,6 +9,6 @@
 		/// Creates a log entry at a "verbose" log level.
 		/// </summary>
 		/// <param name="message">The message to log.</param>
-		void Verbose(string message);
+		void Verbose(string message, LogCategory category = LogCategory.General);
 	}
 }

@@ -66,7 +66,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				JsonOptions.Log?.Verbose("Instance not an object; not applicable");
+				Log.Verbose("Instance not an object; not applicable", LogCategory.Schema);
 				return new SchemaValidationResults(Name, context);
 			}
 
@@ -75,16 +75,17 @@ namespace Manatee.Json.Schema
 			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
 			if (toEvaluate.Count == 0)
 			{
-				JsonOptions.Log?.Verbose("All properties have been evaluated");
+				Log.Verbose("All properties have been evaluated", LogCategory.Schema);
 				return results;
 			}
 
-			JsonOptions.Log?.Verbose(context.EvaluatedPropertyNames.Count == 0
-				                         ? "No properties have been evaluated; process all"
-				                         : $"Properties {context.EvaluatedPropertyNames.ToJson()} have been evaluated; skipping these");
+			Log.Verbose(context.EvaluatedPropertyNames.Count == 0
+				            ? "No properties have been evaluated; process all"
+				            : $"Properties {context.EvaluatedPropertyNames.ToJson()} have been evaluated; skipping these",
+			            LogCategory.Schema);
 			if (Value == JsonSchema.False && toEvaluate.Any())
 			{
-				JsonOptions.Log?.Verbose("Subschema is `false`; all instances invalid");
+				Log.Verbose("Subschema is `false`; all instances invalid", LogCategory.Schema);
 				results.IsValid = false;
 				results.Keyword = Name;
 				results.ErrorMessage = ErrorTemplate;
@@ -111,7 +112,7 @@ namespace Manatee.Json.Schema
 				{
 					if (!valid)
 					{
-						JsonOptions.Log?.Verbose("Subschema failed; halting validation early");
+						Log.Verbose("Subschema failed; halting validation early", LogCategory.Schema);
 						break;
 					}
 				}

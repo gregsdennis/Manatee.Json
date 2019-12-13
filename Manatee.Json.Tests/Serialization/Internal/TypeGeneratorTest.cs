@@ -8,6 +8,12 @@ namespace Manatee.Json.Tests.Serialization.Internal
 	[TestFixture]
 	public class TypeGeneratorTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Serialization;
+		}
+
 		[Test]
 		public void TypeCreation_Success()
 		{
