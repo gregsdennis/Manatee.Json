@@ -71,20 +71,20 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				Log.Verbose("Instance not an object; not applicable", LogCategory.Schema);
+				Log.Schema("Instance not an object; not applicable");
 				return results;
 			}
 
 			if (!context.Instance.Object.ContainsKey(PropertyName))
 			{
-				Log.Verbose($"Property {PropertyName} not found; not applicable", LogCategory.Schema);
+				Log.Schema($"Property {PropertyName} not found; not applicable");
 				return results;
 			}
 
 			var missingProperties = _dependencies.Except(context.Instance.Object.Keys).ToList();
 			if (missingProperties.Any())
 			{
-				Log.Verbose($"Properties {missingProperties} not found but required by property {PropertyName}", LogCategory.Schema);
+				Log.Schema($"Properties {missingProperties} not found but required by property {PropertyName}");
 				results.IsValid = false;
 				results.AdditionalInfo["required"] = missingProperties.ToJson();
 				results.AdditionalInfo["dependency"] = PropertyName;

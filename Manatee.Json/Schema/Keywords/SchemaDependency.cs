@@ -58,13 +58,13 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				Log.Verbose("Instance not an object; not applicable", LogCategory.Schema);
+				Log.Schema("Instance not an object; not applicable");
 				return results;
 			}
 
 			if (!context.Instance.Object.ContainsKey(PropertyName))
 			{
-				Log.Verbose($"Property {PropertyName} not found; not applicable", LogCategory.Schema);
+				Log.Schema($"Property {PropertyName} not found; not applicable");
 				return results;
 			}
 
@@ -79,7 +79,7 @@ namespace Manatee.Json.Schema
 
 			if (!nestedResult.IsValid)
 			{
-				Log.Verbose($"Property {PropertyName} found, but subschema failed", LogCategory.Schema);
+				Log.Schema($"Property {PropertyName} found, but subschema failed");
 				results.IsValid = false;
 				results.ErrorMessage = ErrorTemplate;
 			}

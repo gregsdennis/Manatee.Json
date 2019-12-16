@@ -60,7 +60,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.RecursiveAnchor == null)
 			{
-				Log.Verbose($"Marking recursive anchor at {context.RelativeLocation}", LogCategory.Schema);
+				Log.Schema($"Marking recursive anchor at {context.RelativeLocation}");
 				context.RecursiveAnchor = context.Local;
 			}
 			

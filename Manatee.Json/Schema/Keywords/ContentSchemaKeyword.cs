@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.String)
 			{
-				Log.Verbose("Instance not a string; not applicable", LogCategory.Schema);
+				Log.Schema("Instance not a string; not applicable");
 				return new SchemaValidationResults(Name, context);
 			}
 

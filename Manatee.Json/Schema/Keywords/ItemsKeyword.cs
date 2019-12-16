@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Array)
 			{
-				Log.Verbose("Instance not an array; not applicable", LogCategory.Schema);
+				Log.Schema("Instance not an array; not applicable");
 				return results;
 			}
 
@@ -67,7 +67,7 @@ namespace Manatee.Json.Schema
 			if (IsArray)
 			{
 				// have array of schemata: validate in sequence
-				Log.Verbose("items is an array; process elements index-aligned", LogCategory.Schema);
+				Log.Schema("items is an array; process elements index-aligned");
 				var i = 0;
 				while (i < array.Count && i < Count)
 				{
@@ -81,7 +81,7 @@ namespace Manatee.Json.Schema
 					var localResults = this[i].Validate(newContext);
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
 					{
-						Log.Verbose("Subschema failed; halting validation early", LogCategory.Schema);
+						Log.Schema("Subschema failed; halting validation early");
 						results.IsValid = false;
 						break;
 					}
@@ -100,7 +100,7 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				Log.Verbose($"items is an single subschema; process all elements", LogCategory.Schema);
+				Log.Schema($"items is an single subschema; process all elements");
 				// have single schema: validate all against this
 				var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -128,7 +128,7 @@ namespace Manatee.Json.Schema
 					{
 						if (!valid)
 						{
-							Log.Verbose("Subschema failed; halting validation early", LogCategory.Schema);
+							Log.Schema("Subschema failed; halting validation early");
 							break;
 						}
 					}

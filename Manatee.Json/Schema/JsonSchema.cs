@@ -293,15 +293,15 @@ namespace Manatee.Json.Schema
 
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			Log.Verbose($"Begin validation of {context.InstanceLocation} by {context.RelativeLocation}", LogCategory.Schema);
+			Log.Schema($"Begin validation of {context.InstanceLocation} by {context.RelativeLocation}");
 			if (_inherentValue.HasValue)
 			{
 				if (_inherentValue.Value)
 				{
-					Log.Verbose("`true` schema; all instances valid", LogCategory.Schema);
+					Log.Schema("`true` schema; all instances valid");
 					return new SchemaValidationResults(context);
 				}
-				Log.Verbose("`false` schema; all instances invalid", LogCategory.Schema);
+				Log.Schema("`false` schema; all instances invalid");
 				return new SchemaValidationResults(context)
 					{
 						IsValid = false,
@@ -340,9 +340,9 @@ namespace Manatee.Json.Schema
 			var nestedResults = this.OrderBy(k => k.ValidationSequence)
 				.Select(k =>
 					{
-						Log.Verbose($"Processing `{k.Name}`", LogCategory.Schema);
+						Log.Schema($"Processing `{k.Name}`");
 						var localResults = k.Validate(context);	
-						Log.Verbose($"`{k.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}", LogCategory.Schema);
+						Log.Schema($"`{k.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
 						return localResults;
 					}).ToList();
 
@@ -351,7 +351,7 @@ namespace Manatee.Json.Schema
 
 			results.NestedResults = nestedResults;
 
-			Log.Verbose($"Validation of {context.InstanceLocation} by {context.RelativeLocation} complete: {(results.IsValid ? "valid" : "invalid")}", LogCategory.Schema);
+			Log.Schema($"Validation of {context.InstanceLocation} by {context.RelativeLocation} complete: {(results.IsValid ? "valid" : "invalid")}");
 			return results;
 		}
 

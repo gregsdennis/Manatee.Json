@@ -70,14 +70,14 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.String)
 			{
-				Log.Verbose("Instance not a string; not applicable", LogCategory.Schema);
+				Log.Schema("Instance not a string; not applicable");
 				return results;
 			}
 
 			var length = new StringInfo(context.Instance.String).LengthInTextElements;
 			if (length < Value)
 			{
-				Log.Verbose($"Bounds check failed: {length} < {Value}", LogCategory.Schema);
+				Log.Schema($"Bounds check failed: {length} < {Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["lowerBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.String.Length;

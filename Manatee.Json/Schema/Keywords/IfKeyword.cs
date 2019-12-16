@@ -70,7 +70,7 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				Log.Verbose("`then` and `else` keywords not present; skipping `if` validation", LogCategory.Schema);
+				Log.Schema("`then` and `else` keywords not present; skipping `if` validation");
 			}
 
 			return new SchemaValidationResults(Name, context);

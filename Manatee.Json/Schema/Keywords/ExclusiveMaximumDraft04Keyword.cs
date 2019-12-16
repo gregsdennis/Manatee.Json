@@ -68,26 +68,26 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Number)
 			{
-				Log.Verbose("Instance not a number; not applicable", LogCategory.Schema);
+				Log.Schema("Instance not a number; not applicable");
 				return results;
 			}
 
 			var keyword = context.Local.Get<MaximumKeyword>();
 			if (keyword == null)
 			{
-				Log.Verbose("`maximum` keyword not defined; not applicable", LogCategory.Schema);
+				Log.Schema("`maximum` keyword not defined; not applicable");
 				return results;
 			}
 
 			if (!Value)
 			{
-				Log.Verbose("Not exclusive; see `maximum` results", LogCategory.Schema);
+				Log.Schema("Not exclusive; see `maximum` results");
 				return results;
 			}
 			
 			if (context.Instance.Number >= keyword.Value)
 			{
-				Log.Verbose($"Bounds check failed: {context.Instance.Number} >= {keyword.Value}", LogCategory.Schema);
+				Log.Schema($"Bounds check failed: {context.Instance.Number} >= {keyword.Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["upperBound"] = keyword.Value;
 				results.AdditionalInfo["actual"] = context.Instance;

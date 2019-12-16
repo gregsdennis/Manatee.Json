@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 				{
 					if (!valid)
 					{
-						Log.Verbose("Subschema failed; halting validation early", LogCategory.Schema);
+						Log.Schema("Subschema failed; halting validation early");
 						break;
 					}
 				}

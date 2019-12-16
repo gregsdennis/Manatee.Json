@@ -18,7 +18,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
-			return DefaultValueSerializer.Instance.TrySerialize(serializer, context);
+			throw new NotImplementedException($"{nameof(SchemaValidator)} is only used for deserialization");
 		}
 		public object? TryDeserialize(ISerializer serializer, DeserializationContext context)
 		{

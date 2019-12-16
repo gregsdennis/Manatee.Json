@@ -5,9 +5,19 @@ namespace Manatee.Json.Internal
 	internal static class Log
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Verbose(string message, LogCategory category)
+		public static void General(string message)
 		{
-			JsonOptions.Log?.Verbose(message, category);
+			JsonOptions.Log?.Verbose(message);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void Schema(string message)
+		{
+			JsonOptions.Log?.Verbose(message, LogCategory.Schema);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void Serialization(string message)
+		{
+			JsonOptions.Log?.Verbose(message, LogCategory.Serialization);
 		}
 	}
 }

@@ -68,26 +68,26 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Number)
 			{
-				Log.Verbose("Instance not a number; not applicable", LogCategory.Schema);
+				Log.Schema("Instance not a number; not applicable");
 				return results;
 			}
 
 			var keyword = context.Local.Get<MinimumKeyword>();
 			if (keyword == null)
 			{
-				Log.Verbose("`minimum` keyword not defined; not applicable", LogCategory.Schema);
+				Log.Schema("`minimum` keyword not defined; not applicable");
 				return results;
 			}
 
 			if (!Value)
 			{
-				Log.Verbose("Not exclusive; see `minimum` results", LogCategory.Schema);
+				Log.Schema("Not exclusive; see `minimum` results");
 				return results;
 			}
 
 			if (context.Instance.Number <= keyword.Value)
 			{
-				Log.Verbose($"Bounds check failed: {context.Instance.Number} <= {keyword.Value}", LogCategory.Schema);
+				Log.Schema($"Bounds check failed: {context.Instance.Number} <= {keyword.Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["lowerBound"] = keyword.Value;
 				results.AdditionalInfo["actual"] = context.Instance;

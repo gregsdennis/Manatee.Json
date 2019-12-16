@@ -72,7 +72,7 @@ namespace Manatee.Json.Schema
 
 			if (!JsonSchemaOptions.ValidateFormatKeyword)
 			{
-				Log.Verbose("Options indicate skipping format validation", LogCategory.Schema);
+				Log.Schema("Options indicate skipping format validation");
 				return results;
 			}
 

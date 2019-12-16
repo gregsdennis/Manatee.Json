@@ -78,7 +78,7 @@ namespace Manatee.Json.Serialization
 					context.OverrideInferredType(type);
 			}
 
-			Log.Verbose($"Serializer {theChosenOne?.GetType().CSharpName() ?? "<not found>"} selected for type `{context.InferredType ?? context.RequestedType}`", LogCategory.Serialization);
+			Log.Serialization($"Serializer {theChosenOne?.GetType().CSharpName() ?? "<not found>"} selected for type `{(context.InferredType ?? context.RequestedType).CSharpName()}`");
 			return theChosenOne;
 		}
 		internal static ITypeSerializer GetTypeSerializer()
