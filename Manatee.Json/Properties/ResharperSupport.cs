@@ -36,4 +36,6 @@ namespace JetBrains.Annotations
 
 		public string FormatParameterName { get; }
 	}
+
+	internal sealed class UsedImplicitlyAttribute : Attribute { }
 }

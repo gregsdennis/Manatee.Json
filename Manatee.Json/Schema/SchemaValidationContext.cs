@@ -24,7 +24,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the recursive anchor (root).
 		/// </summary>
-		public JsonSchema RecursiveAnchor { get; set; }
+		public JsonSchema? RecursiveAnchor { get; set; }
 		/// <summary>
 		/// Gets or sets the instance being validated.
 		/// </summary>
@@ -48,7 +48,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the base URI at this point in the validation.
 		/// </summary>
-		public Uri BaseUri { get; set; }
+		public Uri? BaseUri { get; set; }
 		/// <summary>
 		/// Gets or sets the current instance location.
 		/// </summary>
@@ -60,7 +60,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the current schema location relative to the current base URI (<see cref="BaseUri"/>).
 		/// </summary>
-		public JsonPointer BaseRelativeLocation { get; set; }
+		public JsonPointer? BaseRelativeLocation { get; set; }
 		/// <summary>
 		/// Gets or sets whether the current validation run is for a meta-schema.
 		/// </summary>

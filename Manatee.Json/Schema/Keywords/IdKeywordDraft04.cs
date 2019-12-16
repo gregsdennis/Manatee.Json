@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Schema
@@ -27,6 +28,7 @@ namespace Manatee.Json.Schema
 		/// Used for deserialization.
 		/// </summary>
 		[DeserializationUseOnly]
+		[UsedImplicitly]
 		public IdKeywordDraft04() { }
 		/// <summary>
 		/// Creates an instance of the <see cref="IdKeywordDraft04"/>.

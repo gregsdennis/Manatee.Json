@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -13,8 +14,8 @@ namespace Manatee.Json.Schema
 	[DebuggerDisplay("Name={Name} Value={Reference}")]
 	public class RefKeyword : IJsonSchemaKeyword, IEquatable<RefKeyword>
 	{
-		private JsonSchema _resolvedRoot;
-		private JsonPointer _resolvedFragment;
+		private JsonSchema? _resolvedRoot;
+		private JsonPointer? _resolvedFragment;
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -41,13 +42,16 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the resolved schema that corresponds to the reference.
 		/// </summary>
-		public JsonSchema Resolved { get; private set; }
+		public JsonSchema? Resolved { get; private set; }
 
 		/// <summary>
 		/// Used for deserialization.
 		/// </summary>
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		[DeserializationUseOnly]
+		[UsedImplicitly]
 		public RefKeyword() { }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		/// <summary>
 		/// Creates an instance of the <see cref="RefKeyword"/>.
 		/// </summary>
@@ -101,7 +105,7 @@ namespace Manatee.Json.Schema
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}
@@ -129,7 +133,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(RefKeyword other)
+		public bool Equals(RefKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -138,14 +142,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
+		public bool Equals(IJsonSchemaKeyword? other)
 		{
 			return Equals(other as RefKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as RefKeyword);
 		}
@@ -206,7 +210,7 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
-			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri);
+			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri!);
 		}
 		private void _ResolveLocalReference(Uri baseUri)
 		{
@@ -217,7 +221,7 @@ namespace Manatee.Json.Schema
 			}
 
 			Log.Schema($"Resolving local reference {_resolvedFragment}");
-			Resolved = _resolvedRoot.ResolveSubschema(_resolvedFragment, baseUri);
+			Resolved = _resolvedRoot!.ResolveSubschema(_resolvedFragment!, baseUri);
 		}
 	}
 }

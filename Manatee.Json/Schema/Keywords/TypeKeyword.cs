@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -49,6 +50,7 @@ namespace Manatee.Json.Schema
 		/// Used for deserialization.
 		/// </summary>
 		[DeserializationUseOnly]
+		[UsedImplicitly]
 		public TypeKeyword() { }
 		/// <summary>
 		/// Creates an instance of the <see cref="TypeKeyword"/>.
@@ -124,7 +126,7 @@ namespace Manatee.Json.Schema
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}

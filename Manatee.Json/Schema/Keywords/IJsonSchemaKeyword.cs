@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 		/// If the keyword contains no subschemas, simply return null.
 		/// If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
 		/// </implementationNotes>
-		JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri);
+		JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri);
 	}
 
 	internal interface IJsonSchemaKeywordPlus : IJsonSchemaKeyword

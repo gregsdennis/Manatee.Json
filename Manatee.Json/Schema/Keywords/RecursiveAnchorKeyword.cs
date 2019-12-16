@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -42,6 +43,7 @@ namespace Manatee.Json.Schema
 		/// Used for deserialization.
 		/// </summary>
 		[DeserializationUseOnly]
+		[UsedImplicitly]
 		public RecursiveAnchorKeyword() { }
 		/// <summary>
 		/// Creates a new instance of the <see cref="RecursiveAnchorKeyword"/>.
@@ -85,7 +87,7 @@ namespace Manatee.Json.Schema
 		/// If the keyword contains no subschemas, simply return null.
 		/// If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
 		/// </implementationNotes>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}
@@ -114,23 +116,23 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
-		{
-			return Equals(other as RecursiveAnchorKeyword);
-		}
-		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(RecursiveAnchorKeyword other)
+		public bool Equals(RecursiveAnchorKeyword? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return string.Equals(Name, other.Name);
 		}
+		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public bool Equals(IJsonSchemaKeyword? other)
+		{
+			return Equals(other as RecursiveAnchorKeyword);
+		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as RecursiveAnchorKeyword);
 		}
