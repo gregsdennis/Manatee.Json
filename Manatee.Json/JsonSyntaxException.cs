@@ -10,11 +10,6 @@ namespace Manatee.Json
 	public class JsonSyntaxException : Exception
 	{
 		/// <summary>
-		/// Obsolete - Gets the JSON source string.
-		/// </summary>
-		[Obsolete("Use SourceData instead")]
-		public new string? Source => SourceData;
-		/// <summary>
 		/// Gets the JSON source string.
 		/// </summary>
 		public string? SourceData { get; }

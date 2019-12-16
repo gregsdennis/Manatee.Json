@@ -119,95 +119,57 @@ namespace Manatee.Json
 		/// <summary>
 		/// Creates a null <see cref="JsonValue"/>.
 		/// </summary>
-		[Obsolete("Use JsonValue.Null instead.")]
-		// TODO: make this private
-		public JsonValue()
+		private JsonValue()
 		{
 			Type = JsonValueType.Null;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a boolean.
 		/// </summary>
-#if !DEBUG
-		[Obsolete("Future versions will remove the null allowance.")]
-#endif
-		public JsonValue(bool? b)
+		public JsonValue(bool b)
 		{
-			if (b != null)
-			{
-				Type = JsonValueType.Boolean;
-				_boolValue = b.Value;
-			}
-			else Type = JsonValueType.Null;
+			_boolValue = b;
+			Type = JsonValueType.Boolean;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a string.
 		/// </summary>
-#if !DEBUG
-		[Obsolete("Future versions will require non-null parameters.")]
-#endif
-		public JsonValue(string? s)
+		public JsonValue(string s)
 		{
-			if (s != null)
-			{
-				Type = JsonValueType.String;
-				_stringValue = s;
-			}
-			else Type = JsonValueType.Null;
+			_stringValue = s ?? throw new ArgumentNullException(nameof(s));
+			Type = JsonValueType.String;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a numeric value.
 		/// </summary>
-#if !DEBUG
-		[Obsolete("Future versions will remove the null allowance.")]
-#endif
-		public JsonValue(double? n)
+		public JsonValue(double n)
 		{
-			if (n != null)
-			{
-				Type = JsonValueType.Number;
-				_numberValue = n.Value;
-			}
-			else Type = JsonValueType.Null;
+			_numberValue = n;
+			Type = JsonValueType.Number;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a JSON object.
 		/// </summary>
-#if !DEBUG
-		[Obsolete("Future versions will require non-null parameters.")]
-#endif
-		public JsonValue(JsonObject? o)
+		public JsonValue(JsonObject o)
 		{
-			if (o != null)
-			{
-				Type = JsonValueType.Object;
-				_objectValue = o;
-			}
-			else Type = JsonValueType.Null;
+			_objectValue = o ?? throw new ArgumentNullException(nameof(o));
+			Type = JsonValueType.Object;
 		}
 		/// <summary>
 		/// Creates a <see cref="JsonValue"/> from a JSON array.
 		/// </summary>
-#if !DEBUG
-		[Obsolete("Future versions will require non-null parameters.")]
-#endif
-		public JsonValue(JsonArray? a)
+		public JsonValue(JsonArray a)
 		{
-			if (a != null)
-			{
-				Type = JsonValueType.Array;
-				_arrayValue = a;
-			}
-			else Type = JsonValueType.Null;
+			_arrayValue = a ?? throw new ArgumentNullException(nameof(a));
+			Type = JsonValueType.Array;
 		}
 		/// <summary>
 		/// Creates a copy of a <see cref="JsonValue"/>.
 		/// </summary>
-#if !DEBUG
-		[Obsolete("Future versions will require non-null parameters.")]
-#endif
 		public JsonValue(JsonValue other)
 		{
+			if (other == null) throw new ArgumentNullException(nameof(other));
+
 			_arrayValue = other._arrayValue;
 			_objectValue = other._objectValue;
 			_numberValue = other._numberValue;

@@ -103,6 +103,12 @@ namespace Manatee.Json.Schema
 			LocalRegistry = source.LocalRegistry;
 		}
 
+		/// <summary>
+		/// Updates the <see cref="EvaluatedPropertyNames"/>, <see cref="LocallyEvaluatedPropertyNames"/>,
+		/// <see cref="LastEvaluatedIndex"/>, and <see cref="LocalTierLastEvaluatedIndex"/> properties based
+		/// on another context that processed a subschema.
+		/// </summary>
+		/// <param name="other">Another context object.</param>
 		public void UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(SchemaValidationContext other)
 		{
 			EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);

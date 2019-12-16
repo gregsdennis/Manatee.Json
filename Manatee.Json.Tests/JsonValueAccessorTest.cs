@@ -92,12 +92,6 @@ namespace Manatee.Json.Tests
 				});
 		}
 		[Test]
-		public void Ctor_TypeIsNull()
-		{
-			var json = new JsonValue();
-			Assert.AreEqual(JsonValueType.Null, json.Type);
-		}
-		[Test]
 		public void Ctor_NullBoolean_TypeIsNull()
 		{
 			var json = new JsonValue((bool?) null);

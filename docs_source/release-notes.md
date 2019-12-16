@@ -1,3 +1,72 @@
+# 12.0.0
+
+*Released on 27 Nov, 2019*
+
+<span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
+
+## Breaking Changes
+
+- `JsonArray.OfType(JsonValueType)` now throws `ArgumentNullException` when passed a null array.
+- `JsonSyntaxException.Source` replaced by `SourceData` so that it doesn't hide `Exception.Source`.
+- `JsonValue` parameterless constructor removed.  Use `JsonValue.Null` instead.
+- `JsonValue` parameterized constructor arguments changed to non-nullable or will throw `ArgumentNullException`.
+- `SerializationContext` used only for serialization now.  `DeserializationContext` now introduced for deserialization.  This changes method signatures for `ISerializer`.  Additional notes below.
+
+### Serialization changes
+
+In an effort to reduce memory footprint, a single `SerializationContext`/`DeserializationContext` instance will be retained throughout the serialization/deserialization process.  To facilitate this, new instances will no longer be created when a serializer needs to serialize an object's contents; instead it will "push" new details onto the existing context, serialize, then "pop" the details when finished.
+
+For example, the internal `ListSerializer` in versions up to v11 would serialize a list's contents using [this code](https://github.com/gregsdennis/Manatee.Json/blob/7b5fa44bd2ece54dc616716482284baaca72ed35/Manatee.Json/Serialization/Internal/Serializers/ListSerializer.cs#L23-L34):
+
+```c#
+for (int i = 0; i < array.Length; i++)
+{
+    var newContext = new SerializationContext(context)
+    {
+        CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+        InferredType = list[i]?.GetType() ?? typeof(T),
+        RequestedType = typeof(T),
+        Source = list[i]
+    };
+
+    array[i] = context.RootSerializer.Serialize(newContext);
+}
+```
+
+However, creating a new context instance for each item is resource intensive and creates a lot of work for the garbage collector afterward.
+
+Instead we simply push new details onto the existing context before we serialize an item, then pop those details afterward, like [this](https://github.com/gregsdennis/Manatee.Json/blob/929e6d1b922df5f774522e0743cc05d19e2527b9/Manatee.Json/Serialization/Internal/Serializers/ListSerializer.cs#L23-L28):
+
+```c#
+for (int i = 0; i < array.Length; i++)
+{
+    context.Push(list[i]?.GetType() ?? typeof(T), typeof(T), i.ToString(), list[i]);
+    array[i] = context.RootSerializer.Serialize(context);
+    context.Pop();
+}
+```
+
+The values that we push are
+
+- The inferred type of the object we're pushing (or the requested type if the inferred type is null)
+- The requested type
+- The JSON path segment (in this case the index)
+- The object to be serialized
+
+These are maintained in a stack internally to the context object and are removed on the `Pop()` call, keeping the context synchronized with the serialization process.
+
+## Logging
+
+Some cursory verbose logging has been introduced to allow the client to see what decisions Manatee.Json is making during (primarily) schema validation and serialization.  The `JsonOptions.Log` static property has been introduced for this purpose.  It is of type `ILog` which exposes a single method, `Verbose(string, LogCategory)`.
+
+The log categories currently are general, serialization, and schema.  This allows the client to enable or disable certain activities, so that, for instance, they can only enable schema validation logging if they wish.  The `JsonOptions.LogCategory` static property controls what categories are actually sent.
+
+**There is no default implementation for `ILog`.**  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are *a lot* of logs.
+
+## Bug fixes
+
+`unevaluatedItems` would not properly process properties that nested keywords touched but failed.  See https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291 for details.
+
 # 11.0.4
 
 *Released on 27 Nov, 2019*
@@ -58,7 +127,7 @@ Minor serialization improvements.
 </p>
 </details>
 
-<span id="feature">feature</span>
+<span id="break">breaking change</span><span id="feature">feature</span>
 
 ## Breaking changes
 

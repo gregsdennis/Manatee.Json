@@ -29,16 +29,25 @@ namespace Manatee.Json.Serialization
 			JsonRoot = jsonRoot;
 		}
 
+		/// <summary>
+		/// Pushes new details onto the context to allow for recursive serialization.
+		/// </summary>
+		/// <param name="type">The type to be deserialized.</param>
+		/// <param name="propertyName">The property name or index.  Will be appended to the location as a JSON Path segment.</param>
+		/// <param name="localValue">The local JSON value being deserialized.</param>
 		public void Push(Type type, string? propertyName, JsonValue localValue)
 		{
-			Push(type, type, propertyName);
+			PushDetails(type, type, propertyName);
 
 			_localValues.Push(LocalValue);
 			LocalValue = localValue;
 		}
+		/// <summary>
+		/// Pops details from the context to keep the context in sync with the deserialization process.
+		/// </summary>
 		public void Pop()
 		{
-			base.Pop();
+			base.PopDetails();
 
 			LocalValue = _localValues.Pop();
 		}

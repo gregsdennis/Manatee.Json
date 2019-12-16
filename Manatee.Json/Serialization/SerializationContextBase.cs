@@ -45,7 +45,7 @@ namespace Manatee.Json.Serialization
 			InferredType = type;
 		}
 
-		private protected void Push(Type inferredType, Type requestedType, string? propertyName)
+		private protected void PushDetails(Type inferredType, Type requestedType, string? propertyName)
 		{
 			_inferredTypes.Push(InferredType);
 			InferredType = inferredType;
@@ -56,7 +56,7 @@ namespace Manatee.Json.Serialization
 			CurrentLocation.Add(propertyName);
 		}
 
-		private protected void Pop()
+		private protected void PopDetails()
 		{
 			InferredType = _inferredTypes.Pop();
 			RequestedType = _requestedTypes.Pop();
