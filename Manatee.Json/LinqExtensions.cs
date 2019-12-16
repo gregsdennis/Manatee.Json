@@ -29,7 +29,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="results">An <see cref="IDictionary{String, JsonValue}"/></param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
-		public static JsonObject ToJson(this IDictionary<string, JsonValue> results)
+		public static JsonObject ToJson(this IDictionary<string, JsonValue?> results)
 		{
 			return new JsonObject(results);
 		}
@@ -38,7 +38,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="results">An <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{String, JsonValue}"/></param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
-		public static JsonObject ToJson(this IEnumerable<KeyValuePair<string, JsonValue>> results)
+		public static JsonObject ToJson(this IEnumerable<KeyValuePair<string, JsonValue?>> results)
 		{
 			var json = new JsonObject();
 			foreach (var keyValuePair in results)
@@ -52,11 +52,11 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="list">A collection of strings</param>
 		/// <returns>A <see cref="JsonArray"/> containing the strings</returns>
-		public static JsonValue ToJson(this IEnumerable<string> list)
+		public static JsonValue ToJson(this IEnumerable<string?>? list)
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
-			json.AddRange(list.Select(j => new JsonValue(j)));
+			json.AddRange(list.Select(j => j == null ? JsonValue.Null : new JsonValue(j)));
 			return json;
 		}
 		/// <summary>
@@ -64,7 +64,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="list">A collection of booleans</param>
 		/// <returns>A <see cref="JsonArray"/> containing the booleans</returns>
-		public static JsonValue ToJson(this IEnumerable<bool> list)
+		public static JsonValue ToJson(this IEnumerable<bool>? list)
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
@@ -76,7 +76,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="list">A collection of <see cref="Nullable{Boolean}"/></param>
 		/// <returns>A <see cref="JsonArray"/> containing the <see cref="Nullable{Boolean}"/></returns>
-		public static JsonValue ToJson(this IEnumerable<bool?> list)
+		public static JsonValue ToJson(this IEnumerable<bool?>? list)
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
@@ -88,7 +88,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="list">A collection of <see cref="JsonArray"/>s</param>
 		/// <returns>A <see cref="JsonArray"/> containing the <see cref="JsonArray"/>s</returns>
-		public static JsonValue ToJson(this IEnumerable<JsonArray> list)
+		public static JsonValue ToJson(this IEnumerable<JsonArray>? list)
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
@@ -100,7 +100,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="list">A collection of <see cref="JsonObject"/>s</param>
 		/// <returns>A <see cref="JsonArray"/> containing the <see cref="JsonObject"/>s</returns>
-		public static JsonValue ToJson(this IEnumerable<JsonObject> list)
+		public static JsonValue ToJson(this IEnumerable<JsonObject>? list)
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
@@ -112,7 +112,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="list">A collection of doubles</param>
 		/// <returns>A <see cref="JsonArray"/> containing the doubles</returns>
-		public static JsonValue ToJson(this IEnumerable<double> list)
+		public static JsonValue ToJson(this IEnumerable<double>? list)
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
@@ -124,7 +124,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="list">A collection of doubles</param>
 		/// <returns>A <see cref="JsonArray"/> containing the doubles</returns>
-		public static JsonValue ToJson(this IEnumerable<double?> list)
+		public static JsonValue ToJson(this IEnumerable<double?>? list)
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
@@ -138,7 +138,7 @@ namespace Manatee.Json
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>A <see cref="JsonArray"/> containing the equivalent JsonValues</returns>
 		public static JsonValue ToJson<T>(this IEnumerable<T> list, JsonSerializer serializer)
-			where T : IJsonSerializable
+			where T : IJsonSerializable?
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
@@ -152,7 +152,7 @@ namespace Manatee.Json
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>An equivalent <see cref="JsonObject"/></returns>
 		public static JsonObject ToJson<T>(this IEnumerable<KeyValuePair<string, T>> results, JsonSerializer serializer)
-			where T : IJsonSerializable
+			where T : IJsonSerializable?
 		{
 			var json = new JsonObject();
 			foreach (var keyValuePair in results)
@@ -187,7 +187,7 @@ namespace Manatee.Json
 		/// <param name="json">The <see cref="JsonValue"/> to deserialize</param>
 		/// <param name="serializer">The <see cref="JsonSerializer"/> instance to use for additional serialization of values.</param>
 		/// <returns>A collection of the deserialized objects</returns>
-		public static T FromJson<T>(this JsonObject json, JsonSerializer serializer)
+		public static T FromJson<T>(this JsonObject? json, JsonSerializer serializer)
 			where T : IJsonSerializable, new()
 		{
 			if (json == null) return default!;

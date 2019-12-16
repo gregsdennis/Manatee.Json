@@ -98,7 +98,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="locaRegistry"></param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry locaRegistry) { }
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry locaRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>

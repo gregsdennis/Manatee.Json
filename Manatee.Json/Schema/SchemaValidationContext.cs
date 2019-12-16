@@ -11,8 +11,8 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationContext
 	{
-		private HashSet<string> _evaluatedPropertyNames;
-		private HashSet<string> _locallyEvaluatedPropertyNames;
+		private HashSet<string>? _evaluatedPropertyNames;
+		private HashSet<string>? _locallyEvaluatedPropertyNames;
 		/// <summary>
 		/// Gets or sets the local schema at this point in the validation.
 		/// </summary>
@@ -60,6 +60,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the current schema location relative to the current base URI (<see cref="BaseUri"/>).
 		/// </summary>
+		// TODO: Revisit the nullability of this
 		public JsonPointer? BaseRelativeLocation { get; set; }
 		/// <summary>
 		/// Gets or sets whether the current validation run is for a meta-schema.
@@ -76,15 +77,26 @@ namespace Manatee.Json.Schema
 
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
-		internal SchemaValidationContext()
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+		internal SchemaValidationContext(JsonSchema root,
+										 JsonValue instance,
+		                                 JsonPointer? baseRelativeLocation,
+		                                 JsonPointer relativeLocation,
+		                                 JsonPointer instanceLocation)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
+			Root = root;
+			Instance = instance;
+			BaseRelativeLocation = baseRelativeLocation;
+			RelativeLocation = relativeLocation;
+			InstanceLocation = instanceLocation;
 			LocalRegistry = new JsonSchemaRegistry();
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.
 		/// </summary>
 		public SchemaValidationContext(SchemaValidationContext source)
-			: this()
+			: this(source.Root, source.Instance, source.BaseRelativeLocation, source.RelativeLocation, source.InstanceLocation)
 		{
 			Local = source.Local;
 			Root = source.Root;

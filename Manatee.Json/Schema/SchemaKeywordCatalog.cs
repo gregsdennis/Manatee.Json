@@ -37,7 +37,11 @@ namespace Manatee.Json.Schema
 		public static void Add<T>()
 			where T : IJsonSchemaKeyword, new()
 		{
+#pragma warning disable CS8601 // Possible null reference assignment.
 			var keyword = (T) _resolver.Resolve(typeof(T), null);
+#pragma warning restore CS8601 // Possible null reference assignment.
+			if (keyword == null)
+				throw new ArgumentException($"Cannot resolve instance of type {typeof(T)}", nameof(T));
 			if (!_cache.TryGetValue(keyword.Name, out var list))
 			{
 				list = new List<Type>();
@@ -61,39 +65,40 @@ namespace Manatee.Json.Schema
 		public static void Remove<T>()
 			where T : IJsonSchemaKeyword, new()
 		{
+#pragma warning disable CS8601 // Possible null reference assignment.
 			var keyword = (T) _resolver.Resolve(typeof(T), null);
-			if (!_cache.TryGetValue(keyword.Name, out var list)) return;
+#pragma warning restore CS8601 // Possible null reference assignment.
+			if (keyword == null || !_cache.TryGetValue(keyword.Name, out var list)) return;
 
 			list.Remove(typeof(T));
 
-			if (_vocabularies.TryGetValue(keyword.Vocabulary.Id, out var vocabulary))
-			{
-				vocabulary.DefinedKeywords.Remove(typeof(T));
-				if (!vocabulary.DefinedKeywords.Any())
-					_vocabularies.Remove(vocabulary.Id);
-			}
+			if (!_vocabularies.TryGetValue(keyword.Vocabulary.Id, out var vocabulary)) return;
+			vocabulary.DefinedKeywords.Remove(typeof(T));
+			
+			if (vocabulary.DefinedKeywords.Any()) return;
+			_vocabularies.Remove(vocabulary.Id);
 		}
 
-		internal static IJsonSchemaKeyword Build(string keywordName, JsonValue json, JsonSerializer serializer)
+		internal static IJsonSchemaKeyword? Build(string keywordName, JsonValue json, JsonSerializer serializer)
 		{
 			if (!_cache.TryGetValue(keywordName, out var list) || !list.Any())
 				return null;
 
-			IJsonSchemaKeyword keyword = null;
+			IJsonSchemaKeyword? keyword = null;
 			var specials = list.Where(t => t.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IJsonSchemaKeywordPlus)))
-				.Select(t => (IJsonSchemaKeywordPlus) _resolver.Resolve(t, null))
+				.Select(t => (IJsonSchemaKeywordPlus?) _resolver.Resolve(t, null))
 				.ToList();
 			if (specials.Any())
-				keyword = specials.FirstOrDefault(k => k.Handles(json));
+				keyword = specials.FirstOrDefault(k => k?.Handles(json) ?? false);
 
 			if (keyword == null)
-				keyword = (IJsonSchemaKeyword) _resolver.Resolve(list.First(), null);
-			keyword.FromJson(json, serializer);
+				keyword = (IJsonSchemaKeyword?) _resolver.Resolve(list.First(), null);
+			keyword?.FromJson(json, serializer);
 
 			return keyword;
 		}
 
-		internal static SchemaVocabulary GetVocabulary(string id)
+		internal static SchemaVocabulary? GetVocabulary(string id)
 		{
 			return _vocabularies.TryGetValue(id, out var vocabulary) ? vocabulary : null;
 

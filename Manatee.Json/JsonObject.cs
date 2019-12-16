@@ -34,7 +34,7 @@ namespace Manatee.Json
 		/// supplied JSON values.
 		/// </summary>
 		/// <param name="collection"></param>
-		public JsonObject(IDictionary<string, JsonValue> collection)
+		public JsonObject(IDictionary<string, JsonValue?> collection)
 			: base(collection.ToDictionary(kvp => kvp.Key, kvp => kvp.Value ?? JsonValue.Null)) {}
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="key">The key of the element to add.</param>
 		/// <param name="value">The value of the element to add. If the value is null, it will be replaced by <see cref="JsonValue.Null"/>.</param>
-		public new void Add(string key, JsonValue value)
+		public new void Add(string key, JsonValue? value)
 		{
 			switch (JsonOptions.DuplicateKeyBehavior)
 			{

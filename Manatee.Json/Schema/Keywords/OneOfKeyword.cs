@@ -103,7 +103,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			foreach (var schema in this)
 			{

@@ -45,7 +45,7 @@ namespace Manatee.Json.Schema
 		/// <implementationNotes>
 		/// If the keyword does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
-		void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry);
+		void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry);
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>

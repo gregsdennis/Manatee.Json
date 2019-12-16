@@ -45,7 +45,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			foreach (var schema in Values)
 			{
@@ -88,8 +88,10 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 			return this.ToDictionary(kvp => kvp.Key,
 									 kvp => serializer.Serialize(kvp.Value))
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 				.ToJson();
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
@@ -119,7 +121,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object" obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as DefsKeyword);
 		}

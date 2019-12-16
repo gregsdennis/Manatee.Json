@@ -94,7 +94,7 @@ namespace Manatee.Json.Schema
 		/// <implementationNotes>
 		/// If the dependency does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			_schema.RegisterSubschemas(baseUri, localRegistry);
 		}

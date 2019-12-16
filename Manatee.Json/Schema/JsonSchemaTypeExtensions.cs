@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		private static string _TranslateSingleType(JsonSchemaType type)
+		private static string? _TranslateSingleType(JsonSchemaType type)
 		{
 			switch (type)
 			{
