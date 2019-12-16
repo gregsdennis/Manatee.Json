@@ -67,10 +67,15 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Array) return results;
+			if (context.Instance.Type != JsonValueType.Array)
+			{
+				Log.Schema("Instance not an array; not applicable");
+				return results;
+			}
 
 			if (context.Instance.Array.Count > Value)
 			{
+				Log.Schema($"Bounds check failed: {context.Instance.Array.Count} > {Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["upperBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Array.Count;

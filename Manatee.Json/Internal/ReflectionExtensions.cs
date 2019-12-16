@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 using Manatee.Json.Serialization.Internal;
@@ -73,61 +75,208 @@ namespace Manatee.Json.Internal
 			return type.GetTypeInfo().IsValueType ? Activator.CreateInstance(type) : null;
 		}
 
-		public static void SetMember(this object? obj, JsonPointer pointer, object value)
+		public static void SetMember(this object? obj, JsonPointer pointer, object? value)
 		{
-			if (obj == null) return;
-			if (pointer.Count == 0)
-				throw new ArgumentException("Pointer must have at least one segment.");
-
-			SerializationInfo member;
-			var segment = pointer[0];
-			if (int.TryParse(segment, out var index))
+			while (true)
 			{
-				member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, false)
-					.Single(m => m.MemberInfo is PropertyInfo pi && pi.GetIndexParameters().Length == 1);
+				if (obj == null) return;
+				if (pointer.Count == 0) throw new ArgumentException("Pointer must have at least one segment.");
+
+				SerializationInfo member;
+				var segment = pointer[0];
+				if (int.TryParse(segment, out var index))
+				{
+					member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, false)
+						.Single(m => m.MemberInfo is PropertyInfo pi && pi.GetIndexParameters().Length == 1);
+					if (member == null) return;
+
+					var indexer = (PropertyInfo) member.MemberInfo;
+					if (pointer.Count == 1)
+					{
+						indexer.SetValue(obj, value, new object[] {index});
+						return;
+					}
+
+					var local = indexer.GetValue(obj, new object[] {index});
+					obj = local;
+					pointer = new JsonPointer(pointer.Skip(1));
+					continue;
+				}
+
+				member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, true)
+					.Single(m => m.SerializationName == segment);
 				if (member == null) return;
 
-				var indexer = (PropertyInfo) member.MemberInfo;
-				if (pointer.Count == 1)
+				if (member.MemberInfo is PropertyInfo asProperty)
 				{
-					indexer.SetValue(obj, value, new object[] {index});
-					return;
+					if (pointer.Count == 1)
+					{
+						asProperty.SetValue(obj, value);
+						return;
+					}
+
+					var local = asProperty.GetValue(obj);
+					obj = local;
+					pointer = new JsonPointer(pointer.Skip(1));
+					continue;
 				}
 
-				var local = indexer.GetValue(obj, new object[] { index });
-				SetMember(local, new JsonPointer(pointer.Skip(1)), value);
-				return;
+				if (member.MemberInfo is FieldInfo asField)
+				{
+					if (pointer.Count == 1)
+					{
+						asField.SetValue(obj, value);
+						return;
+					}
+
+					var local = asField.GetValue(obj);
+					obj = local;
+					pointer = new JsonPointer(pointer.Skip(1));
+					continue;
+				}
+
+				break;
 			}
+		}
+		public static string CSharpName(this Type type)
+		{
+			var sb = new StringBuilder();
+			type._CSharpName(sb);
+			return sb.ToString();
+		}
 
-			member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, true)
-				.Single(m => m.SerializationName == segment);
-			if (member == null) return;
-
-			if (member.MemberInfo is PropertyInfo asProperty)
+		private static void _CSharpName(this Type type, StringBuilder sb)
+		{
+			if (_TryCSharpKeyword(type, out var name))
 			{
-				if (pointer.Count == 1)
-				{
-					asProperty.SetValue(obj, value);
-					return;
-				}
-
-				var local = asProperty.GetValue(obj);
-				SetMember(local, new JsonPointer(pointer.Skip(1)), value);
+				sb.Append(name);
 				return;
 			}
-
-			if (member.MemberInfo is FieldInfo asField)
+			name = type.Name;
+			bool comma;
+			if (type.IsAnonymousType())
 			{
-				if (pointer.Count == 1)
+				sb.Append("[anon]{");
+				comma = false;
+				foreach (var p in type.GetProperties())
 				{
-					asField.SetValue(obj, value);
-					return;
+					if (comma)
+						sb.Append(",");
+					p.PropertyType._CSharpName(sb);
+					comma = true;
 				}
-
-				var local = asField.GetValue(obj);
-				SetMember(local, new JsonPointer(pointer.Skip(1)), value);
+				sb.Append("}");
 				return;
 			}
+			if (!type.IsGenericType)
+			{
+				sb.Append(type.Name);
+				return;
+			}
+
+			sb.Append(name.Substring(0, name.IndexOf('`')));
+			sb.Append("<");
+			comma = false;
+			foreach (var t in type.GetGenericArguments())
+			{
+				if (comma)
+					sb.Append(",");
+				t._CSharpName(sb);
+				comma = true;
+			}
+			sb.Append(">");
+		}
+		// Source: https://stackoverflow.com/a/2483054/878701
+		public static bool IsAnonymousType(this Type type)
+		{
+			if (type == null) throw new ArgumentNullException(nameof(type));
+
+			// HACK: The only way to detect anonymous types right now.
+			return Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
+			       && type.IsGenericType && type.Name.Contains("AnonymousType")
+			       && (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"))
+			       && type.Attributes.HasFlag(TypeAttributes.NotPublic);
+		}
+		private static bool _TryCSharpKeyword(this Type type, [NotNullWhen(true)] out string? name)
+		{
+			if (type == typeof(string))
+			{
+				name = "string";
+				return true;
+			}
+			if (type == typeof(byte))
+			{
+				name = "byte";
+				return true;
+			}
+			if (type == typeof(sbyte))
+			{
+				name = "sbyte";
+				return true;
+			}
+			if (type == typeof(short))
+			{
+				name = "short";
+				return true;
+			}
+			if (type == typeof(ushort))
+			{
+				name = "ushort";
+				return true;
+			}
+			if (type == typeof(int))
+			{
+				name = "int";
+				return true;
+			}
+			if (type == typeof(uint))
+			{
+				name = "uint";
+				return true;
+			}
+			if (type == typeof(long))
+			{
+				name = "long";
+				return true;
+			}
+			if (type == typeof(ulong))
+			{
+				name = "ulong";
+				return true;
+			}
+			if (type == typeof(float))
+			{
+				name = "float";
+				return true;
+			}
+			if (type == typeof(double))
+			{
+				name = "double";
+				return true;
+			}
+			if (type == typeof(char))
+			{
+				name = "char";
+				return true;
+			}
+			if (type == typeof(decimal))
+			{
+				name = "decimal";
+				return true;
+			}
+			if (type == typeof(bool))
+			{
+				name = "bool";
+				return true;
+			}
+			if (type == typeof(object))
+			{
+				name = "object";
+				return true;
+			}
+
+			name = null;
+			return false;
 		}
 	}
 }

@@ -71,7 +71,7 @@ namespace Manatee.Json.Transform
 			return items.Count == 1 ? items[0] : (index == -1 ? items : items[index]);
 		}
 
-		private static JsonPath _TryGetPath(string text)
+		private static JsonPath? _TryGetPath(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text)) return null;
 			if (text[0] == '@')

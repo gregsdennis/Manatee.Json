@@ -1,4 +1,6 @@
-﻿namespace Manatee.Json
+﻿using System;
+
+namespace Manatee.Json
 {
 	/// <summary>
 	/// Provides some configurability around the basic JSON entities.
@@ -25,5 +27,21 @@
 		/// wrong accessory type (e.g. accessing an array as a boolean).  The default is true.
 		/// </summary>
 		public static bool ThrowOnIncorrectTypeAccess { get; set; } = true;
+
+		/// <summary>
+		/// Provides "verbose" level logging during serialization and schema processing.
+		/// </summary>
+		public static ILog? Log { get; set; }
+		public static LogCategory LogCategory { get; set; }
+	}
+
+	[Flags]
+	public enum LogCategory
+	{
+		None,
+		General = 1 << 0,
+		Serialization = 1 << 1,
+		Schema = 1 << 2,
+		All = General | Serialization | Schema
 	}
 }

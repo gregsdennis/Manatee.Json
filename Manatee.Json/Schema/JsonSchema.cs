@@ -293,9 +293,15 @@ namespace Manatee.Json.Schema
 
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			Log.Schema($"Begin validation of {context.InstanceLocation} by {context.RelativeLocation}");
 			if (_inherentValue.HasValue)
 			{
-				if (_inherentValue.Value) return new SchemaValidationResults(context);
+				if (_inherentValue.Value)
+				{
+					Log.Schema("`true` schema; all instances valid");
+					return new SchemaValidationResults(context);
+				}
+				Log.Schema("`false` schema; all instances invalid");
 				return new SchemaValidationResults(context)
 					{
 						IsValid = false,
@@ -327,21 +333,25 @@ namespace Manatee.Json.Schema
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
-			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
-				JsonSchemaRegistry.Register(this);
-
 			if (refKeyword != null) return refKeyword.Validate(context);
 
 			var results = new SchemaValidationResults(context);
 
 			var nestedResults = this.OrderBy(k => k.ValidationSequence)
-				.Select(k => k.Validate(context)).ToList();
+				.Select(k =>
+					{
+						Log.Schema($"Processing `{k.Name}`");
+						var localResults = k.Validate(context);	
+						Log.Schema($"`{k.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
+						return localResults;
+					}).ToList();
 
 			if (nestedResults.Any(r => !r.IsValid))
 				results.IsValid = false;
 
 			results.NestedResults = nestedResults;
 
+			Log.Schema($"Validation of {context.InstanceLocation} by {context.RelativeLocation} complete: {(results.IsValid ? "valid" : "invalid")}");
 			return results;
 		}
 

@@ -54,7 +54,11 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Array) return results;
+			if (context.Instance.Type != JsonValueType.Array)
+			{
+				Log.Schema("Instance not an array; not applicable");
+				return results;
+			}
 
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
@@ -63,6 +67,7 @@ namespace Manatee.Json.Schema
 			if (IsArray)
 			{
 				// have array of schemata: validate in sequence
+				Log.Schema("items is an array; process elements index-aligned");
 				var i = 0;
 				while (i < array.Count && i < Count)
 				{
@@ -76,23 +81,26 @@ namespace Manatee.Json.Schema
 					var localResults = this[i].Validate(newContext);
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
 					{
+						Log.Schema("Subschema failed; halting validation early");
 						results.IsValid = false;
-						return results;
+						break;
 					}
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
 					if (reportChildErrors)
 						nestedResults.Add(this[i].Validate(newContext));
-					i++;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LocalTierLastEvaluatedIndex, i);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+					i++;
 				}
 
-				results.IsValid = JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag || nestedResults.All(r => r.IsValid);
+				results.IsValid = nestedResults.All(r => r.IsValid);
 				results.NestedResults = nestedResults;
 			}
 			else
 			{
+				Log.Schema($"items is an single subschema; process all elements");
 				// have single schema: validate all against this
 				var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -113,11 +121,16 @@ namespace Manatee.Json.Schema
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
-					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LocalTierLastEvaluatedIndex, i);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{
-						if (!valid) break;
+						if (!valid)
+						{
+							Log.Schema("Subschema failed; halting validation early");
+							break;
+						}
 					}
 					else if (reportChildErrors)
 						nestedResults.Add(localResults);
@@ -132,7 +145,7 @@ namespace Manatee.Json.Schema
 			if (!results.IsValid)
 			{
 				results.AdditionalInfo["indices"] = failedIndices;
-				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+				results.ErrorMessage = ErrorTemplate;
 			}
 
 			return results;

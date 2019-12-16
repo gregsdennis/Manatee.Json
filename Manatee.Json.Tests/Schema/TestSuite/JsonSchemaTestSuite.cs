@@ -79,6 +79,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 					return File.ReadAllText(newPath.LocalPath);
 				};
+			JsonOptions.LogCategory = LogCategory.Schema;
 
 			if (Directory.Exists(OutputFolder))
 				Directory.Delete(OutputFolder, true);

@@ -67,10 +67,15 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Number) return results;
+			if (context.Instance.Type != JsonValueType.Number)
+			{
+				Log.Schema("Instance not a number; not applicable");
+				return results;
+			}
 
 			if ((decimal)context.Instance.Number % (decimal?) Value != 0)
 			{
+				Log.Schema($"{context.Instance.Number} is not a multiple of {Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["divisor"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Number % Value;

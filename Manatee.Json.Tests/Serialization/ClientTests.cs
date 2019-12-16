@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 using Manatee.Json.Tests.Test_References;
@@ -14,6 +10,12 @@ namespace Manatee.Json.Tests.Serialization
 	[TestFixture]
 	public class ClientTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Serialization;
+		}
+
 		public enum NoNamedZero
 		{
 			One = 1,

@@ -62,7 +62,39 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			return SchemaValidationResults.Null;
+			if (!context.Misc.TryGetValue("ifKeywordValid", out var ifKeywordValidStore))
+			{
+				Log.Schema("`if` keyword not present; not applicable");
+				return new SchemaValidationResults(Name, context);
+			}
+
+			var ifKeywordValid = (bool)ifKeywordValidStore;
+
+			if (!ifKeywordValid)
+			{
+				Log.Schema("`if` subschema failed; not applicable");
+				return new SchemaValidationResults(Name, context);
+			}
+
+			var results = new SchemaValidationResults(Name, context);
+
+			var newContext = new SchemaValidationContext(context)
+				{
+					BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name),
+					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
+				};
+			var thenResults = Value.Validate(newContext);
+			if (!thenResults.IsValid)
+			{
+				Log.Schema("`if` subschema succeeded, but `then` subschema failed");
+				results.IsValid = false;
+				results.Keyword = Name;
+				results.ErrorMessage = ErrorTemplate;
+				if (JsonSchemaOptions.ShouldReportChildErrors(this, context))
+					results.NestedResults.Add(thenResults);
+			}
+
+			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.

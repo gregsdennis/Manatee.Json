@@ -69,17 +69,26 @@ namespace Manatee.Json.Schema
 					Keyword = $"{context.Misc["dependencyParent"]}/{PropertyName}"
 				};
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
-			if (context.Instance.Object.ContainsKey(PropertyName))
+			if (context.Instance.Type != JsonValueType.Object)
 			{
-				var missingProperties = _dependencies.Except(context.Instance.Object.Keys).ToList();
-				if (missingProperties.Any())
-				{
-					results.IsValid = false;
-					results.AdditionalInfo["required"] = missingProperties.ToJson();
-					results.AdditionalInfo["dependency"] = PropertyName;
-					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
-				}
+				Log.Schema("Instance not an object; not applicable");
+				return results;
+			}
+
+			if (!context.Instance.Object.ContainsKey(PropertyName))
+			{
+				Log.Schema($"Property {PropertyName} not found; not applicable");
+				return results;
+			}
+
+			var missingProperties = _dependencies.Except(context.Instance.Object.Keys).ToList();
+			if (missingProperties.Any())
+			{
+				Log.Schema($"Properties {missingProperties} not found but required by property {PropertyName}");
+				results.IsValid = false;
+				results.AdditionalInfo["required"] = missingProperties.ToJson();
+				results.AdditionalInfo["dependency"] = PropertyName;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

@@ -60,12 +60,17 @@ namespace Manatee.Json.Schema
 					};
 				var localResults = s.Validate(newContext);
 				valid |= localResults.IsValid;
-				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+				Log.Schema($"`{Name}` {(valid ? "valid" : "invalid")} so far");
+				if (valid)
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (valid) break;
+					if (valid)
+					{
+						Log.Schema("Subschema passed; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);

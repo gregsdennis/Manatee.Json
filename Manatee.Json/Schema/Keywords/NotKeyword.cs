@@ -71,13 +71,14 @@ namespace Manatee.Json.Schema
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 				};
 			var nestedResults = Value.Validate(newContext);
-			context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-			context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 
 			results.IsValid = !nestedResults.IsValid;
 
 			if (!results.IsValid)
+			{
+				Log.Schema("Subschema succeeded; inverting result");
 				results.ErrorMessage = ErrorTemplate;
+			}
 
 			if (JsonSchemaOptions.OutputFormat != SchemaValidationOutputFormat.Flag &&
 			    JsonSchemaOptions.ShouldReportChildErrors(this, context))

@@ -81,19 +81,24 @@ namespace Manatee.Json.Schema
 			var results = new SchemaValidationResults(Name, context);
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var startIndex = context.LocalTierLastEvaluatedIndex + 1;
 
-			if (context.LocalTierLastEvaluatedIndex < array.Count)
+			Log.Schema(startIndex == 0
+				                         ? "No indices have been evaluated; process all"
+				                         : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
+			if (startIndex < array.Count)
 			{
 				if (Value == JsonSchema.False)
 				{
+					Log.Schema("Subschema is `false`; all instances invalid");
 					results.IsValid = false;
 					results.Keyword = Name;
 					results.ErrorMessage = ErrorTemplate_False;
 					return results;
 				}
 
-				var eligibleItems = array.Skip(context.LocalTierLastEvaluatedIndex);
-				var index = 0;
+				var eligibleItems = array.Skip(startIndex);
+				var index = startIndex;
 				foreach (var item in eligibleItems)
 				{
 					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
@@ -113,11 +118,19 @@ namespace Manatee.Json.Schema
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{
-						if (!valid) break;
+						if (!valid)
+						{
+							Log.Schema("Subschema failed; halting validation early");
+							break;
+						}
 					}
 					else if (reportChildErrors)
 						nestedResults.Add(localResults);
 				}
+			}
+			else
+			{
+				Log.Schema("All items have been validated");
 			}
 			results.NestedResults = nestedResults;
 			results.IsValid = valid;

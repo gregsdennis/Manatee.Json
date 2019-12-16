@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
@@ -57,14 +58,9 @@ namespace Manatee.Json.Serialization.Internal
 			Clear();
 		}
 
-		public bool TryGetPair(object obj, out SerializationReference pair)
+		public bool TryGetPair(object obj, [NotNullWhen(true)] out SerializationReference? pair)
 		{
 			return _objMap.TryGetValue(obj, out pair);
-		}
-
-		public bool TryGetPair(string location, out SerializationReference pair)
-		{
-			return _refMap.TryGetValue(location, out pair);
 		}
 	}
 }

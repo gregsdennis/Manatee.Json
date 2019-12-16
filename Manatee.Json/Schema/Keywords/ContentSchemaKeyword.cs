@@ -55,7 +55,11 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.String) return new SchemaValidationResults(Name, context);
+			if (context.Instance.Type != JsonValueType.String)
+			{
+				Log.Schema("Instance not a string; not applicable");
+				return new SchemaValidationResults(Name, context);
+			}
 
 			var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -71,10 +75,7 @@ namespace Manatee.Json.Schema
 					IsValid = nestedResult.IsValid
 				};
 			if (JsonSchemaOptions.OutputFormat != SchemaValidationOutputFormat.Flag)
-				results = new SchemaValidationResults(Name, context)
-					{
-						NestedResults = new List<SchemaValidationResults> {nestedResult}
-					};
+				results.NestedResults = new List<SchemaValidationResults> {nestedResult};
 
 			return results;
 		}

@@ -59,7 +59,10 @@ namespace Manatee.Json.Schema
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			if (context.RecursiveAnchor == null)
+			{
+				Log.Schema($"Marking recursive anchor at {context.RelativeLocation}");
 				context.RecursiveAnchor = context.Local;
+			}
 			
 			return SchemaValidationResults.Null;
 		}

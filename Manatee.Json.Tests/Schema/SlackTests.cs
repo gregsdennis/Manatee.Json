@@ -5,6 +5,12 @@ namespace Manatee.Json.Tests.Schema
 {
 	public class SlackTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		[Test]
 		public void Test()
 		{

@@ -67,7 +67,11 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
+			if (context.Instance.Type != JsonValueType.Array)
+			{
+				Log.Schema("Instance not an array; not applicable");
+				return new SchemaValidationResults(Name, context);
+			}
 
 			var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -96,7 +100,11 @@ namespace Manatee.Json.Schema
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (valid && !hasMinMaxConstraints) break;
+					if (valid && !hasMinMaxConstraints)
+					{
+						Log.Schema("Match found and no min/max constraints; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);
@@ -104,6 +112,7 @@ namespace Manatee.Json.Schema
 				i++;
 			}
 
+			Log.Schema($"Found {matchedIndices.Count} instances that match; saving for later");
 			context.Misc["containsCount"] = matchedIndices.Count;
 			var results = new SchemaValidationResults
 				{

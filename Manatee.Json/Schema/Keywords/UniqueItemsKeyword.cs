@@ -65,9 +65,14 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Array) return results;
+			if (context.Instance.Type != JsonValueType.Array)
+			{
+				Log.Schema("Instance not an array; not applicable");
+				return results;
+			}
 			if (context.Instance.Array.Distinct().Count() != context.Instance.Array.Count)
 			{
+				Log.Schema("Instance contains duplicate items");
 				results.IsValid = false;
 				results.AdditionalInfo["value"] = context.Instance;
 				results.ErrorMessage = ErrorTemplate;

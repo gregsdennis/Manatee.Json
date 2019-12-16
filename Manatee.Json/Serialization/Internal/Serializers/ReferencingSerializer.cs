@@ -10,15 +10,20 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		private ReferencingSerializer() { }
 
-		public bool Handles(ISerializer serializer, Type type)
+		public static bool Handles(ISerializer serializer, Type type)
 		{
+			Log.Serialization("Determining if object references should be maintained");
 			return !type.IsValueType && serializer.ShouldMaintainReferences;
 		}
 		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
 			if (context.SerializationMap.TryGetPair(context.Source!, out var pair))
+			{
+				Log.Serialization("Object already serialized; returning reference marker");
 				return new JsonObject {[Constants.RefKey] = pair.Source.ToString()};
+			}
 
+			Log.Serialization("Object not serialized yet; setting up tracking...");
 			context.SerializationMap.Add(new SerializationReference
 				{
 					Object = context.Source,
@@ -34,6 +39,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var jsonObj = context.LocalValue.Object;
 				if (jsonObj.TryGetValue(Constants.RefKey, out var reference))
 				{
+					Log.Serialization("Found reference marker; setting up tracking...");
 					var location = JsonPointer.Parse(reference.String);
 					context.SerializationMap.AddReference(location, context.CurrentLocation.CleanAndClone());
 					return context.InferredType.Default();

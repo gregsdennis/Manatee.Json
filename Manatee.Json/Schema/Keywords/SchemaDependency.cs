@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
@@ -55,8 +56,17 @@ namespace Manatee.Json.Schema
 					Keyword = $"{context.Misc["dependencyParent"]}/{PropertyName}"
 				};
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
-			if (!context.Instance.Object.ContainsKey(PropertyName)) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				Log.Schema("Instance not an object; not applicable");
+				return results;
+			}
+
+			if (!context.Instance.Object.ContainsKey(PropertyName))
+			{
+				Log.Schema($"Property {PropertyName} not found; not applicable");
+				return results;
+			}
 
 			var newContext = new SchemaValidationContext(context)
 				{
@@ -69,6 +79,7 @@ namespace Manatee.Json.Schema
 
 			if (!nestedResult.IsValid)
 			{
+				Log.Schema($"Property {PropertyName} found, but subschema failed");
 				results.IsValid = false;
 				results.ErrorMessage = ErrorTemplate;
 			}

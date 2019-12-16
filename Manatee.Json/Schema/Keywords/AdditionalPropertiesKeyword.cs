@@ -71,14 +71,27 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (context.Instance.Type != JsonValueType.Object) return new SchemaValidationResults(Name, context);
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				Log.Schema("Instance not an object; not applicable");
+				return new SchemaValidationResults(Name, context);
+			}
 
 			var obj = context.Instance.Object;
-			var toEvaluate = obj.Where(kvp => !context.LocallyEvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
-
 			var results = new SchemaValidationResults(Name, context);
+			var toEvaluate = obj.Where(kvp => !context.LocallyEvaluatedPropertyNames.Contains(kvp.Key)).ToJson();
+			if (toEvaluate.Count == 0)
+			{
+				Log.Schema("All properties have been evaluated");
+				return results;
+			}
+
+			Log.Schema(context.LocallyEvaluatedPropertyNames.Count == 0
+				                         ? "No properties have been evaluated; process all"
+				                         : $"Properties {context.LocallyEvaluatedPropertyNames.ToJson()} have been evaluated; skipping these");
 			if (Value == JsonSchema.False && toEvaluate.Any())
 			{
+				Log.Schema("Subschema is `false`; all instances invalid");
 				results.IsValid = false;
 				results.Keyword = Name;
 				results.ErrorMessage = ErrorTemplate_False;
@@ -107,7 +120,11 @@ namespace Manatee.Json.Schema
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (!valid) break;
+					if (!valid)
+					{
+						Log.Schema("Subschema failed; halting validation early");
+						break;
+					}
 				} else if (reportChildErrors)
 					nestedResults.Add(localResults);
 			}

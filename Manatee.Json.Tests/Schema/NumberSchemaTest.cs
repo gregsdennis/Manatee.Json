@@ -8,6 +8,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class NumberSchemaTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		public static IEnumerable TypeData
 		{
 			get

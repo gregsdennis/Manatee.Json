@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization.Internal;
 using Manatee.Json.Serialization.Internal.Serializers;
 
@@ -46,7 +46,9 @@ namespace Manatee.Json.Serialization
 		{
 			var existing = _serializers.FirstOrDefault(s => s.GetType() == serializer.GetType());
 			if (existing == null)
+			{
 				_serializers.Add(serializer);
+			}
 			_UpdateOrderedSerializers();
 		}
 		/// <summary>
@@ -76,6 +78,7 @@ namespace Manatee.Json.Serialization
 					context.OverrideInferredType(type);
 			}
 
+			Log.Serialization($"Serializer {theChosenOne?.GetType().CSharpName() ?? "<not found>"} selected for type `{(context.InferredType ?? context.RequestedType).CSharpName()}`");
 			return theChosenOne;
 		}
 		internal static ITypeSerializer GetTypeSerializer()

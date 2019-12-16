@@ -77,6 +77,8 @@ namespace Manatee.Json.Schema
 				_ResolveReference(context);
 				if (Resolved == null)
 					throw new SchemaReferenceNotFoundException(context.RelativeLocation);
+
+				Log.Schema("Reference found");
 			}
 
 			var results = new SchemaValidationResults(Name, context);
@@ -167,8 +169,11 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
+			Log.Schema($"Resolving `{Reference}`");
+	
 			if (context.RecursiveAnchor != null)
 			{
+				Log.Schema("Finding anchor of root schema");
 				var baseDocument = JsonSchemaRegistry.Get(context.BaseUri.OriginalString);
 				if (baseDocument?.Get<RecursiveAnchorKeyword>() != null)
 					_resolvedRoot = context.RecursiveAnchor;
@@ -176,8 +181,11 @@ namespace Manatee.Json.Schema
 
 			if (Reference.IsLocalSchemaId())
 			{
+				Log.Schema("Reference recognized as anchor or local ID");
 				Resolved = context.LocalRegistry.GetLocal(Reference);
 				if (Resolved != null) return;
+
+				Log.Schema($"`{Reference}` is an unknown anchor");
 			}
 
 			var documentPath = _resolvedRoot?.DocumentPath ?? context.BaseUri;
@@ -204,11 +212,16 @@ namespace Manatee.Json.Schema
 					_resolvedRoot = context.Root;
 			}
 
-			if (_resolvedRoot == null) return;
+			if (_resolvedRoot == null)
+			{
+				Log.Schema("Could not resolve root of reference");
+				return;
+			}
 
 			var wellKnown = JsonSchemaRegistry.GetWellKnown(Reference);
 			if (wellKnown != null)
 			{
+				Log.Schema("Well known reference found");
 				Resolved = wellKnown;
 				return;
 			}
@@ -223,6 +236,7 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
+			Log.Schema($"Resolving local reference {_resolvedFragment}");
 			Resolved = _resolvedRoot.ResolveSubschema(_resolvedFragment, baseUri);
 		}
 	}

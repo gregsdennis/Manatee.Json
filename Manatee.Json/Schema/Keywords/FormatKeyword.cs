@@ -70,8 +70,11 @@ namespace Manatee.Json.Schema
 					AnnotationValue = Value.Key
 				};
 
-
-			if (!JsonSchemaOptions.ValidateFormatKeyword) return results;
+			if (!JsonSchemaOptions.ValidateFormatKeyword)
+			{
+				Log.Schema("Options indicate skipping format validation");
+				return results;
+			}
 
 			var format = Value;
 			if (!format.Validate(context.Instance))
