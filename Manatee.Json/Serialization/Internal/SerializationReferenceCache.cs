@@ -26,10 +26,7 @@ namespace Manatee.Json.Serialization.Internal
 			var sourceAsString = source.ToString();
 			if (!_refMap.TryGetValue(sourceAsString, out var map))
 			{
-				map = new SerializationReference
-					{
-						Source = source
-					};
+				map = new SerializationReference(source);
 				_refMap[sourceAsString] = map;
 			}
 

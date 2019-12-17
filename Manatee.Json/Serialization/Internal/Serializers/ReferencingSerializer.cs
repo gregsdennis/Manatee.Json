@@ -24,10 +24,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 
 			Log.Serialization("Object not serialized yet; setting up tracking...");
-			context.SerializationMap.Add(new SerializationReference
+			context.SerializationMap.Add(new SerializationReference(context.CurrentLocation.CleanAndClone())
 				{
-					Object = context.Source,
-					Source = context.CurrentLocation.CleanAndClone()
+					Object = context.Source
 				});
 
 			return serializer.Serialize(context);
@@ -46,10 +45,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				}
 			}
 
-			var pair = new SerializationReference
-				{
-					Source = context.CurrentLocation.CleanAndClone()
-				};
+			var pair = new SerializationReference(context.CurrentLocation.CleanAndClone());
 			context.SerializationMap.Add(pair);
 
 			var obj = serializer.Deserialize(context);

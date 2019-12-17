@@ -126,7 +126,7 @@ namespace Manatee.Json.Serialization
 			return CreateInstance(context.InferredType, context.LocalValue, context.RootSerializer.Options.Resolver, context.ValueMap);
 		}
 
-		internal object CreateInstance(Type type, JsonValue json, IResolver resolver, Dictionary<SerializationInfo, object> parameters = null)
+		internal object CreateInstance(Type type, JsonValue? json, IResolver resolver, Dictionary<SerializationInfo, object> parameters = null)
 		{
 			var typeInfo = type.GetTypeInfo();
 			var resolveSlow = typeInfo.IsAbstract || typeInfo.IsInterface || typeInfo.IsGenericType;
@@ -135,7 +135,7 @@ namespace Manatee.Json.Serialization
 				       : resolver.Resolve(type, parameters);
 		}
 
-		internal Type IdentifyTypeToResolve(Type type, JsonValue json)
+		internal Type IdentifyTypeToResolve(Type type, JsonValue? json)
 		{
 			if (json != null && json.Type == JsonValueType.Object && json.Object.ContainsKey(Constants.TypeKey))
 			{
@@ -143,9 +143,9 @@ namespace Manatee.Json.Serialization
 				return concrete;
 			}
 
-			if (!_registry.TryGetValue(type, out Type tConcrete))
+			if (!_registry.TryGetValue(type, out var tConcrete))
 			{
-				Type typeToLookup = type;
+				var typeToLookup = type;
 				if (type.GetTypeInfo().IsGenericType)
 					typeToLookup = type.GetGenericTypeDefinition();
 				_registry.TryGetValue(typeToLookup, out tConcrete);
@@ -161,7 +161,7 @@ namespace Manatee.Json.Serialization
 			return type;
 		}
 
-		private object _ResolveSlow(Type type, JsonValue json, IResolver resolver, Dictionary<SerializationInfo, object> parameters)
+		private object _ResolveSlow(Type type, JsonValue? json, IResolver resolver, Dictionary<SerializationInfo, object> parameters)
 		{
 			var typeToResolve = IdentifyTypeToResolve(type, json);
 

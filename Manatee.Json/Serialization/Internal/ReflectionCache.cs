@@ -64,7 +64,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		private static ReflectionInfo _InitializeInstanceCache(Type type)
 		{
-			if (!_instanceCache.TryGetValue(type, out ReflectionInfo info))
+			if (!_instanceCache.TryGetValue(type, out ReflectionInfo? info))
 			{
 				var read = _GetInstanceProperties(type).Where(p => !p.SetMethod?.IsPublic ?? true)
 				                                       .Where(p => p.GetMethod?.IsPublic ?? false)
@@ -83,7 +83,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		private static ReflectionInfo _InitializeStaticCache(Type type)
 		{
-			if (!_staticCache.TryGetValue(type, out ReflectionInfo info))
+			if (!_staticCache.TryGetValue(type, out ReflectionInfo? info))
 			{
 				var read = _GetStaticProperties(type).Where(p => !p.SetMethod?.IsPublic ?? true)
 				                                     .Where(p => p.GetMethod?.IsPublic ?? false)
@@ -122,7 +122,7 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			return type.GetTypeInfo()._GetAllFields().Where(f => f.IsStatic && f.IsPublic);
 		}
-		private static IEnumerable<FieldInfo> _GetAllFields(this TypeInfo type)
+		private static IEnumerable<FieldInfo> _GetAllFields(this TypeInfo? type)
 		{
 			var fields = new List<FieldInfo>();
 			while (type != null)
