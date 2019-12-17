@@ -4,6 +4,20 @@
 
 <span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
 
+This change primarily adds .Net Core 3.0 support.  It has also been reviewed and updated to support null reference types.
+
+## Logging
+
+Some cursory verbose logging has been introduced to allow the client to see what decisions Manatee.Json is making during (primarily) schema validation and serialization.  The `JsonOptions.Log` static property has been introduced for this purpose.  It is of type `ILog` which exposes a single method, `Verbose(string, LogCategory)`.
+
+The log categories currently are general, serialization, and schema.  This allows the client to enable or disable certain activities, so that, for instance, they can only enable schema validation logging if they wish.  The `JsonOptions.LogCategory` static property controls what categories are actually sent.
+
+**There is no default implementation for `ILog`.**  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are *a lot* of logs.
+
+## Bug fixes
+
+`unevaluatedItems` would not properly process properties that nested keywords touched but failed.  See https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291 for details.
+
 ## Breaking Changes
 
 - `JsonArray.OfType(JsonValueType)` now throws `ArgumentNullException` when passed a null array.
@@ -54,18 +68,6 @@ The values that we push are
 - The object to be serialized
 
 These are maintained in a stack internally to the context object and are removed on the `Pop()` call, keeping the context synchronized with the serialization process.
-
-## Logging
-
-Some cursory verbose logging has been introduced to allow the client to see what decisions Manatee.Json is making during (primarily) schema validation and serialization.  The `JsonOptions.Log` static property has been introduced for this purpose.  It is of type `ILog` which exposes a single method, `Verbose(string, LogCategory)`.
-
-The log categories currently are general, serialization, and schema.  This allows the client to enable or disable certain activities, so that, for instance, they can only enable schema validation logging if they wish.  The `JsonOptions.LogCategory` static property controls what categories are actually sent.
-
-**There is no default implementation for `ILog`.**  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are *a lot* of logs.
-
-## Bug fixes
-
-`unevaluatedItems` would not properly process properties that nested keywords touched but failed.  See https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291 for details.
 
 # 11.0.4
 
