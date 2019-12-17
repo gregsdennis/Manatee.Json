@@ -75,10 +75,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			                       .FirstOrDefault(p => typeof(JsonSchema).GetTypeInfo().IsAssignableFrom(p.PropertyType.GetTypeInfo()) &&
 			                                            p.GetMethod != null && p.GetMethod.IsStatic &&
 			                                            p.Name == propertyName);
-			var schema = (JsonSchema?) property?.GetMethod.Invoke(null, new object[] { });
+			var schema = (JsonSchema?) property?.GetMethod?.Invoke(null, new object[] { });
 			return schema;
 		}
-		private static JsonSchema _GetFileSchema(SchemaAttribute attribute)
+		private static JsonSchema? _GetFileSchema(SchemaAttribute attribute)
 		{
 			var uri = attribute.Source;
 			if (!Uri.TryCreate(uri, UriKind.Absolute, out _))

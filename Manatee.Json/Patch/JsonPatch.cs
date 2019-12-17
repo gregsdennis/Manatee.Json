@@ -16,7 +16,7 @@ namespace Manatee.Json.Patch
 		public static readonly JsonSchema Schema = new JsonSchema()
 			.Title("JSON schema for JSONPatch files")
 			.Id("http://json.schemastore.org/json-patch#")
-			.Schema(MetaSchemas.Draft04.Id)
+			.Schema(MetaSchemas.Draft04.Id!)
 			.Type(JsonSchemaType.Array)
 			.Items(new JsonSchema().Ref("#/definitions/operation"))
 			.Definition("operation", new JsonSchema()

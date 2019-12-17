@@ -1,8 +1,10 @@
 using System;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class NullableSerializer : GenericTypeSerializerBase
 	{
 		public override bool Handles(SerializationContextBase context)
@@ -11,6 +13,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
+		[UsedImplicitly]
 		private static JsonValue _Encode<T>(SerializationContext context)
 			where T : struct
 		{
@@ -26,6 +29,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return json;
 		}
+		[UsedImplicitly]
 		private static T? _Decode<T>(DeserializationContext context)
 			where T : struct
 		{

@@ -16,8 +16,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		protected GenericTypeSerializerBase()
 		{
-			_encodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Encode");
-			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode");
+			_encodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Encode") ??
+			                throw new NotImplementedException("Serializer must implement an _Encode method");
+			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode") ??
+			                throw new NotImplementedException("Serializer must implement a _Decode method");
 		}
 
 		public abstract bool Handles(SerializationContextBase context);
@@ -27,12 +29,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var source = PrepSource(context);
 			if (source != null)
 				context.OverrideSource(source);
-			var typeArguments = GetTypeArguments(context.Source.GetType());
+			var typeArguments = GetTypeArguments(context.Source!.GetType());
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
 
-			return (JsonValue) toJson.Invoke(null, new object[] {context});
+			return (JsonValue) toJson.Invoke(null, new object[] {context})!;
 		}
 
 		public object Deserialize(DeserializationContext context)
@@ -42,7 +44,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
 
-			return fromJson.Invoke(null, new object[] {context});
+			return fromJson.Invoke(null, new object[] {context})!;
 		}
 
 		protected virtual Type[] GetTypeArguments(Type type)

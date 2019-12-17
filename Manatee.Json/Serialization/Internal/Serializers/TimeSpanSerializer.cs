@@ -14,7 +14,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			var ts = (TimeSpan) context.Source;
+			var ts = (TimeSpan) context.Source!;
 
 			return ts.ToString();
 		}
@@ -22,7 +22,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			return context.LocalValue.Type == JsonValueType.String
 				? TimeSpan.Parse(context.LocalValue.String)
-				: default(TimeSpan);
+				: default;
 		}
 	}
 }

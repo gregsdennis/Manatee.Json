@@ -1,5 +1,8 @@
-﻿namespace Manatee.Json.Serialization.Internal.Serializers
+﻿using JetBrains.Annotations;
+
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class BooleanSerializer : IPrioritizedSerializer
 	{
 		public int Priority => 1;
@@ -12,7 +15,7 @@
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			return (bool) context.Source;
+			return (bool) context.Source!;
 		}
 		public object Deserialize(DeserializationContext context)
 		{

@@ -14,13 +14,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			var uri = context.Source as Uri;
+			var uri = (Uri) context.Source!;
 
-			return uri?.OriginalString;
+			return uri.OriginalString;
 		}
 		public object Deserialize(DeserializationContext context)
 		{
-			return context.LocalValue == null ? null : new Uri(context.LocalValue.String);
+			return new Uri(context.LocalValue.String);
 		}
 	}
 }

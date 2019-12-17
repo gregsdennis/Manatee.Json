@@ -88,10 +88,8 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 			return this.ToDictionary(kvp => kvp.Key,
-									 kvp => serializer.Serialize(kvp.Value))
-#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+									 kvp => serializer.Serialize(kvp.Value))!
 				.ToJson();
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>

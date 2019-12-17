@@ -21,7 +21,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			var json = new JsonObject();
 			var type = context.RequestedType;
-			var objectType = context.Source.GetType();
+			var objectType = context.Source!.GetType();
 			bool typeKeyAdded = false;
 			if (context.RootSerializer.Options.TypeNameSerializationBehavior != TypeNameSerializationBehavior.Never &&
 				(context.RootSerializer.Options.TypeNameSerializationBehavior == TypeNameSerializationBehavior.Always ||
@@ -57,7 +57,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (json.Object.Count > 0 && context.RootSerializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException)
 				throw new TypeDoesNotContainPropertyException(type, json);
 			_AssignObjectProperties(out var obj, type, context);
-			return obj;
+			return obj!;
 		}
 		public void DeserializeType<T>(JsonValue json, JsonSerializer serializer)
 		{
@@ -66,7 +66,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var map = _DeserializeTypeValues(json, serializer, propertyList, !serializer.Options.CaseSensitiveDeserialization);
 			if (json.Object.Count > 0 && serializer.Options.InvalidPropertyKeyBehavior == InvalidPropertyKeyBehavior.ThrowException)
 				throw new TypeDoesNotContainPropertyException(type, json);
-			object obj = null;
+			object? obj = null;
 			_AssignObjectProperties(ref obj, map);
 		}
 		private static Dictionary<SerializationInfo, JsonValue> _SerializeValues(SerializationContext context,
@@ -78,7 +78,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var dict = new Dictionary<SerializationInfo, JsonValue>();
 			foreach (var property in properties)
 			{
-				object value;
+				object? value;
 				Type type;
 				if (property.MemberInfo is PropertyInfo propertyInfo)
 				{
@@ -118,7 +118,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var dict = new Dictionary<SerializationInfo, JsonValue>();
 			foreach (var memberInfo in properties)
 			{
-				object value;
+				object? value;
 				Type type;
 				if (memberInfo.MemberInfo is PropertyInfo propertyInfo)
 				{
@@ -220,14 +220,14 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return key != null;
 		}
-		private static void _AssignObjectProperties(out object obj, Type type, DeserializationContext context)
+		private static void _AssignObjectProperties(out object? obj, Type type, DeserializationContext context)
 		{
 			obj = type.GetTypeInfo().IsInterface
 				? TypeGenerator.Generate(type)
 				: context.RootSerializer.Options.Resolver.Resolve(type, context.ValueMap);
 			_AssignObjectProperties(ref obj, context.ValueMap);
 		}
-		private static void _AssignObjectProperties(ref object obj, Dictionary<SerializationInfo, object> memberMap)
+		private static void _AssignObjectProperties(ref object? obj, Dictionary<SerializationInfo, object> memberMap)
 		{
 			foreach (var entry in memberMap)
 			{
@@ -238,7 +238,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						info.SetValue(obj, entry.Value, null);
 					else if (typeof(IList).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()))
 					{
-						var list = (IList) info.GetValue(obj);
+						var list = (IList) info.GetValue(obj)!;
 						foreach (var value in (IList)entry.Value)
 						{
 							list.Add(value);
@@ -246,8 +246,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					}
 					else if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()))
 					{
-						var dictionary = (IDictionary) info.GetValue(obj);
+						var dictionary = (IDictionary) info.GetValue(obj)!;
+#pragma warning disable CS8605 // Unboxing a possibly null value.
 						foreach (DictionaryEntry kvp in (IDictionary)entry.Value)
+#pragma warning restore CS8605 // Unboxing a possibly null value.
 						{
 							dictionary.Add(kvp.Key, kvp.Value);
 						}
@@ -262,12 +264,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var elementType = _GetElementType(type);
 			var buildMethod = TemplateGenerator.GetBuildMethod(elementType);
 			var value = buildMethod.Invoke(null, new object[] {serializer.Options});
-			json.Add(serializer.Serialize(elementType, value));
+			json.Add(serializer.Serialize(elementType, value!));
 		}
 		private static Type _GetElementType(Type collectionType)
 		{
 			if (collectionType.IsArray)
-				return collectionType.GetElementType();
+				return collectionType.GetElementType()!;
 			if (collectionType.GetTypeInfo().IsGenericType && collectionType.GetGenericTypeDefinition().InheritsFrom(typeof(IEnumerable<>)))
 				return collectionType.GetTypeArguments().First();
 			return typeof (object);

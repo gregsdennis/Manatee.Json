@@ -162,7 +162,7 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return this.ToDictionary(kvp => kvp.Key,
-									 kvp => serializer.Serialize<JsonSchema>(kvp.Value))
+									 kvp => serializer.Serialize(kvp.Value))!
 				.ToJson();
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>

@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class JsonSerializableSerializer : IPrioritizedSerializer
 	{
 		public int Priority => 2;
@@ -14,7 +16,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			var serializable = (IJsonSerializable)context.Source;
+			var serializable = (IJsonSerializable)context.Source!;
 			return serializable.ToJson(context.RootSerializer);
 		}
 		public object Deserialize(DeserializationContext context)

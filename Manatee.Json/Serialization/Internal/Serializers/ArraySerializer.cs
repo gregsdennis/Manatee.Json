@@ -1,7 +1,9 @@
 using System;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class ArraySerializer : GenericTypeSerializerBase
 	{
 		public override bool Handles(SerializationContextBase context)
@@ -11,12 +13,13 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		protected override Type[] GetTypeArguments(Type type)
 		{
-			return new[] { type.GetElementType() };
+			return new[] { type.GetElementType()! };
 		}
 
+		[UsedImplicitly]
 		private static JsonValue _Encode<T>(SerializationContext context)
 		{
-			var array = (T[]) context.Source;
+			var array = (T[]) context.Source!;
 			var values = new JsonValue[array.Length];
 			for (int i = 0; i < array.Length; i++)
 			{
@@ -28,6 +31,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return new JsonArray(values);
 		}
+		[UsedImplicitly]
 		private static T[] _Decode<T>(DeserializationContext context)
 		{
 			var array = context.LocalValue.Array;

@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class ListSerializer : GenericTypeSerializerBase
 	{
 		public override int Priority => 3;
@@ -15,10 +17,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return context.InferredType.GetTypeInfo().IsGenericType &&
 			       context.InferredType.InheritsFrom(typeof(IEnumerable));
 		}
-
+		[UsedImplicitly]
 		private static JsonValue _Encode<T>(SerializationContext context)
 		{
-			var list = (List<T>) context.Source;
+			var list = (List<T>) context.Source!;
 			var array = new JsonValue[list.Count];
 			for (int i = 0; i < array.Length; i++)
 			{
@@ -28,6 +30,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return new JsonArray(array);
 		}
+		[UsedImplicitly]
 		private static List<T> _Decode<T>(DeserializationContext context)
 		{
 			var array = context.LocalValue.Array;
@@ -43,11 +46,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		protected override object PrepSource(SerializationContext context)
 		{
-			var sourceType = context.Source.GetType();
+			var sourceType = context.Source!.GetType();
 			if (sourceType.GetTypeInfo().IsGenericType &&
 			    sourceType.GetGenericTypeDefinition().InheritsFrom(typeof(List<>))) return context.Source;
 
-			return (context.Source as IEnumerable).Cast<object>().ToList();
+			return ((IEnumerable) context.Source).Cast<object>().ToList();
 		}
 	}
 }

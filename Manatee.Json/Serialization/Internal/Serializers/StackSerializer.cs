@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class StackSerializer : GenericTypeSerializerBase
 	{
 		public override bool Handles(SerializationContextBase context)
@@ -12,9 +14,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Stack<>);
 		}
 
+		[UsedImplicitly]
 		private static JsonValue _Encode<T>(SerializationContext context)
 		{
-			var stack = (Stack<T>) context.Source;
+			var stack = (Stack<T>) context.Source!;
 			var values = new JsonValue[stack.Count];
 			for (int i = 0; i < values.Length; i++)
 			{
@@ -25,6 +28,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return new JsonArray(values);
 		}
+		[UsedImplicitly]
 		private static Stack<T> _Decode<T>(DeserializationContext context)
 		{
 			var array = context.LocalValue.Array;

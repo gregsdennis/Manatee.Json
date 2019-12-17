@@ -1,8 +1,10 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class NumericSerializer : IPrioritizedSerializer
 	{
 		public int Priority => 2;

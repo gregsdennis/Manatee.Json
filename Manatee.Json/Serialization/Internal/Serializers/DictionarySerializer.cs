@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class DictionarySerializer : GenericTypeSerializerBase
 	{
 		public override bool Handles(SerializationContextBase context)
@@ -14,14 +16,16 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition().InheritsFrom(typeof(Dictionary<,>));
 		}
 
+		[UsedImplicitly]
 		private static JsonValue _Encode<TKey, TValue>(SerializationContext context)
+			where TKey : notnull
 		{
-			var dict = (Dictionary<TKey, TValue>) context.Source;
+			var dict = (Dictionary<TKey, TValue>) context.Source!;
 			var existingOption = context.RootSerializer.Options.EncodeDefaultValues;
 			var useDefaultValue = existingOption || typeof(TValue).GetTypeInfo().IsValueType;
 			if (typeof(TKey) == typeof(string))
 			{
-				var output = new Dictionary<string, JsonValue>();
+				var output = new Dictionary<string, JsonValue?>();
 				foreach (var kvp in dict)
 				{
 					context.Push(kvp.Value?.GetType() ?? typeof(TValue), typeof(TValue), kvp.Key.ToString(), kvp.Value);
@@ -38,6 +42,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return _EncodeDictionary(context, dict, context.RootSerializer, useDefaultValue, existingOption);
 		}
 		private static JsonValue _EncodeDictionary<TKey, TValue>(SerializationContext context, Dictionary<TKey, TValue> dict, JsonSerializer serializer, bool useDefaultValue, bool existingOption)
+			where TKey : notnull
 		{
 			var array = new JsonValue[dict.Count];
 			int i = 0;
@@ -67,6 +72,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return new JsonArray(array);
 		}
 		private static JsonValue _EncodeEnumKeyDictionary<TKey, TValue>(SerializationContext context, Dictionary<TKey, TValue> dict, bool useDefaultValue, bool existingOption)
+			where TKey : notnull
 		{
 			var serializer = context.RootSerializer;
 			var enumFormat = serializer.Options.EnumSerializationFormat;
@@ -78,7 +84,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				var index = i.ToString();
 				
-				context.Push(kvp.Key.GetType(), typeof(TKey), index, kvp.Key);
+				context.Push(kvp.Key!.GetType(), typeof(TKey), index, kvp.Key);
 				context.Push(kvp.Key.GetType(), typeof(TKey), "Key", kvp.Key);
 				var key = serializer.Options.SerializationNameTransform(_SerializeDefaultValue(context, true, existingOption).String);
 				context.Pop();
@@ -97,7 +103,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return output;
 		}
 
+		[UsedImplicitly]
 		private static Dictionary<TKey, TValue> _Decode<TKey, TValue>(DeserializationContext context)
+			where TKey : notnull
 		{
 			var json = context.LocalValue;
 
@@ -137,6 +145,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					              });
 		}
 		private static Dictionary<TKey, TValue> _DecodeEnumDictionary<TKey, TValue>(DeserializationContext context)
+			where TKey : notnull
 		{
 			var serializer = context.RootSerializer;
 			var encodeDefaults = serializer.Options.EncodeDefaultValues;

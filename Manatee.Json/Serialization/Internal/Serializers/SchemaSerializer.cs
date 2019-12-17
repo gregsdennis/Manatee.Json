@@ -1,7 +1,9 @@
-﻿using Manatee.Json.Schema;
+﻿using JetBrains.Annotations;
+using Manatee.Json.Schema;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class SchemaSerializer : IPrioritizedSerializer
 	{
 		public bool ShouldMaintainReferences => false;
@@ -13,7 +15,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			var schema = (JsonSchema) context.Source;
+			var schema = (JsonSchema) context.Source!;
 			return schema.ToJson(context.RootSerializer);
 		}
 		public object Deserialize(DeserializationContext context)

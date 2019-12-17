@@ -1,5 +1,8 @@
-﻿namespace Manatee.Json.Serialization.Internal.Serializers
+﻿using JetBrains.Annotations;
+
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class StringSerializer : IPrioritizedSerializer
 	{
 		public int Priority => 2;

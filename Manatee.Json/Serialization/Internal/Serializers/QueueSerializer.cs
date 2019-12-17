@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class QueueSerializer : GenericTypeSerializerBase
 	{
 		public override bool Handles(SerializationContextBase context)
@@ -12,9 +14,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Queue<>);
 		}
 
+		[UsedImplicitly]
 		private static JsonValue _Encode<T>(SerializationContext context)
 		{
-			var queue = (Queue<T>) context.Source;
+			var queue = (Queue<T>) context.Source!;
 			var array = new JsonArray();
 			for (int i = 0; i < queue.Count; i++)
 			{
@@ -25,6 +28,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			}
 			return array;
 		}
+		[UsedImplicitly]
 		private static Queue<T> _Decode<T>(DeserializationContext context)
 		{
 			var queue = new Queue<T>();

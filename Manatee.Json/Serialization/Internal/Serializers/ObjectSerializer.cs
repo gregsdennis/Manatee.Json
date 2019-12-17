@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class ObjectSerializer : GenericTypeSerializerBase
 	{
 		public override bool Handles(SerializationContextBase context)
@@ -12,10 +14,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			return context.InferredType == typeof(object);
 		}
 
+		[UsedImplicitly]
 		private static JsonValue _Encode(SerializationContext context)
 		{
 			throw new NotImplementedException();
 		}
+		[UsedImplicitly]
 		private static object _Decode(DeserializationContext context)
 		{
 			switch (context.LocalValue.Type)
@@ -43,8 +47,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						context.Pop();
 					}
 					return result;
-				case JsonValueType.Null:
-					return null;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
