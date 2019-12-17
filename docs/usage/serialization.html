@@ -179,7 +179,7 @@ var alex = new Parent
         return new JsonObject {{&quot;x&quot;, p.x}, {&quot;y&quot;, p.y}};
     }
 
-    static object Deserialize(SerializationContext context)
+    static object? Deserialize(DeserializationContext context)
     {
         return new Point(json.Object[&quot;x&quot;].Number, json.Object[&quot;y&quot;].Number);
     }
