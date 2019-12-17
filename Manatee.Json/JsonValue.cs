@@ -119,7 +119,7 @@ namespace Manatee.Json
 		/// <summary>
 		/// Creates a null <see cref="JsonValue"/>.
 		/// </summary>
-		private JsonValue()
+		public JsonValue()
 		{
 			Type = JsonValueType.Null;
 		}
@@ -374,9 +374,9 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(bool? b)
+		public static implicit operator JsonValue(bool b)
 		{
-			return b == null ? null : new JsonValue(b);
+			return new JsonValue(b);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="string"/> into a <see cref="JsonValue"/>.
@@ -400,7 +400,7 @@ namespace Manatee.Json
 		/// </example>
 		public static implicit operator JsonValue(string? s)
 		{
-			return s == null ? null : new JsonValue(s);
+			return s is null ? null : new JsonValue(s);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="double"/> into a <see cref="JsonValue"/>.
@@ -422,9 +422,9 @@ namespace Manatee.Json
 		///			{"moreBoolData", false}}}};
 		/// ```
 		/// </example>
-		public static implicit operator JsonValue(double? n)
+		public static implicit operator JsonValue(double n)
 		{
-			return n == null ? null : new JsonValue(n);
+			return new JsonValue(n);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="JsonObject"/> into a <see cref="JsonValue"/>.
@@ -448,7 +448,7 @@ namespace Manatee.Json
 		/// </example>
 		public static implicit operator JsonValue(JsonObject? o)
 		{
-			return o == null ? null : new JsonValue(o);
+			return o is null ? null : new JsonValue(o);
 		}
 		/// <summary>
 		/// Implicitly converts a <see cref="JsonArray"/> into a <see cref="JsonValue"/>.
@@ -472,7 +472,7 @@ namespace Manatee.Json
 		/// </example>
 		public static implicit operator JsonValue(JsonArray? a)
 		{
-			return a == null ? null : new JsonValue(a);
+			return a is null ? null : new JsonValue(a);
 		}
 #pragma warning restore CS8603 // Possible null reference return.
 		///<summary>

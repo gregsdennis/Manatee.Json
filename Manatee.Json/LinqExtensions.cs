@@ -128,7 +128,7 @@ namespace Manatee.Json
 		{
 			if (list == null) return JsonValue.Null;
 			var json = new JsonArray();
-			json.AddRange(list.Select(j => new JsonValue(j)));
+			json.AddRange(list.Select(j => j.HasValue ? new JsonValue(j.Value) : JsonValue.Null));
 			return json;
 		}
 		/// <summary>

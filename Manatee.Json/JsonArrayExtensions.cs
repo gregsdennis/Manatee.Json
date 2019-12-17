@@ -16,7 +16,7 @@ namespace Manatee.Json
 		/// <returns>A <see cref="JsonArray"/> containing only the <see cref="JsonValue"/>s of a specified type</returns>
 		public static JsonArray OfType(this JsonArray? arr, JsonValueType type)
 		{
-			if (arr == null) return null!;
+			if (arr == null) throw new ArgumentNullException(nameof(arr));
 
 			var retVal = new JsonArray();
 			retVal.AddRange(arr.Where(j => j.Type == type));

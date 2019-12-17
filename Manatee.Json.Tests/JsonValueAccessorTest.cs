@@ -1,4 +1,5 @@
 ﻿
+using System;
 using NUnit.Framework;
 // ReSharper disable UnusedVariable
 
@@ -92,34 +93,19 @@ namespace Manatee.Json.Tests
 				});
 		}
 		[Test]
-		public void Ctor_NullBoolean_TypeIsNull()
-		{
-			var json = new JsonValue((bool?) null);
-			Assert.AreEqual(JsonValueType.Null, json.Type);
-		}
-		[Test]
-		public void Ctor_NullDouble_TypeIsNull()
-		{
-			var json = new JsonValue((double?) null);
-			Assert.AreEqual(JsonValueType.Null, json.Type);
-		}
-		[Test]
 		public void Ctor_NullString_TypeIsNull()
 		{
-			var json = new JsonValue((string) null);
-			Assert.AreEqual(JsonValueType.Null, json.Type);
+			Assert.Throws<ArgumentNullException>(() => new JsonValue((string) null));
 		}
 		[Test]
 		public void Ctor_NullArray_TypeIsNull()
 		{
-			var json = new JsonValue((JsonArray) null);
-			Assert.AreEqual(JsonValueType.Null, json.Type);
+			Assert.Throws<ArgumentNullException>(() => new JsonValue((JsonArray) null));
 		}
 		[Test]
 		public void Ctor_NullObject_TypeIsNull()
 		{
-			var json = new JsonValue((JsonObject) null);
-			Assert.AreEqual(JsonValueType.Null, json.Type);
+			Assert.Throws<ArgumentNullException>(() => new JsonValue((JsonObject) null));
 		}
 	}
 }
