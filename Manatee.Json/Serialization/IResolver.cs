@@ -14,6 +14,6 @@ namespace Manatee.Json.Serialization
 		/// <param name="type">The type to resolve.</param>
 		/// <param name="parameters">Parameters to use for construction of the object.</param>
 		/// <returns>An instance of the type requested.</returns>
-		object? Resolve(Type type, Dictionary<SerializationInfo, object> parameters);
+		object Resolve(Type type, Dictionary<SerializationInfo, object?>? parameters);
 	}
 }

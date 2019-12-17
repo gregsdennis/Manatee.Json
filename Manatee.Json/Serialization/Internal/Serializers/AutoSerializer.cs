@@ -150,11 +150,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 	            json.Add(name, memberMap[memberInfo]);
 	        }
 	    }
-		private static Dictionary<SerializationInfo, object> _DeserializeValues(DeserializationContext context,
-		                                                                        IEnumerable<SerializationInfo> members,
-		                                                                        bool ignoreCase)
+		private static Dictionary<SerializationInfo, object?> _DeserializeValues(DeserializationContext context,
+		                                                                         IEnumerable<SerializationInfo> members,
+		                                                                         bool ignoreCase)
 		{
-			var dict = new Dictionary<SerializationInfo, object>();
+			var dict = new Dictionary<SerializationInfo, object?>();
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
@@ -180,11 +180,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 			return dict;
 		}
-		private static Dictionary<SerializationInfo, object> _DeserializeTypeValues(JsonValue json, JsonSerializer serializer,
-		                                                                            IEnumerable<SerializationInfo> members,
-		                                                                            bool ignoreCase)
+		private static Dictionary<SerializationInfo, object?> _DeserializeTypeValues(JsonValue json, JsonSerializer serializer,
+		                                                                             IEnumerable<SerializationInfo> members,
+		                                                                             bool ignoreCase)
 		{
-			var dict = new Dictionary<SerializationInfo, object>();
+			var dict = new Dictionary<SerializationInfo, object?>();
 			foreach (var memberInfo in members)
 			{
 				var name = memberInfo.SerializationName;
@@ -227,7 +227,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				: context.RootSerializer.Options.Resolver.Resolve(type, context.ValueMap);
 			_AssignObjectProperties(ref obj, context.ValueMap);
 		}
-		private static void _AssignObjectProperties(ref object? obj, Dictionary<SerializationInfo, object> memberMap)
+		private static void _AssignObjectProperties(ref object? obj, Dictionary<SerializationInfo, object?> memberMap)
 		{
 			foreach (var entry in memberMap)
 			{
@@ -239,7 +239,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					else if (typeof(IList).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()))
 					{
 						var list = (IList) info.GetValue(obj)!;
-						foreach (var value in (IList)entry.Value)
+						foreach (var value in (IList)entry.Value!)
 						{
 							list.Add(value);
 						}
@@ -248,7 +248,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 					{
 						var dictionary = (IDictionary) info.GetValue(obj)!;
 #pragma warning disable CS8605 // Unboxing a possibly null value.
-						foreach (DictionaryEntry kvp in (IDictionary)entry.Value)
+						foreach (DictionaryEntry kvp in (IDictionary)entry.Value!)
 #pragma warning restore CS8605 // Unboxing a possibly null value.
 						{
 							dictionary.Add(kvp.Key, kvp.Value);

@@ -82,7 +82,7 @@ namespace Manatee.Json.Serialization
 		public void RemoveMap<TAbstract>(bool removeRelated = true)
 		{
 			var tAbstract = typeof (TAbstract);
-			if (!_registry.TryGetValue(tAbstract, out Type tConcrete)) return;
+			if (!_registry.TryGetValue(tAbstract, out Type? tConcrete)) return;
 
 			_registry.Remove(tAbstract);
 			if (!removeRelated) return;
@@ -100,7 +100,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The mapped type if a mapping exists; otherwise the abstraction type.</returns>
 		public Type GetMap(Type type)
 		{
-			if (_registry.TryGetValue(type, out Type tConcrete)) return tConcrete;
+			if (_registry.TryGetValue(type, out Type? tConcrete)) return tConcrete;
 
 			var typeInfo = type.GetTypeInfo();
 			if (typeInfo.IsGenericType)
@@ -126,7 +126,7 @@ namespace Manatee.Json.Serialization
 			return CreateInstance(context.InferredType, context.LocalValue, context.RootSerializer.Options.Resolver, context.ValueMap);
 		}
 
-		internal object CreateInstance(Type type, JsonValue? json, IResolver resolver, Dictionary<SerializationInfo, object> parameters = null)
+		internal object CreateInstance(Type type, JsonValue? json, IResolver resolver, Dictionary<SerializationInfo, object?>? parameters = null)
 		{
 			var typeInfo = type.GetTypeInfo();
 			var resolveSlow = typeInfo.IsAbstract || typeInfo.IsInterface || typeInfo.IsGenericType;
@@ -139,7 +139,10 @@ namespace Manatee.Json.Serialization
 		{
 			if (json != null && json.Type == JsonValueType.Object && json.Object.ContainsKey(Constants.TypeKey))
 			{
-				var concrete = Type.GetType(json.Object[Constants.TypeKey].String);
+				var declaredType = json.Object[Constants.TypeKey].String;
+				var concrete = Type.GetType(declaredType);
+				if (concrete == null)
+					throw new ArgumentException($"Cannot find type {declaredType}");
 				return concrete;
 			}
 
@@ -161,7 +164,7 @@ namespace Manatee.Json.Serialization
 			return type;
 		}
 
-		private object _ResolveSlow(Type type, JsonValue? json, IResolver resolver, Dictionary<SerializationInfo, object> parameters)
+		private object _ResolveSlow(Type type, JsonValue? json, IResolver resolver, Dictionary<SerializationInfo, object?>? parameters)
 		{
 			var typeToResolve = IdentifyTypeToResolve(type, json);
 
@@ -184,9 +187,10 @@ namespace Manatee.Json.Serialization
 					break;
 			}
 		}
-		private void _MapBaseTypes(Type tAbstract, Type tConcrete, bool overwrite)
+		private void _MapBaseTypes(Type? tAbstract, Type tConcrete, bool overwrite)
 		{
 			if (tAbstract == null) return;
+
 			var tBase = tAbstract.GetTypeInfo().BaseType;
 			if (tBase != null && (overwrite || !_registry.ContainsKey(tBase)))
 				_registry[tBase] = tConcrete;
@@ -194,9 +198,7 @@ namespace Manatee.Json.Serialization
 			foreach (var tInterface in tAbstract.GetTypeInfo().ImplementedInterfaces)
 			{
 				if (overwrite || !_registry.ContainsKey(tInterface))
-				{
 					_registry[tInterface] = tConcrete;
-				}
 				_MapBaseTypes(tInterface, tConcrete, overwrite);
 			}
 		}

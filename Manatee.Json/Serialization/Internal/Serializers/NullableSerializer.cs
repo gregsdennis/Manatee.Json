@@ -21,8 +21,9 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (!nullable.HasValue) return JsonValue.Null;
 
 			var encodeDefaultValues = context.RootSerializer.Options.EncodeDefaultValues;
-			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
-			context.Push(typeof(T), typeof(T), null, nullable.Value);
+			T @default = default;
+			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, @default);
+			context.Push(typeof(T), typeof(T), null!, nullable.Value);
 			var json = context.RootSerializer.Serialize(context);
 			context.Pop();
 			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;
@@ -35,8 +36,10 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			if (context.LocalValue == JsonValue.Null) return null;
 
-			context.Push(typeof(T), null, context.LocalValue);
-			var value = (T) context.RootSerializer.Deserialize(context);
+			// this is a special case for the pointer in that we don't want to add a segment,
+			// but we have to push something so that it can be popped.
+			context.Push(typeof(T), null!, context.LocalValue);
+			var value = (T) context.RootSerializer.Deserialize(context)!;
 			context.Pop();
 
 			return value;

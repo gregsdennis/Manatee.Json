@@ -39,7 +39,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 							return json;
 						}).ToList();
 				case JsonValueType.Object:
-					var result = new ExpandoObject() as IDictionary<string, object>;
+					var result = new ExpandoObject() as IDictionary<string, object?>;
 					foreach (var kvp in context.LocalValue.Object)
 					{
 						context.Push(typeof(object), kvp.Key, kvp.Value);

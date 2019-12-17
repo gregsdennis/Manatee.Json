@@ -21,9 +21,11 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// A mapping of the deserialized values to the type's property information.
 		/// </summary>
-		public Dictionary<SerializationInfo, object> ValueMap { get; set; }
+		public Dictionary<SerializationInfo, object?> ValueMap { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		internal DeserializationContext(JsonSerializer rootSerializer, JsonValue jsonRoot)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 			: base(rootSerializer)
 		{
 			JsonRoot = jsonRoot;
@@ -35,7 +37,7 @@ namespace Manatee.Json.Serialization
 		/// <param name="type">The type to be deserialized.</param>
 		/// <param name="propertyName">The property name or index.  Will be appended to the location as a JSON Path segment.</param>
 		/// <param name="localValue">The local JSON value being deserialized.</param>
-		public void Push(Type type, string? propertyName, JsonValue localValue)
+		public void Push(Type type, string propertyName, JsonValue localValue)
 		{
 			PushDetails(type, type, propertyName);
 
@@ -47,7 +49,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public void Pop()
 		{
-			base.PopDetails();
+			PopDetails();
 
 			LocalValue = _localValues.Pop();
 		}

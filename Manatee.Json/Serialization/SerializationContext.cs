@@ -27,7 +27,7 @@ namespace Manatee.Json.Serialization
 		/// <param name="requestedType">The type to be serialized as requested by the caller.</param>
 		/// <param name="propertyName">The property name or index.  Will be appended to the location as a JSON Path segment.</param>
 		/// <param name="source">The object being serialized.</param>
-		public void Push(Type inferredType, Type requestedType, string? propertyName, object? source)
+		public void Push(Type inferredType, Type requestedType, string propertyName, object? source)
 		{
 			PushDetails(inferredType, requestedType, propertyName);
 
@@ -39,7 +39,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public void Pop()
 		{
-			base.PopDetails();
+			PopDetails();
 
 			Source = _sources.Pop();
 		}

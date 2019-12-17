@@ -28,7 +28,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var output = new Dictionary<string, JsonValue?>();
 				foreach (var kvp in dict)
 				{
-					context.Push(kvp.Value?.GetType() ?? typeof(TValue), typeof(TValue), kvp.Key.ToString(), kvp.Value);
+					context.Push(kvp.Value?.GetType() ?? typeof(TValue), typeof(TValue), kvp.Key.ToString()!, kvp.Value);
 					var value = _SerializeDefaultValue(context, useDefaultValue, existingOption);
 					output.Add((string)(object)kvp.Key, value);
 				}
@@ -114,7 +114,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 												kvp =>
 													{
 														context.Push(typeof(TValue), kvp.Key.ToString(), kvp.Value);
-														var value = (TValue) context.RootSerializer.Deserialize(context);
+														var value = (TValue) context.RootSerializer.Deserialize(context)!;
 														context.Pop();
 														return value;
 													});
@@ -128,7 +128,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						              var key = jv.Value.Object["Key"];
 									  context.Push(typeof(TKey), jv.Index.ToString(), key);
 									  context.Push(typeof(TKey), "Key", key);
-						              var obj = (TKey) context.RootSerializer.Deserialize(context);
+						              var obj = (TKey) context.RootSerializer.Deserialize(context)!;
 									  context.Pop();
 									  context.Pop();
 									  return obj;
@@ -138,7 +138,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 						              var value = jv.Value.Object["Value"];
 									  context.Push(typeof(TValue), jv.Index.ToString(), value);
 									  context.Push(typeof(TValue), "Value", value);
-						              var obj = (TValue) context.RootSerializer.Deserialize(context);
+						              var obj = (TValue) context.RootSerializer.Deserialize(context)!;
 									  context.Pop();
 									  context.Pop();
 									  return obj;
@@ -160,12 +160,12 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var transformed = serializer.Options.DeserializationNameTransform(kvp.Key);
 				context.Push(typeof(TKey), i.ToString(), transformed);
 				context.Push(typeof(TKey), "Key", transformed);
-				var key = (TKey) serializer.Deserialize(context);
+				var key = (TKey) serializer.Deserialize(context)!;
 				context.Pop();
 				context.Pop();
 
 				context.Push(typeof(TValue), kvp.Key, kvp.Value);
-				output.Add(key, (TValue) serializer.Deserialize(context));
+				output.Add(key, (TValue) serializer.Deserialize(context)!);
 				context.Pop();
 				i++;
 			}

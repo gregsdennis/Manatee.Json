@@ -9,9 +9,9 @@ namespace Manatee.Json.Serialization
 	public class JsonSerializerOptions
 	{
 		private static readonly IResolver _defaultResolver = new ConstructorResolver();
-		private IResolver _resolver;
-	    private Func<string, string> _serializationNameTransform;
-	    private Func<string, string> _deserializationNameTransform;
+		private IResolver? _resolver;
+	    private Func<string, string>? _serializationNameTransform;
+	    private Func<string, string>? _deserializationNameTransform;
 
 	    /// <summary>
 		/// Default options used by the serializer.
@@ -39,7 +39,7 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Gets and sets a custom serialization format for <see cref="DateTime"/>.
 		/// </summary>
-		public string CustomDateTimeSerializationFormat { get; set; }
+		public string? CustomDateTimeSerializationFormat { get; set; }
 		/// <summary>
 		/// Gets and sets the format for enumeration serialization using the default serializer methods.
 		/// </summary>

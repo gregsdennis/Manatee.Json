@@ -16,11 +16,11 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// The inferred type.  This will usually be the actual type of the object during serialization.
 		/// </summary>
-		public Type InferredType { get; private set; } = null!;
+		public Type InferredType { get; private set; }
 		/// <summary>
 		/// The type requested by the serialize/deserialize call.
 		/// </summary>
-		public Type RequestedType { get; private set; } = null!;
+		public Type RequestedType { get; private set; }
 		/// <summary>
 		/// The current location in the JSON instance or object.
 		/// </summary>
@@ -32,7 +32,9 @@ namespace Manatee.Json.Serialization
 
 		internal SerializationReferenceCache SerializationMap { get; }
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		internal SerializationContextBase(JsonSerializer rootSerializer)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
 			SerializationMap = new SerializationReferenceCache();
 			RootSerializer = rootSerializer;
@@ -45,7 +47,7 @@ namespace Manatee.Json.Serialization
 			InferredType = type;
 		}
 
-		private protected void PushDetails(Type inferredType, Type requestedType, string? propertyName)
+		private protected void PushDetails(Type inferredType, Type requestedType, string propertyName)
 		{
 			_inferredTypes.Push(InferredType);
 			InferredType = inferredType;

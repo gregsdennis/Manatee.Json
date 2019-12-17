@@ -28,6 +28,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				case DateTimeSerializationFormat.Milliseconds:
 					return dt.Ticks / TimeSpan.TicksPerMillisecond;
 				case DateTimeSerializationFormat.Custom:
+					if (string.IsNullOrWhiteSpace(options.CustomDateTimeSerializationFormat))
+						throw new ArgumentNullException($"{nameof(JsonSerializerOptions)}.{nameof(JsonSerializerOptions.CustomDateTimeSerializationFormat)}");
 					return dt.ToString(options.CustomDateTimeSerializationFormat);
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -45,6 +47,8 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				case DateTimeSerializationFormat.Milliseconds:
 					return new DateTime((long)context.LocalValue.Number * TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Custom:
+					if (string.IsNullOrWhiteSpace(options.CustomDateTimeSerializationFormat))
+						throw new ArgumentNullException($"{nameof(JsonSerializerOptions)}.{nameof(JsonSerializerOptions.CustomDateTimeSerializationFormat)}");
 					return DateTime.ParseExact(context.LocalValue.String, options.CustomDateTimeSerializationFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
 				default:
 					throw new ArgumentOutOfRangeException();

@@ -23,7 +23,9 @@ namespace Manatee.Json.Serialization
 			};
 		private static List<ISerializer> _orderedSerializers;
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		static SerializerFactory()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
 			_serializers = typeof(ISerializer).GetTypeInfo()
 											  .Assembly
@@ -34,7 +36,7 @@ namespace Manatee.Json.Serialization
 											  .Select(t => Activator.CreateInstance(t.AsType()))
 											  .Cast<ISerializer>()
 											  .ToList();
-			_autoSerializer = _serializers.OfType<ITypeSerializer>().FirstOrDefault();
+			_autoSerializer = _serializers.OfType<AutoSerializer>().FirstOrDefault();
 			_UpdateOrderedSerializers();
 		}
 
@@ -66,19 +68,19 @@ namespace Manatee.Json.Serialization
 		internal static ISerializer GetSerializer(SerializationContextBase context)
 		{
 			context.OverrideInferredType(context.RootSerializer.AbstractionMap.GetMap(context.InferredType ?? context.RequestedType));
-			var theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
+			var theChosenOne = _orderedSerializers.First(s => s.Handles(context));
 
 			if (theChosenOne is AutoSerializer && context.RequestedType != typeof(object))
 			{
-				var type = context.InferredType;
+				var type = context.InferredType!;
 				context.OverrideInferredType(context.RootSerializer.AbstractionMap.GetMap(context.RequestedType));
-				theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
+				theChosenOne = _orderedSerializers.First(s => s.Handles(context));
 
 				if (theChosenOne is AutoSerializer)
 					context.OverrideInferredType(type);
 			}
 
-			Log.Serialization($"Serializer {theChosenOne?.GetType().CSharpName() ?? "<not found>"} selected for type `{(context.InferredType ?? context.RequestedType).CSharpName()}`");
+			Log.Serialization($"Serializer {theChosenOne.GetType().CSharpName() ?? "<not found>"} selected for type `{(context.InferredType ?? context.RequestedType).CSharpName()}`");
 			return theChosenOne;
 		}
 		internal static ITypeSerializer GetTypeSerializer()

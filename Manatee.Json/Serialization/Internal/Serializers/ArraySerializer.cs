@@ -40,7 +40,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			{
 				context.Push(typeof(T), i.ToString(), array[i]);
 
-				values[i] = (T) context.RootSerializer.Deserialize(context);
+				values[i] = (T) context.RootSerializer.Deserialize(context)!;
 
 				context.Pop();
 			}

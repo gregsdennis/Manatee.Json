@@ -35,7 +35,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			for (int i = 0; i < context.LocalValue.Array.Count; i++)
 			{
 				context.Push(typeof(T), i.ToString(), context.LocalValue.Array[i]);
-				queue.Enqueue((T)context.RootSerializer.Deserialize(context));
+				queue.Enqueue((T)context.RootSerializer.Deserialize(context)!);
 				context.Pop();
 			}
 			return queue;

@@ -11,8 +11,8 @@ namespace Manatee.Json.Serialization
 	public class JsonSerializer
 	{
 		private int _callCount;
-		private JsonSerializerOptions _options;
-		private AbstractionMap _abstractionMap;
+		private JsonSerializerOptions? _options;
+		private AbstractionMap? _abstractionMap;
 
 		/// <summary>
 		/// Gets or sets a set of options for this serializer.
@@ -39,11 +39,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			var context = new SerializationContext(this);
-			context.Push(obj?.GetType() ?? typeof(T), typeof(T), null, obj);
-			var value = Serialize(context);
-			context.Pop();
-			return value;
+			return Serialize(typeof(T), obj!);
 		}
 		/// <summary>
 		/// Serializes an object to a JSON structure.
@@ -54,7 +50,7 @@ namespace Manatee.Json.Serialization
 		public JsonValue Serialize(Type type, object obj)
 		{
 			var context = new SerializationContext(this);
-			context.Push(obj?.GetType() ?? type, type, null, obj);
+			context.Push(obj?.GetType() ?? type, type, null!, obj);
 			var value = Serialize(context);
 			context.Pop();
 			return value;
@@ -104,7 +100,7 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public T Deserialize<T>(JsonValue json)
 		{
-			return (T) Deserialize(typeof(T), json);
+			return (T) Deserialize(typeof(T), json)!;
 		}
 		/// <summary>
 		/// Deserializes a JSON structure to an object of the appropriate type.
@@ -115,16 +111,16 @@ namespace Manatee.Json.Serialization
 		/// <exception cref="TypeDoesNotContainPropertyException">Optionally thrown during automatic
 		/// deserialization when the JSON contains a property which is not defined by the requested
 		/// type.</exception>
-		public object Deserialize(Type type, JsonValue json)
+		public object? Deserialize(Type type, JsonValue json)
 		{
 			var context = new DeserializationContext(this, json);
-			context.Push(type, null, json);
+			context.Push(type, null!, json);
 			var value = Deserialize(context);
 			context.Pop();
 			return value;
 		}
 
-		internal object Deserialize(DeserializationContext context)
+		internal object? Deserialize(DeserializationContext context)
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
@@ -132,7 +128,8 @@ namespace Manatee.Json.Serialization
 			if (--_callCount == 0)
 			{
 				Log.Serialization("Primary deserialization complete; processing references");
-				context.SerializationMap.Complete(obj);
+				if (obj != null)
+					context.SerializationMap.Complete(obj);
 			}
 			return obj;
 		}

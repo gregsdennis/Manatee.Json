@@ -36,7 +36,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			for (int i = 0; i < values.Length; i++)
 			{
 				context.Push(typeof(T), i.ToString(), array[i]);
-				values[i] = (T)context.RootSerializer.Deserialize(context);
+				values[i] = (T)context.RootSerializer.Deserialize(context)!;
 				context.Pop();
 			}
 			return new Stack<T>(values);
