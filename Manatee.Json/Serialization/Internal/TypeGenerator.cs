@@ -26,7 +26,7 @@ namespace Manatee.Json.Serialization.Internal
 
 		public static object Generate(Type type)
 		{
-			if (!_cache.TryGetValue(type, out TypeInfo concreteType))
+			if (!_cache.TryGetValue(type, out var concreteType))
 			{
 				var typeInfo = type.GetTypeInfo();
 				if (!typeInfo.IsInterface)
@@ -45,7 +45,7 @@ namespace Manatee.Json.Serialization.Internal
 				_ImplementProperties(type, typeBuilder);
 				_ImplementMethods(type, typeBuilder);
 				_ImplementEvents(type, typeBuilder);
-				concreteType = typeBuilder.CreateTypeInfo();
+				concreteType = typeBuilder.CreateTypeInfo()!;
 				_cache.Add(type, concreteType);
 			}
 			return _ConstructInstance(concreteType.AsType());
@@ -86,7 +86,7 @@ namespace Manatee.Json.Serialization.Internal
 			MethodBuilder methodBuilder;
 			if (propertyInfo.CanRead)
 			{
-				methodBuilder = builder.DefineMethod(propertyInfo.GetMethod.Name, methodAttr, propertyInfo.PropertyType, indexers);
+				methodBuilder = builder.DefineMethod(propertyInfo.GetMethod!.Name, methodAttr, propertyInfo.PropertyType, indexers);
 				var il = methodBuilder.GetILGenerator();
 				il.Emit(OpCodes.Ldarg_0);
 				il.Emit(OpCodes.Ldfld, fieldBuilder);
@@ -96,7 +96,7 @@ namespace Manatee.Json.Serialization.Internal
 			}
 			if (propertyInfo.CanWrite)
 			{
-				methodBuilder = builder.DefineMethod(propertyInfo.GetMethod.Name, methodAttr, null,
+				methodBuilder = builder.DefineMethod(propertyInfo.SetMethod!.Name, methodAttr, null,
 				                                     indexers.Union(new[] {propertyInfo.PropertyType}).ToArray());
 				var il = methodBuilder.GetILGenerator();
 				il.Emit(OpCodes.Ldarg_0);
@@ -171,20 +171,21 @@ namespace Manatee.Json.Serialization.Internal
 		{
 			const MethodAttributes methodAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.NewSlot |
 												MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Final;
-			var fieldBuilder = builder.DefineField("_" + eventInfo.Name, eventInfo.EventHandlerType, FieldAttributes.Private);
-			var eventBuilder = builder.DefineEvent(eventInfo.Name, EventAttributes.None, eventInfo.EventHandlerType);
+			var eventHandlerType = eventInfo.EventHandlerType!;
+			var fieldBuilder = builder.DefineField("_" + eventInfo.Name, eventHandlerType, FieldAttributes.Private);
+			var eventBuilder = builder.DefineEvent(eventInfo.Name, EventAttributes.None, eventHandlerType);
 
-			var methodBuilder = builder.DefineMethod(eventInfo.AddMethod.Name, methodAttr, null,
-			                                         new[] {eventInfo.EventHandlerType});
+			var methodBuilder = builder.DefineMethod(eventInfo.AddMethod!.Name, methodAttr, null,
+			                                         new[] { eventHandlerType });
 			var combineMethod = typeof (Delegate).GetRuntimeMethod("Combine", new[] {typeof (Delegate), typeof (Delegate)});
 			var removeMethod = typeof (Delegate).GetRuntimeMethod("Remove", new[] {typeof (Delegate), typeof (Delegate)});
 			var compareExchangeMethod = typeof(Interlocked).GetTypeInfo().DeclaredMethods
 			                                               .Single(m => m.Name == "CompareExchange" && m.IsGenericMethod)
-			                                               .MakeGenericMethod(eventInfo.EventHandlerType);
+			                                               .MakeGenericMethod(eventHandlerType);
 			var il = methodBuilder.GetILGenerator();
-			il.DeclareLocal(eventInfo.EventHandlerType);
-			il.DeclareLocal(eventInfo.EventHandlerType);
-			il.DeclareLocal(eventInfo.EventHandlerType);
+			il.DeclareLocal(eventHandlerType);
+			il.DeclareLocal(eventHandlerType);
+			il.DeclareLocal(eventHandlerType);
 			il.DeclareLocal(typeof (bool));
 			il.Emit(OpCodes.Ldarg_0);
 			il.Emit(OpCodes.Ldfld, fieldBuilder);
@@ -195,8 +196,8 @@ namespace Manatee.Json.Serialization.Internal
 			il.Emit(OpCodes.Stloc_1);
 			il.Emit(OpCodes.Ldloc_1);
 			il.Emit(OpCodes.Ldarg_1);
-			il.Emit(OpCodes.Call, combineMethod);
-			il.Emit(OpCodes.Castclass, eventInfo.EventHandlerType);
+			il.Emit(OpCodes.Call, combineMethod!);
+			il.Emit(OpCodes.Castclass, eventHandlerType);
 			il.Emit(OpCodes.Stloc_2);
 			il.Emit(OpCodes.Ldarg_0);
 			il.Emit(OpCodes.Ldflda, fieldBuilder);
@@ -216,11 +217,11 @@ namespace Manatee.Json.Serialization.Internal
 			eventBuilder.SetAddOnMethod(methodBuilder);
 			builder.DefineMethodOverride(methodBuilder, eventInfo.AddMethod);
 
-			methodBuilder = builder.DefineMethod(eventInfo.RemoveMethod.Name, methodAttr, null, new[] {eventInfo.EventHandlerType});
+			methodBuilder = builder.DefineMethod(eventInfo.RemoveMethod!.Name, methodAttr, null, new[] { eventHandlerType });
 			il = methodBuilder.GetILGenerator();
-			il.DeclareLocal(eventInfo.EventHandlerType);
-			il.DeclareLocal(eventInfo.EventHandlerType);
-			il.DeclareLocal(eventInfo.EventHandlerType);
+			il.DeclareLocal(eventHandlerType);
+			il.DeclareLocal(eventHandlerType);
+			il.DeclareLocal(eventHandlerType);
 			il.DeclareLocal(typeof (bool));
 			il.Emit(OpCodes.Ldarg_0);
 			il.Emit(OpCodes.Ldfld, fieldBuilder);
@@ -231,8 +232,8 @@ namespace Manatee.Json.Serialization.Internal
 			il.Emit(OpCodes.Stloc_1);
 			il.Emit(OpCodes.Ldloc_1);
 			il.Emit(OpCodes.Ldarg_1);
-			il.Emit(OpCodes.Call, removeMethod);
-			il.Emit(OpCodes.Castclass, eventInfo.EventHandlerType);
+			il.Emit(OpCodes.Call, removeMethod!);
+			il.Emit(OpCodes.Castclass, eventHandlerType);
 			il.Emit(OpCodes.Stloc_2);
 			il.Emit(OpCodes.Ldarg_0);
 			il.Emit(OpCodes.Ldflda, fieldBuilder);
@@ -254,7 +255,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		private static object _ConstructInstance(Type type)
 		{
-			return Activator.CreateInstance(type, null);
+			return Activator.CreateInstance(type, null)!;
 		}
 	}
 }

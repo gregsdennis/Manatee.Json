@@ -23,21 +23,21 @@ namespace Manatee.Json.Path.Operators
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return Name.Any(c => !char.IsLetterOrDigit(c)) || string.IsNullOrWhiteSpace(Name)
 				       ? $".'{Name}'"
 				       : $".{Name}";
 		}
 
-		public bool Equals(NameOperator other)
+		public bool Equals(NameOperator? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return string.Equals(Name, other.Name);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as NameOperator);
 		}

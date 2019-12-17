@@ -1,34 +1,33 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Expressions
 {
 	internal class AddExpression<T> : ExpressionTreeBranch<T>, IEquatable<AddExpression<T>>
 	{
-		public override object Evaluate(T json, JsonValue root)
+		public AddExpression(ExpressionTreeNode<T> left, ExpressionTreeNode<T> right)
+			: base(left, right) { }
+
+		public override object? Evaluate([MaybeNull] T json, JsonValue? root)
 		{
 			var left = Left.Evaluate(json, root);
 			var right = Right.Evaluate(json, root);
-			if (!(left is double) || !(right is double))
-			{
-				var sleft = left as string;
-				var sright = right as string;
-				if (sleft == null || sright == null) return null;
-				return sleft + sright;
-			}
-			return (double) left + (double) right;
+			if (left is double dleft && right is double dright) return dleft + dright;
+			if (left is string sleft && right is string sright) return sleft + sright;
+			return null;
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
 			var right = Right is ExpressionTreeBranch<T> ? $"({Right})" : Right.ToString();
 			return $"{Left}+{right}";
 		}
-		public bool Equals(AddExpression<T> other)
+		public bool Equals(AddExpression<T>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return base.Equals(other);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Manatee.Json.Internal;
@@ -22,39 +23,36 @@ namespace Manatee.Json.Path.Parsing
 		public static JsonPath Parse(string source)
 		{
 			var index = 0;
-			var errorMessage = Parse(source, ref index, out var path);
-			if (errorMessage != null)
+			if (!TryParse(source, ref index, out var path, out var errorMessage))
 				throw new JsonPathSyntaxException(path, errorMessage);
 
 			return path;
 		}
 
-		public static string Parse(string source, ref int index, out JsonPath path)
+		public static bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			var length = source.Length;
-			path = null;
-			while(index < length)
+			path = null!;
+			while (index < length)
 			{
-				var errorMessage = source.SkipWhiteSpace(ref index, length, out _);
-				if (errorMessage != null) return errorMessage;
+				errorMessage = source.SkipWhiteSpace(ref index, length, out _);
+				if (errorMessage != null) return false;
 
-				IJsonPathParser foundParser = null;
-				foreach (var parser in _parsers)
+				var i = index;
+				var foundParser = _parsers.FirstOrDefault(p => p.Handles(source, i));
+
+				if (foundParser == null)
 				{
-					if (parser.Handles(source, index))
-					{
-						foundParser = parser;
-						break;
-					}
+					errorMessage = "Unrecognized JSON Path element.";
+					return false;
 				}
 
-				if (foundParser == null) return "Unrecognized JSON Path element.";
-
-				errorMessage = foundParser.TryParse(source, ref index, ref path);
-				if (errorMessage != null) return errorMessage;
+				;
+				if (!foundParser.TryParse(source, ref index, ref path, out errorMessage)) return false;
 			}
 
-			return null;
+			errorMessage = null!;
+			return true;
 		}
 	}
 }

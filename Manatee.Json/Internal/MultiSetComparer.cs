@@ -8,7 +8,7 @@ namespace Manatee.Json.Internal
 
 		public static MultiSetComparer<T> Default { get; } = new MultiSetComparer<T>();
 
-		public MultiSetComparer(IEqualityComparer<T> comparer = null)
+		public MultiSetComparer(IEqualityComparer<T>? comparer = null)
 		{
 			_comparer = comparer ?? EqualityComparer<T>.Default;
 		}
@@ -48,9 +48,11 @@ namespace Manatee.Json.Internal
 			return false;
 		}
 
+#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
 		private Dictionary<T, int> _GetElementCounts(IEnumerable<T> enumerable, out int nullCount)
 		{
 			var dictionary = new Dictionary<T, int>(_comparer);
+#pragma warning restore CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
 			nullCount = 0;
 
 			foreach (var element in enumerable)

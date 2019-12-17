@@ -11,6 +11,12 @@ namespace Manatee.Json.Tests.Serialization
 	[TestFixture]
 	public class ConcurrencyTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Serialization;
+		}
+
 		private class LocalClass
 		{
 			public int Value1 { get; set; }

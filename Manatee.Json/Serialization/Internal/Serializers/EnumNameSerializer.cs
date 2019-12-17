@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class EnumNameSerializer : IPrioritizedSerializer
 	{
 		private class Description
 		{
-			public object Value { get; set; }
-			public string String { get; set; }
+			public object Value { get; }
+			public string Name { get; }
+
+			public Description(object value, string name)
+			{
+				Value = value;
+				Name = name;
+			}
 		}
 
 		private static readonly Dictionary<Type, List<Description>> _descriptions = new Dictionary<Type,List<Description>>();
@@ -20,34 +28,34 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
-			var serializing = context.LocalValue == null;
+			var dContext = context as DeserializationContext;
 			return context.InferredType.GetTypeInfo().IsEnum &&
-			       ((serializing && context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName) || // used during serialization
-			        (!serializing && context.LocalValue?.Type == JsonValueType.String)); // used during deserialization
+			       ((dContext == null && context.RootSerializer.Options.EnumSerializationFormat == EnumSerializationFormat.AsName) || // used during serialization
+			        (dContext != null && dContext.LocalValue?.Type == JsonValueType.String)); // used during deserialization
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
 			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);
 			var attributes = type.GetTypeInfo().GetCustomAttributes(typeof (FlagsAttribute), false);
-			if (attributes.Any()) return _BuildFlagsValues(context.InferredType, context.Source, context.RootSerializer.Options);
+			if (attributes.Any()) return _BuildFlagsValues(context.InferredType, context.Source!, context.RootSerializer.Options);
 
 			var entry = _descriptions[type].FirstOrDefault(d => Equals(d.Value, context.Source));
-			if (entry != null) return entry.String;
+			if (entry != null) return entry.Name;
 
-			var enumValue = context.RootSerializer.Options.SerializationNameTransform(context.Source.ToString());
+			var enumValue = context.RootSerializer.Options.SerializationNameTransform(context.Source!.ToString()!);
 			return enumValue;
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			var type = _GetType(context.InferredType);
 			_EnsureDescriptions(type);
 			var options = context.RootSerializer.Options.CaseSensitiveDeserialization
 							  ? StringComparison.OrdinalIgnoreCase
 							  : StringComparison.Ordinal;
-			var entry = _descriptions[type].FirstOrDefault(d => string.Equals(d.String, context.LocalValue.String, options));
+			var entry = _descriptions[type].FirstOrDefault(d => string.Equals(d.Name, context.LocalValue.String, options));
 			if (entry == null)
 			{
 				var enumValue = context.RootSerializer.Options.DeserializationNameTransform(context.LocalValue.String);
@@ -72,14 +80,14 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				if (_descriptions.ContainsKey(type)) return;
 
 				var names = Enum.GetValues(type).Cast<object>();
-				var descriptions = names.Select(n => new Description { Value = n, String = _GetDescription(type, n.ToString()) }).ToList();
+				var descriptions = names.Select(n => new Description(n, _GetDescription(type, n.ToString()!))).ToList();
 				_descriptions.Add(type, descriptions);
 			}
 		}
 		private static string _GetDescription(Type type, string name)
 		{
 			var memInfo = type.GetTypeInfo().GetDeclaredField(name);
-			var attributes = memInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
+			var attributes = memInfo!.GetCustomAttributes(typeof(DisplayAttribute), false);
 			return attributes.Any() ? ((DisplayAttribute) attributes.First()).Description : name;
 		}
 		private static string _BuildFlagsValues(Type type, object obj, JsonSerializerOptions options)
@@ -93,7 +101,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				var compare = Convert.ToInt64(descriptions[index].Value);
 				if (value >= compare)
 				{
-					names.Insert(0, descriptions[index].String);
+					names.Insert(0, descriptions[index].Name);
 					value -= compare;
 				}
 				index--;

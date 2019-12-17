@@ -69,17 +69,26 @@ namespace Manatee.Json.Schema
 					Keyword = $"{context.Misc["dependencyParent"]}/{PropertyName}"
 				};
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
-			if (context.Instance.Object.ContainsKey(PropertyName))
+			if (context.Instance.Type != JsonValueType.Object)
 			{
-				var missingProperties = _dependencies.Except(context.Instance.Object.Keys).ToList();
-				if (missingProperties.Any())
-				{
-					results.IsValid = false;
-					results.AdditionalInfo["required"] = missingProperties.ToJson();
-					results.AdditionalInfo["dependency"] = PropertyName;
-					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
-				}
+				Log.Schema("Instance not an object; not applicable");
+				return results;
+			}
+
+			if (!context.Instance.Object.ContainsKey(PropertyName))
+			{
+				Log.Schema($"Property {PropertyName} not found; not applicable");
+				return results;
+			}
+
+			var missingProperties = _dependencies.Except(context.Instance.Object.Keys).ToList();
+			if (missingProperties.Any())
+			{
+				Log.Schema($"Properties {missingProperties} not found but required by property {PropertyName}");
+				results.IsValid = false;
+				results.AdditionalInfo["required"] = missingProperties.ToJson();
+				results.AdditionalInfo["dependency"] = PropertyName;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;
@@ -89,21 +98,21 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="locaRegistry"></param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry locaRegistry) { }
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry locaRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(PropertyDependency other)
+		public bool Equals(PropertyDependency? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -113,14 +122,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaDependency other)
+		public bool Equals(IJsonSchemaDependency? other)
 		{
 			return Equals(other as PropertyDependency);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as PropertyDependency);
 		}

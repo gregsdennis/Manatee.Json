@@ -14,12 +14,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 			var parameter = method.Arguments.Last() as ConstantExpression;
 			if (parameter == null || parameter.Type != typeof(string))
 				throw new NotSupportedException("Only constant string arguments are supported in HasProperty()");
-			return new HasPropertyExpression<T>
-				{
-					Path = BuildPath(method, out bool isLocal),
-					IsLocal = isLocal,
-					Name = parameter.Value.ToString()
-				};
+			return new HasPropertyExpression<T>(BuildPath(method, out var isLocal), isLocal, parameter.Value.ToString()!);
 		}
 	}
 }

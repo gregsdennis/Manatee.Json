@@ -9,15 +9,16 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		{
 			return input[index] == '"' || input[index] == '\'';
 		}
-		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
+		public bool TryParse<TIn>(string source, ref int index, out JsonPathExpression? expression, out string? errorMessage)
 		{
-			expression = null;
+			if (!source.TryGetKey(ref index, out var value, out errorMessage))
+			{
+				expression = null!;
+				return false;
+			}
 
-			var error = source.GetKey(ref index, out var value);
-			if (error != null) return error;
-
-			expression = new ValueExpression { Value = value };
-			return null;
+			expression = new ValueExpression(value);
+			return true;
 		}
 	}
 }

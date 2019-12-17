@@ -39,7 +39,7 @@ namespace Manatee.Json.Path
 		/// <summary>Returns a string that represents the current object.</summary>
 		/// <returns>A string that represents the current object.</returns>
 		/// <filterpriority>2</filterpriority>
-		public override string ToString()
+		public override string? ToString()
 		{
 			return Index.HasValue
 				       ? Index.ToString()
@@ -50,7 +50,7 @@ namespace Manatee.Json.Path
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(Slice other)
+		public bool Equals(Slice? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -63,7 +63,7 @@ namespace Manatee.Json.Path
 		/// <returns>true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
 		/// <filterpriority>2</filterpriority>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as Slice);
 		}

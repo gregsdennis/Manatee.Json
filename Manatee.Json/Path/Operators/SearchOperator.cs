@@ -16,19 +16,19 @@ namespace Manatee.Json.Path.Operators
 			return new JsonArray(_parameter.Find(json, root));
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return $"..{_parameter}";
 		}
 
-		public bool Equals(SearchOperator other)
+		public bool Equals(SearchOperator? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(_parameter, other._parameter);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as SearchOperator);
 		}

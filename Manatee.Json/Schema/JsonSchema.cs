@@ -34,7 +34,7 @@ namespace Manatee.Json.Schema
 		public static readonly JsonSchema False = new JsonSchema(false);
 
 		private bool? _inherentValue;
-		private Uri _documentPath;
+		private Uri? _documentPath;
 		private bool _hasRegistered;
 		private bool _hasValidated;
 		private JsonSchemaVersion _supportedVersions;
@@ -42,19 +42,19 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Defines the document path.  If not explicitly provided, it will be derived from the <see cref="Id"/> property.
 		/// </summary>
-		public Uri DocumentPath
+		public Uri? DocumentPath
 		{
-			get => _documentPath ?? (_documentPath = _BuildDocumentPath());
+			get => _documentPath ??= _BuildDocumentPath();
 			set => _documentPath = value;
 		}
 		/// <summary>
 		/// Gets the `$id` (or `id` for draft-04) property value, if declared.
 		/// </summary>
-		public string Id => this.Get<IdKeyword>()?.Value;
+		public string? Id => this.Get<IdKeyword>()?.Value;
 		/// <summary>
 		/// Gets the `$schema` property, if declared.
 		/// </summary>
-		public string Schema => this.Get<SchemaKeyword>()?.Value;
+		public string? Schema => this.Get<SchemaKeyword>()?.Value;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -116,12 +116,8 @@ namespace Manatee.Json.Schema
 					if (metaSchema != null)
 					{
 						var asJson = ToJson(new JsonSerializer());
-						var context = new SchemaValidationContext
+						var context = new SchemaValidationContext(this, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"))
 							{
-								Instance = asJson,
-								BaseRelativeLocation = new JsonPointer("#"),
-								RelativeLocation = new JsonPointer("#"),
-								InstanceLocation = new JsonPointer("#"),
 								IsMetaSchemaValidation = true
 							};
 						var metaValidation = metaSchema.Validate(context);
@@ -136,19 +132,15 @@ namespace Manatee.Json.Schema
 			else
 			{
 				var asJson = ToJson(new JsonSerializer());
-				var context = new SchemaValidationContext
+				var context = new SchemaValidationContext(this, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"))
 					{
-						Instance = asJson,
-						BaseRelativeLocation = new JsonPointer("#"),
-						RelativeLocation = new JsonPointer("#"),
-						InstanceLocation = new JsonPointer("#"),
 						IsMetaSchemaValidation = true
 					};
 				if (supportedVersions.HasFlag(JsonSchemaVersion.Draft04))
 				{
 					context.Root = MetaSchemas.Draft04;
 					var metaValidation = MetaSchemas.Draft04.Validate(context);
-					results.MetaSchemaValidations[MetaSchemas.Draft04.Id] = metaValidation;
+					results.MetaSchemaValidations[MetaSchemas.Draft04.Id!] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft04;
 				}
@@ -156,7 +148,7 @@ namespace Manatee.Json.Schema
 				{
 					context.Root = MetaSchemas.Draft06;
 					var metaValidation = MetaSchemas.Draft06.Validate(context);
-					results.MetaSchemaValidations[MetaSchemas.Draft06.Id] = metaValidation;
+					results.MetaSchemaValidations[MetaSchemas.Draft06.Id!] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft06;
 				}
@@ -164,7 +156,7 @@ namespace Manatee.Json.Schema
 				{
 					context.Root = MetaSchemas.Draft07;
 					var metaValidation = MetaSchemas.Draft07.Validate(context);
-					results.MetaSchemaValidations[MetaSchemas.Draft07.Id] = metaValidation;
+					results.MetaSchemaValidations[MetaSchemas.Draft07.Id!] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft07;
 				}
@@ -172,7 +164,7 @@ namespace Manatee.Json.Schema
 				{
 					context.Root = MetaSchemas.Draft2019_09;
 					var metaValidation = MetaSchemas.Draft2019_09.Validate(context);
-					results.MetaSchemaValidations[MetaSchemas.Draft2019_09.Id] = metaValidation;
+					results.MetaSchemaValidations[MetaSchemas.Draft2019_09.Id!] = metaValidation;
 					if (metaValidation.IsValid)
 						results.SupportedVersions |= JsonSchemaVersion.Draft2019_09;
 				}
@@ -198,22 +190,15 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(JsonValue json)
 		{
-			var results = Validate(new SchemaValidationContext
-				{
-					Instance = json,
-					Root = this,
-					BaseRelativeLocation = new JsonPointer("#"),
-					RelativeLocation = new JsonPointer("#"),
-					InstanceLocation = new JsonPointer("#")
-				});
+			var results = Validate(new SchemaValidationContext(this, json, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#")));
 
 			switch (JsonSchemaOptions.OutputFormat)
 			{
 				case SchemaValidationOutputFormat.Flag:
 					results.AdditionalInfo = new JsonObject();
-					results.RelativeLocation = null;
+					results.RelativeLocation = null!;
 					results.AbsoluteLocation = null;
-					results.InstanceLocation = null;
+					results.InstanceLocation = null!;
 					results.NestedResults = new List<SchemaValidationResults>();
 					break;
 				case SchemaValidationOutputFormat.Basic:
@@ -233,7 +218,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			if (_hasRegistered) return;
 			_hasRegistered = true;
@@ -263,7 +248,7 @@ namespace Manatee.Json.Schema
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			var first = pointer.FirstOrDefault();
 			if (first == null)
@@ -293,9 +278,15 @@ namespace Manatee.Json.Schema
 
 		internal SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			Log.Schema($"Begin validation of {context.InstanceLocation} by {context.RelativeLocation}");
 			if (_inherentValue.HasValue)
 			{
-				if (_inherentValue.Value) return new SchemaValidationResults(context);
+				if (_inherentValue.Value)
+				{
+					Log.Schema("`true` schema; all instances valid");
+					return new SchemaValidationResults(context);
+				}
+				Log.Schema("`false` schema; all instances invalid");
 				return new SchemaValidationResults(context)
 					{
 						IsValid = false,
@@ -327,25 +318,29 @@ namespace Manatee.Json.Schema
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
-			if (Id != null && Uri.TryCreate(Id, UriKind.Absolute, out _))
-				JsonSchemaRegistry.Register(this);
-
 			if (refKeyword != null) return refKeyword.Validate(context);
 
 			var results = new SchemaValidationResults(context);
 
 			var nestedResults = this.OrderBy(k => k.ValidationSequence)
-				.Select(k => k.Validate(context)).ToList();
+				.Select(k =>
+					{
+						Log.Schema($"Processing `{k.Name}`");
+						var localResults = k.Validate(context);	
+						Log.Schema($"`{k.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
+						return localResults;
+					}).ToList();
 
 			if (nestedResults.Any(r => !r.IsValid))
 				results.IsValid = false;
 
 			results.NestedResults = nestedResults;
 
+			Log.Schema($"Validation of {context.InstanceLocation} by {context.RelativeLocation} complete: {(results.IsValid ? "valid" : "invalid")}");
 			return results;
 		}
 
-		private Uri _BuildDocumentPath()
+		private Uri? _BuildDocumentPath()
 		{
 			return Id != null
 				? new Uri(Id, UriKind.RelativeOrAbsolute)
@@ -366,15 +361,18 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
-			AddRange(json.Object.Select(kvp =>
-					         {
-								 var keyword = SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer);
-						         if (keyword == null)
-							         OtherData[kvp.Key] = kvp.Value;
+			var toAdd = new List<IJsonSchemaKeyword>();
 
-						         return keyword;
-					         })
-				         .Where(k => k != null));
+			foreach (var kvp in json.Object)
+			{
+				var keyword = SchemaKeywordCatalog.Build(kvp.Key, kvp.Value, serializer);
+				if (keyword != null)
+					toAdd.Add(keyword);
+				else
+					OtherData[kvp.Key] = kvp.Value;
+			}
+
+			AddRange(toAdd);
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -386,7 +384,7 @@ namespace Manatee.Json.Schema
 		{
 			if (_inherentValue.HasValue) return _inherentValue;
 
-			var obj = this.Select(k => new KeyValuePair<string, JsonValue>(k.Name, k.ToJson(serializer))).ToJson();
+			var obj = this.Select(k => new KeyValuePair<string, JsonValue?>(k.Name, k.ToJson(serializer))).ToJson();
 
 			if (OtherData != null)
 			{
@@ -409,7 +407,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(JsonSchema other)
+		public bool Equals(JsonSchema? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -431,7 +429,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as JsonSchema);
 		}
@@ -445,7 +443,7 @@ namespace Manatee.Json.Schema
 		/// Overloads the equals operator for <see cref="JsonSchema"/>.
 		/// </summary>
 		/// <returns>true if the two values represent the same schema; false otherwise</returns>
-		public static bool operator ==(JsonSchema left, JsonSchema right)
+		public static bool operator ==(JsonSchema? left, JsonSchema? right)
 		{
 			return Equals(left, right);
 		}
@@ -453,7 +451,7 @@ namespace Manatee.Json.Schema
 		/// Overloads the not-equal operator for <see cref="JsonSchema"/>.
 		/// </summary>
 		/// <returns>false if the two values represent the same schema; true otherwise</returns>
-		public static bool operator !=(JsonSchema left, JsonSchema right)
+		public static bool operator !=(JsonSchema? left, JsonSchema? right)
 		{
 			return !Equals(left, right);
 		}

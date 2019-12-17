@@ -34,7 +34,9 @@ namespace Manatee.Json.Schema
 			Id = id;
 			MetaSchemaId = metaSchemaId;
 		}
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		internal SchemaVocabulary(string id)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
 			Id = id;
 		}
@@ -44,7 +46,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public bool Equals(SchemaVocabulary other)
+		public bool Equals(SchemaVocabulary? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -55,7 +57,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as SchemaVocabulary);
 		}

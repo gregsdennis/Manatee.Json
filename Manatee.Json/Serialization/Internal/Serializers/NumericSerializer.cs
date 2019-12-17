@@ -1,15 +1,17 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class NumericSerializer : IPrioritizedSerializer
 	{
 		public int Priority => 2;
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType.IsNumericType();
 		}
@@ -18,7 +20,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			var value = Convert.ToDouble(context.Source);
 			return value;
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			var value = context.LocalValue.Number;
 			return Convert.ChangeType(value, context.InferredType);

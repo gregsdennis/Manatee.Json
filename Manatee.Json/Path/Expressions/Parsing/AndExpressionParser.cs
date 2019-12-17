@@ -9,11 +9,12 @@
 			return input[index] == '&' && input[index + 1] == '&';
 		}
 
-		public string TryParse<T>(string source, ref int index, out JsonPathExpression expression)
+		public bool TryParse<T>(string source, ref int index, out JsonPathExpression? expression, out string? errorMessage)
 		{
 			index += 2;
 			expression = new OperatorExpression { Operator = JsonPathOperator.And };
-			return null;
+			errorMessage = null!;
+			return true;
 		}
 	}
 }

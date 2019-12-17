@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -48,8 +49,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used for deserialization.
 		/// </summary>
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		[DeserializationUseOnly]
+		[UsedImplicitly]
 		public PropertyNamesKeyword() { }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		/// <summary>
 		/// Creates an instance of the <see cref="PropertyNamesKeyword"/>.
 		/// </summary>
@@ -67,7 +71,11 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				Log.Schema("Instance not an object; not applicable");
+				return results;
+			}
 
 			var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -92,7 +100,11 @@ namespace Manatee.Json.Schema
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (!valid) break;
+					if (!valid)
+					{
+						Log.Schema("Subschema failed; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);
@@ -103,6 +115,7 @@ namespace Manatee.Json.Schema
 			
 			if (!results.IsValid)
 			{
+				Log.Schema($"Property names {invalidPropertyNames.ToJson()} failed");
 				results.AdditionalInfo["properties"] = invalidPropertyNames;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
@@ -114,7 +127,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			Value.RegisterSubschemas(baseUri, localRegistry);
 		}
@@ -124,7 +137,7 @@ namespace Manatee.Json.Schema
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return Value.ResolveSubschema(pointer, baseUri);
 		}
@@ -151,7 +164,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(PropertyNamesKeyword other)
+		public bool Equals(PropertyNamesKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -160,14 +173,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
+		public bool Equals(IJsonSchemaKeyword? other)
 		{
 			return Equals(other as PropertyNamesKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as PropertyNamesKeyword);
 		}

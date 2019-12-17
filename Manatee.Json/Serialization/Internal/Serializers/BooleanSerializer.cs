@@ -1,20 +1,23 @@
-﻿namespace Manatee.Json.Serialization.Internal.Serializers
+﻿using JetBrains.Annotations;
+
+namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class BooleanSerializer : IPrioritizedSerializer
 	{
 		public int Priority => 1;
 
 		public bool ShouldMaintainReferences => false;
 
-		public bool Handles(SerializationContext context)
+		public bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType == typeof(bool);
 		}
 		public JsonValue Serialize(SerializationContext context)
 		{
-			return (bool) context.Source;
+			return (bool) context.Source!;
 		}
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			return context.LocalValue.Boolean;
 		}

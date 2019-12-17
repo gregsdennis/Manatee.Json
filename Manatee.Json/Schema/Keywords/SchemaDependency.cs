@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
@@ -55,8 +56,17 @@ namespace Manatee.Json.Schema
 					Keyword = $"{context.Misc["dependencyParent"]}/{PropertyName}"
 				};
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
-			if (!context.Instance.Object.ContainsKey(PropertyName)) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				Log.Schema("Instance not an object; not applicable");
+				return results;
+			}
+
+			if (!context.Instance.Object.ContainsKey(PropertyName))
+			{
+				Log.Schema($"Property {PropertyName} not found; not applicable");
+				return results;
+			}
 
 			var newContext = new SchemaValidationContext(context)
 				{
@@ -69,6 +79,7 @@ namespace Manatee.Json.Schema
 
 			if (!nestedResult.IsValid)
 			{
+				Log.Schema($"Property {PropertyName} found, but subschema failed");
 				results.IsValid = false;
 				results.ErrorMessage = ErrorTemplate;
 			}
@@ -83,7 +94,7 @@ namespace Manatee.Json.Schema
 		/// <implementationNotes>
 		/// If the dependency does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			_schema.RegisterSubschemas(baseUri, localRegistry);
 		}
@@ -97,14 +108,14 @@ namespace Manatee.Json.Schema
 		/// If the dependency contains no subschemas, simply return null.
 		/// If the dependency contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
 		/// </implementationNotes>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return _schema.ResolveSubschema(pointer, baseUri);
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(SchemaDependency other)
+		public bool Equals(SchemaDependency? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -114,14 +125,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaDependency other)
+		public bool Equals(IJsonSchemaDependency? other)
 		{
 			return Equals(other as SchemaDependency);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as SchemaDependency);
 		}

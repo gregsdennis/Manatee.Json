@@ -1,12 +1,19 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Expressions
 {
 	internal class HasPropertyExpression<T> : PathExpression<T>, IEquatable<HasPropertyExpression<T>>
 	{
-		public string Name { get; set; }
+		public string Name { get; }
 
-		public override object Evaluate(T json, JsonValue root)
+		public HasPropertyExpression(JsonPath path, bool isLocal, string name)
+			: base(path, isLocal)
+		{
+			Name = name;
+		}
+
+		public override object? Evaluate([MaybeNull] T json, JsonValue? root)
 		{
 			var value = json as JsonValue;
 			if (value == null)
@@ -16,17 +23,17 @@ namespace Manatee.Json.Path.Expressions
 				result = value.Object[Name].Boolean;
 			return result;
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
 			return $"@.{Name}";
 		}
-		public bool Equals(HasPropertyExpression<T> other)
+		public bool Equals(HasPropertyExpression<T>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return base.Equals(other) && string.Equals(Name, other.Name);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as HasPropertyExpression<T>);
 		}

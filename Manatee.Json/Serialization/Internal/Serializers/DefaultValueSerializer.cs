@@ -2,34 +2,39 @@
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class DefaultValueSerializer : ISerializer
+	internal class DefaultValueSerializer : IChainedSerializer
 	{
-		private readonly ISerializer _innerSerializer;
+		public static DefaultValueSerializer Instance { get; } = new DefaultValueSerializer();
 
-		public bool ShouldMaintainReferences => _innerSerializer.ShouldMaintainReferences;
+		private DefaultValueSerializer() { }
 
-		public DefaultValueSerializer(ISerializer innerSerializer)
+		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
-			_innerSerializer = innerSerializer;
-		}
-
-		public bool Handles(SerializationContext context)
-		{
-			return true;
-		}
-		public JsonValue Serialize(SerializationContext context)
-		{
+			Log.Serialization("Checking for default value");
 			if (Equals(context.Source, context.RequestedType.Default()) &&
 			    !context.RootSerializer.Options.EncodeDefaultValues)
+			{
+				Log.Serialization($"Value was default for {context.InferredType.CSharpName()}; returning JSON null");
 				return JsonValue.Null;
+			}
 
-			return _innerSerializer.Serialize(context);
+			if (ReferencingSerializer.Handles(serializer, context.InferredType))
+				return ReferencingSerializer.Instance.TrySerialize(serializer, context);
+
+			return serializer.Serialize(context);
 		}
-		public object Deserialize(SerializationContext context)
+		public object? TryDeserialize(ISerializer serializer, DeserializationContext context)
 		{
-			return context.LocalValue.Type == JsonValueType.Null
-				       ? context.InferredType.Default()
-				       : _innerSerializer.Deserialize(context);
+			if (context.LocalValue.Type == JsonValueType.Null)
+			{
+				Log.Serialization($"Found JSON null; returning default for {context.InferredType.CSharpName()}");
+				return context.InferredType.Default();
+			}
+
+			if (ReferencingSerializer.Handles(serializer, context.InferredType))
+				return ReferencingSerializer.Instance.TryDeserialize(serializer, context);
+
+			return serializer.Deserialize(context);
 		}
 	}
 }

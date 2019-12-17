@@ -6,6 +6,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 {
 	internal abstract class GenericTypeSerializerBase : IPrioritizedSerializer
 	{
+		// TODO: (PERF) cache typed methods
 		private readonly MethodInfo _encodeMethod;
 		private readonly MethodInfo _decodeMethod;
 
@@ -15,31 +16,35 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		protected GenericTypeSerializerBase()
 		{
-			_encodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Encode");
-			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode");
+			_encodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Encode") ??
+			                throw new NotImplementedException("Serializer must implement an _Encode method");
+			_decodeMethod = GetType().GetTypeInfo().GetDeclaredMethod("_Decode") ??
+			                throw new NotImplementedException("Serializer must implement a _Decode method");
 		}
 
-		public abstract bool Handles(SerializationContext context);
+		public abstract bool Handles(SerializationContextBase context);
 
 		public JsonValue Serialize(SerializationContext context)
 		{
-			PrepSource(context);
-			var typeArguments = GetTypeArguments(context.Source.GetType());
+			var source = PrepSource(context);
+			if (source != null)
+				context.OverrideSource(source);
+			var typeArguments = GetTypeArguments(context.Source!.GetType());
 			var toJson = _encodeMethod;
 			if (toJson.IsGenericMethod)
 				toJson = toJson.MakeGenericMethod(typeArguments);
 
-			return (JsonValue) toJson.Invoke(null, new object[] {context});
+			return (JsonValue) toJson.Invoke(null, new object[] {context})!;
 		}
 
-		public object Deserialize(SerializationContext context)
+		public object Deserialize(DeserializationContext context)
 		{
 			var typeArguments = GetTypeArguments(context.InferredType);
 			var fromJson = _decodeMethod;
 			if (fromJson.IsGenericMethod)
 				fromJson = fromJson.MakeGenericMethod(typeArguments);
 
-			return fromJson.Invoke(null, new object[] {context});
+			return fromJson.Invoke(null, new object[] {context})!;
 		}
 
 		protected virtual Type[] GetTypeArguments(Type type)
@@ -49,6 +54,6 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 				: new[] {type};
 		}
 
-		protected virtual void PrepSource(SerializationContext context) { }
+		protected virtual object? PrepSource(SerializationContext context) => null;
 	}
 }

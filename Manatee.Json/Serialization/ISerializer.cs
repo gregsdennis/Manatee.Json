@@ -15,7 +15,7 @@
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns>true if the serializer is up to the task; false otherwise.</returns>
-		bool Handles(SerializationContext context);
+		bool Handles(SerializationContextBase context);
 		/// <summary>
 		/// Serializes a value.
 		/// </summary>
@@ -27,6 +27,6 @@
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns>The typed value represented by the JSON data.</returns>
-		object Deserialize(SerializationContext context);
+		object Deserialize(DeserializationContext context);
 	}
 }

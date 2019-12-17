@@ -49,7 +49,11 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Object) return results;
+			if (context.Instance.Type != JsonValueType.Object)
+			{
+				Log.Schema("Instance not an object; not applicable");
+				return results;
+			}
 
 			var nestedResults = new List<SchemaValidationResults>();
 			var obj = context.Instance.Object;
@@ -61,30 +65,42 @@ namespace Manatee.Json.Schema
 				var pattern = new Regex(patternProperty.Key);
 				var localSchema = patternProperty.Value;
 				var matches = obj.Keys.Where(k => pattern.IsMatch(k));
-				var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, patternProperty.Key);
-				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
-				foreach (var match in matches)
+				if (matches.Any())
 				{
-					context.EvaluatedPropertyNames.Add(match);
-					context.LocallyEvaluatedPropertyNames.Add(match);
-					var newContext = new SchemaValidationContext(context)
-						{
-							Instance = obj[match],
-							BaseRelativeLocation = baseRelativeLocation,
-							RelativeLocation = relativeLocation,
-							InstanceLocation = context.InstanceLocation.CloneAndAppend(match),
-						};
-					var localResults = localSchema.Validate(newContext);
-					valid &= localResults.IsValid;
-					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
-
-					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					Log.Schema($"Properties {matches.ToJson()} are matches for regular expression \"{pattern}\"");
+					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, patternProperty.Key);
+					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
+					foreach (var match in matches)
 					{
-						if (!valid) break;
+						context.EvaluatedPropertyNames.Add(match);
+						context.LocallyEvaluatedPropertyNames.Add(match);
+						var newContext = new SchemaValidationContext(context)
+							{
+								Instance = obj[match],
+								BaseRelativeLocation = baseRelativeLocation,
+								RelativeLocation = relativeLocation,
+								InstanceLocation = context.InstanceLocation.CloneAndAppend(match),
+							};
+						var localResults = localSchema.Validate(newContext);
+						valid &= localResults.IsValid;
+						if (valid)
+							context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+
+						if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+						{
+							if (!valid)
+							{
+								Log.Schema("Subschema failed; halting validation early");
+								break;
+							}
+						}
+						else if (reportChildErrors)
+							nestedResults.Add(localResults);
 					}
-					else if (reportChildErrors)
-						nestedResults.Add(localResults);
+				}
+				else
+				{
+					Log.Schema($"No properties found that match regular expression \"{pattern}\"");
 				}
 			}
 
@@ -102,7 +118,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			foreach (var schema in Values)
 			{
@@ -115,7 +131,7 @@ namespace Manatee.Json.Schema
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			var first = pointer.FirstOrDefault();
 			if (first == null) return null;
@@ -146,13 +162,13 @@ namespace Manatee.Json.Schema
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
 			return this.ToDictionary(kvp => kvp.Key,
-									 kvp => serializer.Serialize<JsonSchema>(kvp.Value))
+									 kvp => serializer.Serialize(kvp.Value))!
 				.ToJson();
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(PatternPropertiesKeyword other)
+		public bool Equals(PatternPropertiesKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -161,14 +177,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
+		public bool Equals(IJsonSchemaKeyword? other)
 		{
 			return Equals(other as PatternPropertiesKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as PatternPropertiesKeyword);
 		}

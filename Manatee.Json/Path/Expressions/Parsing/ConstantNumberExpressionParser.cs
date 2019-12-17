@@ -8,15 +8,17 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		{
 			return char.IsDigit(input[index]);
 		}
-		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
+		public bool TryParse<TIn>(string source, ref int index, out JsonPathExpression? expression, out string? errorMessage)
 		{
-			expression = null;
+			if (!source.TryGetNumber(ref index, out var number, out errorMessage))
+			{
+				expression = null!;
+				return false;
+			}
 
-			var error = source.GetNumber(ref index, out var number);
-			if (error != null) return error;
-
-			expression = new ValueExpression { Value = number };
-			return null;
+			expression = new ValueExpression(number);
+			errorMessage = null!;
+			return true;
 		}
 	}
 }

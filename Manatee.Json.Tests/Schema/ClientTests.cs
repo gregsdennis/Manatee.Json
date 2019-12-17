@@ -15,6 +15,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ClientTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		private static readonly JsonSerializer _serializer = new JsonSerializer();
 
 		[Test]

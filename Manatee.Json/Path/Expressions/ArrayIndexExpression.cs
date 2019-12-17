@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -6,12 +7,25 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class ArrayIndexExpression<T> : PathExpression<T>, IEquatable<ArrayIndexExpression<T>>
 	{
-		public int Index { get; set; }
-		public ExpressionTreeNode<T> IndexExpression { get; set; }
+		public int Index { get; }
+		public ExpressionTreeNode<T> IndexExpression { get; }
 
-		public override object Evaluate(T json, JsonValue root)
+		public ArrayIndexExpression(JsonPath path, bool isLocal, int index)
+			: base(path, isLocal)
 		{
-			var value = IsLocal ? json.AsJsonValue() : root;
+			Index = index;
+			IndexExpression = null!;
+		}
+
+		public ArrayIndexExpression(JsonPath path, bool isLocal, ExpressionTreeNode<T> indexExpression)
+			: base(path, isLocal)
+		{
+			IndexExpression = indexExpression;
+		}
+
+		public override object? Evaluate([MaybeNull] T json, JsonValue? root)
+		{
+			var value = IsLocal ? json?.AsJsonValue() : root;
 			if (value == null)
 				throw new NotSupportedException("ArrayIndex requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
@@ -28,12 +42,12 @@ namespace Manatee.Json.Path.Expressions
 			}
 			return null;
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
 			return string.Format(IsLocal ? "@{0}[{1}]" : "${0}[{1}]", path, _GetIndex());
 		}
-		public bool Equals(ArrayIndexExpression<T> other)
+		public bool Equals(ArrayIndexExpression<T>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -41,7 +55,7 @@ namespace Manatee.Json.Path.Expressions
 			       Index == other.Index &&
 			       Equals(IndexExpression, other.IndexExpression);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as ArrayIndexExpression<T>);
 		}
@@ -58,7 +72,7 @@ namespace Manatee.Json.Path.Expressions
 
 		private int _GetIndex()
 		{
-			var value = IndexExpression?.Evaluate(default(T), null);
+			var value = IndexExpression?.Evaluate(default!, null);
 			if (value != null) return (int) value;
 			return Index;
 		}

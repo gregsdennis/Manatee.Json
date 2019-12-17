@@ -112,7 +112,7 @@ public class PointSerializer : ISerializer
         return new JsonObject {{"x", p.x}, {"y", p.y}};
     }
 
-    static object Deserialize(SerializationContext context)
+    static object? Deserialize(DeserializationContext context)
     {
         return new Point(json.Object["x"].Number, json.Object["y"].Number);
     }

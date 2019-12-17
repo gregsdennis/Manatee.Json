@@ -12,6 +12,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ContainsSchemaTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		[Test]
 		public void Contains_Valid()
 		{

@@ -85,7 +85,8 @@ The default output format is the condensed hierarchy, but this can be configured
 
 ### Examples of output
 
-#### Verbose Hierarchy
+<details>
+  <summary>Verbose Hierarchy</summary>
 
 ```json
 {
@@ -139,7 +140,10 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-#### Condensed Hierarchy
+</details><br>
+
+<details>
+  <summary>Condensed Hierarchy</summary>
 
 ```json
 {
@@ -172,7 +176,10 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-#### Flat List
+</details><br>
+
+<details>
+  <summary>Flat List</summary>
 
 ```json
 {
@@ -207,6 +214,8 @@ The default output format is the condensed hierarchy, but this can be configured
     ]
 }
 ```
+
+</details>
 
 ## Value format validation
 

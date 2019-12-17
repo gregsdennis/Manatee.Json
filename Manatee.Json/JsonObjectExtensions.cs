@@ -13,7 +13,7 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
 		/// <returns>A <see cref="string"/> or null if the key is not found or is not a <see cref="string"/></returns>
-		public static string TryGetString(this JsonObject obj, string key)
+		public static string? TryGetString(this JsonObject obj, string key)
 		{
 			return obj == null ? null : obj.ContainsKey(key) && obj[key].Type == JsonValueType.String ? obj[key].String : null;
 		}
@@ -43,7 +43,7 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
 		/// <returns>A <see cref="JsonArray"/> or null if the key is not found or is not a <see cref="JsonArray"/></returns>
-		public static JsonArray TryGetArray(this JsonObject obj, string key)
+		public static JsonArray? TryGetArray(this JsonObject obj, string key)
 		{
 			return obj == null ? null : obj.ContainsKey(key) && obj[key].Type == JsonValueType.Array ? obj[key].Array : null;
 		}
@@ -53,7 +53,7 @@ namespace Manatee.Json
 		/// <param name="obj">The <see cref="JsonObject"/> to search</param>
 		/// <param name="key">The key</param>
 		/// <returns>A <see cref="JsonObject"/> or null if the key is not found or is not a <see cref="JsonObject"/></returns>
-		public static JsonObject TryGetObject(this JsonObject obj, string key)
+		public static JsonObject? TryGetObject(this JsonObject obj, string key)
 		{
 			return obj == null ? null : obj.ContainsKey(key) && obj[key].Type == JsonValueType.Object ? obj[key].Object : null;
 		}

@@ -15,12 +15,12 @@ namespace Manatee.Json.Internal
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsInt(this double value)
 		{
-			return Math.Ceiling(value) == Math.Floor(value);
+			return Math.Abs(Math.Ceiling(value) - Math.Floor(value)) < double.Epsilon;
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int GetCollectionHashCode<T>(this IEnumerable<T> collection)
 		{
-			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ obj.GetHashCode());
+			return collection.Aggregate(0, (current, obj) => unchecked(current * 397) ^ (obj?.GetHashCode() ?? 0));
 		}
 		public static int GetCollectionHashCode<T>(this IEnumerable<KeyValuePair<string, T>> collection)
 		{
@@ -35,20 +35,20 @@ namespace Manatee.Json.Internal
 					                            }
 				                            });
 		}
-		public static JsonValue AsJsonValue(this object value)
+		public static JsonValue? AsJsonValue(this object value)
 		{
 			if (ReferenceEquals(value, null)) return null;
 			if (value is JsonValue jsonValue) return jsonValue;
 			if (value is JsonArray jsonArray) return jsonArray;
 			if (value is JsonObject jsonObject) return jsonObject;
 			if (value is string s) return s;
-			if (value is bool) return (bool) value;
+			if (value is bool b) return b;
 			if (value.IsNumber()) return Convert.ToDouble(value);
 
 			return null;
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNumber(this object value)
+		public static bool IsNumber(this object? value)
 		{
 			return value is double ||
 			       value is float ||

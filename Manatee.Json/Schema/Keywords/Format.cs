@@ -101,27 +101,27 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// If created with a regular expression, this gets the regular expression.
 		/// </summary>
-		public Regex ValidationRegex { get; }
+		public Regex? ValidationRegex { get; }
 
 		/// <summary>
 		/// If created with a validation function, this gets the function.
 		/// </summary>
-		public Func<JsonValue, bool> ValidationFunction { get; }
+		public Func<JsonValue, bool>? ValidationFunction { get; }
 
 		internal bool IsKnown { get; private set; } = true;
 
-		private static string[] DateTimeFormats = new[]
-		{
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffffffK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffffK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ssK",
-			"yyyy'-'MM'-'dd'T'HH':'mm':'ss",
-		};
+		private static readonly string[] _dateTimeFormats =
+			{
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffffffK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffffK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ffK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ssK",
+				"yyyy'-'MM'-'dd'T'HH':'mm':'ss",
+			};
 
 		static Format()
 		{
@@ -130,7 +130,7 @@ namespace Manatee.Json.Schema
 			Date = new Format("date", JsonSchemaVersion.Draft2019_09,
 			                        @"^(\d{4})-(\d{2})-(\d{2})$");
 			DateTime = new Format("date-time", JsonSchemaVersion.All,
-										s => s.Type != JsonValueType.String || DateTimeOffset.TryParseExact(s.String, DateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out _));
+										s => s.Type != JsonValueType.String || DateTimeOffset.TryParseExact(s.String, _dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out _));
 			Duration = new Format("duration", JsonSchemaVersion.Draft2019_09,
 			                            @"^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$");
 			Email = new Format("email", JsonSchemaVersion.All,
@@ -145,7 +145,7 @@ namespace Manatee.Json.Schema
 			                                @"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?");
 			Iri = new Format("iri", JsonSchemaVersion.Draft2019_09, s => s.Type != JsonValueType.String || System.Uri.IsWellFormedUriString(s.String, UriKind.RelativeOrAbsolute));
 			JsonPointer = new Format("json-pointer", JsonSchemaVersion.Draft2019_09, @"^(/(([^/~])|(~[01]))+)*/?$");
-			Regex = new Format("regex", JsonSchemaVersion.All, null, true);
+			Regex = new Format("regex", JsonSchemaVersion.All, string.Empty, true);
 			RelativeJsonPointer = new Format("relative-json-pointer", JsonSchemaVersion.Draft2019_09, @"^[0-9]+#/(([^/~])|(~[01]))*$");
 			UriReference = new Format("uri-reference", JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_09,
 			                                @"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?");
@@ -193,11 +193,9 @@ namespace Manatee.Json.Schema
 		/// <returns>True if the value is valid, otherwise false.</returns>
 		public bool Validate(JsonValue value)
 		{
-			if (ValidationRegex == null || value.Type != JsonValueType.String)
-			{
-				return ValidationFunction == null || ValidationFunction(value);
-			}
-			return ValidationRegex.IsMatch(value.String);
+			return ValidationRegex == null || value.Type != JsonValueType.String
+				? ValidationFunction == null || ValidationFunction(value)
+				: ValidationRegex.IsMatch(value.String);
 		}
 
 		/// <summary>
@@ -207,8 +205,11 @@ namespace Manatee.Json.Schema
 		/// <returns>A <see cref="Format"/> object, or null if none exists for the key.</returns>
 		public static Format GetFormat(string formatKey)
 		{
-			return formatKey != null && _lookup.ContainsKey(formatKey)
-				? _lookup[formatKey]
+			if (formatKey == null)
+				throw new ArgumentNullException(nameof(formatKey));
+
+			return _lookup.TryGetValue(formatKey, out var format)
+				? format
 				: new Format(formatKey, JsonSchemaVersion.None, s => JsonSchemaOptions.AllowUnknownFormats) {IsKnown = false};
 		}
 	}

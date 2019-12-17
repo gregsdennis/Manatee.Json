@@ -10,7 +10,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 			var unary = body as UnaryExpression;
 			if (unary == null)
 				throw new InvalidOperationException();
-			return new NotExpression<T> { Root = ExpressionTranslator.TranslateNode<T>(unary.Operand) };
+			return new NotExpression<T>(ExpressionTranslator.TranslateNode<T>(unary.Operand));
 		}
 	}
 }

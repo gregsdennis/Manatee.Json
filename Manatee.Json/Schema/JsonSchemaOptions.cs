@@ -20,7 +20,12 @@ namespace Manatee.Json.Schema
 
 		private class LocationErrorCollectionCondition : IErrorCollectionCondition
 		{
-			public JsonPointer Location { get; set; }
+			public JsonPointer Location { get; private set; }
+
+			public LocationErrorCollectionCondition(JsonPointer location)
+			{
+				Location = location;
+			}
 
 			public bool ShouldExcludeChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 			{
@@ -30,7 +35,12 @@ namespace Manatee.Json.Schema
 
 		private class KeywordErrorCollectionCondition : IErrorCollectionCondition
 		{
-			public Type Type { get; set; }
+			public Type Type { get; private set; }
+
+			public KeywordErrorCollectionCondition(Type type)
+			{
+				Type = type;
+			}
 
 			public bool ShouldExcludeChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 			{
@@ -39,14 +49,14 @@ namespace Manatee.Json.Schema
 		}
 
 		private static readonly List<IErrorCollectionCondition> _errorCollectionConditions;
-		private static Func<string, string> _download;
+		private static Func<string, string>? _download;
 
 		/// <summary>
 		/// Gets and sets a method used to download online schema.
 		/// </summary>
 		public static Func<string, string> Download
 		{
-			get { return _download ?? (_download = _BasicDownload); }
+			get { return _download ??= _BasicDownload; }
 			set { _download = value; }
 		}
 
@@ -108,7 +118,7 @@ namespace Manatee.Json.Schema
 					var filename = Uri.UnescapeDataString(uri.AbsolutePath);
 					return File.ReadAllText(filename);
 				case "manatee":
-					return null;
+					return null!;
 				default:
 					throw new Exception($"URI scheme '{uri.Scheme}' is not supported.  Only HTTP(S) and local file system URIs are allowed.");
 			}
@@ -127,7 +137,7 @@ namespace Manatee.Json.Schema
 		public static void IgnoreErrorsForChildren<T>()
 			where T : IJsonSchemaKeyword
 		{
-			_errorCollectionConditions.Add(new KeywordErrorCollectionCondition {Type = typeof(T)});
+			_errorCollectionConditions.Add(new KeywordErrorCollectionCondition(typeof(T)));
 		}
 
 		/// <summary>
@@ -141,7 +151,7 @@ namespace Manatee.Json.Schema
 		/// </remarks>
 		public static void IgnoreErrorsForChildren(JsonPointer location)
 		{
-			_errorCollectionConditions.Add(new LocationErrorCollectionCondition {Location = location});
+			_errorCollectionConditions.Add(new LocationErrorCollectionCondition(location));
 		}
 
 		/// <summary>

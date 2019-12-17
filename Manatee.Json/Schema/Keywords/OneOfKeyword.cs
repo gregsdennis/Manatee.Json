@@ -52,6 +52,8 @@ namespace Manatee.Json.Schema
 			var nestedResults = new List<SchemaValidationResults>();
 			var validCount = 0;
 
+			var contextCopy = new SchemaValidationContext(context);
+
 			foreach (var s in this)
 			{
 				var newContext = new SchemaValidationContext(context)
@@ -62,13 +64,16 @@ namespace Manatee.Json.Schema
 				var localResults = s.Validate(newContext);
 				if (localResults.IsValid)
 					validCount++;
-				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
-				context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, newContext.LastEvaluatedIndex);
+				Log.Schema($"`{Name}` {validCount} items valid so far");
+				contextCopy.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
-					if (validCount > 1) break;
+					if (validCount > 1)
+					{
+						Log.Schema("More than one subschema succeeded; halting validation early");
+						break;
+					}
 				}
 				else if (reportChildErrors)
 					nestedResults.Add(localResults);
@@ -82,8 +87,13 @@ namespace Manatee.Json.Schema
 
 			if (!results.IsValid)
 			{
+				Log.Schema($"{validCount} subschemas passed validation; expected only one");
 				results.AdditionalInfo["passed"] = validCount;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			}
+			else
+			{
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(contextCopy);
 			}
 
 			return results;
@@ -93,7 +103,7 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
 		{
 			foreach (var schema in this)
 			{
@@ -106,7 +116,7 @@ namespace Manatee.Json.Schema
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			var first = pointer.FirstOrDefault();
 			if (first == null) return null;
@@ -141,7 +151,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(OneOfKeyword other)
+		public bool Equals(OneOfKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -150,14 +160,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
+		public bool Equals(IJsonSchemaKeyword? other)
 		{
 			return Equals(other as OneOfKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as OneOfKeyword);
 		}

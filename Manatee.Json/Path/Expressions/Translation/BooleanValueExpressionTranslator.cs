@@ -10,7 +10,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 			var constant = body as ConstantExpression;
 			if (constant == null)
 				throw new InvalidOperationException();
-			return new ValueExpression<T> { Value = constant.Value };
+			return new ValueExpression<T>(constant.Value);
 		}
 	}
 }

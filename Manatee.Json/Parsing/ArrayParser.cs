@@ -1,4 +1,5 @@
-using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,34 +13,38 @@ namespace Manatee.Json.Parsing
 		{
 			return c == '[';
 		}
-		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage, bool allowExtraChars)
 		{
-			System.Diagnostics.Debug.Assert(index < source.Length && source[index] == '[');
+			Debug.Assert(index < source.Length && source[index] == '[');
 
-			bool complete = false;
+			var complete = false;
 			var array = new JsonArray();
 			value = array;
 			var length = source.Length;
 			index++;
 			while (index < length)
 			{
-				var message = source.SkipWhiteSpace(ref index, length, out char c);
-				if (message != null) return message;
+				errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
+				if (errorMessage != null) return false;
 				// check for empty array
 				if (c == ']')
+				{
 					if (array.Count == 0)
 					{
 						complete = true;
 						index++;
 						break;
 					}
-					else return "Expected value.";
+
+					errorMessage = "Expected value.";
+					return false;
+				}
 				// get value
-				message = JsonParser.Parse(source, ref index, out JsonValue item);
-				array.Add(item);
-				if (message != null) return message;
-				message = source.SkipWhiteSpace(ref index, length, out c);
-				if (message != null) return message;
+				var success = JsonParser.TryParse(source, ref index, out var item, out errorMessage);
+				array.Add(item!);
+				if (!success) return false;
+				errorMessage = source.SkipWhiteSpace(ref index, length, out c);
+				if (errorMessage != null) return false;
 				// check for end or separator
 				index++;
 				if (c == ']')
@@ -47,17 +52,26 @@ namespace Manatee.Json.Parsing
 					complete = true;
 					break;
 				}
-				if (c != ',') return "Expected ','.";
+
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					return false;
+				}
 			}
 
 			if (!complete)
-				return "Unterminated array (missing ']')";
+			{
+				errorMessage = "Unterminated array (missing ']')";
+				return false;
+			}
 
-			return null;
+			errorMessage = null;
+			return true;
 		}
-		public string TryParse(TextReader stream, out JsonValue value)
+		public bool TryParse(TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
-			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
+			Debug.Assert(stream.Peek() == '[');
 
 			bool complete = false;
 			var array = new JsonArray();
@@ -65,23 +79,27 @@ namespace Manatee.Json.Parsing
 			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '[' or ','
-				var message = stream.SkipWhiteSpace(out char c);
-				if (message != null) return message;
+				errorMessage = stream.SkipWhiteSpace(out var c);
+				if (errorMessage != null) return false;
 				// check for empty array
 				if (c == ']')
+				{
 					if (array.Count == 0)
 					{
 						complete = true;
 						stream.Read(); // waste the ']'
 						break;
 					}
-					else return "Expected value.";
+
+					errorMessage = "Expected value.";
+					return false;
+				}
 				// get value
-				message = JsonParser.Parse(stream, out JsonValue item);
-				array.Add(item);
-				if (message != null) return message;
-				message = stream.SkipWhiteSpace(out c);
-				if (message != null) return message;
+				var success = JsonParser.TryParse(stream, out var item, out errorMessage);
+				array.Add(item!);
+				if (!success) return false;
+				errorMessage = stream.SkipWhiteSpace(out c);
+				if (errorMessage != null) return false;
 				// check for end or separator
 				if (c == ']')
 				{
@@ -89,25 +107,33 @@ namespace Manatee.Json.Parsing
 					stream.Read(); // waste the ']'
 					break;
 				}
-				if (c != ',') return "Expected ','.";
+
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					return false;
+				}
 			}
 
 			if (!complete)
-				return "Unterminated array (missing ']')";
+			{
+				errorMessage = "Unterminated array (missing ']')";
+				return false;
+			}
 
-			return null;
+			errorMessage = null;
+			return true;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
-			System.Diagnostics.Debug.Assert(stream.Peek() == '[');
+			Debug.Assert(stream.Peek() == '[');
 
 			var scratch = SmallBufferCache.Acquire(1);
 			var array = new JsonArray();
 
 			bool complete = false;
 
-			char c;
-			string errorMessage = null;
+			string? errorMessage = null;
 			while (stream.Peek() != -1)
 			{
 				if (token.IsCancellationRequested)
@@ -117,6 +143,7 @@ namespace Manatee.Json.Parsing
 				}
 
 				await stream.TryRead(scratch, 0, 1, token); // waste the '[' or ','
+				char c;
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null)
 					break;
@@ -130,19 +157,16 @@ namespace Manatee.Json.Parsing
 						await stream.TryRead(scratch, 0, 1, token); // waste the ']'
 						break;
 					}
-					else
-					{
-						errorMessage = "Expected value.";
-						break;
-					}
+
+					errorMessage = "Expected value.";
+					break;
 				}
 
 				// get value
-				JsonValue item;
+				JsonValue? item;
 				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
-				array.Add(item);
-				if (errorMessage != null)
-					break;
+				array.Add(item!);
+				if (errorMessage != null) break;
 
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null)
@@ -163,10 +187,8 @@ namespace Manatee.Json.Parsing
 				}
 			}
 
-			if (!complete)
-			{
-				errorMessage = "Unterminated array (missing ']')";
-			}
+			if (!complete) 
+				errorMessage ??= "Unterminated array (missing ']')";
 
 			SmallBufferCache.Release(scratch);
 			return (errorMessage, array);

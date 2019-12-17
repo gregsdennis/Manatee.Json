@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Manatee.Json.Internal;
 
@@ -6,12 +7,26 @@ namespace Manatee.Json.Path.Expressions
 {
 	internal class IndexOfExpression<T> : PathExpression<T>, IEquatable<IndexOfExpression<T>>
 	{
-		public JsonValue Parameter { get; set; }
-		public ExpressionTreeNode<JsonArray> ParameterExpression { get; set; }
+		public JsonValue Parameter { get; }
+		public ExpressionTreeNode<JsonArray> ParameterExpression { get; }
 
-		public override object Evaluate(T json, JsonValue root)
+		public IndexOfExpression(JsonPath path, bool isLocal, JsonValue parameter)
+			: base(path, isLocal)
 		{
-			var value = IsLocal ? json.AsJsonValue() : root;
+			Parameter = parameter;
+			ParameterExpression = null!;
+		}
+
+		public IndexOfExpression(JsonPath path, bool isLocal, ExpressionTreeNode<JsonArray> parameterExpression)
+			: base(path, isLocal)
+		{
+			Parameter = null!;
+			ParameterExpression = parameterExpression;
+		}
+
+		public override object? Evaluate([MaybeNull] T json, JsonValue? root)
+		{
+			var value = IsLocal ? json?.AsJsonValue() : root;
 			if (value == null)
 				throw new NotSupportedException("IndexOf requires a JsonValue to evaluate.");
 			var results = Path.Evaluate(value);
@@ -19,23 +34,23 @@ namespace Manatee.Json.Path.Expressions
 				throw new InvalidOperationException($"Path '{Path}' returned more than one result on value '{value}'");
 			var result = results.FirstOrDefault();
 			var parameter = _GetParameter();
-			return result != null && result.Type == JsonValueType.Array && parameter != null
-					   ? result.Array.IndexOf(parameter)
-					   : (object)null;
+
+			if (result == null || result.Type != JsonValueType.Array || parameter == null) return null;
+			return result.Array.IndexOf(parameter);
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
 			var parameter = ParameterExpression?.ToString() ?? Parameter.ToString();
 			return string.Format(IsLocal ? "@{0}.indexOf({1})" : "${0}.indexOf({1})", path, parameter);
 		}
-		public bool Equals(IndexOfExpression<T> other)
+		public bool Equals(IndexOfExpression<T>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return base.Equals(other) && Equals(ParameterExpression, other.ParameterExpression);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as IndexOfExpression<T>);
 		}
@@ -50,25 +65,19 @@ namespace Manatee.Json.Path.Expressions
 			}
 		}
 
-		private JsonValue _GetParameter()
+		private JsonValue? _GetParameter()
 		{
-			var value = ParameterExpression?.Evaluate(null, null);
-			if (value != null)
-			{
-				if (value is double)
-					return new JsonValue((double)value);
-				if (value is bool)
-					return new JsonValue((bool)value);
-				if (value is string)
-					return new JsonValue((string)value);
-				if (value is JsonArray)
-					return new JsonValue((JsonArray)value);
-				if (value is JsonObject)
-					return new JsonValue((JsonObject)value);
-				if (value is JsonValue)
-					return (JsonValue) value;
-			}
-			return Parameter;
+			var value = ParameterExpression?.Evaluate(null!, null);
+			return value switch
+				{
+					double d => new JsonValue(d),
+					bool b => new JsonValue(b),
+					string s => new JsonValue(s),
+					JsonArray array => new JsonValue(array),
+					JsonObject jsonObject => new JsonValue(jsonObject),
+					JsonValue jsonValue => jsonValue,
+					_ => Parameter
+				};
 		}
 	}
 }

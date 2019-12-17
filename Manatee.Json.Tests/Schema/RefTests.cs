@@ -5,6 +5,12 @@ namespace Manatee.Json.Tests.Schema
 {
 	public class RefTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		[Test]
 		public void RefResolvesToInternallyStoredSchema()
 		{

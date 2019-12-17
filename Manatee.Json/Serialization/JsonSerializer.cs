@@ -1,6 +1,7 @@
 ﻿using System;
-using Manatee.Json.Pointer;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization.Internal;
+using Manatee.Json.Serialization.Internal.Serializers;
 
 namespace Manatee.Json.Serialization
 {
@@ -10,15 +11,15 @@ namespace Manatee.Json.Serialization
 	public class JsonSerializer
 	{
 		private int _callCount;
-		private JsonSerializerOptions _options;
-		private AbstractionMap _abstractionMap;
+		private JsonSerializerOptions? _options;
+		private AbstractionMap? _abstractionMap;
 
 		/// <summary>
 		/// Gets or sets a set of options for this serializer.
 		/// </summary>
 		public JsonSerializerOptions Options
 		{
-			get { return _options ?? (_options = new JsonSerializerOptions(JsonSerializerOptions.Default)); }
+			get { return _options ??= new JsonSerializerOptions(JsonSerializerOptions.Default); }
 			set { _options = value; }
 		}
 		/// <summary>
@@ -26,7 +27,7 @@ namespace Manatee.Json.Serialization
 		/// </summary>
 		public AbstractionMap AbstractionMap
 		{
-			get { return _abstractionMap ?? (_abstractionMap = new AbstractionMap(AbstractionMap.Default)); }
+			get { return _abstractionMap ??= new AbstractionMap(AbstractionMap.Default); }
 			set { _abstractionMap = value; }
 		}
 
@@ -38,14 +39,7 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize<T>(T obj)
 		{
-			var context = new SerializationContext(this)
-				{
-					InferredType = obj?.GetType() ?? typeof(T),
-					RequestedType = typeof(T),
-					CurrentLocation = new JsonPointer("#"),
-					Source = obj
-				};
-			return Serialize(context);
+			return Serialize(typeof(T), obj!);
 		}
 		/// <summary>
 		/// Serializes an object to a JSON structure.
@@ -55,23 +49,22 @@ namespace Manatee.Json.Serialization
 		/// <returns>The JSON representation of the object.</returns>
 		public JsonValue Serialize(Type type, object obj)
 		{
-			var context = new SerializationContext(this)
-				{
-					InferredType = obj?.GetType() ?? type,
-					RequestedType = type,
-					CurrentLocation = new JsonPointer("#"),
-					Source = obj
-				};
-			return Serialize(context);
+			var context = new SerializationContext(this);
+			context.Push(obj?.GetType() ?? type, type, null!, obj);
+			var value = Serialize(context);
+			context.Pop();
+			return value;
 		}
 
 		internal JsonValue Serialize(SerializationContext context)
 		{
 			_callCount++;
+			Log.Serialization($"Serializing {context.CurrentLocation}");
 			var serializer = SerializerFactory.GetSerializer(context);
-			var json = serializer.Serialize(context);
+			var json = DefaultValueSerializer.Instance.TrySerialize(serializer, context);
 			if (--_callCount == 0)
 			{
+				Log.Serialization("Serialization complete; clearing reference map");
 				context.SerializationMap.Clear();
 			}
 			return json;
@@ -107,7 +100,7 @@ namespace Manatee.Json.Serialization
 		/// type.</exception>
 		public T Deserialize<T>(JsonValue json)
 		{
-			return (T) Deserialize(typeof(T), json);
+			return (T) Deserialize(typeof(T), json)!;
 		}
 		/// <summary>
 		/// Deserializes a JSON structure to an object of the appropriate type.
@@ -118,27 +111,25 @@ namespace Manatee.Json.Serialization
 		/// <exception cref="TypeDoesNotContainPropertyException">Optionally thrown during automatic
 		/// deserialization when the JSON contains a property which is not defined by the requested
 		/// type.</exception>
-		public object Deserialize(Type type, JsonValue json)
+		public object? Deserialize(Type type, JsonValue json)
 		{
-			var context = new SerializationContext(this, json)
-				{
-					InferredType = type,
-					RequestedType = type,
-					CurrentLocation = new JsonPointer("#"),
-					LocalValue = json
-				};
-
-			return Deserialize(context);
+			var context = new DeserializationContext(this, json);
+			context.Push(type, null!, json);
+			var value = Deserialize(context);
+			context.Pop();
+			return value;
 		}
 
-		internal object Deserialize(SerializationContext context)
+		internal object? Deserialize(DeserializationContext context)
 		{
 			_callCount++;
 			var serializer = SerializerFactory.GetSerializer(context);
-			var obj = serializer.Deserialize(context);
+			var obj = SchemaValidator.Instance.TryDeserialize(serializer, context);
 			if (--_callCount == 0)
 			{
-				context.SerializationMap.Complete(obj);
+				Log.Serialization("Primary deserialization complete; processing references");
+				if (obj != null)
+					context.SerializationMap.Complete(obj);
 			}
 			return obj;
 		}

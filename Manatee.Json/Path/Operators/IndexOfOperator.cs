@@ -25,19 +25,19 @@ namespace Manatee.Json.Path.Operators
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return $".indexOf({Parameter})";
 		}
 
-		public bool Equals(IndexOfOperator other)
+		public bool Equals(IndexOfOperator? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(Parameter, other.Parameter);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as IndexOfOperator);
 		}

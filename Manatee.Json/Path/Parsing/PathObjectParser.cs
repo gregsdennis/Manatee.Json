@@ -1,4 +1,4 @@
-﻿using Manatee.Json.Internal;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Parsing
 {
@@ -16,25 +16,27 @@ namespace Manatee.Json.Path.Parsing
 					|| allowedChars.IndexOf(input[index + 1]) >= 0);
 		}
 
-		public string TryParse(string source, ref int index, ref JsonPath path)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			if (path == null)
-				return "Start token not found.";
+			{
+				errorMessage = "Start token not found.";
+				return false;
+			}
 
 		    index++;
-
-			if (source[index] == '*')
+		    if (source[index] == '*')
 			{
 				path = path.Name();
 				index++;
-				return null;
+				errorMessage = null!;
+				return true;
 			}
 
-		    var error = source.GetKey(ref index, out var key);
-			if (error != null) return error;
+			if (!source.TryGetKey(ref index, out var key, out errorMessage)) return false;
 
 			path = path.Name(key);
-			return null;
+			return true;
 		}
 	}
 }
