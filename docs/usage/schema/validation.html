@@ -134,7 +134,8 @@ var nonObjectResults = schame.Validate(nonObject);
 <p>The default output format is the condensed hierarchy, but this can be configured via the <code>JsonSchemaOptions.OutputFormat</code> static property.</p>
 <p><em><strong>NOTE</strong> It's only possible to translate from a more detailed to a less detailed format.</em></p>
 <h3 id="examples-of-output">Examples of output</h3>
-<h4 id="verbose-hierarchy">Verbose Hierarchy</h4>
+<details>
+  <summary>Verbose Hierarchy</summary>
 <pre><code class="lang-json">{
   &quot;valid&quot; : false,
   &quot;keywordLocation&quot; : &quot;#&quot;,
@@ -185,7 +186,9 @@ var nonObjectResults = schame.Validate(nonObject);
     ]
 }
 </code></pre>
-<h4 id="condensed-hierarchy">Condensed Hierarchy</h4>
+</details><br>
+<details>
+  <summary>Condensed Hierarchy</summary>
 <pre><code class="lang-json">{
   &quot;valid&quot; : false,
   &quot;keywordLocation&quot; : &quot;#/allOf&quot;,
@@ -215,7 +218,9 @@ var nonObjectResults = schame.Validate(nonObject);
     ]
 }
 </code></pre>
-<h4 id="flat-list">Flat List</h4>
+</details><br>
+<details>
+  <summary>Flat List</summary>
 <pre><code class="lang-json">{
   &quot;valid&quot; : false,
   &quot;errors&quot; : [
@@ -248,6 +253,7 @@ var nonObjectResults = schame.Validate(nonObject);
     ]
 }
 </code></pre>
+</details>
 <h2 id="value-format-validation">Value format validation</h2>
 <p>The <code>format</code> keyword has been around a while.  It's available in all of the drafts supported by Manatee.Json.  Although this keyword is techincally classified as an annotation, the specification does allow (the word used is &quot;SHOULD&quot;) that implementation provide some level of validation on it so long as that validation may be configured on and off.</p>
 <p>Manatee.Json makes a valiant attempt at validating a few of them.  These are hardcoded as static properties on the <code>Format</code> class.  Out of the box, these are available:</p>
