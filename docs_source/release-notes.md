@@ -4,7 +4,7 @@
 
 <span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
 
-This change primarily adds .Net Core 3.0 support.  It has also been reviewed and updated to support null reference types.
+This change primarily adds .Net Core 3.0 support.  It has also been updated to support null reference types.
 
 ## Logging
 
@@ -12,18 +12,18 @@ Some cursory verbose logging has been introduced to allow the client to see what
 
 The log categories currently are general, serialization, and schema.  This allows the client to enable or disable certain activities, so that, for instance, they can only enable schema validation logging if they wish.  The `JsonOptions.LogCategory` static property controls what categories are actually sent.
 
-**There is no default implementation for `ILog`.**  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are *a lot* of logs.
+**There is no default implementation for `ILog`.**  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are *a lot* of logs which can add processing time.
 
 ## Bug fixes
 
-`unevaluatedItems` would not properly process properties that nested keywords touched but failed.  See https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291 for details.
+`unevaluatedItems` would not properly process items that nested keywords touched but failed.  See [JSON-Schema-Test-Suite #291](https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291) for details and an example of the logging mentioned above.
 
 ## Breaking Changes
 
-- `JsonArray.OfType(JsonValueType)` now throws `ArgumentNullException` when passed a null array.
-- `JsonSyntaxException.Source` replaced by `SourceData` so that it doesn't hide `Exception.Source`.
 - `JsonValue` parameterless constructor removed.  Use `JsonValue.Null` instead.
 - `JsonValue` parameterized constructor arguments changed to non-nullable or will throw `ArgumentNullException`.
+- `JsonArray.OfType(JsonValueType)` now throws `ArgumentNullException` when passed a null array.
+- `JsonSyntaxException.Source` replaced by `SourceData` so that it doesn't hide `Exception.Source`.
 - `SerializationContext` used only for serialization now.  `DeserializationContext` now introduced for deserialization.  This changes method signatures for `ISerializer`.  Additional notes below.
 
 ### Serialization changes
