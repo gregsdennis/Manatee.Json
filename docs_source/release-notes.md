@@ -1,6 +1,14 @@
+# 12.0.1
+
+*Released on 19 Dec, 2019*
+
+<span id="patch">patch</span>
+
+([#241](https://github.com/gregsdennis/Manatee.Json/pulls/241)) Creating an override for a schema format causes `ArgumentException` because the key is already added.
+
 # 12.0.0
 
-*Released on 27 Nov, 2019*
+*Released on 18 Dec, 2019*
 
 <span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
 
