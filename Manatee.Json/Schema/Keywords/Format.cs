@@ -128,32 +128,32 @@ namespace Manatee.Json.Schema
 			_lookup = new Dictionary<string, Format>();
 
 			Date = new Format("date", JsonSchemaVersion.Draft2019_09,
-			                        @"^(\d{4})-(\d{2})-(\d{2})$");
+									@"^(\d{4})-(\d{2})-(\d{2})$");
 			DateTime = new Format("date-time", JsonSchemaVersion.All,
 										s => s.Type != JsonValueType.String || DateTimeOffset.TryParseExact(s.String, _dateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out _));
 			Duration = new Format("duration", JsonSchemaVersion.Draft2019_09,
-			                            @"^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$");
+										@"^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$");
 			Email = new Format("email", JsonSchemaVersion.All,
-			                         @"^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|""(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*"")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$");
+									 @"^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|""(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*"")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$");
 			HostName = new Format("hostname", JsonSchemaVersion.All,
-			                            @"^(?!.{255,})([a-zA-Z0-9-]{0,63}\.)*([a-zA-Z0-9-]{0,63})$");
+										@"^(?!.{255,})([a-zA-Z0-9-]{0,63}\.)*([a-zA-Z0-9-]{0,63})$");
 			Ipv4 = new Format("ipv4", JsonSchemaVersion.All,
-			                        @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+									@"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 			Ipv6 = new Format("ipv6", JsonSchemaVersion.All,
-			                        @"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$");
+									@"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$");
 			IriReference = new Format("iri-reference", JsonSchemaVersion.Draft2019_09,
-			                                @"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?");
+											@"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?");
 			Iri = new Format("iri", JsonSchemaVersion.Draft2019_09, s => s.Type != JsonValueType.String || System.Uri.IsWellFormedUriString(s.String, UriKind.RelativeOrAbsolute));
 			JsonPointer = new Format("json-pointer", JsonSchemaVersion.Draft2019_09, @"^(/(([^/~])|(~[01]))+)*/?$");
 			Regex = new Format("regex", JsonSchemaVersion.All, string.Empty, true);
 			RelativeJsonPointer = new Format("relative-json-pointer", JsonSchemaVersion.Draft2019_09, @"^[0-9]+#/(([^/~])|(~[01]))*$");
 			UriReference = new Format("uri-reference", JsonSchemaVersion.Draft06 | JsonSchemaVersion.Draft07 | JsonSchemaVersion.Draft2019_09,
-			                                @"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?");
+											@"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?");
 			UriTemplate = new Format("uri-template", JsonSchemaVersion.Draft2019_09,
-			                                @"^$");
+											@"^$");
 			Uri = new Format("uri", JsonSchemaVersion.All, s => s.Type != JsonValueType.String || System.Uri.IsWellFormedUriString(s.String, UriKind.RelativeOrAbsolute));
 			Uuid = new Format("uuid", JsonSchemaVersion.Draft2019_09,
-			                        @"[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
+									@"[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
 		}
 		/// <summary>
 		/// Creates a new <see cref="Format"/> instance using a regular expression.
@@ -169,7 +169,7 @@ namespace Manatee.Json.Schema
 			if (regex != null)
 				ValidationRegex = new Regex(regex, isCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 
-			_lookup.Add(key, this);
+			_lookup[key] = this;
 		}
 		/// <summary>
 		/// Creates a new <see cref="Format"/> instance using a validation function.
@@ -183,7 +183,7 @@ namespace Manatee.Json.Schema
 			Key = key;
 			SupportedBy = supportedBy;
 
-			_lookup.Add(key, this);
+			_lookup[key] = this;
 		}
 
 		/// <summary>
