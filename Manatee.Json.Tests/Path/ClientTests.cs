@@ -37,7 +37,7 @@ namespace Manatee.Json.Tests.Path
 
 			var results = path.Evaluate(json);
 
-			Assert.AreEqual(new JsonArray { "red", 19.95 }, results);
+			Assert.AreEqual(new JsonArray {"red", 19.95}, results);
 		}
 
 		[Test]
@@ -45,12 +45,23 @@ namespace Manatee.Json.Tests.Path
 		{
 			var json = GoessnerExamplesTest.GoessnerData;
 			var path = JsonPathWith.Name("store")
-			                       .Name("bicycle")
-			                       .Array(jv => 1 == 1);
+				.Name("bicycle")
+				.Array(jv => 1 == 1);
 
 			var results = path.Evaluate(json);
 
-			Assert.AreEqual(new JsonArray { "red", 19.95 }, results);
+			Assert.AreEqual(new JsonArray {"red", 19.95}, results);
+		}
+
+		[Test]
+		public void Issue243_OverlappingBoundsReturnsValuesInOverlap()
+		{
+			var json = new JsonArray {"first", "second", "third"};
+			var path = JsonPath.Parse("$[1:10]");
+
+			var results = path.Evaluate(json);
+
+			Assert.AreEqual(new JsonArray {"second", "third"}, results);
 		}
 	}
 }
