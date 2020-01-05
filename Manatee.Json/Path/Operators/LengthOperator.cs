@@ -7,6 +7,8 @@ namespace Manatee.Json.Path.Operators
 	{
 		public static LengthOperator Instance { get; } = new LengthOperator();
 
+		private LengthOperator() { }
+
 		public JsonArray Evaluate(JsonArray json, JsonValue root)
 		{
 			var results = new JsonArray();

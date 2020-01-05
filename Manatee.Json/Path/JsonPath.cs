@@ -34,7 +34,7 @@ namespace Manatee.Json.Path
 		{
 			if (json == null) throw new ArgumentNullException(nameof(json));
 
-			var current = new JsonArray { json };
+			var current = new JsonArray {json};
 			foreach (var op in Operators)
 			{
 				current = op.Evaluate(current, json);

@@ -1,3 +1,13 @@
+# 12.0.2
+
+*Released on 5 Jan, 2020*
+
+<span id="patch">patch</span>
+
+([#243](https://github.com/gregsdennis/Manatee.Json/pulls/243)) Bugs with JSON Path implementation
+  - `ArgumentOutOfRangeException` thrown when array index overlaps instance but is out of range of instance.  Should just return items within the overlap.
+  - Wildcard search operator should only return child objects, not also the root object.
+
 # 12.0.1
 
 *Released on 19 Dec, 2019*
