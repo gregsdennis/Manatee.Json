@@ -3,7 +3,7 @@
     <TargetFrameworks>netcoreapp3.0;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Provides an intuitive approach to JSON, including its structure, serialization, JSON Schema, JSON Path, JSON Pointer, and JSON Patch.</Description>
-    <Version>12.0.1</Version>
+    <Version>12.0.2</Version>
     <Copyright>Copyright © 2019 Little Crab Solutions</Copyright>
     <PackageLicenseUrl>https://github.com/gregsdennis/Manatee.Json/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://gregsdennis.github.io/Manatee.Json/</PackageProjectUrl>
@@ -14,7 +14,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Manatee.Json.snk</AssemblyOriginatorKeyFile>
-    <FileVersion>12.0.1.0</FileVersion>
+    <FileVersion>12.0.2.0</FileVersion>
     <AssemblyVersion>12.0.0.0</AssemblyVersion>
     <Authors>gregsdennis</Authors>
     <Company>Little Crab Solutions</Company>

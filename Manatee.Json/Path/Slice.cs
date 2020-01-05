@@ -133,7 +133,7 @@ namespace Manatee.Json.Path
 
 		private static int _ResolveIndex(int index, int count)
 		{
-			return index < 0 ? count + index : index;
+			return index < 0 ? count + index : Math.Min(index, count);
 		}
 	}
 }

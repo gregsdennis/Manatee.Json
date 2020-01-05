@@ -541,56 +541,6 @@ namespace Manatee.Json.Tests.Path
 					new JsonObject
 						{
 							{
-								"store", new JsonObject
-									{
-										{
-											"book", new JsonArray
-												{
-													new JsonObject
-														{
-															{"category", "reference"},
-															{"author", "Nigel Rees"},
-															{"title", "Sayings of the Century"},
-															{"price", 8.95}
-														},
-													new JsonObject
-														{
-															{"category", "fiction"},
-															{"author", "Evelyn Waugh"},
-															{"title", "Sword of Honour"},
-															{"price", 12.99}
-														},
-													new JsonObject
-														{
-															{"category", "fiction"},
-															{"author", "Herman Melville"},
-															{"title", "Moby Dick"},
-															{"isbn", "0-553-21311-3"},
-															{"price", 8.99}
-														},
-													new JsonObject
-														{
-															{"category", "fiction"},
-															{"author", "J. R. R. Tolkien"},
-															{"title", "The Lord of the Rings"},
-															{"isbn", "0-395-19395-8"},
-															{"price", 22.99}
-														}
-												}
-										},
-										{
-											"bicycle", new JsonObject
-												{
-													{"color", "red"},
-													{"price", 19.95}
-												}
-										}
-									}
-							}
-						},
-					new JsonObject
-						{
-							{
 								"book", new JsonArray
 									{
 										new JsonObject
@@ -732,56 +682,6 @@ namespace Manatee.Json.Tests.Path
 			var path = JsonPathWith.Search();
 			var expected = new JsonArray
 				{
-					new JsonObject
-						{
-							{
-								"store", new JsonObject
-									{
-										{
-											"book", new JsonArray
-												{
-													new JsonObject
-														{
-															{"category", "reference"},
-															{"author", "Nigel Rees"},
-															{"title", "Sayings of the Century"},
-															{"price", 8.95}
-														},
-													new JsonObject
-														{
-															{"category", "fiction"},
-															{"author", "Evelyn Waugh"},
-															{"title", "Sword of Honour"},
-															{"price", 12.99}
-														},
-													new JsonObject
-														{
-															{"category", "fiction"},
-															{"author", "Herman Melville"},
-															{"title", "Moby Dick"},
-															{"isbn", "0-553-21311-3"},
-															{"price", 8.99}
-														},
-													new JsonObject
-														{
-															{"category", "fiction"},
-															{"author", "J. R. R. Tolkien"},
-															{"title", "The Lord of the Rings"},
-															{"isbn", "0-395-19395-8"},
-															{"price", 22.99}
-														}
-												}
-										},
-										{
-											"bicycle", new JsonObject
-												{
-													{"color", "red"},
-													{"price", 19.95}
-												}
-										}
-									}
-							}
-						},
 					new JsonObject
 						{
 							{
