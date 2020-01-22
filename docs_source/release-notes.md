@@ -1,3 +1,11 @@
+# 12.0.3
+
+*Released on 22 Jan, 2020*
+
+<span id="patch">patch</span>
+
+([#248](https://github.com/gregsdennis/Manatee.Json/pulls/248)) `$ref` and `$recursiveRef` schema keywords were not passing up evaluated properties/items, so `unevaluatedProperties` and `unevaluatedItems` keywords could not "see through" them.
+
 # 12.0.2
 
 *Released on 5 Jan, 2020*
