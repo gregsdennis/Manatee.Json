@@ -101,6 +101,7 @@ namespace Manatee.Json.Schema
 
 			results.IsValid = nestedResults.IsValid;
 			results.NestedResults.Add(nestedResults);
+			context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 			return results;
 		}

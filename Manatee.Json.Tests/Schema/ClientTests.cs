@@ -558,5 +558,32 @@ namespace Manatee.Json.Tests.Schema
 				JsonSchemaOptions.OutputFormat = format;
 			}
 		}
+
+		[Test]
+		public void Issue248_RefNotPassingEvaluatedProperties()
+		{
+			var schema = new JsonSchema()
+				.Definition("other", new JsonSchema()
+								.Type(JsonSchemaType.Object)
+								.Property("surfboard", new JsonSchema().Type(JsonSchemaType.String)))
+				.AllOf(new JsonSchema().Ref("#/definitions/other"),
+					   new JsonSchema()
+						   .Property("wheels", true)
+						   .Property("headlights", true),
+					   new JsonSchema().Property("pontoons", true),
+					   new JsonSchema().Property("wings", true))
+				.UnevaluatedProperties(false);
+
+			var instance = new JsonObject
+				{
+					["pontoons"] = new JsonObject(),
+					["wheels"] = new JsonObject(),
+					["surfboard"] = "2"
+				};
+
+			var results = schema.Validate(instance);
+
+			results.AssertValid();
+		}
 	}
 }
