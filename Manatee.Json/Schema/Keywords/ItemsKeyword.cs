@@ -87,6 +87,8 @@ namespace Manatee.Json.Schema
 					}
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
+					else
+						context.LocallyValidatedIndices.Add(i);
 					if (reportChildErrors)
 						nestedResults.Add(this[i].Validate(newContext));
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
@@ -100,7 +102,7 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				Log.Schema($"items is an single subschema; process all elements");
+				Log.Schema("items is an single subschema; process all elements");
 				// have single schema: validate all against this
 				var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 				var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
@@ -120,6 +122,8 @@ namespace Manatee.Json.Schema
 					valid &= localResults.IsValid;
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
+					else
+						context.LocallyValidatedIndices.Add(i);
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LocalTierLastEvaluatedIndex, i);
 					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
@@ -145,7 +149,7 @@ namespace Manatee.Json.Schema
 			if (!results.IsValid)
 			{
 				results.AdditionalInfo["indices"] = failedIndices;
-				results.ErrorMessage = ErrorTemplate;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

@@ -100,7 +100,10 @@ namespace Manatee.Json.Schema
 				var localResults = Value.Validate(newContext);
 				valid |= localResults.IsValid;
 				if (localResults.IsValid)
+				{
+					context.LocallyValidatedIndices.Add(i);
 					matchedIndices.Add(i);
+				}
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{

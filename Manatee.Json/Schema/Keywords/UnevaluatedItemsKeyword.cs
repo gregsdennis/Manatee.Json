@@ -79,12 +79,12 @@ namespace Manatee.Json.Schema
 			var results = new SchemaValidationResults(Name, context);
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
-			var startIndex = context.LastEvaluatedIndex + 1;
+			var indicesToEvaluate = Enumerable.Range(0, array.Count).Except(context.ValidatedIndices).ToList();
 
-			Log.Schema(startIndex == 0
-				            ? "No indices have been evaluated; process all"
-				            : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
-			if (startIndex < array.Count)
+			Log.Schema(indicesToEvaluate.Any()
+						   ? "No indices have been evaluated; process all"
+						   : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
+			if (indicesToEvaluate.Any())
 			{
 				if (Value == JsonSchema.False)
 				{
@@ -95,10 +95,9 @@ namespace Manatee.Json.Schema
 					return results;
 				}
 
-				var eligibleItems = array.Skip(startIndex);
-				var index = startIndex;
-				foreach (var item in eligibleItems)
+				foreach (var index in indicesToEvaluate)
 				{
+					var item = array[index];
 					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name);
 					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 					var newContext = new SchemaValidationContext(context)
@@ -112,7 +111,6 @@ namespace Manatee.Json.Schema
 					valid &= localResults.IsValid;
 					if (valid)
 						context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
-					index++;
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{

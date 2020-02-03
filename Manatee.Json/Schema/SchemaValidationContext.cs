@@ -13,6 +13,9 @@ namespace Manatee.Json.Schema
 	{
 		private HashSet<string>? _evaluatedPropertyNames;
 		private HashSet<string>? _locallyEvaluatedPropertyNames;
+		private HashSet<int>? _validatedIndices;
+		private HashSet<int>? _locallyValidatedIndices;
+
 		/// <summary>
 		/// Gets or sets the local schema at this point in the validation.
 		/// </summary>
@@ -37,6 +40,14 @@ namespace Manatee.Json.Schema
 		/// Gets a list of property names that have been evaluated on the current tier of this validation pass.
 		/// </summary>
 		public HashSet<string> LocallyEvaluatedPropertyNames => _locallyEvaluatedPropertyNames ??= new HashSet<string>();
+		/// <summary>
+		/// Gets a list of array indices that have been evaluated in this validation pass.  Used for keywords that can peer into siblings, like `unevaluatedItems`.
+		/// </summary>
+		public HashSet<int> ValidatedIndices => _validatedIndices ??= new HashSet<int>();
+		/// <summary>
+		/// Gets a list of array indices that have been evaluated on the current tier of this validation pass.  Used for keywords that can peer into siblings, like `unevaluatedItems`.
+		/// </summary>
+		public HashSet<int> LocallyValidatedIndices => _locallyValidatedIndices ??= new HashSet<int>();
 		/// <summary>
 		/// Gets the last array index that has been evaluated in this validation pass.
 		/// </summary>
@@ -104,6 +115,8 @@ namespace Manatee.Json.Schema
 			Instance = source.Instance;
 			EvaluatedPropertyNames.UnionWith(source.EvaluatedPropertyNames);
 			LocallyEvaluatedPropertyNames.UnionWith(source.LocallyEvaluatedPropertyNames);
+			ValidatedIndices.UnionWith(source.ValidatedIndices);
+			LocallyValidatedIndices.UnionWith(source.LocallyValidatedIndices);
 			LastEvaluatedIndex = source.LastEvaluatedIndex;
 			LocalTierLastEvaluatedIndex = source.LocalTierLastEvaluatedIndex;
 			BaseUri = source.BaseUri;
@@ -129,8 +142,10 @@ namespace Manatee.Json.Schema
 				Log.Schema($"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LastEvaluatedIndex);
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LocalTierLastEvaluatedIndex);
+			ValidatedIndices.UnionWith(other.ValidatedIndices);
+			ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
 			if (other.EvaluatedPropertyNames.Any())
-				Log.Schema($"Indices through [{other.LastEvaluatedIndex}] have now been validated");
+				Log.Schema($"Indices [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
 		}
 	}
 }

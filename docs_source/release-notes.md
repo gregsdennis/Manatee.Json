@@ -1,3 +1,11 @@
+# 12.1.0
+
+*Released on 4 Feb, 2020*
+
+<span id="feature">feature</span>
+
+([JSON Schema Spec #248](https://github.com/json-schema-org/json-schema-spec/issues/810)) Added properties `ValidatedItems` and `LocallyValidatedItems` to `SchemaValidationContext` in order to fix a bug where `unevaluatedItems` was not considering all items that failed validation.
+
 # 12.0.3
 
 *Released on 22 Jan, 2020*

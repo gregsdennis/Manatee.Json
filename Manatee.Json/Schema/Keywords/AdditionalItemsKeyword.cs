@@ -88,8 +88,8 @@ namespace Manatee.Json.Schema
 			var startIndex = context.LocalTierLastEvaluatedIndex + 1;
 
 			Log.Schema(startIndex == 0
-				                         ? "No indices have been evaluated; process all"
-				                         : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
+						   ? "No indices have been evaluated; process all"
+						   : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
 			if (startIndex < array.Count)
 			{
 				if (Value == JsonSchema.False)
@@ -118,6 +118,7 @@ namespace Manatee.Json.Schema
 					valid &= localResults.IsValid;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					context.LocallyValidatedIndices.Add(index);
 					index++;
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
