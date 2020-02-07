@@ -4,6 +4,3 @@
 [submodule "json-patch-tests"]
 	path = json-patch-tests
 	url = https://github.com/json-patch/json-patch-tests.git
-[submodule "json-path-comparison"]
-	path = json-path-comparison
-	url = git@github.com:cburgmer/json-path-comparison.git
