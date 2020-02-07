@@ -75,14 +75,15 @@ namespace Manatee.Json.Tests.Path
 			Console.WriteLine(testCase);
 			Console.WriteLine();
 
-			if (testCase.ExpectedResultString == null)
-				Assert.Inconclusive("Test case has no consensus result.  Cannot validate.");
-			
-			var expected = JsonValue.Parse(testCase.ExpectedResultString);
-
 			var actual = Evaluate(testCase.JsonString, testCase.PathString);
 
-			Assert.AreEqual(expected, actual);
+			if (testCase.ExpectedResultString == null)
+				Assert.Inconclusive("Test case has no consensus result.  Cannot validate.");
+			else
+			{
+				var expected = JsonValue.Parse(testCase.ExpectedResultString);
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 		private JsonArray Evaluate(string jsonString, string pathString)
