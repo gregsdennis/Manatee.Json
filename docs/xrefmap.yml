@@ -17076,6 +17076,19 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.SchemaValidationContext.LocallyEvaluatedPropertyNames
   nameWithType: SchemaValidationContext.LocallyEvaluatedPropertyNames
+- uid: Manatee.Json.Schema.SchemaValidationContext.LocallyValidatedIndices
+  name: LocallyValidatedIndices
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_LocallyValidatedIndices
+  commentId: P:Manatee.Json.Schema.SchemaValidationContext.LocallyValidatedIndices
+  fullName: Manatee.Json.Schema.SchemaValidationContext.LocallyValidatedIndices
+  nameWithType: SchemaValidationContext.LocallyValidatedIndices
+- uid: Manatee.Json.Schema.SchemaValidationContext.LocallyValidatedIndices*
+  name: LocallyValidatedIndices
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_LocallyValidatedIndices_
+  commentId: Overload:Manatee.Json.Schema.SchemaValidationContext.LocallyValidatedIndices
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.SchemaValidationContext.LocallyValidatedIndices
+  nameWithType: SchemaValidationContext.LocallyValidatedIndices
 - uid: Manatee.Json.Schema.SchemaValidationContext.LocalTierLastEvaluatedIndex
   name: LocalTierLastEvaluatedIndex
   href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_LocalTierLastEvaluatedIndex
@@ -17154,6 +17167,19 @@ references:
   isSpec: "True"
   fullName: Manatee.Json.Schema.SchemaValidationContext.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation
   nameWithType: SchemaValidationContext.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation
+- uid: Manatee.Json.Schema.SchemaValidationContext.ValidatedIndices
+  name: ValidatedIndices
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_ValidatedIndices
+  commentId: P:Manatee.Json.Schema.SchemaValidationContext.ValidatedIndices
+  fullName: Manatee.Json.Schema.SchemaValidationContext.ValidatedIndices
+  nameWithType: SchemaValidationContext.ValidatedIndices
+- uid: Manatee.Json.Schema.SchemaValidationContext.ValidatedIndices*
+  name: ValidatedIndices
+  href: api/Manatee.Json.Schema.SchemaValidationContext.html#Manatee_Json_Schema_SchemaValidationContext_ValidatedIndices_
+  commentId: Overload:Manatee.Json.Schema.SchemaValidationContext.ValidatedIndices
+  isSpec: "True"
+  fullName: Manatee.Json.Schema.SchemaValidationContext.ValidatedIndices
+  nameWithType: SchemaValidationContext.ValidatedIndices
 - uid: Manatee.Json.Schema.SchemaValidationOutputFormat
   name: SchemaValidationOutputFormat
   href: api/Manatee.Json.Schema.SchemaValidationOutputFormat.html
