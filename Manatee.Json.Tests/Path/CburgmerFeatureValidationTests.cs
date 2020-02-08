@@ -78,7 +78,10 @@ namespace Manatee.Json.Tests.Path
 			var actual = Evaluate(testCase.JsonString, testCase.PathString);
 
 			if (testCase.ExpectedResultString == null)
+			{
+				Console.WriteLine($"Actual: {actual}");
 				Assert.Inconclusive("Test case has no consensus result.  Cannot validate.");
+			}
 			else
 			{
 				var expected = JsonValue.Parse(testCase.ExpectedResultString);
