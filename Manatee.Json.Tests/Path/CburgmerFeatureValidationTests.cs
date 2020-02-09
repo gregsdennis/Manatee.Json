@@ -3,6 +3,7 @@ using Manatee.Json.Path;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Manatee.Json.Tests.Path
@@ -15,11 +16,16 @@ namespace Manatee.Json.Tests.Path
 	[TestFixture]
 	public class CburgmerFeatureValidationTests
 	{
-		private const string RegressionResultsFile = @"..\..\..\..\json-path-comparison\regression_suite\regression_suite.yaml";
-		private static readonly Regex IdPattern = new Regex(@"  - id: (?<value>.*)");
-		private static readonly Regex SelectorPattern = new Regex(@"    selector: (?<value>.*)");
-		private static readonly Regex DocumentPattern = new Regex(@"    document: (?<value>.*)");
-		private static readonly Regex ConsensusPattern = new Regex(@"    consensus: (?<value>.*)");
+		private const string _regressionResultsFile = @"..\..\..\..\json-path-comparison\regression_suite\regression_suite.yaml";
+		private static readonly Regex _idPattern = new Regex(@"  - id: (?<value>.*)");
+		private static readonly Regex _selectorPattern = new Regex(@"    selector: (?<value>.*)");
+		private static readonly Regex _documentPattern = new Regex(@"    document: (?<value>.*)");
+		private static readonly Regex _consensusPattern = new Regex(@"    consensus: (?<value>.*)");
+
+		private static readonly string[] _notSupported =
+			{
+				"$[?(@.key=42)]"
+			};
 
 		//  - id: array_index
 		//    selector: $[2]
@@ -44,27 +50,27 @@ namespace Manatee.Json.Tests.Path
 				}
 
 				// what I wouldn't give for a YAML parser...
-				var fileLines = File.ReadAllLines(RegressionResultsFile);
+				var fileLines = File.ReadAllLines(_regressionResultsFile);
 				CburgmerTestCase currentTestCase = null;
 				foreach (var line in fileLines)
 				{
-					if (TryMatch(line, IdPattern, out var value))
+					if (TryMatch(line, _idPattern, out var value))
 					{
 						if (currentTestCase != null)
 							yield return new TestCaseData(currentTestCase) {TestName = currentTestCase.TestName};
 						currentTestCase = new CburgmerTestCase{TestName = value};
 					}
-					else if (TryMatch(line, SelectorPattern, out value))
+					else if (TryMatch(line, _selectorPattern, out value))
 					{
 						currentTestCase.PathString = value;
 					}
-					else if (TryMatch(line, DocumentPattern, out value))
+					else if (TryMatch(line, _documentPattern, out value))
 					{
 						currentTestCase.JsonString = value;
 					}
-					else if (TryMatch(line, ConsensusPattern, out value))
+					else if (TryMatch(line, _consensusPattern, out value))
 					{
-						currentTestCase.ExpectedResultString = value;
+						currentTestCase.Consensus = value;
 					}
 				}
 			}
@@ -73,19 +79,22 @@ namespace Manatee.Json.Tests.Path
 		[TestCaseSource(nameof(TestCases))]
 		public void Run(CburgmerTestCase testCase)
 		{
+			if (_notSupported.Contains(testCase.PathString))
+				Assert.Inconclusive("This case will not be supported.");
+
 			Console.WriteLine(testCase);
 			Console.WriteLine();
 
 			var actual = Evaluate(testCase.JsonString, testCase.PathString);
 
-			if (testCase.ExpectedResultString == null)
+			if (testCase.Consensus == null)
 			{
 				Console.WriteLine($"Actual: {actual}");
 				Assert.Inconclusive("Test case has no consensus result.  Cannot validate.");
 			}
 			else
 			{
-				var expected = JsonValue.Parse(testCase.ExpectedResultString);
+				var expected = JsonValue.Parse(testCase.Consensus);
 				Assert.AreEqual(expected, actual);
 			}
 		}
@@ -106,14 +115,14 @@ namespace Manatee.Json.Tests.Path
 		public string TestName { get; set; }
 		public string PathString { get; set; }
 		public string JsonString { get; set; }
-		public string ExpectedResultString { get; set; }
+		public string Consensus { get; set; }
 
 		public override string ToString()
 		{
 			return $"TestName:   {TestName}\n" +
 				   $"PathString: {PathString}\n" +
 				   $"JsonString: {JsonString}\n" +
-				   $"Expected:   {ExpectedResultString}";
+				   $"Consensus:   {Consensus}";
 		}
 	}
 }

@@ -510,6 +510,8 @@ namespace Manatee.Json
 					return _objectValue;
 				case JsonValueType.Array:
 					return _arrayValue;
+				case JsonValueType.Null:
+					return this;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(Type));
 			}
