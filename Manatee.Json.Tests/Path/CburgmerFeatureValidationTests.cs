@@ -11,6 +11,7 @@ namespace Manatee.Json.Tests.Path
 	/// These are a set of tests that GitHub user cburgmer uses to check all JSON Path implementations
 	/// for feature support.  Adding the suite here ensures that I support them all.
 	/// </summary>
+	/// <remarks>This is from cburgmer's amazing reporting site: https://cburgmer.github.io/json-path-comparison/</remarks>
 	[TestFixture]
 	public class CburgmerFeatureValidationTests
 	{

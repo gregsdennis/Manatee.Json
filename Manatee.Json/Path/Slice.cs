@@ -94,14 +94,18 @@ namespace Manatee.Json.Path
 		{
 			if (Index.HasValue)
 			{
-				return Index.Value < 0 || json.Count <= Index.Value
-						   ? Enumerable.Empty<JsonValue>()
-						   : new[] { json[Index.Value] };
+				var index = Index.Value;
+				if (index < 0)
+					index += json.Count;
+
+				return index < 0 || json.Count <= index
+					? Enumerable.Empty<JsonValue>()
+					: new[] {json[index]};
 			}
 
 			var start = _ResolveIndex(_start ?? 0, json.Count);
 			var end = _ResolveIndex(_end ?? json.Count, json.Count);
-			var step = Math.Max(_step ?? 1, 1);
+			var step = _step ?? 1;
 
 			// quick copy
 			if (start == 0 && end == json.Count && step == 1)
@@ -113,17 +117,18 @@ namespace Manatee.Json.Path
 				json.CopyTo(start, result, 0, end - start);
 				return result;
 			}
-			else
-			{
-				return _FindSlow(json, start, end, step);
-			}
+
+			return _FindSlow(json, start, end, step);
 		}
 
 		private static IEnumerable<JsonValue> _FindSlow(JsonArray json, int start, int end, int step)
 		{
+			var test = step > 0
+				? (Func<int, int, bool>) ((a, b) => a < b)
+				: (a, b) => a > b;
 			var index = start;
 			var list = new List<JsonValue>();
-			while (index < end)
+			while (test(index , end))
 			{
 				list.Add(json[index]);
 				index += step;
