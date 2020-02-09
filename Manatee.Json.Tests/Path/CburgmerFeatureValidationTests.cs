@@ -21,11 +21,24 @@ namespace Manatee.Json.Tests.Path
 		private static readonly Regex _selectorPattern = new Regex(@"    selector: (?<value>.*)");
 		private static readonly Regex _documentPattern = new Regex(@"    document: (?<value>.*)");
 		private static readonly Regex _consensusPattern = new Regex(@"    consensus: (?<value>.*)");
-
 		private static readonly string[] _notSupported =
 			{
-				"$[?(@.key=42)]"
+				"$[?(@.key=42)]",
+				"$[?(@)]",
+				"$[?(@.a[?(@.price>10)])]",
+				"$['key','another']",
+				"$['one','three'].key",
+				"$['two'.'some']",
+				"$[two.some]",
+				"$['single'quote']",
+				"$[key]",
+				"$.[key]",
+				"$..",
+				"$..[?(@.id==2)]",
+				"$..[?(@.id)]"
 			};
+
+		private ArrayEquality _arrayEquality;
 
 		//  - id: array_index
 		//    selector: $[2]
@@ -74,6 +87,18 @@ namespace Manatee.Json.Tests.Path
 					}
 				}
 			}
+		}
+
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.DefaultArrayEquality = ArrayEquality.ContentsEqual;
+		}
+
+		[OneTimeTearDown]
+		public void TearDown()
+		{
+			JsonOptions.DefaultArrayEquality = _arrayEquality;
 		}
 
 		[TestCaseSource(nameof(TestCases))]
