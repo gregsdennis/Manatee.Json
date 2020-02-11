@@ -35,7 +35,8 @@ namespace Manatee.Json.Tests.Path
 				"$.[key]",
 				"$..",
 				"$..[?(@.id==2)]",
-				"$..[?(@.id)]"
+				"$..[?(@.id)]",
+				"$[?(@.name=~/hello.*/)]"
 			};
 
 		private ArrayEquality _arrayEquality;

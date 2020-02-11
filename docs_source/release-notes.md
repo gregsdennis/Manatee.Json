@@ -1,3 +1,18 @@
+# 12.2.0
+
+*Released on 11 Feb, 2020*
+
+<span id="feature">feature</span>
+
+Inspired by a fabulous [test report site](https://cburgmer.github.io/json-path-comparison/) by GitHub user cburgmer JsonPath now supports some new syntaxes.
+
+- Various bracketed key notations: `$["key"]`, etc.
+- Negative indexes for "from last" queries: `$[-1]`.
+- Backward navigation and negative steps in slice queries: `$[3:0:-2]`.
+- Comparisons with null in expressions: `$[?(@.key == null)]`.
+
+The remaining items will not be supported for now.  Support _may_ be added with sufficient pressure from the user base, however.
+
 # 12.1.0
 
 *Released on 4 Feb, 2020*
