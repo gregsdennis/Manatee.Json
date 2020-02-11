@@ -19,7 +19,7 @@ namespace Manatee.Json.Path.Expressions
 			var dright = _TryGetNumber(b);
 			if (dleft != null && dright != null)
 				return dleft == dright;
-			return false;
+			return Equals(a, JsonValue.Null) && Equals(b, JsonValue.Null);
 		}
 		public static bool LessThan(object? a, object? b)
 		{

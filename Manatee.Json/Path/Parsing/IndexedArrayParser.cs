@@ -10,7 +10,7 @@ namespace Manatee.Json.Path.Parsing
 			if (index + 1 >= input.Length) return false;
 
 			return input[index] == '[' &&
-			       (char.IsDigit(input[index + 1]) || input[index + 1] == '-' || input[index + 1] == ':');
+				   (char.IsDigit(input[index + 1]) || input[index + 1] == '-' || input[index + 1] == ':');
 		}
 
 		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)

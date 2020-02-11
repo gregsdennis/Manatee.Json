@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,21 +26,18 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
 			SchemaValidationResults.IncludeAdditionalInfo = true;
 
-			var schema = new JsonSchema()
-				.UnevaluatedProperties(false)
-				.AllOf(new JsonSchema()
-					       .Property("foo", new JsonSchema().Type(JsonSchemaType.String | JsonSchemaType.Null))
-					       .Property("bar", new JsonSchema().Type(JsonSchemaType.String | JsonSchemaType.Null)),
-				       new JsonSchema()
-					       .AdditionalProperties(new JsonSchema().Not(new JsonSchema().Enum(JsonValue.Null))));
-			var json = new JsonObject
-				{
-					["bar"] = "foo",
-					["bob"] = "who?"
-				};
+			var serializer = new JsonSerializer();
+
+			var schemaText = File.ReadAllText("C:\\Users\\gregs\\Desktop\\Manatee.Json.Schema.OpenApi\\Reference\\schema-2.0.json");
+			var schemaJson = JsonValue.Parse(schemaText);
+			var schema = serializer.Deserialize<JsonSchema>(schemaJson);
+
+			var address = new Uri("https://raw.githubusercontent.com/warehouseman/trello-swagger-generator/master/TrelloAPI.json");
+			var content = new WebClient().DownloadString(address);
+			var json = JsonValue.Parse(content);
 
 			var results = schema.Validate(json);
 

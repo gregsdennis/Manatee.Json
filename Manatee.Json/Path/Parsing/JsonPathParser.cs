@@ -23,7 +23,7 @@ namespace Manatee.Json.Path.Parsing
 		public static JsonPath Parse(string source)
 		{
 			var index = 0;
-			if (!TryParse(source, ref index, out var path, out var errorMessage))
+			if (!TryParse(source.Trim(), ref index, out var path, out var errorMessage))
 				throw new JsonPathSyntaxException(path, errorMessage);
 
 			return path;
