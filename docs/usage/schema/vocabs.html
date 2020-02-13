@@ -178,7 +178,7 @@
 <li><code>EvaluatedPropertyNames</code> - This is a list of property names that have been validated by either your keyword or by subschemas.  You will need to add any properties your keyword processes as well as any properties in the contexts you send to subschemas to this list.</li>
 <li><code>LocallyEvaluatedPropertyNames</code> - Similar to <code>EvaluatedPropertyNames</code> except that it only tracks those properties which have been evaluated by keywords at the current tier of the schema.</li>
 <li><code>LastEvaluatedIndex</code> - Indicates the last evaluated index in an array.</li>
-<li><code>LocakTierLastEvaluatedIndex</code> - Indicates the last evaluated index in an array by keywords at the current tier of the schema.</li>
+<li><code>LocalTierLastEvaluatedIndex</code> - Indicates the last evaluated index in an array by keywords at the current tier of the schema.</li>
 <li><code>BaseUri</code> - This is the current base URI.  It will change throughout the validation process as subschemas declare <code>$id</code> or <code>id</code> keywords.</li>
 <li><code>InstanceLocation</code> - This is the location of the <code>Instance</code> property within the original instance.</li>
 <li><code>RelativeLocation</code> - This is the location of the current subschema with respect to the root schema.  It will contain <code>$ref</code> segments for any references that have been processed.</li>

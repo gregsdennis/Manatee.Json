@@ -146,7 +146,7 @@ The context fulfills two purposes: provide all of the required validation inform
 - `EvaluatedPropertyNames` - This is a list of property names that have been validated by either your keyword or by subschemas.  You will need to add any properties your keyword processes as well as any properties in the contexts you send to subschemas to this list.
 - `LocallyEvaluatedPropertyNames` - Similar to `EvaluatedPropertyNames` except that it only tracks those properties which have been evaluated by keywords at the current tier of the schema.
 - `LastEvaluatedIndex` - Indicates the last evaluated index in an array.
-- `LocakTierLastEvaluatedIndex` - Indicates the last evaluated index in an array by keywords at the current tier of the schema.
+- `LocalTierLastEvaluatedIndex` - Indicates the last evaluated index in an array by keywords at the current tier of the schema.
 - `BaseUri` - This is the current base URI.  It will change throughout the validation process as subschemas declare `$id` or `id` keywords.
 - `InstanceLocation` - This is the location of the `Instance` property within the original instance.
 - `RelativeLocation` - This is the location of the current subschema with respect to the root schema.  It will contain `$ref` segments for any references that have been processed.
