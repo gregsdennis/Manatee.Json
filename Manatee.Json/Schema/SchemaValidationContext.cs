@@ -113,10 +113,12 @@ namespace Manatee.Json.Schema
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
-			EvaluatedPropertyNames.UnionWith(source.EvaluatedPropertyNames);
-			LocallyEvaluatedPropertyNames.UnionWith(source.LocallyEvaluatedPropertyNames);
-			ValidatedIndices.UnionWith(source.ValidatedIndices);
-			LocallyValidatedIndices.UnionWith(source.LocallyValidatedIndices);
+
+			_evaluatedPropertyNames = new HashSet<string>(source.EvaluatedPropertyNames.AsEnumerable<string>());
+			_locallyEvaluatedPropertyNames = new HashSet<string>(source.LocallyEvaluatedPropertyNames.AsEnumerable<string>());
+			_validatedIndices = new HashSet<int>(source.ValidatedIndices.AsEnumerable<int>());
+			_locallyValidatedIndices = new HashSet<int>(source.LocallyValidatedIndices.AsEnumerable<int>());
+
 			LastEvaluatedIndex = source.LastEvaluatedIndex;
 			LocalTierLastEvaluatedIndex = source.LocalTierLastEvaluatedIndex;
 			BaseUri = source.BaseUri;

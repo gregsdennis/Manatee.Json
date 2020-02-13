@@ -6,7 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="large_message.json" />
+    <None Remove="schema.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestData\large_message.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.13" />
   </ItemGroup>
 
   <ItemGroup>
