@@ -7,7 +7,7 @@ namespace Manatee.Json.Tests.Benchmark
 	{
 		static async Task Main(string[] args)
 		{
-			await PerformanceTests.Run();
+			//await PerformanceTests.Run();
 			await SchemaPerformance.Run();
 
 			Console.ReadLine();

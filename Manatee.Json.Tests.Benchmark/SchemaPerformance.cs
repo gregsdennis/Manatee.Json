@@ -89,12 +89,7 @@ namespace Manatee.Json.Tests.Benchmark
 			schema.FromJson(schemaJson, _serializer);
 			var result = schema.Validate(json);
 
-			_manateeWatch.Stop();
-
-			_manateeWatch.Reset();
-			_manateeWatch.Start();
-			_manateeWatch.Stop();
-		
+			_manateeWatch.Stop();		
 		}
 		private static void _NewtonDeserializeAndValidate(string dataString, string schemaString)
 		{
@@ -106,10 +101,6 @@ namespace Manatee.Json.Tests.Benchmark
 			JObject json = JObject.Parse(dataString);
 			var result = json.IsValid(schema);
 
-			_manateeWatch.Stop();
-
-			_manateeWatch.Reset();
-			_manateeWatch.Start();
 			_manateeWatch.Stop();
 
 		}
