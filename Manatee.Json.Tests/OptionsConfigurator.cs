@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using Manatee.Json.Tests.Common;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
@@ -7,22 +7,6 @@ namespace Manatee.Json.Tests
 	[SetUpFixture]
 	public class OptionsConfigurator
 	{
-		public class ConsoleLog : ILog
-		{
-			private static readonly Stopwatch _stopwatch;
-
-			static ConsoleLog()
-			{
-				_stopwatch = new Stopwatch();
-				_stopwatch.Start();
-			}
-
-			public void Verbose(string message, LogCategory category)
-			{
-				if (JsonOptions.LogCategory.HasFlag(category))
-					Console.WriteLine($@"[{_stopwatch.Elapsed:mm\:ss\.ffffff}]: {message}");
-			}
-		}
 
 		[OneTimeSetUp]
 		public void Setup()
@@ -31,4 +15,4 @@ namespace Manatee.Json.Tests
 				JsonOptions.Log = new ConsoleLog();
 		}
 	}
-}	
+}

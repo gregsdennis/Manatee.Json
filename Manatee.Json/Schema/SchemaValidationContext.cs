@@ -11,10 +11,10 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationContext
 	{
-		private HashSet<string> _evaluatedPropertyNames;
-		private HashSet<string> _locallyEvaluatedPropertyNames;
-		private HashSet<int> _validatedIndices;
-		private HashSet<int> _locallyValidatedIndices;
+		private HashSet<string>? _evaluatedPropertyNames;
+		private HashSet<string>? _locallyEvaluatedPropertyNames;
+		private HashSet<int>? _validatedIndices;
+		private HashSet<int>? _locallyValidatedIndices;
 
 		/// <summary>
 		/// Gets or sets the local schema at this point in the validation.
@@ -114,39 +114,10 @@ namespace Manatee.Json.Schema
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
 
-			
-			if (_evaluatedPropertyNames is null)
-			{
-				_evaluatedPropertyNames = new HashSet<string>(source.EvaluatedPropertyNames.AsEnumerable<string>());
-			}
-			else
-			{
-				_evaluatedPropertyNames.UnionWith(source.EvaluatedPropertyNames);
-			}
-			if (_locallyEvaluatedPropertyNames is null)
-			{
-				_locallyEvaluatedPropertyNames = new HashSet<string>(source.LocallyEvaluatedPropertyNames.AsEnumerable<string>());
-			}
-			else
-			{
-				_locallyEvaluatedPropertyNames.UnionWith(source.LocallyEvaluatedPropertyNames);
-			}
-			if (_validatedIndices is null) {
-				_validatedIndices = new HashSet<int>(source.ValidatedIndices.AsEnumerable<int>());
-			}
-			else
-			{
-				_validatedIndices.UnionWith(source.ValidatedIndices);
-			}
-			if(_locallyValidatedIndices is null)
-			{
-				_locallyValidatedIndices = new HashSet<int>(source.LocallyValidatedIndices.AsEnumerable<int>());
-			}
-			else
-			{
-				_locallyValidatedIndices.UnionWith(source.LocallyValidatedIndices);
-			}
-			
+			_InitializeHashSet(ref _evaluatedPropertyNames, source._evaluatedPropertyNames);
+			_InitializeHashSet(ref _locallyEvaluatedPropertyNames, source._locallyEvaluatedPropertyNames);
+			_InitializeHashSet(ref _validatedIndices, source._validatedIndices);
+			_InitializeHashSet(ref _locallyValidatedIndices, source._locallyValidatedIndices);
 
 			LastEvaluatedIndex = source.LastEvaluatedIndex;
 			LocalTierLastEvaluatedIndex = source.LocalTierLastEvaluatedIndex;
@@ -177,6 +148,20 @@ namespace Manatee.Json.Schema
 			ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
 			if (other.EvaluatedPropertyNames.Any())
 				Log.Schema(() => $"Indices [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+		}
+
+		private static void _InitializeHashSet<T>(ref HashSet<T>? hashSet, IEnumerable<T>? data)
+		{
+			if (data is null) return;
+
+			if (hashSet is null)
+			{
+				hashSet = new HashSet<T>(data);
+			}
+			else
+			{
+				hashSet.UnionWith(data);
+			}
 		}
 	}
 }

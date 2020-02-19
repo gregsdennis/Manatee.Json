@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Manatee.Json.Tests.Common\Manatee.Json.Tests.Common.csproj" />
     <ProjectReference Include="..\Manatee.Json\Manatee.Json.csproj" />
   </ItemGroup>
 

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Manatee.Json.Schema;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using JsonSchema = Manatee.Json.Schema.JsonSchema;
@@ -14,8 +10,8 @@ using JsonSerializer = Manatee.Json.Serialization.JsonSerializer;
 
 namespace Manatee.Json.Tests.Benchmark
 {
-    public class SchemaPerformance
-    {
+	public class SchemaPerformance
+	{
 		private static readonly Stopwatch _manateeWatch = new Stopwatch();
 		private static bool _shouldOutput;
 
@@ -29,6 +25,8 @@ namespace Manatee.Json.Tests.Benchmark
 
 		public static async Task Run()
 		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+
 			await _RunBulk();
 		}
 
@@ -41,7 +39,7 @@ namespace Manatee.Json.Tests.Benchmark
 			Console.WriteLine($"Schema length: {schemaString.Length}");
 
 
-			var runCount = 5;
+			var runCount = 1;
 			var page = 1;
 			for (int i = 0; i < runCount; i++)
 			{
