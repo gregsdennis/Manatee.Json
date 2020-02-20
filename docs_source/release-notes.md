@@ -8,6 +8,8 @@
 
 ([#255](https://github.com/gregsdennis/Manatee.Json/pulls/255)) Added `writeOnly` to draft 7 metaschema in accordance with [JSON Schema correction](https://github.com/json-schema-org/json-schema-org.github.io/pull/308).
 
+Also added `.ToJson()` override for `IEnumerable<int>`.  Previously only supported `IEnumerable<double>`.
+
 # 12.2.0
 
 *Released on 11 Feb, 2020*
