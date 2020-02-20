@@ -336,5 +336,53 @@ namespace Manatee.Json.Tests
 		}
 
 		#endregion
+
+		#region Logging
+
+		[Test]
+		public void NoLogTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = null;
+				JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
+
+				Assert.AreEqual(0, storedValue);
+			}
+			catch (Exception e)
+			{
+				JsonOptions.Log = log;
+				throw;
+			}
+		}
+
+		[Test]
+		public void LogTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			// Test suite sets log
+			Assert.IsNotNull(JsonOptions.Log);
+			JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
+
+			Assert.AreEqual(4, storedValue);
+		}
+
+		#endregion
 	}
 }
