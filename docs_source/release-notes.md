@@ -1,3 +1,13 @@
+# 12.3.0
+
+*Released on 20 Feb, 2020*
+
+<span id="feature">feature</span>
+
+([#254](https://github.com/gregsdennis/Manatee.Json/pulls/254)) Include properties and item indices for `additional*` and `unevaluated*` schema keywords.
+
+([#255](https://github.com/gregsdennis/Manatee.Json/pulls/255)) Added `writeOnly` to draft 7 metaschema in accordance with [JSON Schema correction](https://github.com/json-schema-org/json-schema-org.github.io/pull/308).
+
 # 12.2.0
 
 *Released on 11 Feb, 2020*
