@@ -100,7 +100,7 @@ namespace Manatee.Json.Schema
 					Log.Schema($"Subschema is `false`; all instances after index {startIndex} are invalid");
 					results.IsValid = false;
 					results.Keyword = Name;
-					results.AdditionalInfo["indices"] = Enumerable.Range(startIndex, array.Count - startIndex).Select(i => (JsonValue) i).ToJson();
+					results.AdditionalInfo["indices"] = Enumerable.Range(startIndex, array.Count - startIndex).ToJson();
 					results.ErrorMessage = ErrorTemplate_False.ResolveTokens(results.AdditionalInfo);
 					return results;
 				}

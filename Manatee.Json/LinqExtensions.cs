@@ -132,6 +132,30 @@ namespace Manatee.Json
 			return json;
 		}
 		/// <summary>
+		/// Converts a collection of doubles to a <see cref="JsonArray"/>.
+		/// </summary>
+		/// <param name="list">A collection of doubles</param>
+		/// <returns>A <see cref="JsonArray"/> containing the doubles</returns>
+		public static JsonValue ToJson(this IEnumerable<int>? list)
+		{
+			if (list == null) return JsonValue.Null;
+			var json = new JsonArray();
+			json.AddRange(list.Select(j => new JsonValue(j)));
+			return json;
+		}
+		/// <summary>
+		/// Converts a collection of doubles to a <see cref="JsonArray"/>.
+		/// </summary>
+		/// <param name="list">A collection of doubles</param>
+		/// <returns>A <see cref="JsonArray"/> containing the doubles</returns>
+		public static JsonValue ToJson(this IEnumerable<int?>? list)
+		{
+			if (list == null) return JsonValue.Null;
+			var json = new JsonArray();
+			json.AddRange(list.Select(j => j.HasValue ? new JsonValue(j.Value) : JsonValue.Null));
+			return json;
+		}
+		/// <summary>
 		/// Serializes a collection of objects which implement <see cref="IJsonSerializable"/> to a <see cref="JsonArray"/> of equivalent JsonValues.
 		/// </summary>
 		/// <param name="list">A collection of equivalent <see cref="JsonValue"/>s</param>

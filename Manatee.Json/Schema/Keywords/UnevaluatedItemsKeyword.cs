@@ -19,9 +19,10 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the error message template.
 		/// </summary>
 		/// <remarks>
-		/// Does not supports any tokens.
+		/// Supports the following tokens:
+		/// - indices
 		/// </remarks>
-		public static string ErrorTemplate { get; set; } = "Items not covered by `items` or `additionalItems` failed validation.";
+		public static string ErrorTemplate { get; set; } = "Items at indices {{indices}} are not covered by `items` or `additionalItems` failed validation.";
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -80,6 +81,7 @@ namespace Manatee.Json.Schema
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var indicesToEvaluate = Enumerable.Range(0, array.Count).Except(context.ValidatedIndices).ToList();
+			var failedIndices = new JsonArray();
 
 			Log.Schema(indicesToEvaluate.Any()
 						   ? "No indices have been evaluated; process all"
@@ -91,7 +93,8 @@ namespace Manatee.Json.Schema
 					Log.Schema("Subschema is `false`; all instances invalid");
 					results.IsValid = false;
 					results.Keyword = Name;
-					results.ErrorMessage = ErrorTemplate;
+					results.AdditionalInfo["indices"] = indicesToEvaluate.ToJson();
+					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 					return results;
 				}
 
@@ -108,6 +111,8 @@ namespace Manatee.Json.Schema
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(index.ToString()),
 						};
 					var localResults = Value.Validate(newContext);
+					if (!localResults.IsValid)
+						failedIndices.Add(index);
 					valid &= localResults.IsValid;
 					if (valid)
 						context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
@@ -132,7 +137,11 @@ namespace Manatee.Json.Schema
 			results.IsValid = valid;
 			results.Keyword = Name;
 
-			if (!valid) results.ErrorMessage = ErrorTemplate;
+			if (!valid)
+			{
+				results.AdditionalInfo["indices"] = failedIndices;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			}
 
 			return results;
 		}
