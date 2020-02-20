@@ -19,16 +19,20 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the error message template.
 		/// </summary>
 		/// <remarks>
-		/// Does not supports any tokens.
+		/// Supports the following tokens:
+		/// - properties
 		/// </remarks>
-		public static string ErrorTemplate { get; set; } = "Any properties not covered by `properties` and `patternProperties` failed validation.";
+		public static string ErrorTemplate { get; set; } = "Properties {{properties}} were not covered by either `properties` or `patternProperties` " +
+		                                                   "and failed validation of the local subschema.";
 		/// <summary>
 		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
 		/// </summary>
 		/// <remarks>
-		/// Does not supports any tokens.
+		/// Supports the following tokens:
+		/// - properties
 		/// </remarks>
-		public static string ErrorTemplate_False { get; set; } = "Properties not covered by `properties` and `patternProperties` are not allowed.";
+		public static string ErrorTemplate_False { get; set; } = "Properties {{properties}} are covered by neither `properties` nor `patternProperties` " +
+		                                                         "and so are not allowed.";
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -98,13 +102,15 @@ namespace Manatee.Json.Schema
 				Log.Schema("Subschema is `false`; all instances invalid");
 				results.IsValid = false;
 				results.Keyword = Name;
-				results.ErrorMessage = ErrorTemplate_False;
+				results.AdditionalInfo["properties"] = toEvaluate.Keys.ToJson();
+				results.ErrorMessage = ErrorTemplate_False.ResolveTokens(results.AdditionalInfo);
 				return results;
 			}
 
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
+			var failedProperties = new JsonArray();
 
 			foreach (var kvp in toEvaluate)
 			{
@@ -118,6 +124,10 @@ namespace Manatee.Json.Schema
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
 					};
 				var localResults = Value.Validate(newContext);
+				if (!localResults.IsValid)
+				{
+					failedProperties.Add(kvp.Key);
+				}
 				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
 				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 				valid &= localResults.IsValid;
@@ -139,7 +149,8 @@ namespace Manatee.Json.Schema
 			{
 				results.IsValid = false;
 				results.Keyword = Name;
-				results.ErrorMessage = ErrorTemplate;
+				results.AdditionalInfo["properties"] = failedProperties;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;
