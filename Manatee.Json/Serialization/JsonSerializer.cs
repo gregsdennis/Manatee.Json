@@ -59,12 +59,12 @@ namespace Manatee.Json.Serialization
 		internal JsonValue Serialize(SerializationContext context)
 		{
 			_callCount++;
-			Log.Serialization($"Serializing {context.CurrentLocation}");
+			Log.Serialization(() => $"Serializing {context.CurrentLocation}");
 			var serializer = SerializerFactory.GetSerializer(context);
 			var json = DefaultValueSerializer.Instance.TrySerialize(serializer, context);
 			if (--_callCount == 0)
 			{
-				Log.Serialization("Serialization complete; clearing reference map");
+				Log.Serialization(() => "Serialization complete; clearing reference map");
 				context.SerializationMap.Clear();
 			}
 			return json;
@@ -127,7 +127,7 @@ namespace Manatee.Json.Serialization
 			var obj = SchemaValidator.Instance.TryDeserialize(serializer, context);
 			if (--_callCount == 0)
 			{
-				Log.Serialization("Primary deserialization complete; processing references");
+				Log.Serialization(() => "Primary deserialization complete; processing references");
 				if (obj != null)
 					context.SerializationMap.Complete(obj);
 			}

@@ -358,7 +358,7 @@ namespace Manatee.Json.Tests
 
 				Assert.AreEqual(0, storedValue);
 			}
-			catch (Exception e)
+			catch
 			{
 				JsonOptions.Log = log;
 				throw;
@@ -381,6 +381,71 @@ namespace Manatee.Json.Tests
 			JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
 
 			Assert.AreEqual(4, storedValue);
+		}
+
+		// this isn't really testing desired behavior; just illustrating c# behavior
+		[Test]
+		public void NoLogNoFuncTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			void LogIt(string message)
+			{
+				JsonOptions.Log?.Verbose(message);
+			}
+
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = null;
+				LogIt($"changing storedValue to {PrintValue(4)}");
+
+				// note that in NoLogTest, PrintValue wasn't run
+				Assert.AreEqual(4, storedValue);
+			}
+			catch
+			{
+				JsonOptions.Log = log;
+				throw;
+			}
+		}
+
+		// this isn't really testing desired behavior; just illustrating c# behavior
+		[Test]
+		public void NoLogFuncTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			void LogIt(Func<string> message)
+			{
+				JsonOptions.Log?.Verbose(message());
+			}
+
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = null;
+				LogIt(() => $"changing storedValue to {PrintValue(4)}");
+
+				Assert.AreEqual(0, storedValue);
+			}
+			catch
+			{
+				JsonOptions.Log = log;
+				throw;
+			}
 		}
 
 		#endregion

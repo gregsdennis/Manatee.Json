@@ -89,7 +89,7 @@ namespace Manatee.Json.Schema
 		{
 			if (schema.DocumentPath == null) return;
 
-			Log.Schema($"Registering \"{schema.DocumentPath.OriginalString}\"");
+			Log.Schema(() => $"Registering \"{schema.DocumentPath.OriginalString}\"");
 			lock (_schemaLookup)
 			{
 				_schemaLookup[schema.DocumentPath.OriginalString] = schema;
@@ -100,7 +100,7 @@ namespace Manatee.Json.Schema
 		{
 			if (schema.Id != null && schema.Id.IsLocalSchemaId())
 			{
-				Log.Schema($"Registering \"{schema.Id}\"");
+				Log.Schema(() => $"Registering \"{schema.Id}\"");
 				lock (_contextLookup)
 				{
 					_contextLookup[schema.Id] = schema;
@@ -111,7 +111,7 @@ namespace Manatee.Json.Schema
 			if (anchor != null)
 			{
 				var anchorUri = $"{schema.DocumentPath}#{anchor.Value}";
-				Log.Schema($"Registering \"{anchorUri}\"");
+				Log.Schema(() => $"Registering \"{anchorUri}\"");
 				lock (_contextLookup)
 				{
 					_contextLookup[anchorUri] = schema;

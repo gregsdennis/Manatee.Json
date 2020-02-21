@@ -139,13 +139,13 @@ namespace Manatee.Json.Schema
 			EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
 			EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
 			if (other.EvaluatedPropertyNames.Any())
-				Log.Schema($"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+				Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LastEvaluatedIndex);
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LocalTierLastEvaluatedIndex);
 			ValidatedIndices.UnionWith(other.ValidatedIndices);
 			ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
 			if (other.EvaluatedPropertyNames.Any())
-				Log.Schema($"Indices [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+				Log.Schema(() => $"Indices [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
 		}
 	}
 }

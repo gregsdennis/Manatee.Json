@@ -80,7 +80,7 @@ namespace Manatee.Json.Schema
 
 			if (!results.IsValid)
 			{
-				Log.Schema("Subschema succeeded; inverting result");
+				Log.Schema(() => "Subschema succeeded; inverting result");
 				results.ErrorMessage = ErrorTemplate;
 			}
 

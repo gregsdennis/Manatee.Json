@@ -70,13 +70,13 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Number)
 			{
-				Log.Schema("Instance not a number; not applicable");
+				Log.Schema(() => "Instance not a number; not applicable");
 				return results;
 			}
 
 			if (context.Instance.Number >= Value)
 			{
-				Log.Schema($"Bounds check failed: {context.Instance.Number} >= {Value}");
+				Log.Schema(() => $"Bounds check failed: {context.Instance.Number} >= {Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["upperBound"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance;

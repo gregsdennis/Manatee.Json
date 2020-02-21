@@ -71,7 +71,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.Array)
 			{
-				Log.Schema("Instance not an array; not applicable");
+				Log.Schema(() => "Instance not an array; not applicable");
 				return new SchemaValidationResults(Name, context);
 			}
 
@@ -83,14 +83,14 @@ namespace Manatee.Json.Schema
 			var indicesToEvaluate = Enumerable.Range(0, array.Count).Except(context.ValidatedIndices).ToList();
 			var failedIndices = new JsonArray();
 
-			Log.Schema(indicesToEvaluate.Any()
+			Log.Schema(() => indicesToEvaluate.Any()
 						   ? "No indices have been evaluated; process all"
 						   : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
 			if (indicesToEvaluate.Any())
 			{
 				if (Value == JsonSchema.False)
 				{
-					Log.Schema("Subschema is `false`; all instances invalid");
+					Log.Schema(() => "Subschema is `false`; all instances invalid");
 					results.IsValid = false;
 					results.Keyword = Name;
 					results.AdditionalInfo["indices"] = indicesToEvaluate.ToJson();
@@ -121,7 +121,7 @@ namespace Manatee.Json.Schema
 					{
 						if (!valid)
 						{
-							Log.Schema("Subschema failed; halting validation early");
+							Log.Schema(() => "Subschema failed; halting validation early");
 							break;
 						}
 					}
@@ -131,7 +131,7 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				Log.Schema("All items have been validated");
+				Log.Schema(() => "All items have been validated");
 			}
 			results.NestedResults = nestedResults;
 			results.IsValid = valid;

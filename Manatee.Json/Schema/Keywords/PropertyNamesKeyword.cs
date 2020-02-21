@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				Log.Schema("Instance not an object; not applicable");
+				Log.Schema(() => "Instance not an object; not applicable");
 				return results;
 			}
 
@@ -102,7 +102,7 @@ namespace Manatee.Json.Schema
 				{
 					if (!valid)
 					{
-						Log.Schema("Subschema failed; halting validation early");
+						Log.Schema(() => "Subschema failed; halting validation early");
 						break;
 					}
 				}
@@ -115,7 +115,7 @@ namespace Manatee.Json.Schema
 			
 			if (!results.IsValid)
 			{
-				Log.Schema($"Property names {invalidPropertyNames.ToJson()} failed");
+				Log.Schema(() => $"Property names {invalidPropertyNames.ToJson()} failed");
 				results.AdditionalInfo["properties"] = invalidPropertyNames;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}

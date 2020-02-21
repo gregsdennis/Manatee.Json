@@ -70,7 +70,7 @@ namespace Manatee.Json.Schema
 			var results = new SchemaValidationResults(Name, context);
 
 			bool valid = true;
-			Log.Schema($"Validating that instance is of type {Value.ToJson()}");
+			Log.Schema(() => $"Validating that instance is of type {Value.ToJson()}");
 			switch (context.Instance.Type)
 			{
 				case JsonValueType.Number:
@@ -105,7 +105,7 @@ namespace Manatee.Json.Schema
 
 			if (!valid)
 			{
-				Log.Schema($"Type check failed: found {context.Instance.Type.ToString().ToLower()}");
+				Log.Schema(() => $"Type check failed: found {context.Instance.Type.ToString().ToLower()}");
 				results.IsValid = false;
 				results.AdditionalInfo["allowed"] = Value.ToJson();
 				results.AdditionalInfo["actual"] = context.Instance.Type.ToString().ToLower();
