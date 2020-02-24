@@ -82,7 +82,7 @@ namespace Manatee.Json.Schema
 		/// when a specific draft cannot be identified.  The default is <see cref="RefResolutionStrategy.ProcessSiblingId"/>.
 		/// </summary>
 		/// <remarks>
-		/// As of draft-08, keywords are allowed to be adjacent to `$ref`.  This means that an
+		/// As of draft 2019-09, keywords are allowed to be adjacent to `$ref`.  This means that an
 		/// adjacent `$id` keyword will now change the base URI whereas in prior drafts it would not
 		/// since adjacent keywords were to be ignored.
 		///

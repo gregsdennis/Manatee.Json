@@ -299,7 +299,7 @@ namespace Manatee.Json.Schema
 
 			context.Local = this;
 
-			var refKeyword = this.Get<RefKeyword>();
+			var refKeyword = this.Get<RefKeyword?>();
 			if (refKeyword == null ||
 			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
 			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09)
@@ -318,19 +318,21 @@ namespace Manatee.Json.Schema
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
-			if (refKeyword != null) return refKeyword.Validate(context);
+			var nestedResults = new List<SchemaValidationResults>();
+
+			if (refKeyword != null && !context.Root.SupportedVersions.HasFlag(JsonSchemaVersion.Draft2019_09))
+				return refKeyword.Validate(context);
+
+			nestedResults.AddRange(this.OrderBy(k => k.ValidationSequence)
+				                       .Select(k =>
+					                       {
+						                       Log.Schema(() => $"Processing `{k.Name}`");
+						                       var localResults = k.Validate(context);
+						                       Log.Schema(() => $"`{k.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
+						                       return localResults;
+					                       }));
 
 			var results = new SchemaValidationResults(context);
-
-			var nestedResults = this.OrderBy(k => k.ValidationSequence)
-				.Select(k =>
-					{
-						Log.Schema(() => $"Processing `{k.Name}`");
-						var localResults = k.Validate(context);	
-						Log.Schema(() => $"`{k.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
-						return localResults;
-					}).ToList();
-
 			if (nestedResults.Any(r => !r.IsValid))
 				results.IsValid = false;
 
