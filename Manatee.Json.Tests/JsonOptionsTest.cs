@@ -376,11 +376,19 @@ namespace Manatee.Json.Tests
 				return value;
 			}
 
-			// Test suite sets log
-			Assert.IsNotNull(JsonOptions.Log);
-			JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = new OptionsConfigurator.ConsoleLog();
+				JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
 
-			Assert.AreEqual(4, storedValue);
+				Assert.AreEqual(4, storedValue);
+			}
+			catch
+			{
+				JsonOptions.Log = log;
+				throw;
+			}
 		}
 
 		// this isn't really testing desired behavior; just illustrating c# behavior

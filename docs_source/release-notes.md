@@ -2,7 +2,7 @@
 
 *Released on 20 Feb, 2020*
 
-<span id="feature">feature</span>
+<span id="feature">feature</span><span id="patch">patch</span>
 
 ([#254](https://github.com/gregsdennis/Manatee.Json/issues/254)) Include properties and item indices for `additional*` and `unevaluated*` schema keywords.
 
@@ -11,6 +11,8 @@
 ([#257](https://github.com/gregsdennis/Manatee.Json/issues/255)) Fixed debug logging so that it only processes the output strings when configured to log.
 
 Also added `.ToJson()` override for `IEnumerable<int>`.  Previously only supported `IEnumerable<double>`.
+
+Fixed a bug with `$ref`-sibling keywords not being processed for draft 2019-09.
 
 # 12.2.0
 
