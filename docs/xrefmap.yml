@@ -1045,6 +1045,15 @@ references:
   fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Nullable(Of System.Collections.Generic.IEnumerable(Of System.Double)))
   nameWithType: LinqExtensions.ToJson(Nullable<IEnumerable<Double>>)
   nameWithType.vb: LinqExtensions.ToJson(Nullable(Of IEnumerable(Of Double)))
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Nullable{System.Collections.Generic.IEnumerable{System.Int32}})
+  name: ToJson(Nullable<IEnumerable<Int32>>)
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Nullable_System_Collections_Generic_IEnumerable_System_Int32___
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Nullable{System.Collections.Generic.IEnumerable{System.Int32}})
+  name.vb: ToJson(Nullable(Of IEnumerable(Of Int32)))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Nullable<System.Collections.Generic.IEnumerable<System.Int32>>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Nullable(Of System.Collections.Generic.IEnumerable(Of System.Int32)))
+  nameWithType: LinqExtensions.ToJson(Nullable<IEnumerable<Int32>>)
+  nameWithType.vb: LinqExtensions.ToJson(Nullable(Of IEnumerable(Of Int32)))
 - uid: Manatee.Json.LinqExtensions.ToJson(System.Nullable{System.Collections.Generic.IEnumerable{System.Nullable{System.Boolean}}})
   name: ToJson(Nullable<IEnumerable<Nullable<Boolean>>>)
   href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Nullable_System_Collections_Generic_IEnumerable_System_Nullable_System_Boolean____
@@ -1063,6 +1072,15 @@ references:
   fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Nullable(Of System.Collections.Generic.IEnumerable(Of System.Nullable(Of System.Double))))
   nameWithType: LinqExtensions.ToJson(Nullable<IEnumerable<Nullable<Double>>>)
   nameWithType.vb: LinqExtensions.ToJson(Nullable(Of IEnumerable(Of Nullable(Of Double))))
+- uid: Manatee.Json.LinqExtensions.ToJson(System.Nullable{System.Collections.Generic.IEnumerable{System.Nullable{System.Int32}}})
+  name: ToJson(Nullable<IEnumerable<Nullable<Int32>>>)
+  href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Nullable_System_Collections_Generic_IEnumerable_System_Nullable_System_Int32____
+  commentId: M:Manatee.Json.LinqExtensions.ToJson(System.Nullable{System.Collections.Generic.IEnumerable{System.Nullable{System.Int32}}})
+  name.vb: ToJson(Nullable(Of IEnumerable(Of Nullable(Of Int32))))
+  fullName: Manatee.Json.LinqExtensions.ToJson(System.Nullable<System.Collections.Generic.IEnumerable<System.Nullable<System.Int32>>>)
+  fullName.vb: Manatee.Json.LinqExtensions.ToJson(System.Nullable(Of System.Collections.Generic.IEnumerable(Of System.Nullable(Of System.Int32))))
+  nameWithType: LinqExtensions.ToJson(Nullable<IEnumerable<Nullable<Int32>>>)
+  nameWithType.vb: LinqExtensions.ToJson(Nullable(Of IEnumerable(Of Nullable(Of Int32))))
 - uid: Manatee.Json.LinqExtensions.ToJson(System.Nullable{System.Collections.Generic.IEnumerable{System.Nullable{System.String}}})
   name: ToJson(Nullable<IEnumerable<Nullable<String>>>)
   href: api/Manatee.Json.LinqExtensions.html#Manatee_Json_LinqExtensions_ToJson_System_Nullable_System_Collections_Generic_IEnumerable_System_Nullable_System_String____
@@ -16250,12 +16268,24 @@ references:
   commentId: F:Manatee.Json.Schema.RefResolutionStrategy.IgnoreSiblingId
   fullName: Manatee.Json.Schema.RefResolutionStrategy.IgnoreSiblingId
   nameWithType: RefResolutionStrategy.IgnoreSiblingId
+- uid: Manatee.Json.Schema.RefResolutionStrategy.IgnoreSiblingKeywords
+  name: IgnoreSiblingKeywords
+  href: api/Manatee.Json.Schema.RefResolutionStrategy.html#Manatee_Json_Schema_RefResolutionStrategy_IgnoreSiblingKeywords
+  commentId: F:Manatee.Json.Schema.RefResolutionStrategy.IgnoreSiblingKeywords
+  fullName: Manatee.Json.Schema.RefResolutionStrategy.IgnoreSiblingKeywords
+  nameWithType: RefResolutionStrategy.IgnoreSiblingKeywords
 - uid: Manatee.Json.Schema.RefResolutionStrategy.ProcessSiblingId
   name: ProcessSiblingId
   href: api/Manatee.Json.Schema.RefResolutionStrategy.html#Manatee_Json_Schema_RefResolutionStrategy_ProcessSiblingId
   commentId: F:Manatee.Json.Schema.RefResolutionStrategy.ProcessSiblingId
   fullName: Manatee.Json.Schema.RefResolutionStrategy.ProcessSiblingId
   nameWithType: RefResolutionStrategy.ProcessSiblingId
+- uid: Manatee.Json.Schema.RefResolutionStrategy.ProcessSiblingKeywords
+  name: ProcessSiblingKeywords
+  href: api/Manatee.Json.Schema.RefResolutionStrategy.html#Manatee_Json_Schema_RefResolutionStrategy_ProcessSiblingKeywords
+  commentId: F:Manatee.Json.Schema.RefResolutionStrategy.ProcessSiblingKeywords
+  fullName: Manatee.Json.Schema.RefResolutionStrategy.ProcessSiblingKeywords
+  nameWithType: RefResolutionStrategy.ProcessSiblingKeywords
 - uid: Manatee.Json.Schema.RequiredKeyword
   name: RequiredKeyword
   href: api/Manatee.Json.Schema.RequiredKeyword.html
