@@ -14,6 +14,8 @@ Also added `.ToJson()` override for `IEnumerable<int>`.  Previously only support
 
 Fixed a bug with `$ref`-sibling keywords not being processed for draft 2019-09.
 
+Fixed several bugs in JSON Path evaluation in accordance with additions to the [test report site](https://cburgmer.github.io/json-path-comparison/).
+
 # 12.2.0
 
 *Released on 11 Feb, 2020*

@@ -36,8 +36,7 @@ namespace Manatee.Json.Schema
 		private bool? _inherentValue;
 		private Uri? _documentPath;
 		private bool _hasRegistered;
-		private bool _hasValidated;
-		private JsonSchemaVersion _supportedVersions;
+		private MetaSchemaValidationResults? _metaSchemaResults;
 
 		/// <summary>
 		/// Defines the document path.  If not explicitly provided, it will be derived from the <see cref="Id"/> property.
@@ -62,14 +61,12 @@ namespace Manatee.Json.Schema
 		{
 			get
 			{
-				if (!_hasValidated)
-					ValidateSchema();
-				return _supportedVersions;
+				_metaSchemaResults ??= ValidateSchema();
+				return _metaSchemaResults.SupportedVersions;
 			}
 			internal set
 			{
-				_supportedVersions = value;
-				_hasValidated = true;
+				_metaSchemaResults = new MetaSchemaValidationResults {SupportedVersions = value};
 			}
 		}
 		/// <summary>
@@ -95,6 +92,8 @@ namespace Manatee.Json.Schema
 		/// <returns>Validation results.</returns>
 		public MetaSchemaValidationResults ValidateSchema()
 		{
+			if (_metaSchemaResults != null) return _metaSchemaResults;
+
 			var results = new MetaSchemaValidationResults();
 
 			JsonSchemaVersion startVersion;
@@ -116,7 +115,7 @@ namespace Manatee.Json.Schema
 					if (metaSchema != null)
 					{
 						var asJson = ToJson(new JsonSerializer());
-						var context = new SchemaValidationContext(this, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"))
+						var context = new SchemaValidationContext(metaSchema, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"))
 							{
 								IsMetaSchemaValidation = true
 							};
@@ -170,7 +169,7 @@ namespace Manatee.Json.Schema
 				}
 			}
 
-			_supportedVersions = supportedVersions;
+			results.SupportedVersions = supportedVersions;
 
 			var duplicateKeywords = this.GroupBy(k => k.Name)
 			                            .Where(g => g.Count() > 1)
@@ -179,7 +178,7 @@ namespace Manatee.Json.Schema
 			if (duplicateKeywords.Any())
 				results.OtherErrors.Add($"The following keywords have been entered more than once: {string.Join(", ", duplicateKeywords)}");
 
-			_hasValidated = true;
+			_metaSchemaResults = results;
 
 			return results;
 		}
@@ -250,7 +249,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
 		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
-			var first = pointer.FirstOrDefault();
+			var first = pointer.FirstOrDefault<string?>();
 			if (first == null)
 			{
 				DocumentPath = DocumentPath != null ? new Uri(baseUri, DocumentPath) : baseUri;
@@ -301,7 +300,7 @@ namespace Manatee.Json.Schema
 
 			var refKeyword = this.Get<RefKeyword?>();
 			if (refKeyword == null ||
-			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
+			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
 			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09)
 			{
 				if (context.BaseUri == null)

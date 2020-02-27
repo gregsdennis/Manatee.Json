@@ -181,7 +181,7 @@ namespace Manatee.Json.Schema
 			if (!string.IsNullOrWhiteSpace(address))
 			{
 				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute) &&
-					(JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
+					(JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
 					 context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09))
 					address = context.Local.Id + address;
 

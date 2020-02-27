@@ -9,9 +9,9 @@ namespace Manatee.Json.Path
 	/// </summary>
 	public class Slice : IEquatable<Slice>
 	{
-		private int? _start;
-		private int? _end;
-		private int? _step;
+		private readonly int? _start;
+		private readonly int? _end;
+		private readonly int? _step;
 
 		internal int? Index { get; }
 
@@ -103,13 +103,18 @@ namespace Manatee.Json.Path
 					: new[] {json[index]};
 			}
 
-			var start = _ResolveIndex(_start ?? 0, json.Count);
+			var start = Math.Max(_ResolveIndex(_start ?? 0, json.Count), 0);
 			var end = _ResolveIndex(_end ?? json.Count, json.Count);
+			if (start == end)
+				return Enumerable.Empty<JsonValue>();
+			//var step = _step ?? (start < end ? 1 : -1);
 			var step = _step ?? 1;
 
-			// quick copy
 			if (start == 0 && end == json.Count && step == 1)
-				return new List<JsonValue>(json);
+				return json;
+
+			if (step > 0 && end <= start)
+				return Enumerable.Empty<JsonValue>();
 
 			if (step == 1)
 			{

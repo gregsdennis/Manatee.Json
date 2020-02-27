@@ -75,7 +75,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 			{
 				path.Operators.Remove(array);
 				var query = array.Query as SliceQuery;
-				var constant = query?.Slices.FirstOrDefault()?.Index;
+				var constant = query?.Slices.FirstOrDefault<Slice?>()?.Index;
 				if (query == null || query.Slices.Count() != 1 || !constant.HasValue)
 				{
 					errorMessage = "JSON Path expression indexers only support single constant values.";
