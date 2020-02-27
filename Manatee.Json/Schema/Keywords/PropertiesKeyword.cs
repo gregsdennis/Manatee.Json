@@ -50,7 +50,7 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				Log.Schema("Instance not an object; not applicable");
+				Log.Schema(() => "Instance not an object; not applicable");
 				return results;
 			}
 
@@ -62,7 +62,7 @@ namespace Manatee.Json.Schema
 			{
 				if (!obj.ContainsKey(property.Key))
 				{
-					Log.Schema($"Property {property.Key} not found; skipping");
+					Log.Schema(() => $"Property {property.Key} not found; skipping");
 					continue;
 				}
 
@@ -84,7 +84,7 @@ namespace Manatee.Json.Schema
 				{
 					if (!valid)
 					{
-						Log.Schema("Subschema failed; halting validation early");
+						Log.Schema(() => "Subschema failed; halting validation early");
 						break;
 					}
 				}

@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 				if (Resolved == null)
 					throw new SchemaReferenceNotFoundException(context.RelativeLocation);
 				
-				Log.Schema("Reference found");
+				Log.Schema(() => "Reference found");
 			}
 
 			var results = new SchemaValidationResults(Name, context);
@@ -163,15 +163,15 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
-			Log.Schema($"Resolving `{Reference}`");
+			Log.Schema(() => $"Resolving `{Reference}`");
 
 			if (Reference.IsLocalSchemaId())
 			{
-				Log.Schema("Reference recognized as anchor or local ID");
+				Log.Schema(() => "Reference recognized as anchor or local ID");
 				Resolved = context.LocalRegistry.GetLocal(Reference);
 				if (Resolved != null) return;
 
-				Log.Schema($"`{Reference}` is an unknown anchor");
+				Log.Schema(() => $"`{Reference}` is an unknown anchor");
 			}
 
 			var documentPath = context.BaseUri;
@@ -181,7 +181,7 @@ namespace Manatee.Json.Schema
 			if (!string.IsNullOrWhiteSpace(address))
 			{
 				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute) &&
-					(JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingId ||
+					(JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
 					 context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09))
 					address = context.Local.Id + address;
 
@@ -199,14 +199,14 @@ namespace Manatee.Json.Schema
 
 			if (_resolvedRoot == null)
 			{
-				Log.Schema("Could not resolve root of reference");
+				Log.Schema(() => "Could not resolve root of reference");
 				return;
 			}
 
 			var wellKnown = JsonSchemaRegistry.GetWellKnown(Reference);
 			if (wellKnown != null)
 			{
-				Log.Schema("Well known reference found");
+				Log.Schema(() => "Well known reference found");
 				Resolved = wellKnown;
 				return;
 			}
@@ -221,7 +221,7 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
-			Log.Schema($"Resolving local reference {_resolvedFragment}");
+			Log.Schema(() => $"Resolving local reference {_resolvedFragment}");
 			Resolved = _resolvedRoot!.ResolveSubschema(_resolvedFragment!, baseUri);
 		}
 	}

@@ -19,16 +19,20 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the error message template.
 		/// </summary>
 		/// <remarks>
-		/// Does not supports any tokens.
+		/// Supports the following tokens:
+		/// - properties
 		/// </remarks>
-		public static string ErrorTemplate { get; set; } = "Any properties not covered by `properties` and `patternProperties` failed validation.";
+		public static string ErrorTemplate { get; set; } = "Properties {{properties}} were not covered by either `properties` or `patternProperties` " +
+		                                                   "and failed validation of the local subschema.";
 		/// <summary>
 		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
 		/// </summary>
 		/// <remarks>
-		/// Does not supports any tokens.
+		/// Supports the following tokens:
+		/// - properties
 		/// </remarks>
-		public static string ErrorTemplate_False { get; set; } = "Properties not covered by `properties` and `patternProperties` are not allowed.";
+		public static string ErrorTemplate_False { get; set; } = "Properties {{properties}} are covered by neither `properties` nor `patternProperties` " +
+		                                                         "and so are not allowed.";
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -77,7 +81,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				Log.Schema("Instance not an object; not applicable");
+				Log.Schema(() => "Instance not an object; not applicable");
 				return new SchemaValidationResults(Name, context);
 			}
 
@@ -86,25 +90,27 @@ namespace Manatee.Json.Schema
 			var toEvaluate = obj.Where(kvp => !context.LocallyEvaluatedPropertyNames.Contains(kvp.Key))!.ToJson();
 			if (toEvaluate.Count == 0)
 			{
-				Log.Schema("All properties have been evaluated");
+				Log.Schema(() => "All properties have been evaluated");
 				return results;
 			}
 
-			Log.Schema(context.LocallyEvaluatedPropertyNames.Count == 0
+			Log.Schema(() => context.LocallyEvaluatedPropertyNames.Count == 0
 				                         ? "No properties have been evaluated; process all"
 				                         : $"Properties {context.LocallyEvaluatedPropertyNames.ToJson()} have been evaluated; skipping these");
 			if (Value == JsonSchema.False && toEvaluate.Any())
 			{
-				Log.Schema("Subschema is `false`; all instances invalid");
+				Log.Schema(() => "Subschema is `false`; all instances invalid");
 				results.IsValid = false;
 				results.Keyword = Name;
-				results.ErrorMessage = ErrorTemplate_False;
+				results.AdditionalInfo["properties"] = toEvaluate.Keys.ToJson();
+				results.ErrorMessage = ErrorTemplate_False.ResolveTokens(results.AdditionalInfo);
 				return results;
 			}
 
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
+			var failedProperties = new JsonArray();
 
 			foreach (var kvp in toEvaluate)
 			{
@@ -118,6 +124,10 @@ namespace Manatee.Json.Schema
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(kvp.Key),
 					};
 				var localResults = Value.Validate(newContext);
+				if (!localResults.IsValid)
+				{
+					failedProperties.Add(kvp.Key);
+				}
 				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
 				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 				valid &= localResults.IsValid;
@@ -126,7 +136,7 @@ namespace Manatee.Json.Schema
 				{
 					if (!valid)
 					{
-						Log.Schema("Subschema failed; halting validation early");
+						Log.Schema(() => "Subschema failed; halting validation early");
 						break;
 					}
 				} else if (reportChildErrors)
@@ -139,7 +149,8 @@ namespace Manatee.Json.Schema
 			{
 				results.IsValid = false;
 				results.Keyword = Name;
-				results.ErrorMessage = ErrorTemplate;
+				results.AdditionalInfo["properties"] = failedProperties;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}
 
 			return results;

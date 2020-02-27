@@ -71,7 +71,7 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				Log.Schema("Instance not an object; not applicable");
+				Log.Schema(() => "Instance not an object; not applicable");
 				return results;
 			}
 
@@ -92,7 +92,7 @@ namespace Manatee.Json.Schema
 
 			if (missingProperties.Any())
 			{
-				Log.Schema($"Properties {missingProperties.ToJson()} required but not found");
+				Log.Schema(() => $"Properties {missingProperties.ToJson()} required but not found");
 				results.IsValid = false;
 				results.AdditionalInfo["properties"] = missingProperties.ToJson();
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);

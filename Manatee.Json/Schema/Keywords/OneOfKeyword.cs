@@ -64,14 +64,14 @@ namespace Manatee.Json.Schema
 				var localResults = s.Validate(newContext);
 				if (localResults.IsValid)
 					validCount++;
-				Log.Schema($"`{Name}` {validCount} items valid so far");
+				Log.Schema(() => $"`{Name}` {validCount} items valid so far");
 				contextCopy.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
 					if (validCount > 1)
 					{
-						Log.Schema("More than one subschema succeeded; halting validation early");
+						Log.Schema(() => "More than one subschema succeeded; halting validation early");
 						break;
 					}
 				}
@@ -87,7 +87,7 @@ namespace Manatee.Json.Schema
 
 			if (!results.IsValid)
 			{
-				Log.Schema($"{validCount} subschemas passed validation; expected only one");
+				Log.Schema(() => $"{validCount} subschemas passed validation; expected only one");
 				results.AdditionalInfo["passed"] = validCount;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
 			}

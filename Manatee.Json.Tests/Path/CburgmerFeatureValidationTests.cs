@@ -23,20 +23,37 @@ namespace Manatee.Json.Tests.Path
 		private static readonly Regex _consensusPattern = new Regex(@"    consensus: (?<value>.*)");
 		private static readonly string[] _notSupported =
 			{
+				// invalid
 				"$[?(@.key=42)]",
 				"$[?(@)]",
+				"$['single'quote']",
+
+				// nested expression
 				"$[?(@.a[?(@.price>10)])]",
+				
+				// unions
 				"$['key','another']",
 				"$['one','three'].key",
+				"$[?(@<3),?(@>6)]",
+				"$[:]['c','d']",
+				"$[0]['c','d']",
+				"$.*['c','d']",
+
+				// path within indexer
 				"$['two'.'some']",
 				"$[two.some]",
-				"$['single'quote']",
+
+				// unquoted keys
 				"$[key]",
 				"$.[key]",
+				
+				// no search term
 				"$..",
+				
+				// maybe add support for this later
 				"$..[?(@.id==2)]",
 				"$..[?(@.id)]",
-				"$[?(@.name=~/hello.*/)]"
+				"$[?(@.name=~/hello.*/)]",
 			};
 
 		private ArrayEquality _arrayEquality;
@@ -93,6 +110,7 @@ namespace Manatee.Json.Tests.Path
 		[OneTimeSetUp]
 		public void Setup()
 		{
+			_arrayEquality = JsonOptions.DefaultArrayEquality;
 			JsonOptions.DefaultArrayEquality = ArrayEquality.ContentsEqual;
 		}
 

@@ -7,7 +7,7 @@ namespace Manatee.Json.Tests
 	[SetUpFixture]
 	public class OptionsConfigurator
 	{
-		class ConsoleLog : ILog
+		public class ConsoleLog : ILog
 		{
 			private static readonly Stopwatch _stopwatch;
 

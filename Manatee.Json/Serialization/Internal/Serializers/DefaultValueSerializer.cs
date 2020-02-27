@@ -10,11 +10,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 
 		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
-			Log.Serialization("Checking for default value");
+			Log.Serialization(() => "Checking for default value");
 			if (Equals(context.Source, context.RequestedType.Default()) &&
 			    !context.RootSerializer.Options.EncodeDefaultValues)
 			{
-				Log.Serialization($"Value was default for {context.InferredType.CSharpName()}; returning JSON null");
+				Log.Serialization(() => $"Value was default for {context.InferredType.CSharpName()}; returning JSON null");
 				return JsonValue.Null;
 			}
 
@@ -27,7 +27,7 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		{
 			if (context.LocalValue.Type == JsonValueType.Null)
 			{
-				Log.Serialization($"Found JSON null; returning default for {context.InferredType.CSharpName()}");
+				Log.Serialization(() => $"Found JSON null; returning default for {context.InferredType.CSharpName()}");
 				return context.InferredType.Default();
 			}
 

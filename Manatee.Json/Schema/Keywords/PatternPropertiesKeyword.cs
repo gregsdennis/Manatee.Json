@@ -51,7 +51,7 @@ namespace Manatee.Json.Schema
 
 			if (context.Instance.Type != JsonValueType.Object)
 			{
-				Log.Schema("Instance not an object; not applicable");
+				Log.Schema(() => "Instance not an object; not applicable");
 				return results;
 			}
 
@@ -67,7 +67,7 @@ namespace Manatee.Json.Schema
 				var matches = obj.Keys.Where(k => pattern.IsMatch(k));
 				if (matches.Any())
 				{
-					Log.Schema($"Properties {matches.ToJson()} are matches for regular expression \"{pattern}\"");
+					Log.Schema(() => $"Properties {matches.ToJson()} are matches for regular expression \"{pattern}\"");
 					var baseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, patternProperty.Key);
 					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
 					foreach (var match in matches)
@@ -90,7 +90,7 @@ namespace Manatee.Json.Schema
 						{
 							if (!valid)
 							{
-								Log.Schema("Subschema failed; halting validation early");
+								Log.Schema(() => "Subschema failed; halting validation early");
 								break;
 							}
 						}
@@ -100,7 +100,7 @@ namespace Manatee.Json.Schema
 				}
 				else
 				{
-					Log.Schema($"No properties found that match regular expression \"{pattern}\"");
+					Log.Schema(() => $"No properties found that match regular expression \"{pattern}\"");
 				}
 			}
 

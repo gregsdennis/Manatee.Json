@@ -19,16 +19,18 @@ namespace Manatee.Json.Schema
 		/// Gets or sets the error message template.
 		/// </summary>
 		/// <remarks>
-		/// Does not supports any tokens.
+		/// Supports the following tokens:
+		/// - indices
 		/// </remarks>
-		public static string ErrorTemplate { get; set; } = "Items not covered by `items` failed validation.";
+		public static string ErrorTemplate { get; set; } = "Items at indices {{indices}} are not covered by `items` and failed validation of the local subschema.";
 		/// <summary>
 		/// Gets or sets the error message template for when the schema is <see cref="JsonSchema.False"/>.
 		/// </summary>
 		/// <remarks>
-		/// Does not supports any tokens.
+		/// Supports the following tokens:
+		/// - indices
 		/// </remarks>
-		public static string ErrorTemplate_False { get; set; } = "Items not covered by `items` are not allowed.";
+		public static string ErrorTemplate_False { get; set; } = "Items at indices {{indices}} are not covered by `items` and so are not allowed.";
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -77,7 +79,7 @@ namespace Manatee.Json.Schema
 		{
 			if (context.Instance.Type != JsonValueType.Array) return new SchemaValidationResults(Name, context);
 
-			var itemsKeyword = context.Local.Get<ItemsKeyword>();
+			var itemsKeyword = context.Local.Get<ItemsKeyword?>();
 			if (itemsKeyword == null || !itemsKeyword.IsArray) return new SchemaValidationResults(Name, context);
 
 			var nestedResults = new List<SchemaValidationResults>();
@@ -86,18 +88,20 @@ namespace Manatee.Json.Schema
 			var valid = true;
 			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
 			var startIndex = context.LocalTierLastEvaluatedIndex + 1;
+			var failedIndices = new JsonArray();
 
-			Log.Schema(startIndex == 0
+			Log.Schema(() => startIndex == 0
 						   ? "No indices have been evaluated; process all"
 						   : $"Indices up to {context.LastEvaluatedIndex} have been evaluated; skipping these");
 			if (startIndex < array.Count)
 			{
 				if (Value == JsonSchema.False)
 				{
-					Log.Schema("Subschema is `false`; all instances invalid");
+					Log.Schema(() => $"Subschema is `false`; all instances after index {startIndex} are invalid");
 					results.IsValid = false;
 					results.Keyword = Name;
-					results.ErrorMessage = ErrorTemplate_False;
+					results.AdditionalInfo["indices"] = Enumerable.Range(startIndex, array.Count - startIndex).ToJson();
+					results.ErrorMessage = ErrorTemplate_False.ResolveTokens(results.AdditionalInfo);
 					return results;
 				}
 
@@ -115,6 +119,8 @@ namespace Manatee.Json.Schema
 							InstanceLocation = context.InstanceLocation.CloneAndAppend(index.ToString()),
 						};
 					var localResults = Value.Validate(newContext);
+					if (!localResults.IsValid)
+						failedIndices.Add(index);
 					valid &= localResults.IsValid;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
@@ -125,7 +131,7 @@ namespace Manatee.Json.Schema
 					{
 						if (!valid)
 						{
-							Log.Schema("Subschema failed; halting validation early");
+							Log.Schema(() => "Subschema failed; halting validation early");
 							break;
 						}
 					}
@@ -135,14 +141,17 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				Log.Schema("All items have been validated");
+				Log.Schema(() => "All items have been validated");
 			}
 			results.NestedResults = nestedResults;
 			results.IsValid = valid;
 			results.Keyword = Name;
 
 			if (!valid)
-				results.ErrorMessage = ErrorTemplate;
+			{
+				results.AdditionalInfo["indices"] = failedIndices;
+				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+			}
 
 			return results;
 		}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -398,6 +399,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the indicated keyword, if present.
 		/// </summary>
+		[return: MaybeNull]
 		public static T Get<T>(this JsonSchema schema)
 			where T : IJsonSchemaKeyword?
 		{

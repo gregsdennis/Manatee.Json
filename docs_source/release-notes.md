@@ -1,3 +1,21 @@
+# 12.3.0
+
+*Released on 20 Feb, 2020*
+
+<span id="feature">feature</span><span id="patch">patch</span>
+
+([#254](https://github.com/gregsdennis/Manatee.Json/issues/254)) Include properties and item indices for `additional*` and `unevaluated*` schema keywords.
+
+([#255](https://github.com/gregsdennis/Manatee.Json/issues/255)) Added `writeOnly` to draft 7 metaschema in accordance with [JSON Schema correction](https://github.com/json-schema-org/json-schema-org.github.io/pull/308).
+
+([#257](https://github.com/gregsdennis/Manatee.Json/issues/255)) Fixed debug logging so that it only processes the output strings when configured to log.
+
+Also added `.ToJson()` override for `IEnumerable<int>`.  Previously only supported `IEnumerable<double>`.
+
+Fixed a bug with `$ref`-sibling keywords not being processed for draft 2019-09.
+
+Fixed several bugs in JSON Path evaluation in accordance with additions to the [test report site](https://cburgmer.github.io/json-path-comparison/).
+
 # 12.2.0
 
 *Released on 11 Feb, 2020*
@@ -27,7 +45,7 @@ The remaining items will not be supported for now.  Support _may_ be added with 
 
 <span id="patch">patch</span>
 
-([#248](https://github.com/gregsdennis/Manatee.Json/pulls/248)) `$ref` and `$recursiveRef` schema keywords were not passing up evaluated properties/items, so `unevaluatedProperties` and `unevaluatedItems` keywords could not "see through" them.
+([#248](https://github.com/gregsdennis/Manatee.Json/issues/248)) `$ref` and `$recursiveRef` schema keywords were not passing up evaluated properties/items, so `unevaluatedProperties` and `unevaluatedItems` keywords could not "see through" them.
 
 # 12.0.2
 
@@ -35,7 +53,7 @@ The remaining items will not be supported for now.  Support _may_ be added with 
 
 <span id="patch">patch</span>
 
-([#243](https://github.com/gregsdennis/Manatee.Json/pulls/243)) Bugs with JSON Path implementation
+([#243](https://github.com/gregsdennis/Manatee.Json/issues/243)) Bugs with JSON Path implementation
   - `ArgumentOutOfRangeException` thrown when array index overlaps instance but is out of range of instance.  Should just return items within the overlap.
   - Wildcard search operator should only return child objects, not also the root object.
 
@@ -45,7 +63,7 @@ The remaining items will not be supported for now.  Support _may_ be added with 
 
 <span id="patch">patch</span>
 
-([#241](https://github.com/gregsdennis/Manatee.Json/pulls/241)) Creating an override for a schema format causes `ArgumentException` because the key is already added.
+([#241](https://github.com/gregsdennis/Manatee.Json/issues/241)) Creating an override for a schema format causes `ArgumentException` because the key is already added.
 
 # 12.0.0
 

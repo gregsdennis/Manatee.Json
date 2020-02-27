@@ -73,7 +73,7 @@ namespace Manatee.Json.Schema
 				{
 					if (!valid)
 					{
-						Log.Schema("Dependency failed; halting validation early");
+						Log.Schema(() => "Dependency failed; halting validation early");
 						break;
 					}
 				}
