@@ -146,13 +146,13 @@
         {
           "if": { "properties": { "@type": { "const": "ViewAccountCondition" } } },
           "then": {
-            "prod_base": {
-              "type": [ "string", "null" ],
-              "pattern": "^[0-9\\+]+$"
+            "properties": {
+	            "prod_base": {
+		            "type": [ "string", "null" ],
+		            "pattern": "^[0-9\\+]+$"
+	            }
             }
-
           }
-
         },
 
         {
@@ -364,9 +364,11 @@
           "if": { "properties": { "@type": { "const": "SignerGroup" } } },
           "then": {
             "required": [ "req_sign" ],
-            "req_sign": {
-              "type": "string",
-              "pattern": "^[0-9]+$"
+            "properties": {
+	            "req_sign": {
+		            "type": "string",
+		            "pattern": "^[0-9]+$"
+	            }
             }
           }
         },
@@ -374,9 +376,11 @@
           "if": { "properties": { "@type": { "const": "CancelGroup" } } },
           "then": {
             "required": [ "req_sign" ],
-            "req_sign": {
-              "type": "string",
-              "pattern": "^[0-9]+$"
+            "properties": {
+	            "req_sign": {
+		            "type": "string",
+		            "pattern": "^[0-9]+$"
+	            }
             }
           }
         }
@@ -397,10 +401,11 @@
           "if": { "properties": { "@type": { "const": "Account" } } },
           "then": {
             "required": [ "bban", "acct_hier_tp", "curr_code", "account_owner", "ldgr_syst_name", "parc_ar_id" ],
-
-            "ldgr_syst_name": {
-              "type": "string",
-              "minLength": 1
+            "properties": {
+	            "ldgr_syst_name": {
+		            "type": "string",
+		            "minLength": 1
+	            }
             }
           }
         },
