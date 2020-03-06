@@ -317,8 +317,6 @@ namespace Manatee.Json.Schema
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
-			var nestedResults = new List<SchemaValidationResults>();
-
 			if (refKeyword != null && !context.Root.SupportedVersions.HasFlag(JsonSchemaVersion.Draft2019_09))
 				return refKeyword.Validate(context);
 
@@ -326,12 +324,12 @@ namespace Manatee.Json.Schema
 
 			foreach (var keyword in this.OrderBy(k => k.ValidationSequence))
 			{
-				Log.Schema($"Processing `{keyword.Name}`");
+				Log.Schema(() => $"Processing `{keyword.Name}`");
 				var localResults = keyword.Validate(context);
-				Log.Schema($"`{keyword.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
+				Log.Schema(() => $"`{keyword.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
 				{
-					Log.Schema("Found fail condition with flag output enabled; halting validation early.");
+					Log.Schema(() => "Found fail condition with flag output enabled; halting validation early.");
 					return new SchemaValidationResults {IsValid = false};
 				}
 				nestedResults.Add(localResults);

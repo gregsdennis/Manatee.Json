@@ -94,13 +94,12 @@ namespace Manatee.Json.Tests.Benchmark
 			
 			_manateeWatch.Reset();
 			_manateeWatch.Start();
-			JSchema schema = JSchema.Parse(schemaString);
+			var schema = JSchema.Parse(schemaString);
 
-			JObject json = JObject.Parse(dataString);
+			var json = JObject.Parse(dataString);
 			var result = json.IsValid(schema);
 
 			_manateeWatch.Stop();
-
 		}
 	}
 }

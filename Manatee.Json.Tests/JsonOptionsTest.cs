@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Tests.Common;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
@@ -379,7 +380,7 @@ namespace Manatee.Json.Tests
 			var log = JsonOptions.Log;
 			try
 			{
-				JsonOptions.Log = new OptionsConfigurator.ConsoleLog();
+				JsonOptions.Log = new ConsoleLog();
 				JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
 
 				Assert.AreEqual(4, storedValue);
