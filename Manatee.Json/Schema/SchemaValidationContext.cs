@@ -113,10 +113,12 @@ namespace Manatee.Json.Schema
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
-			EvaluatedPropertyNames.UnionWith(source.EvaluatedPropertyNames);
-			LocallyEvaluatedPropertyNames.UnionWith(source.LocallyEvaluatedPropertyNames);
-			ValidatedIndices.UnionWith(source.ValidatedIndices);
-			LocallyValidatedIndices.UnionWith(source.LocallyValidatedIndices);
+
+			_InitializeHashSet(ref _evaluatedPropertyNames, source._evaluatedPropertyNames);
+			_InitializeHashSet(ref _locallyEvaluatedPropertyNames, source._locallyEvaluatedPropertyNames);
+			_InitializeHashSet(ref _validatedIndices, source._validatedIndices);
+			_InitializeHashSet(ref _locallyValidatedIndices, source._locallyValidatedIndices);
+
 			LastEvaluatedIndex = source.LastEvaluatedIndex;
 			LocalTierLastEvaluatedIndex = source.LocalTierLastEvaluatedIndex;
 			BaseUri = source.BaseUri;
@@ -146,6 +148,20 @@ namespace Manatee.Json.Schema
 			ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
 			if (other.EvaluatedPropertyNames.Any())
 				Log.Schema(() => $"Indices [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+		}
+
+		private static void _InitializeHashSet<T>(ref HashSet<T>? hashSet, IEnumerable<T>? data)
+		{
+			if (data is null) return;
+
+			if (hashSet is null)
+			{
+				hashSet = new HashSet<T>(data);
+			}
+			else
+			{
+				hashSet.UnionWith(data);
+			}
 		}
 	}
 }

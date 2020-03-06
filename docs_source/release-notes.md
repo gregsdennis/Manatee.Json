@@ -1,3 +1,11 @@
+# 12.3.1
+
+*Released on 6 Mar, 2020*
+
+<span id="patch">patch</span>
+
+([#253](https://github.com/gregsdennis/Manatee.Json/pull/253)) Some performance and logging enhancements as suggested by a schema benchmark test.
+
 # 12.3.0
 
 *Released on 20 Feb, 2020*

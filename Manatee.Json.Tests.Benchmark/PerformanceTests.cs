@@ -26,6 +26,8 @@ namespace Manatee.Json.Tests.Benchmark
 
 		public static async Task Run()
 		{
+			JsonOptions.LogCategory = LogCategory.Serialization;
+
 			await _RunBulk();
 		}
 

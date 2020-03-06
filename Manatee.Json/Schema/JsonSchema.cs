@@ -49,11 +49,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the `$id` (or `id` for draft-04) property value, if declared.
 		/// </summary>
-		public string? Id => this.Get<IdKeyword>()?.Value;
+		public string? Id => this.Get<IdKeyword?>()?.Value;
 		/// <summary>
 		/// Gets the `$schema` property, if declared.
 		/// </summary>
-		public string? Schema => this.Get<SchemaKeyword>()?.Value;
+		public string? Schema => this.Get<SchemaKeyword?>()?.Value;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -317,19 +317,23 @@ namespace Manatee.Json.Schema
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
-			var nestedResults = new List<SchemaValidationResults>();
-
 			if (refKeyword != null && !context.Root.SupportedVersions.HasFlag(JsonSchemaVersion.Draft2019_09))
 				return refKeyword.Validate(context);
 
-			nestedResults.AddRange(this.OrderBy(k => k.ValidationSequence)
-				                       .Select(k =>
-					                       {
-						                       Log.Schema(() => $"Processing `{k.Name}`");
-						                       var localResults = k.Validate(context);
-						                       Log.Schema(() => $"`{k.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
-						                       return localResults;
-					                       }));
+			var nestedResults = new List<SchemaValidationResults>();
+
+			foreach (var keyword in this.OrderBy(k => k.ValidationSequence))
+			{
+				Log.Schema(() => $"Processing `{keyword.Name}`");
+				var localResults = keyword.Validate(context);
+				Log.Schema(() => $"`{keyword.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
+				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
+				{
+					Log.Schema(() => "Found fail condition with flag output enabled; halting validation early.");
+					return new SchemaValidationResults {IsValid = false};
+				}
+				nestedResults.Add(localResults);
+			}
 
 			var results = new SchemaValidationResults(context);
 			if (nestedResults.Any(r => !r.IsValid))
