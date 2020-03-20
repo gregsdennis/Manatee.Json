@@ -15,6 +15,7 @@ namespace Manatee.Json.Schema
 		private HashSet<string>? _locallyEvaluatedPropertyNames;
 		private HashSet<int>? _validatedIndices;
 		private HashSet<int>? _locallyValidatedIndices;
+		private Dictionary<string, object>? _misc;
 
 		/// <summary>
 		/// Gets or sets the local schema at this point in the validation.
@@ -77,6 +78,7 @@ namespace Manatee.Json.Schema
 		/// Gets or sets whether the current validation run is for a meta-schema.
 		/// </summary>
 		public bool IsMetaSchemaValidation { get; set; }
+
 		/// <summary>
 		/// Miscellaneous data.  Useful for communicating results between keywords.
 		/// </summary>
@@ -84,35 +86,50 @@ namespace Manatee.Json.Schema
 		/// Use <see cref="IJsonSchemaKeyword.ValidationSequence"/> to ensure that keywords are
 		/// processed in the correct order so that the communication occurs properly.
 		/// </remarks>
-		public Dictionary<string, object> Misc { get; } = new Dictionary<string, object>();
+		public Dictionary<string, object> Misc => _misc ??= new Dictionary<string, object>();
+
+		/// <summary>
+		/// Get or set if the validations for this context should track Evaluated Property Names.
+		/// </summary>
+		public bool ShouldTrackEvaluatedPropertyNames { get; }
+
+		/// <summary>
+		/// Get or set if the validations for this context should track Validated Indices.
+		/// </summary>
+		public bool ShouldTrackValidatedIndices { get; }
 
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
 		internal SchemaValidationContext(JsonSchema root,
-										 JsonValue instance,
-		                                 JsonPointer? baseRelativeLocation,
-		                                 JsonPointer relativeLocation,
-		                                 JsonPointer instanceLocation)
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+										JsonValue instance,
+										JsonPointer? baseRelativeLocation,
+										JsonPointer relativeLocation,
+										JsonPointer instanceLocation,
+										bool forceTrackingEvaluatedPropertyNames = false,
+										bool forceTrackingValidateIndices = false)
+			: this(root, instance, baseRelativeLocation, relativeLocation, instanceLocation)
 		{
-			Root = root;
-			Instance = instance;
-			BaseRelativeLocation = baseRelativeLocation;
-			RelativeLocation = relativeLocation;
-			InstanceLocation = instanceLocation;
-			LocalRegistry = new JsonSchemaRegistry();
+			ShouldTrackEvaluatedPropertyNames = forceTrackingEvaluatedPropertyNames || root.Any(k => k is IRequiresEvaluatedPropertyNamesTracking);
+			ShouldTrackValidatedIndices = forceTrackingValidateIndices || root.Any(k => k is IRequiresValidatedIndicesTracking);
 		}
+
 		/// <summary>
 		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.
 		/// </summary>
 		public SchemaValidationContext(SchemaValidationContext source)
-			: this(source.Root, source.Instance, source.BaseRelativeLocation, source.RelativeLocation, source.InstanceLocation)
+			: this(source.Root,
+					source.Instance,
+					source.BaseRelativeLocation,
+					source.RelativeLocation,
+					source.InstanceLocation)
 		{
 			Local = source.Local;
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
+			ShouldTrackEvaluatedPropertyNames = source.ShouldTrackEvaluatedPropertyNames;
+			ShouldTrackValidatedIndices = source.ShouldTrackValidatedIndices;
 
 			_InitializeHashSet(ref _evaluatedPropertyNames, source._evaluatedPropertyNames);
 			_InitializeHashSet(ref _locallyEvaluatedPropertyNames, source._locallyEvaluatedPropertyNames);
@@ -130,6 +147,22 @@ namespace Manatee.Json.Schema
 			LocalRegistry = source.LocalRegistry;
 		}
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+		private SchemaValidationContext(JsonSchema root, 
+										JsonValue instance,
+										JsonPointer? baseRelativeLocation,
+										JsonPointer relativeLocation,
+										JsonPointer instanceLocation)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+		{
+			Root = root;
+			Instance = instance;
+			BaseRelativeLocation = baseRelativeLocation;
+			RelativeLocation = relativeLocation;
+			InstanceLocation = instanceLocation;
+			LocalRegistry = new JsonSchemaRegistry();
+		}
+
 		/// <summary>
 		/// Updates the <see cref="EvaluatedPropertyNames"/>, <see cref="LocallyEvaluatedPropertyNames"/>,
 		/// <see cref="LastEvaluatedIndex"/>, and <see cref="LocalTierLastEvaluatedIndex"/> properties based
@@ -138,16 +171,24 @@ namespace Manatee.Json.Schema
 		/// <param name="other">Another context object.</param>
 		public void UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(SchemaValidationContext other)
 		{
-			EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
-			EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
-			if (other.EvaluatedPropertyNames.Any())
-				Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+			if (ShouldTrackEvaluatedPropertyNames)
+			{
+				EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
+				EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
+				if (other.EvaluatedPropertyNames.Any())
+					Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+			}
+
+			if (ShouldTrackValidatedIndices)
+			{
+				ValidatedIndices.UnionWith(other.ValidatedIndices);
+				ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
+				if (other.ValidatedIndices.Any())
+					Log.Schema(() => $"Indices [{ValidatedIndices.ToStringList()}] have now been validated");
+			}
+
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LastEvaluatedIndex);
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LocalTierLastEvaluatedIndex);
-			ValidatedIndices.UnionWith(other.ValidatedIndices);
-			ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
-			if (other.EvaluatedPropertyNames.Any())
-				Log.Schema(() => $"Indices [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
 		}
 
 		private static void _InitializeHashSet<T>(ref HashSet<T>? hashSet, IEnumerable<T>? data)

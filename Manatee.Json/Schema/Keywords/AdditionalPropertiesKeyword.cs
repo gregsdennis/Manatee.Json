@@ -114,7 +114,9 @@ namespace Manatee.Json.Schema
 
 			foreach (var kvp in toEvaluate)
 			{
-				context.EvaluatedPropertyNames.Add(kvp.Key);
+				if (context.ShouldTrackEvaluatedPropertyNames)
+					context.EvaluatedPropertyNames.Add(kvp.Key);
+
 				context.LocallyEvaluatedPropertyNames.Add(kvp.Key);
 				var newContext = new SchemaValidationContext(context)
 					{
@@ -128,8 +130,13 @@ namespace Manatee.Json.Schema
 				{
 					failedProperties.Add(kvp.Key);
 				}
-				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+
+				if (context.ShouldTrackEvaluatedPropertyNames)
+				{
+					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+				}
+
 				valid &= localResults.IsValid;
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
@@ -139,7 +146,8 @@ namespace Manatee.Json.Schema
 						Log.Schema(() => "Subschema failed; halting validation early");
 						break;
 					}
-				} else if (reportChildErrors)
+				}
+				else if (reportChildErrors)
 					nestedResults.Add(localResults);
 			}
 
