@@ -29,14 +29,28 @@ namespace Manatee.Json.Pointer
 		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
 		public JsonPointer(params string[] source)
 			: this((IEnumerable<string>) source) { }
+
 		/// <summary>
 		/// Creates a new <see cref="JsonPointer"/> instance.
 		/// </summary>
 		/// <param name="source">A collection of strings representing the segments of the pointer.</param>
 		public JsonPointer(IEnumerable<string> source)
-			: base(source.SkipWhile(s => s == "#"))
+			: base(source.FirstOrDefault() == "#" ? source.SkipWhile(s => s == "#") : source)
 		{
 			_usesHash = source.FirstOrDefault() == "#";
+		}
+
+		private JsonPointer(List<string> source, bool usesHash)
+			: base(source.FirstOrDefault() == "#" ? source.SkipWhile(s => s == "#") : source)
+		{
+			_usesHash = usesHash;
+		}
+
+		private JsonPointer(JsonPointer source, int capacity, bool usesHash)
+			: base(capacity)
+		{
+			AddRange(source.FirstOrDefault() == "#" ? source.SkipWhile(s => s == "#") : source);
+			_usesHash = usesHash;
 		}
 
 		/// <summary>
@@ -101,7 +115,7 @@ namespace Manatee.Json.Pointer
 		/// </summary>
 		public JsonPointer Clone()
 		{
-			return new JsonPointer(this){_usesHash = _usesHash};
+			return new JsonPointer(this, _usesHash);
 		}
 
 		/// <summary>
@@ -110,7 +124,7 @@ namespace Manatee.Json.Pointer
 		/// <param name="append">The segments to append.</param>
 		public JsonPointer CloneAndAppend(params string[] append)
 		{
-			var clone = new JsonPointer(this){_usesHash = _usesHash};
+			var clone = new JsonPointer(this, Count + append.Length, _usesHash);
 			clone.AddRange(append);
 
 			return clone;
@@ -128,12 +142,12 @@ namespace Manatee.Json.Pointer
 
 		internal JsonPointer CleanAndClone()
 		{
-			return new JsonPointer(this.WhereNotNull()) {_usesHash = _usesHash};
+			return new JsonPointer(this.WhereNotNull().ToList(), _usesHash);
 		}
 
 		internal JsonPointer WithHash()
 		{
-			return new JsonPointer(this) {_usesHash = true};
+			return new JsonPointer(this, true);
 		}
 
 		private static JsonValue? _EvaluateSegment(JsonValue current, string segment)
