@@ -15,6 +15,7 @@ namespace Manatee.Json.Schema
 		private HashSet<string>? _locallyEvaluatedPropertyNames;
 		private HashSet<int>? _validatedIndices;
 		private HashSet<int>? _locallyValidatedIndices;
+		private Dictionary<string, object>? _misc;
 
 		/// <summary>
 		/// Gets or sets the local schema at this point in the validation.
@@ -84,7 +85,8 @@ namespace Manatee.Json.Schema
 		/// Use <see cref="IJsonSchemaKeyword.ValidationSequence"/> to ensure that keywords are
 		/// processed in the correct order so that the communication occurs properly.
 		/// </remarks>
-		public Dictionary<string, object> Misc { get; } = new Dictionary<string, object>();
+		
+		public Dictionary<string, object> Misc => _misc ??= new Dictionary<string, object>();
 
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
@@ -138,7 +140,9 @@ namespace Manatee.Json.Schema
 		/// <param name="other">Another context object.</param>
 		public void UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(SchemaValidationContext other)
 		{
-			EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
+			if (other.EvaluatedPropertyNames.Count > EvaluatedPropertyNames.Count)
+				EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
+
 			EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
 			if (other.EvaluatedPropertyNames.Any())
 				Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
