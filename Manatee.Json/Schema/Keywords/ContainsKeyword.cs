@@ -101,7 +101,9 @@ namespace Manatee.Json.Schema
 				valid |= localResults.IsValid;
 				if (localResults.IsValid)
 				{
-					context.LocallyValidatedIndices.Add(i);
+					if (context.ShouldTrackEvaluatedPropertyNamesAndIndices)
+						context.LocallyValidatedIndices.Add(i);
+
 					matchedIndices.Add(i);
 				}
 

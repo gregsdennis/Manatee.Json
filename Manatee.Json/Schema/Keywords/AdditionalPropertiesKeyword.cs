@@ -114,7 +114,9 @@ namespace Manatee.Json.Schema
 
 			foreach (var kvp in toEvaluate)
 			{
-				context.EvaluatedPropertyNames.Add(kvp.Key);
+				if (context.ShouldTrackEvaluatedPropertyNamesAndIndices)
+					context.EvaluatedPropertyNames.Add(kvp.Key);
+
 				context.LocallyEvaluatedPropertyNames.Add(kvp.Key);
 				var newContext = new SchemaValidationContext(context)
 					{
@@ -129,10 +131,12 @@ namespace Manatee.Json.Schema
 					failedProperties.Add(kvp.Key);
 				}
 
-				if (newContext.EvaluatedPropertyNames.Count > context.EvaluatedPropertyNames.Count)
+				if (context.ShouldTrackEvaluatedPropertyNamesAndIndices)
+				{
 					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+				}
 
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
 				valid &= localResults.IsValid;
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)

@@ -78,6 +78,7 @@ namespace Manatee.Json.Schema
 		/// Gets or sets whether the current validation run is for a meta-schema.
 		/// </summary>
 		public bool IsMetaSchemaValidation { get; set; }
+
 		/// <summary>
 		/// Miscellaneous data.  Useful for communicating results between keywords.
 		/// </summary>
@@ -88,14 +89,21 @@ namespace Manatee.Json.Schema
 		
 		public Dictionary<string, object> Misc => _misc ??= new Dictionary<string, object>();
 
+		/// <summary>
+		/// Get or set if the validations for this context should track
+		/// Evaluated Property Names and Indices.
+		/// </summary>
+		public bool ShouldTrackEvaluatedPropertyNamesAndIndices { get; set; }
+
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		internal SchemaValidationContext(JsonSchema root,
-										 JsonValue instance,
-		                                 JsonPointer? baseRelativeLocation,
-		                                 JsonPointer relativeLocation,
-		                                 JsonPointer instanceLocation)
+										JsonValue instance,
+										JsonPointer? baseRelativeLocation,
+										JsonPointer relativeLocation,
+										JsonPointer instanceLocation,
+										bool? shouldTrackEvaluatedPropertyNamesAndIndices = null)
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
 			Root = root;
@@ -104,12 +112,14 @@ namespace Manatee.Json.Schema
 			RelativeLocation = relativeLocation;
 			InstanceLocation = instanceLocation;
 			LocalRegistry = new JsonSchemaRegistry();
+
+			ShouldTrackEvaluatedPropertyNamesAndIndices = shouldTrackEvaluatedPropertyNamesAndIndices ?? root.Any(k => k is UnevaluatedPropertiesKeyword);
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.
 		/// </summary>
 		public SchemaValidationContext(SchemaValidationContext source)
-			: this(source.Root, source.Instance, source.BaseRelativeLocation, source.RelativeLocation, source.InstanceLocation)
+			: this(source.Root, source.Instance, source.BaseRelativeLocation, source.RelativeLocation, source.InstanceLocation, source.ShouldTrackEvaluatedPropertyNamesAndIndices)
 		{
 			Local = source.Local;
 			Root = source.Root;
@@ -140,21 +150,21 @@ namespace Manatee.Json.Schema
 		/// <param name="other">Another context object.</param>
 		public void UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(SchemaValidationContext other)
 		{
-			if (other.EvaluatedPropertyNames.Count > EvaluatedPropertyNames.Count)
+			if (ShouldTrackEvaluatedPropertyNamesAndIndices)
+			{
 				EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
+				EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
+				if (other.EvaluatedPropertyNames.Any())
+					Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
 
-			EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
-			if (other.EvaluatedPropertyNames.Any())
-				Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+				ValidatedIndices.UnionWith(other.ValidatedIndices);
+				ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
+				if (other.ValidatedIndices.Any())
+					Log.Schema(() => $"Indices [{ValidatedIndices.ToStringList()}] have now been validated");
+			}
+
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LastEvaluatedIndex);
 			LastEvaluatedIndex = Math.Max(LastEvaluatedIndex, other.LocalTierLastEvaluatedIndex);
-
-			if (other.ValidatedIndices.Count > ValidatedIndices.Count)
-				ValidatedIndices.UnionWith(other.ValidatedIndices);
-
-			ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
-			if (other.EvaluatedPropertyNames.Any())
-				Log.Schema(() => $"Indices [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
 		}
 
 		private static void _InitializeHashSet<T>(ref HashSet<T>? hashSet, IEnumerable<T>? data)
