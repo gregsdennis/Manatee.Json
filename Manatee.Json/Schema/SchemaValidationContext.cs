@@ -90,10 +90,14 @@ namespace Manatee.Json.Schema
 		public Dictionary<string, object> Misc => _misc ??= new Dictionary<string, object>();
 
 		/// <summary>
-		/// Get or set if the validations for this context should track
-		/// Evaluated Property Names and Indices.
+		/// Get or set if the validations for this context should track Evaluated Property Names.
 		/// </summary>
-		public bool ShouldTrackEvaluatedPropertyNamesAndIndices { get; set; }
+		public bool ShouldTrackEvaluatedPropertyNames { get; set; }
+
+		/// <summary>
+		/// Get or set if the validations for this context should track Evaluated Indices.
+		/// </summary>
+		public bool ShouldTrackEvaluatedIndices { get; set; }
 
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
@@ -103,7 +107,8 @@ namespace Manatee.Json.Schema
 										JsonPointer? baseRelativeLocation,
 										JsonPointer relativeLocation,
 										JsonPointer instanceLocation,
-										bool? shouldTrackEvaluatedPropertyNamesAndIndices = null)
+										bool? shouldTrackEvaluatedPropertyNames = null,
+										bool? shouldTrackEvaluatedIndices = null)
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
 			Root = root;
@@ -113,13 +118,20 @@ namespace Manatee.Json.Schema
 			InstanceLocation = instanceLocation;
 			LocalRegistry = new JsonSchemaRegistry();
 
-			ShouldTrackEvaluatedPropertyNamesAndIndices = shouldTrackEvaluatedPropertyNamesAndIndices ?? root.Any(k => k is UnevaluatedPropertiesKeyword);
+			ShouldTrackEvaluatedPropertyNames = shouldTrackEvaluatedPropertyNames ?? root.Any(k => k is UnevaluatedPropertiesKeyword);
+			ShouldTrackEvaluatedIndices = shouldTrackEvaluatedIndices ?? root.Any(k => k is UnevaluatedItemsKeyword);
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.
 		/// </summary>
 		public SchemaValidationContext(SchemaValidationContext source)
-			: this(source.Root, source.Instance, source.BaseRelativeLocation, source.RelativeLocation, source.InstanceLocation, source.ShouldTrackEvaluatedPropertyNamesAndIndices)
+			: this(source.Root, 
+			       source.Instance,
+			       source.BaseRelativeLocation, 
+			       source.RelativeLocation,
+			       source.InstanceLocation, 
+			       source.ShouldTrackEvaluatedPropertyNames,
+			       source.ShouldTrackEvaluatedIndices)
 		{
 			Local = source.Local;
 			Root = source.Root;
@@ -150,13 +162,16 @@ namespace Manatee.Json.Schema
 		/// <param name="other">Another context object.</param>
 		public void UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(SchemaValidationContext other)
 		{
-			if (ShouldTrackEvaluatedPropertyNamesAndIndices)
+			if (ShouldTrackEvaluatedPropertyNames)
 			{
 				EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
 				EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
 				if (other.EvaluatedPropertyNames.Any())
 					Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
+			}
 
+			if (ShouldTrackEvaluatedIndices)
+			{
 				ValidatedIndices.UnionWith(other.ValidatedIndices);
 				ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
 				if (other.ValidatedIndices.Any())

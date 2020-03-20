@@ -66,7 +66,7 @@ namespace Manatee.Json.Schema
 					continue;
 				}
 
-				if (context.ShouldTrackEvaluatedPropertyNamesAndIndices)
+				if (context.ShouldTrackEvaluatedPropertyNames)
 					context.EvaluatedPropertyNames.Add(property.Key);
 
 				context.LocallyEvaluatedPropertyNames.Add(property.Key);
@@ -79,7 +79,7 @@ namespace Manatee.Json.Schema
 					};
 				var localResults = property.Value.Validate(newContext);
 
-				if (context.ShouldTrackEvaluatedPropertyNamesAndIndices)
+				if (context.ShouldTrackEvaluatedPropertyNames)
 				{
 					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
 					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
