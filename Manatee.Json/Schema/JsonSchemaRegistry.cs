@@ -32,9 +32,9 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Downloads and registers a schema at the specified URI.
 		/// </summary>
-		public static JsonSchema Get(string uri)
+		public static JsonSchema? Get(string uri)
 		{
-			JsonSchema schema;
+			JsonSchema? schema;
 			lock (_schemaLookup)
 			{
 				uri = uri.TrimEnd('#');
@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 			return schema;
 		}
 
-		internal static JsonSchema GetWellKnown(string uri)
+		internal static JsonSchema? GetWellKnown(string uri)
 		{
 			lock (_schemaLookup)
 			{
@@ -68,7 +68,7 @@ namespace Manatee.Json.Schema
 			}
 		}
 
-		internal JsonSchema GetLocal(string uri)
+		internal JsonSchema? GetLocal(string uri)
 		{
 			lock (_contextLookup)
 			{
@@ -88,6 +88,8 @@ namespace Manatee.Json.Schema
 		public static void Register(JsonSchema schema)
 		{
 			if (schema.DocumentPath == null) return;
+
+			Log.Schema(() => $"Registering \"{schema.DocumentPath.OriginalString}\"");
 			lock (_schemaLookup)
 			{
 				_schemaLookup[schema.DocumentPath.OriginalString] = schema;
@@ -98,6 +100,7 @@ namespace Manatee.Json.Schema
 		{
 			if (schema.Id != null && schema.Id.IsLocalSchemaId())
 			{
+				Log.Schema(() => $"Registering \"{schema.Id}\"");
 				lock (_contextLookup)
 				{
 					_contextLookup[schema.Id] = schema;
@@ -108,6 +111,7 @@ namespace Manatee.Json.Schema
 			if (anchor != null)
 			{
 				var anchorUri = $"{schema.DocumentPath}#{anchor.Value}";
+				Log.Schema(() => $"Registering \"{anchorUri}\"");
 				lock (_contextLookup)
 				{
 					_contextLookup[anchorUri] = schema;
@@ -144,11 +148,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static void Clear()
 		{
-			var draft04Uri = MetaSchemas.Draft04.Id.Split('#')[0];
-			var draft06Uri = MetaSchemas.Draft06.Id.Split('#')[0];
-			var draft07Uri = MetaSchemas.Draft07.Id.Split('#')[0];
-			var draft2019_09Uri = MetaSchemas.Draft2019_09.Id.Split('#')[0];
-			var patchUri = JsonPatch.Schema.Id.Split('#')[0];
+			var draft04Uri = MetaSchemas.Draft04.Id!.Split('#')[0];
+			var draft06Uri = MetaSchemas.Draft06.Id!.Split('#')[0];
+			var draft07Uri = MetaSchemas.Draft07.Id!.Split('#')[0];
+			var draft2019_09Uri = MetaSchemas.Draft2019_09.Id!.Split('#')[0];
+			var patchUri = JsonPatch.Schema.Id!.Split('#')[0];
 			lock (_schemaLookup)
 			{
 				_schemaLookup.Clear();
@@ -156,12 +160,12 @@ namespace Manatee.Json.Schema
 				_schemaLookup[draft06Uri] = MetaSchemas.Draft06;
 				_schemaLookup[draft07Uri] = MetaSchemas.Draft07;
 				_schemaLookup[draft2019_09Uri] = MetaSchemas.Draft2019_09;
-				_schemaLookup[MetaSchemas.Draft2019_09_Core.Id] = MetaSchemas.Draft2019_09_Core;
-				_schemaLookup[MetaSchemas.Draft2019_09_MetaData.Id] = MetaSchemas.Draft2019_09_MetaData;
-				_schemaLookup[MetaSchemas.Draft2019_09_Applicator.Id] = MetaSchemas.Draft2019_09_Applicator;
-				_schemaLookup[MetaSchemas.Draft2019_09_Validation.Id] = MetaSchemas.Draft2019_09_Validation;
-				_schemaLookup[MetaSchemas.Draft2019_09_Format.Id] = MetaSchemas.Draft2019_09_Format;
-				_schemaLookup[MetaSchemas.Draft2019_09_Content.Id] = MetaSchemas.Draft2019_09_Content;
+				_schemaLookup[MetaSchemas.Draft2019_09_Core.Id!] = MetaSchemas.Draft2019_09_Core;
+				_schemaLookup[MetaSchemas.Draft2019_09_MetaData.Id!] = MetaSchemas.Draft2019_09_MetaData;
+				_schemaLookup[MetaSchemas.Draft2019_09_Applicator.Id!] = MetaSchemas.Draft2019_09_Applicator;
+				_schemaLookup[MetaSchemas.Draft2019_09_Validation.Id!] = MetaSchemas.Draft2019_09_Validation;
+				_schemaLookup[MetaSchemas.Draft2019_09_Format.Id!] = MetaSchemas.Draft2019_09_Format;
+				_schemaLookup[MetaSchemas.Draft2019_09_Content.Id!] = MetaSchemas.Draft2019_09_Content;
 				_schemaLookup[patchUri] = JsonPatch.Schema;
 			}
 		}

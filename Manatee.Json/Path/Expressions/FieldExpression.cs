@@ -1,14 +1,21 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Manatee.Json.Path.Expressions
 {
 	internal class FieldExpression<T> : ExpressionTreeNode<T>, IEquatable<FieldExpression<T>>
 	{
-		public FieldInfo Field { get; set; }
-		public object Source { get; set; }
+		public FieldInfo Field { get; }
+		public object Source { get; }
 
-		public override object Evaluate(T json, JsonValue root)
+		public FieldExpression(FieldInfo field, object source)
+		{
+			Field = field;
+			Source = source;
+		}
+
+		public override object? Evaluate([MaybeNull] T json, JsonValue? root)
 		{
 			if (Field.FieldType == typeof(string) ||
 				Field.FieldType == typeof(JsonArray) ||
@@ -17,20 +24,20 @@ namespace Manatee.Json.Path.Expressions
 				return Field.GetValue(Source);
 			return Convert.ToDouble(Field.GetValue(Source));
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
-			var value = Evaluate(default(T), null);
+			var value = Evaluate(default!, null);
 			return value is string
 				       ? $"\"{value}\""
 				       : value?.ToString() ?? "null";
 		}
-		public bool Equals(FieldExpression<T> other)
+		public bool Equals(FieldExpression<T>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(Field, other.Field) && Equals(Source, other.Source);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as FieldExpression<T>);
 		}

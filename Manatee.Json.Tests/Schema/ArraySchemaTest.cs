@@ -8,6 +8,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ArraySchemaTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		public static IEnumerable TypeData
 		{
 			get { yield return new TestCaseData(new JsonSchema().Type(JsonSchemaType.Array)); }

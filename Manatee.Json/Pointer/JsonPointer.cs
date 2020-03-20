@@ -37,7 +37,6 @@ namespace Manatee.Json.Pointer
 			: base(source.SkipWhile(s => s == "#"))
 		{
 			_usesHash = source.FirstOrDefault() == "#";
-
 		}
 
 		/// <summary>
@@ -73,7 +72,7 @@ namespace Manatee.Json.Pointer
 		public PointerEvaluationResults Evaluate(JsonValue root)
 		{
 			var upTo = new JsonPointer();
-			var current = root;
+			JsonValue? current = root;
 			foreach (var segment in this)
 			{
 				upTo.Add(segment);
@@ -91,8 +90,8 @@ namespace Manatee.Json.Pointer
 		public override string ToString()
 		{
 			var asString = _usesHash
-				? $"#/{string.Join("/", this.Select(_Escape))}"
-				: $"/{string.Join("/", this.Select(_Escape))}";
+				? $"#/{string.Join("/", this.Where(s => s != null).Select(_Escape))}"
+				: $"/{string.Join("/", this.Where(s => s != null).Select(_Escape))}";
 
 			return asString == "/" ? asString : asString.TrimEnd('/');
 		}
@@ -127,12 +126,17 @@ namespace Manatee.Json.Pointer
 			return this.Take(pointer.Count).SequenceEqual(pointer);
 		}
 
+		internal JsonPointer CleanAndClone()
+		{
+			return new JsonPointer(this.WhereNotNull()) {_usesHash = _usesHash};
+		}
+
 		internal JsonPointer WithHash()
 		{
 			return new JsonPointer(this) {_usesHash = true};
 		}
 
-		private static JsonValue _EvaluateSegment(JsonValue current, string segment)
+		private static JsonValue? _EvaluateSegment(JsonValue current, string segment)
 		{
 			if (current.Type == JsonValueType.Array)
 			{
@@ -145,7 +149,11 @@ namespace Manatee.Json.Pointer
 				}
 
 				if (segment == "-")
+#if NETSTANDARD2_0
 					return current.Array[current.Array.Count-1];
+#else
+					return current.Array[^1];
+#endif
 			}
 
 			return current.Type != JsonValueType.Object || !current.Object.TryGetValue(segment, out var value)
@@ -164,9 +172,9 @@ namespace Manatee.Json.Pointer
 			var unescaped = reference.Replace("~1", "/")
 				.Replace("~0", "~");
 			var matches = _generalEscapePattern.Matches(unescaped);
-			foreach (Match match in matches)
+			foreach (Match? match in matches)
 			{
-				var value = int.Parse(match.Groups["Value"].Value, NumberStyles.HexNumber);
+				var value = int.Parse(match!.Groups["Value"].Value, NumberStyles.HexNumber);
 				var ch = (char)value;
 				unescaped = Regex.Replace(unescaped, match.Value, new string(ch, 1));
 			}
@@ -197,7 +205,7 @@ namespace Manatee.Json.Pointer
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(JsonPointer other)
+		public bool Equals(JsonPointer? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -207,7 +215,7 @@ namespace Manatee.Json.Pointer
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as JsonPointer);
 		}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Manatee.Json.Schema;
@@ -46,7 +47,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 						var testName = $"{shortFileName}.{testSet.Object["description"].String}.{testJson.Object["description"].String}.{draft}".Replace(' ', '_');
 						if (isOptional)
 							testName = $"optional.{testName}";
-						allTests.Add(new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional)
+						allTests.Add(new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional, testName)
 							{
 								TestName = testName
 							});
@@ -79,6 +80,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 					return File.ReadAllText(newPath.LocalPath);
 				};
+			JsonOptions.LogCategory = LogCategory.Schema;
 
 			if (Directory.Exists(OutputFolder))
 				Directory.Delete(OutputFolder, true);
@@ -88,7 +90,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 			var configureForTestOutputValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
 			bool.TryParse(configureForTestOutputValue, out var configureForTestOutput);
-			//JsonSchemaOptions.ConfigureForTestOutput = configureForTestOutput;
+			JsonSchemaOptions.ConfigureForTestOutput = configureForTestOutput;
 		}
 
 		[OneTimeTearDown]
@@ -100,8 +102,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		[TestCaseSource(nameof(AllTestData))]
-		public void Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, bool isOptional)
+		public void Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, bool isOptional, string testName)
 		{
+			Console.WriteLine(testName);
+			Console.WriteLine();
+
+			//if (testName == "ref.escaped_pointer_ref.slash_invalid.draft2019-09")
+			//	Debugger.Break();
+
 			var outputFormat = JsonSchemaOptions.OutputFormat;
 			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 			try

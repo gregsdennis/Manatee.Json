@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -15,8 +16,8 @@ namespace Manatee.Json.Schema
 	public class RecursiveRefKeyword : IJsonSchemaKeyword, IEquatable<RecursiveRefKeyword>
 	{
 		private readonly List<JsonPointer> _validatingLocations = new List<JsonPointer>();
-		private JsonSchema _resolvedRoot;
-		private JsonPointer _resolvedFragment;
+		private JsonSchema? _resolvedRoot;
+		private JsonPointer? _resolvedFragment;
 
 		/// <summary>
 		/// Gets the name of the keyword.
@@ -43,13 +44,16 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the resolved schema that corresponds to the reference.
 		/// </summary>
-		public JsonSchema Resolved { get; private set; }
+		public JsonSchema? Resolved { get; private set; }
 
 		/// <summary>
 		/// Used for deserialization.
 		/// </summary>
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		[DeserializationUseOnly]
+		[UsedImplicitly]
 		public RecursiveRefKeyword() { }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		/// <summary>
 		/// Creates an instance of the <see cref="RecursiveRefKeyword"/>.
 		/// </summary>
@@ -77,15 +81,17 @@ namespace Manatee.Json.Schema
 				_ResolveReference(context);
 				if (Resolved == null)
 					throw new SchemaReferenceNotFoundException(context.RelativeLocation);
+
+				Log.Schema(() => "Reference found");
 			}
 
 			var results = new SchemaValidationResults(Name, context);
 
 			var newContext = new SchemaValidationContext(context)
 				{
-					BaseUri = _resolvedRoot.DocumentPath,
+					BaseUri = _resolvedRoot!.DocumentPath,
 					Root = _resolvedRoot ?? context.Root,
-					BaseRelativeLocation = _resolvedFragment.WithHash(),
+					BaseRelativeLocation = _resolvedFragment!.WithHash(),
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 				};
 
@@ -95,6 +101,7 @@ namespace Manatee.Json.Schema
 
 			results.IsValid = nestedResults.IsValid;
 			results.NestedResults.Add(nestedResults);
+			context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 			return results;
 		}
@@ -103,14 +110,14 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$recursiveRef` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}
@@ -138,7 +145,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(RecursiveRefKeyword other)
+		public bool Equals(RecursiveRefKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -147,14 +154,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
+		public bool Equals(IJsonSchemaKeyword? other)
 		{
 			return Equals(other as RecursiveRefKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as RecursiveRefKeyword);
 		}
@@ -167,8 +174,13 @@ namespace Manatee.Json.Schema
 
 		private void _ResolveReference(SchemaValidationContext context)
 		{
+			Log.Schema(() => $"Resolving `{Reference}`");
+	
 			if (context.RecursiveAnchor != null)
 			{
+				Log.Schema(() => "Finding anchor of root schema");
+				if (context.BaseUri == null)
+					throw new InvalidOperationException("BaseUri not set");
 				var baseDocument = JsonSchemaRegistry.Get(context.BaseUri.OriginalString);
 				if (baseDocument?.Get<RecursiveAnchorKeyword>() != null)
 					_resolvedRoot = context.RecursiveAnchor;
@@ -176,8 +188,11 @@ namespace Manatee.Json.Schema
 
 			if (Reference.IsLocalSchemaId())
 			{
+				Log.Schema(() => "Reference recognized as anchor or local ID");
 				Resolved = context.LocalRegistry.GetLocal(Reference);
 				if (Resolved != null) return;
+
+				Log.Schema(() => $"`{Reference}` is an unknown anchor");
 			}
 
 			var documentPath = _resolvedRoot?.DocumentPath ?? context.BaseUri;
@@ -188,13 +203,13 @@ namespace Manatee.Json.Schema
 			{
 				if (!string.IsNullOrWhiteSpace(address))
 				{
-					if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute))
+					if (!Uri.TryCreate(address, UriKind.Absolute, out _))
 						address = context.Local.Id + address;
 
-					if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out absolute))
+					if (documentPath != null && !Uri.TryCreate(address, UriKind.Absolute, out _))
 					{
 						var uriFolder = documentPath.OriginalString.EndsWith("/") ? documentPath : documentPath.GetParentUri();
-						absolute = new Uri(uriFolder, address);
+						var absolute = new Uri(uriFolder, address);
 						address = absolute.OriginalString;
 					}
 
@@ -204,16 +219,21 @@ namespace Manatee.Json.Schema
 					_resolvedRoot = context.Root;
 			}
 
-			if (_resolvedRoot == null) return;
+			if (_resolvedRoot == null)
+			{
+				Log.Schema(() => "Could not resolve root of reference");
+				return;
+			}
 
 			var wellKnown = JsonSchemaRegistry.GetWellKnown(Reference);
 			if (wellKnown != null)
 			{
+				Log.Schema(() => "Well known reference found");
 				Resolved = wellKnown;
 				return;
 			}
 
-			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri);
+			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri!);
 		}
 		private void _ResolveLocalReference(Uri baseUri)
 		{
@@ -223,7 +243,8 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
-			Resolved = _resolvedRoot.ResolveSubschema(_resolvedFragment, baseUri);
+			Log.Schema(() => $"Resolving local reference {_resolvedFragment}");
+			Resolved = _resolvedRoot!.ResolveSubschema(_resolvedFragment!, baseUri);
 		}
 	}
 }

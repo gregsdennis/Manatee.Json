@@ -9,12 +9,8 @@ namespace Manatee.Json.Path.Expressions.Translation
 			bool isLocal;
 			var method = body as MethodCallExpression;
 			return method == null
-				       ? new LengthExpression<T>()
-				       : new LengthExpression<T>
-					       {
-						       Path = BuildPath(method, out isLocal),
-						       IsLocal = isLocal
-					       };
+				? new LengthExpression<T>()
+				: new LengthExpression<T>(BuildPath(method, out isLocal), isLocal);
 		}
 	}
 }

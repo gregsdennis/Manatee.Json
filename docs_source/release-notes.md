@@ -1,3 +1,167 @@
+# 12.3.1
+
+*Released on 6 Mar, 2020*
+
+<span id="patch">patch</span>
+
+([#253](https://github.com/gregsdennis/Manatee.Json/pull/253)) Some performance and logging enhancements as suggested by a schema benchmark test.
+
+# 12.3.0
+
+*Released on 20 Feb, 2020*
+
+<span id="feature">feature</span><span id="patch">patch</span>
+
+([#254](https://github.com/gregsdennis/Manatee.Json/issues/254)) Include properties and item indices for `additional*` and `unevaluated*` schema keywords.
+
+([#255](https://github.com/gregsdennis/Manatee.Json/issues/255)) Added `writeOnly` to draft 7 metaschema in accordance with [JSON Schema correction](https://github.com/json-schema-org/json-schema-org.github.io/pull/308).
+
+([#257](https://github.com/gregsdennis/Manatee.Json/issues/255)) Fixed debug logging so that it only processes the output strings when configured to log.
+
+Also added `.ToJson()` override for `IEnumerable<int>`.  Previously only supported `IEnumerable<double>`.
+
+Fixed a bug with `$ref`-sibling keywords not being processed for draft 2019-09.
+
+Fixed several bugs in JSON Path evaluation in accordance with additions to the [test report site](https://cburgmer.github.io/json-path-comparison/).
+
+# 12.2.0
+
+*Released on 11 Feb, 2020*
+
+<span id="feature">feature</span>
+
+Inspired by a fabulous [test report site](https://cburgmer.github.io/json-path-comparison/) by GitHub user cburgmer JsonPath now supports some new syntaxes.
+
+- Various bracketed key notations: `$["key"]`, etc.
+- Negative indexes for "from last" queries: `$[-1]`.
+- Backward navigation and negative steps in slice queries: `$[3:0:-2]`.
+- Comparisons with null in expressions: `$[?(@.key == null)]`.
+
+The remaining items will not be supported for now.  Support _may_ be added with sufficient pressure from the user base, however.
+
+# 12.1.0
+
+*Released on 4 Feb, 2020*
+
+<span id="feature">feature</span>
+
+([JSON Schema Spec #248](https://github.com/json-schema-org/json-schema-spec/issues/810)) Added properties `ValidatedItems` and `LocallyValidatedItems` to `SchemaValidationContext` in order to fix a bug where `unevaluatedItems` was not considering all items that failed validation.
+
+# 12.0.3
+
+*Released on 22 Jan, 2020*
+
+<span id="patch">patch</span>
+
+([#248](https://github.com/gregsdennis/Manatee.Json/issues/248)) `$ref` and `$recursiveRef` schema keywords were not passing up evaluated properties/items, so `unevaluatedProperties` and `unevaluatedItems` keywords could not "see through" them.
+
+# 12.0.2
+
+*Released on 5 Jan, 2020*
+
+<span id="patch">patch</span>
+
+([#243](https://github.com/gregsdennis/Manatee.Json/issues/243)) Bugs with JSON Path implementation
+  - `ArgumentOutOfRangeException` thrown when array index overlaps instance but is out of range of instance.  Should just return items within the overlap.
+  - Wildcard search operator should only return child objects, not also the root object.
+
+# 12.0.1
+
+*Released on 19 Dec, 2019*
+
+<span id="patch">patch</span>
+
+([#241](https://github.com/gregsdennis/Manatee.Json/issues/241)) Creating an override for a schema format causes `ArgumentException` because the key is already added.
+
+# 12.0.0
+
+*Released on 18 Dec, 2019*
+
+<span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
+
+This change primarily adds .Net Core 3.0 support.  It has also been updated to support null reference types.
+
+## Logging
+
+Some cursory verbose logging has been introduced to allow the client to see what decisions Manatee.Json is making during (primarily) schema validation and serialization.  The `JsonOptions.Log` static property has been introduced for this purpose.  It is of type `ILog` which exposes a single method, `Verbose(string, LogCategory)`.
+
+The log categories currently are general, serialization, and schema.  This allows the client to enable or disable certain activities, so that, for instance, they can only enable schema validation logging if they wish.  The `JsonOptions.LogCategory` static property controls what categories are actually sent.
+
+**There is no default implementation for `ILog`.**  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are *a lot* of logs which can add processing time.
+
+## Bug fixes
+
+`unevaluatedItems` would not properly process items that nested keywords touched but failed.  See [JSON-Schema-Test-Suite #291](https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291) for details and an example of the logging mentioned above.
+
+## Breaking Changes
+
+- `JsonValue` parameterless constructor removed.  Use `JsonValue.Null` instead.
+- `JsonValue` parameterized constructor arguments changed to non-nullable or will throw `ArgumentNullException`.
+- `JsonArray.OfType(JsonValueType)` now throws `ArgumentNullException` when passed a null array.
+- `JsonSyntaxException.Source` replaced by `SourceData` so that it doesn't hide `Exception.Source`.
+- `SerializationContext` used only for serialization now.  `DeserializationContext` now introduced for deserialization.  This changes method signatures for `ISerializer`.  Additional notes below.
+
+### Serialization changes
+
+In an effort to reduce memory footprint, a single `SerializationContext`/`DeserializationContext` instance will be retained throughout the serialization/deserialization process.  To facilitate this, new instances will no longer be created when a serializer needs to serialize an object's contents; instead it will "push" new details onto the existing context, serialize, then "pop" the details when finished.
+
+For example, the internal `ListSerializer` in versions up to v11 would serialize a list's contents using [this code](https://github.com/gregsdennis/Manatee.Json/blob/7b5fa44bd2ece54dc616716482284baaca72ed35/Manatee.Json/Serialization/Internal/Serializers/ListSerializer.cs#L23-L34):
+
+```c#
+for (int i = 0; i < array.Length; i++)
+{
+    var newContext = new SerializationContext(context)
+    {
+        CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+        InferredType = list[i]?.GetType() ?? typeof(T),
+        RequestedType = typeof(T),
+        Source = list[i]
+    };
+
+    array[i] = context.RootSerializer.Serialize(newContext);
+}
+```
+
+However, creating a new context instance for each item is resource intensive and creates a lot of work for the garbage collector afterward.
+
+Instead we simply push new details onto the existing context before we serialize an item, then pop those details afterward, like [this](https://github.com/gregsdennis/Manatee.Json/blob/929e6d1b922df5f774522e0743cc05d19e2527b9/Manatee.Json/Serialization/Internal/Serializers/ListSerializer.cs#L23-L28):
+
+```c#
+for (int i = 0; i < array.Length; i++)
+{
+    context.Push(list[i]?.GetType() ?? typeof(T), typeof(T), i.ToString(), list[i]);
+    array[i] = context.RootSerializer.Serialize(context);
+    context.Pop();
+}
+```
+
+The values that we push are
+
+- The inferred type of the object we're pushing (or the requested type if the inferred type is null)
+- The requested type
+- The JSON path segment (in this case the index)
+- The object to be serialized
+
+These are maintained in a stack internally to the context object and are removed on the `Pop()` call, keeping the context synchronized with the serialization process.
+
+# 11.0.4
+
+*Released on 27 Nov, 2019*
+
+<span id="patch">patch</span>
+
+([#231](https://github.com/gregsdennis/Manatee.Json/pulls/231)) `$ref` throwing `SchemaNotFoundException` when `$id` is an anchor-type reference in drafts 07 and earlier.  (These are disallowed for draft 2019-09.  The functionality was split out to the `$anchor` keyword.)
+
+Fixed an issue where not all evaluated properties were being reported to be used by `unevaluatedProperties`.  This came out of a JSON Schema Slack conversation.
+
+# 11.0.3
+
+*Released on 26 Oct, 2019*
+
+<span id="patch">patch</span>
+
+([#226](https://github.com/gregsdennis/Manatee.Json/pulls/226)) Fixes for JSON Patch move and add operations.
+
 # 11.0.2
 
 *Released on 14 Oct, 2019*
@@ -40,7 +204,7 @@ Minor serialization improvements.
 </p>
 </details>
 
-<span id="feature">feature</span>
+<span id="break">breaking change</span><span id="feature">feature</span>
 
 ## Breaking changes
 
@@ -48,7 +212,7 @@ Minor serialization improvements.
 
 In order to support some new independent reference tests, some changes were made to the schema validation logic to include a validation-run-independent schema registry, separate from the static one.  The first two changes support this requirement:
 
-- `IJsonSchemaKeyword.RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)` - The second parameter is new.
+- `IJsonSchemaKeyword.RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)` - The second parameter is new.
 - `SchemaValidationContext` now requires a source context from which to copy values.
 - `JsonSchemaOptions.OutputFormat` now has a default value of `Flag`, which only returns whether an instance is valid, without any error details.  This greatly improves performance out of the box.  Configuration is required to generate error details.
 - `JsonSchemaoptions.RefResolutionStrategy` now has a default value of `ProcessSiblingId` to conform with the draft-08 definition of `$ref` and `$recursiveRef`.

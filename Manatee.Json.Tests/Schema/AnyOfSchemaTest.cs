@@ -6,6 +6,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class AnyOfSchemaTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		[Test]
 		public void ValidateReturnsErrorOnNoneValid()
 		{

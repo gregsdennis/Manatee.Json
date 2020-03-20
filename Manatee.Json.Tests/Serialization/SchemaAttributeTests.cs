@@ -99,6 +99,7 @@ namespace Manatee.Json.Tests.Serialization
 
 					return File.ReadAllText(newPath.LocalPath);
 				};
+			JsonOptions.LogCategory = LogCategory.Serialization | LogCategory.Schema;
 		}
 
 		[Test]

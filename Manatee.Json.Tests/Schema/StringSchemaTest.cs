@@ -9,6 +9,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class StringSchemaTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		[Test]
 		public void ValidateReturnsErrorOnNonString()
 		{

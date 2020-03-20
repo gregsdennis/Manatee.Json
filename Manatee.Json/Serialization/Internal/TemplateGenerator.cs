@@ -6,7 +6,6 @@ using Manatee.Json.Internal;
 
 namespace Manatee.Json.Serialization.Internal
 {
-
 	internal static class TemplateGenerator
 	{
 		private static readonly MethodInfo _buildMethod;
@@ -16,9 +15,11 @@ namespace Manatee.Json.Serialization.Internal
 		[ThreadStatic]
 		private static List<Type> _generatedTypes;
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		static TemplateGenerator()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
-			_buildMethod = typeof(TemplateGenerator).GetTypeInfo().GetDeclaredMethod("BuildInstance");
+			_buildMethod = typeof(TemplateGenerator).GetTypeInfo().GetDeclaredMethod(nameof(_BuildInstance))!;
 			_buildMethods = new Dictionary<Type, MethodInfo>();
 			_defaultInstances = new Dictionary<Type, object>
 				{
@@ -51,7 +52,7 @@ namespace Manatee.Json.Serialization.Internal
 			if (_defaultInstances.ContainsKey(type))
 				return (T) _defaultInstances[type];
 
-			if (_generatedTypes.Contains(type)) return default(T);
+			if (_generatedTypes.Contains(type)) return default!;
 
 			_generatedTypes.Add(type);
 			T instance;
@@ -61,7 +62,7 @@ namespace Manatee.Json.Serialization.Internal
 				var valueType = type.GetTypeArguments().First();
 				var buildMethod = GetBuildMethod(valueType);
 				var value = buildMethod.Invoke(null, new object[] {options});
-				instance = (T) value;
+				instance = (T) value!;
 			}
 			else
 			{
@@ -105,7 +106,7 @@ namespace Manatee.Json.Serialization.Internal
 				fieldInfo.SetValue(instance, value);
 			}
 		}
-		private static object _GetValue(JsonSerializerOptions options, Type propertyType)
+		private static object? _GetValue(JsonSerializerOptions options, Type propertyType)
 		{
 			var buildMethod = GetBuildMethod(propertyType);
 			var value = buildMethod.Invoke(null, new object[] {options});
@@ -113,7 +114,7 @@ namespace Manatee.Json.Serialization.Internal
 		}
 		internal static MethodInfo GetBuildMethod(Type type)
 		{
-			if (!_buildMethods.TryGetValue(type, out MethodInfo methodInfo))
+			if (!_buildMethods.TryGetValue(type, out MethodInfo? methodInfo))
 			{
 				methodInfo = _buildMethod.MakeGenericMethod(type);
 				_buildMethods[type] = methodInfo;

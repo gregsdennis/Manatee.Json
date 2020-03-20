@@ -8,6 +8,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class VersionTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		[Test]
 		public void IfIsNotADraft4Keyword()
 		{

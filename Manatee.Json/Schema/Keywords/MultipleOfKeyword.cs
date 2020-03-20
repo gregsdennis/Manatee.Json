@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using JetBrains.Annotations;
 using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
@@ -49,6 +50,7 @@ namespace Manatee.Json.Schema
 		/// Used for deserialization.
 		/// </summary>
 		[DeserializationUseOnly]
+		[UsedImplicitly]
 		public MultipleOfKeyword() { }
 		/// <summary>
 		/// Creates an instance of the <see cref="MultipleOfKeyword"/>.
@@ -67,10 +69,15 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context);
 
-			if (context.Instance.Type != JsonValueType.Number) return results;
+			if (context.Instance.Type != JsonValueType.Number)
+			{
+				Log.Schema(() => "Instance not a number; not applicable");
+				return results;
+			}
 
 			if ((decimal)context.Instance.Number % (decimal?) Value != 0)
 			{
+				Log.Schema(() => $"{context.Instance.Number} is not a multiple of {Value}");
 				results.IsValid = false;
 				results.AdditionalInfo["divisor"] = Value;
 				results.AdditionalInfo["actual"] = context.Instance.Number % Value;
@@ -84,14 +91,14 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="baseUri">The current base URI</param>
 		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}
@@ -118,7 +125,7 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(MultipleOfKeyword other)
+		public bool Equals(MultipleOfKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -127,14 +134,14 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
+		public bool Equals(IJsonSchemaKeyword? other)
 		{
 			return Equals(other as MultipleOfKeyword);
 		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as MultipleOfKeyword);
 		}

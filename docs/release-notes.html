@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>11.0.2 </title>
+    <title>12.3.1 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="11.0.2 ">
-    <meta name="generator" content="docfx 2.36.1.0">
+    <meta name="title" content="12.3.1 ">
+    <meta name="generator" content="docfx 2.43.2.0">
     
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -60,8 +60,112 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="1102">11.0.2</h1>
+<h1 id="1231">12.3.1</h1>
 
+<p><em>Released on 6 Mar, 2020</em></p>
+<p><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/pull/253">#253</a>) Some performance and logging enhancements as suggested by a schema benchmark test.</p>
+<h1 id="1230">12.3.0</h1>
+<p><em>Released on 20 Feb, 2020</em></p>
+<p><span id="feature">feature</span><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/254">#254</a>) Include properties and item indices for <code>additional*</code> and <code>unevaluated*</code> schema keywords.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/255">#255</a>) Added <code>writeOnly</code> to draft 7 metaschema in accordance with <a href="https://github.com/json-schema-org/json-schema-org.github.io/pull/308">JSON Schema correction</a>.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/255">#257</a>) Fixed debug logging so that it only processes the output strings when configured to log.</p>
+<p>Also added <code>.ToJson()</code> override for <code>IEnumerable&lt;int&gt;</code>.  Previously only supported <code>IEnumerable&lt;double&gt;</code>.</p>
+<p>Fixed a bug with <code>$ref</code>-sibling keywords not being processed for draft 2019-09.</p>
+<p>Fixed several bugs in JSON Path evaluation in accordance with additions to the <a href="https://cburgmer.github.io/json-path-comparison/">test report site</a>.</p>
+<h1 id="1220">12.2.0</h1>
+<p><em>Released on 11 Feb, 2020</em></p>
+<p><span id="feature">feature</span></p>
+<p>Inspired by a fabulous <a href="https://cburgmer.github.io/json-path-comparison/">test report site</a> by GitHub user cburgmer JsonPath now supports some new syntaxes.</p>
+<ul>
+<li>Various bracketed key notations: <code>$[&quot;key&quot;]</code>, etc.</li>
+<li>Negative indexes for &quot;from last&quot; queries: <code>$[-1]</code>.</li>
+<li>Backward navigation and negative steps in slice queries: <code>$[3:0:-2]</code>.</li>
+<li>Comparisons with null in expressions: <code>$[?(@.key == null)]</code>.</li>
+</ul>
+<p>The remaining items will not be supported for now.  Support <em>may</em> be added with sufficient pressure from the user base, however.</p>
+<h1 id="1210">12.1.0</h1>
+<p><em>Released on 4 Feb, 2020</em></p>
+<p><span id="feature">feature</span></p>
+<p>(<a href="https://github.com/json-schema-org/json-schema-spec/issues/810">JSON Schema Spec #248</a>) Added properties <code>ValidatedItems</code> and <code>LocallyValidatedItems</code> to <code>SchemaValidationContext</code> in order to fix a bug where <code>unevaluatedItems</code> was not considering all items that failed validation.</p>
+<h1 id="1203">12.0.3</h1>
+<p><em>Released on 22 Jan, 2020</em></p>
+<p><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/248">#248</a>) <code>$ref</code> and <code>$recursiveRef</code> schema keywords were not passing up evaluated properties/items, so <code>unevaluatedProperties</code> and <code>unevaluatedItems</code> keywords could not &quot;see through&quot; them.</p>
+<h1 id="1202">12.0.2</h1>
+<p><em>Released on 5 Jan, 2020</em></p>
+<p><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/243">#243</a>) Bugs with JSON Path implementation</p>
+<ul>
+<li><code>ArgumentOutOfRangeException</code> thrown when array index overlaps instance but is out of range of instance.  Should just return items within the overlap.</li>
+<li>Wildcard search operator should only return child objects, not also the root object.</li>
+</ul>
+<h1 id="1201">12.0.1</h1>
+<p><em>Released on 19 Dec, 2019</em></p>
+<p><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/241">#241</a>) Creating an override for a schema format causes <code>ArgumentException</code> because the key is already added.</p>
+<h1 id="1200">12.0.0</h1>
+<p><em>Released on 18 Dec, 2019</em></p>
+<p><span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span></p>
+<p>This change primarily adds .Net Core 3.0 support.  It has also been updated to support null reference types.</p>
+<h2 id="logging">Logging</h2>
+<p>Some cursory verbose logging has been introduced to allow the client to see what decisions Manatee.Json is making during (primarily) schema validation and serialization.  The <code>JsonOptions.Log</code> static property has been introduced for this purpose.  It is of type <code>ILog</code> which exposes a single method, <code>Verbose(string, LogCategory)</code>.</p>
+<p>The log categories currently are general, serialization, and schema.  This allows the client to enable or disable certain activities, so that, for instance, they can only enable schema validation logging if they wish.  The <code>JsonOptions.LogCategory</code> static property controls what categories are actually sent.</p>
+<p><strong>There is no default implementation for <code>ILog</code>.</strong>  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are <em>a lot</em> of logs which can add processing time.</p>
+<h2 id="bug-fixes">Bug fixes</h2>
+<p><code>unevaluatedItems</code> would not properly process items that nested keywords touched but failed.  See <a href="https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291">JSON-Schema-Test-Suite #291</a> for details and an example of the logging mentioned above.</p>
+<h2 id="breaking-changes">Breaking Changes</h2>
+<ul>
+<li><code>JsonValue</code> parameterless constructor removed.  Use <code>JsonValue.Null</code> instead.</li>
+<li><code>JsonValue</code> parameterized constructor arguments changed to non-nullable or will throw <code>ArgumentNullException</code>.</li>
+<li><code>JsonArray.OfType(JsonValueType)</code> now throws <code>ArgumentNullException</code> when passed a null array.</li>
+<li><code>JsonSyntaxException.Source</code> replaced by <code>SourceData</code> so that it doesn't hide <code>Exception.Source</code>.</li>
+<li><code>SerializationContext</code> used only for serialization now.  <code>DeserializationContext</code> now introduced for deserialization.  This changes method signatures for <code>ISerializer</code>.  Additional notes below.</li>
+</ul>
+<h3 id="serialization-changes">Serialization changes</h3>
+<p>In an effort to reduce memory footprint, a single <code>SerializationContext</code>/<code>DeserializationContext</code> instance will be retained throughout the serialization/deserialization process.  To facilitate this, new instances will no longer be created when a serializer needs to serialize an object's contents; instead it will &quot;push&quot; new details onto the existing context, serialize, then &quot;pop&quot; the details when finished.</p>
+<p>For example, the internal <code>ListSerializer</code> in versions up to v11 would serialize a list's contents using <a href="https://github.com/gregsdennis/Manatee.Json/blob/7b5fa44bd2ece54dc616716482284baaca72ed35/Manatee.Json/Serialization/Internal/Serializers/ListSerializer.cs#L23-L34">this code</a>:</p>
+<pre><code class="lang-c#">for (int i = 0; i &lt; array.Length; i++)
+{
+    var newContext = new SerializationContext(context)
+    {
+        CurrentLocation = context.CurrentLocation.CloneAndAppend(i.ToString()),
+        InferredType = list[i]?.GetType() ?? typeof(T),
+        RequestedType = typeof(T),
+        Source = list[i]
+    };
+
+    array[i] = context.RootSerializer.Serialize(newContext);
+}
+</code></pre>
+<p>However, creating a new context instance for each item is resource intensive and creates a lot of work for the garbage collector afterward.</p>
+<p>Instead we simply push new details onto the existing context before we serialize an item, then pop those details afterward, like <a href="https://github.com/gregsdennis/Manatee.Json/blob/929e6d1b922df5f774522e0743cc05d19e2527b9/Manatee.Json/Serialization/Internal/Serializers/ListSerializer.cs#L23-L28">this</a>:</p>
+<pre><code class="lang-c#">for (int i = 0; i &lt; array.Length; i++)
+{
+    context.Push(list[i]?.GetType() ?? typeof(T), typeof(T), i.ToString(), list[i]);
+    array[i] = context.RootSerializer.Serialize(context);
+    context.Pop();
+}
+</code></pre>
+<p>The values that we push are</p>
+<ul>
+<li>The inferred type of the object we're pushing (or the requested type if the inferred type is null)</li>
+<li>The requested type</li>
+<li>The JSON path segment (in this case the index)</li>
+<li>The object to be serialized</li>
+</ul>
+<p>These are maintained in a stack internally to the context object and are removed on the <code>Pop()</code> call, keeping the context synchronized with the serialization process.</p>
+<h1 id="1104">11.0.4</h1>
+<p><em>Released on 27 Nov, 2019</em></p>
+<p><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/pulls/231">#231</a>) <code>$ref</code> throwing <code>SchemaNotFoundException</code> when <code>$id</code> is an anchor-type reference in drafts 07 and earlier.  (These are disallowed for draft 2019-09.  The functionality was split out to the <code>$anchor</code> keyword.)</p>
+<p>Fixed an issue where not all evaluated properties were being reported to be used by <code>unevaluatedProperties</code>.  This came out of a JSON Schema Slack conversation.</p>
+<h1 id="1103">11.0.3</h1>
+<p><em>Released on 26 Oct, 2019</em></p>
+<p><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/pulls/226">#226</a>) Fixes for JSON Patch move and add operations.</p>
+<h1 id="1102">11.0.2</h1>
 <p><em>Released on 14 Oct, 2019</em></p>
 <p><span id="patch">patch</span></p>
 <p>Fixed an issue with deserialization name transformations where the function was passed the member name instead of the JSON key value.</p>
@@ -89,12 +193,12 @@
 <p><em><strong>NOTE</strong> The properties for the new drafts contain version names like &quot;Draft2019_06&quot;.  Since this depends on when the spec is released, these may change between the beta and the official release without incrementing the major version.</em></p>
 </p>
 </details>
-<p><span id="feature">feature</span></p>
-<h2 id="breaking-changes">Breaking changes</h2>
+<p><span id="break">breaking change</span><span id="feature">feature</span></p>
+<h2 id="breaking-changes-1">Breaking changes</h2>
 <h3 id="schema">Schema</h3>
 <p>In order to support some new independent reference tests, some changes were made to the schema validation logic to include a validation-run-independent schema registry, separate from the static one.  The first two changes support this requirement:</p>
 <ul>
-<li><code>IJsonSchemaKeyword.RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)</code> - The second parameter is new.</li>
+<li><code>IJsonSchemaKeyword.RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)</code> - The second parameter is new.</li>
 <li><code>SchemaValidationContext</code> now requires a source context from which to copy values.</li>
 <li><code>JsonSchemaOptions.OutputFormat</code> now has a default value of <code>Flag</code>, which only returns whether an instance is valid, without any error details.  This greatly improves performance out of the box.  Configuration is required to generate error details.</li>
 <li><code>JsonSchemaoptions.RefResolutionStrategy</code> now has a default value of <code>ProcessSiblingId</code> to conform with the draft-08 definition of <code>$ref</code> and <code>$recursiveRef</code>.</li>

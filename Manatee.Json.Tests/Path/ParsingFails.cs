@@ -13,8 +13,6 @@ namespace Manatee.Json.Tests.Path
 		[TestCase("$[?()]")]
 		[TestCase("$.")]
 		[TestCase("$.tes*t")]
-		// TODO: This may actually be the key to parsing bracket notation
-		[TestCase("$[\"test\"]")]
 		[TestCase("$[false]")]
 		[TestCase("$[1.test")]
 		[TestCase("$[1-5]")]
@@ -32,6 +30,8 @@ namespace Manatee.Json.Tests.Path
 		[TestCase("$[?(@[(@.length-1))]")]
 		[TestCase("$[?(@[?(@.name == 5))]")]
 		[TestCase("$..")]
+		[TestCase("[1]")]
+		[TestCase(".a")]
 		public static void Run(string text)
 		{
 			Assert.Throws<JsonPathSyntaxException>(() =>

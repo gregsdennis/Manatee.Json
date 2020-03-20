@@ -68,24 +68,24 @@ namespace Manatee.Json.Schema
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(IJsonSchemaKeyword other)
-		{
-			return Equals(other as VocabularyKeyword);
-		}
-		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
-		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(VocabularyKeyword other)
+		public bool Equals(VocabularyKeyword? other)
 		{
 			if (other is null) return false;
 			if (ReferenceEquals(this, other)) return true;
 
 			return other.ContentsEqual(this);
 		}
+		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+		/// <param name="other">An object to compare with this object.</param>
+		public bool Equals(IJsonSchemaKeyword? other)
+		{
+			return Equals(other as VocabularyKeyword);
+		}
 		/// <summary>Determines whether the specified object is equal to the current object.</summary>
 		/// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as VocabularyKeyword);
 		}
@@ -119,7 +119,7 @@ namespace Manatee.Json.Schema
 				{
 					var newContext = new SchemaValidationContext(context)
 						{
-							BaseRelativeLocation = context.BaseRelativeLocation.CloneAndAppend(Name, vocabulary.Id),
+							BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, vocabulary.Id),
 							RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, vocabulary.Id),
 						};
 					var metaSchema = JsonSchemaRegistry.Get(vocabulary.MetaSchemaId);
@@ -146,7 +146,7 @@ namespace Manatee.Json.Schema
 		/// <implementationNotes>
 		/// If the keyword does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
-		public void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry) { }
+		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
@@ -157,7 +157,7 @@ namespace Manatee.Json.Schema
 		/// If the keyword contains no subschemas, simply return null.
 		/// If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
 		/// </implementationNotes>
-		public JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
 		{
 			return null;
 		}

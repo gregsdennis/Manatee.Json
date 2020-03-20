@@ -28,13 +28,13 @@ namespace Manatee.Json.Path.ArrayParameters
 		{
 			return string.Join(",", Slices);
 		}
-		public bool Equals(SliceQuery other)
+		public bool Equals(SliceQuery? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Slices.ContentsEqual(other.Slices);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as SliceQuery);
 		}

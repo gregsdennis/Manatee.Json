@@ -19,17 +19,17 @@ namespace Manatee.Json.Path.SearchParameters
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return "length";
 		}
 
-		public bool Equals(LengthSearchParameter other)
+		public bool Equals(LengthSearchParameter? other)
 		{
 			return !ReferenceEquals(null, other);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as LengthSearchParameter);
 		}

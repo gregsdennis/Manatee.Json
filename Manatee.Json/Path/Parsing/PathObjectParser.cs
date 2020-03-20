@@ -1,4 +1,5 @@
-﻿using Manatee.Json.Internal;
+﻿using System.Diagnostics.CodeAnalysis;
+using Manatee.Json.Internal;
 
 namespace Manatee.Json.Path.Parsing
 {
@@ -11,30 +12,59 @@ namespace Manatee.Json.Path.Parsing
 			if (index + 1 >= input.Length)
 				return false;
 
-			return input[index] == '.'
-				&& (char.IsLetterOrDigit(input[index + 1])
-					|| allowedChars.IndexOf(input[index + 1]) >= 0);
+			var check = index + 1;
+
+			if (input[index] == '.')
+			{
+				if (input[index + 1] == '[' && input[index + 2].In('\'', '"'))
+					check++;
+				return char.IsLetterOrDigit(input[check]) || allowedChars.IndexOf(input[check]) >= 0;
+			}
+
+			return input[index] == '[' &&
+				   input[index + 1].In('\'', '"') &&
+				   (char.IsLetterOrDigit(input[check]) || allowedChars.IndexOf(input[check]) >= 0);
 		}
 
-		public string TryParse(string source, ref int index, ref JsonPath path)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
 			if (path == null)
-				return "Start token not found.";
+			{
+				errorMessage = "Start token not found.";
+				return false;
+			}
 
-		    index++;
+			if (source[index] == '.')
+				index++;
 
-			if (source[index] == '*')
+			var isBracketed = false;
+			if (source[index] == '[')
+			{
+				isBracketed = true;
+				index++;
+			}
+
+		    if (source[index] == '*')
 			{
 				path = path.Name();
 				index++;
-				return null;
+				errorMessage = null!;
+				return true;
 			}
 
-		    var error = source.GetKey(ref index, out var key);
-			if (error != null) return error;
+			if (!source.TryGetKey(ref index, out var key, out errorMessage)) return false;
+
+			if (isBracketed)
+			{
+				if (source[index] != ']') {
+					errorMessage = "Expected close bracket.";
+					return false;
+				}
+				index++;
+			}
 
 			path = path.Name(key);
-			return null;
+			return true;
 		}
 	}
 }

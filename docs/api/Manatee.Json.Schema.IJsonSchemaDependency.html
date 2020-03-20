@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Interface IJsonSchemaDependency
    ">
-    <meta name="generator" content="docfx 2.36.1.0">
+    <meta name="generator" content="docfx 2.43.2.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,6 +83,9 @@
     </div>
     <div>
       <a class="xref" href="Manatee.Json.Serialization.IJsonSerializable.html#Manatee_Json_Serialization_IJsonSerializable_ToJson_Manatee_Json_Serialization_JsonSerializer_">IJsonSerializable.ToJson(JsonSerializer)</a>
+    </div>
+    <div>
+      <span class="xref">System.IEquatable&lt;Manatee.Json.Schema.IJsonSchemaDependency&gt;.Equals(Manatee.Json.Schema.IJsonSchemaDependency)</span>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.Schema.html">Manatee.Json.Schema</a></h6>
@@ -159,19 +162,19 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri%2CManatee.Json.Schema.JsonSchemaRegistry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_System_Nullable_System_Uri__Manatee_Json_Schema_JsonSchemaRegistry_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Nullable%7BSystem.Uri%7D%2CManatee.Json.Schema.JsonSchemaRegistry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/IJsonSchemaDependency.cs/#L35">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_" data-uid="Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas*"></a>
-  <h4 id="Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_System_Uri_Manatee_Json_Schema_JsonSchemaRegistry_" data-uid="Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Uri,Manatee.Json.Schema.JsonSchemaRegistry)">RegisterSubschemas(Uri, JsonSchemaRegistry)</h4>
+  <h4 id="Manatee_Json_Schema_IJsonSchemaDependency_RegisterSubschemas_System_Nullable_System_Uri__Manatee_Json_Schema_JsonSchemaRegistry_" data-uid="Manatee.Json.Schema.IJsonSchemaDependency.RegisterSubschemas(System.Nullable{System.Uri},Manatee.Json.Schema.JsonSchemaRegistry)">RegisterSubschemas(Nullable&lt;Uri&gt;, JsonSchemaRegistry)</h4>
   <div class="markdown level1 summary"><p>Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry)</code></pre>
+    <pre><code class="lang-csharp hljs">void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -184,7 +187,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Uri</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Uri</span>&gt;</td>
         <td><span class="parametername">baseUri</span></td>
         <td><p>The current base URI</p>
 </td>
@@ -211,7 +214,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri)</code></pre>
+    <pre><code class="lang-csharp hljs">JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -247,7 +250,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a></td>
+        <td><span class="xref">System.Nullable</span>&lt;<a class="xref" href="Manatee.Json.Schema.JsonSchema.html">JsonSchema</a>&gt;</td>
         <td><p>The referenced schema, if it exists; otherwise null.</p>
 </td>
       </tr>

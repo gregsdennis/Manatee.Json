@@ -7,7 +7,7 @@ namespace Manatee.Json.Serialization.Internal
 {
 	internal class ConstructorResolver : IResolver
 	{
-		public object Resolve(Type type, Dictionary<SerializationInfo, object> parameters)
+		public object Resolve(Type type, Dictionary<SerializationInfo, object?>? parameters)
 		{
 			try
 			{
@@ -21,7 +21,7 @@ namespace Manatee.Json.Serialization.Internal
 			}
 		}
 
-		private static object _Resolve(Type type, Dictionary<SerializationInfo, object> parameters)
+		private static object _Resolve(Type type, Dictionary<SerializationInfo, object?>? parameters)
 		{
 			var ctors = type.GetTypeInfo().DeclaredConstructors
 				.Select(c => new {Method = c, Parameters = c.GetParameters()})
@@ -29,7 +29,7 @@ namespace Manatee.Json.Serialization.Internal
 				.ToList();
 
 			if (ctors.Count == 0)
-				return Activator.CreateInstance(type);
+				return Activator.CreateInstance(type)!;
 
 			if (ctors[0].Parameters.Length == 0)
 				return ctors[0].Method.Invoke(null);
@@ -37,7 +37,7 @@ namespace Manatee.Json.Serialization.Internal
 			var scored = ctors.Select(c =>
 					{
 						var matched = c.Parameters.Join(parameters,
-						                                cp => cp.Name.ToLowerInvariant(),
+						                                cp => cp.Name!.ToLowerInvariant(),
 						                                p => (p.Key.SerializationName ?? p.Key.MemberInfo.Name).ToLowerInvariant(),
 						                                (cp, p) => new {ConstructorParameter = cp, JsonParameter = p}).ToList();
 						var score = (double) matched.Count / c.Parameters.Length;
@@ -59,7 +59,7 @@ namespace Manatee.Json.Serialization.Internal
 
 		private static object _ResolveSimple(Type type)
 		{
-			ConstructorInfo shortestCtor = null;
+			ConstructorInfo? shortestCtor = null;
 			foreach (var constructor in type.GetTypeInfo().DeclaredConstructors)
 			{
 				if (constructor.GetParameters().Length == 0)
@@ -77,7 +77,7 @@ namespace Manatee.Json.Serialization.Internal
 				return shortestCtor.Invoke(ctorParameters);
 			}
 
-			return Activator.CreateInstance(type);
+			return Activator.CreateInstance(type)!;
 		}
 	}
 }

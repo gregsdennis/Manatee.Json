@@ -7,6 +7,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class BooleanSchemaTest
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		public static IEnumerable TestData
 		{
 			get

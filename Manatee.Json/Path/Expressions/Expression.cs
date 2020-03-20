@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Expressions
 {
@@ -26,10 +27,10 @@ namespace Manatee.Json.Path.Expressions
 			if (typeof(T) == typeof(JsonValue))
 			{
 				if (result is JsonValue) return (T) result;
-				if (result is double)
-					return (T) (object) new JsonValue((double) result);
-				if (result is bool)
-					return (T) (object) new JsonValue((bool) result);
+				if (result is double d)
+					return (T) (object) new JsonValue(d);
+				if (result is bool b)
+					return (T) (object) new JsonValue(b);
 				if (result is string s)
 					return (T)(object)new JsonValue(s);
 				if (result is JsonArray array)
@@ -37,19 +38,19 @@ namespace Manatee.Json.Path.Expressions
 				if (result is JsonObject o)
 					return (T)(object)new JsonValue(o);
 			}
-			return (T) Convert.ChangeType(result, typeof(T));
+			return (T) Convert.ChangeType(result, typeof(T))!;
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
 			return _root.ToString();
 		}
-		public bool Equals(Expression<T, TIn> other)
+		public bool Equals(Expression<T, TIn>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return Equals(_root, other._root);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as Expression<T, TIn>);
 		}

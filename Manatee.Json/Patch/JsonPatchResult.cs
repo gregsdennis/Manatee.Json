@@ -16,9 +16,9 @@
 		/// <summary>
 		/// Gets any errors that have occurred during a patch.
 		/// </summary>
-		public string Error { get; }
+		public string? Error { get; }
 
-		internal JsonPatchResult(JsonValue patched, string error = null)
+		internal JsonPatchResult(JsonValue patched, string? error = null)
 		{
 			Patched = patched;
 			Error = error;

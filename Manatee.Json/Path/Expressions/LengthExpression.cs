@@ -1,19 +1,25 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Manatee.Json.Path.Expressions
 {
 	internal class LengthExpression<T> : PathExpression<T>, IEquatable<LengthExpression<T>>
 	{
-		public override object Evaluate(T json, JsonValue root)
+		public LengthExpression()
+			: base(new JsonPath(), false) { }
+		public LengthExpression(JsonPath path, bool isLocal)
+			: base(path, isLocal) { }
+
+		public override object? Evaluate([MaybeNull] T json, JsonValue? root)
 		{
-			JsonArray array;
+			JsonArray? array;
 			if (Path == null || !Path.Operators.Any())
 			{
 				if (IsLocal)
 					array = json as JsonArray;
 				else
-					array = root.Type == JsonValueType.Array ? root.Array : null;
+					array = root?.Type == JsonValueType.Array ? root.Array : null;
 				if (array == null)
 				{
 					var value = json as JsonValue;
@@ -25,7 +31,7 @@ namespace Manatee.Json.Path.Expressions
 			else
 			{
 				var value = IsLocal
-								? json is JsonArray ? json as JsonArray : json as JsonValue
+								? json is JsonArray jsonArray ? jsonArray : json as JsonValue
 								: root;
 				var results = Path.Evaluate(value);
 				if (results.Count > 1)
@@ -37,18 +43,18 @@ namespace Manatee.Json.Path.Expressions
 			}
 			return array == null ? null : (object)(double) array.Count;
 		}
-		public override string ToString()
+		public override string? ToString()
 		{
 			var path = Path == null ? string.Empty : Path.GetRawString();
 			return (IsLocal ? "@" : "$") + $"{path}.length";
 		}
-		public bool Equals(LengthExpression<T> other)
+		public bool Equals(LengthExpression<T>? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
 			return base.Equals(other);
 		}
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as LengthExpression<T>);
 		}

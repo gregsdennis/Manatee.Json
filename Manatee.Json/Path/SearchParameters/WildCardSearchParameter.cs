@@ -7,6 +7,8 @@ namespace Manatee.Json.Path.SearchParameters
 	{
 		public static WildCardSearchParameter Instance { get; } = new WildCardSearchParameter();
 
+		private WildCardSearchParameter() { }
+
 		public IEnumerable<JsonValue> Find(IEnumerable<JsonValue> json, JsonValue root)
 		{
 			var results = new JsonArray();
@@ -14,20 +16,22 @@ namespace Manatee.Json.Path.SearchParameters
 			{
 				_Find(value, results);
 			}
+			// we don't want to include the root
+			results.RemoveAt(0);
 			return results;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return "*";
 		}
 
-		public bool Equals(WildCardSearchParameter other)
+		public bool Equals(WildCardSearchParameter? other)
 		{
 			return !ReferenceEquals(null, other);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as WildCardSearchParameter);
 		}
@@ -38,7 +42,7 @@ namespace Manatee.Json.Path.SearchParameters
 			return base.GetHashCode();
 		}
 
-		private void _Find(JsonValue value, JsonArray results)
+		private static void _Find(JsonValue value, JsonArray results)
 		{
 			results.Add(value);
 			switch (value.Type)

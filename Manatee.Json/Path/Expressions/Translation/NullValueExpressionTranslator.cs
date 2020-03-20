@@ -6,7 +6,7 @@ namespace Manatee.Json.Path.Expressions.Translation
 	{
 		public ExpressionTreeNode<T> Translate<T>(Expression body)
 		{
-			return new ValueExpression<T> { Value = JsonValue.Null };
+			return new ValueExpression<T>(JsonValue.Null);
 		}
 	}
 }

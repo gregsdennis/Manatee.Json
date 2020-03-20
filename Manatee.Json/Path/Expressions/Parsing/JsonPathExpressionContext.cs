@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Manatee.Json.Path.Expressions.Parsing
 {
@@ -24,109 +25,111 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		/// <remarks>
 		/// Used to differentiate unary negation from subtraction.
 		/// </remarks>
-		public JsonPathExpression LastExpression { get; set; }
+		public JsonPathExpression? LastExpression { get; set; }
 
-		public string CreateExpressionTreeNode<TIn>(out ExpressionTreeNode<TIn> root)
+		public bool TryCreateExpressionTreeNode<TIn>([NotNullWhen(true)] out ExpressionTreeNode<TIn> root, [NotNullWhen(false)] out string errorMessage)
 		{
-			root = null;
 			if (Output.Count != 1)
-				return "No expression to parse.";
-			if (Operators.Count > 0)
-				return "Unbalanced expression.";
-
-			root = _MakeHasPropertyIfNameExpression(_Visit<TIn>(Output.Pop()));
-			return null;
-		}
-		private ExpressionTreeNode<TIn> _Visit<TIn>(JsonPathExpression expr)
-		{
-			if (expr is null) return null;
-
-			if (expr is PathValueExpression<TIn> path) return path.Path;
-			if (expr is ValueExpression value) return new ValueExpression<TIn> {Value = value.Value};
-
-			if (!(expr is OperatorExpression op))
-				throw new NotSupportedException($"Expressions of type {expr.GetType()} are not supported");
-
-			var left = _Visit<TIn>(op.Children[0]);
-			var right = _Visit<TIn>(op.Children.Count > 1 ? op.Children[1] : null);
-
-			_CheckAndReplaceIfHasPropertyNeeded(op.Operator, ref left, ref right);
-			switch (op.Operator)
 			{
-				case JsonPathOperator.Add:
-					return new AddExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.And:
-					return new AndExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Divide:
-					return new DivideExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Exponent:
-					return new ExponentExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Equal:
-					return new IsEqualExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.GreaterThan:
-					return new IsGreaterThanExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.GreaterThanOrEqual:
-					return new IsGreaterThanEqualExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.LessThan:
-					return new IsLessThanExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.LessThanOrEqual:
-					return new IsLessThanEqualExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.NotEqual:
-					return new IsNotEqualExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Modulo:
-					return new ModuloExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Multiply:
-					return new MultiplyExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Subtract:
-					return new SubtractExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Or:
-					return new OrExpression<TIn> {Left = left, Right = right,};
-				case JsonPathOperator.Negate:
-					return _VisitNegate(left);
-				case JsonPathOperator.Not:
-					return new NotExpression<TIn> {Root = _MakeHasPropertyIfNameExpression(left)};
+				root = null!;
+				errorMessage = "No expression to parse.";
+				return false;
 			}
 
-			throw new NotSupportedException($"Expressions of type {expr.GetType()} are not supported");
+			if (Operators.Count > 0)
+			{
+				root = null!;
+				errorMessage = "Unbalanced expression.";
+				return false;
+			}
+
+			var first = Output.Pop();
+			if (first == null)
+			{
+				root = null!;
+				errorMessage = "No expression found.";
+				return false;
+			}
+			var node = _Visit<TIn>(first);
+
+			root = _MakeHasPropertyIfNameExpression(node);
+			errorMessage = null!;
+			return true;
+		}
+		private static ExpressionTreeNode<TIn> _Visit<TIn>(JsonPathExpression expr)
+		{
+			if (expr is PathValueExpression<TIn> path) return path.Path;
+			if (expr is ValueExpression value) return new ValueExpression<TIn>(value.Value);
+
+			if (!(expr is OperatorExpression op))
+				throw new NotSupportedException($"Expressions of type {expr.GetType()} are not supported.");
+
+			var left = _Visit<TIn>(op.Children[0]);
+
+			if (op.Operator == JsonPathOperator.Negate) return _VisitNegate(left);
+			if (op.Operator == JsonPathOperator.Not) return new NotExpression<TIn>(_MakeHasPropertyIfNameExpression(left));
+
+			var right = _Visit<TIn>(op.Children.Count > 1 
+				                        ? op.Children[1]
+				                        : throw new InvalidOperationException($"Operator type {op.Operator} requires two operands."));
+
+			_CheckAndReplaceIfHasPropertyNeeded(op.Operator, ref left, ref right);
+			return op.Operator switch
+				{
+					JsonPathOperator.Add => (ExpressionTreeNode<TIn>) new AddExpression<TIn>(left, right),
+					JsonPathOperator.And => new AndExpression<TIn>(left, right),
+					JsonPathOperator.Divide => new DivideExpression<TIn>(left, right),
+					JsonPathOperator.Exponent => new ExponentExpression<TIn>(left, right),
+					JsonPathOperator.Equal => new IsEqualExpression<TIn>(left, right),
+					JsonPathOperator.GreaterThan => new IsGreaterThanExpression<TIn>(left, right),
+					JsonPathOperator.GreaterThanOrEqual => new IsGreaterThanEqualExpression<TIn>(left, right),
+					JsonPathOperator.LessThan => new IsLessThanExpression<TIn>(left, right),
+					JsonPathOperator.LessThanOrEqual => new IsLessThanEqualExpression<TIn>(left, right),
+					JsonPathOperator.NotEqual => new IsNotEqualExpression<TIn>(left, right),
+					JsonPathOperator.Modulo => new ModuloExpression<TIn>(left, right),
+					JsonPathOperator.Multiply => new MultiplyExpression<TIn>(left, right),
+					JsonPathOperator.Subtract => new SubtractExpression<TIn>(left, right),
+					JsonPathOperator.Or => new OrExpression<TIn>(left, right),
+					_ => throw new NotSupportedException($"Expressions of type {expr.GetType()} are not supported")
+				};
 		}
 
 		/// <summary>
 		/// Constant terms are negated immediately.
 		/// </summary>
-		private ExpressionTreeNode<TIn> _VisitNegate<TIn>(ExpressionTreeNode<TIn> left)
+		private static ExpressionTreeNode<TIn> _VisitNegate<TIn>(ExpressionTreeNode<TIn> left)
 		{
-			// Always apply Negate to path values
-			if (left is PathValueExpression<TIn>)
-				return new NegateExpression<TIn> { Root = left };
-
 			if (left is ValueExpression<TIn> value && value.Value != null)
 			{
 				// Fold.
 				var negatedValue = _Negate(value.Value);
 				if (negatedValue != null)
 				{
-					return new ValueExpression<TIn> { Value = negatedValue };
+					return new ValueExpression<TIn>(negatedValue);
 				}
 			}
 
 			// Always apply Negate to anything other than a negatable value
-			return new NegateExpression<TIn> { Root = left };
+			return new NegateExpression<TIn>(left);
 		}
 
-		private static object _Negate(object value)
+		private static object? _Negate(object value)
 		{
-			if (value is byte @byte) return -@byte;
-			if (value is sbyte @sbyte) return -@sbyte;
-			if (value is short @short) return -@short;
-			if (value is ushort @ushort) return -@ushort;
-			if (value is int @int) return -@int;
-			if (value is uint @uint) return -@uint;
-			if (value is long @long) return -@long;
-			if (value is ulong) return null; // can't negate a ulong
-			if (value is float @float) return -@float;
-			if (value is double @double) return -@double;
-			if (value is decimal @decimal) return -@decimal;
-			return null;
+			return value switch
+				{
+					byte @byte => (object) -@byte,
+					sbyte @sbyte => -@sbyte,
+					short @short => -@short,
+					ushort @ushort => -@ushort,
+					int @int => -@int,
+					uint @uint => -@uint,
+					long @long => -@long,
+					ulong _ => null, // can't negate a ulong
+					float @float => -@float,
+					double @double => -@double,
+					decimal @decimal => -@decimal,
+					_ => null
+				};
 		}
 
 		/// <summary>
@@ -138,12 +141,12 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		/// <param name="op">Operator applied to <paramref name="left"/> and <paramref name="right"/>.</param>
 		/// <param name="left">Left hand side of <paramref name="op"/>.</param>
 		/// <param name="right">Right hand side of <paramref name="op"/>.</param>
-		private void _CheckAndReplaceIfHasPropertyNeeded<TIn>(JsonPathOperator op, ref ExpressionTreeNode<TIn> left, ref ExpressionTreeNode<TIn> right)
+		private static void _CheckAndReplaceIfHasPropertyNeeded<TIn>(JsonPathOperator op, ref ExpressionTreeNode<TIn> left, ref ExpressionTreeNode<TIn> right)
 		{
-			if (!(left is NameExpression<TIn>) && !(right is NameExpression<TIn>)) return;
-
 			var namedLeft = left as NameExpression<TIn>;
 			var namedRight = right as NameExpression<TIn>;
+			if (namedLeft == null && namedRight == null) return;
+
 			switch (op)
 			{
 				case JsonPathOperator.And:
@@ -185,14 +188,7 @@ namespace Manatee.Json.Path.Expressions.Parsing
 		private static ExpressionTreeNode<TIn> _MakeHasPropertyIfNameExpression<TIn>(ExpressionTreeNode<TIn> node)
 		{
 			if (node is NameExpression<TIn> named)
-			{
-				return new HasPropertyExpression<TIn>
-				{
-					Path = named.Path,
-					IsLocal = named.IsLocal,
-					Name = named.Name
-				};
-			}
+				return new HasPropertyExpression<TIn>(named.Path, named.IsLocal, named.Name);
 
 			return node;
 		}

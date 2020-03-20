@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Enum RefResolutionStrategy
    ">
-    <meta name="generator" content="docfx 2.36.1.0">
+    <meta name="generator" content="docfx 2.43.2.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -81,7 +81,7 @@
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_Schema_RefResolutionStrategy_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public enum RefResolutionStrategy : int</code></pre>
+    <pre><code class="lang-csharp hljs">public enum RefResolutionStrategy</code></pre>
   </div>
   <h5 id="Manatee_Json_Schema_RefResolutionStrategy_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks"><p>See the specific members for examples.</p>
@@ -103,9 +103,19 @@ base URI.  This will process <code>$ref</code> according to draft-07 and earlier
 </td>
       </tr>
       <tr>
+        <td id="Manatee_Json_Schema_RefResolutionStrategy_IgnoreSiblingKeywords">IgnoreSiblingKeywords</td>
+        <td><p>Sibling keywords will be ignored. This will process <code>$ref</code> according to draft-07 and earlier.</p>
+</td>
+      </tr>
+      <tr>
         <td id="Manatee_Json_Schema_RefResolutionStrategy_ProcessSiblingId">ProcessSiblingId</td>
         <td><p>Sibling <code>$id</code> properties will be processed and will change the
-base URI.  This will process <code>$ref</code> according to draft-08.</p>
+base URI.  This will process <code>$ref</code> according to draft 2019-09.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Manatee_Json_Schema_RefResolutionStrategy_ProcessSiblingKeywords">ProcessSiblingKeywords</td>
+        <td><p>Sibling keywords will be processed. This will process <code>$ref</code> <em>and</em> sibling keywords according to draft 2019-09.</p>
 </td>
       </tr>
     </tbody>
@@ -121,7 +131,7 @@ base URI.  This will process <code>$ref</code> according to draft-08.</p>
                     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_RefResolutionStrategy.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.RefResolutionStrategy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/RefResolutionStrategy.cs/#L10" class="contribution-link">View Source</a>
+                    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/RefResolutionStrategy.cs/#L13" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

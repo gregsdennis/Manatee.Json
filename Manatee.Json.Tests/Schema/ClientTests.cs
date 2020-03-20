@@ -15,6 +15,12 @@ namespace Manatee.Json.Tests.Schema
 	[TestFixture]
 	public class ClientTests
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			JsonOptions.LogCategory = LogCategory.Schema;
+		}
+
 		private static readonly JsonSerializer _serializer = new JsonSerializer();
 
 		[Test]
@@ -362,7 +368,6 @@ namespace Manatee.Json.Tests.Schema
 		{
 			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var actual = new JsonSchema()
-				.Id("http://myschema.org/test194")
 				.Ref("#/definitions/apredefinedtype")
 				.Definition("apredefinedtype", new JsonSchema()
 					            .Type(JsonSchemaType.Object)
@@ -377,7 +382,6 @@ namespace Manatee.Json.Tests.Schema
 				{
 					IsValid = false,
 					RelativeLocation = JsonPointer.Parse("#/$ref/required"),
-					AbsoluteLocation = new Uri("http://myschema.org/test194#/definitions/apredefinedtype/required"),
 					InstanceLocation = JsonPointer.Parse("#"),
 					Keyword = "required",
 					ErrorMessage = "The properties [\"prop1\"] are required.",
@@ -461,6 +465,123 @@ namespace Manatee.Json.Tests.Schema
 			var json = JsonValue.Parse(jsonText);
 
 			Assert.Throws<SchemaReferenceNotFoundException>(() => schema.Validate(json));
+		}
+
+		[Test]
+		public void Issue231_ReferenceNotFoundExceptionOnValidRef()
+		{
+			var schema = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Id("http://localhost/Resistance.schema.json")
+				.Type(JsonSchemaType.Object)
+				.Definition("1DVector", new JsonSchema()
+					            .Id("#1DVector")
+					            .Type(JsonSchemaType.Array)
+					            .MinItems(1)
+					            .Items(new JsonSchema()
+						                   .AnyOf(new JsonSchema().Type(JsonSchemaType.Number),
+						                          new JsonSchema().Type(JsonSchemaType.Null))
+						                   .Default(JsonValue.Null))
+					            .Examples(1.1, 2.3, 4.5))
+				.Definition("t_PulseTimePeriod", new JsonSchema()
+					            .Id("#t_PulseTimePeriod")
+					            .Type(JsonSchemaType.Object)
+					            .Title("The t_PulseTimePeriod Schema")
+					            .Required("values")
+					            .Property("values", new JsonSchema().Ref("#/definitions/1DVector")))
+				.Required("t_PulseTimePeriod")
+				.Property("t_PulseTimePeriod", new JsonSchema().Ref("#t_PulseTimePeriod"))
+				.AdditionalProperties(false);
+
+			var instance = new JsonObject {["t_PulseTimePeriod"] = new JsonObject {["values"] = new JsonArray()}};
+
+			var format = JsonSchemaOptions.OutputFormat;
+			try
+			{
+				JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
+				var result = schema.Validate(instance);
+
+				result.AssertInvalid();
+			}
+			finally
+			{
+				JsonSchemaOptions.OutputFormat = format;
+			}
+		}
+
+		[Test]
+		public void Issue232_RefsNotResolvedAgainstId()
+		{
+			var resistanceSchema = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Id("http://localhost/Resistance.schema.json")
+				.Type(JsonSchemaType.Object)
+				.Required("t_PulseTimePeriod")
+				.Property("t_PulseTimePeriod", new JsonSchema().Ref("./definitions.schema.json#definitions/t_PulseTimePeriod"))
+				.AdditionalProperties(false);
+			var definitionsSchema = new JsonSchema()
+				.Schema(MetaSchemas.Draft07.Id)
+				.Id("http://localhost/definitions.schema.json")
+				.Definition("1DVector", new JsonSchema()
+					            .Id("#1DVector")
+					            .Type(JsonSchemaType.Array)
+					            .MinItems(1)
+					            .Items(new JsonSchema()
+						                   .AnyOf(new JsonSchema().Type(JsonSchemaType.Number),
+						                          new JsonSchema().Type(JsonSchemaType.Null))
+						                   .Default(JsonValue.Null))
+					            .Examples(1.1, 2.3, 4.5))
+				.Definition("t_PulseTimePeriod", new JsonSchema()
+					            .Id("#t_PulseTimePeriod")
+					            .Type(JsonSchemaType.Object)
+					            .Title("The t_PulseTimePeriod Schema")
+					            .Required("values")
+					            .Property("values", new JsonSchema().Ref("#/definitions/1DVector")));
+
+			JsonSchemaRegistry.Register(resistanceSchema);
+			JsonSchemaRegistry.Register(definitionsSchema);
+
+			var instance = new JsonObject { ["t_PulseTimePeriod"] = new JsonObject { ["values"] = new JsonArray() } };
+
+			var format = JsonSchemaOptions.OutputFormat;
+			try
+			{
+				JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
+				var result = resistanceSchema.Validate(instance);
+
+				result.AssertInvalid();
+			}
+			finally
+			{
+				JsonSchemaOptions.OutputFormat = format;
+			}
+		}
+
+		[Test]
+		public void Issue248_RefNotPassingEvaluatedProperties()
+		{
+			var schema = new JsonSchema()
+				.Definition("other", new JsonSchema()
+								.Type(JsonSchemaType.Object)
+								.Property("surfboard", new JsonSchema().Type(JsonSchemaType.String)))
+				.AllOf(new JsonSchema().Ref("#/definitions/other"),
+					   new JsonSchema()
+						   .Property("wheels", true)
+						   .Property("headlights", true),
+					   new JsonSchema().Property("pontoons", true),
+					   new JsonSchema().Property("wings", true))
+				.UnevaluatedProperties(false);
+
+			var instance = new JsonObject
+				{
+					["pontoons"] = new JsonObject(),
+					["wheels"] = new JsonObject(),
+					["surfboard"] = "2"
+				};
+
+			var results = schema.Validate(instance);
+
+			results.AssertValid();
 		}
 	}
 }

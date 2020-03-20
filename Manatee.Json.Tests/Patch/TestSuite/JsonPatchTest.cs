@@ -29,7 +29,10 @@ namespace Manatee.Json.Tests.Patch.TestSuite
 			Comment = obj.TryGetString("comment");
 			Doc = obj["doc"];
 			if (obj.ContainsKey("expected"))
+			{
+				HasExpectedValue = true;
 				ExpectedValue = obj["expected"];
+			}
 			else
 				HasExpectedValue = false;
 			ExpectsError = !string.IsNullOrWhiteSpace(obj.TryGetString("error"));

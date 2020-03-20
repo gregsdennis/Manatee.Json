@@ -6,15 +6,15 @@ namespace Manatee.Json.Patch
 {
     internal static class JsonPointerFunctions
     {
-        private static readonly ValueTuple<JsonValue, string, int, bool> _empty = (null, null, -1, false);
+        private static readonly ValueTuple<JsonValue?, string?, int, bool> _empty = (null, null, -1, false);
         
-        public static (JsonValue parent, string key, int index, bool success) ResolvePointer(JsonValue json, string path)
+        public static (JsonValue? parent, string? key, int index, bool success) ResolvePointer(JsonValue json, string path)
         {
             if (path == string.Empty) return _empty;
             var parts = path.Split('/').Skip(1);
-            JsonValue parent = null;
+            JsonValue? parent = null;
             var current = json;
-            string key = null;
+            string? key = null;
             int index = -1;
             foreach (var part in parts)
             {
@@ -25,7 +25,7 @@ namespace Manatee.Json.Patch
                     index = key == "-" ? int.MaxValue : -1;
                 if (current.Type == JsonValueType.Object)
                 {
-                    if (!current.Object.TryGetValue(key, out JsonValue found)) return _empty;
+                    if (!current.Object.TryGetValue(key, out var found)) return _empty;
 
                     parent = current;
                     current = found;
@@ -46,12 +46,12 @@ namespace Manatee.Json.Patch
             return (parent, key, index, true);
         }
 
-        public static (JsonValue result, bool success) InsertValue(JsonValue json, string path, JsonValue value)
+        public static (JsonValue? result, bool success) InsertValue(JsonValue json, string path, JsonValue value, bool insertAfter)
         {
             if (path == string.Empty) return (value, true);
             var parts = path.Split('/').Skip(1);
-            var current = json;
-            Func<JsonValue, bool> addValue = null;
+            JsonValue? current = json;
+            Func<JsonValue, bool>? addValue = null;
             foreach (var part in parts)
             {
                 var key = part.UnescapePointer();
@@ -81,13 +81,32 @@ namespace Manatee.Json.Patch
                         index = Math.Max(0, current.Array.Count - 1);
 
                     var array = current.Array;
-                    var tempIndex = index;
-                    addValue = v =>
+                    if (key == "-" || index == current.Array.Count)
+                    {
+                        addValue = v =>
                         {
-                            if (tempIndex > array.Count) return false;
-                            array.Insert(tempIndex, v);
+                            array.Add(v);
                             return true;
                         };
+                    }
+                    else
+                    {
+                        var tempIndex = index;
+                        addValue = v =>
+                            {
+                                if (tempIndex > array.Count - 1) return false;
+                                array.Insert(tempIndex, v);
+
+                                if (insertAfter)
+                                {
+                                    var oldValue = array[tempIndex];
+                                    array[tempIndex] = array[tempIndex + 1];
+                                    array[tempIndex + 1] = oldValue;
+                                }
+
+                                return true;
+                            };
+                    }
 
                     current = index < current.Array.Count
                                   ? current.Array[index]

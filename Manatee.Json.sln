@@ -5,9 +5,10 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C148909-BDAD-45A5-9BFA-63DBD47290B9}"
 	ProjectSection(SolutionItems) = preProject
-		build.bat = build.bat
+		appveyor.yml = appveyor.yml
 		Local.testsettings = Local.testsettings
 		README.md = README.md
+		docs_source\release-notes.md = docs_source\release-notes.md
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
@@ -37,6 +38,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2019-09", "2019-09", "{4021
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Tests.Benchmark", "Manatee.Json.Tests.Benchmark\Manatee.Json.Tests.Benchmark.csproj", "{773D6512-3464-4C0C-8937-C433F71830FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{D9D06EE8-22B1-4A7B-8B42-412E99AB3370}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manatee.Json.Console", "Manatee.Json.Console\Manatee.Json.Console.csproj", "{1D5B51CF-0132-4CD2-8723-D89FAD373AC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manatee.Json.Tests.Common", "Manatee.Json.Tests.Common\Manatee.Json.Tests.Common.csproj", "{5CF527BE-3A1D-426B-BDEC-B74DC390BD04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +62,14 @@ Global
 		{773D6512-3464-4C0C-8937-C433F71830FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{773D6512-3464-4C0C-8937-C433F71830FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{773D6512-3464-4C0C-8937-C433F71830FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D5B51CF-0132-4CD2-8723-D89FAD373AC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D5B51CF-0132-4CD2-8723-D89FAD373AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D5B51CF-0132-4CD2-8723-D89FAD373AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D5B51CF-0132-4CD2-8723-D89FAD373AC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CF527BE-3A1D-426B-BDEC-B74DC390BD04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF527BE-3A1D-426B-BDEC-B74DC390BD04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF527BE-3A1D-426B-BDEC-B74DC390BD04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF527BE-3A1D-426B-BDEC-B74DC390BD04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +78,8 @@ Global
 		{FECC9923-41DB-4DE7-9715-D7E565456B8C} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 		{4021715A-4D23-4A60-B41C-40542B7BF215} = {2EABC48C-8556-4A6D-B0CA-B2D5A46C7239}
 		{773D6512-3464-4C0C-8937-C433F71830FC} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
+		{1D5B51CF-0132-4CD2-8723-D89FAD373AC4} = {D9D06EE8-22B1-4A7B-8B42-412E99AB3370}
+		{5CF527BE-3A1D-426B-BDEC-B74DC390BD04} = {6E84846A-D11A-4B3F-9588-C815FB0A22C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A28ED14-DF83-45F6-BA43-47423E29D5D9}

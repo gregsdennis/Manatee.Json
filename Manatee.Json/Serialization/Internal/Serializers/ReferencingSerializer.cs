@@ -1,56 +1,54 @@
-﻿using Manatee.Json.Internal;
+﻿using System;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
-	internal class ReferencingSerializer : ISerializer
+	internal class ReferencingSerializer : IChainedSerializer
 	{
-		private readonly ISerializer _innerSerializer;
+		public static ReferencingSerializer Instance { get; } = new ReferencingSerializer();
 
-		public bool ShouldMaintainReferences => true;
+		private ReferencingSerializer() { }
 
-		public ReferencingSerializer(ISerializer innerSerializer)
+		public static bool Handles(ISerializer serializer, Type type)
 		{
-			_innerSerializer = innerSerializer;
+			Log.Serialization(() => "Determining if object references should be maintained");
+			return !type.IsValueType && serializer.ShouldMaintainReferences;
 		}
-
-		public bool Handles(SerializationContext context)
+		public JsonValue TrySerialize(ISerializer serializer, SerializationContext context)
 		{
-			return true;
-		}
-		public JsonValue Serialize(SerializationContext context)
-		{
-			if (context.SerializationMap.TryGetPair(context.Source, out var pair))
-				return new JsonObject {{Constants.RefKey, pair.Source.ToString()}};
+			if (context.SerializationMap.TryGetPair(context.Source!, out var pair))
+			{
+				Log.Serialization(() => "Object already serialized; returning reference marker");
+				return new JsonObject {[Constants.RefKey] = pair.Source.ToString()};
+			}
 
-			context.SerializationMap.Add(new SerializationReference
+			Log.Serialization(() => "Object not serialized yet; setting up tracking...");
+			context.SerializationMap.Add(new SerializationReference(context.CurrentLocation.CleanAndClone())
 				{
-					Object = context.Source,
-					Source = context.CurrentLocation
+					Object = context.Source
 				});
 
-			return _innerSerializer.Serialize(context);
+			return serializer.Serialize(context);
 		}
-		public object Deserialize(SerializationContext context)
+		public object? TryDeserialize(ISerializer serializer, DeserializationContext context)
 		{
 			if (context.LocalValue.Type == JsonValueType.Object)
 			{
 				var jsonObj = context.LocalValue.Object;
 				if (jsonObj.TryGetValue(Constants.RefKey, out var reference))
 				{
+					Log.Serialization(() => "Found reference marker; setting up tracking...");
 					var location = JsonPointer.Parse(reference.String);
-					context.SerializationMap.AddReference(location, context.CurrentLocation);
+					context.SerializationMap.AddReference(location, context.CurrentLocation.CleanAndClone());
 					return context.InferredType.Default();
 				}
 			}
 
-			var pair = new SerializationReference
-				{
-					Source = context.CurrentLocation
-				};
+			var pair = new SerializationReference(context.CurrentLocation.CleanAndClone());
 			context.SerializationMap.Add(pair);
 
-			var obj = _innerSerializer.Deserialize(context);
+			var obj = serializer.Deserialize(context);
 
 			pair.Object = obj;
 			pair.DeserializationIsComplete = true;

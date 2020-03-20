@@ -34,8 +34,8 @@ namespace Manatee.Json
 		/// supplied JSON values.
 		/// </summary>
 		/// <param name="collection"></param>
-		public JsonObject(IDictionary<string, JsonValue> collection)
-			: base(collection) {}
+		public JsonObject(IDictionary<string, JsonValue?> collection)
+			: base(collection.ToDictionary(kvp => kvp.Key, kvp => kvp.Value ?? JsonValue.Null)) {}
 
 		/// <summary>
 		/// Creates a string representation of the JSON data.
@@ -47,9 +47,7 @@ namespace Manatee.Json
 			if (Count == 0) return "{}";
 
 			var builder = new StringBuilder();
-
 			AppendIndentedString(builder, indentLevel);
-
 			return builder.ToString();
 		}
 		internal void AppendIndentedString(StringBuilder builder, int indentLevel = 0)
@@ -87,7 +85,7 @@ namespace Manatee.Json
 		/// </summary>
 		/// <param name="key">The key of the element to add.</param>
 		/// <param name="value">The value of the element to add. If the value is null, it will be replaced by <see cref="JsonValue.Null"/>.</param>
-		public new void Add(string key, JsonValue value)
+		public new void Add(string key, JsonValue? value)
 		{
 			switch (JsonOptions.DuplicateKeyBehavior)
 			{
@@ -114,9 +112,7 @@ namespace Manatee.Json
 			if (Count == 0) return "{}";
 
 			var builder = new StringBuilder();
-
 			AppendString(builder);
-
 			return builder.ToString();
 		}
 		internal void AppendString(StringBuilder builder)
@@ -150,7 +146,7 @@ namespace Manatee.Json
 		/// true if the specified <see cref="object"/> is equal to the current <see cref="object"/>; otherwise, false.
 		/// </returns>
 		/// <param name="obj">The <see cref="object"/> to compare with the current <see cref="object"/>. </param>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (!(obj is JsonObject json)) return false;
 			if (!Keys.ContentsEqual(json.Keys)) return false;

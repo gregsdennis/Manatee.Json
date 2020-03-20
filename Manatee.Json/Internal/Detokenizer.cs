@@ -10,9 +10,9 @@ namespace Manatee.Json.Internal
 		{
 			var matches = _tokenPattern.Matches(template);
 
-			foreach (Match match in matches)
+			foreach (Match? match in matches)
 			{
-				var key = match.Groups["key"].Value;
+				var key = match!.Groups["key"].Value;
 				var format = match.Groups["format"]?.Value;
 
 				if (!settings.TryGetValue(key, out var setting)) continue;

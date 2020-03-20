@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Manatee.Json.Internal;
 using Manatee.Json.Serialization.Internal;
 using Manatee.Json.Serialization.Internal.Serializers;
 
@@ -22,7 +23,9 @@ namespace Manatee.Json.Serialization
 			};
 		private static List<ISerializer> _orderedSerializers;
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		static SerializerFactory()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 		{
 			_serializers = typeof(ISerializer).GetTypeInfo()
 											  .Assembly
@@ -33,7 +36,7 @@ namespace Manatee.Json.Serialization
 											  .Select(t => Activator.CreateInstance(t.AsType()))
 											  .Cast<ISerializer>()
 											  .ToList();
-			_autoSerializer = _serializers.OfType<ITypeSerializer>().FirstOrDefault();
+			_autoSerializer = _serializers.OfType<AutoSerializer>().FirstOrDefault();
 			_UpdateOrderedSerializers();
 		}
 
@@ -45,7 +48,9 @@ namespace Manatee.Json.Serialization
 		{
 			var existing = _serializers.FirstOrDefault(s => s.GetType() == serializer.GetType());
 			if (existing == null)
+			{
 				_serializers.Add(serializer);
+			}
 			_UpdateOrderedSerializers();
 		}
 		/// <summary>
@@ -60,34 +65,27 @@ namespace Manatee.Json.Serialization
 			_UpdateOrderedSerializers();
 		}
 
-		internal static ISerializer GetSerializer(SerializationContext context)
+		internal static ISerializer GetSerializer(SerializationContextBase context)
 		{
-			context.InferredType = context.RootSerializer.AbstractionMap.GetMap(context.InferredType);
-			var theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
+			context.OverrideInferredType(context.RootSerializer.AbstractionMap.GetMap(context.InferredType ?? context.RequestedType));
+			var theChosenOne = _orderedSerializers.First(s => s.Handles(context));
 
 			if (theChosenOne is AutoSerializer && context.RequestedType != typeof(object))
 			{
-				var type = context.InferredType;
-				context.InferredType = context.RootSerializer.AbstractionMap.GetMap(context.RequestedType);
-				theChosenOne = _orderedSerializers.FirstOrDefault(s => s.Handles(context));
+				var type = context.InferredType!;
+				context.OverrideInferredType(context.RootSerializer.AbstractionMap.GetMap(context.RequestedType));
+				theChosenOne = _orderedSerializers.First(s => s.Handles(context));
 
 				if (theChosenOne is AutoSerializer)
-					context.InferredType = type;
+					context.OverrideInferredType(type);
 			}
 
-			return _BuildSerializer(theChosenOne, context.InferredType.GetTypeInfo());
+			Log.Serialization(() => $"Serializer {theChosenOne.GetType().CSharpName() ?? "<not found>"} selected for type `{(context.InferredType ?? context.RequestedType).CSharpName()}`");
+			return theChosenOne;
 		}
 		internal static ITypeSerializer GetTypeSerializer()
 		{
 			return _autoSerializer;
-		}
-
-		private static ISerializer _BuildSerializer(ISerializer innerSerializer, TypeInfo typeInfo)
-		{
-			if (!typeInfo.IsValueType && innerSerializer.ShouldMaintainReferences)
-				innerSerializer = new ReferencingSerializer(innerSerializer);
-
-			return new SchemaValidator(new DefaultValueSerializer(innerSerializer));
 		}
 
 		private static void _UpdateOrderedSerializers()

@@ -9,9 +9,9 @@ namespace Manatee.Json.Path
 	/// </summary>
 	public class Slice : IEquatable<Slice>
 	{
-		private int? _start;
-		private int? _end;
-		private int? _step;
+		private readonly int? _start;
+		private readonly int? _end;
+		private readonly int? _step;
 
 		internal int? Index { get; }
 
@@ -39,7 +39,7 @@ namespace Manatee.Json.Path
 		/// <summary>Returns a string that represents the current object.</summary>
 		/// <returns>A string that represents the current object.</returns>
 		/// <filterpriority>2</filterpriority>
-		public override string ToString()
+		public override string? ToString()
 		{
 			return Index.HasValue
 				       ? Index.ToString()
@@ -50,7 +50,7 @@ namespace Manatee.Json.Path
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
 		/// <param name="other">An object to compare with this object.</param>
-		public bool Equals(Slice other)
+		public bool Equals(Slice? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -63,7 +63,7 @@ namespace Manatee.Json.Path
 		/// <returns>true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.</returns>
 		/// <param name="obj">The object to compare with the current object. </param>
 		/// <filterpriority>2</filterpriority>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as Slice);
 		}
@@ -94,18 +94,27 @@ namespace Manatee.Json.Path
 		{
 			if (Index.HasValue)
 			{
-				return Index.Value < 0 || json.Count <= Index.Value
-						   ? Enumerable.Empty<JsonValue>()
-						   : new[] { json[Index.Value] };
+				var index = Index.Value;
+				if (index < 0)
+					index += json.Count;
+
+				return index < 0 || json.Count <= index
+					? Enumerable.Empty<JsonValue>()
+					: new[] {json[index]};
 			}
 
-			var start = _ResolveIndex(_start ?? 0, json.Count);
+			var start = Math.Max(_ResolveIndex(_start ?? 0, json.Count), 0);
 			var end = _ResolveIndex(_end ?? json.Count, json.Count);
-			var step = Math.Max(_step ?? 1, 1);
+			if (start == end)
+				return Enumerable.Empty<JsonValue>();
+			//var step = _step ?? (start < end ? 1 : -1);
+			var step = _step ?? 1;
 
-			// quick copy
 			if (start == 0 && end == json.Count && step == 1)
-				return new List<JsonValue>(json);
+				return json;
+
+			if (step > 0 && end <= start)
+				return Enumerable.Empty<JsonValue>();
 
 			if (step == 1)
 			{
@@ -113,17 +122,18 @@ namespace Manatee.Json.Path
 				json.CopyTo(start, result, 0, end - start);
 				return result;
 			}
-			else
-			{
-				return _FindSlow(json, start, end, step);
-			}
+
+			return _FindSlow(json, start, end, step);
 		}
 
 		private static IEnumerable<JsonValue> _FindSlow(JsonArray json, int start, int end, int step)
 		{
+			var test = step > 0
+				? (Func<int, int, bool>) ((a, b) => a < b)
+				: (a, b) => a > b;
 			var index = start;
 			var list = new List<JsonValue>();
-			while (index < end)
+			while (test(index , end))
 			{
 				list.Add(json[index]);
 				index += step;
@@ -133,7 +143,7 @@ namespace Manatee.Json.Path
 
 		private static int _ResolveIndex(int index, int count)
 		{
-			return index < 0 ? count + index : index;
+			return index < 0 ? count + index : Math.Min(index, count);
 		}
 	}
 }

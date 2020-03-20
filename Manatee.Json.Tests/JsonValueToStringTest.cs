@@ -73,7 +73,7 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void ToString_Null_ReturnsCorrectString()
 		{
-			var json = new JsonValue();
+			var json = JsonValue.Null;
 			var expected = "null";
 			var actual = json.ToString();
 			Assert.AreEqual(expected, actual);

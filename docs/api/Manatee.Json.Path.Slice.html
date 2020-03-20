@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Slice
    ">
-    <meta name="generator" content="docfx 2.36.1.0">
+    <meta name="generator" content="docfx 2.43.2.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -85,11 +85,29 @@
     <h5>Implements</h5>
     <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Manatee.Json.Path.Slice.html">Slice</a>&gt;</div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Manatee.Json.Path.html">Manatee.Json.Path</a></h6>
   <h6><strong>Assembly</strong>: Manatee.Json.dll</h6>
   <h5 id="Manatee_Json_Path_Slice_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Slice : object, IEquatable&lt;Slice&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class Slice : IEquatable&lt;Slice&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -141,7 +159,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Slice(int? start, int? end, int? step = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Slice(int? start, int? end, int? step = default(int? ))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -177,19 +195,19 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_Slice_Equals_Manatee_Json_Path_Slice_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.Slice.Equals(Manatee.Json.Path.Slice)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_Slice_Equals_System_Nullable_Manatee_Json_Path_Slice__.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.Slice.Equals(System.Nullable%7BManatee.Json.Path.Slice%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/Slice.cs/#L53">View Source</a>
   </span>
   <a id="Manatee_Json_Path_Slice_Equals_" data-uid="Manatee.Json.Path.Slice.Equals*"></a>
-  <h4 id="Manatee_Json_Path_Slice_Equals_Manatee_Json_Path_Slice_" data-uid="Manatee.Json.Path.Slice.Equals(Manatee.Json.Path.Slice)">Equals(Slice)</h4>
+  <h4 id="Manatee_Json_Path_Slice_Equals_System_Nullable_Manatee_Json_Path_Slice__" data-uid="Manatee.Json.Path.Slice.Equals(System.Nullable{Manatee.Json.Path.Slice})">Equals(Nullable&lt;Slice&gt;)</h4>
   <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Equals(Slice other)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Equals(Slice? other)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -202,7 +220,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Manatee.Json.Path.Slice.html">Slice</a></td>
+        <td><span class="xref">System.Nullable</span>&lt;<a class="xref" href="Manatee.Json.Path.Slice.html">Slice</a>&gt;</td>
         <td><span class="parametername">other</span></td>
         <td><p>An object to compare with this object.</p>
 </td>
@@ -227,19 +245,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_Slice_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.Slice.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_Slice_Equals_System_Nullable_System_Object__.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.Slice.Equals(System.Nullable%7BSystem.Object%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Path/Slice.cs/#L66">View Source</a>
   </span>
   <a id="Manatee_Json_Path_Slice_Equals_" data-uid="Manatee.Json.Path.Slice.Equals*"></a>
-  <h4 id="Manatee_Json_Path_Slice_Equals_System_Object_" data-uid="Manatee.Json.Path.Slice.Equals(System.Object)">Equals(Object)</h4>
+  <h4 id="Manatee_Json_Path_Slice_Equals_System_Nullable_System_Object__" data-uid="Manatee.Json.Path.Slice.Equals(System.Nullable{System.Object})">Equals(Nullable&lt;Object&gt;)</h4>
   <div class="markdown level1 summary"><p>Determines whether the specified <span class="xref">System.Object</span> is equal to the current <span class="xref">System.Object</span>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+    <pre><code class="lang-csharp hljs">public override bool Equals(object? obj)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -252,7 +270,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Object</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Object</span>&gt;</td>
         <td><span class="parametername">obj</span></td>
         <td><p>The object to compare with the current object.</p>
 </td>
@@ -307,6 +325,8 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Path_Slice_ToString.md&amp;value=---%0Auid%3A%20Manatee.Json.Path.Slice.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -321,7 +341,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+    <pre><code class="lang-csharp hljs">public override string? ToString()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -333,12 +353,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td><p>A string that represents the current object.</p>
 </td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
   <h3 id="operators">Operators
   </h3>
   <span class="small pull-right mobile-hide">
@@ -392,7 +414,7 @@
   </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <span class="xref">System.IEquatable&lt;&gt;</span>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
   </div>
 </article>
           </div>

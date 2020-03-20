@@ -8,11 +8,12 @@
 
 			return index + 1 >= input.Length || input[index + 1] != '=';
 		}
-		public string TryParse<TIn>(string source, ref int index, out JsonPathExpression expression)
+		public bool TryParse<TIn>(string source, ref int index, out JsonPathExpression? expression, out string? errorMessage)
 		{
 			index++;
-			expression = new OperatorExpression { Operator = JsonPathOperator.LessThan };
-			return null;
+			expression = new OperatorExpression {Operator = JsonPathOperator.LessThan};
+			errorMessage = null!;
+			return true;
 		}
 	}
 }

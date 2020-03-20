@@ -1,4 +1,5 @@
 ﻿using System;
+using Manatee.Json.Tests.Common;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
@@ -332,6 +333,127 @@ namespace Manatee.Json.Tests
 			finally
 			{
 				JsonOptions.DefaultArrayEquality = ArrayEquality.SequenceEqual;
+			}
+		}
+
+		#endregion
+
+		#region Logging
+
+		[Test]
+		public void NoLogTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = null;
+				JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
+
+				Assert.AreEqual(0, storedValue);
+			}
+			catch
+			{
+				JsonOptions.Log = log;
+				throw;
+			}
+		}
+
+		[Test]
+		public void LogTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = new ConsoleLog();
+				JsonOptions.Log?.Verbose($"changing storedValue to {PrintValue(4)}");
+
+				Assert.AreEqual(4, storedValue);
+			}
+			catch
+			{
+				JsonOptions.Log = log;
+				throw;
+			}
+		}
+
+		// this isn't really testing desired behavior; just illustrating c# behavior
+		[Test]
+		public void NoLogNoFuncTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			void LogIt(string message)
+			{
+				JsonOptions.Log?.Verbose(message);
+			}
+
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = null;
+				LogIt($"changing storedValue to {PrintValue(4)}");
+
+				// note that in NoLogTest, PrintValue wasn't run
+				Assert.AreEqual(4, storedValue);
+			}
+			catch
+			{
+				JsonOptions.Log = log;
+				throw;
+			}
+		}
+
+		// this isn't really testing desired behavior; just illustrating c# behavior
+		[Test]
+		public void NoLogFuncTest()
+		{
+			int storedValue = 0;
+
+			int PrintValue(int value)
+			{
+				storedValue = value;
+				return value;
+			}
+
+			void LogIt(Func<string> message)
+			{
+				JsonOptions.Log?.Verbose(message());
+			}
+
+			var log = JsonOptions.Log;
+			try
+			{
+				JsonOptions.Log = null;
+				LogIt(() => $"changing storedValue to {PrintValue(4)}");
+
+				Assert.AreEqual(0, storedValue);
+			}
+			catch
+			{
+				JsonOptions.Log = log;
+				throw;
 			}
 		}
 

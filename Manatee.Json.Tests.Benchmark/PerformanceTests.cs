@@ -1,102 +1,146 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using JsonSerializer = Manatee.Json.Serialization.JsonSerializer;
 
 namespace Manatee.Json.Tests.Benchmark
 {
-	public class PerformanceTests
+	public static class PerformanceTests
 	{
-		public class MyClass
+		private static readonly JsonSerializer _serializer = new JsonSerializer
+			{
+				Options =
+					{
+						CaseSensitiveDeserialization = false
+					}
+			};
+		private static readonly Stopwatch _manateeWatch = new Stopwatch();
+		private static long _parseTime;
+		private static long _serializeTime;
+		private static long _deserializeTime;
+		private static long _toStringTime;
+		private static bool _shouldOutput;
+
+		public static async Task Run()
 		{
-			public string Value { get; set; }
-			public int OtherValue { get; set; }
-			public MyClass NestedValue { get; set; }
+			JsonOptions.LogCategory = LogCategory.Serialization;
+
+			await _RunBulk();
 		}
 
-		private static readonly JsonSerializer _serializer = new JsonSerializer();
-
-		public static void Run()
+		private static async Task _RunBulk()
 		{
-			// This initializes whatever caches might be inside the serializer
-			_RunSingle(false);
+			var data = await GetEmojiData();
+			Console.WriteLine($"Data length: {data.Length}");
+			Console.WriteLine($"Object count: 1528");
 
-			//_RunSingle();5
-			_RunBulk();
+			var runCount = 100;
+			var page = 10;
+			for (int i = 0; i < runCount; i++)
+			{
+				_shouldOutput = i % page == 0 || i == runCount - 1;
+				Log($"Run {i}");
+				_ExecuteTest(data);
+				Log();
+				Log();
+			}
 		}
 
-		private static void _RunSingle(bool output = true)
+		private static void _ExecuteTest(string data)
 		{
-			var subjects = new[] {_GenerateSubject()};
+			_parseTime = 0;
+			_deserializeTime = 0;
+			_serializeTime = 0;
+			_toStringTime = 0;
 
-			if (output)
-				Console.WriteLine("\nNewtonsoft @1");
-			//_Run(subjects, JsonConvert.SerializeObject, JsonConvert.DeserializeObject<MyClass>, output);
+			Log($"\nNewtonsoft");
+			_Run(data, JsonConvert.SerializeObject, JsonConvert.DeserializeObject<EmojiResponse>);
 
-			if (output)
-				Console.WriteLine("\nManatee @1");
-			_Run(subjects, _ManateeSerialize, _ManateeDeserialize, output);
+			Log($"\nManatee");
+			_Run(data, _ManateeSerialize, _ManateeDeserialize, true);
+
 		}
 
-		private static void _RunBulk()
+		private static void _Run(string data, Func<EmojiResponse, string> serialize, Func<string, EmojiResponse> deserialize, bool details = false)
 		{
-			var count = 20000;
-			var subjects = Enumerable.Range(0, count).Select(i => _GenerateSubject()).ToList();
-
-			Console.WriteLine($"\nNewtonsoft @{count}");
-			_Run(subjects, JsonConvert.SerializeObject, JsonConvert.DeserializeObject<MyClass>);
-
-			Console.WriteLine($"\nManatee @{count}");
-			_Run(subjects, _ManateeSerialize, _ManateeDeserialize);
-		}
-
-		private static void _Run(IEnumerable<MyClass> subjects, Func<MyClass, string> serialize, Func<string, MyClass> deserialize, bool output = true)
-		{
-			Thread.Sleep(250);
+			Thread.Sleep(1);
 
 			var watch = new Stopwatch();
 
 			watch.Start();
-			var json = subjects.Select(serialize).ToArray();
+			var objects = deserialize(data);
 			watch.Stop();
 
-			if (output)
-				Console.WriteLine($"  Serialize: {watch.Elapsed} ({watch.ElapsedTicks})");
+			Log($"  Deserialize: {watch.Elapsed}");
+			if (details)
+			{
+				Log($"    Parse: {TimeSpan.FromTicks(_parseTime)}");
+				Log($"    Deserialize: {TimeSpan.FromTicks(_deserializeTime)}");
+			}
 
 			watch.Reset();
 			watch.Start();
-			var back = json.Select(deserialize).ToArray();
+			var json = serialize(objects);
 			watch.Stop();
 
-			if (output)
-				Console.WriteLine($"  Deserialize: {watch.Elapsed} ({watch.ElapsedTicks})");
-
-			Thread.Sleep(250);
+			Log($"  Serialize: {watch.Elapsed}");
+			if (details)
+			{
+				Log($"    Serialize: {TimeSpan.FromTicks(_serializeTime)}");
+				Log($"    ToString: {TimeSpan.FromTicks(_toStringTime)}");
+			}
 		}
 
-		private static string _ManateeSerialize(MyClass obj)
+		private static string _ManateeSerialize(EmojiResponse obj)
 		{
+			_manateeWatch.Reset();
+			_manateeWatch.Start();
 			var json = _serializer.Serialize(obj);
-			return json.ToString();
+			_manateeWatch.Stop();
+			_serializeTime += _manateeWatch.ElapsedTicks;
+
+			_manateeWatch.Reset();
+			_manateeWatch.Start();
+			var str = json.ToString();
+			_manateeWatch.Stop();
+			_toStringTime += _manateeWatch.ElapsedTicks;
+
+			return str;
 		}
 
-		private static MyClass _ManateeDeserialize(string jsonString)
+		private static EmojiResponse _ManateeDeserialize(string jsonString)
 		{
+			_manateeWatch.Reset();
+			_manateeWatch.Start();
 			var json = JsonValue.Parse(jsonString);
-			return _serializer.Deserialize<MyClass>(json);
+			_manateeWatch.Stop();
+			_parseTime += _manateeWatch.ElapsedTicks;
+
+			_manateeWatch.Reset();
+			_manateeWatch.Start();
+			var obj = _serializer.Deserialize<EmojiResponse>(json);
+			_manateeWatch.Stop();
+			_deserializeTime += _manateeWatch.ElapsedTicks;
+
+			return obj;
 		}
 
-		private static MyClass _GenerateSubject(int nest = 0)
+		private static async Task<string> GetEmojiData()
 		{
-			return new MyClass
-				{
-					Value = Guid.NewGuid().ToString(),
-					OtherValue = new Random().Next(),
-					NestedValue = nest < 0 && new Random().Next(1) == 0 ? _GenerateSubject(nest + 1) : null
-				};
+			using (var client = new HttpClient())
+			using (var response = await client.GetAsync("https://api.trello.com/1/emoji?spritesheets=false&key=062109670e7f56b88783721892f8f66f"))
+			{
+				return await response.Content.ReadAsStringAsync();
+			}
+		}
+
+		private static void Log(string message = null)
+		{
+			if (_shouldOutput)
+				Console.WriteLine(message);
 		}
 	}
 }

@@ -59,7 +59,7 @@ var nonObjectResults = schame.Validate(nonObject);
 
 The various results objects are of type `SchemaValidationResults`.  More information about the results object can be found in the next section.
 
-In the above example, the following would be reported:
+In the above example, the following would result:
 
 - `emptyJson` and `numberJson` failed because `"myProperty"` was not found.
 - `booleanJson` failed because the value of `"myProperty"` is of the wrong type.
@@ -67,25 +67,28 @@ In the above example, the following would be reported:
 - `shortJson` failed because the value of `"myProperty"` was too short.
 - `nonObject` also passed validation because `properties` and `required` ignore non-object JSON.
 
+No errors would actually be reported here because the output format defaults to a "flag" format, which is a basic pass/fail.  To get specific errors, the output format will need to be configured.
+
 ## Validation results
 
-Planned for JSON Schema draft-08 is a standardized format for validation output in order to support cross-platform and cross-implementation compatibility.  The format is described in [this GitHub issue](https://github.com/json-schema-org/json-schema-spec/issues/643).  This includes support for both errors and annotation collection.
+JSON Schema draft 2019-09 standardized the format for validation output in order to support cross-platform and cross-implementation compatibility.  The format is described in the [JSON Schema spec, section 10](https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.10).  This includes support for both errors and annotation collection.
 
-In summary, there are four levels of verbosity for output: Basic, List, Hierarchy, and Verbose Hierarchy.
+In summary, there are four levels of verbosity for output: Flag, Basic, Detailed, and Verbose.
 
-Basic will simply return a boolean value indicating a pass/fail result.  All other formats include JSON Pointers and URIs to indicate the source of the errors or annotations that were produced.
+The flag format will simply return a boolean value indicating a pass/fail result.  All other formats include JSON Pointers and URIs to indicate the source of the errors or annotations that were produced.
 
-A list output reduces all of the errors to a flat list.
+A basic format reduces all of the errors to a flat list.
 
-The hierarchical views mirror the structure of the schema.  The verbose one copies this structure exactly, whereas the standard hierarchy will condense the results where possible.
+The detailed and verbose output formats follows the hierarchical structure of the schema.  The verbose one copies this structure exactly, whereas the standard hierarchy will condense the results where possible.
 
-The default output format is the condensed hierarchy, but this can be configured via the `JsonSchemaOptions.OutputFormat` static property.
+The default output format is Flag, but this can be configured via the `JsonSchemaOptions.OutputFormat` static property.
 
 ***NOTE** It's only possible to translate from a more detailed to a less detailed format.*
 
 ### Examples of output
 
-#### Verbose Hierarchy
+<details>
+  <summary>Verbose Hierarchy</summary>
 
 ```json
 {
@@ -139,7 +142,10 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-#### Condensed Hierarchy
+</details><br>
+
+<details>
+  <summary>Condensed Hierarchy</summary>
 
 ```json
 {
@@ -172,7 +178,10 @@ The default output format is the condensed hierarchy, but this can be configured
 }
 ```
 
-#### Flat List
+</details><br>
+
+<details>
+  <summary>Flat List</summary>
 
 ```json
 {
@@ -207,6 +216,8 @@ The default output format is the condensed hierarchy, but this can be configured
     ]
 }
 ```
+
+</details>
 
 ## Value format validation
 

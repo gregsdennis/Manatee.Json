@@ -1,4 +1,4 @@
-using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,9 +12,8 @@ namespace Manatee.Json.Parsing
 		{
 			return c == '{';
 		}
-		public string TryParse(string source, ref int index, out JsonValue value, bool allowExtraChars)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage, bool allowExtraChars)
 		{
-
 			bool complete = false;
 
 			var obj = new JsonObject();
@@ -23,8 +22,8 @@ namespace Manatee.Json.Parsing
 			index++;
 			while (index < length)
 			{
-				var message = source.SkipWhiteSpace(ref index, length, out char c);
-				if (message != null) return message;
+				errorMessage = source.SkipWhiteSpace(ref index, length, out char c);
+				if (errorMessage != null) return false;
 				// check for empty object
 				if (c == '}')
 					if (obj.Count == 0)
@@ -33,29 +32,37 @@ namespace Manatee.Json.Parsing
 						index++;
 						break;
 					}
-					else return "Expected key.";
+					else
+					{
+						errorMessage = "Expected key.";
+						return false;
+					}
 				// get key
-				message = source.SkipWhiteSpace(ref index, length, out c);
-				if (message != null) return message;
-				if (c != '\"') return "Expected key.";
-				message = JsonParser.Parse(source, ref index, out JsonValue item);
-				if (message != null) return message;
-				var key = item.String;
+				errorMessage = source.SkipWhiteSpace(ref index, length, out c);
+				if (errorMessage != null) return false;
+				if (c != '\"')
+				{
+					errorMessage = "Expected key.";
+					return false;
+				}
+				if (!JsonParser.TryParse(source, ref index, out var item, out errorMessage)) return false;
+				var key = item!.String;
 				// check for colon
-				message = source.SkipWhiteSpace(ref index, length, out c);
-				if (message != null) return message;
+				errorMessage = source.SkipWhiteSpace(ref index, length, out c);
+				if (errorMessage != null) return false;
 				if (c != ':')
 				{
-					obj.Add(key, null);
-					return "Expected ':'.";
+					obj.Add(key, null!);
+					errorMessage = "Expected ':'.";
+					return false;
 				}
 				index++;
 				// get value (whitespace is removed in Parse)
-				message = JsonParser.Parse(source, ref index, out item);
-				obj.Add(key, item);
-				if (message != null) return message;
-				message = source.SkipWhiteSpace(ref index, length, out c);
-				if (message != null) return message;
+				var success = JsonParser.TryParse(source, ref index, out item, out errorMessage);
+				obj.Add(key, item!);
+				if (!success) return false;
+				errorMessage = source.SkipWhiteSpace(ref index, length, out c);
+				if (errorMessage != null) return false;
 				// check for end or separator
 				index++;
 				if (c == '}')
@@ -63,15 +70,24 @@ namespace Manatee.Json.Parsing
 					complete = true;
 					break;
 				}
-				if (c != ',') return "Expected ','.";
+
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					return false;
+				}
 			}
 
 			if (!complete)
-				return "Unterminated object (missing '}').";
+			{
+				errorMessage = "Unterminated object (missing '}').";
+				return false;
+			}
 
-			return null;
+			errorMessage = null;
+			return true;
 		}
-		public string TryParse(TextReader stream, out JsonValue value)
+		public bool TryParse(TextReader stream, [NotNullWhen(true)] out JsonValue? value, [NotNullWhen(false)] out string? errorMessage)
 		{
 			bool complete = false;
 
@@ -80,8 +96,8 @@ namespace Manatee.Json.Parsing
 			while (stream.Peek() != -1)
 			{
 				stream.Read(); // waste the '{' or ','
-				var message = stream.SkipWhiteSpace(out char c);
-				if (message != null) return message;
+				errorMessage = stream.SkipWhiteSpace(out char c);
+				if (errorMessage != null) return false;
 				// check for empty object
 				if (c == '}')
 					if (obj.Count == 0)
@@ -90,29 +106,37 @@ namespace Manatee.Json.Parsing
 						stream.Read(); // waste the '}'
 						break;
 					}
-					else return "Expected key.";
+					else
+					{
+						errorMessage = "Expected key.";
+						return false;
+					}
 				// get key
-				message = stream.SkipWhiteSpace(out c);
-				if (message != null) return message;
-				if (c != '\"') return "Expected key.";
-				message = JsonParser.Parse(stream, out JsonValue item);
-				if (message != null) return message;
-				var key = item.String;
+				errorMessage = stream.SkipWhiteSpace(out c);
+				if (errorMessage != null) return false;
+				if (c != '\"')
+				{
+					errorMessage = "Expected key.";
+					return false;
+				}
+				if (!JsonParser.TryParse(stream, out var item, out errorMessage)) return false;
+				var key = item!.String;
 				// check for colon
-				message = stream.SkipWhiteSpace(out c);
-				if (message != null) return message;
+				errorMessage = stream.SkipWhiteSpace(out c);
+				if (errorMessage != null) return false;
 				if (c != ':')
 				{
-					obj.Add(key, null);
-					return "Expected ':'.";
+					obj.Add(key, null!);
+					errorMessage = "Expected ':'.";
+					return false;
 				}
 				stream.Read(); // waste the ':'
 							   // get value (whitespace is removed in Parse)
-				message = JsonParser.Parse(stream, out item);
-				obj.Add(key, item);
-				if (message != null) return message;
-				message = stream.SkipWhiteSpace(out c);
-				if (message != null) return message;
+				var success = JsonParser.TryParse(stream, out item, out errorMessage);
+				obj.Add(key, item!);
+				if (!success) return false;
+				errorMessage = stream.SkipWhiteSpace(out c);
+				if (errorMessage != null) return false;
 				// check for end or separator
 				if (c == '}')
 				{
@@ -120,15 +144,24 @@ namespace Manatee.Json.Parsing
 					stream.Read(); // waste the '}'
 					break;
 				}
-				if (c != ',') return "Expected ','.";
+
+				if (c != ',')
+				{
+					errorMessage = "Expected ','.";
+					return false;
+				}
 			}
 
 			if (!complete)
-				return "Unterminated object (missing '}').";
+			{
+				errorMessage = "Unterminated object (missing '}').";
+				return false;
+			}
 
-			return null;
+			errorMessage = null;
+			return true;
 		}
-		public async Task<(string errorMessage, JsonValue value)> TryParseAsync(TextReader stream, CancellationToken token)
+		public async Task<(string? errorMessage, JsonValue? value)> TryParseAsync(TextReader stream, CancellationToken token)
 		{
 			bool complete = false;
 
@@ -136,7 +169,7 @@ namespace Manatee.Json.Parsing
 
 			var scratch = SmallBufferCache.Acquire(1);
 
-			string errorMessage = null;
+			string? errorMessage = null;
 			while (stream.Peek() != -1)
 			{
 				if (token.IsCancellationRequested)
@@ -163,30 +196,30 @@ namespace Manatee.Json.Parsing
 					}
 				// get key
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
-				if (errorMessage != null) break; ;
+				if (errorMessage != null) break;
 				if (c != '\"')
 				{
 					errorMessage = "Expected key.";
 					break;
 				}
 
-				JsonValue item;
+				JsonValue? item;
 				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
 				if (errorMessage != null) break;
-				var key = item.String;
+				var key = item!.String;
 				// check for colon
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null) break;
 				if (c != ':')
 				{
-					obj.Add(key, null);
+					obj.Add(key, null!);
 					errorMessage = "Expected ':'.";
 					break;
 				}
 				await stream.TryRead(scratch, 0, 1, token); // waste the ':'
-													 // get value (whitespace is removed in Parse)
-				errorMessage = JsonParser.Parse(stream, out item);
-				obj.Add(key, item);
+															// get value (whitespace is removed in Parse)
+				(errorMessage, item) = await JsonParser.TryParseAsync(stream, token);
+				obj.Add(key, item!);
 				if (errorMessage != null) break;
 				(errorMessage, c) = await stream.SkipWhiteSpaceAsync(scratch);
 				if (errorMessage != null) break;
@@ -204,10 +237,8 @@ namespace Manatee.Json.Parsing
 				}
 			}
 
-			if (!complete && errorMessage == null)
-			{
+			if (!complete && errorMessage == null) 
 				errorMessage = "Unterminated object (missing '}').";
-			}
 
 			SmallBufferCache.Release(scratch);
 			return (errorMessage, obj);

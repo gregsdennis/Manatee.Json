@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -12,119 +13,119 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the value for the `additionalItems` keyword, if present.
 		/// </summary>
-		public static JsonSchema AdditionalItems(this JsonSchema schema)
+		public static JsonSchema? AdditionalItems(this JsonSchema schema)
 		{
 			return schema.Get<AdditionalItemsKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `additionalProperties` keyword, if present.
 		/// </summary>
-		public static JsonSchema AdditionalProperties(this JsonSchema schema)
+		public static JsonSchema? AdditionalProperties(this JsonSchema schema)
 		{
 			return schema.Get<AdditionalPropertiesKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `allOf` keyword, if present.
 		/// </summary>
-		public static List<JsonSchema> AllOf(this JsonSchema schema)
+		public static List<JsonSchema>? AllOf(this JsonSchema schema)
 		{
 			return schema.Get<AllOfKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `anyOf` keyword, if present.
 		/// </summary>
-		public static List<JsonSchema> AnyOf(this JsonSchema schema)
+		public static List<JsonSchema>? AnyOf(this JsonSchema schema)
 		{
 			return schema.Get<AnyOfKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `$comment` keyword, if present.
 		/// </summary>
-		public static string Comment(this JsonSchema schema)
+		public static string? Comment(this JsonSchema schema)
 		{
 			return schema.Get<CommentKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `const` keyword, if present.
 		/// </summary>
-		public static JsonValue Const(this JsonSchema schema)
+		public static JsonValue? Const(this JsonSchema schema)
 		{
 			return schema.Get<ConstKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `contains` keyword, if present.
 		/// </summary>
-		public static JsonSchema Contains(this JsonSchema schema)
+		public static JsonSchema? Contains(this JsonSchema schema)
 		{
 			return schema.Get<ContainsKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `contentEncoding` keyword, if present.
 		/// </summary>
-		public static string ContentEncoding(this JsonSchema schema)
+		public static string? ContentEncoding(this JsonSchema schema)
 		{
 			return schema.Get<ContentEncodingKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `contentMediaType` keyword, if present.
 		/// </summary>
-		public static string ContentMediaType(this JsonSchema schema)
+		public static string? ContentMediaType(this JsonSchema schema)
 		{
 			return schema.Get<ContentMediaTypeKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `contentSchema` keyword, if present.
 		/// </summary>
-		public static JsonSchema ContentSchema(this JsonSchema schema)
+		public static JsonSchema? ContentSchema(this JsonSchema schema)
 		{
 			return schema.Get<ContentSchemaKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `default` keyword, if present.
 		/// </summary>
-		public static JsonValue Default(this JsonSchema schema)
+		public static JsonValue? Default(this JsonSchema schema)
 		{
 			return schema.Get<DefaultKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `$defs` keyword, if present.
 		/// </summary>
-		public static Dictionary<string, JsonSchema> Defs(this JsonSchema schema)
+		public static Dictionary<string, JsonSchema>? Defs(this JsonSchema schema)
 		{
 			return schema.Get<DefsKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `definitions` keyword, if present.
 		/// </summary>
-		public static Dictionary<string, JsonSchema> Definitions(this JsonSchema schema)
+		public static Dictionary<string, JsonSchema>? Definitions(this JsonSchema schema)
 		{
 			return schema.Get<DefinitionsKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `description` keyword, if present.
 		/// </summary>
-		public static string Description(this JsonSchema schema)
+		public static string? Description(this JsonSchema schema)
 		{
 			return schema.Get<DescriptionKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `else` keyword, if present.
 		/// </summary>
-		public static JsonSchema Else(this JsonSchema schema)
+		public static JsonSchema? Else(this JsonSchema schema)
 		{
 			return schema.Get<ElseKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `enum` keyword, if present.
 		/// </summary>
-		public static List<JsonValue> Enum(this JsonSchema schema)
+		public static List<JsonValue>? Enum(this JsonSchema schema)
 		{
 			return schema.Get<EnumKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `examples` keyword, if present.
 		/// </summary>
-		public static List<JsonValue> Examples(this JsonSchema schema)
+		public static List<JsonValue>? Examples(this JsonSchema schema)
 		{
 			return schema.Get<ExamplesKeyword>();
 		}
@@ -159,21 +160,21 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the value for the `format` keyword, if present.
 		/// </summary>
-		public static Format Format(this JsonSchema schema)
+		public static Format? Format(this JsonSchema schema)
 		{
 			return schema.Get<FormatKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `$id` (or `id` for draft-04) keyword, if present.
 		/// </summary>
-		public static string Id(this JsonSchema schema)
+		public static string? Id(this JsonSchema schema)
 		{
 			return schema.Get<IdKeyword>()?.Value ?? schema.Get<IdKeywordDraft04>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `items` keyword, if present.
 		/// </summary>
-		public static List<JsonSchema> Items(this JsonSchema schema)
+		public static List<JsonSchema>? Items(this JsonSchema schema)
 		{
 			return schema.Get<ItemsKeyword>();
 		}
@@ -257,42 +258,42 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the value for the `not` keyword, if present.
 		/// </summary>
-		public static JsonSchema Not(this JsonSchema schema)
+		public static JsonSchema? Not(this JsonSchema schema)
 		{
 			return schema.Get<NotKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `oneOf` keyword, if present.
 		/// </summary>
-		public static List<JsonSchema> OneOf(this JsonSchema schema)
+		public static List<JsonSchema>? OneOf(this JsonSchema schema)
 		{
 			return schema.Get<OneOfKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `pattern` keyword, if present.
 		/// </summary>
-		public static Regex Pattern(this JsonSchema schema)
+		public static Regex? Pattern(this JsonSchema schema)
 		{
 			return schema.Get<PatternKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `patternProperties` keyword, if present.
 		/// </summary>
-		public static Dictionary<string, JsonSchema> PatternProperties(this JsonSchema schema)
+		public static Dictionary<string, JsonSchema>? PatternProperties(this JsonSchema schema)
 		{
 			return schema.Get<PatternPropertiesKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `properties` keyword, if present.
 		/// </summary>
-		public static Dictionary<string, JsonSchema> Properties(this JsonSchema schema)
+		public static Dictionary<string, JsonSchema>? Properties(this JsonSchema schema)
 		{
 			return schema.Get<PropertiesKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `propertyNames` keyword, if present.
 		/// </summary>
-		public static JsonSchema PropertyNames(this JsonSchema schema)
+		public static JsonSchema? PropertyNames(this JsonSchema schema)
 		{
 			return schema.Get<PropertyNamesKeyword>()?.Value;
 		}
@@ -306,70 +307,70 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the value for the `$recursiveAnchor` keyword, if present.
 		/// </summary>
-		public static bool? RecursiveAnchor(this JsonSchema schema)
+		public static bool RecursiveAnchor(this JsonSchema schema)
 		{
-			return schema.Get<RecursiveAnchorKeyword>()?.Value;
+			return schema.Get<RecursiveAnchorKeyword>()?.Value ?? false;
 		}
 		/// <summary>
 		/// Gets the value for the `recursiveRef` keyword, if present.
 		/// </summary>
-		public static string RecursiveRef(this JsonSchema schema)
+		public static string? RecursiveRef(this JsonSchema schema)
 		{
 			return schema.Get<RecursiveRefKeyword>()?.Reference;
 		}
 		/// <summary>
 		/// Gets the value for the `$ref` keyword, if present.
 		/// </summary>
-		public static string Ref(this JsonSchema schema)
+		public static string? Ref(this JsonSchema schema)
 		{
 			return schema.Get<RefKeyword>()?.Reference;
 		}
 		/// <summary>
 		/// Gets the resolved schema for the `$ref` keyword, if present.
 		/// </summary>
-		public static JsonSchema RefResolved(this JsonSchema schema)
+		public static JsonSchema? RefResolved(this JsonSchema schema)
 		{
 			return schema.Get<RefKeyword>()?.Resolved;
 		}
 		/// <summary>
 		/// Gets the value for the `required` keyword, if present.
 		/// </summary>
-		public static List<string> Required(this JsonSchema schema)
+		public static List<string>? Required(this JsonSchema schema)
 		{
 			return schema.Get<RequiredKeyword>();
 		}
 		/// <summary>
 		/// Gets the value for the `$schema` keyword, if present.
 		/// </summary>
-		public static string Schema(this JsonSchema schema)
+		public static string? Schema(this JsonSchema schema)
 		{
 			return schema.Get<SchemaKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `then` keyword, if present.
 		/// </summary>
-		public static JsonSchema Then(this JsonSchema schema)
+		public static JsonSchema? Then(this JsonSchema schema)
 		{
 			return schema.Get<ThenKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `title` keyword, if present.
 		/// </summary>
-		public static string Title(this JsonSchema schema)
+		public static string? Title(this JsonSchema schema)
 		{
 			return schema.Get<TitleKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `unevaluatedItems` keyword, if present.
 		/// </summary>
-		public static JsonSchema UnevaluatedItems(this JsonSchema schema)
+		public static JsonSchema? UnevaluatedItems(this JsonSchema schema)
 		{
 			return schema.Get<UnevaluatedItemsKeyword>()?.Value;
 		}
 		/// <summary>
 		/// Gets the value for the `unevaluatedProperties` keyword, if present.
 		/// </summary>
-		public static JsonSchema UnevaluatedProperties(this JsonSchema schema)
+		public static JsonSchema? UnevaluatedProperties(this JsonSchema schema)
 		{
 			return schema.Get<UnevaluatedPropertiesKeyword>()?.Value;
 		}
@@ -383,7 +384,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the value for the `uniqueItems` keyword, if present.
 		/// </summary>
-		public static Dictionary<SchemaVocabulary, bool> Vocabulary(this JsonSchema schema)
+		public static Dictionary<SchemaVocabulary, bool>? Vocabulary(this JsonSchema schema)
 		{
 			return schema.Get<VocabularyKeyword>();
 		}
@@ -398,8 +399,9 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the indicated keyword, if present.
 		/// </summary>
+		[return: MaybeNull]
 		public static T Get<T>(this JsonSchema schema)
-			where T : IJsonSchemaKeyword
+			where T : IJsonSchemaKeyword?
 		{
 			return schema.OfType<T>().FirstOrDefault();
 		}

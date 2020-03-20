@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,57 +26,22 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void Test()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
+			SchemaValidationResults.IncludeAdditionalInfo = true;
 
 			var serializer = new JsonSerializer();
 
-			var schemaFile = @"C:\Users\gregs\Downloads\dozor-schema.json";
-
-			var schemaText = File.ReadAllText(schemaFile);
+			var schemaText = File.ReadAllText("C:\\Users\\gregs\\Desktop\\Manatee.Json.Schema.OpenApi\\Reference\\schema-2.0.json");
 			var schemaJson = JsonValue.Parse(schemaText);
 			var schema = serializer.Deserialize<JsonSchema>(schemaJson);
 
-			JsonValue json = new JsonObject
-				{
-					["events"] = new JsonArray
-						{
-							new JsonObject
-								{
-									["data"] = new JsonObject {["screen_name"] = "example screen 4"},
-									["event_type"] = "screen_view"
-								},
-							new JsonObject
-								{
-									["data"] = new JsonObject
-										{
-											["custom_attributes"] = new JsonObject {["foo"] = "literally anything"},
-											["custom_event_type"] = "navigation",
-											["event_name"] = "example custom 40"
-										},
-									["event_type"] = "custom_event"
-								}
-						},
-					["user_attributes"] = new JsonObject
-							{
-								["foo-string6"] = "a string",
-								["foo-boolean4"] = false,
-								["custom_property"] = new JsonArray {5, false, "string"}
-							}
-						["user_identities"] = new JsonObject
-						{
-							["customer_id"] = "name",
-							["email"] = "email",
-							["other"] = Math.PI,
-							["other_property"] = null
-						}
-				};
+			var address = new Uri("https://raw.githubusercontent.com/warehouseman/trello-swagger-generator/master/TrelloAPI.json");
+			var content = new WebClient().DownloadString(address);
+			var json = JsonValue.Parse(content);
 
-			var watch = Stopwatch.StartNew();
 			var results = schema.Validate(json);
-			watch.Stop();
 
 			Console.WriteLine(json);
-			Console.WriteLine(watch.ElapsedMilliseconds);
 
 			results.AssertValid();
 		}

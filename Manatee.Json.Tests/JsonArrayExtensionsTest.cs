@@ -1,4 +1,5 @@
 ﻿
+using System;
 using NUnit.Framework;
 
 namespace Manatee.Json.Tests
@@ -16,13 +17,10 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected, values);
 		}
 		[Test]
-		public void OfType_NullSourceReturnsNull()
+		public void OfType_NullSourceThrows()
 		{
 			var json = (JsonArray)null;
-			var expected = (JsonArray)null;
-			var values = json.OfType(JsonValueType.Number);
-
-			Assert.AreEqual(expected, values);
+			Assert.Throws<ArgumentNullException>(() => json.OfType(JsonValueType.Number));
 		}
 	}
 }

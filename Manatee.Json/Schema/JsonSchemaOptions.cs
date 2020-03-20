@@ -20,7 +20,12 @@ namespace Manatee.Json.Schema
 
 		private class LocationErrorCollectionCondition : IErrorCollectionCondition
 		{
-			public JsonPointer Location { get; set; }
+			public JsonPointer Location { get; private set; }
+
+			public LocationErrorCollectionCondition(JsonPointer location)
+			{
+				Location = location;
+			}
 
 			public bool ShouldExcludeChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 			{
@@ -30,7 +35,12 @@ namespace Manatee.Json.Schema
 
 		private class KeywordErrorCollectionCondition : IErrorCollectionCondition
 		{
-			public Type Type { get; set; }
+			public Type Type { get; private set; }
+
+			public KeywordErrorCollectionCondition(Type type)
+			{
+				Type = type;
+			}
 
 			public bool ShouldExcludeChildErrors(IJsonSchemaKeyword keyword, SchemaValidationContext context)
 			{
@@ -39,14 +49,14 @@ namespace Manatee.Json.Schema
 		}
 
 		private static readonly List<IErrorCollectionCondition> _errorCollectionConditions;
-		private static Func<string, string> _download;
+		private static Func<string, string>? _download;
 
 		/// <summary>
 		/// Gets and sets a method used to download online schema.
 		/// </summary>
 		public static Func<string, string> Download
 		{
-			get { return _download ?? (_download = _BasicDownload); }
+			get { return _download ??= _BasicDownload; }
 			set { _download = value; }
 		}
 
@@ -68,11 +78,12 @@ namespace Manatee.Json.Schema
 		public static SchemaValidationOutputFormat OutputFormat { get; set; } = SchemaValidationOutputFormat.Flag;
 
 		/// <summary>
-		/// Determines how `$ref` keywords are resolved when adjacent to an `$id` keyword
-		/// when a specific draft cannot be identified.  The default is <see cref="RefResolutionStrategy.ProcessSiblingId"/>.
+		/// Determines whether siblings of `$ref` keywords are processed.  This also affects how `$ref` is resolved
+		/// when adjacent to an `$id` keyword when a specific draft cannot be identified.  The default is
+		/// <see cref="RefResolutionStrategy.ProcessSiblingKeywords"/> to be consistent with the latest draft, 2019-09.
 		/// </summary>
 		/// <remarks>
-		/// As of draft-08, keywords are allowed to be adjacent to `$ref`.  This means that an
+		/// As of draft 2019-09, keywords are allowed to be adjacent to `$ref`.  This means that an
 		/// adjacent `$id` keyword will now change the base URI whereas in prior drafts it would not
 		/// since adjacent keywords were to be ignored.
 		///
@@ -80,7 +91,7 @@ namespace Manatee.Json.Schema
 		/// the `$schema` keyword or the selection of keywords being used), this option will
 		/// determine the behavior for resolving URIs.
 		/// </remarks>
-		public static RefResolutionStrategy RefResolution { get; set; } = RefResolutionStrategy.ProcessSiblingId;
+		public static RefResolutionStrategy RefResolution { get; set; } = RefResolutionStrategy.ProcessSiblingKeywords;
 
 		/// <summary>
 		/// Defines a default base URI for root schemas that use a relative URI for their `$id`.  The default is `manatee://json-schema/`.
@@ -108,7 +119,7 @@ namespace Manatee.Json.Schema
 					var filename = Uri.UnescapeDataString(uri.AbsolutePath);
 					return File.ReadAllText(filename);
 				case "manatee":
-					return null;
+					return null!;
 				default:
 					throw new Exception($"URI scheme '{uri.Scheme}' is not supported.  Only HTTP(S) and local file system URIs are allowed.");
 			}
@@ -127,7 +138,7 @@ namespace Manatee.Json.Schema
 		public static void IgnoreErrorsForChildren<T>()
 			where T : IJsonSchemaKeyword
 		{
-			_errorCollectionConditions.Add(new KeywordErrorCollectionCondition {Type = typeof(T)});
+			_errorCollectionConditions.Add(new KeywordErrorCollectionCondition(typeof(T)));
 		}
 
 		/// <summary>
@@ -141,7 +152,7 @@ namespace Manatee.Json.Schema
 		/// </remarks>
 		public static void IgnoreErrorsForChildren(JsonPointer location)
 		{
-			_errorCollectionConditions.Add(new LocationErrorCollectionCondition {Location = location});
+			_errorCollectionConditions.Add(new LocationErrorCollectionCondition(location));
 		}
 
 		/// <summary>

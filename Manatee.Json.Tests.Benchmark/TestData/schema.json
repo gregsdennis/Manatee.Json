@@ -1,0 +1,436 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.sebank.se/AuthorizationAsAService/A3S/blob/master/JsonSchemas/user_permissions.DEV.schema.json",
+  "title": "TestSchemaForLargeMessage",
+  "description": "Test Schema For Large Message",
+  "type": "object",
+  "required": [
+    "message_type",
+    "system_id",
+    "user_id",
+    "customer_id"
+  ],
+  "properties": {
+    "message_type": {
+      "type": "string",
+      "enum": [ "user_permissions" ]
+    },
+    "system_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "access_rights": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "access_right": { "$ref": "#/definitions/access_right" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "access_right": {
+      "type": "object",
+      "required": [
+        "poa_id",
+        "permissions",
+        "arrangements",
+        "reason"
+      ],
+      "properties": {
+        "poa_id": {
+          "type": "string"
+        },
+        "reason": {
+          "enum": [ "OWNER", "POA", "Poa", "GUARDIAN" ]
+        },
+        "permissions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/permission" }
+        },
+        "arrangements": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/arrangement" }
+        }
+      }
+    },
+
+    "permission": {
+      "type": "object",
+      "required": [ "@type" ],
+      "properties": {
+        "@type": {
+          "enum": [
+            "KycReview",
+            "ViewPaymentDetails",
+            "SignPayment",
+            "CancelPayment",
+            "RegisterPayment",
+            "ViewAccountBalance",
+            "ViewAccountTransactions",
+            "ViewAccountInformation",
+            "ViewAccountCondition",
+            "RegisterAgreement",
+            "ViewAgreementDetails",
+            "SignAgreement",
+            "CancelAgreement"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "@type": { "const": "KycReview" } } },
+          "then": {
+            "required": [ "profile" ],
+            "properties": {
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              },
+              "profile": {
+                "type": "string",
+                "enum": [ "Administrator", "FullAuthorization", "SignAgreements" ]
+              }
+            }
+          }
+
+        },
+
+        {
+          "if": { "properties": { "@type": { "const": "ViewAccountBalance" } } },
+          "then": {
+            "properties": {
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              }
+
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "ViewAccountTransactions" } } },
+          "then": {
+            "required": [ "reach" ],
+            "properties": {
+              "reach": { "enum": [ "International", "Domestic", "Internal" ] },
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              }
+
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "ViewAccountInformation" } } },
+          "then": {
+            "properties": {
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              }
+
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "ViewAccountCondition" } } },
+          "then": {
+            "properties": {
+	            "prod_base": {
+		            "type": [ "string", "null" ],
+		            "pattern": "^[0-9\\+]+$"
+	            }
+            }
+          }
+        },
+
+        {
+          "if": { "properties": { "@type": { "const": "SignPayment" } } },
+          "then": {
+            "required": [ "confidentiality", "reach", "action_groups" ],
+            "properties": {
+              "confidentiality": { "enum": [ "General", "Salary" ] },
+              "scope": { "enum": [ "Own", "All", null ] },
+              "reach": { "enum": [ "International", "Domestic", "Internal" ] },
+              "payment_type": { "enum": [ "BGPG", null ] },
+              "action_groups": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/action_group" }
+              },
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              },
+              "limit": {
+                "oneOf": [
+                  { "type": "null" },
+                  { "$ref": "#/definitions/limit" }
+                ]
+              },
+              "to_accounts": {
+                "type": "array",
+                "items": {
+                  "properties": {
+                    "@type": { "enum": [ "Account" ] }
+                  },
+                  "$ref": "#/definitions/arrangement"
+
+                }
+              }
+
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "CancelPayment" } } },
+          "then": {
+            "required": [ "confidentiality", "scope", "reach", "sign_status", "action_groups" ],
+            "properties": {
+              "confidentiality": { "enum": [ "General", "Salary" ] },
+              "scope": { "enum": [ "Own", "All", null ] },
+              "reach": { "enum": [ "International", "Domestic", "Internal" ] },
+              "payment_type": { "enum": [ "BGPG", null ] },
+              "sign_status": { "enum": [ "RSE", "REG" ] },
+              "action_groups": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/action_group" }
+              },
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              }
+
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "RegisterPayment" } } },
+          "then": {
+            "required": [ "confidentiality", "reach" ],
+            "properties": {
+              "confidentiality": { "enum": [ "General", "Salary" ] },
+              "scope": { "enum": [ "Own", "All", null ] },
+              "reach": { "enum": [ "International", "Domestic", "Internal" ] },
+              "payment_type": { "enum": [ "BGPG", null ] },
+              "limit": {
+                "oneOf": [
+                  { "type": "null" },
+                  { "$ref": "#/definitions/limit" }
+                ]
+              },
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              }
+
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "ViewPaymentDetails" } } },
+          "then": {
+            "required": [ "confidentiality", "scope", "reach" ],
+            "properties": {
+              "confidentiality": { "enum": [ "General", "Salary" ] },
+              "scope": { "enum": [ "Own", "All", null ] },
+              "reach": { "enum": [ "International", "Domestic", "Internal" ] },
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              }
+
+            }
+          }
+
+        },
+        {
+
+          "if": { "properties": { "@type": { "const": "RegisterAgreement" } } },
+          "then": {
+            "properties": {
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              }
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "ViewAgreementDetails" } } },
+          "then": {
+            "required": [ "level", "scope" ],
+            "properties": {
+              "level": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9]+$"
+              },
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              },
+              "scope": {
+                "type": "string",
+                "enum": [ "Own", "All" ]
+              }
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "SignAgreement" } } },
+          "then": {
+            "required": [ "level", "action_groups" ],
+            "properties": {
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              },
+              "level": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9]+$"
+              },
+              "action_groups": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/action_group" }
+              }
+
+            }
+          }
+
+        },
+        {
+          "if": { "properties": { "@type": { "const": "CancelAgreement" } } },
+          "then": {
+            "required": [ "scope", "level", "sign_status", "action_groups" ],
+            "properties": {
+              "prod_base": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9\\+]+$"
+              },
+              "scope": {
+                "enum": [ "Own", "All" ]
+              },
+              "level": {
+                "type": [ "string", "null" ],
+                "pattern": "^[0-9]+$"
+              },
+              "sign_status": {
+                "enum": [ "RSE", "REG" ]
+              },
+              "action_groups": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/action_group" }
+              }
+
+            }
+          }
+
+        }
+
+
+
+      ]
+    },
+
+    "action_group": {
+      "type": "object",
+      "required": [ "@type", "id" ],
+      "properties": {
+        "@type": {
+          "enum": [ "SignerGroup", "RegistratorGroup", "CancelGroup" ],
+          "$comment": "RegistratorGroup har inga extra v�rden att validera"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "@type": { "const": "SignerGroup" } } },
+          "then": {
+            "required": [ "req_sign" ],
+            "properties": {
+	            "req_sign": {
+		            "type": "string",
+		            "pattern": "^[0-9]+$"
+	            }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "@type": { "const": "CancelGroup" } } },
+          "then": {
+            "required": [ "req_sign" ],
+            "properties": {
+	            "req_sign": {
+		            "type": "string",
+		            "pattern": "^[0-9]+$"
+	            }
+            }
+          }
+        }
+      ]
+    },
+
+    "arrangement": {
+      "type": "object",
+      "required": [ "@type" ],
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [ "Service", "Account", "InvolvedParty" ]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "@type": { "const": "Account" } } },
+          "then": {
+            "required": [ "bban", "acct_hier_tp", "curr_code", "account_owner", "ldgr_syst_name", "parc_ar_id" ],
+            "properties": {
+	            "ldgr_syst_name": {
+		            "type": "string",
+		            "minLength": 1
+	            }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "@type": { "const": "InvolvedParty" } } },
+          "then": {
+            "required": [ "customer_id" ]
+          }
+        },
+        {
+          "if": { "properties": { "@type": { "const": "Service" } } },
+          "then": {
+            "required": [ "service_type" ]
+          }
+        }
+      ]
+    },
+
+
+    "limit": {
+      "type": "object",
+      "required": [
+        "limit_id"
+      ]
+    }
+
+  }
+}

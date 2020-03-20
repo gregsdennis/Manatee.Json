@@ -45,7 +45,7 @@ namespace Manatee.Json.Schema
 		/// <implementationNotes>
 		/// If the keyword does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
-		void RegisterSubschemas(Uri baseUri, JsonSchemaRegistry localRegistry);
+		void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry);
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
@@ -56,7 +56,7 @@ namespace Manatee.Json.Schema
 		/// If the keyword contains no subschemas, simply return null.
 		/// If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
 		/// </implementationNotes>
-		JsonSchema ResolveSubschema(JsonPointer pointer, Uri baseUri);
+		JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri);
 	}
 
 	internal interface IJsonSchemaKeywordPlus : IJsonSchemaKeyword

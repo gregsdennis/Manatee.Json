@@ -1,16 +1,19 @@
 using System;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Manatee.Json.Serialization.Internal.Serializers
 {
+	[UsedImplicitly]
 	internal class NullableSerializer : GenericTypeSerializerBase
 	{
-		public override bool Handles(SerializationContext context)
+		public override bool Handles(SerializationContextBase context)
 		{
 			return context.InferredType.GetTypeInfo().IsGenericType &&
 			       context.InferredType.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
+		[UsedImplicitly]
 		private static JsonValue _Encode<T>(SerializationContext context)
 			where T : struct
 		{
@@ -18,34 +21,28 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 			if (!nullable.HasValue) return JsonValue.Null;
 
 			var encodeDefaultValues = context.RootSerializer.Options.EncodeDefaultValues;
-			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, default (T));
-			var newContext = new SerializationContext(context)
-			{
-					CurrentLocation = context.CurrentLocation.Clone(),
-					InferredType = typeof(T),
-					RequestedType = typeof(T),
-					LocalValue = context.LocalValue,
-					Source = nullable.Value
-				};
-			var json = context.RootSerializer.Serialize(newContext);
+			T @default = default;
+			context.RootSerializer.Options.EncodeDefaultValues = Equals(nullable.Value, @default);
+			context.Push(typeof(T), typeof(T), null!, nullable.Value);
+			var json = context.RootSerializer.Serialize(context);
+			context.Pop();
 			context.RootSerializer.Options.EncodeDefaultValues = encodeDefaultValues;
 
 			return json;
 		}
-		private static T? _Decode<T>(SerializationContext context)
+		[UsedImplicitly]
+		private static T? _Decode<T>(DeserializationContext context)
 			where T : struct
 		{
 			if (context.LocalValue == JsonValue.Null) return null;
 
-			var newContext = new SerializationContext(context)
-			{
-					CurrentLocation = context.CurrentLocation.Clone(),
-					InferredType = typeof(T),
-					RequestedType = typeof(T),
-					LocalValue = context.LocalValue
-				};
+			// this is a special case for the pointer in that we don't want to add a segment,
+			// but we have to push something so that it can be popped.
+			context.Push(typeof(T), null!, context.LocalValue);
+			var value = (T) context.RootSerializer.Deserialize(context)!;
+			context.Pop();
 
-			return (T) context.RootSerializer.Deserialize(newContext);
+			return value;
 		}
 	}
 }

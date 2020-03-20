@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Manatee.Json.Path.Parsing
 {
@@ -9,18 +10,21 @@ namespace Manatee.Json.Path.Parsing
 			if (index + 1 >= input.Length) return false;
 
 			return input[index] == '[' &&
-			       (char.IsDigit(input[index + 1]) || input[index + 1] == '-' || input[index + 1] == ':');
+				   (char.IsDigit(input[index + 1]) || input[index + 1] == '-' || input[index + 1] == ':');
 		}
 
-		public string TryParse(string source, ref int index, ref JsonPath path)
+		public bool TryParse(string source, ref int index, [NotNullWhen(true)] ref JsonPath? path, [NotNullWhen(false)] out string? errorMessage)
 		{
-			if (path == null) return "Start token not found.";
+			if (path == null)
+			{
+				errorMessage = "Start token not found.";
+				return false;
+			}
 
-			var error = source.GetSlices(ref index, out var slices);
-			if (error != null) return error;
+			if (!source.TryGetSlices(ref index, out var slices, out errorMessage)) return false;
 
 			path = path.Array(slices.ToArray());
-			return null;
+			return true;
 		}
 	}
 }
