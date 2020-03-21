@@ -88,7 +88,7 @@ namespace Manatee.Json.Schema
 
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
-					else if (context.ShouldTrackEvaluatedIndices)
+					else if (context.ShouldTrackValidatedIndices)
 						context.LocallyValidatedIndices.Add(i);
 
 					if (reportChildErrors)
@@ -124,7 +124,7 @@ namespace Manatee.Json.Schema
 					valid &= localResults.IsValid;
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
-					else if (context.ShouldTrackEvaluatedIndices)
+					else if (context.ShouldTrackValidatedIndices)
 						context.LocallyValidatedIndices.Add(i);
 
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);

@@ -57,6 +57,16 @@ namespace Manatee.Json.Schema
 		/// If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
 		/// </implementationNotes>
 		JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri);
+
+		/// <summary>
+		/// Specifies whether a keyword requires Evaluated Property Name tracking to properly validate.
+		/// </summary>
+		bool RequiresEvaluatedPropertyNamesTracking  => false;
+
+		/// <summary>
+		/// Specifies whether a keyword requires Validated Index tracking to properly validate.
+		/// </summary>
+		bool RequiresValidatedIndicesTracking => false;
 	}
 
 	internal interface IJsonSchemaKeywordPlus : IJsonSchemaKeyword

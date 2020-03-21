@@ -48,6 +48,11 @@ namespace Manatee.Json.Schema
 		public JsonSchema Value { get; private set; }
 
 		/// <summary>
+		/// Specifies that the keyword requires Evaluated Property Name tracking to properly validate.
+		/// </summary>
+		public bool RequiresEvaluatedPropertyNamesTracking => true;
+
+		/// <summary>
 		/// Used for deserialization.
 		/// </summary>
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

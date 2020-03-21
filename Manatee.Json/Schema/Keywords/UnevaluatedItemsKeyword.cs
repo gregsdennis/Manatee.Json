@@ -47,6 +47,11 @@ namespace Manatee.Json.Schema
 		public JsonSchema Value { get; private set; }
 
 		/// <summary>
+		/// Specifies that the keyword requires Validated Index tracking to properly validate.
+		/// </summary>
+		public bool RequiresValidatedIndicesTracking => true;
+
+		/// <summary>
 		/// Used for deserialization.
 		/// </summary>
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

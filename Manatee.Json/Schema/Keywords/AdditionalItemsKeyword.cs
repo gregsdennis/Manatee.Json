@@ -125,7 +125,7 @@ namespace Manatee.Json.Schema
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
 
-					if (context.ShouldTrackEvaluatedIndices)
+					if (context.ShouldTrackValidatedIndices)
 						context.LocallyValidatedIndices.Add(index);
 
 					index++;
