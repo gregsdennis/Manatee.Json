@@ -118,8 +118,8 @@ namespace Manatee.Json.Schema
 			InstanceLocation = instanceLocation;
 			LocalRegistry = new JsonSchemaRegistry();
 
-			ShouldTrackEvaluatedPropertyNames = shouldTrackEvaluatedPropertyNames || root.Any(k => k.RequiresEvaluatedPropertyNamesTracking);
-			ShouldTrackValidatedIndices = shouldTrackValidateIndices || root.Any(k => k.RequiresValidatedIndicesTracking);
+			ShouldTrackEvaluatedPropertyNames = shouldTrackEvaluatedPropertyNames || root.Any(k => k is IRequiresEvaluatedPropertyNamesTracking);
+			ShouldTrackValidatedIndices = shouldTrackValidateIndices || root.Any(k => k is IRequiresValidatedIndicesTracking);
 		}
 		/// <summary>
 		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.

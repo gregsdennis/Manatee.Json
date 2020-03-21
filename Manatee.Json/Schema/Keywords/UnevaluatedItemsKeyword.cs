@@ -13,7 +13,7 @@ namespace Manatee.Json.Schema
 	/// Defines the `unevaluatedItems` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}")]
-	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>
+	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>, IRequiresValidatedIndicesTracking
 	{
 		/// <summary>
 		/// Gets or sets the error message template.
@@ -45,11 +45,6 @@ namespace Manatee.Json.Schema
 		/// The schema value for this keyword.
 		/// </summary>
 		public JsonSchema Value { get; private set; }
-
-		/// <summary>
-		/// Specifies that the keyword requires Validated Index tracking to properly validate.
-		/// </summary>
-		public bool RequiresValidatedIndicesTracking => true;
 
 		/// <summary>
 		/// Used for deserialization.

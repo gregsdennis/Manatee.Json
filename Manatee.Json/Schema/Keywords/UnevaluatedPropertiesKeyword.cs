@@ -13,7 +13,7 @@ namespace Manatee.Json.Schema
 	/// Defines the `unevaluatedProperties` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}")]
-	public class UnevaluatedPropertiesKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedPropertiesKeyword>
+	public class UnevaluatedPropertiesKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedPropertiesKeyword>, IRequiresEvaluatedPropertyNamesTracking
 	{
 		/// <summary>
 		/// Gets or sets the error message template.
@@ -46,11 +46,6 @@ namespace Manatee.Json.Schema
 		/// The schema value for this keyword.
 		/// </summary>
 		public JsonSchema Value { get; private set; }
-
-		/// <summary>
-		/// Specifies that the keyword requires Evaluated Property Name tracking to properly validate.
-		/// </summary>
-		public bool RequiresEvaluatedPropertyNamesTracking => true;
 
 		/// <summary>
 		/// Used for deserialization.
