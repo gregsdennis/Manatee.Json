@@ -86,7 +86,6 @@ namespace Manatee.Json.Schema
 		/// Use <see cref="IJsonSchemaKeyword.ValidationSequence"/> to ensure that keywords are
 		/// processed in the correct order so that the communication occurs properly.
 		/// </remarks>
-		
 		public Dictionary<string, object> Misc => _misc ??= new Dictionary<string, object>();
 
 		/// <summary>
