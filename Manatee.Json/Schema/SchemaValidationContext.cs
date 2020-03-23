@@ -100,42 +100,36 @@ namespace Manatee.Json.Schema
 
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
 		internal SchemaValidationContext(JsonSchema root,
 										JsonValue instance,
 										JsonPointer? baseRelativeLocation,
 										JsonPointer relativeLocation,
 										JsonPointer instanceLocation,
-										bool shouldTrackEvaluatedPropertyNames = false,
-										bool shouldTrackValidateIndices = false)
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+										bool forceTrackingEvaluatedPropertyNames = false,
+										bool forceTrackingValidateIndices = false)
+			: this(root, instance, baseRelativeLocation, relativeLocation, instanceLocation)
 		{
-			Root = root;
-			Instance = instance;
-			BaseRelativeLocation = baseRelativeLocation;
-			RelativeLocation = relativeLocation;
-			InstanceLocation = instanceLocation;
-			LocalRegistry = new JsonSchemaRegistry();
-
-			ShouldTrackEvaluatedPropertyNames = shouldTrackEvaluatedPropertyNames || root.Any(k => k is IRequiresEvaluatedPropertyNamesTracking);
-			ShouldTrackValidatedIndices = shouldTrackValidateIndices || root.Any(k => k is IRequiresValidatedIndicesTracking);
+			ShouldTrackEvaluatedPropertyNames = forceTrackingEvaluatedPropertyNames || root.Any(k => k is IRequiresEvaluatedPropertyNamesTracking);
+			ShouldTrackValidatedIndices = forceTrackingValidateIndices || root.Any(k => k is IRequiresValidatedIndicesTracking);
 		}
+
 		/// <summary>
 		/// Creates a new instance of the <see cref="SchemaValidationContext"/> class by copying values from another instance.
 		/// </summary>
 		public SchemaValidationContext(SchemaValidationContext source)
-			: this(source.Root, 
-			       source.Instance,
-			       source.BaseRelativeLocation, 
-			       source.RelativeLocation,
-			       source.InstanceLocation, 
-			       source.ShouldTrackEvaluatedPropertyNames,
-			       source.ShouldTrackValidatedIndices)
+			: this(source.Root,
+					source.Instance,
+					source.BaseRelativeLocation,
+					source.RelativeLocation,
+					source.InstanceLocation)
 		{
 			Local = source.Local;
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
+			ShouldTrackEvaluatedPropertyNames = source.ShouldTrackEvaluatedPropertyNames;
+			ShouldTrackValidatedIndices = source.ShouldTrackValidatedIndices;
 
 			_InitializeHashSet(ref _evaluatedPropertyNames, source._evaluatedPropertyNames);
 			_InitializeHashSet(ref _locallyEvaluatedPropertyNames, source._locallyEvaluatedPropertyNames);
@@ -151,6 +145,22 @@ namespace Manatee.Json.Schema
 			IsMetaSchemaValidation = source.IsMetaSchemaValidation;
 
 			LocalRegistry = source.LocalRegistry;
+		}
+
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+		private SchemaValidationContext(JsonSchema root, 
+										JsonValue instance,
+										JsonPointer? baseRelativeLocation,
+										JsonPointer relativeLocation,
+										JsonPointer instanceLocation)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+		{
+			Root = root;
+			Instance = instance;
+			BaseRelativeLocation = baseRelativeLocation;
+			RelativeLocation = relativeLocation;
+			InstanceLocation = instanceLocation;
+			LocalRegistry = new JsonSchemaRegistry();
 		}
 
 		/// <summary>
