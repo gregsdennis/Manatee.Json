@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using Manatee.Json.Internal;
 using Manatee.Json.Pointer;
 using Manatee.Json.Serialization;
 
@@ -107,7 +108,7 @@ namespace Manatee.Json.Schema
 
 		private static string _BasicDownload(string path)
 		{
-			Console.WriteLine(path);
+			Log.Schema(() => $"Attempting to downloading schema from '{path}'");
 			var uri = new Uri(path);
 
 			switch (uri.Scheme)
