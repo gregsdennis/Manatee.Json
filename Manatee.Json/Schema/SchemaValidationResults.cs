@@ -13,8 +13,8 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationResults : IJsonSerializable, IEquatable<SchemaValidationResults>
 	{
-		private List<SchemaValidationResults> _nestedResults = null!;
-		private JsonObject _additionalInfo = null!;
+		private List<SchemaValidationResults>? _nestedResults;
+		private JsonObject? _additionalInfo;
 
 		/// <summary>
 		/// Gets a value to return for no results.  Only used when a keyword should not produce any output, such as `$id`.
