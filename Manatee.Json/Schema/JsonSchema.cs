@@ -37,6 +37,7 @@ namespace Manatee.Json.Schema
 		private Uri? _documentPath;
 		private bool _hasRegistered;
 		private MetaSchemaValidationResults? _metaSchemaResults;
+		private JsonSchemaVersion? _processingVersion;
 
 		/// <summary>
 		/// Defines the document path.  If not explicitly provided, it will be derived from the <see cref="Id"/> property.
@@ -75,6 +76,15 @@ namespace Manatee.Json.Schema
 		public JsonObject OtherData { get; set; } = new JsonObject();
 
 		/// <summary>
+		/// Gets or sets the processing version for this schema.
+		/// </summary>
+		public JsonSchemaVersion ProcessingVersion
+		{
+			get => _processingVersion ??= JsonSchemaOptions.DefaultProcessingVersion.FirstOrDefault(v => SupportedVersions.HasFlag(v));
+			set => _processingVersion = value;
+		}
+
+		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchema"/> class.
 		/// </summary>
 		public JsonSchema() { }
@@ -93,6 +103,10 @@ namespace Manatee.Json.Schema
 		public MetaSchemaValidationResults ValidateSchema()
 		{
 			if (_metaSchemaResults != null) return _metaSchemaResults;
+
+			var currentLogCategory = JsonOptions.LogCategory;
+			if (!JsonSchemaOptions.LogMetaSchemaValidation)
+				JsonOptions.LogCategory &= ~LogCategory.Schema;
 
 			var results = new MetaSchemaValidationResults();
 
@@ -180,10 +194,13 @@ namespace Manatee.Json.Schema
 
 			_metaSchemaResults = results;
 
+			if (!JsonSchemaOptions.LogMetaSchemaValidation)
+				JsonOptions.LogCategory = currentLogCategory;
+
 			return results;
 		}
 		/// <summary>
-		/// Provides the validation logic for this keyword.
+		/// Validates a JSON instance.
 		/// </summary>
 		/// <param name="json">The instance to validate.</param>
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
@@ -246,8 +263,9 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			var first = pointer.FirstOrDefault<string?>();
 			if (first == null)
@@ -258,12 +276,12 @@ namespace Manatee.Json.Schema
 
 			if (Uri.TryCreate(Id, UriKind.Absolute, out var uri))
 				baseUri = uri;
-			else if (Uri.TryCreate(Id, UriKind.Relative, out uri))
+			else if (ProcessingVersion != JsonSchemaVersion.Draft2019_09 && Uri.TryCreate(Id, UriKind.Relative, out uri))
 				baseUri = new Uri(baseUri, uri);
 
 			var keyword = this.FirstOrDefault(k => k.Name == first);
 
-			var keywordSchema = keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri);
+			var keywordSchema = keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri, supportedVersions);
 			if (keywordSchema != null) return keywordSchema;
 
 			var found = pointer.Evaluate(OtherData);
@@ -275,7 +293,12 @@ namespace Manatee.Json.Schema
 			return foundSchema;
 		}
 
-		internal SchemaValidationResults Validate(SchemaValidationContext context)
+		/// <summary>
+		/// DO NOT USE FOR BASIC JSON INSTANCE VALIDATION.  Used for subschema validation from within a custom keyword.
+		/// </summary>
+		/// <param name="context">The context for the validation.</param>
+		/// <returns>The schema validation results.</returns>
+		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
 			Log.Schema(() => $"Begin validation of {context.InstanceLocation} by {context.RelativeLocation}");
 			if (_inherentValue.HasValue)
@@ -317,7 +340,7 @@ namespace Manatee.Json.Schema
 			if (context.BaseUri != null && context.BaseUri.OriginalString.EndsWith("#"))
 				context.BaseUri = new Uri(context.BaseUri.OriginalString.TrimEnd('#'), UriKind.RelativeOrAbsolute);
 
-			if (refKeyword != null && !context.Root.SupportedVersions.HasFlag(JsonSchemaVersion.Draft2019_09))
+			if (refKeyword != null && context.Root.ProcessingVersion != JsonSchemaVersion.Draft2019_09)
 				return refKeyword.Validate(context);
 
 			var nestedResults = new List<SchemaValidationResults>();

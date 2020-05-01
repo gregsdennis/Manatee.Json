@@ -61,7 +61,7 @@ namespace Manatee.Json.Schema
 			var then = context.Local.Get<ThenKeyword>();
 			var @else = context.Local.Get<ElseKeyword>();
 
-			if (then != null || @else != null)
+			if (then != null || @else != null || context.ShouldTrackValidatedValues)
 			{
 				var newContext = new SchemaValidationContext(context)
 					{
@@ -71,6 +71,9 @@ namespace Manatee.Json.Schema
 
 				var ifResults = Value.Validate(newContext);
 				context.Misc["ifKeywordValid"] = ifResults.IsValid;
+
+				if (ifResults.IsValid)
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 			}
 			else
 			{
@@ -93,8 +96,9 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			return null;
 		}

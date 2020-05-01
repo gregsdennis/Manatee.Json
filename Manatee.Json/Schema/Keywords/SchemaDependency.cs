@@ -103,14 +103,11 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		/// <implementationNotes>
-		/// If the dependency contains no subschemas, simply return null.
-		/// If the dependency contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
-		/// </implementationNotes>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
-			return _schema.ResolveSubschema(pointer, baseUri);
+			return _schema.ResolveSubschema(pointer, baseUri, supportedVersions);
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>

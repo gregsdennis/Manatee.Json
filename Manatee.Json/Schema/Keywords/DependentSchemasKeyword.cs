@@ -113,15 +113,16 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			var first = pointer.FirstOrDefault();
 			if (first == null) return null;
 
 			var keyword = this.FirstOrDefault(k => k.PropertyName == first);
 
-			return keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri);
+			return keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri, supportedVersions);
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

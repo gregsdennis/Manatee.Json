@@ -99,6 +99,29 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		public static Uri DefaultBaseUri { get; set; } = new Uri("manatee://json-schema/", UriKind.Absolute);
 
+		/// <summary>
+		/// Gets or sets whether meta-schema validation is enabled. Default is false.
+		/// </summary>
+		/// <remarks>
+		/// A schema is validated against the meta-schemas the first time it is used to validate an instance.
+		/// This is done to determine the specific draft that the schema supports.  Logging for this can be
+		/// quite verbose, but if you want this to be logged, you can enable this feature.
+		/// </remarks>
+		public static bool LogMetaSchemaValidation { get; set; }
+
+		/// <summary>
+		/// Gets or sets a default draft version to use in case a schema can be determined to support
+		/// multiple drafts.  Default is latest to earliest.
+		/// </summary>
+		public static List<JsonSchemaVersion> DefaultProcessingVersion { get; set; } =
+			new List<JsonSchemaVersion>
+				{
+					JsonSchemaVersion.Draft2019_09,
+					JsonSchemaVersion.Draft07,
+					JsonSchemaVersion.Draft06,
+					JsonSchemaVersion.Draft04
+				};
+
 		internal static bool ConfigureForTestOutput { get; set; }
 
 		static JsonSchemaOptions()

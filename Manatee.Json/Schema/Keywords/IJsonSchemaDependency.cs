@@ -38,11 +38,14 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
 		/// <implementationNotes>
-		/// If the dependency contains no subschemas, simply return null.
-		/// If the dependency contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
+		/// - If the keyword contains no subschemas, simply return null.
+		/// - If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema"/>.
+		/// - The <paramref name="supportedVersions"/> parameter should come from the validation context's
+		/// <see cref="SchemaValidationContext.Root"/> property.
 		/// </implementationNotes>
-		JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri);
+		JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions);
 	}
 }

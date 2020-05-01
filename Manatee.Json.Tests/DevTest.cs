@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Manatee.Json.Internal;
 using Manatee.Json.Patch;
@@ -20,30 +21,31 @@ namespace Manatee.Json.Tests
 {
 	[TestFixture]
 	// TODO: Add categories to exclude this test.
-	[Ignore("This test fixture for development purposes only.")]
+	//[Ignore("This test fixture for development purposes only.")]
 	public class DevTest
 	{
 		[Test]
 		public void Test()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Flag;
-			SchemaValidationResults.IncludeAdditionalInfo = true;
+			Regex p = new Regex("^🐲*$");
+			Console.WriteLine(p.IsMatch("🐲"));
+			Console.WriteLine(p.IsMatch("🐲🐲"));
+		}
 
-			var serializer = new JsonSerializer();
+		[Test]
+		public void Test2()
+		{
+			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 
-			var schemaText = File.ReadAllText("C:\\Users\\gregs\\Desktop\\Manatee.Json.Schema.OpenApi\\Reference\\schema-2.0.json");
-			var schemaJson = JsonValue.Parse(schemaText);
-			var schema = serializer.Deserialize<JsonSchema>(schemaJson);
+			var schema = new JsonSchema
+				{
+					new ItemsKeyword{IsArray = true}
+				};
+			var json = new JsonArray{"1", "2", "3"};
 
-			var address = new Uri("https://raw.githubusercontent.com/warehouseman/trello-swagger-generator/master/TrelloAPI.json");
-			var content = new WebClient().DownloadString(address);
-			var json = JsonValue.Parse(content);
+			var result = schema.Validate(json);
 
-			var results = schema.Validate(json);
-
-			Console.WriteLine(json);
-
-			results.AssertValid();
+			Console.WriteLine(result.ToJson(null).GetIndentedString());
 		}
 	}
 }

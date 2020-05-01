@@ -72,6 +72,13 @@ namespace Manatee.Json.Schema
 				Log.Schema(() => "Instance not an array; not applicable");
 				return results;
 			}
+
+			if (!Value)
+			{
+				Log.Schema(() => "Keyword configured to not check for uniqueness");
+				return results;
+			}
+
 			if (context.Instance.Array.Distinct().Count() != context.Instance.Array.Count)
 			{
 				Log.Schema(() => "Instance contains duplicate items");
@@ -94,8 +101,9 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			return null;
 		}

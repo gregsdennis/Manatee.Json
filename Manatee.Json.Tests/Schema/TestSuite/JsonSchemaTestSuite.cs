@@ -19,12 +19,18 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		private const string OutputFolder = @"..\..\..\..\Json-Schema-Test-Results\";
 		private static readonly JsonSerializer _serializer;
 
-		public static IEnumerable AllTestData => _LoadSchemaJson("draft4")
-			.Concat(_LoadSchemaJson("draft6"))
-			.Concat(_LoadSchemaJson("draft7"))
-			.Concat(_LoadSchemaJson("draft2019-09"));
+		// these are tests that are considered required, but I can't support for whatever reason
+		private static readonly string[] _notSupported =
+			{
 
-		private static IEnumerable<TestCaseData> _LoadSchemaJson(string draft)
+			};
+
+		public static IEnumerable AllTestData => _LoadSchemaJson("draft4", JsonSchemaVersion.Draft04)
+			.Concat(_LoadSchemaJson("draft6", JsonSchemaVersion.Draft06))
+			.Concat(_LoadSchemaJson("draft7", JsonSchemaVersion.Draft07))
+			.Concat(_LoadSchemaJson("draft2019-09", JsonSchemaVersion.Draft2019_09));
+
+		private static IEnumerable<TestCaseData> _LoadSchemaJson(string draft, JsonSchemaVersion version)
 		{
 			var testsPath = System.IO.Path.Combine(TestContext.CurrentContext.WorkDirectory, RootTestsFolder, $"{draft}\\").AdjustForOS();
 			if (!Directory.Exists(testsPath)) return Enumerable.Empty<TestCaseData>();
@@ -47,7 +53,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 						var testName = $"{shortFileName}.{testSet.Object["description"].String}.{testJson.Object["description"].String}.{draft}".Replace(' ', '_');
 						if (isOptional)
 							testName = $"optional.{testName}";
-						allTests.Add(new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, isOptional, testName)
+						allTests.Add(new TestCaseData(fileName, testSet.Object["description"].String, testJson, schemaJson, version, isOptional, testName)
 							{
 								TestName = testName
 							});
@@ -102,7 +108,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		}
 
 		[TestCaseSource(nameof(AllTestData))]
-		public void Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, bool isOptional, string testName)
+		public void Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, JsonSchemaVersion version, bool isOptional, string testName)
 		{
 			Console.WriteLine(testName);
 			Console.WriteLine();
@@ -114,7 +120,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 			try
 			{
-				_Run(fileName, setDescription, testJson, schemaJson, isOptional);
+				_Run(fileName, setDescription, testJson, schemaJson, version, isOptional);
 			}
 			finally
 			{
@@ -122,7 +128,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 			}
 		}
 
-		private static void _Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, bool isOptional)
+		private static void _Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, JsonSchemaVersion version, bool isOptional)
 		{
 			using (new TestExecutionContext.IsolatedContext())
 			{
@@ -130,6 +136,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				{
 					var test = _serializer.Deserialize<SchemaTest>(testJson);
 					var schema = _serializer.Deserialize<JsonSchema>(schemaJson);
+					schema.ProcessingVersion = version;
 
 					var results = schema.Validate(test.Data);
 

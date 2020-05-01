@@ -116,8 +116,9 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			return null;
 		}
@@ -233,9 +234,9 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
-			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri!);
+			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri!, context.Root.SupportedVersions);
 		}
-		private void _ResolveLocalReference(Uri baseUri)
+		private void _ResolveLocalReference(Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			if (!_resolvedFragment.Any())
 			{
@@ -244,7 +245,7 @@ namespace Manatee.Json.Schema
 			}
 
 			Log.Schema(() => $"Resolving local reference {_resolvedFragment}");
-			Resolved = _resolvedRoot!.ResolveSubschema(_resolvedFragment!, baseUri);
+			Resolved = _resolvedRoot!.ResolveSubschema(_resolvedFragment!, baseUri, supportedVersions);
 		}
 	}
 }
