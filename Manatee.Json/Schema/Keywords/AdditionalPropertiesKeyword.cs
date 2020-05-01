@@ -114,7 +114,7 @@ namespace Manatee.Json.Schema
 
 			foreach (var kvp in toEvaluate)
 			{
-				if (context.ShouldTrackEvaluatedPropertyNames)
+				if (context.ShouldTrackValidatedValues)
 					context.EvaluatedPropertyNames.Add(kvp.Key);
 
 				context.LocallyEvaluatedPropertyNames.Add(kvp.Key);
@@ -131,7 +131,7 @@ namespace Manatee.Json.Schema
 					failedProperties.Add(kvp.Key);
 				}
 
-				if (context.ShouldTrackEvaluatedPropertyNames)
+				if (context.ShouldTrackValidatedValues)
 				{
 					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
 					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);

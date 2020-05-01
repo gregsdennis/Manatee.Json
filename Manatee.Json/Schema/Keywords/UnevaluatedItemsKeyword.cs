@@ -13,7 +13,7 @@ namespace Manatee.Json.Schema
 	/// Defines the `unevaluatedItems` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}")]
-	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>, IRequiresValidatedIndicesTracking
+	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>, IRequireAnnotations
 	{
 		/// <summary>
 		/// Gets or sets the error message template.

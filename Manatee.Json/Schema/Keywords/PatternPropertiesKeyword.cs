@@ -72,7 +72,7 @@ namespace Manatee.Json.Schema
 					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
 					foreach (var match in matches)
 					{
-						if (context.ShouldTrackEvaluatedPropertyNames)
+						if (context.ShouldTrackValidatedValues)
 							context.EvaluatedPropertyNames.Add(match);
 
 						context.LocallyEvaluatedPropertyNames.Add(match);

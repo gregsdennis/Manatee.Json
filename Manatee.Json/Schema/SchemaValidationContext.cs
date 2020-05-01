@@ -91,13 +91,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Get or set if the validations for this context should track Evaluated Property Names.
 		/// </summary>
-		public bool ShouldTrackEvaluatedPropertyNames { get; }
-
-		/// <summary>
-		/// Get or set if the validations for this context should track Validated Indices.
-		/// </summary>
-		public bool ShouldTrackValidatedIndices { get; }
-
+		public bool ShouldTrackValidatedValues { get; }
+		
 		internal JsonSchemaRegistry LocalRegistry { get; }
 
 
@@ -110,8 +105,7 @@ namespace Manatee.Json.Schema
 										bool forceTrackingValidateIndices = false)
 			: this(root, instance, baseRelativeLocation, relativeLocation, instanceLocation)
 		{
-			ShouldTrackEvaluatedPropertyNames = forceTrackingEvaluatedPropertyNames || root.Any(k => k is IRequiresEvaluatedPropertyNamesTracking);
-			ShouldTrackValidatedIndices = forceTrackingValidateIndices || root.Any(k => k is IRequiresValidatedIndicesTracking);
+			ShouldTrackValidatedValues = forceTrackingEvaluatedPropertyNames || root.Any(k => k is IRequireAnnotations);
 		}
 
 		/// <summary>
@@ -128,8 +122,7 @@ namespace Manatee.Json.Schema
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
-			ShouldTrackEvaluatedPropertyNames = source.ShouldTrackEvaluatedPropertyNames;
-			ShouldTrackValidatedIndices = source.ShouldTrackValidatedIndices;
+			ShouldTrackValidatedValues = source.ShouldTrackValidatedValues;
 
 			_InitializeHashSet(ref _evaluatedPropertyNames, source._evaluatedPropertyNames);
 			_InitializeHashSet(ref _locallyEvaluatedPropertyNames, source._locallyEvaluatedPropertyNames);
@@ -171,16 +164,13 @@ namespace Manatee.Json.Schema
 		/// <param name="other">Another context object.</param>
 		public void UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(SchemaValidationContext other)
 		{
-			if (ShouldTrackEvaluatedPropertyNames)
+			if (ShouldTrackValidatedValues)
 			{
 				EvaluatedPropertyNames.UnionWith(other.EvaluatedPropertyNames);
 				EvaluatedPropertyNames.UnionWith(other.LocallyEvaluatedPropertyNames);
 				if (other.EvaluatedPropertyNames.Any())
 					Log.Schema(() => $"Properties [{EvaluatedPropertyNames.ToStringList()}] have now been validated");
-			}
 
-			if (ShouldTrackValidatedIndices)
-			{
 				ValidatedIndices.UnionWith(other.ValidatedIndices);
 				ValidatedIndices.UnionWith(other.LocallyValidatedIndices);
 				if (other.ValidatedIndices.Any())
