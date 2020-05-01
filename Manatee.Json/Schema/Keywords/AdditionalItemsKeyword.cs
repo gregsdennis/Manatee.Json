@@ -124,7 +124,10 @@ namespace Manatee.Json.Schema
 					valid &= localResults.IsValid;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
-					context.LocallyValidatedIndices.Add(index);
+
+					if (context.ShouldTrackValidatedValues)
+						context.LocallyValidatedIndices.Add(index);
+
 					index++;
 
 					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)

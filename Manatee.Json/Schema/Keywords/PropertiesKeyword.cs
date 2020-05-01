@@ -66,7 +66,9 @@ namespace Manatee.Json.Schema
 					continue;
 				}
 
-				context.EvaluatedPropertyNames.Add(property.Key);
+				if (context.ShouldTrackValidatedValues)
+					context.EvaluatedPropertyNames.Add(property.Key);
+
 				context.LocallyEvaluatedPropertyNames.Add(property.Key);
 				var newContext = new SchemaValidationContext(context)
 					{
@@ -76,8 +78,13 @@ namespace Manatee.Json.Schema
 						InstanceLocation = context.InstanceLocation.CloneAndAppend(property.Key),
 					};
 				var localResults = property.Value.Validate(newContext);
-				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+
+				if (context.ShouldTrackValidatedValues)
+				{
+					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
+					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+				}
+
 				valid &= localResults.IsValid;
 
 				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)

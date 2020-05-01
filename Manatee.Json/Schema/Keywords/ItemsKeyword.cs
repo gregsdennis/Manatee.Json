@@ -85,10 +85,12 @@ namespace Manatee.Json.Schema
 						results.IsValid = false;
 						break;
 					}
+
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
-					else
+					else if (context.ShouldTrackValidatedValues)
 						context.LocallyValidatedIndices.Add(i);
+
 					if (reportChildErrors)
 						nestedResults.Add(this[i].Validate(newContext));
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
@@ -122,8 +124,9 @@ namespace Manatee.Json.Schema
 					valid &= localResults.IsValid;
 					if (!localResults.IsValid)
 						failedIndices.Add(i);
-					else
+					else if (context.ShouldTrackValidatedValues)
 						context.LocallyValidatedIndices.Add(i);
+
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, i);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LocalTierLastEvaluatedIndex, i);
 					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);

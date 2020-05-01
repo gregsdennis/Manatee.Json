@@ -72,7 +72,9 @@ namespace Manatee.Json.Schema
 					var relativeLocation = context.RelativeLocation.CloneAndAppend(Name, patternProperty.Key);
 					foreach (var match in matches)
 					{
-						context.EvaluatedPropertyNames.Add(match);
+						if (context.ShouldTrackValidatedValues)
+							context.EvaluatedPropertyNames.Add(match);
+
 						context.LocallyEvaluatedPropertyNames.Add(match);
 						var newContext = new SchemaValidationContext(context)
 							{
