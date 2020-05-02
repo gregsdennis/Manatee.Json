@@ -88,7 +88,9 @@ namespace Manatee.Json.Schema
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 				};
 			var thenResults = Value.Validate(newContext);
-			if (!thenResults.IsValid)
+			if (thenResults.IsValid)
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+			else
 			{
 				Log.Schema(() => "`if` subschema succeeded, but `then` subschema failed");
 				results.IsValid = false;
