@@ -1,3 +1,83 @@
+# 13.0.0
+
+*Released on 6 Mar, 2020*
+
+<span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
+
+([#260](https://github.com/gregsdennis/Manatee.Json/pull/260)) Performance enhancements for `JsonPointer`.  Also updates how evaluated properties & items are tracked in schemas.
+
+([#263](https://github.com/gregsdennis/Manatee.Json/issues/263)) `JsonSchemaOptions.BasicDownload` shouldn't write to the console.
+
+([#265](https://github.com/gregsdennis/Manatee.Json/issues/265)) `DateTime` serialization doesn't format ISO-8601 properly.
+
+([#261](https://github.com/gregsdennis/Manatee.Json/pull/261)) More enhancements around how evaluated properties & items are tracked in schemas.
+
+([#241](https://github.com/gregsdennis/Manatee.Json/issues/241)) Complete overhaul of the schema `format` keyword validation system.
+
+([#267](https://github.com/gregsdennis/Manatee.Json/issues/267)) JSON parsing should throw when there is more content after the completion of the value.
+
+([#266](https://github.com/gregsdennis/Manatee.Json/issues/266)) Migrated `JsonSchemaOptions` to be used as an instance class so that several schemas can be used with differing options.
+
+## Bug Fixes
+
+- ISO 8601 DateTime serialization now uses the `O` format instead of the `s` format.  (See [.Net `DateTime` formatting](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings).)  Additionally, deserialization now assumes universal times.
+- Setting `JsonSerializerOptions.CustomDateTimeSerializationFormat` now automatically sets `DateTimeSerializationFormat` to `Custom`.
+
+## Additions
+
+- `JsonOptions.RequireIsolatedJsonDuringParse` - Specifies whether content is allowed after JSON parsing completes a value.  The default behavior is the same as in v12: additional content is allowed.
+- `JsonSchema.ProcessingVersion` - Allows a schema to be explicitly processed as a specific draft.  Normally, this would be assessed during the first validation by examining the set of keywords present (including the `$schema`).  This allows subversion of this process.  It also works together with the new `JsonSchemaOptions.DefaultProcessingVersion` property to indicate exactly which draft is being used.
+- `JsonSchema.Validate()` and `JsonSchema.ValidateSchema()` now accept an optional `JsonSchemaOptions` parameter.
+- `JsonSchema.Validate(SchemaValidationContext)` has been made public.  This is to be used by custom keywords, not to initiate validation.
+- New members on `JsonSchemaOptions`:
+  - Static `Default` the default instance of the options.
+  - Parameterless and copy constructors.
+  - `LogMetaSchemaValidation` - A value of `true` will instruct the logging subsystem to not create log entries when validating metaschemas.  This can help isolate logs that pertain directly to a validation.
+  - `DefaultProcessingVersion` - A priority-ordered list of schema draft versions that will serve to determine which draft will be used for a schema.
+- `IRequireAnnotations` - Schema keywords can implement this interface to indicate that they require annotation results from other keywords in order to do their job properly.  Examples of these are the `unevaluated*` keywords, which require some special property & item tracking.  Not having these keywords in your schemas can increase performance significantly as optimizations have been added for when these keywords are absent.
+- `SchemaValidationContext`
+  - `ShouldTrackValidatedValues` - Works together with `IRequireAnnotations` keywords to control how evaluated properties & items are tracked.
+  - `Options` - The set of options used during the specific validation pass.
+- `IFormatValidator` - See "Formats" section below for more details on the changes on how schema formatting has changed.
+
+## Breaking Changes
+
+- `FluentBuilderExtensions.Format(JsonSchema, Format)` (used for fluent-building schemas) replaced with two new versions:
+  - `FluentBuilderExtensions.Format(JsonSchema, string)`
+  - `FluentBuilderExtensions.Format(JsonSchema, IFormatValidator)`
+- `GetterExtensions.Format(JsonSchema)` now returns `string` of the format key instead of a `Format` instance.
+- `Format` class changed to `Formats` static class.
+  - All static properties that represent formats have been changed to return `IFormatValidator`.
+  - `GetFormat(string)` now returns `IFormatValidator`.
+  - See "Formats" section below for more details on the changes on how schema formatting has changed.
+- `JsonSchema`
+  - `RegisterSubschemas(Uri, JsonSchemaRegistry)` 🠖 `RegisterSubschemas(SchemaValidationContext)`
+  - `ResolveSubschema(JsonPointer, Uri)` 🠖 `ResolveSubschema(JsonPointer, Uri, JsonSchemaVersion)`
+- `IJsonSchemaKeyword`
+  - `RegisterSubschemas(Uri, JsonSchemaRegistry)` 🠖 `RegisterSubschemas(SchemaValidationContext)`
+  - `ResolveSubschema(JsonPointer, Uri)` 🠖 `ResolveSubschema(JsonPointer, Uri, JsonSchemaVersion)`
+  - Same change applied to all keywords.
+- `IJsonSchemaDependency`
+  - `RegisterSubschemas(Uri, JsonSchemaRegistry)` 🠖 `RegisterSubschemas(SchemaValidationContext)`
+  - `ResolveSubschema(JsonPointer, Uri)` 🠖 `ResolveSubschema(JsonPointer, Uri, JsonSchemaVersion)`
+  - Same change applied to both implementations.
+- `JsonSchemaOptions` migrated to an instance class.  This class can be passed into the validation methods and will be added to the context.
+  - The exception to this migration is the `Download` property, which remains static.
+- `FormatKeyword.Value` now returns `string` instead of `Format`.
+
+### Format Overhaul
+
+As was discussed in [#241](https://github.com/gregsdennis/Manatee.Json/issues/241), the format validation framework had its issues.
+
+- It was difficult or confusing to add custom formats.
+- Overriding existing formats just didn't work right.
+
+As such, it has been overhauled to use individual format validator classes.  Each of these classes implements a new interface, `IFormatValidator`, and handles validation for a single format.
+
+By default, the formats defined by the spec have default implementations and are pre-registered.  New formats can be added by implementing `IFormatValidator` and supplying an instance to the new `Formats.RegisterValidator(IFormatValidator)` static method.  Additionally, this same method can be used to supercede the in-built registrations.  The static properties are still there and will return the handler for that format, even when overridden.
+
+A minor behavior change is that serialization will no longer throw an exception when encountering unknown formats.  It will still throw on validation if configured to do so, however.
+
 # 12.3.1
 
 *Released on 6 Mar, 2020*

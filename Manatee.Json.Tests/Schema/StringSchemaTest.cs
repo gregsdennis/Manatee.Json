@@ -240,7 +240,7 @@ namespace Manatee.Json.Tests.Schema
 			results.AssertValid(expected);
 		}
 		[Test]
-		public void DeserializeThrowsOnUnknownFormat()
+		public void DeserializeDoesNotThrowOnUnknownFormat()
 		{
 			JsonSchemaOptions.Default.AllowUnknownFormats = false;
 			var serializer = new JsonSerializer();
@@ -250,14 +250,7 @@ namespace Manatee.Json.Tests.Schema
 					["format"] = "Int32"
 				};
 
-			try
-			{
-				Assert.Throws<JsonSerializationException>(() => serializer.Deserialize<JsonSchema>(schemaJson));
-			}
-			finally
-			{
-				JsonSchemaOptions.Default.AllowUnknownFormats = true;
-			}
+			serializer.Deserialize<JsonSchema>(schemaJson);
 		}
 		[Test]
 		public void ValidateReturnsInvalidOnUnknownFormat()

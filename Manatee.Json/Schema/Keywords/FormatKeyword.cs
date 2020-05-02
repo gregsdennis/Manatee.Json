@@ -131,11 +131,6 @@ namespace Manatee.Json.Schema
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
 			Value = json.String;
-
-			var validator = Formats.GetFormat(Value);
-
-			if (validator == null && JsonSchemaOptions.Default.ValidateFormatKeyword && !JsonSchemaOptions.Default.AllowUnknownFormats)
-				throw new JsonSerializationException("Unknown format specifier found.  Either allow unknown formats or disable format validation in the default JsonSchemaOptions.");
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
