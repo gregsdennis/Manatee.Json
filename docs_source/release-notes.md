@@ -1,6 +1,6 @@
 # 13.0.0
 
-*Released on 6 Mar, 2020*
+*Released on XXX May, 2020*
 
 <span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
 
@@ -26,11 +26,12 @@
 ## Additions
 
 - `JsonOptions.RequireIsolatedJsonDuringParse` - Specifies whether content is allowed after JSON parsing completes a value.  The default behavior is the same as in v12: additional content is allowed.
-- `JsonSchema.ProcessingVersion` - Allows a schema to be explicitly processed as a specific draft.  Normally, this would be assessed during the first validation by examining the set of keywords present (including the `$schema`).  This allows subversion of this process.  It also works together with the new `JsonSchemaOptions.DefaultProcessingVersion` property to indicate exactly which draft is being used.
-- `JsonSchema.Validate()` and `JsonSchema.ValidateSchema()` now accept an optional `JsonSchemaOptions` parameter.
-- `JsonSchema.Validate(SchemaValidationContext)` has been made public.  This is to be used by custom keywords, not to initiate validation.
-- New members on `JsonSchemaOptions`:
-  - Static `Default` the default instance of the options.
+- `JsonSchema`
+  - `ProcessingVersion` - Allows a schema to be explicitly processed as a specific draft.  Normally, this would be assessed during the first validation by examining the set of keywords present (including the `$schema`).  This allows subversion of this process.  It also works together with the new `JsonSchemaOptions.DefaultProcessingVersion` property to indicate exactly which draft is being used.
+  - `Validate()` and `ValidateSchema()` now accept an optional `JsonSchemaOptions` parameter.
+  - `Validate(SchemaValidationContext)` has been made public.  This is to be used by custom keywords, not to initiate validation.
+- `JsonSchemaOptions`:
+  - Static `Default` - the default instance of the options.  Used to create new instances when not provided by the user.
   - Parameterless and copy constructors.
   - `LogMetaSchemaValidation` - A value of `true` will instruct the logging subsystem to not create log entries when validating metaschemas.  This can help isolate logs that pertain directly to a validation.
   - `DefaultProcessingVersion` - A priority-ordered list of schema draft versions that will serve to determine which draft will be used for a schema.
