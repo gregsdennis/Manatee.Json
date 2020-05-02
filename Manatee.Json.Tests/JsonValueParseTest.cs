@@ -123,21 +123,17 @@ namespace Manatee.Json.Tests
 
 		private static async Task _RunTestAsync(Stream test, JsonValue expected)
 		{
-			using (var reader = new StreamReader(test))
-			{
-				var actual = await JsonValue.ParseAsync(reader);
-				Assert.AreEqual(expected, actual);
-			}
+			using var reader = new StreamReader(test);
+			var actual = await JsonValue.ParseAsync(reader);
+			Assert.AreEqual(expected, actual);
 		}
 
 		private static async Task _RunFailAsync(Stream test, string message)
 		{
 			try
 			{
-				using (var reader = new StreamReader(test))
-				{
-					await JsonValue.ParseAsync(reader);
-				}
+				using var reader = new StreamReader(test);
+				await JsonValue.ParseAsync(reader);
 			}
 			catch (JsonSyntaxException e)
 			{
@@ -178,10 +174,8 @@ namespace Manatee.Json.Tests
 			Assert.Throws<JsonSyntaxException>(() =>
 				{
 					var stream = new MemoryStream(Encoding.UTF8.GetBytes("  \t\n"), false);
-					using (var reader = new StreamReader(stream))
-					{
-						JsonValue.Parse(reader);
-					}
+					using var reader = new StreamReader(stream);
+					JsonValue.Parse(reader);
 				});
 		}
 		[Test]
@@ -196,11 +190,9 @@ namespace Manatee.Json.Tests
 		{
 			var str = "{\"string\":\"double\\n\\nspaced\"}";
 			var stream = new MemoryStream(Encoding.UTF8.GetBytes(str), false);
-			using (var reader = new StreamReader(stream))
-			{
-				var json = JsonValue.Parse(reader).Object;
-				Console.WriteLine(json["string"].String);
-			}
+			using var reader = new StreamReader(stream);
+			var json = JsonValue.Parse(reader).Object;
+			Console.WriteLine(json["string"].String);
 		}
 		[Test]
 		public void Parse_TrelloCard()
@@ -209,6 +201,101 @@ namespace Manatee.Json.Tests
 			var str = File.ReadAllText(fileName);
 			var json = JsonValue.Parse(str);
 			Console.WriteLine(json);
+		}
+		[Test]
+		public void Parse_ExtraContentDoesNotThrow_String()
+		{
+			var text = "{\"data\": \"“Silly Gooseberry!”\"},{\"data\": \"“Silly Gooseberry!”\"}";
+			var json = JsonValue.Parse(text);
+			Console.WriteLine(json);
+		}
+		[Test]
+		public void Parse_ExtraContentDoesNotThrow_Stream()
+		{
+			var text = "{\"data\": \"“Silly Gooseberry!”\"},{\"data\": \"“Silly Gooseberry!”\"}";
+			var stream = new MemoryStream(Encoding.UTF8.GetBytes(text), false);
+			using var reader = new StreamReader(stream);
+			var json = JsonValue.Parse(reader);
+			Console.WriteLine(json);
+		}
+		[Test]
+		public async Task Parse_ExtraContentDoesNotThrow_AsyncStream()
+		{
+			var text = "{\"data\": \"“Silly Gooseberry!”\"},{\"data\": \"“Silly Gooseberry!”\"}";
+			var stream = new MemoryStream(Encoding.UTF8.GetBytes(text), false);
+			using var reader = new StreamReader(stream);
+			var json = await JsonValue.ParseAsync(reader);
+			Console.WriteLine(json);
+		}
+		[Test]
+		public void Parse_ExtraContentThrows_String()
+		{
+			try
+			{
+				JsonOptions.RequireIsolatedJsonDuringParse = true;
+
+				var text = "{\"data\": \"“Silly Gooseberry!”\"},{\"data\": \"“Silly Gooseberry!”\"}";
+				var json = JsonValue.Parse(text);
+				Console.WriteLine(json);
+
+				Assert.Fail("Expected an exception.");
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Content detected after initial JSON value Path: '/data'", e.Message);
+			}
+			finally
+			{
+				JsonOptions.RequireIsolatedJsonDuringParse = false;
+			}
+		}
+		[Test]
+		public void Parse_ExtraContentThrows_Stream()
+		{
+			try
+			{
+				JsonOptions.RequireIsolatedJsonDuringParse = true;
+
+				var text = "{\"data\": \"“Silly Gooseberry!”\"},{\"data\": \"“Silly Gooseberry!”\"}";
+				var stream = new MemoryStream(Encoding.UTF8.GetBytes(text), false);
+				using var reader = new StreamReader(stream);
+				var json = JsonValue.Parse(reader);
+				Console.WriteLine(json);
+
+				Assert.Fail("Expected an exception.");
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Content detected after initial JSON value Path: '/data'", e.Message);
+			}
+			finally
+			{
+				JsonOptions.RequireIsolatedJsonDuringParse = false;
+			}
+		}
+		[Test]
+		public async Task Parse_ExtraContentThrows_AsyncStream()
+		{
+			try
+			{
+				JsonOptions.RequireIsolatedJsonDuringParse = true;
+
+				var text = "{\"data\": \"“Silly Gooseberry!”\"},{\"data\": \"“Silly Gooseberry!”\"}";
+				var stream = new MemoryStream(Encoding.UTF8.GetBytes(text), false);
+				using var reader = new StreamReader(stream);
+				var json = await JsonValue.ParseAsync(reader);
+				Console.WriteLine(json);
+
+				Assert.Fail("Expected an exception.");
+			}
+			catch (JsonSyntaxException e)
+			{
+				Assert.AreEqual("Content detected after initial JSON value Path: '/data'", e.Message);
+			}
+			finally
+			{
+				JsonOptions.RequireIsolatedJsonDuringParse = false;
+			}
 		}
 	}
 }
