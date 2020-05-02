@@ -31,21 +31,5 @@ namespace Manatee.Json.Tests
 			Console.WriteLine(p.IsMatch("🐲"));
 			Console.WriteLine(p.IsMatch("🐲🐲"));
 		}
-
-		[Test]
-		public void Test2()
-		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
-
-			var schema = new JsonSchema
-				{
-					new ItemsKeyword{IsArray = true}
-				};
-			var json = new JsonArray{"1", "2", "3"};
-
-			var result = schema.Validate(json);
-
-			Console.WriteLine(result.ToJson(null).GetIndentedString());
-		}
 	}
 }

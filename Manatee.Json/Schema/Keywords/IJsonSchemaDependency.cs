@@ -27,12 +27,11 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
+		/// <param name="context">The context object.</param>
 		/// <implementationNotes>
 		/// If the dependency does not contain any schemas (e.g. `maximum`), this method is a no-op.
 		/// </implementationNotes>
-		void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry);
+		void RegisterSubschemas(SchemaValidationContext context);
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>

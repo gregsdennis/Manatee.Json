@@ -1,4 +1,3 @@
-using System;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
 
@@ -34,7 +33,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					["valid"] = Valid
 				};
 
-			if (JsonSchemaOptions.ConfigureForTestOutput && OutputGeneration != null)
+			if (JsonSchemaOptions.Default.ConfigureForTestOutput && OutputGeneration != null)
 				obj["output"] = new JsonObject
 					{
 						["basic"] = OutputGeneration.Flatten().ToJson(serializer),

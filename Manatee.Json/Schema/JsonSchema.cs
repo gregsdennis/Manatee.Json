@@ -78,11 +78,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets or sets the processing version for this schema.
 		/// </summary>
-		public JsonSchemaVersion ProcessingVersion
-		{
-			get => _processingVersion ??= JsonSchemaOptions.DefaultProcessingVersion.FirstOrDefault(v => SupportedVersions.HasFlag(v));
-			set => _processingVersion = value;
-		}
+		public JsonSchemaVersion? ProcessingVersion { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="JsonSchema"/> class.
@@ -100,12 +96,14 @@ namespace Manatee.Json.Schema
 		/// Validates that the schema object represents a valid schema in accordance with a known meta-schema.
 		/// </summary>
 		/// <returns>Validation results.</returns>
-		public MetaSchemaValidationResults ValidateSchema()
+		public MetaSchemaValidationResults ValidateSchema(JsonSchemaOptions? options = null)
 		{
 			if (_metaSchemaResults != null) return _metaSchemaResults;
 
+			options ??= new JsonSchemaOptions(JsonSchemaOptions.Default);
+
 			var currentLogCategory = JsonOptions.LogCategory;
-			if (!JsonSchemaOptions.LogMetaSchemaValidation)
+			if (!options.LogMetaSchemaValidation)
 				JsonOptions.LogCategory &= ~LogCategory.Schema;
 
 			var results = new MetaSchemaValidationResults();
@@ -129,7 +127,7 @@ namespace Manatee.Json.Schema
 					if (metaSchema != null)
 					{
 						var asJson = ToJson(new JsonSerializer());
-						var context = new SchemaValidationContext(metaSchema, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"))
+						var context = new SchemaValidationContext(metaSchema, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"), options)
 							{
 								IsMetaSchemaValidation = true
 							};
@@ -145,7 +143,7 @@ namespace Manatee.Json.Schema
 			else
 			{
 				var asJson = ToJson(new JsonSerializer());
-				var context = new SchemaValidationContext(this, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"))
+				var context = new SchemaValidationContext(this, asJson, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"), options)
 					{
 						IsMetaSchemaValidation = true
 					};
@@ -194,7 +192,7 @@ namespace Manatee.Json.Schema
 
 			_metaSchemaResults = results;
 
-			if (!JsonSchemaOptions.LogMetaSchemaValidation)
+			if (!options.LogMetaSchemaValidation)
 				JsonOptions.LogCategory = currentLogCategory;
 
 			return results;
@@ -203,12 +201,14 @@ namespace Manatee.Json.Schema
 		/// Validates a JSON instance.
 		/// </summary>
 		/// <param name="json">The instance to validate.</param>
+		/// <param name="options">Options for the validation.</param>
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
-		public SchemaValidationResults Validate(JsonValue json)
+		public SchemaValidationResults Validate(JsonValue json, JsonSchemaOptions? options = null)
 		{
-			var results = Validate(new SchemaValidationContext(this, json, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#")));
+			options ??= new JsonSchemaOptions(JsonSchemaOptions.Default);
+			var results = Validate(new SchemaValidationContext(this, json, new JsonPointer("#"), new JsonPointer("#"), new JsonPointer("#"), options));
 
-			switch (JsonSchemaOptions.OutputFormat)
+			switch (options.OutputFormat)
 			{
 				case SchemaValidationOutputFormat.Flag:
 					results.AdditionalInfo = new JsonObject();
@@ -232,30 +232,34 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context for the validation.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
 			if (_hasRegistered) return;
 			_hasRegistered = true;
 
-			localRegistry.RegisterLocal(this);
+			if (!ReferenceEquals(this, context.Root)) 
+				SupportedVersions = context.Root.SupportedVersions;
+			ProcessingVersion ??= context.Root.ProcessingVersion ??
+			                      context.Options.DefaultProcessingVersion.FirstOrDefault(v => SupportedVersions.HasFlag(v));
+
+			context.LocalRegistry.RegisterLocal(this);
 
 			var address = Id;
-			if (baseUri != null && address != null)
-				address = new Uri(baseUri, address).OriginalString;
+			if (context.BaseUri != null && address != null)
+				address = new Uri(context.BaseUri, address).OriginalString;
 			if (_documentPath == null && address != null && !address.StartsWith("#"))
 			{
 				if (!Uri.TryCreate(address, UriKind.Absolute, out var uri))
-					uri = new Uri(JsonSchemaOptions.DefaultBaseUri, address);
+					uri = new Uri(context.Options.DefaultBaseUri, address);
 				DocumentPath = uri;
 				JsonSchemaRegistry.Register(this);
-				baseUri = uri;
+				context.BaseUri = uri;
 			}
 
 			foreach (var keyword in this)
 			{
-				keyword.RegisterSubschemas(baseUri, localRegistry);
+				keyword.RegisterSubschemas(context);
 			}
 		}
 		/// <summary>
@@ -316,14 +320,14 @@ namespace Manatee.Json.Schema
 					};
 			}
 
-			RegisterSubschemas(null, context.LocalRegistry);
+			RegisterSubschemas(context);
 			context.LocalRegistry.RegisterLocal(this);
 
 			context.Local = this;
 
 			var refKeyword = this.Get<RefKeyword?>();
 			if (refKeyword == null ||
-			    JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
+			    context.Options.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
 			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09)
 			{
 				if (context.BaseUri == null)
@@ -350,7 +354,7 @@ namespace Manatee.Json.Schema
 				Log.Schema(() => $"Processing `{keyword.Name}`");
 				var localResults = keyword.Validate(context);
 				Log.Schema(() => $"`{keyword.Name}` complete: {(localResults.IsValid ? "valid" : "invalid")}");
-				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
+				if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag && !localResults.IsValid)
 				{
 					Log.Schema(() => "Found fail condition with flag output enabled; halting validation early.");
 					return new SchemaValidationResults {IsValid = false};

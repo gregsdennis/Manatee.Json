@@ -21,8 +21,7 @@ namespace Manatee.Json.Console
 				schema = serializer.Deserialize<JsonSchema>(schemaJson);
 			}
 
-			JsonSchemaOptions.OutputFormat = command.OutputFormat;
-			var results = schema.Validate(instance);
+			var results = schema.Validate(instance, new JsonSchemaOptions { OutputFormat = command.OutputFormat });
 
 			JsonOptions.PrettyPrintIndent = "  ";
 			var output = serializer.Serialize(results).GetIndentedString();

@@ -81,7 +81,7 @@ namespace Manatee.Json.Schema
 			{
 				if (!obj.ContainsKey(propertyName))
 				{
-					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{
 						results.IsValid = false;
 						return results;
@@ -103,9 +103,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>

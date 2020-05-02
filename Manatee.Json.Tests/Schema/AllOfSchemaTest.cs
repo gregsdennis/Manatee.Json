@@ -17,8 +17,6 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsErrorOnAnyInvalid()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
-
 			var schema = new JsonSchema()
 				.AllOf(new JsonSchema().Type(JsonSchemaType.Array),
 				       new JsonSchema().Type(JsonSchemaType.Number));
@@ -95,7 +93,7 @@ namespace Manatee.Json.Tests.Schema
 						}
 				};
 
-			var results = schema.Validate(json);
+			var results = schema.Validate(json, new JsonSchemaOptions{OutputFormat = SchemaValidationOutputFormat.Verbose});
 
 			results.AssertInvalid(expected);
 		}
@@ -103,8 +101,6 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnAllValid()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
-
 			var schema = new JsonSchema()
 				.AllOf(new JsonSchema()
 					       .Type(JsonSchemaType.Number)
@@ -181,7 +177,7 @@ namespace Manatee.Json.Tests.Schema
 						}
 				};
 
-			var results = schema.Validate(json);
+			var results = schema.Validate(json, new JsonSchemaOptions {OutputFormat = SchemaValidationOutputFormat.Verbose});
 
 			results.AssertValid(expected);
 		}

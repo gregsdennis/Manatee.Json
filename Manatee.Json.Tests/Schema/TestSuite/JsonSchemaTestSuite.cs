@@ -96,14 +96,14 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 			var configureForTestOutputValue = Environment.GetEnvironmentVariable("EXPORT_JSON_TEST_SUITE_RESULTS");
 			bool.TryParse(configureForTestOutputValue, out var configureForTestOutput);
-			JsonSchemaOptions.ConfigureForTestOutput = configureForTestOutput;
+			JsonSchemaOptions.Default.ConfigureForTestOutput = configureForTestOutput;
 		}
 
 		[OneTimeTearDown]
 		public static void TearDown()
 		{
 			JsonSchemaOptions.Download = null;
-			JsonSchemaOptions.ConfigureForTestOutput = false;
+			JsonSchemaOptions.Default.ConfigureForTestOutput = false;
 			SchemaValidationResults.IncludeAdditionalInfo = true;
 		}
 
@@ -115,17 +115,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 
 			//if (testName == "ref.escaped_pointer_ref.slash_invalid.draft2019-09")
 			//	Debugger.Break();
-
-			var outputFormat = JsonSchemaOptions.OutputFormat;
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
-			try
-			{
-				_Run(fileName, setDescription, testJson, schemaJson, version, isOptional);
-			}
-			finally
-			{
-				JsonSchemaOptions.OutputFormat = outputFormat;
-			}
+			_Run(fileName, setDescription, testJson, schemaJson, version, isOptional);
 		}
 
 		private static void _Run(string fileName, string setDescription, JsonValue testJson, JsonValue schemaJson, JsonSchemaVersion version, bool isOptional)
@@ -138,7 +128,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 					var schema = _serializer.Deserialize<JsonSchema>(schemaJson);
 					schema.ProcessingVersion = version;
 
-					var results = schema.Validate(test.Data);
+					var results = schema.Validate(test.Data, new JsonSchemaOptions {OutputFormat = SchemaValidationOutputFormat.Verbose});
 
 					if (test.Valid != results.IsValid)
 						Console.WriteLine(string.Join("\n", _serializer.Serialize(results).GetIndentedString()));

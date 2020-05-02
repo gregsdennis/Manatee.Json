@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 
 			var nestedResults = new List<SchemaValidationResults>();
 			var obj = context.Instance.Object;
-			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var reportChildErrors = context.Options.ShouldReportChildErrors(this, context);
 			var valid = true;
 
 			foreach (var patternProperty in this)
@@ -88,7 +88,7 @@ namespace Manatee.Json.Schema
 						if (valid)
 							context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
-						if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+						if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 						{
 							if (!valid)
 							{
@@ -118,13 +118,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
 			foreach (var schema in Values)
 			{
-				schema.RegisterSubschemas(baseUri, localRegistry);
+				schema.RegisterSubschemas(context);
 			}
 		}
 		/// <summary>

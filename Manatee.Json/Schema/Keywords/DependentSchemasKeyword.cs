@@ -52,7 +52,7 @@ namespace Manatee.Json.Schema
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 
 			var valid = true;
-			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var reportChildErrors = context.Options.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
 			var failedCount = 0;
 
@@ -69,7 +69,7 @@ namespace Manatee.Json.Schema
 				if (!valid)
 					failedCount++;
 
-				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
 					if (!valid)
 					{
@@ -85,7 +85,7 @@ namespace Manatee.Json.Schema
 				{
 					IsValid = valid
 				};
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+			if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 				results.NestedResults = nestedResults;
 			else if (!results.IsValid)
 			{
@@ -99,13 +99,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
 			foreach (var schema in this)
 			{
-				schema.RegisterSubschemas(baseUri, localRegistry);
+				schema.RegisterSubschemas(context);
 			}
 		}
 		/// <summary>

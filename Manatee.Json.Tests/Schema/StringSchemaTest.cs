@@ -218,7 +218,6 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void ValidateReturnsValidOnUnknownFormat()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format("Int32");
 			var json = (JsonValue) "32";
 			var expected = new SchemaValidationResults
@@ -236,14 +235,14 @@ namespace Manatee.Json.Tests.Schema
 						}
 	};
 
-			var results = schema.Validate(json);
+			var results = schema.Validate(json, new JsonSchemaOptions { OutputFormat = SchemaValidationOutputFormat.Detailed });
 
 			results.AssertValid(expected);
 		}
 		[Test]
 		public void DeserializeThrowsOnUnknownFormat()
 		{
-			JsonSchemaOptions.AllowUnknownFormats = false;
+			JsonSchemaOptions.Default.AllowUnknownFormats = false;
 			var serializer = new JsonSerializer();
 			var schemaJson = new JsonObject
 				{
@@ -257,14 +256,12 @@ namespace Manatee.Json.Tests.Schema
 			}
 			finally
 			{
-				JsonSchemaOptions.AllowUnknownFormats = true;
+				JsonSchemaOptions.Default.AllowUnknownFormats = true;
 			}
 		}
 		[Test]
 		public void ValidateReturnsInvalidOnUnknownFormat()
 		{
-			JsonSchemaOptions.AllowUnknownFormats = false;
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var schema = new JsonSchema().Type(JsonSchemaType.String).Format("Int32");
 			var json = (JsonValue)"32";
 			var expected = new SchemaValidationResults
@@ -283,16 +280,13 @@ namespace Manatee.Json.Tests.Schema
 						}
 				};
 
-			try
-			{
-				var results = schema.Validate(json);
+			var results = schema.Validate(json, new JsonSchemaOptions
+				{
+					OutputFormat = SchemaValidationOutputFormat.Detailed,
+					AllowUnknownFormats = false
+				});
 
-				results.AssertInvalid(expected);
-			}
-			finally
-			{
-				JsonSchemaOptions.AllowUnknownFormats = true;
-			}
+			results.AssertInvalid(expected);
 		}
 		[Test]
 		public void ValidateReturnsErrorOnPatternNonMatch()

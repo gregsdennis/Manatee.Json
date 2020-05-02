@@ -74,7 +74,7 @@ namespace Manatee.Json.Schema
 					AnnotationValue = Value
 				};
 
-			if (!JsonSchemaOptions.ValidateFormatKeyword)
+			if (!context.Options.ValidateFormatKeyword)
 			{
 				Log.Schema(() => "Options indicate skipping format validation");
 				return results;
@@ -87,7 +87,7 @@ namespace Manatee.Json.Schema
 				results.AdditionalInfo["format"] = Value;
 				results.AdditionalInfo["isKnownFormat"] = false;
 
-				if (JsonSchemaOptions.AllowUnknownFormats)
+				if (context.Options.AllowUnknownFormats)
 					results.IsValid = true;
 				else
 				{
@@ -109,9 +109,8 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
@@ -135,8 +134,8 @@ namespace Manatee.Json.Schema
 
 			var validator = Formats.GetFormat(Value);
 
-			if (validator == null && JsonSchemaOptions.ValidateFormatKeyword && !JsonSchemaOptions.AllowUnknownFormats)
-				throw new JsonSerializationException("Unknown format specifier found.  Either allow unknown formats or disable format validation in the JsonSchemaOptions.");
+			if (validator == null && JsonSchemaOptions.Default.ValidateFormatKeyword && !JsonSchemaOptions.Default.AllowUnknownFormats)
+				throw new JsonSerializationException("Unknown format specifier found.  Either allow unknown formats or disable format validation in the default JsonSchemaOptions.");
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.

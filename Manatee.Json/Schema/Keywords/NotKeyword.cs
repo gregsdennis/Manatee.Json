@@ -84,8 +84,8 @@ namespace Manatee.Json.Schema
 				results.ErrorMessage = ErrorTemplate;
 			}
 
-			if (JsonSchemaOptions.OutputFormat != SchemaValidationOutputFormat.Flag &&
-			    JsonSchemaOptions.ShouldReportChildErrors(this, context))
+			if (context.Options.OutputFormat != SchemaValidationOutputFormat.Flag &&
+			    context.Options.ShouldReportChildErrors(this, context))
 				results.NestedResults = new List<SchemaValidationResults> {nestedResults};
 
 			return results;
@@ -93,11 +93,10 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
-			Value.RegisterSubschemas(baseUri, localRegistry);
+			Value.RegisterSubschemas(context);
 		}
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
