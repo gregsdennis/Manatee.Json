@@ -47,7 +47,7 @@
 				.Property("minLength", new JsonSchema().Ref("#/definitions/positiveIntegerDefault0"))
 				.Property("pattern", new JsonSchema()
 					          .Type(JsonSchemaType.String)
-					          .Format(Format.Regex))
+					          .Format(Formats.Regex!))
 				.Property("additionalItems", new JsonSchema()
 					          .AnyOf(new JsonSchema().Type(JsonSchemaType.Boolean),
 					                 new JsonSchema().RefRoot())

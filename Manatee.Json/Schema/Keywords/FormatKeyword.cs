@@ -31,7 +31,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions => Value.SupportedBy;
+		public JsonSchemaVersion SupportedVersions => Formats.GetFormat(Value)?.SupportedBy ?? JsonSchemaVersion.None;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
@@ -44,7 +44,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// The string format for this keyword.
 		/// </summary>
-		public Format Value { get; private set; }
+		public string Value { get; private set; }
 
 		/// <summary>
 		/// Used for deserialization.
@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Creates an instance of the <see cref="FormatKeyword"/>.
 		/// </summary>
-		public FormatKeyword(Format value)
+		public FormatKeyword(string value)
 		{
 			Value = value;
 		}
@@ -71,7 +71,7 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context)
 				{
-					AnnotationValue = Value.Key
+					AnnotationValue = Value
 				};
 
 			if (!JsonSchemaOptions.ValidateFormatKeyword)
@@ -80,15 +80,29 @@ namespace Manatee.Json.Schema
 				return results;
 			}
 
-			var format = Value;
-			if (!format.Validate(context.Instance))
+			var validator = Formats.GetFormat(Value);
+			if (validator == null)
+			{
+				results.AdditionalInfo["actual"] = context.Instance;
+				results.AdditionalInfo["format"] = Value;
+				results.AdditionalInfo["isKnownFormat"] = false;
+
+				if (JsonSchemaOptions.AllowUnknownFormats)
+					results.IsValid = true;
+				else
+				{
+					results.IsValid = false;
+					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+				}
+			}
+			else if (!validator.Validate(context.Instance))
 			{
 				results.IsValid = false;
 				results.AdditionalInfo["actual"] = context.Instance;
-				results.AdditionalInfo["format"] = format.Key;
-				results.AdditionalInfo["isKnownFormat"] = format.IsKnown;
+				results.AdditionalInfo["format"] = Value;
+				results.AdditionalInfo["isKnownFormat"] = true;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
-			};
+			}
 
 			return results;
 		}
@@ -117,9 +131,11 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = Format.GetFormat(json.String);
+			Value = json.String;
 
-			if (!Value.IsKnown && JsonSchemaOptions.ValidateFormatKeyword && !JsonSchemaOptions.AllowUnknownFormats)
+			var validator = Formats.GetFormat(Value);
+
+			if (validator == null && JsonSchemaOptions.ValidateFormatKeyword && !JsonSchemaOptions.AllowUnknownFormats)
 				throw new JsonSerializationException("Unknown format specifier found.  Either allow unknown formats or disable format validation in the JsonSchemaOptions.");
 		}
 		/// <summary>
@@ -130,7 +146,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return Value.Key;
+			return Value;
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
