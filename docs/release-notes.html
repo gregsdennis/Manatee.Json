@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>12.3.1 </title>
+    <title>13.0.0 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="12.3.1 ">
+    <meta name="title" content="13.0.0 ">
     <meta name="generator" content="docfx 2.43.2.0">
     
     <link rel="shortcut icon" href="favicon.ico">
@@ -60,8 +60,102 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="1231">12.3.1</h1>
+<h1 id="1300">13.0.0</h1>
 
+<p><em>Released on XXX May, 2020</em></p>
+<p><span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span></p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/pull/260">#260</a>) Performance enhancements for <code>JsonPointer</code>.  Also updates how evaluated properties &amp; items are tracked in schemas.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/263">#263</a>) <code>JsonSchemaOptions.BasicDownload</code> shouldn't write to the console.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/265">#265</a>) <code>DateTime</code> serialization doesn't format ISO-8601 properly.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/pull/261">#261</a>) More enhancements around how evaluated properties &amp; items are tracked in schemas.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/241">#241</a>) Complete overhaul of the schema <code>format</code> keyword validation system.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/267">#267</a>) JSON parsing should throw when there is more content after the completion of the value.</p>
+<p>(<a href="https://github.com/gregsdennis/Manatee.Json/issues/266">#266</a>) Migrated <code>JsonSchemaOptions</code> to be used as an instance class so that several schemas can be used with differing options.</p>
+<h2 id="bug-fixes">Bug Fixes</h2>
+<ul>
+<li>ISO 8601 DateTime serialization now uses the <code>O</code> format instead of the <code>s</code> format.  (See <a href="https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings">.Net <code>DateTime</code> formatting</a>.)  Additionally, deserialization now assumes universal times.</li>
+<li>Setting <code>JsonSerializerOptions.CustomDateTimeSerializationFormat</code> now automatically sets <code>DateTimeSerializationFormat</code> to <code>Custom</code>.</li>
+</ul>
+<h2 id="additions">Additions</h2>
+<ul>
+<li><code>JsonOptions.RequireIsolatedJsonDuringParse</code> - Specifies whether content is allowed after JSON parsing completes a value.  The default behavior is the same as in v12: additional content is allowed.</li>
+<li><code>JsonSchema</code>
+<ul>
+<li><code>ProcessingVersion</code> - Allows a schema to be explicitly processed as a specific draft.  Normally, this would be assessed during the first validation by examining the set of keywords present (including the <code>$schema</code>).  This allows subversion of this process.  It also works together with the new <code>JsonSchemaOptions.DefaultProcessingVersion</code> property to indicate exactly which draft is being used.</li>
+<li><code>Validate()</code> and <code>ValidateSchema()</code> now accept an optional <code>JsonSchemaOptions</code> parameter.</li>
+<li><code>Validate(SchemaValidationContext)</code> has been made public.  This is to be used by custom keywords, not to initiate validation.</li>
+</ul>
+</li>
+<li><code>JsonSchemaOptions</code>:
+<ul>
+<li>Static <code>Default</code> - the default instance of the options.  Used to create new instances when not provided by the user.</li>
+<li>Parameterless and copy constructors.</li>
+<li><code>LogMetaSchemaValidation</code> - A value of <code>true</code> will instruct the logging subsystem to not create log entries when validating metaschemas.  This can help isolate logs that pertain directly to a validation.</li>
+<li><code>DefaultProcessingVersion</code> - A priority-ordered list of schema draft versions that will serve to determine which draft will be used for a schema.</li>
+</ul>
+</li>
+<li><code>IRequireAnnotations</code> - Schema keywords can implement this interface to indicate that they require annotation results from other keywords in order to do their job properly.  Examples of these are the <code>unevaluated*</code> keywords, which require some special property &amp; item tracking.  Not having these keywords in your schemas can increase performance significantly as optimizations have been added for when these keywords are absent.</li>
+<li><code>SchemaValidationContext</code>
+<ul>
+<li><code>ShouldTrackValidatedValues</code> - Works together with <code>IRequireAnnotations</code> keywords to control how evaluated properties &amp; items are tracked.</li>
+<li><code>Options</code> - The set of options used during the specific validation pass.</li>
+</ul>
+</li>
+<li><code>IFormatValidator</code> - See &quot;Formats&quot; section below for more details on the changes on how schema formatting has changed.</li>
+</ul>
+<h2 id="breaking-changes">Breaking Changes</h2>
+<ul>
+<li><code>FluentBuilderExtensions.Format(JsonSchema, Format)</code> (used for fluent-building schemas) replaced with two new versions:
+<ul>
+<li><code>FluentBuilderExtensions.Format(JsonSchema, string)</code></li>
+<li><code>FluentBuilderExtensions.Format(JsonSchema, IFormatValidator)</code></li>
+</ul>
+</li>
+<li><code>GetterExtensions.Format(JsonSchema)</code> now returns <code>string</code> of the format key instead of a <code>Format</code> instance.</li>
+<li><code>Format</code> class changed to <code>Formats</code> static class.
+<ul>
+<li>All static properties that represent formats have been changed to return <code>IFormatValidator</code>.</li>
+<li><code>GetFormat(string)</code> now returns <code>IFormatValidator</code>.</li>
+<li>See &quot;Formats&quot; section below for more details on the changes on how schema formatting has changed.</li>
+</ul>
+</li>
+<li><code>JsonSchema</code>
+<ul>
+<li><code>RegisterSubschemas(Uri, JsonSchemaRegistry)</code> 🠖 <code>RegisterSubschemas(SchemaValidationContext)</code></li>
+<li><code>ResolveSubschema(JsonPointer, Uri)</code> 🠖 <code>ResolveSubschema(JsonPointer, Uri, JsonSchemaVersion)</code></li>
+</ul>
+</li>
+<li><code>IJsonSchemaKeyword</code>
+<ul>
+<li><code>RegisterSubschemas(Uri, JsonSchemaRegistry)</code> 🠖 <code>RegisterSubschemas(SchemaValidationContext)</code></li>
+<li><code>ResolveSubschema(JsonPointer, Uri)</code> 🠖 <code>ResolveSubschema(JsonPointer, Uri, JsonSchemaVersion)</code></li>
+<li>Same change applied to all keywords.</li>
+</ul>
+</li>
+<li><code>IJsonSchemaDependency</code>
+<ul>
+<li><code>RegisterSubschemas(Uri, JsonSchemaRegistry)</code> 🠖 <code>RegisterSubschemas(SchemaValidationContext)</code></li>
+<li><code>ResolveSubschema(JsonPointer, Uri)</code> 🠖 <code>ResolveSubschema(JsonPointer, Uri, JsonSchemaVersion)</code></li>
+<li>Same change applied to both implementations.</li>
+</ul>
+</li>
+<li><code>JsonSchemaOptions</code> migrated to an instance class.  This class can be passed into the validation methods and will be added to the context.
+<ul>
+<li>The exception to this migration is the <code>Download</code> property, which remains static.</li>
+</ul>
+</li>
+<li><code>FormatKeyword.Value</code> now returns <code>string</code> instead of <code>Format</code>.</li>
+</ul>
+<h3 id="format-overhaul">Format Overhaul</h3>
+<p>As was discussed in <a href="https://github.com/gregsdennis/Manatee.Json/issues/241">#241</a>, the format validation framework had its issues.</p>
+<ul>
+<li>It was difficult or confusing to add custom formats.</li>
+<li>Overriding existing formats just didn't work right.</li>
+</ul>
+<p>As such, it has been overhauled to use individual format validator classes.  Each of these classes implements a new interface, <code>IFormatValidator</code>, and handles validation for a single format.</p>
+<p>By default, the formats defined by the spec have default implementations and are pre-registered.  New formats can be added by implementing <code>IFormatValidator</code> and supplying an instance to the new <code>Formats.RegisterValidator(IFormatValidator)</code> static method.  Additionally, this same method can be used to supercede the in-built registrations.  The static properties are still there and will return the handler for that format, even when overridden.</p>
+<p>A minor behavior change is that serialization will no longer throw an exception when encountering unknown formats.  It will still throw on validation if configured to do so, however.</p>
+<h1 id="1231">12.3.1</h1>
 <p><em>Released on 6 Mar, 2020</em></p>
 <p><span id="patch">patch</span></p>
 <p>(<a href="https://github.com/gregsdennis/Manatee.Json/pull/253">#253</a>) Some performance and logging enhancements as suggested by a schema benchmark test.</p>
@@ -113,9 +207,9 @@
 <p>Some cursory verbose logging has been introduced to allow the client to see what decisions Manatee.Json is making during (primarily) schema validation and serialization.  The <code>JsonOptions.Log</code> static property has been introduced for this purpose.  It is of type <code>ILog</code> which exposes a single method, <code>Verbose(string, LogCategory)</code>.</p>
 <p>The log categories currently are general, serialization, and schema.  This allows the client to enable or disable certain activities, so that, for instance, they can only enable schema validation logging if they wish.  The <code>JsonOptions.LogCategory</code> static property controls what categories are actually sent.</p>
 <p><strong>There is no default implementation for <code>ILog</code>.</strong>  Keeping this option null will ensure faster processing in production scenarios.  This logging feature is intended for research and debugging purposes only as there are <em>a lot</em> of logs which can add processing time.</p>
-<h2 id="bug-fixes">Bug fixes</h2>
+<h2 id="bug-fixes-1">Bug fixes</h2>
 <p><code>unevaluatedItems</code> would not properly process items that nested keywords touched but failed.  See <a href="https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues/291">JSON-Schema-Test-Suite #291</a> for details and an example of the logging mentioned above.</p>
-<h2 id="breaking-changes">Breaking Changes</h2>
+<h2 id="breaking-changes-1">Breaking Changes</h2>
 <ul>
 <li><code>JsonValue</code> parameterless constructor removed.  Use <code>JsonValue.Null</code> instead.</li>
 <li><code>JsonValue</code> parameterized constructor arguments changed to non-nullable or will throw <code>ArgumentNullException</code>.</li>
@@ -194,7 +288,7 @@
 </p>
 </details>
 <p><span id="break">breaking change</span><span id="feature">feature</span></p>
-<h2 id="breaking-changes-1">Breaking changes</h2>
+<h2 id="breaking-changes-2">Breaking changes</h2>
 <h3 id="schema">Schema</h3>
 <p>In order to support some new independent reference tests, some changes were made to the schema validation logic to include a validation-run-independent schema registry, separate from the static one.  The first two changes support this requirement:</p>
 <ul>

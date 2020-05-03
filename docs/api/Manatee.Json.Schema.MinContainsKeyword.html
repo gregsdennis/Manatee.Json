@@ -590,19 +590,19 @@ serialization of values.</p>
   <div><span class="xref">System.Object.GetHashCode()</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_System_Nullable_System_Uri__Manatee_Json_Schema_JsonSchemaRegistry_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Nullable%7BSystem.Uri%7D%2CManatee.Json.Schema.JsonSchemaRegistry)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_Manatee_Json_Schema_SchemaValidationContext_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(Manatee.Json.Schema.SchemaValidationContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/MinContainsKeyword.cs/#L157">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/MinContainsKeyword.cs/#L153">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_" data-uid="Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas*"></a>
-  <h4 id="Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_System_Nullable_System_Uri__Manatee_Json_Schema_JsonSchemaRegistry_" data-uid="Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(System.Nullable{System.Uri},Manatee.Json.Schema.JsonSchemaRegistry)">RegisterSubschemas(Nullable&lt;Uri&gt;, JsonSchemaRegistry)</h4>
+  <h4 id="Manatee_Json_Schema_MinContainsKeyword_RegisterSubschemas_Manatee_Json_Schema_SchemaValidationContext_" data-uid="Manatee.Json.Schema.MinContainsKeyword.RegisterSubschemas(Manatee.Json.Schema.SchemaValidationContext)">RegisterSubschemas(SchemaValidationContext)</h4>
   <div class="markdown level1 summary"><p>Used register any subschemas during validation.  Enables look-forward compatibility with <code>$ref</code> keywords.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)</code></pre>
+    <pre><code class="lang-csharp hljs">public void RegisterSubschemas(SchemaValidationContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -615,33 +615,28 @@ serialization of values.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Uri</span>&gt;</td>
-        <td><span class="parametername">baseUri</span></td>
-        <td><p>The current base URI</p>
+        <td><a class="xref" href="Manatee.Json.Schema.SchemaValidationContext.html">SchemaValidationContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The context object.</p>
 </td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Manatee.Json.Schema.JsonSchemaRegistry.html">JsonSchemaRegistry</a></td>
-        <td><span class="parametername">localRegistry</span></td>
-        <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_MinContainsKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.MinContainsKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer%2CSystem.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/new/master/apiSpec/new?filename=Manatee_Json_Schema_MinContainsKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_Manatee_Json_Schema_JsonSchemaVersion_.md&amp;value=---%0Auid%3A%20Manatee.Json.Schema.MinContainsKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer%2CSystem.Uri%2CManatee.Json.Schema.JsonSchemaVersion)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/MinContainsKeyword.cs/#L168">View Source</a>
+    <a href="https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json/Schema/Keywords/MinContainsKeyword.cs/#L165">View Source</a>
   </span>
   <a id="Manatee_Json_Schema_MinContainsKeyword_ResolveSubschema_" data-uid="Manatee.Json.Schema.MinContainsKeyword.ResolveSubschema*"></a>
-  <h4 id="Manatee_Json_Schema_MinContainsKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_" data-uid="Manatee.Json.Schema.MinContainsKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer,System.Uri)">ResolveSubschema(JsonPointer, Uri)</h4>
+  <h4 id="Manatee_Json_Schema_MinContainsKeyword_ResolveSubschema_Manatee_Json_Pointer_JsonPointer_System_Uri_Manatee_Json_Schema_JsonSchemaVersion_" data-uid="Manatee.Json.Schema.MinContainsKeyword.ResolveSubschema(Manatee.Json.Pointer.JsonPointer,System.Uri,Manatee.Json.Schema.JsonSchemaVersion)">ResolveSubschema(JsonPointer, Uri, JsonSchemaVersion)</h4>
   <div class="markdown level1 summary"><p>Resolves any subschemas during resolution of a <code>$ref</code> during validation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)</code></pre>
+    <pre><code class="lang-csharp hljs">public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -663,6 +658,12 @@ serialization of values.</p>
         <td><span class="xref">System.Uri</span></td>
         <td><span class="parametername">baseUri</span></td>
         <td><p>The current base URI.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Manatee.Json.Schema.JsonSchemaVersion.html">JsonSchemaVersion</a></td>
+        <td><span class="parametername">supportedVersions</span></td>
+        <td><p>Indicates the root schema's supported versions.</p>
 </td>
       </tr>
     </tbody>
