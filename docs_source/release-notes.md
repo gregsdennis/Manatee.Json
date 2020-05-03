@@ -1,6 +1,6 @@
 # 13.0.0
 
-*Released on XXX May, 2020*
+*Released on 3 May, 2020*
 
 <span id="break">breaking change</span><span id="feature">feature</span><span id="patch">patch</span>
 
