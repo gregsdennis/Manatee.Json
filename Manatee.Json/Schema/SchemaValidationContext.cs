@@ -96,6 +96,9 @@ namespace Manatee.Json.Schema
 		/// </remarks>
 		public bool ShouldTrackValidatedValues { get; set; }
 
+		/// <summary>
+		/// Gets the schema options for the current validation pass.
+		/// </summary>
 		public JsonSchemaOptions Options { get; }
 		
 		internal JsonSchemaRegistry LocalRegistry { get; }
@@ -127,7 +130,8 @@ namespace Manatee.Json.Schema
 			       source.Instance,
 			       source.BaseRelativeLocation,
 			       source.RelativeLocation,
-			       source.InstanceLocation, source.Options)
+			       source.InstanceLocation,
+			       source.Options)
 		{
 			Local = source.Local;
 			Root = source.Root;

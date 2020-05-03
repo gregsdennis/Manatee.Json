@@ -37,7 +37,6 @@ namespace Manatee.Json.Schema
 		private Uri? _documentPath;
 		private bool _hasRegistered;
 		private MetaSchemaValidationResults? _metaSchemaResults;
-		private JsonSchemaVersion? _processingVersion;
 
 		/// <summary>
 		/// Defines the document path.  If not explicitly provided, it will be derived from the <see cref="Id"/> property.
