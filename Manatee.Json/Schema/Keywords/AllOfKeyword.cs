@@ -64,9 +64,10 @@ namespace Manatee.Json.Schema
 				var localResults = s.Validate(newContext);
 				valid &= localResults.IsValid;
 				Log.Schema(() => $"`{Name}` {(valid ? "valid" : "invalid")} so far");
-				if (!valid)
+				if (!localResults.IsValid)
 					failedCount++;
-				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+				else
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 				if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{

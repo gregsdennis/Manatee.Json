@@ -117,8 +117,6 @@ namespace Manatee.Json.Schema
 			InstanceLocation = instanceLocation;
 			LocalRegistry = new JsonSchemaRegistry();
 			Options = options;
-
-			ShouldTrackValidatedValues = root.Any(k => k is IRequireAnnotations);
 		}
 
 		/// <summary>
@@ -135,6 +133,7 @@ namespace Manatee.Json.Schema
 			Root = source.Root;
 			RecursiveAnchor = source.RecursiveAnchor;
 			Instance = source.Instance;
+
 			ShouldTrackValidatedValues = source.ShouldTrackValidatedValues;
 
 			_InitializeHashSet(ref _evaluatedPropertyNames, source._evaluatedPropertyNames);

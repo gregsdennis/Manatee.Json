@@ -127,14 +127,12 @@ namespace Manatee.Json.Schema
 					};
 				var localResults = Value.Validate(newContext);
 				if (!localResults.IsValid)
-				{
 					failedProperties.Add(kvp.Key);
-				}
-
-				if (context.ShouldTrackValidatedValues)
+				else
 				{
-					context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-					context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+					if (context.ShouldTrackValidatedValues)
+						newContext.LocallyEvaluatedPropertyNames.Add(kvp.Key);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 				}
 
 				valid &= localResults.IsValid;

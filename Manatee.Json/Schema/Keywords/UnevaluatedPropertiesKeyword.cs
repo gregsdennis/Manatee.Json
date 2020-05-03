@@ -78,7 +78,8 @@ namespace Manatee.Json.Schema
 
 			var obj = context.Instance.Object;
 			var results = new SchemaValidationResults(Name, context);
-			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key))!.ToJson();
+			var toEvaluate = obj.Where(kvp => !context.EvaluatedPropertyNames.Contains(kvp.Key) &&
+			                                  !context.LocallyEvaluatedPropertyNames.Contains(kvp.Key))!.ToJson();
 			if (toEvaluate.Count == 0)
 			{
 				Log.Schema(() => "All properties have been evaluated");
@@ -114,8 +115,12 @@ namespace Manatee.Json.Schema
 					};
 				var localResults = Value.Validate(newContext);
 				if (!localResults.IsValid)
-				{
 					failedProperties.Add(kvp.Key);
+				else
+				{
+					if (context.ShouldTrackValidatedValues)
+						newContext.LocallyEvaluatedPropertyNames.Add(kvp.Key);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 				}
 				valid &= localResults.IsValid;
 

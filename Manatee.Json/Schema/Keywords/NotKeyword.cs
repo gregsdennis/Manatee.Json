@@ -77,6 +77,8 @@ namespace Manatee.Json.Schema
 			var nestedResults = Value.Validate(newContext);
 
 			results.IsValid = !nestedResults.IsValid;
+			if (nestedResults.IsValid)
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 			if (!results.IsValid)
 			{

@@ -83,6 +83,12 @@ namespace Manatee.Json.Schema
 				results.IsValid = false;
 				results.ErrorMessage = ErrorTemplate;
 			}
+			else
+			{
+				if (context.ShouldTrackValidatedValues)
+					newContext.LocallyEvaluatedPropertyNames.Add(PropertyName);
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+			}
 
 			return results;
 		}

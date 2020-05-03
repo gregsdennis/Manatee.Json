@@ -121,12 +121,12 @@ namespace Manatee.Json.Schema
 					var localResults = Value.Validate(newContext);
 					if (!localResults.IsValid)
 						failedIndices.Add(index);
+					else if (context.ShouldTrackValidatedValues)
+						newContext.LocallyValidatedIndices.Add(index);
 					valid &= localResults.IsValid;
 					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
 					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
-
-					if (context.ShouldTrackValidatedValues)
-						context.LocallyValidatedIndices.Add(index);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 					index++;
 

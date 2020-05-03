@@ -80,7 +80,10 @@ namespace Manatee.Json.Schema
 			var results = new SchemaValidationResults(Name, context);
 			var valid = true;
 			var reportChildErrors = context.Options.ShouldReportChildErrors(this, context);
-			var indicesToEvaluate = Enumerable.Range(0, array.Count).Except(context.ValidatedIndices).ToList();
+			var indicesToEvaluate = Enumerable.Range(0, array.Count)
+				.Except(context.ValidatedIndices)
+				.Except(context.LocallyValidatedIndices)
+				.ToList();
 			var failedIndices = new JsonArray();
 
 			Log.Schema(() => indicesToEvaluate.Any()
@@ -113,9 +116,12 @@ namespace Manatee.Json.Schema
 					var localResults = Value.Validate(newContext);
 					if (!localResults.IsValid)
 						failedIndices.Add(index);
+					else if (context.ShouldTrackValidatedValues)
+						newContext.LocallyValidatedIndices.Add(index);
 					valid &= localResults.IsValid;
-					if (valid)
-						context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 					if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{

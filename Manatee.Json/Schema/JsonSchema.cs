@@ -304,6 +304,8 @@ namespace Manatee.Json.Schema
 		/// <returns>The schema validation results.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
+			context.ShouldTrackValidatedValues |= this.OfType<IRequireAnnotations>().Any();
+
 			Log.Schema(() => $"Begin validation of {context.InstanceLocation} by {context.RelativeLocation}");
 			if (_inherentValue.HasValue)
 			{
