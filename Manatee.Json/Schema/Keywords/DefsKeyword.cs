@@ -43,13 +43,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
 			foreach (var schema in Values)
 			{
-				schema.RegisterSubschemas(baseUri, localRegistry);
+				schema.RegisterSubschemas(context);
 			}
 		}
 		/// <summary>
@@ -57,15 +56,16 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			var first = pointer.FirstOrDefault();
 			if (first == null) return null;
 
 			if (!TryGetValue(first, out var schema)) return null;
 
-			return schema.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri);
+			return schema.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri, supportedVersions);
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

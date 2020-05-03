@@ -154,7 +154,7 @@ namespace Manatee.Json.Tests.Schema
 				.AdditionalProperties(new JsonSchema().Type(JsonSchemaType.Boolean));
 			var json = new JsonObject {{"test1", "value"}, {"test2", 5.5}, {"test", false}};
 
-			var results = schema.Validate(json);
+			var results = schema.Validate(json, new JsonSchemaOptions {LogMetaSchemaValidation = false});
 
 			results.AssertInvalid();
 		}

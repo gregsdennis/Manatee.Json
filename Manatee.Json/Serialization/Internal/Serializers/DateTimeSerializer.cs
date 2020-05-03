@@ -18,11 +18,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		public JsonValue Serialize(SerializationContext context)
 		{
 			var dt = (DateTime) context.Source!;
-			var options = context.RootSerializer.Options ?? JsonSerializerOptions.Default;
+			var options = context.RootSerializer.Options;
 			switch (options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.Iso8601:
-					return dt.ToString("s");
+					return dt.ToString("O", CultureInfo.InvariantCulture);
 				case DateTimeSerializationFormat.JavaConstructor:
 					return $"/Date({dt.Ticks / TimeSpan.TicksPerMillisecond})/";
 				case DateTimeSerializationFormat.Milliseconds:
@@ -37,11 +37,11 @@ namespace Manatee.Json.Serialization.Internal.Serializers
 		}
 		public object Deserialize(DeserializationContext context)
 		{
-			var options = context.RootSerializer.Options ?? JsonSerializerOptions.Default;
+			var options = context.RootSerializer.Options;
 			switch (options.DateTimeSerializationFormat)
 			{
 				case DateTimeSerializationFormat.Iso8601:
-					return DateTime.Parse(context.LocalValue.String);
+					return DateTime.Parse(context.LocalValue.String, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToUniversalTime();
 				case DateTimeSerializationFormat.JavaConstructor:
 					return new DateTime(long.Parse(context.LocalValue.String.Substring(6, context.LocalValue.String.Length - 8)) * TimeSpan.TicksPerMillisecond);
 				case DateTimeSerializationFormat.Milliseconds:

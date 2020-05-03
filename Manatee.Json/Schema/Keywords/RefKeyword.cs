@@ -97,16 +97,16 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			return null;
 		}
@@ -181,7 +181,7 @@ namespace Manatee.Json.Schema
 			if (!string.IsNullOrWhiteSpace(address))
 			{
 				if (!Uri.TryCreate(address, UriKind.Absolute, out var absolute) &&
-					(JsonSchemaOptions.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
+					(context.Options.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
 					 context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09))
 					address = context.Local.Id + address;
 
@@ -211,9 +211,9 @@ namespace Manatee.Json.Schema
 				return;
 			}
 
-			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri!);
+			_ResolveLocalReference(_resolvedRoot?.DocumentPath ?? context.BaseUri!, context.Root.SupportedVersions);
 		}
-		private void _ResolveLocalReference(Uri baseUri)
+		private void _ResolveLocalReference(Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			if (!_resolvedFragment.Any())
 			{
@@ -222,7 +222,7 @@ namespace Manatee.Json.Schema
 			}
 
 			Log.Schema(() => $"Resolving local reference {_resolvedFragment}");
-			Resolved = _resolvedRoot!.ResolveSubschema(_resolvedFragment!, baseUri);
+			Resolved = _resolvedRoot!.ResolveSubschema(_resolvedFragment!, baseUri, supportedVersions);
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Manatee.Json.Tests.Serialization
 		{
 			var serializer = new JsonSerializer();
 			var obj = DateTime.Today;
-			JsonValue expected = DateTime.Today.ToString("s");
+			JsonValue expected = DateTime.Today.ToString("O");
 			var actual = serializer.Serialize(obj);
 			Assert.AreEqual(expected, actual);
 		}
@@ -63,6 +63,22 @@ namespace Manatee.Json.Tests.Serialization
 				};
 			var obj = DateTime.Today;
 			JsonValue expected = DateTime.Today.Ticks/TimeSpan.TicksPerMillisecond;
+			var actual = serializer.Serialize(obj);
+			serializer.Options = null;
+			Assert.AreEqual(expected, actual);
+		}
+		[Test]
+		public void DateTimeIso8601_Successful()
+		{
+			var serializer = new JsonSerializer
+				{
+					Options =
+						{
+							DateTimeSerializationFormat = DateTimeSerializationFormat.Iso8601
+						}
+				};
+			var obj = new DateTime(1989, 4, 16, 13, 11, 20, 721, DateTimeKind.Utc);
+			JsonValue expected = "1989-04-16T13:11:20.7210000Z";
 			var actual = serializer.Serialize(obj);
 			serializer.Options = null;
 			Assert.AreEqual(expected, actual);

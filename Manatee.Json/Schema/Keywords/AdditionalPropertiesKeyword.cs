@@ -108,13 +108,15 @@ namespace Manatee.Json.Schema
 			}
 
 			var valid = true;
-			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var reportChildErrors = context.Options.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
 			var failedProperties = new JsonArray();
 
 			foreach (var kvp in toEvaluate)
 			{
-				context.EvaluatedPropertyNames.Add(kvp.Key);
+				if (context.ShouldTrackValidatedValues)
+					context.EvaluatedPropertyNames.Add(kvp.Key);
+
 				context.LocallyEvaluatedPropertyNames.Add(kvp.Key);
 				var newContext = new SchemaValidationContext(context)
 					{
@@ -125,27 +127,31 @@ namespace Manatee.Json.Schema
 					};
 				var localResults = Value.Validate(newContext);
 				if (!localResults.IsValid)
-				{
 					failedProperties.Add(kvp.Key);
+				else
+				{
+					if (context.ShouldTrackValidatedValues)
+						newContext.LocallyEvaluatedPropertyNames.Add(kvp.Key);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 				}
-				context.EvaluatedPropertyNames.UnionWith(newContext.EvaluatedPropertyNames);
-				context.EvaluatedPropertyNames.UnionWith(newContext.LocallyEvaluatedPropertyNames);
+
 				valid &= localResults.IsValid;
 
-				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
 					if (!valid)
 					{
 						Log.Schema(() => "Subschema failed; halting validation early");
 						break;
 					}
-				} else if (reportChildErrors)
+				}
+				else if (reportChildErrors)
 					nestedResults.Add(localResults);
 			}
 
 			results.NestedResults = nestedResults;
 
-			if (nestedResults.Any(r => !r.IsValid))
+			if (!valid || nestedResults.Any(r => !r.IsValid))
 			{
 				results.IsValid = false;
 				results.Keyword = Name;
@@ -158,21 +164,21 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
-			Value.RegisterSubschemas(baseUri, localRegistry);
+			Value.RegisterSubschemas(context);
 		}
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
-			return Value.ResolveSubschema(pointer, baseUri);
+			return Value.ResolveSubschema(pointer, baseUri, supportedVersions);
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

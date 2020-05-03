@@ -52,7 +52,7 @@ namespace Manatee.Json.Schema
 			var relativeLocation = context.RelativeLocation.CloneAndAppend(Name);
 
 			var valid = true;
-			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
+			var reportChildErrors = context.Options.ShouldReportChildErrors(this, context);
 			var nestedResults = new List<SchemaValidationResults>();
 			var failedCount = 0;
 
@@ -66,10 +66,13 @@ namespace Manatee.Json.Schema
 					};
 				var localResults = d.Validate(newContext);
 				valid &= localResults.IsValid;
-				if (!valid)
+				if (!localResults.IsValid)
 					failedCount++;
+				else if (context.ShouldTrackValidatedValues)
+					newContext.LocallyEvaluatedPropertyNames.Add(d.PropertyName);
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
-				if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+				if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 				{
 					if (!valid)
 					{
@@ -85,7 +88,7 @@ namespace Manatee.Json.Schema
 				{
 					IsValid = valid
 				};
-			if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+			if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 				results.NestedResults = nestedResults;
 			else if (!results.IsValid)
 			{
@@ -99,13 +102,12 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
 			foreach (var schema in this)
 			{
-				schema.RegisterSubschemas(baseUri, localRegistry);
+				schema.RegisterSubschemas(context);
 			}
 		}
 		/// <summary>
@@ -113,15 +115,16 @@ namespace Manatee.Json.Schema
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			var first = pointer.FirstOrDefault();
 			if (first == null) return null;
 
 			var keyword = this.FirstOrDefault(k => k.PropertyName == first);
 
-			return keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri);
+			return keyword?.ResolveSubschema(new JsonPointer(pointer.Skip(1)), baseUri, supportedVersions);
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

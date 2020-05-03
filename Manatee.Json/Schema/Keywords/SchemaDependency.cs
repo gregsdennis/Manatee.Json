@@ -83,34 +83,33 @@ namespace Manatee.Json.Schema
 				results.IsValid = false;
 				results.ErrorMessage = ErrorTemplate;
 			}
+			else
+			{
+				if (context.ShouldTrackValidatedValues)
+					newContext.LocallyEvaluatedPropertyNames.Add(PropertyName);
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+			}
 
 			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry"></param>
-		/// <implementationNotes>
-		/// If the dependency does not contain any schemas (e.g. `maximum`), this method is a no-op.
-		/// </implementationNotes>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
-			_schema.RegisterSubschemas(baseUri, localRegistry);
+			_schema.RegisterSubschemas(context);
 		}
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		/// <implementationNotes>
-		/// If the dependency contains no subschemas, simply return null.
-		/// If the dependency contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
-		/// </implementationNotes>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
-			return _schema.ResolveSubschema(pointer, baseUri);
+			return _schema.ResolveSubschema(pointer, baseUri, supportedVersions);
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>

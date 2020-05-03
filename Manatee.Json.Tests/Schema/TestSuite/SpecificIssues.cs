@@ -11,7 +11,6 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 		[TestCase("[\"yes\",false]", false)]
 		public void Issue291(string instanceText, bool shouldPass)
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Verbose;
 			var schema = new JsonSchema()
 				.UnevaluatedItems(new JsonSchema().Type(JsonSchemaType.Boolean))
 				.AnyOf(new JsonSchema()
@@ -19,7 +18,7 @@ namespace Manatee.Json.Tests.Schema.TestSuite
 				       true);
 			var instance = JsonValue.Parse(instanceText);
 
-			var results = schema.Validate(instance);
+			var results = schema.Validate(instance, new JsonSchemaOptions {OutputFormat = SchemaValidationOutputFormat.Verbose});
 
 			if (shouldPass)
 				results.AssertValid();

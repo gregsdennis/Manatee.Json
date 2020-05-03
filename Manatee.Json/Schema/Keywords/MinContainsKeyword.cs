@@ -149,23 +149,20 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry"></param>
-		/// <implementationNotes>
-		/// If the keyword does not contain any schemas (e.g. `maximum`), this method is a no-op.
-		/// </implementationNotes>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
 		/// <implementationNotes>
 		/// If the keyword contains no subschemas, simply return null.
-		/// If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema(JsonPointer, Uri)"/>.
+		/// If the keyword contains a subschema, simply pass the call to <see cref="JsonSchema.ResolveSubschema"/>.
 		/// </implementationNotes>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			return null;
 		}

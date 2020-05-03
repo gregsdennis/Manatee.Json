@@ -36,6 +36,14 @@ namespace Manatee.Json
 		/// Defines the logging categories that will be generated.  Default is <see cref="LogCategory.All"/>.
 		/// </summary>
 		public static LogCategory LogCategory { get; set; } = LogCategory.All;
+
+		/// <summary>
+		/// Determines whether parsing will accept content after the first JSON value
+		/// is complete.  Setting this to true will throw a <see cref="JsonSyntaxException"/>
+		/// upon detection of additional content once the first JSON value has completely
+		/// parsed.  The default is false.
+		/// </summary>
+		public static bool RequireIsolatedJsonDuringParse { get; set; }
 	}
 
 	/// <summary>

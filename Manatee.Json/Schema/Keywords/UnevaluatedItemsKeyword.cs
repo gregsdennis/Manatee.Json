@@ -13,7 +13,7 @@ namespace Manatee.Json.Schema
 	/// Defines the `unevaluatedItems` JSON Schema keyword.
 	/// </summary>
 	[DebuggerDisplay("Name={Name}")]
-	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>
+	public class UnevaluatedItemsKeyword : IJsonSchemaKeyword, IEquatable<UnevaluatedItemsKeyword>, IRequireAnnotations
 	{
 		/// <summary>
 		/// Gets or sets the error message template.
@@ -79,8 +79,11 @@ namespace Manatee.Json.Schema
 			var array = context.Instance.Array;
 			var results = new SchemaValidationResults(Name, context);
 			var valid = true;
-			var reportChildErrors = JsonSchemaOptions.ShouldReportChildErrors(this, context);
-			var indicesToEvaluate = Enumerable.Range(0, array.Count).Except(context.ValidatedIndices).ToList();
+			var reportChildErrors = context.Options.ShouldReportChildErrors(this, context);
+			var indicesToEvaluate = Enumerable.Range(0, array.Count)
+				.Except(context.ValidatedIndices)
+				.Except(context.LocallyValidatedIndices)
+				.ToList();
 			var failedIndices = new JsonArray();
 
 			Log.Schema(() => indicesToEvaluate.Any()
@@ -113,11 +116,14 @@ namespace Manatee.Json.Schema
 					var localResults = Value.Validate(newContext);
 					if (!localResults.IsValid)
 						failedIndices.Add(index);
+					else if (context.ShouldTrackValidatedValues)
+						newContext.LocallyValidatedIndices.Add(index);
 					valid &= localResults.IsValid;
-					if (valid)
-						context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
+					context.LastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					context.LocalTierLastEvaluatedIndex = Math.Max(context.LastEvaluatedIndex, index);
+					context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
-					if (JsonSchemaOptions.OutputFormat == SchemaValidationOutputFormat.Flag)
+					if (context.Options.OutputFormat == SchemaValidationOutputFormat.Flag)
 					{
 						if (!valid)
 						{
@@ -148,21 +154,21 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
-			Value.RegisterSubschemas(baseUri, localRegistry);
+			Value.RegisterSubschemas(context);
 		}
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
-			return Value.ResolveSubschema(pointer, baseUri);
+			return Value.ResolveSubschema(pointer, baseUri, supportedVersions);
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

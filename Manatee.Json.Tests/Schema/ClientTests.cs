@@ -366,7 +366,6 @@ namespace Manatee.Json.Tests.Schema
 		[Test]
 		public void Issue194_refNoIntuitiveErrorMessage()
 		{
-			JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
 			var actual = new JsonSchema()
 				.Ref("#/definitions/apredefinedtype")
 				.Definition("apredefinedtype", new JsonSchema()
@@ -392,7 +391,7 @@ namespace Manatee.Json.Tests.Schema
 						}
 				};
 
-			var messages = actual.Validate(jObject);
+			var messages = actual.Validate(jObject, new JsonSchemaOptions {OutputFormat = SchemaValidationOutputFormat.Detailed});
 
 			messages.AssertInvalid(expected);
 		}
@@ -495,18 +494,9 @@ namespace Manatee.Json.Tests.Schema
 
 			var instance = new JsonObject {["t_PulseTimePeriod"] = new JsonObject {["values"] = new JsonArray()}};
 
-			var format = JsonSchemaOptions.OutputFormat;
-			try
-			{
-				JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
-				var result = schema.Validate(instance);
+			var result = schema.Validate(instance, new JsonSchemaOptions { OutputFormat = SchemaValidationOutputFormat.Detailed });
 
-				result.AssertInvalid();
-			}
-			finally
-			{
-				JsonSchemaOptions.OutputFormat = format;
-			}
+			result.AssertInvalid();
 		}
 
 		[Test]
@@ -543,18 +533,9 @@ namespace Manatee.Json.Tests.Schema
 
 			var instance = new JsonObject { ["t_PulseTimePeriod"] = new JsonObject { ["values"] = new JsonArray() } };
 
-			var format = JsonSchemaOptions.OutputFormat;
-			try
-			{
-				JsonSchemaOptions.OutputFormat = SchemaValidationOutputFormat.Detailed;
-				var result = resistanceSchema.Validate(instance);
+			var result = resistanceSchema.Validate(instance, new JsonSchemaOptions { OutputFormat = SchemaValidationOutputFormat.Detailed });
 
-				result.AssertInvalid();
-			}
-			finally
-			{
-				JsonSchemaOptions.OutputFormat = format;
-			}
+			result.AssertInvalid();
 		}
 
 		[Test]

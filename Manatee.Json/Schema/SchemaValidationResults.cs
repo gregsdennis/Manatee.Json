@@ -13,8 +13,8 @@ namespace Manatee.Json.Schema
 	/// </summary>
 	public class SchemaValidationResults : IJsonSerializable, IEquatable<SchemaValidationResults>
 	{
-		private List<SchemaValidationResults> _nestedResults = null!;
-		private JsonObject _additionalInfo = null!;
+		private List<SchemaValidationResults>? _nestedResults;
+		private JsonObject? _additionalInfo;
 
 		/// <summary>
 		/// Gets a value to return for no results.  Only used when a keyword should not produce any output, such as `$id`.
@@ -215,7 +215,7 @@ namespace Manatee.Json.Schema
 				obj["instanceLocation"] = InstanceLocation.ToString();
 
 			var nonNullNestedResults = NestedResults.Where(r => !ReferenceEquals(r, Null)).ToList();
-			if (!JsonSchemaOptions.ConfigureForTestOutput && Keyword != null)
+			if (!JsonSchemaOptions.Default.ConfigureForTestOutput && Keyword != null)
 				obj["keyword"] = Keyword;
 			if (IsValid)
 			{
@@ -226,12 +226,12 @@ namespace Manatee.Json.Schema
 			}
 			else
 			{
-				if (!JsonSchemaOptions.ConfigureForTestOutput && !string.IsNullOrWhiteSpace(ErrorMessage))
+				if (!JsonSchemaOptions.Default.ConfigureForTestOutput && !string.IsNullOrWhiteSpace(ErrorMessage))
 					obj["error"] = ErrorMessage;
 				if (nonNullNestedResults.Any())
 					obj["errors"] = nonNullNestedResults.Select(r => r.ToJson(serializer)).ToJson();
 			}
-			if (!JsonSchemaOptions.ConfigureForTestOutput && IncludeAdditionalInfo && AdditionalInfo != null && AdditionalInfo.Any())
+			if (!JsonSchemaOptions.Default.ConfigureForTestOutput && IncludeAdditionalInfo && AdditionalInfo != null && AdditionalInfo.Any())
 				obj["additionalInfo"] = AdditionalInfo;
 
 			return obj;

@@ -77,6 +77,8 @@ namespace Manatee.Json.Schema
 			var nestedResults = Value.Validate(newContext);
 
 			results.IsValid = !nestedResults.IsValid;
+			if (nestedResults.IsValid)
+				context.UpdateEvaluatedPropertiesAndItemsFromSubschemaValidation(newContext);
 
 			if (!results.IsValid)
 			{
@@ -84,8 +86,8 @@ namespace Manatee.Json.Schema
 				results.ErrorMessage = ErrorTemplate;
 			}
 
-			if (JsonSchemaOptions.OutputFormat != SchemaValidationOutputFormat.Flag &&
-			    JsonSchemaOptions.ShouldReportChildErrors(this, context))
+			if (context.Options.OutputFormat != SchemaValidationOutputFormat.Flag &&
+			    context.Options.ShouldReportChildErrors(this, context))
 				results.NestedResults = new List<SchemaValidationResults> {nestedResults};
 
 			return results;
@@ -93,21 +95,21 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry">A local schema registry to handle cases where <paramref name="baseUri"/> is null.</param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry)
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context)
 		{
-			Value.RegisterSubschemas(baseUri, localRegistry);
+			Value.RegisterSubschemas(context);
 		}
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
-			return Value.ResolveSubschema(pointer, baseUri);
+			return Value.ResolveSubschema(pointer, baseUri, supportedVersions);
 		}
 		/// <summary>
 		/// Builds an object from a <see cref="JsonValue"/>.

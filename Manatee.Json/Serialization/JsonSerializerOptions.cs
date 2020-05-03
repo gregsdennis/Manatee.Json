@@ -12,6 +12,7 @@ namespace Manatee.Json.Serialization
 		private IResolver? _resolver;
 	    private Func<string, string>? _serializationNameTransform;
 	    private Func<string, string>? _deserializationNameTransform;
+	    private string? _customDateTimeSerializationFormat;
 
 	    /// <summary>
 		/// Default options used by the serializer.
@@ -39,13 +40,18 @@ namespace Manatee.Json.Serialization
 		/// <summary>
 		/// Gets and sets a custom serialization format for <see cref="DateTime"/>.
 		/// </summary>
-		public string? CustomDateTimeSerializationFormat { get; set; }
+		public string? CustomDateTimeSerializationFormat
+		{
+			get { return _customDateTimeSerializationFormat; }
+			set
+			{
+				DateTimeSerializationFormat = DateTimeSerializationFormat.Custom;
+				_customDateTimeSerializationFormat = value;
+			}
+		}
 		/// <summary>
 		/// Gets and sets the format for enumeration serialization using the default serializer methods.
 		/// </summary>
-		/// <remarks>
-		/// If a custom serializer for DateTime has been registered, this property will have no effect.
-		/// </remarks>
 		public EnumSerializationFormat EnumSerializationFormat { get; set; }
 		/// <summary>
 		/// Gets and sets a separator to be used when serializing enumerations marked with the <see cref="FlagsAttribute"/>.
@@ -133,7 +139,8 @@ namespace Manatee.Json.Serialization
 			EncodeDefaultValues = options.EncodeDefaultValues;
 			InvalidPropertyKeyBehavior = options.InvalidPropertyKeyBehavior;
 			DateTimeSerializationFormat = options.DateTimeSerializationFormat;
-			CustomDateTimeSerializationFormat = options.CustomDateTimeSerializationFormat;
+			if (DateTimeSerializationFormat == DateTimeSerializationFormat.Custom)
+				CustomDateTimeSerializationFormat = options.CustomDateTimeSerializationFormat;
 			EnumSerializationFormat = options.EnumSerializationFormat;
 			FlagsEnumSeparator = options.FlagsEnumSeparator;
 			CaseSensitiveDeserialization = options.CaseSensitiveDeserialization;

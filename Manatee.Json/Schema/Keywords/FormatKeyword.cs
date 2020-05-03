@@ -31,7 +31,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the versions (drafts) of JSON Schema which support this keyword.
 		/// </summary>
-		public JsonSchemaVersion SupportedVersions => Value.SupportedBy;
+		public JsonSchemaVersion SupportedVersions => Formats.GetFormat(Value)?.SupportedBy ?? JsonSchemaVersion.None;
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
@@ -44,7 +44,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// The string format for this keyword.
 		/// </summary>
-		public Format Value { get; private set; }
+		public string Value { get; private set; }
 
 		/// <summary>
 		/// Used for deserialization.
@@ -57,7 +57,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Creates an instance of the <see cref="FormatKeyword"/>.
 		/// </summary>
-		public FormatKeyword(Format value)
+		public FormatKeyword(string value)
 		{
 			Value = value;
 		}
@@ -71,40 +71,54 @@ namespace Manatee.Json.Schema
 		{
 			var results = new SchemaValidationResults(Name, context)
 				{
-					AnnotationValue = Value.Key
+					AnnotationValue = Value
 				};
 
-			if (!JsonSchemaOptions.ValidateFormatKeyword)
+			if (!context.Options.ValidateFormatKeyword)
 			{
 				Log.Schema(() => "Options indicate skipping format validation");
 				return results;
 			}
 
-			var format = Value;
-			if (!format.Validate(context.Instance))
+			var validator = Formats.GetFormat(Value);
+			if (validator == null)
+			{
+				results.AdditionalInfo["actual"] = context.Instance;
+				results.AdditionalInfo["format"] = Value;
+				results.AdditionalInfo["isKnownFormat"] = false;
+
+				if (context.Options.AllowUnknownFormats)
+					results.IsValid = true;
+				else
+				{
+					results.IsValid = false;
+					results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
+				}
+			}
+			else if (!validator.Validate(context.Instance))
 			{
 				results.IsValid = false;
 				results.AdditionalInfo["actual"] = context.Instance;
-				results.AdditionalInfo["format"] = format.Key;
-				results.AdditionalInfo["isKnownFormat"] = format.IsKnown;
+				results.AdditionalInfo["format"] = Value;
+				results.AdditionalInfo["isKnownFormat"] = true;
 				results.ErrorMessage = ErrorTemplate.ResolveTokens(results.AdditionalInfo);
-			};
+			}
 
 			return results;
 		}
 		/// <summary>
 		/// Used register any subschemas during validation.  Enables look-forward compatibility with `$ref` keywords.
 		/// </summary>
-		/// <param name="baseUri">The current base URI</param>
-		/// <param name="localRegistry"></param>
-		public void RegisterSubschemas(Uri? baseUri, JsonSchemaRegistry localRegistry) { }
+		/// <param name="context">The context object.</param>
+		public void RegisterSubschemas(SchemaValidationContext context) { }
 		/// <summary>
 		/// Resolves any subschemas during resolution of a `$ref` during validation.
 		/// </summary>
 		/// <param name="pointer">A <see cref="JsonPointer"/> to the target schema.</param>
 		/// <param name="baseUri">The current base URI.</param>
+		/// <param name="supportedVersions">Indicates the root schema's supported versions.</param>
 		/// <returns>The referenced schema, if it exists; otherwise null.</returns>
-		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri)
+		public JsonSchema? ResolveSubschema(JsonPointer pointer, Uri baseUri, JsonSchemaVersion supportedVersions)
 		{
 			return null;
 		}
@@ -116,10 +130,7 @@ namespace Manatee.Json.Schema
 		/// serialization of values.</param>
 		public void FromJson(JsonValue json, JsonSerializer serializer)
 		{
-			Value = Format.GetFormat(json.String);
-
-			if (!Value.IsKnown && JsonSchemaOptions.ValidateFormatKeyword && !JsonSchemaOptions.AllowUnknownFormats)
-				throw new JsonSerializationException("Unknown format specifier found.  Either allow unknown formats or disable format validation in the JsonSchemaOptions.");
+			Value = json.String;
 		}
 		/// <summary>
 		/// Converts an object to a <see cref="JsonValue"/>.
@@ -129,7 +140,7 @@ namespace Manatee.Json.Schema
 		/// <returns>The <see cref="JsonValue"/> representation of the object.</returns>
 		public JsonValue ToJson(JsonSerializer serializer)
 		{
-			return Value.Key;
+			return Value;
 		}
 		/// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
 		/// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
