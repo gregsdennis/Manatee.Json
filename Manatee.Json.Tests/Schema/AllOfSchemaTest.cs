@@ -181,5 +181,18 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid(expected);
 		}
+
+		[Test]
+		public void AllOfOrderingUnimportant()
+		{
+			var schema = new JsonSchema().Schema(MetaSchemas.Draft2019_09.Schema)
+				.AllOf(new JsonSchema().Property("foo", true),
+					new JsonSchema().UnevaluatedProperties(false));
+			JsonValue instance = new JsonObject{["foo"]  = 1};
+
+			var results = schema.Validate(instance);
+			
+			results.AssertInvalid();
+		}
 	}
 }
