@@ -1,0 +1,10 @@
+{
+	"$id": "http://localhost/schemas/1.1.0/instance",
+	"$schema": "https://json-schema.org/draft/2019-09/schema",
+	"$ref": "http://localhost/schemas/1.0.0/base",
+	"properties": {
+		"propertyAffectedFromSubSchema": {
+			"$ref": "http://localhost/schemas/1.0.1/sub"
+		}
+	}
+}

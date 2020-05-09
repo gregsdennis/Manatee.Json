@@ -97,6 +97,8 @@ namespace Manatee.Json.Schema
 		/// <returns>Validation results.</returns>
 		public MetaSchemaValidationResults ValidateSchema(JsonSchemaOptions? options = null)
 		{
+			bool SchemaMatches(string? a, string? b) => string.Equals(a?.TrimEnd('#'), b?.TrimEnd('#'), StringComparison.InvariantCultureIgnoreCase);
+
 			if (_metaSchemaResults != null) return _metaSchemaResults;
 
 			options ??= new JsonSchemaOptions(JsonSchemaOptions.Default);
@@ -108,14 +110,26 @@ namespace Manatee.Json.Schema
 			var results = new MetaSchemaValidationResults();
 
 			JsonSchemaVersion startVersion;
-			if (Schema == MetaSchemas.Draft04.Id)
+			if (SchemaMatches(Schema, MetaSchemas.Draft04.Id))
+			{
 				startVersion = JsonSchemaVersion.Draft04;
-			else if (Schema == MetaSchemas.Draft06.Id)
+				ProcessingVersion = JsonSchemaVersion.Draft04;
+			}
+			else if (SchemaMatches(Schema, MetaSchemas.Draft06.Id))
+			{
 				startVersion = JsonSchemaVersion.Draft06;
-			else if (Schema == MetaSchemas.Draft07.Id)
+				ProcessingVersion = JsonSchemaVersion.Draft06;
+			}
+			else if (SchemaMatches(Schema, MetaSchemas.Draft07.Id))
+			{
 				startVersion = JsonSchemaVersion.Draft07;
-			else if (Schema == MetaSchemas.Draft2019_09.Id)
+				ProcessingVersion = JsonSchemaVersion.Draft07;
+			}
+			else if (SchemaMatches(Schema, MetaSchemas.Draft2019_09.Id))
+			{
 				startVersion = JsonSchemaVersion.Draft2019_09;
+				ProcessingVersion = JsonSchemaVersion.Draft2019_09;
+			}
 			else
 			{
 				startVersion = JsonSchemaVersion.All;
@@ -181,6 +195,8 @@ namespace Manatee.Json.Schema
 			}
 
 			results.SupportedVersions = supportedVersions;
+			if (supportedVersions.In(JsonSchemaVersion.Draft04, JsonSchemaVersion.Draft06, JsonSchemaVersion.Draft07, JsonSchemaVersion.Draft2019_09))
+				ProcessingVersion = supportedVersions;
 
 			var duplicateKeywords = this.GroupBy(k => k.Name)
 			                            .Where(g => g.Count() > 1)
@@ -237,10 +253,16 @@ namespace Manatee.Json.Schema
 			if (_hasRegistered) return;
 			_hasRegistered = true;
 
-			if (!ReferenceEquals(this, context.Root)) 
+			if (ReferenceEquals(this, context.Root))
+			{
+				ValidateSchema(context.Options);
+				ProcessingVersion ??= context.Options.DefaultProcessingVersion.FirstOrDefault(v => SupportedVersions.HasFlag(v));
+			}
+			else
+			{
 				SupportedVersions = context.Root.SupportedVersions;
-			ProcessingVersion ??= context.Root.ProcessingVersion ??
-			                      context.Options.DefaultProcessingVersion.FirstOrDefault(v => SupportedVersions.HasFlag(v));
+				ProcessingVersion ??= context.Root.ProcessingVersion;
+			}
 
 			context.LocalRegistry.RegisterLocal(this);
 
@@ -328,7 +350,8 @@ namespace Manatee.Json.Schema
 
 			var refKeyword = this.Get<RefKeyword?>();
 			if (refKeyword == null ||
-			    context.Options.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords ||
+			    (context.Options.RefResolution == RefResolutionStrategy.ProcessSiblingKeywords &&
+			     !context.Root.SupportedVersions.HasFlag(JsonSchemaVersion.Draft2019_09)) ||
 			    context.Root.SupportedVersions == JsonSchemaVersion.Draft2019_09)
 			{
 				if (context.BaseUri == null)
