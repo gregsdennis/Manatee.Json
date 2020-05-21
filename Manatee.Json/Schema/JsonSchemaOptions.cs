@@ -21,7 +21,7 @@ namespace Manatee.Json.Schema
 
 		private class LocationErrorCollectionCondition : IErrorCollectionCondition
 		{
-			public JsonPointer Location { get; private set; }
+			public JsonPointer Location { get; }
 
 			public LocationErrorCollectionCondition(JsonPointer location)
 			{
@@ -36,7 +36,7 @@ namespace Manatee.Json.Schema
 
 		private class KeywordErrorCollectionCondition : IErrorCollectionCondition
 		{
-			public Type Type { get; private set; }
+			public Type Type { get; }
 
 			public KeywordErrorCollectionCondition(Type type)
 			{

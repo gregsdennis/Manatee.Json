@@ -564,5 +564,40 @@ namespace Manatee.Json.Tests.Schema
 
 			results.AssertValid();
 		}
+
+		[TestCase("draft7", 1)]
+		[TestCase("draft2019-09", 2)]
+		public void Issue269_DownloadOverrideNotWorking(string draft, int expectedDownloadCount)
+		{
+			try
+			{
+				var schemaDirPath = $"{AppDomain.CurrentDomain.BaseDirectory}/Files/Issue269/{draft}/";
+				var schemaUriPrefix = "http://localhost/";
+				var jsonData = JsonValue.Parse("{\"propertyAffectedFromSubSchema\": {}}");
+				var serializer = new JsonSerializer();
+				var downloadCount = 0;
+
+				JsonSchemaOptions.Download = uri =>
+					{
+						downloadCount++;
+						Console.WriteLine($"Downloading {uri}");
+						var localSchemaPath = uri.Replace(schemaUriPrefix, schemaDirPath); //Set Breakpoint
+						var filePath = $"{localSchemaPath}.schema.json";
+						return File.ReadAllText(filePath);
+					};
+
+				JsonSchemaRegistry.Clear();
+				var instanceSchemaFilePath = $"{System.IO.Path.Combine(schemaDirPath, "schemas/1.1.0/instance")}.schema.json";
+				var schemaJson = JsonValue.Parse(File.ReadAllText(instanceSchemaFilePath));
+				var schema = serializer.Deserialize<JsonSchema>(schemaJson);
+				var validationResults = schema.Validate(jsonData);
+
+				Assert.AreEqual(expectedDownloadCount, downloadCount);
+			}
+			finally
+			{
+				JsonSchemaOptions.Download = null!;
+			}
+		}
 	}
 }
