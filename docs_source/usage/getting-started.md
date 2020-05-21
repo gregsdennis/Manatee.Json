@@ -84,15 +84,15 @@ These declarations can be combined in the same way as when declaring any other o
 ```csharp
 var json = new JsonObject
     {
-        {"boolean", true},
-        {"number", 42},
-        {"string", "a string"},
-        {"null", JsonValue.Null},
-        {"array", new JsonArray {6.7, true, "a value"}},
-        {"object", new JsonObject
+        ["boolean"] = true,
+        ["number"] = 42,
+        ["string"] = "a string",
+        ["null"] = JsonValue.Null,
+        ["array"] = new JsonArray {6.7, true, "a value"},
+        ["object"] = new JsonObject
             {
-                {"aKey", 42},
-                {"anotherKey", false}
+                ["aKey"] = 42,
+                ["anotherKey"] = false
             }
         }
     };
@@ -117,7 +117,7 @@ As you can see, creating these constructs is quite easy and very readable.  As i
 
 Furthermore, feeding this output back into the `JsonObject` constructor yields the original structure (although using new instances).
 
-## Getting JSON Output
+## Pretty Output
 
 There are two methods that create output:  `ToString()`, which simply outputs the most concise JSON (single line, no white spacing), and `GetIndentedString()`, which outputs a multiline, indented string.
 

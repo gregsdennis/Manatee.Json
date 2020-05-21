@@ -1,7 +1,5 @@
 # JSON Schema Overview
 
-> *This documentation only applies to Manatee.Json version 10 and later.  To work with JSON Schema in previous Manatee.Json versions, please refer to the [legacy JSON Schema page](v9.html).*
-
 The occasion may arise when you wish to validate that a JSON object is in the correct form (has the appropriate keys and the right types of values).  Enter JSON Schema.  Much like XML Schema with XML, JSON Schema defines a pattern for JSON data.  A JSON Schema validator can verify that a given JSON object meets the requirements as defined by the JSON Schema.  This validation can come in handy as a precursor step before deserializing.
 
 More information about JSON Schema can be found at [json-schema.org](http://json-schema.org).
@@ -12,13 +10,13 @@ To support JSON Schema, Manatee.Json exposes the `JsonSchema` type.  This type i
 
 There are currently five active drafts of the JSON Schema specification:
 
-- Draft-03
-- Draft-04
-- Draft-06
-- Draft-07
-- Draft-08
+- Draft 03
+- Draft 04
+- Draft 06
+- Draft 07
+- Draft 2019-09
 
-Manatee.Json supports draft-04 and later.
+Manatee.Json supports draft 04 and later.
 
 ### Meta-schemas
 
@@ -26,7 +24,7 @@ Each draft defines a meta-schema.  This is a special JSON Schema that describes 
 
 Manatee.Json declares the meta-schemas for the supported drafts as members of the `MetaSchemas` static class.
 
-Draft-08 introduced vocabularies.  As part of this new feature, the meta-schema for draft-08 has been split into vocabulary-specific meta-schemas.  Additionally, the specification recognizes that the meta-schemas aren't perfect and may need to be updated occasionally.  To this end, the meta-schemas are versioned with the year and month they are published.  The schemas within this library are named accordingly.
+Draft 2019-09 introduced vocabularies.  As part of this new feature, the meta-schema for draft 2019-09 has been split into vocabulary-specific meta-schemas.  Additionally, the specification recognizes that the meta-schemas aren't perfect and may need to be updated occasionally.  To this end, the meta-schemas are versioned with the year and month they are published.  The schemas within this library are named accordingly.
 
 ## Keywords
 

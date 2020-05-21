@@ -9,6 +9,11 @@ Secondarily, Manatee.Json is *intended* to be strictly compliant with RFC-8259, 
     var text = File.ReadAllText("content.json");
     var json = JsonValue.Parse(text);
 
+or
+
+    using var reader = File.Open("content.json");
+    var json = JsonValue.Parse(reader); // also available as async
+
 The `json` field now contains the content of the *.json* file.  The object structure is exactly what you'd expect by looking at the file.
 
 ## Object model
@@ -64,7 +69,7 @@ There are many ways to customize serialization.  See the wiki page for more deta
 
 Manatee.Json also:
 
-- Is covered by over 3000 unit tests
+- Is covered by over 4000 unit tests
 - Conforms to RFC-8259: The JSON specification
 - Supports .Net Standard 2.0
 - Outputs compact and prettified JSON text

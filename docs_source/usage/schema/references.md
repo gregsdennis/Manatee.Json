@@ -11,7 +11,7 @@ Manatee.Json will automatically attempt to find schemas based on the current doc
 
 Any other protocols will result in an error.
 
-This behavior can be overridden, however.  The `JsonSchemaOptions.Download` static property is a function that takes a string (the `$id` URI) and returns the serialized JSON Schema content.  This method is used by the `JsonSchemaRegistry` static class (see [below](#schema-registration)) to obtain schema data.  This setting can also be used if the `$id` URIs are not located at the network address they specify.  See the [JSON Schema Test Suite runner](https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json.Tests/Schema/TestSuite/JsonSchemaTestSuite.cs#L70-L81) for an example of where localhost URIs are translated into file paths.
+This behavior can be overridden, however.  The `JsonSchemaOptions.Download` static property is a function that takes a string (the `$id` URI) and returns the serialized JSON Schema content.  This method is used by the `JsonSchemaRegistry` static class (see [below](#schema-registration)) to obtain schema data.  This setting can also be used if the `$id` URIs are not located at the network address they specify.  See the [JSON Schema Test Suite runner](https://github.com/gregsdennis/Manatee.Json/blob/master/Manatee.Json.Tests/Schema/TestSuite/JsonSchemaTestSuite.cs#L77-L88) for an example of where localhost URIs are translated into file paths.
 
 Another interesting use case for this is is loading schemas from a database, where the data is indexed by the `$id` URI.
 

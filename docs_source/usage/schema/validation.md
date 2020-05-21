@@ -247,13 +247,23 @@ All of the static properties can be set to new instances.  When creating a new i
 
 In the same way, entirely new formats can be created to make them available to Manatee.Json.
 
-## Static options
+## Options
 
-The `JsonSchemaOptions` class gives you a few configuration points that likely won't change at runtime.
+The `JsonSchemaOptions` class gives you a few configuration points for customizing how the validation process behaves.  It is an instance class and can be passed into the `JsonSchema.Validate()` method.  If no options are explicitly passed, a copy of `JsonSchemaOptions.Default` will be used.
 
-- `Download` - This function property is the mechanism by which `JsonSchemaRepository` downloads unregistered schemas.  By default, it knows to use `HttpClient` for *http:* endpoints and `System.IO.File` for file paths.  If you need more functionality (for instance if your schema is buried inside an FTP share), override this with a new function that can read from your endpoint.
+- `Download` - This static function property is the mechanism by which `JsonSchemaRepository` downloads unregistered schemas.  By default, it knows to use `HttpClient` for *http:* endpoints and `System.IO.File` for file paths.  If you need more functionality (for instance if your schema is buried inside an FTP share), override this with a new function that can read from your endpoint.
 - `ValidateFormatKeyword` - This defines whether a schema will attempt to apply string format validation based on the value of a `format` keyword.  This is enabled by default.  See above for more information on string format validation.
 - `AllowUnknownFormats` - This specifies whether the system will allow unknown string formats.  It is enabled by default.  If `ValidateFormatKeyword` is disabled, this option has no effect.  There are two effect of disabling this option,
   - Validations by schemas with unknown string formats will always return invalid.  This impacts schemas explicitly built in code.
   - If a schema with an unknown string format is deserialized (loaded from an external source), a `JsonSerializationException` will be thrown.
 - `OutputFormat` - You already read about output formats above.  This is the property that controls it all.  By default, a collapsed hierarchy is returned.
+- `RefResolution` - This defines how the `$ref` keyword is processed.  Prior to draft 2019-09, `$ref`-sibling keywords are to be ignored.  This property can be used to prescribe behavior when the draft cannot be automatically determined.
+- `DefaultBaseUri` - When a schema is loaded without an `$id`, it can't know how to properly handle `$ref`s without a base URI.  This property provides that.  The default is `manatee://json-schema/`.  It's can't be externally resolved, but gives something for the system to use.
+- `LogMetaSchemaValidation` - This works along with `JsonOptions.Log` and `JsonOptions.LogCategory`.  When a schema is first loaded or used to validate, the system will attempt to validate the schema against its meta-schema (defined by `$schema`).  Logs that are created during this meta-schema validation can be noisy, so this property can be used to disable logs specifically during meta-schema validation.  This will leave the remaining schema validation logging intact.
+- `DefaultProcessingVersion` - This property defines a hierarchy of preferred versions to be used for `JsonSchema.ProcessingVersion` when the schema is compatible with multiple drafts.  The default is latest to earliest.
+
+Along with these properties, there are some overrides that allow exclusion of some errors in the output.
+
+- `IgnoreErrorsForChildren<T>()` - This will disable reporting of errors for children of a specific keyword.  This can be useful if you want to ignore errors for e.g. `allOf`.
+- `IgnoreErrorsForChildren(JsonPointer)` - This will disable reporting of error for children of a specific path *within the schema*, e.g. a specific `allOf`.
+- `ShouldReportChildErrors(IJsonSchemaKeyword, SchemaValidationContext)` - This method can be used by custom keywords to determine whether output should be generated for a given keyword during the validation process.  The return is based on the two above configurations.
