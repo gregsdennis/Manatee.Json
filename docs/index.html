@@ -68,6 +68,10 @@
 <pre><code>var text = File.ReadAllText(&quot;content.json&quot;);
 var json = JsonValue.Parse(text);
 </code></pre>
+<p>or</p>
+<pre><code>using var reader = File.Open(&quot;content.json&quot;);
+var json = JsonValue.Parse(reader); // also available as async
+</code></pre>
 <p>The <code>json</code> field now contains the content of the <em>.json</em> file.  The object structure is exactly what you'd expect by looking at the file.</p>
 <h2 id="object-model">Object model</h2>
 <p>These JSON types map to primitive .Net types:</p>
@@ -114,7 +118,7 @@ var array = new JsonArray { &quot;value&quot;, 9, obj };
 <h2 id="but-wait-theres-more">But wait, there's more!</h2>
 <p>Manatee.Json also:</p>
 <ul>
-<li>Is covered by over 3000 unit tests</li>
+<li>Is covered by over 4000 unit tests</li>
 <li>Conforms to RFC-8259: The JSON specification</li>
 <li>Supports .Net Standard 2.0</li>
 <li>Outputs compact and prettified JSON text</li>

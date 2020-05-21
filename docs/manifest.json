@@ -2144,7 +2144,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "QksNtx3MZaXgKJec4vpTDQ=="
+          "hash": "rxUsPSyhXVy+fqx0DdpolQ=="
         }
       },
       "is_incremental": false,
@@ -2183,7 +2183,7 @@
       "output": {
         ".html": {
           "relative_path": "usage/getting-started.html",
-          "hash": "xDQtxh/54vctlVF2GDMeZw=="
+          "hash": "sUoM7zLP/QRHC3KEFYttgA=="
         }
       },
       "is_incremental": false,
@@ -2238,15 +2238,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Conceptual",
       "source_relative_path": "usage/schema/overview.md",
       "output": {
         ".html": {
           "relative_path": "usage/schema/overview.html",
-          "hash": "QuKQWies94x25GXiRuUqRg=="
+          "hash": "vr7fYEXbgt+L/q8BU0s5/Q=="
         }
       },
       "is_incremental": false,
@@ -2258,22 +2255,7 @@
       "output": {
         ".html": {
           "relative_path": "usage/schema/references.html",
-          "hash": "6RAJa3KeMkPR/Tp33DOQdg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "usage/schema/v9.md",
-      "output": {
-        ".html": {
-          "relative_path": "usage/schema/v9.html",
-          "hash": "dL4yddVlmtInsYozIxnw7g=="
+          "hash": "Du3qpdiRoovmNC6EtpOMEw=="
         }
       },
       "is_incremental": false,
@@ -2285,7 +2267,7 @@
       "output": {
         ".html": {
           "relative_path": "usage/schema/validation.html",
-          "hash": "L9IGKv+UAc8C1ks9ihWdZQ=="
+          "hash": "YIK9Uqjf587dMLXxIenzJQ=="
         }
       },
       "is_incremental": false,
@@ -2333,7 +2315,7 @@
       "output": {
         ".html": {
           "relative_path": "usage/toc.html",
-          "hash": "PZOqA9YHSYKOuyyB+89Vvw=="
+          "hash": "V1WV37DGUFaUyhDWy0lbtg=="
         }
       },
       "is_incremental": false,
@@ -2363,16 +2345,16 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 16,
+          "skipped_file_count": 0
+        },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 170,
-          "skipped_file_count": 0
-        },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 17,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

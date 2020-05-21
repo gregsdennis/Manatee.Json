@@ -131,15 +131,15 @@ jsonArray.Array
 <p>These declarations can be combined in the same way as when declaring any other object.  For example, a moderately complex <code>JsonObject</code> can be built as follows:</p>
 <pre><code class="lang-csharp">var json = new JsonObject
     {
-        {&quot;boolean&quot;, true},
-        {&quot;number&quot;, 42},
-        {&quot;string&quot;, &quot;a string&quot;},
-        {&quot;null&quot;, JsonValue.Null},
-        {&quot;array&quot;, new JsonArray {6.7, true, &quot;a value&quot;}},
-        {&quot;object&quot;, new JsonObject
+        [&quot;boolean&quot;] = true,
+        [&quot;number&quot;] = 42,
+        [&quot;string&quot;] = &quot;a string&quot;,
+        [&quot;null&quot;] = JsonValue.Null,
+        [&quot;array&quot;] = new JsonArray {6.7, true, &quot;a value&quot;},
+        [&quot;object&quot;] = new JsonObject
             {
-                {&quot;aKey&quot;, 42},
-                {&quot;anotherKey&quot;, false}
+                [&quot;aKey&quot;] = 42,
+                [&quot;anotherKey&quot;] = false
             }
         }
     };
@@ -154,7 +154,7 @@ var onlyStrings = json.Select(jkv =&gt; jkv.Value.Type == JsonValueType.String).
 <pre><code class="lang-json">{&quot;boolean&quot;:true,&quot;number&quot;:42,&quot;string&quot;:&quot;a string&quot;,&quot;null&quot;:null,&quot;array&quot;:[6.7,true,&quot;a value&quot;],&quot;object&quot;:{&quot;aKey&quot;:42,&quot;anotherKey&quot;:false}}
 </code></pre>
 <p>Furthermore, feeding this output back into the <code>JsonObject</code> constructor yields the original structure (although using new instances).</p>
-<h2 id="getting-json-output">Getting JSON Output</h2>
+<h2 id="pretty-output">Pretty Output</h2>
 <p>There are two methods that create output:  <code>ToString()</code>, which simply outputs the most concise JSON (single line, no white spacing), and <code>GetIndentedString()</code>, which outputs a multiline, indented string.</p>
 <h2 id="handling-errors">Handling Errors</h2>
 <p>While parsing JSON data (through either the <code>JsonObject</code> constructor or <code>JsonValue.Parse()</code>), errors may occur.  These errors will be reported by throwing a <code>JsonSyntaxException</code>.  This exception exposes a <code>Location</code> property which contains a path to the error in <a href="pointer.html">JSON Pointer syntax</a>.  The messaging has been designed to direct the user directly to the error.</p>
