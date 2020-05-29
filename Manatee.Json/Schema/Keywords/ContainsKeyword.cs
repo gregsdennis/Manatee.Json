@@ -85,7 +85,8 @@ namespace Manatee.Json.Schema
 			var i = 0;
 			var nestedResults = new List<SchemaValidationResults>();
 			var matchedIndices = new JsonArray();
-			var hasMinMaxConstraints = context.Local.Get<MinContainsKeyword>() != null ||
+			var minContainsKeyword = context.Local.Get<MinContainsKeyword>();
+			var hasMinMaxConstraints = minContainsKeyword != null ||
 			                           context.Local.Get<MaxContainsKeyword>() != null;
 
 			foreach (var jv in context.Instance.Array)
@@ -131,7 +132,15 @@ namespace Manatee.Json.Schema
 					AdditionalInfo = {["matchedIndices"] = matchedIndices}
 				};
 			if (!valid)
-				results.ErrorMessage = ErrorTemplate;
+			{
+				if (minContainsKeyword?.Value == 0)
+				{
+					Log.Schema(() => "Found no items that match, but sibling `minContains` is 0");
+					results.IsValid = true;
+				}
+				else
+					results.ErrorMessage = ErrorTemplate;
+			}
 
 			return results;
 		}

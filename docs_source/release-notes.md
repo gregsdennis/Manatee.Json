@@ -1,3 +1,9 @@
+# 13.0.2
+
+([#271](https://github.com/gregsdennis/Manatee.Json/issues/271)) Concurrency issue while validating meta-schemas in parallel.
+
+Fixed the `contains` / `minContains` relationship to respect when `minContains` is zero.  The spec specifies that `contains` should pass in this case.  References: [Specification discussion](https://github.com/json-schema-org/json-schema-spec/issues/924) and [test discussion](https://github.com/json-schema-org/JSON-Schema-Test-Suite/pull/368).
+
 # 13.0.1
 
 ([#269](https://github.com/gregsdennis/Manatee.Json/issues/269)) The reported bug was that the download method in the schema options wasn't always hitting.  What ended up being the issue was that the schema draft wasn't always being determined correctly, and with the recent changes in v13, schemas were always being evaluated as draft 2019-09, even if the `$schema` keyword declared otherwise.  This had some side effects around always processing `$ref`-sibling keywords, which drafts prior to 2019-09 don't allow.

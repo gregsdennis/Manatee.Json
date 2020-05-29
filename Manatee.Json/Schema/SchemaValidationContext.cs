@@ -102,6 +102,7 @@ namespace Manatee.Json.Schema
 		public JsonSchemaOptions Options { get; }
 		
 		internal JsonSchemaRegistry LocalRegistry { get; }
+		internal List<JsonPointer> RecursiveRefValidatedLocations { get; set; }
 
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
@@ -156,6 +157,8 @@ namespace Manatee.Json.Schema
 			LocalRegistry = source.LocalRegistry;
 
 			Options = source.Options;
+
+			RecursiveRefValidatedLocations = source.RecursiveRefValidatedLocations;
 		}
 
 		/// <summary>

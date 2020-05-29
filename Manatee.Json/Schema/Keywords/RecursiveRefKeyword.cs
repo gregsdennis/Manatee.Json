@@ -15,7 +15,6 @@ namespace Manatee.Json.Schema
 	[DebuggerDisplay("Name={Name} Value={Reference}")]
 	public class RecursiveRefKeyword : IJsonSchemaKeyword, IEquatable<RecursiveRefKeyword>
 	{
-		private readonly List<JsonPointer> _validatingLocations = new List<JsonPointer>();
 		private JsonSchema? _resolvedRoot;
 		private JsonPointer? _resolvedFragment;
 
@@ -69,7 +68,10 @@ namespace Manatee.Json.Schema
 		/// <returns>Results object containing a final result and any errors that may have been found.</returns>
 		public SchemaValidationResults Validate(SchemaValidationContext context)
 		{
-			if (_validatingLocations.Any(l => Equals(l, context.InstanceLocation)))
+			if (context.RecursiveRefValidatedLocations == null)
+				context.RecursiveRefValidatedLocations = new List<JsonPointer>();
+
+			if (context.RecursiveRefValidatedLocations.Any(l => Equals(l, context.InstanceLocation)))
 				return new SchemaValidationResults(Name, context)
 					{
 						RecursionDetected = true,
@@ -95,9 +97,9 @@ namespace Manatee.Json.Schema
 					RelativeLocation = context.RelativeLocation.CloneAndAppend(Name),
 				};
 
-			_validatingLocations.Add(context.InstanceLocation);
+			context.RecursiveRefValidatedLocations.Add(context.InstanceLocation);
 			var nestedResults = Resolved.Validate(newContext);
-			_validatingLocations.Remove(context.InstanceLocation);
+			context.RecursiveRefValidatedLocations.Remove(context.InstanceLocation);
 
 			results.IsValid = nestedResults.IsValid;
 			results.NestedResults.Add(nestedResults);
