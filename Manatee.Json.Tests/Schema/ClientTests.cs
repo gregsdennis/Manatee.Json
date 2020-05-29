@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Manatee.Json.Pointer;
 using Manatee.Json.Schema;
 using Manatee.Json.Serialization;
@@ -598,6 +599,44 @@ namespace Manatee.Json.Tests.Schema
 			{
 				JsonSchemaOptions.Download = null!;
 			}
+		}
+
+		[Test]
+		public void Issue271_ConcurrentValidation()
+		{
+			var validateSchemaAction = new Action(() =>
+				{
+					var serializer = new JsonSerializer();
+					var schemaText = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}/Files/Issue271.json");
+					var schemaJson = JsonValue.Parse(schemaText);
+					var schema = serializer.Deserialize<JsonSchema>(schemaJson);
+
+					schema.ValidateSchema();
+				});
+
+			var exceptions = new List<Exception>();
+
+			Parallel.ForEach(
+				new[]
+					{
+						validateSchemaAction,
+						validateSchemaAction,
+						validateSchemaAction,
+						validateSchemaAction,
+						validateSchemaAction
+					}, action =>
+					{
+						try
+						{
+							action();
+						}
+						catch (Exception ex)
+						{
+							exceptions.Add(ex);
+						}
+					});
+
+			Assert.IsEmpty(exceptions);
 		}
 	}
 }

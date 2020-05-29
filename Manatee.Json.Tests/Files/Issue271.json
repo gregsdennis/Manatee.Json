@@ -1,0 +1,33 @@
+{
+	"description": "API Error",
+	"type": "object",
+	"required": [ "code", "message" ],
+	"properties": {
+		"code": { "type": "string" },
+		"message": { "type": "string" },
+		"correlation_id": { "type": "string" },
+		"details": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"property": { "type": "string" },
+					"code": { "type": "string" },
+					"message": { "type": "string" }
+				}
+			}
+		},
+		"links": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"href": { "type": "string" },
+					"rel": { "type": "string" },
+					"reference": { "type": "string" },
+					"type": { "type": "string" }
+				}
+			}
+		}
+	}
+}
