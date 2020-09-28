@@ -54,9 +54,14 @@ namespace Manatee.Json.Schema
 
 			var contextCopy = new SchemaValidationContext(context);
 
+			var baseContext = new SchemaValidationContext(context);
+			baseContext.EvaluatedPropertyNames.Clear();
+			baseContext.LocallyEvaluatedPropertyNames.Clear();
+			baseContext.LastEvaluatedIndex = -1;
+			baseContext.LocalTierLastEvaluatedIndex = -1;
 			foreach (var s in this)
 			{
-				var newContext = new SchemaValidationContext(context)
+				var newContext = new SchemaValidationContext(baseContext)
 					{
 						BaseRelativeLocation = context.BaseRelativeLocation?.CloneAndAppend(Name, i.ToString()),
 						RelativeLocation = context.RelativeLocation.CloneAndAppend(Name, i.ToString()),

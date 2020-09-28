@@ -1,5 +1,11 @@
 # 13.0.2
 
+([#282](https://github.com/gregsdennis/Manatee.Json/issues/282)) `if`/`then`/`else` is dependent on serialized sequence but shouldn't be.
+
+([#281](https://github.com/gregsdennis/Manatee.Json/pull/281)) Use environment-specific line endings for indented formatting.
+
+# 13.0.2
+
 ([#271](https://github.com/gregsdennis/Manatee.Json/issues/271)) Concurrency issue while validating meta-schemas in parallel.
 
 Fixed the `contains` / `minContains` relationship to respect when `minContains` is zero.  The spec specifies that `contains` should pass in this case.  References: [Specification discussion](https://github.com/json-schema-org/json-schema-spec/issues/924) and [test discussion](https://github.com/json-schema-org/JSON-Schema-Test-Suite/pull/368).

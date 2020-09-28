@@ -61,12 +61,16 @@ namespace Manatee.Json
 			string tab0 = JsonOptions.PrettyPrintIndent.Repeat(indentLevel),
 			       tab1 = tab0 + JsonOptions.PrettyPrintIndent;
 
-			builder.Append("{\n");
+			builder.Append("{");
+			builder.Append(Environment.NewLine);
 			bool comma = false;
 			foreach (var kvp in this)
 			{
 				if (comma)
-					builder.Append(",\n");
+				{
+					builder.Append(",");
+					builder.Append(Environment.NewLine);
+				}
 
 				builder.Append(tab1);
 				builder.Append('"');
@@ -76,7 +80,7 @@ namespace Manatee.Json
 
 				comma = true;
 			}
-			builder.Append('\n');
+			builder.Append(Environment.NewLine);
 			builder.Append(tab0);
 			builder.Append('}');
 		}
