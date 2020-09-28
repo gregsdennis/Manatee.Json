@@ -32,7 +32,7 @@ namespace Manatee.Json.Schema
 		/// <summary>
 		/// Gets the a value indicating the sequence in which this keyword will be evaluated.
 		/// </summary>
-		public int ValidationSequence => 1;
+		public int ValidationSequence => 2;
 		/// <summary>
 		/// Gets the vocabulary that defines this keyword.
 		/// </summary>
