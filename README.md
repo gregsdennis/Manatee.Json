@@ -1,4 +1,4 @@
-After careful consideration, I considering halting development for this library in favor of a [new suite of libraries](https://graphqello.com) that provide the same functionality using the `System.Text.Json` namespace.
+After careful consideration, I may be halting development for this library in favor of a [new suite of libraries](https://graphqello.com) that provide the same functionality using the `System.Text.Json` namespace.
 
 Thank you to all those who helped make this library better through code contributions, bug reports, and feature suggestions.
 
