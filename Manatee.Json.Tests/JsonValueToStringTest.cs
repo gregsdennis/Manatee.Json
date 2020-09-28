@@ -143,7 +143,7 @@ namespace Manatee.Json.Tests
 		public void GetIndentedString_Object_ReturnsCorrectIndention()
 		{
 			var json = new JsonValue(new JsonObject { { "bool", false }, { "int", 42 }, { "string", "a string" } });
-			var expected = "{\n\t\"bool\" : false,\n\t\"int\" : 42,\n\t\"string\" : \"a string\"\n}";
+			var expected = "{\r\n\t\"bool\" : false,\r\n\t\"int\" : 42,\r\n\t\"string\" : \"a string\"\r\n}";
 			var actual = json.GetIndentedString();
 			Assert.AreEqual(expected, actual);
 		}
