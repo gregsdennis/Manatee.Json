@@ -1,3 +1,9 @@
+After careful consideration, I considering halting development for this library in favor of a [new suite of libraries](https://graphqello.com) that provide the same functionality using the `System.Text.Json` namespace.
+
+Thank you to all those who helped make this library better through code contributions, bug reports, and feature suggestions.
+
+If you are interested in taking over development of this library, please DM me on Slack (link below) to discuss options.
+
 # Manatee.Json
 
 [![NuGet version](https://img.shields.io/nuget/v/Manatee.Json.svg?svg=true)](https://www.nuget.org/packages/Manatee.Json/)
