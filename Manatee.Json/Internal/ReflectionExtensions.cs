@@ -88,7 +88,53 @@ namespace Manatee.Json.Internal
 				{
 					member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, false)
 						.SingleOrDefault(m => m.MemberInfo is PropertyInfo pi && pi.GetIndexParameters().Length == 1);
-					if (member == null) return;
+					if (member == null)
+					{
+						var jsonArray = (obj as JsonValue)?.Array ?? obj as JsonArray;
+						if (jsonArray == null)
+ 						{
+							return;
+						}
+
+						var segmentExists = jsonArray.Count > index;
+						while (jsonArray.Count <= index)
+						{
+							jsonArray.Add(JsonValue.Null);
+						}
+
+						if (pointer.Count == 1)
+						{
+							JsonValue inferredValue = value is JsonValue jsonValue ? jsonValue :
+								value is JsonObject jsonObjectValue ? jsonObjectValue :
+								value is JsonArray jsonArrayValue ? jsonArrayValue :
+								JsonValue.Null;
+
+							jsonArray.RemoveAt(index);
+							jsonArray.Insert(index, inferredValue);
+							return;
+						}
+
+						JsonValue next;
+						if (!segmentExists)
+						{
+							var nextSegment = pointer[1];
+							if (int.TryParse(nextSegment, out int _))
+								next = new JsonArray();
+							else
+								next = new JsonObject();
+							
+							jsonArray.RemoveAt(index);
+							jsonArray.Insert(index, next);
+						}
+						else
+						{
+							next = jsonArray.ElementAt(index);
+						}
+
+						obj = next;
+						pointer = new JsonPointer(pointer.Skip(1));
+						continue;
+					}
 
 					var indexer = (PropertyInfo) member.MemberInfo;
 					if (pointer.Count == 1)
@@ -105,7 +151,46 @@ namespace Manatee.Json.Internal
 
 				member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, true)
 					.SingleOrDefault(m => m.SerializationName == segment);
-				if (member == null) return;
+				if (member == null)
+				{
+					var jsonObject = (obj as JsonValue)?.Object ?? obj as JsonObject;
+					if (jsonObject == null)
+					{
+						return;
+					}
+
+					var segmentExists = jsonObject.Keys.Contains(segment);
+					if (pointer.Count == 1)
+					{
+						if (segmentExists)
+						{
+							jsonObject.Remove(segment);
+						}
+
+						JsonValue inferredValue = value is JsonValue jsonValue ? jsonValue :
+							value is JsonObject jsonObjectValue ? jsonObjectValue :
+							value is JsonArray jsonArrayValue ? jsonArrayValue :
+							JsonValue.Null;
+
+						jsonObject.Add(segment, inferredValue);
+						return;
+					}
+
+					var local = jsonObject[segment];
+					if (!segmentExists)
+					{
+						var nextSegment = pointer[1];
+						if (int.TryParse(nextSegment, out int _))
+							local = new JsonArray();
+						else
+							local = new JsonObject();
+
+						jsonObject.Add(segment, local);
+					}
+					obj = local;
+					pointer = new JsonPointer(pointer.Skip(1));
+					continue;
+				}
 
 				if (member.MemberInfo is PropertyInfo asProperty)
 				{
