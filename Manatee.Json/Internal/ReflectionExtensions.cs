@@ -87,7 +87,7 @@ namespace Manatee.Json.Internal
 				if (int.TryParse(segment, out var index))
 				{
 					member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, false)
-						.Single(m => m.MemberInfo is PropertyInfo pi && pi.GetIndexParameters().Length == 1);
+						.SingleOrDefault(m => m.MemberInfo is PropertyInfo pi && pi.GetIndexParameters().Length == 1);
 					if (member == null) return;
 
 					var indexer = (PropertyInfo) member.MemberInfo;
@@ -104,7 +104,7 @@ namespace Manatee.Json.Internal
 				}
 
 				member = ReflectionCache.GetMembers(obj.GetType(), PropertySelectionStrategy.ReadWriteOnly, true)
-					.Single(m => m.SerializationName == segment);
+					.SingleOrDefault(m => m.SerializationName == segment);
 				if (member == null) return;
 
 				if (member.MemberInfo is PropertyInfo asProperty)
