@@ -81,6 +81,7 @@
 				.Property("patternProperties", new JsonSchema()
 					          .Type(JsonSchemaType.Object)
 					          .AdditionalProperties(new JsonSchema().RefRoot())
+					          .PropertyNames(new JsonSchema().Format(Formats.Regex))
 					          .Default(new JsonObject()))
 				.Property("dependencies", new JsonSchema()
 					          .Type(JsonSchemaType.Object)
