@@ -1,5 +1,9 @@
 # 13.0.2
 
+([json-schema<nsp>.org #358](https://github.com/json-schema-org/json-schema-org.github.io/pull/358)) Published draft 06 meta-schema doesn't match the copy in the spec repo.
+
+# 13.0.2
+
 ([#282](https://github.com/gregsdennis/Manatee.Json/issues/282)) `if`/`then`/`else` is dependent on serialized sequence but shouldn't be.
 
 ([#281](https://github.com/gregsdennis/Manatee.Json/pull/281)) Use environment-specific line endings for indented formatting.
