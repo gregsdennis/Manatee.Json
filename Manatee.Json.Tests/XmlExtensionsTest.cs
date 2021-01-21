@@ -550,6 +550,19 @@ namespace Manatee.Json.Tests
 
 			Assert.AreEqual(expected.ToString(), actual.ToString());
 		}
+		[Test]
+		public void RoundTrip_StartingWithMultiRepeatingXml()
+		{
+			var expected = XElement.Parse(@"<Items><Item k=""1"" v=""a""><Context uid=""x""/></Item><Item k=""2"" v=""b"" ><Context uid=""y""/></Item><Item k=""3"" v=""c""><Context uid=""z""/></Item></Items>");
+			var expectedJson = JsonValue.Parse(@"{""Items"":{""Item"":[{""-k"":1,""-v"":""a""},{""Context"":[{""-uid"":""x""},null]},[{""-k"":2,""-v"":""b""},{""Context"":[{""-uid"":""y""},null]}],[{""-k"":3,""-v"":""c""},{""Context"":[{""-uid"":""z""},null]}]]}}");
+
+			var toJson = expected.ToJson();
+			Assert.AreEqual(expectedJson, toJson);
+
+			var actual = toJson.ToXElement(null);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+		}
 		#endregion
 	}
 }
