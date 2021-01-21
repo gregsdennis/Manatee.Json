@@ -95,8 +95,8 @@ namespace Manatee.Json
 								xml.Add(attribute);
 							}
 						}
-						return xml;
-					}
+							return xml;
+						}
 					var list = new List<XElement>();
 					foreach (var jv in json.Array)
 					{
@@ -209,7 +209,7 @@ namespace Manatee.Json
 		}
 		private static bool _ContainsAttributeList(JsonArray json)
 		{
-			if (json.Count != 2) return false;
+			if (json.Count < 2) return false;
 			if (json[0].Type != JsonValueType.Object) return false;
 			return json[0].Object.Keys.All(key => key[0] == '-');
 		}
