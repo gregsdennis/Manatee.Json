@@ -57,14 +57,16 @@ namespace Manatee.Json
 					foreach (var kvp in json.Object)
 					{
 						var element = kvp.Value.ToXElement(kvp.Key);
-						if ((kvp.Value.Type == JsonValueType.Array) && !_ContainsAttributeList(kvp.Value.Array))
+						if ((kvp.Value.Type == JsonValueType.Array))
 							xml.Add(element.Elements());
 						else
 							xml.Add(element);
 					}
 					return xml;
 				case JsonValueType.Array:
-					if (_ContainsAttributeList(json.Array))
+					var list = new List<XElement>();
+					var withAttributes = _ContainsAttributeList(json.Array);
+					if (withAttributes)
 					{
 						var attributeNames = json.Array[0].Object;
 						var attributes = new List<XAttribute>();
@@ -95,18 +97,22 @@ namespace Manatee.Json
 								xml.Add(attribute);
 							}
 						}
-							return xml;
-						}
-					var list = new List<XElement>();
-					foreach (var jv in json.Array)
+						list.Add(xml);
+					}
+					foreach (var jv in json.Array.Skip(list.Count*2))
 					{
 						xml = jv.ToXElement(key);
 						switch (jv.Type)
 						{
 							case JsonValueType.Array:
-								var element = new XElement(name, xml.Elements());
-								element.SetAttributeValue(NestAttribute, true);
-								list.Add(element);
+//								if(withAttributes)
+//								{
+									var element = new XElement(name, xml.Elements());
+									element.SetAttributeValue(NestAttribute, true);
+									list.Add(element);
+//								}
+//								else
+//									list.Add(xml);
 								break;
 							default:
 								list.Add(xml);
