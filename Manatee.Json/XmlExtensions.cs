@@ -105,14 +105,14 @@ namespace Manatee.Json
 						switch (jv.Type)
 						{
 							case JsonValueType.Array:
-//								if(withAttributes)
-//								{
+								if(!withAttributes)
+								{
 									var element = new XElement(name, xml.Elements());
 									element.SetAttributeValue(NestAttribute, true);
 									list.Add(element);
-//								}
-//								else
-//									list.Add(xml);
+								}
+								else
+									list.AddRange(xml.Elements());
 								break;
 							default:
 								list.Add(xml);
