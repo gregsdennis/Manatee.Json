@@ -527,8 +527,9 @@ namespace Manatee.Json.Tests
 		[Test]
 		public void RoundTrip_StartingWithMoreComplexXml()
 		{
-			var expected = XElement.Parse(@"<Items><Item k=""1"" v=""a"" /><Item k=""2"" v=""b"" /></Items>");
-			var expectedJson = JsonValue.Parse(@"{""Items"":{""Item"":[{""-k"":1,""-v"":""a""},null,[{""-k"":2,""-v"":""b""},null]]}}");
+			var expected = XElement.Parse(@"<Items><Item k=""1"" v=""a"" /><Item k=""2"" v=""b"" /><Item k=""3"" v=""c"" /></Items>");
+			var expectedJson = JsonValue.Parse(@"{""Items"":{""Item"":[{""-k"":1,""-v"":""a""},null,[{""-k"":2,""-v"":""b""},null],[{""-k"":3,""-v"":""c""},null]]}}
+");
 
 			var toJson = expected.ToJson();
 			Assert.AreEqual(expectedJson, toJson);
