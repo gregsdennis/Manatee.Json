@@ -525,11 +525,23 @@ namespace Manatee.Json.Tests
 			Assert.AreEqual(expected.ToString(), actual.ToString());
 		}
 		[Test]
+		public void RoundTrip_StartingWithRepeatingXml()
+		{
+			var expected = XElement.Parse(@"<Items><Item>1</Item><Item>2</Item><Item>3</Item></Items>");
+			var expectedJson = JsonValue.Parse(@"{""Items"":{""Item"":[1,2,3]}}");
+
+			var toJson = expected.ToJson();
+			Assert.AreEqual(expectedJson, toJson);
+
+			var actual = toJson.ToXElement(null);
+
+			Assert.AreEqual(expected.ToString(), actual.ToString());
+		}
+		[Test]
 		public void RoundTrip_StartingWithMoreComplexXml()
 		{
 			var expected = XElement.Parse(@"<Items><Item k=""1"" v=""a"" /><Item k=""2"" v=""b"" /><Item k=""3"" v=""c"" /></Items>");
-			var expectedJson = JsonValue.Parse(@"{""Items"":{""Item"":[{""-k"":1,""-v"":""a""},null,[{""-k"":2,""-v"":""b""},null],[{""-k"":3,""-v"":""c""},null]]}}
-");
+			var expectedJson = JsonValue.Parse(@"{""Items"":{""Item"":[{""-k"":1,""-v"":""a""},null,[{""-k"":2,""-v"":""b""},null],[{""-k"":3,""-v"":""c""},null]]}}");
 
 			var toJson = expected.ToJson();
 			Assert.AreEqual(expectedJson, toJson);
