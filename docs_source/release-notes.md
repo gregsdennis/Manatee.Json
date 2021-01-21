@@ -1,3 +1,7 @@
+# 13.0.5
+
+([#289](https://github.com/gregsdennis/Manatee.Json/issues/289)) Handle the case of JSON representing an XML document that has multiple sibling elements of the same tag-name, each with attributes -- the JsonArray is overloaded to mean either of these things; this change allows both.
+
 # 13.0.2
 
 ([json-schema<nsp>.org #358](https://github.com/json-schema-org/json-schema-org.github.io/pull/358)) Published draft 06 meta-schema doesn't match the copy in the spec repo.
